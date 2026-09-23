@@ -21,7 +21,7 @@
 | C-04 | 三级记忆体系 | 工程技术部 | live | 媒体线 CODELY.md + 本仓 CODELY.md |
 | C-05 | 发布/数据台账结构 | 平台运营部+数据分析部 | live | `output/schedule.md`+`output/analytics.md` |
 | C-06 | draft_lint 测试件 | 工程技术部 | in-dev | backlog #1 |
-| C-07 | 11 平台变体骨架模板 | 平台运营部 | in-dev | backlog #2 |
+| C-07 | 11 平台变体骨架模板 | 平台运营部 | live | `docs/variant-templates.md` · 11 骨架块+登记块+检查单（backlog#2·R2 commit） |
 | C-08 | 选题-台账一致性探针 | 选题研究部 | in-dev | backlog #3 |
 | C-09 | 自动周报生成器（state+commits→周报） | 数据分析部 | in-dev | backlog #6 |
 | C-10 | 视频号口播裁剪（4 稿 67-77s） | 内容生产部 | blocked | 卡点=生产暂停令 |
