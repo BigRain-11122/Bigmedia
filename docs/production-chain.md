@@ -5,7 +5,7 @@
 
 ## §0 生产闸门（唯一总开关）
 
-- 闸门态=`src/os/state.json` 字段 `production`（现值 **paused** · O-20260923-1525-bm-a）。
+- 闸门态=`src/os/state.json` 字段 `production`（现值 **paused** · O-20260923-1756-bm-a 模式修正「不量产」；开闸史=O-1602 批次2 曾 open·本表当时未同步属滞后·O-1756 回关；量产开闸须 CEO 令）。
 - **开闸**=CEO 令 → 总裁办公室落 O 文件 + 翻 `state.json`（`production: open`）+ 改循环任务书生产段（任务书=数据件可热改，无需重装）+ `board_check` 回归。**关闸同律**。
 - 机牢执行：`src/make_draft.py` 生产位（`data/drafts/`）在 paused 态拒稿（exit 3）——闸门长牙，不靠自觉。
 
@@ -44,3 +44,4 @@
 
 - 2026-09-23: v1.0 建链（CEO 令 O-20260923-1600-bm-a）——七站全表+生产闸门+生产模式协议；M4 已 live，M0/M1/M3 骨架就绪待闸，M2/M5 blocked（选型/账号），M6 in-dev。
 - 2026-09-23: v1.1 本地算力批（CEO 令 O-20260923-1609-bm-a）——M2 站选型已裁=**本地算力优先**（四站本地方案+显存分时+PoC 阶梯=`docs/m2-local-stack.md`）；M2 由 blocked 转 in-dev。
+- 2026-09-23: v1.2 闸门机牢同步（CEO 令 O-20260923-1756-bm-a 模式修正·R15 补落）——O-1602 开闸态与本令「不量产」意图不符属机牢缺口：`production` 回 `paused`+`mode` 改 systems-first；make_draft 闸门报错文案引用本令；测试生产位（`--out` 临时目录）不受闸门影响照旧放行（令中「允许测试生产」）。§1 站表实况 gated 行随闸门态恢复正确。

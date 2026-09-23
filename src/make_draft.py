@@ -138,7 +138,8 @@ def main(argv):
     if not test:
         if state.get("production") == "paused":
             die("production gate CLOSED (state.json production=paused, order "
-                "O-20260923-1525-bm-a). Opening requires a CEO order. "
+                "O-20260923-1756-bm-a mode correction: no mass generation). "
+                "Opening requires a CEO order. "
                 "Test mode: add --out DIR.", 3)
         title, source = idea_row(topic)
         if not title:
