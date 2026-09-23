@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001\\voiceover-v4.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "storyboard": "one beat = one card = one cut (cut on word boundary)",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.45,
+      "lines": [
+        "今天我干了件作死的事",
+        "61 分钟 · 开 3 家公司"
+      ]
+    },
+    {
+      "start": 5.45,
+      "end": 11.35,
+      "lines": [
+        "员工表 · 人类 = 1",
+        "就是我，忙到飞起"
+      ]
+    },
+    {
+      "start": 11.35,
+      "end": 16.22,
+      "lines": [
+        "听着很爽？",
+        "爽的是 AI，累的是我"
+      ]
+    },
+    {
+      "start": 16.22,
+      "end": 22.3,
+      "lines": [
+        "① 游戏公司",
+        "8 款软著 · 0 元起步"
+      ]
+    },
+    {
+      "start": 22.3,
+      "end": 29.71,
+      "lines": [
+        "② 量化公司",
+        "不及格就开除 · 真开过 432 个"
+      ]
+    },
+    {
+      "start": 29.71,
+      "end": 34.99,
+      "lines": [
+        "③ 媒体公司",
+        "正在剪这条骂我的视频"
+      ]
+    },
+    {
+      "start": 34.99,
+      "end": 40.01,
+      "lines": [
+        "我的管理方式",
+        "只说一句话，剩下它们自己卷"
+      ]
+    },
+    {
+      "start": 40.01,
+      "end": 45.31,
+      "lines": [
+        "每 10 分钟自醒",
+        "找活 → 干完 → 记账"
+      ]
+    },
+    {
+      "start": 45.31,
+      "end": 49.66,
+      "lines": [
+        "两台电脑互相甩锅",
+        "啊不，互相交账"
+      ]
+    },
+    {
+      "start": 49.66,
+      "end": 54.55,
+      "lines": [
+        "全程可查",
+        "我吹牛会被当场打脸"
+      ]
+    },
+    {
+      "start": 54.55,
+      "end": 63.94,
+      "lines": [
+        "61 分钟 · 3 家 · 1 人",
+        "这条视频返工了三轮"
+      ]
+    },
+    {
+      "start": 63.94,
+      "end": 71.26,
+      "lines": [
+        "评论区催更",
+        "转给说了八百回「我也搞一个」的朋友"
+      ]
+    }
+  ]
+}
