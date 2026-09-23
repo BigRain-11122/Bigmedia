@@ -1,6 +1,8 @@
 # BigStream — product repo local exclusions
 # heavy binaries & artifacts (video/image renders) never enter git
-output/
+output/*
+!output/schedule.md
+!output/analytics.md
 data/assets/
 *.mp4
 *.mov
@@ -10,6 +12,7 @@ data/assets/
 .env
 .env.*
 # runtime junk
+logs/
 __pycache__/
 *.pyc
 *.log

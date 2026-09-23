@@ -34,19 +34,21 @@ BigStream/
 ├── README.md          <- 本文件（公司章程入口）
 ├── PLAN.md            <- 公司总纲（阶段/生产线/合规/CEO 待决清单）
 ├── orders/            <- CEO 令牌台账（/CEO 触发·追加式）
-├── docs/              <- media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md
+├── docs/              <- os-protocol.md / media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md
 ├── data/
 │   ├── ideas/         <- 选题库（ideas.md 一行一题）
-│   ├── drafts/        <- 脚本与文案草稿
+│   ├── drafts/        <- 脚本与文案草稿（10 稿封存·生产暂停中）
 │   └── sources/       <- 素材与来源引用（可溯链）
-├── output/           <- 成品库（gitignored·二进制不入库）
-├── src/               <- 工具脚本（适配/审查门/统计，按需建）
+├── output/            <- 成品库（二进制 gitignored；schedule.md/analytics.md 台账入库）
+├── src/               <- draft_lint.py（M4 机审）+ os/（OS 循环四件套+任务书+state+backlog）
 └── tests/             <- 脚本测试（按需建）
 ```
 
 ## Run commands
 
-（暂无——生产线脚本到位后回填于此，一行命令制）
+- M4 机审全量：`python src/draft_lint.py`
+- OS 循环注册/自愈：`powershell -NoProfile -ExecutionPolicy Bypass -File src/os/register_loop_task.ps1`
+- 循环实况：`logs/probe-heartbeat.txt`（心跳）· `src/os/state.json`（tick 账本）
 
 ## Red lines（集团红线本线落地）
 
