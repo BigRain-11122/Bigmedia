@@ -34,6 +34,7 @@
 | C-16 | 全链量产生产轮（M0-M3 无人值守量产） | 全部门 | blocked | 卡点=生产暂停令（state.json production=paused）·开闸=CEO 令 |
 | C-18 | 调研能力（双线·协议化） | 选题研究部+工程技术部 | live | `docs/research-protocol.md` v1.0（O-20260923-1719-bm-a）·市场线=user-research v1.3（R8·120 位线索池）·技术线=local-stack-research v1.0（官方 A 级证据 6 件+本机 M1 实测） |
 | C-19 | 发布准备度探针（readiness probe） | 平台运营部 | live | `python src/readiness.py` · backlog#10（R14）——四只读源聚合（accounts 亮灯=状态流自台账解析·GATE 态=GATE_RE 复用 draft_lint·renders 测试件「测试件·非成品」标注核验·backlog 决策标记）→距离首发阻塞清单·stdout/--out·24 测试用例全绿·真跑 3 阻塞 0 发现 exit 1（阻塞=批次①账号未开+10 稿 GATE PENDING+#7 [needs-CEO]） |
+| C-20 | OS 循环健康探针（loop_health） | 工程技术部 | live | `python src/os/loop_health.py` · backlog#11（R17）——os-protocol §5 判据机器化：心跳新鲜度/间隔（SLA 20 分钟=WARN·锁龄 40 分钟=FAIL 停跳线）+tick↔done 轮次对账（账目滞后=FAIL·防 R4/R5 型断洞）+台账时间戳卫生（乱序/缺行=WARN·近似分钟 17:2x 合法）+backlog 燃尽率（info）——28 测试用例全绿·真跑 0 FAIL 4 WARN（皆为在案史实：R8/R9+R10/R11 叙事时间戳漂移、R4+R5 修复行、R5 26 分钟长轮间隙）；首战自检闭环=真跑揭心跳文件 UTF-8 BOM（PowerShell 5.1 Add-Content 所写）致首行失解析→utf-8-sig 修复+回归锁 |
 
 ## §3 能力建设循环
 
@@ -49,3 +50,4 @@
 - 2026-09-23: v1.5 R-C 批（OS 循环 R12）——C-17 整体转 live：双路字幕对轴（B 路 edge-tts 直出+srt_fix 钳重叠=A 路更快-whisper small int8 CPU）+BS-001 v2 音轨重渲；连带修红 drawtext CRLF 行距翻倍（LF 写出+回归测试锁）；PoC 全梯 done·R-D 后置。现 live×12 / in-dev×2 / blocked×3 / planned×1。
 - 2026-09-23: v1.6 周报批（OS 循环 R13）——C-09 转 live：自动周报生成器（src/weekly_report.py·四机器源→output/reports/·重跑覆盖制）；output/reports/ 解封入 git（台账=产出即证据）；首份周报 weekly-2026-W39.md 生成实测。现 live×13 / in-dev×1 / blocked×3 / planned×1。
 - 2026-09-23: v1.7 就绪度批（OS 循环 R14）——新增 C-19 发布准备度探针 live（backlog#10·四只读源聚合→阻塞清单·24 用例·真跑 3 阻塞 0 发现）；C-10 卡点刷新（O-1756 边界外·R14 转 [needs-CEO] 提案并入口吻改写批）；output/renders/README.md 测试件台账解封入 git（mp4 二进制仍 ignored·R9/R12 两件补「测试件·非成品」标注）。现 live×14 / in-dev×1 / blocked×3 / planned×1。
+- 2026-09-23: v1.8 循环健康批（OS 循环 R17）——新增 C-20 OS 循环健康探针 live（os-protocol §5 判据机器化·28 用例·全回归 119 绿·真跑 0 FAIL 4 WARN 皆为在案史实的顾问级记录·首战揭 BOM 解析坑即修+回归锁）。现 live×15 / in-dev×1 / blocked×3 / planned×1。
