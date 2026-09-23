@@ -177,7 +177,10 @@ def build_render_plan(cfg, cues, tmpdir):
 
     def textfile(content, name):
         p = tmpdir / name
-        p.write_text(content, encoding="utf-8")
+        # LF only: CRLF makes drawtext treat \r as an extra line
+        # break, doubling line pitch and clipping 3-line cues off
+        # the frame bottom (pixel-measured at R-C on bs-001 v2)
+        p.write_text(content, encoding="utf-8", newline="\n")
         made.append(p)
         return p
 

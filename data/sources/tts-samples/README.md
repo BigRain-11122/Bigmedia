@@ -70,4 +70,4 @@ edge-tts --voice zh-CN-YunyangNeural --file trial-line.txt --write-media yunyang
 ## §6 终审与下一步
 
 - **待人耳（CEO/Qiqi·backlog #8）**：A/B/C 位次建议+备份线音质——听 `data/sources/tts-samples/` 即可，无环境要求。
-- R-C（下一轮）：faster-whisper CPU int8 对轴 vs `yunyang-subs.srt` 直出——双路 PoC 择优后入 `src/render/` 流水。
+- R-C done 2026-09-23（R12）：双路对轴裁决与证据=`data/sources/bs001/README.md`——B 路（直出+`srt_fix.py` 钳 50ms 重叠）=合成稿正路；A 路（`whisper_to_srt.py`·faster-whisper small int8 CPU）=真人原声通用件（ASR 错字实录在案）。

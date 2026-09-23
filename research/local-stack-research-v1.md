@@ -35,6 +35,23 @@
 
 【推论】R-B 备份验证对象应从「Piper」更名为 **piper1-gpl（pip piper-tts）**，zh_CN huayan（medium 档）为候选试配音；若 medium 档试听不达人设卡嗓音要求，本地备份线结论=「可用性存疑」，如实报 CEO 不硬撑。
 
+### 1.3 中文质量轨候选（开源 0.3B-0.5B TTS·v1.1 交互会话增量）
+
+R-B 若 piper1-gpl 轻量备份不达质量线，质量轨候选有官方评测可依（CosyVoice 官方 README 对照表·test-zh）【A7】：
+
+| 模型 | 开源 | 规模 | test-zh CER(%)↓ | test-zh SS(%)↑ |
+|---|---|---|---|---|
+| Human（人声基线） | — | — | 1.26 | 75.5 |
+| **Fun-CosyVoice3-0.5B-2512_RL** | ✅ | 0.5B | **0.81** | **77.4** |
+| GLM-TTS RL | ✅ | 1.5B | 0.89 | 76.4 |
+| **VoxCPM** | ✅ | 0.5B | 0.93 | 77.2 |
+| CosyVoice2 | ✅ | 0.5B | 1.45 | 75.7 |
+| F5-TTS | ✅ | 0.3B | 1.52 | 74.1 |
+| Spark TTS | ✅ | 0.5B | 1.2 | 66.0 |
+
+- 模型清单（官方）：Fun-CosyVoice3-0.5B / CosyVoice2-0.5B / CosyVoice-300M 系；Conda 安装；可选 ttsfrd 文本正则化包【A7】。
+- 【推论】①0.5B 权重 fp16 约 1GB 量级，12GB 卡可载，但当前空闲 1.5GB（M1）窗口紧——质量轨须配合显存分时（Ollama 让位窗口）；②F5-TTS 0.3B=最轻质量轨候选；③表内数值为官方发布【A7】，排名解读属本件推论；④Piper 系不在该评测域（不对比）。
+
 ## §2 STT 站（字幕对轴）
 
 faster-whisper 官方 README 基准（同精度比 openai/whisper "up to 4 times faster…while using less memory"，int8 量化 CPU/GPU 双支持）【A5】：
