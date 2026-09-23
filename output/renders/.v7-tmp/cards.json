@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001\\voiceover-v7.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "storyboard": "one beat = one card = one cut (cut on word boundary)",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 6.1,
+      "lines": [
+        "一个人上班",
+        "三家公司开工"
+      ]
+    },
+    {
+      "start": 6.1,
+      "end": 11.45,
+      "lines": [
+        "员工表 · 人类 = 1",
+        "爽的是 AI，累的是我"
+      ]
+    },
+    {
+      "start": 11.45,
+      "end": 16.8,
+      "lines": [
+        "老大做游戏",
+        "8 款游戏 · 0 元 · 版权证书一沓"
+      ]
+    },
+    {
+      "start": 16.8,
+      "end": 23.64,
+      "lines": [
+        "老二拿 AI 炒股票",
+        "432 说废就废 · 开了瓶酒 · 真事可查"
+      ]
+    },
+    {
+      "start": 23.64,
+      "end": 28.27,
+      "lines": [
+        "老三最会拍马屁",
+        "它管我叫老板"
+      ]
+    },
+    {
+      "start": 28.27,
+      "end": 32.38,
+      "lines": [
+        "怎么管",
+        "一句话，它们自己卷"
+      ]
+    },
+    {
+      "start": 32.38,
+      "end": 37.01,
+      "lines": [
+        "每 10 分钟自醒",
+        "找活 · 记账 · 谁也改不了"
+      ]
+    },
+    {
+      "start": 37.01,
+      "end": 41.26,
+      "lines": [
+        "两台电脑互相甩锅",
+        "啊不，互相交账"
+      ]
+    },
+    {
+      "start": 41.26,
+      "end": 45.22,
+      "lines": [
+        "我吹牛",
+        "它们当场打脸 · 每一步留底"
+      ]
+    },
+    {
+      "start": 45.22,
+      "end": 49.49,
+      "lines": [
+        "记住这句话",
+        "一个人上班，三家公司开工"
+      ]
+    },
+    {
+      "start": 49.49,
+      "end": 52.82,
+      "lines": [
+        "转给说了八百回的朋友",
+        "「等我有空也搞一个」"
+      ]
+    }
+  ]
+}

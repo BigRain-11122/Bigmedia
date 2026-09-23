@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001\\voiceover-v6.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "storyboard": "one beat = one card = one cut (cut on word boundary)",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.45,
+      "lines": [
+        "今天我干了件作死的事",
+        "61 分钟 · 3 家公司"
+      ]
+    },
+    {
+      "start": 5.45,
+      "end": 10.8,
+      "lines": [
+        "员工表 · 人类 = 1",
+        "爽的是 AI，累的是我"
+      ]
+    },
+    {
+      "start": 10.8,
+      "end": 16.37,
+      "lines": [
+        "老大做游戏",
+        "8 款游戏 · 一分钱没花 · 版权证书一沓"
+      ]
+    },
+    {
+      "start": 16.37,
+      "end": 23.21,
+      "lines": [
+        "老二拿 AI 炒股票",
+        "432 个方案说废就废 · 还开了瓶酒 · 真事·账本可查"
+      ]
+    },
+    {
+      "start": 23.21,
+      "end": 27.84,
+      "lines": [
+        "老三最会拍马屁",
+        "它管我叫老板"
+      ]
+    },
+    {
+      "start": 27.84,
+      "end": 31.94,
+      "lines": [
+        "我的管理方式",
+        "一句话，它们自己卷"
+      ]
+    },
+    {
+      "start": 31.94,
+      "end": 36.58,
+      "lines": [
+        "每 10 分钟自醒",
+        "找活 · 记账 · 谁也改不了"
+      ]
+    },
+    {
+      "start": 36.58,
+      "end": 40.82,
+      "lines": [
+        "两台电脑互相甩锅",
+        "啊不，互相交账"
+      ]
+    },
+    {
+      "start": 40.82,
+      "end": 44.78,
+      "lines": [
+        "我吹牛",
+        "它们当场打脸 · 每一步留底"
+      ]
+    },
+    {
+      "start": 44.78,
+      "end": 51.79,
+      "lines": [
+        "61 分钟 · 3 家 · 1 人",
+        "评论区催更"
+      ]
+    },
+    {
+      "start": 51.79,
+      "end": 55.13,
+      "lines": [
+        "转给说了八百回的朋友",
+        "「等我有空也搞一个」"
+      ]
+    }
+  ]
+}
