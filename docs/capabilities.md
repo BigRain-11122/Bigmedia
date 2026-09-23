@@ -25,9 +25,10 @@
 | C-08 | 选题-台账一致性探针 | 选题研究部 | live | `python src/board_check.py` · 真板 5 题 10 稿 0 FAIL 实测（backlog#3·R3 commit） |
 | C-09 | 自动周报生成器（state+commits→周报） | 数据分析部 | in-dev | backlog #6 |
 | C-10 | 视频号口播裁剪（4 稿 67-77s） | 内容生产部 | blocked | 卡点=生产暂停令 |
-| C-11 | M2 素材链路（TTS/形象选型） | 内容生产部 | blocked | 卡点=CEO 待决+账号 |
+| C-11 | M2 素材链路（TTS/画面/剪辑/字幕） | 内容生产部 | in-dev | 选型已裁：本地算力优先（O-20260923-1609-bm-a·`docs/m2-local-stack.md` 四站本地方案+PoC 阶梯·backlog #9） |
 | C-12 | 平台 API 发布对接 | 平台运营部 | blocked | 卡点=账号未开（批次①） |
 | C-13 | 数据回流自动化（后台导出→对账） | 数据分析部 | planned | 待上线后实况定通道 |
+| C-17 | 本地算力链 PoC（FFmpeg 时间线+TTS 参数表+字幕对轴） | 工程技术部+内容生产部 | in-dev | backlog #9 · m2-local-stack.md §4（R-A→R-C） |
 | C-14 | 自动化生产全链路（七站表+生产闸门+生产模式协议） | 总裁办公室+工程技术部 | live | `docs/production-chain.md` · 闸门拒稿实测 exit=3 |
 | C-15 | 草稿骨架生成器 make_draft（M1/M3 站） | 内容生产部+平台运营部 | live | `python src/make_draft.py` · 三类骨架 lint 0 FAIL 实测 |
 | C-16 | 全链量产生产轮（M0-M3 无人值守量产） | 全部门 | blocked | 卡点=生产暂停令（state.json production=paused）·开闸=CEO 令 |
@@ -40,3 +41,4 @@
 
 - 2026-09-23: v1.0 建册（CEO 令 O-20260923-1536-bm-a）——live×5 / in-dev×4 / blocked×3 / planned×1。
 - 2026-09-23: v1.1 全链批（CEO 令 O-20260923-1600-bm-a）——C-06 升 live（R1）；OS 循环 R2/R3 自主升 C-07/C-08 live；新增 C-14/C-15 live、C-16 闸门 blocked。现 live×8 / in-dev×1 / blocked×4。
+- 2026-09-23: v1.2 本地算力批（CEO 令 O-20260923-1609-bm-a）——C-11 解除 CEO 待决卡点转 in-dev（本地算力优先·选型=v1 四站本地）；新增 C-17 本地链 PoC in-dev（backlog #9）。现 live×8 / in-dev×3 / blocked×3 / planned×1。

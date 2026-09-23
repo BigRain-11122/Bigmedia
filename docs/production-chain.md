@@ -21,7 +21,7 @@
 |---|---|---|---|---|
 | M0 选题 | 半自动 | OS 循环生产轮提案（源=集团 git 实况）+ `board_check.py` 一致性探针（C-08 live） | CEO 批注门；每题来源可溯 | gated（闸门关） |
 | M1 母稿 | 半自动 | `src/make_draft.py` 骨架生成（C-15）+ AI 会话填充 | 命名/版本律；骨架自带 GATE PENDING | gated |
-| M2 素材 | 半自动 | 零预算链路选型（C-11 blocked·needs-CEO）；三案人设参数已锁 | 素材脱敏审；来源可溯 | blocked |
+| M2 素材 | 半自动 | **本地算力链**（C-11 in-dev·选型已裁=本地优先 O-20260923-1609-bm-a）：edge-tts/faster-whisper/FFmpeg/opencv 已装·四站方案=`docs/m2-local-stack.md`·PoC=backlog #9 | 素材脱敏审；来源可溯 | in-dev |
 | M3 变体 | 全自动骨架 | `docs/variant-templates.md` 11 平台骨架（C-07 live）+ make_draft 变体位 | 母稿链接登记；lint 0 FAIL | gated |
 | M4 审查 | 全动机审＋人工点人审 | `src/draft_lint.py`（C-01 live·12 用例）+ 嗓音人审（Qiqi/CEO 抽样） | FAIL=禁发布，无例外 | **live** |
 | M5 发布 | 半自动 | `output/schedule.md` 台账（C-05）；公众号草稿 API+YouTube Data API=接口已定（C-12 blocked·账号） | 发布=M4 PASS+账号就绪双前置 | blocked |
@@ -43,3 +43,4 @@
 ## 变更记录
 
 - 2026-09-23: v1.0 建链（CEO 令 O-20260923-1600-bm-a）——七站全表+生产闸门+生产模式协议；M4 已 live，M0/M1/M3 骨架就绪待闸，M2/M5 blocked（选型/账号），M6 in-dev。
+- 2026-09-23: v1.1 本地算力批（CEO 令 O-20260923-1609-bm-a）——M2 站选型已裁=**本地算力优先**（四站本地方案+显存分时+PoC 阶梯=`docs/m2-local-stack.md`）；M2 由 blocked 转 in-dev。

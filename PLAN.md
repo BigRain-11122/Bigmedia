@@ -58,7 +58,7 @@ M0 选题库 → M1 脚本/文案 → M2 素材制作（AIGC）→ M3 多平台�
 | 1 | GitHub 建私库并接 remote | ✅ 已建·实际名 BigRain-11122/Bigmedia（O-20260923-1512-bm-a）·已接线 push；slug≠产品名，更名与否待 CEO 裁 |
 | 2 | 账号开通顺序 | ✅ 2026-09-23 CEO 批：视频号+公众号（首发）→ B站 → 微博 → YouTube |
 | 3 | 栏目/人设名 | 🔄 交 Qiqi 提案 2-3 套（`docs/column-persona-proposals.md`）·CEO 终审点名 |
-| 4 | 生产工具链预算 | AIGC 工具（配音/剪辑/文生图）选型：先用零预算链路（本机 ComfyUI/Ollama 同源复用），不足再报预算 |
+| 4 | 生产工具链预算 | ✅ 2026-09-23 CEO 裁：**本地算力优先**（O-20260923-1609-bm-a）——本机实况=RTX 4070S 12GB+9950X+Ollama qwen2.5:14b+edge-tts/faster-whisper/FFmpeg 已装；选型=`docs/m2-local-stack.md`（四站本地+显存分时+PoC 阶梯）；云/付费=兜底逐单报批 |
 | 5 | 发布节奏 | 账号到位后定（如周更 2 条起步） |
 
 ## §8 扩容路径
@@ -73,3 +73,4 @@ M0 选题库 → M1 脚本/文案 → M2 素材制作（AIGC）→ M3 多平台�
 - 2026-09-23: 底层优先令（O-20260923-1525-bm-a）——生产暂停·10 稿封存；BigStream-OSLoop 自迭代循环建成注册；M4 机审工具化（src/draft_lint.py）；发布/数据台账模板落位。
 - 2026-09-23: 立法批（O-20260923-1536-bm-a）——公司宪法 CONSTITUTION.md（法律层级 L0-L3）；七部一办组织编制 docs/org-structure.md；自动化能力注册表 docs/capabilities.md；OS 循环任务书接线宪法与编制；R1 首轮实证（backlog#1 测试件 12 用例全绿）。
 - 2026-09-23: 全链批（O-20260923-1600-bm-a）——docs/production-chain.md 七站全表+生产闸门；src/make_draft.py 骨架生成器（闸门拒稿实测 exit=3·三类骨架 lint 0 FAIL）；循环 R2/R3 自主交付变体模板+board_check（C-07/C-08 live）。
+- 2026-09-23: 本地算力批（O-20260923-1609-bm-a）——M2 选型裁决=本地算力优先；docs/m2-local-stack.md 四站本地方案+显存分时+PoC 阶梯；C-11/C-17 in-dev（backlog #9）；§7-4 签毕。
