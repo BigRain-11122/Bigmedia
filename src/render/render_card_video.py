@@ -160,19 +160,59 @@ def _fpath(p):
     return str(p).replace("\\", "/").replace(":", "\\:")
 
 
+# O-20260923-1937 visual-spec palette (visual-spec.md S3)
+# NB: drawtext takes color NAMES or 0xRRGGBB only - "0.6*white" style
+# expressions are not valid fontcolor values (ffmpeg exit 4294967274).
+_COLORS = {
+    "white": "white",
+    "gray60": "gray",
+    "accent": "0xE8E6DF",  # FLUX light-point platinum
+}
+
+
+def _visual_spec(cfg, font_path_check=True):
+    """Resolve visual-spec keys from the font section (all optional;
+    absent keys = legacy single-font rendering, fully backward compatible)."""
+    font = cfg["font"]
+    h1 = font.get("h1_font", "")
+    if h1 and font_path_check and not Path(h1).exists():
+        raise ValueError("font.h1_font not found: %s" % h1)
+    return {
+        "h1_font": h1,
+        "h1_size": int(font.get("h1_size", 96)),
+        "h1_color": font.get("h1_color", "white"),
+        "h2_size": int(font.get("h2_size", 52)),
+        "h2_color": font.get("h2_color", "gray60"),
+        "h1_gap": int(font.get("h1_gap", 48)),
+        "optical_center": float(font.get("optical_center", 0.42)),
+    }
+
+
 def _q(p):
     return "'" + _fpath(p) + "'"
 
 
 def build_render_plan(cfg, cues, tmpdir):
     """Build the drawtext filtergraph. Text bodies go through temp
-    textfiles so multi-line CJK renders without escaping issues."""
+    textfiles so multi-line CJK renders without escaping issues.
+
+    O-20260923-1937 visual-spec engine (backward compatible):
+    - font section may carry h1_font/h1_size/h1_color/h2_size/h2_color/
+      h1_gap and optical_center (default 0.42) - visual-spec.md S1-S2.
+    - per card, lines[0] renders as H1 (bold anchor font, accent color,
+      largest), remaining lines render as H2 block below it, both
+      composed around the optical center line (42% frame height).
+    - 150ms fade in/out per card (S4) via alpha expression.
+    Cards without the new keys render exactly as before.
+    """
     tmpdir = Path(tmpdir)
     font = cfg["font"]
     font_q = _q(font["file"])
     ls = int(font.get("line_spacing", 12))
     subs_bottom = int(font["subs_bottom"])
     frame_w = int(cfg["video"]["width"])
+    frame_h = int(cfg["video"]["height"])
+    spec = _visual_spec(cfg, font_path_check=False)
     made = []
 
     def textfile(content, name):
@@ -184,25 +224,74 @@ def build_render_plan(cfg, cues, tmpdir):
         made.append(p)
         return p
 
+    def fade_alpha(start, end, ms=0.15):
+        f = start + ms
+        g = end - ms
+        if g <= f:
+            return None
+        # NB: the whole expression must be single-quoted inside the
+        # filtergraph, else its commas read as filter separators and
+        # the graph collapses (crash exit 3015096584, O-1937 session).
+        return ("'if(lt(t,%.3f),0,if(lt(t,%.3f),(t-%.3f)/%.3f,"
+                "if(lt(t,%.3f),1,if(lt(t,%.3f),(%.3f-t)/%.3f,0))))'"
+                % (start, f, start, ms, g, end, end, ms))
+
     aigc_p = textfile(str(cfg["aigc_notice"]).strip(), "aigc.txt")
     ends = [e for _, e, _ in cues] + [float(c["end"]) for c in cfg["cards"]]
     duration = max(ends) + float(cfg.get("tail", 0.5))
 
     chain = ["[0:v]"]
     chain.append(
-        "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
-        ":alpha=0.75:x=48:y=48:line_spacing=%d"
-        % (font_q, _q(aigc_p), int(font["aigc_size"]), ls))
+        "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+        ":alpha=0.6:x=48:y=48:line_spacing=%d"
+        % (font_q, _q(aigc_p), int(font["aigc_size"]),
+           _COLORS.get(spec["h2_color"], "white"), ls))
     for i, c in enumerate(cfg["cards"]):
-        size = int(c.get("size", font["cards_size"]))
-        body_text = "\n".join(
-            wrap_for_width(x, size, frame_w) for x in c["lines"])
-        body = textfile(body_text, "card%02d.txt" % i)
-        chain.append(
-            "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
-            ":line_spacing=%d:x=(w-text_w)/2:y=(h-text_h)/2"
-            ":enable='between(t,%.3f,%.3f)'"
-            % (font_q, _q(body), size, ls, float(c["start"]), float(c["end"])))
+        start, end = float(c["start"]), float(c["end"])
+        alpha = fade_alpha(start, end)
+        if spec["h1_font"] and c.get("lines"):
+            h1_text = str(c["lines"][0]).strip()
+            h2_lines = [str(x).strip() for x in c["lines"][1:] if str(x).strip()]
+            h1_size = int(c.get("h1_size", spec["h1_size"]))
+            h2_size = int(c.get("h2_size", spec["h2_size"]))
+            h1f_q = _q(spec["h1_font"])
+            h1_body = textfile(
+                "\n".join(wrap_for_width(x, h1_size, frame_w) for x in [h1_text]),
+                "card%02d.h1.txt" % i)
+            h1_y = "(h*%.2f-text_h/2)" % spec["optical_center"]
+            h1_extra = ""
+            if alpha:
+                h1_extra = ":alpha=%s" % alpha
+            chain.append(
+                "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+                ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
+                % (h1f_q, _q(h1_body), h1_size, _COLORS.get(spec["h1_color"], "white"),
+                   ls, h1_y, start, end, h1_extra))
+            if h2_lines:
+                h2_body = textfile(
+                    "\n".join(wrap_for_width(x, h2_size, frame_w) for x in h2_lines),
+                    "card%02d.h2.txt" % i)
+                h2_y = ("(h*%.2f+text_h/2+%d)"
+                        % (spec["optical_center"], int(spec["h1_gap"])))
+                h2_extra = ""
+                if alpha:
+                    h2_extra = ":alpha=%s" % alpha
+                chain.append(
+                    "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+                    ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
+                    % (font_q, _q(h2_body), h2_size,
+                       _COLORS.get(spec["h2_color"], "white"),
+                       ls, h2_y, start, end, h2_extra))
+        else:
+            size = int(c.get("size", font["cards_size"]))
+            body_text = "\n".join(
+                wrap_for_width(x, size, frame_w) for x in c["lines"])
+            body = textfile(body_text, "card%02d.txt" % i)
+            chain.append(
+                "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
+                ":line_spacing=%d:x=(w-text_w)/2:y=(h-text_h)/2"
+                ":enable='between(t,%.3f,%.3f)'"
+                % (font_q, _q(body), size, ls, start, end))
     for j, (s, e, t) in enumerate(cues):
         body = textfile(wrap_for_width(t, int(font["subs_size"]), frame_w),
                         "cue%03d.txt" % j)

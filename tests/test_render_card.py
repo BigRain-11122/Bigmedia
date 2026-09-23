@@ -183,7 +183,7 @@ class TestPlanAndMatch(unittest.TestCase):
             self.assertEqual(5, ft.count("drawtext="))
             self.assertEqual(4, ft.count("enable='between(t,"))
             # aigc notice persists for the whole video (no enable window)
-            self.assertIn("alpha=0.75", ft)
+            self.assertIn("alpha=0.6", ft)  # O-1937 visual-spec S3: gray60 notice
             # duration = max end (cues 6.5, cards 15) + tail 0.8
             self.assertAlmostEqual(15.8, plan["duration"], places=3)
             for p in plan["textfiles"]:
