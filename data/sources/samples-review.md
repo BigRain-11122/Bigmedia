@@ -57,3 +57,9 @@ ffmpeg -y -i output\renders\.v8-mid\audio.mp3 -stream_loop -1 -i output\renders\
 python src\render\render_card_video.py --cards output\renders\.v8-mid\cards.json --srt output\renders\.v8-mid\subs.srt --voiceover output\renders\.v8-mid\voiceover.txt --strict --audio output\renders\.v8-mid\audio-bgm.mp3 --out output\renders\bs-001-v8-cyber-mid.mp4
 ```
 （light/full 同构换 `--cyber` 档与目录；ASR 听检=`python src\render\whisper_to_srt.py --audio <tmp>\audio.mp3 --out <tmp>\asr-check.srt`）
+
+## 六、定档回执（2026-09-23 22:0X·CEO 点选）
+
+- **声线定档=light 轻度赛博**；**叙述者=机器态确认**（系统日志体正典化）——拟人组 A-D 降为对照留档。
+- **v9 定档版**=`output/renders/bs-001-v9-cyber-light.mp4`（59.31s·12 拍·beat2 增「爽的是我们，累的是他」人味反转·beat9 回归甩锅交账梗）——评审六席 9+ **PASS=放行候选**（`docs/reviews/review-20260923-bs001-v9.md`）·待 CEO 终审最后一键。
+- 产线默认参数已锁：`emotive_tts --cyber light` + 机器叙述者拍稿（copy-craft §2.6）——mid/full 留档对照（full 禁量产·ASR 实证伤事实词）。

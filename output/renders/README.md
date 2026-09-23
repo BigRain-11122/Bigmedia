@@ -20,8 +20,9 @@
 | bs-001-v8-cyber-light.mp4 | 测试件·非成品 | O-2136 赛博声线组 light：v8 系统日志体拍稿+轻机械纹理链（1080×1920·51.61s·strict 过·ASR 可懂度=基线同音字级·索引=samples-review §五） |
 | bs-001-v8-cyber-mid.mp4 | 测试件·非成品 | O-2136 赛博声线组 **mid（评审推荐档）**：音高压平-8Hz+金属颤音链·事实词零损实证（1080×1920·53.17s·strict 过·评审=v8 台账方向首测 FAIL 8.5·待 CEO 拣音） |
 | bs-001-v8-cyber-full.mp4 | 测试件·非成品 | O-2136 赛博声线组 full（极端参考端）：深度合成链（降调+52Hz 颤+位深压碎+窄频带）·ASR 实测打糊事实词（1080×1920·54.90s·strict 过） |
+| bs-001-v9-cyber-light.mp4 | 测试件·非成品 | O-2136 定档版（CEO 点选 light+机器叙述者）：双整改（爽/累反转+甩锅交账梗回归）·12 拍（1080×1920·59.31s·strict 过·ASR 事实词全存活）——评审六席 9+ **PASS=放行候选**待 CEO 终审（docs/reviews/review-20260923-bs001-v9.md） |
 
 > 中间件（独立临时音轨/SRT）存 `output/renders/.samples-tmp/`——O-1830 复现用（samples-review.md §四声明）·非渲染成品·不入本表。
 > 工艺迭代批中间件（O-1918/O-1924/v5）存 `.v3-tmp/`/`.v4-tmp/`/`.v5-tmp/`/`.v5b-tmp/`（分句音频段+BGM+无 BGM 底版+beats 三栏稿）——同性质非成品·不入本表（R21 声明）。
 > v6/v6b/v7 批中间件（E4 路人标准裁后术语平权→口号回环）存 `.v6-tmp/`/`.v6b-tmp/`/`.v7-tmp/`（分句音频段+BGM+cards 字卡+subs——同性质非成品·不入本表·R22 声明）；视觉批中间件（O-1937）存 `.v7vis-tmp/`（分句段+BGM+cards-vis 字卡重制+抽帧探针图）——同上。
-> 赛博批中间件（O-2136）存 `.v8-light/`/`.v8-mid/`/`.v8-full/`（分句段+赛博链前后音轨+BGM duck 混音+cards-vis 模板合并件+subs+ASR 可懂度检查 srt+抽帧图）——同性质非成品·不入本表。
+> 赛博批中间件（O-2136）存 `.v8-light/`/`.v8-mid/`/`.v8-full/`/`.v9-light/`（分句段+赛博链前后音轨+BGM duck 混音+cards-vis 模板合并件+subs+ASR 可懂度检查 srt+抽帧图）——同性质非成品·不入本表。
