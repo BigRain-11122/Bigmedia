@@ -23,7 +23,7 @@
 | C-06 | draft_lint 测试件 | 工程技术部 | live | `tests/test_draft_lint.py` · 12 用例全绿（R1 commit e4c55dc） |
 | C-07 | 11 平台变体骨架模板 | 平台运营部 | live | `docs/variant-templates.md` · 11 骨架块+登记块+检查单（backlog#2·R2 commit） |
 | C-08 | 选题-台账一致性探针 | 选题研究部 | live | `python src/board_check.py` · 真板 5 题 10 稿 0 FAIL 实测（backlog#3·R3 commit） |
-| C-09 | 自动周报生成器（state+commits→周报） | 数据分析部 | in-dev | backlog #6 |
+| C-09 | 自动周报生成器（state+commits→周报） | 数据分析部 | live | `python src/weekly_report.py` · backlog#6（R13）——四机器源（state.json+git log+backlog+orders）→`output/reports/weekly-<ISOyear>-W<ww>.md`·重跑覆盖制·模板件 `src/os/report_template.md`·12 测试用例全绿·首份 weekly-2026-W39.md 实测（10 轮/33 commits/令 10 条） |
 | C-10 | 视频号口播裁剪（4 稿 67-77s） | 内容生产部 | blocked | 卡点=生产暂停令 |
 | C-11 | M2 素材链路（TTS/画面/剪辑/字幕） | 内容生产部 | in-dev | 选型已裁：本地算力优先（O-20260923-1609-bm-a·`docs/m2-local-stack.md` 四站本地方案+PoC 阶梯·backlog #9） |
 | C-12 | 平台 API 发布对接 | 平台运营部 | blocked | 卡点=账号未开（批次①） |
@@ -46,3 +46,4 @@
 - 2026-09-23: v1.3 调研远征批（CEO 令 O-20260923-1719-bm-a）——新增 C-18 调研能力（双线协议化）live：research-protocol v1.0 立制+技术线首采 local-stack-research v1.0（含撤回 m2 一条无源断言）。现 live×11 / in-dev×3 / blocked×3 / planned×1。
 - 2026-09-23: v1.4 R-B 批（OS 循环 R11）——C-17 之 R-B 转 live（TTS 双轨试录：edge-tts 参数表+6 样件·piper1-gpl 本地备份真装真录）；C-17 整体仍 in-dev 至 R-C；卡点 T3 解锁/T2 起录/T4 呈样（local-stack-research §6）。
 - 2026-09-23: v1.5 R-C 批（OS 循环 R12）——C-17 整体转 live：双路字幕对轴（B 路 edge-tts 直出+srt_fix 钳重叠=A 路更快-whisper small int8 CPU）+BS-001 v2 音轨重渲；连带修红 drawtext CRLF 行距翻倍（LF 写出+回归测试锁）；PoC 全梯 done·R-D 后置。现 live×12 / in-dev×2 / blocked×3 / planned×1。
+- 2026-09-23: v1.6 周报批（OS 循环 R13）——C-09 转 live：自动周报生成器（src/weekly_report.py·四机器源→output/reports/·重跑覆盖制）；output/reports/ 解封入 git（台账=产出即证据）；首份周报 weekly-2026-W39.md 生成实测。现 live×13 / in-dev×1 / blocked×3 / planned×1。

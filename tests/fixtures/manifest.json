@@ -14,5 +14,7 @@
   "board_ideas_stale": "board/ideas_stale.md",
   "board_ideas_dup": "board/ideas_dup.md",
   "board_ideas_badstatus": "board/ideas_badstatus.md",
-  "board_ideas_noflow": "board/ideas_noflow.md"
+  "board_ideas_noflow": "board/ideas_noflow.md",
+  "report_state_ok": "report/state_ok.json",
+  "report_backlog_ok": "report/backlog_ok.md"
 }

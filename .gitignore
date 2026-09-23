@@ -3,6 +3,7 @@
 output/*
 !output/schedule.md
 !output/analytics.md
+!output/reports/
 data/assets/
 *.mp4
 *.mov
