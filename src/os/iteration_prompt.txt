@@ -33,6 +33,7 @@
 - P1 级事项（商业化、新赛道、平台扩容）只提案写进 backlog 并标 [needs-CEO]，不执行
 - 集团红线：不标题党、无来源不发布、AIGC 依法显著标识——调研与素材生产同样不得违背
 - 脱敏律（O-1602 新增）：仓位/密钥/token 用量细节/未公开财务/私有仓内容=禁入素材
+- 环节门长牙（O-20260923-2245-bm-a）：核验/补账渲染件时**同跑两道 S2 机检门**——`python src/ai_feel_check.py --beats <拍稿> --srt <tmp>/subs.srt` 与 `python src/platform_spec_check.py --video <mp4> --platform <目标平台>`，结果（PASS/FAIL+要点）并入 renders 台账行或 station-reviews 台账；FAIL 如实入账，**不自行修改 bm-a 在途批**（认领制·只入账待其闭环）
 
 【发布边界】内容生成=仅限产线测试（单件过链·标「测试件·非成品」）；批量生成（N=6）暂缓待 CEO 令；发布（M5）仍须账号（CEO 物理件）+M4 合规门全绿+AIGC 显著标识；未上线=未测量。
 

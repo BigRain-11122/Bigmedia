@@ -39,6 +39,7 @@
 - org-structure §3：部门辖区=评审职责（认领辖区即认领该环节质量）。
 - copy-craft/human-feel-spec：S1/S2 席 rubric 底座（引用不复制）。
 - O-2241 Token 纪律：评审运营成本=机检零 token+Ollama 本地+会话专家最小必要面。
+- **执行引擎**：OS 循环=环节门常设执法面——补账/核验渲染件时同跑 S2 机检两门（ai_feel+platform_spec·任务书铁律区·O-2245）；交互会话=环节门立法与整改面；结果全入台账。
 
 ## 变更记录
 
