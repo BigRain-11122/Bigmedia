@@ -19,7 +19,7 @@
 
 | 站 | 自动化级 | 工具/执行体 | 门禁 | 实况 |
 |---|---|---|---|---|
-| M0 选题 | 半自动 | OS 循环生产轮提案（源=集团 git 实况）+ `board_check.py` 一致性探针（C-08 live） | CEO 批注门；每题来源可溯；**S0 选题官环节门** | gated（闸门关） |
+| M0 选题 | 半自动 | OS 循环生产轮提案（**两源合流=集团 git 实况+情报部日报**·O-2304）+ `board_check.py` 一致性探针（C-08 live） | CEO 批注门；每题来源可溯；**S0 选题官环节门** | gated（闸门关） |
 | M1 母稿 | 半自动 | `src/make_draft.py` 骨架生成（C-15）+ AI 会话填充 | 命名/版本律；骨架自带 GATE PENDING；**S1 编剧官环节门（铁律自检表随稿·进链件 ≥9）** | gated |
 | M2 素材 | 半自动 | **本地算力链**（C-11 in-dev·选型已裁=本地优先 O-20260923-1609-bm-a）：edge-tts/faster-whisper/FFmpeg/opencv 已装·四站方案=`docs/m2-local-stack.md`·PoC=backlog #9 | 素材脱敏审；来源可溯；**人味规格环节（O-2210）：拍稿预算含空气预算（60s→≤55s 文本）·配音走 `--human` 种子**；**S2 配音听审官环节门（ASR+ai_feel+spec 三机检前置）** | in-dev |
 | M3 变体 | 全自动骨架 | `docs/variant-templates.md` 11 平台骨架（C-07 live）+ make_draft 变体位 | 母稿链接登记；lint 0 FAIL；**S3 变体官环节门（平台语态/规格窗·进链件 ≥9）** | gated |
