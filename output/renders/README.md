@@ -13,6 +13,11 @@
 | bs-001-v4-bilibili-style.mp4 | 测试件·非成品 | O-1924 B 站风格 v4：作死挑战叙事全真实事故（文案三轮被拦/432 全灭/AI 自审）（1080×1920·71.26s·strict 全过+BGM ducking·commit 7609adf）——评审团首战样本（FAIL 8.0·docs/reviews/·R21 补账） |
 | bs-001-v5-shipinhao.mp4 | 测试件·非成品 | v5 整改 R1-R4·视频号版：≤60s 规格 60.58s·尾拍 BGM 淡出·三家公司人格化（1080×1920·commit d1cf224·面板复评 FAIL 8.0·弱项收敛 E4 门槛·R21 补账） |
 | bs-001-v5b-bilibili.mp4 | 测试件·非成品 | v5 整改 R1-R4·B 站版：64.0s·系列钩收尾（1080×1920·commit d1cf224·同批评审·R21 补账） |
+| bs-001-v6-shipinhao.mp4 | 测试件·非成品 | v6 术语平权版（CEO 裁 E4 维持路人标准后）：术语译路人语（软著→版权证书/策略→方案/代码库→留底）（1080×1920·55.13s·commit 2c8ddb9·面板三轮 FAIL·E4 锚 7 缺口号·R22 补账） |
+| bs-001-v6b-bilibili.mp4 | 测试件·非成品 | v6 术语平权·B 站版（1080×1920·56.14s·commit 2c8ddb9·同轮评审·R22 补账） |
+| bs-001-v7-shipinhao.mp4 | 测试件·非成品 | v7 口号回环版：「一个人上班，三家公司开工」首尾（1080×1920·52.82s·commit 2c8ddb9·面板四轮 FAIL 8.0 E4 唯一短板席→E4 双态裁后翻**放行候选**（173e286·开发期五席 9+·E4 参考读数 8.0 高于真爆款基线·docs/reviews/）·R22 补账） |
+| bs-001-v7-vis.mp4 | 测试件·非成品 | O-1937 视觉批 v7 重渲：H1/H2 双字重排版引擎（msyhbd 锚+accent 强调+gray60 弱化+150ms 淡入出·visual-spec v1.0）（1080×1920·52.82s·commit 2c2d990·抽帧 E7 自检三重对比过·R22 补账） |
 
 > 中间件（独立临时音轨/SRT）存 `output/renders/.samples-tmp/`——O-1830 复现用（samples-review.md §四声明）·非渲染成品·不入本表。
 > 工艺迭代批中间件（O-1918/O-1924/v5）存 `.v3-tmp/`/`.v4-tmp/`/`.v5-tmp/`/`.v5b-tmp/`（分句音频段+BGM+无 BGM 底版+beats 三栏稿）——同性质非成品·不入本表（R21 声明）。
+> v6/v6b/v7 批中间件（E4 路人标准裁后术语平权→口号回环）存 `.v6-tmp/`/`.v6b-tmp/`/`.v7-tmp/`（分句音频段+BGM+cards 字卡+subs——同性质非成品·不入本表·R22 声明）；视觉批中间件（O-1937）存 `.v7vis-tmp/`（分句段+BGM+cards-vis 字卡重制+抽帧探针图）——同上。
