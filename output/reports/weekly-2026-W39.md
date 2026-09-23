@@ -1,14 +1,14 @@
 # BigStream 周报（2026-W39）
 
-> 自动生成件（C-09 周报生成器·数据分析部归口）——生成时间 2026-09-23 18:16
+> 自动生成件（C-09 周报生成器·数据分析部归口）——生成时间 2026-09-23 19:53
 > 本件=公司运营周报（L3 台账·非内容成品）；数据源=src/os/state.json + git log + src/os/backlog.md + orders/（四个机器源·无人工编辑）
 > 诚实纪律：未上线=未测量（PLAN §5）——平台与内容数据在账号开通前一律「未测量」；本件可重跑覆盖（重生成=最新真相）
 
 - 周期：2026-09-21 ~ 2026-09-27（ISO 周 2026-W39）
-- 轮次：本周 11 轮（当前 tick=13·idle 0 轮·其他账目 1 条）
-- 交付：33 commits
-- 任务板：本周完成 7 项·未完成 3 项
-- 令牌：本周 CEO 令 10 条
+- 轮次：本周 21 轮（当前 tick=22·idle 4 轮·其他账目 1 条）
+- 交付：62 commits
+- 任务板：本周完成 9 项·未完成 4 项
+- 令牌：本周 CEO 令 16 条
 
 ## 1 轮次实录（state.json）
 
@@ -24,9 +24,48 @@
 - 2026-09-23 17:47 R11: backlog#9 R-B 交付——TTS 双轨试录台账落 data/sources/tts-samples/（README）：edge-tts 参数表+6 样件（本机 zh-CN 清单实采：男声4=Yunjian/Yunxi/Yunxia/Yunyang·Azure 全量不在 edge 通道；位次建议 Yunyang A/Yunxi B/Yunjian C·Yunyang 沉稳档 rate-10%+pitch-2Hz·--write-subtitles 直出 SRT 实测 3 句 3 轴可用·cue1/2 有 50ms 重叠在案·本轮 5/5 首试=T2 起录）；piper1-gpl 备份线真装真录（pip piper-tts·huayan medium 63MB 模型 gitignored 落 data/assets/piper-models/·纯 CPU 2.77s 合成 8.17s 音频·T3 解锁=后继仓无 list CLI·语音=外置 ONNX·沿用 HF rhasspy/piper-voices v1.0.0）；T4 样件呈样待人耳（backlog #8·CEO/Qiqi）。接线：m2-local-stack §4 R-B done+变更记录、C-17 R-B live（v1.4）、research §6 T2/T3/T4 更新。下轮焦点=R-C 字幕对轴双路（faster-whisper CPU int8 vs SRT 直出）。收账 commit+push。
 - 2026-09-23 18:1x R12: backlog#9 R-C 交付·#9 全梯 done——双路字幕对轴+裁决：B 路=edge-tts --write-subtitles 直出+src/render/srt_fix.py 钳 50ms 重叠=合成稿正路（文本逐字精确·renderer --strict 实过）；A 路=src/render/whisper_to_srt.py（faster-whisper small int8 CPU·词级时间戳·断点优先句读）=真人原声通用件（ASR 固有错在案：它们→他们/软著→软着/诚实门禁→城市门禁·标点半角化）。BS-001 占位 SRT 换真轴+Yunyang 试配音轨 v2 重渲（1080×1920·59.93s·aac 24k·ffprobe+亮度带像素实证）。连带修红：drawtext CRLF 行距翻倍（textfile \r\n 的 \r 被当独立换行·行距 70→142px LF/CRLF 对照实验定谳·≥3 行字幕裁帧底·R9 目检漏网）→渲染器 LF 写出+回归测试锁（align 14 用例+render 18 用例全绿）。遗留=cue8 14.39s 长 cue 再切+卡轴漂移（58 vs 59.93s）→随 #4 产线批；音色待人耳（#8）。轮末收 O-1756 模式修正令（17:56·体系建设优先·不量产·允许测试生产）：本轮 R-C=令中合法产线测试（测试件·非成品）；下轮焦点改体系优先·#4 量产暂缓（N=6 封存·启动须 CEO 令）；已按新执行认领制在令尾认领并落地执行项②（backlog#4 标注）③（PLAN 变更记录）——①④ bm-a 会话先行完成。收账 commit+push。
 - 2026-09-23 18:2x R13: backlog#6 完成——周报生成器 C-09 交付：src/weekly_report.py（纯 ASCII·四机器源=state.json+git log+backlog+orders→output/reports/weekly-<ISO年>-W<周>.md·重跑覆盖制=最新真相·纯函数注入式可测）+模板数据件 src/os/report_template.md（17 占位符·drift 测试锁）+tests/test_weekly_report.py 12 用例全绿（夹具 state/backlog/orders·git 实仓冒烟·CLI 临时目录；首跑 1 处测试断言笔误即修=orders 窗口写错窗）；lint/board 回归 24 用例全绿。.gitignore 解封 output/reports/（台账=产出即证据）。首份真周报 weekly-2026-W39.md 已生成重跑（本周 11 轮·tick13·平台数据未测量如实标）。台账连带：backlog#9 全梯 done 事实补 [done] 规范标记·#6 标 done·C-09 升 live（v1.6·live×13）。同仓实况：轮首树净·轮中发现另一执行体（bm-a 会话）PLAN.md 未提交在写（§7 待决清单增 7/8/9+§8 模式行）——无 index.lock·文件零交集·本轮 git add 显式列文件未纳其变更（R6 分工先例）。收账 commit+push。
+- 2026-09-23 18:30 R14: backlog#10 交付+backlog#7 裁定——①C-19 发布准备度探针 live：src/readiness.py 四只读源聚合（accounts 亮灯=状态流自台账声明解析·11 平台逐行；10 稿 GATE 态=GATE_RE 复用 draft_lint 单一真相；output/renders/ 测试件清单+「测试件·非成品」标注核验——新台账 output/renders/README.md 解封入 git（mp4 仍 ignored）·R9/R12 两 mp4 补标注；backlog [needs-CEO]/[suspended] 决策标记）→距离首发阻塞清单（模板数据件 readiness_template.md·stdout/--out 双通道·阻塞≠失败口径）；24 用例+全回归 91 用例全绿；真跑实测 3 阻塞 0 发现 exit 1（批次①账号未开+10 稿 GATE PENDING+#7 决策）。修红两起在案：board_check FLOW_RE 跨段捕获（真实台账流线无分号→捕获跑进纪律段·补 \n 行边界+multiflow 回归锁）·blocker 行缺 bullet 前缀（真跑目检发现即修）。②#7 口播裁剪裁定=O-1756 边界外转 [needs-CEO] 提案（4 稿批量内容编辑属量产类·封存稿动笔须 CEO 令·并入口吻改写批一次过=反重复）·C-10 卡点同步刷新。③capabilities v1.7（live×14）。收账 commit+push。
+- 2026-09-23 18:4x R15: O-1756 机牢缺口补落——state.json production open→paused（O-1602 开闸态与「不量产」意图不符）+mode→o-1756-systems-first+opened_by 改 O-1756；make_draft 生产位实测拒稿 exit 3（文案引用 O-1756）/测试位 --out 实测放行 exit 0（临时件验后即删）；文档同步=os-protocol §3 优先级边界+v1.2/production-chain §0 现值+变更记录 v1.2/backlog#4 机牢注/O-1756 令尾 R15 认领行（执行认领制）；unittest 91 用例全绿+board_check 真板 5 题 10 稿 0 FAIL；量产开闸须 CEO 令（PLAN §7-9 决策队列在案）。
+- 2026-09-23 18:5x R16: 修红——O-1830 样件批台账缺口补录：readiness 真跑亮 3 FAIL（render-unannot：bs-001-voice-B-yunxi/C-yunjian/D-huayan-local 三件音色对比成片未入 renders 台账·系 bm-a 样件批 commit 831a2ef 漏记）→ output/renders/README.md 补 3 行（均标「测试件·非成品」·含实测时长/samples-review 索引引用/D 件 ASR 错字在案引用）+ v2 行补「兼 O-1830 对比组 A」+ .samples-tmp 中间件一行声明（引 samples-review §四既有声明·非新立法）；复跑 readiness=3 阻塞 0 发现（阻塞=批次①账号未开+10 稿 GATE PENDING+#7 决策·皆外部如实）·unittest 91 用例全绿·git 轮首树净无锁。backlog 顶行无可认领项（#4 suspended-by-O-1756/#7 needs-CEO/#8 等人耳）——修红后收轮，下轮=体系/闲时活或 idle（不为凑工作量造活）。
+- 2026-09-23 19:00 R17: 体系优先闲时活（底层功能）——os-protocol §5 判据长牙：C-20 循环健康探针 src/os/loop_health.py 交付（工程技术部归口·纯只读·28 新用例+全回归 119 绿）——心跳新鲜度/间隔（SLA 20 分钟=WARN 级·长轮 25 分钟预算内静默合法；锁龄 40 分钟=FAIL 级停跳线）、tick↔done 轮次对账（账目滞后=FAIL·防 R4/R5 型断洞）、台账时间戳卫生（乱序/缺行=WARN·近似分钟 17:2x 合法·乱序为顾问级不改史）、backlog 燃尽率（info）。真跑 0 FAIL 4 WARN 皆为在案史实（R8/R9+R10/R11 叙事时间戳漂移警示·R4+R5 修复行·R5 26 分钟长轮间隙——beat 证据在案不改写）。首战自检闭环：真跑揭心跳文件 UTF-8 BOM（PowerShell 5.1 Add-Content 所写）致首行失解析→utf-8-sig 修复+回归锁。连带：os-protocol v1.3、capabilities v1.8（live×15）、backlog#11 落账。backlog 顶行仍无可认领项（#4 suspended/#7 needs-CEO/#8 等人耳），下轮=体系闲时活或 idle。收账 commit+push。
+- 2026-09-23 19:1x R18: 调研线续·T2 卡点补采（轮首四探针全绿无红·git 无锁树净·backlog 顶行三连不可认领后的真实活）——GitHub 官方 API 实采 edge-tts 403/风控史：标题含 403 的 issues 12 件全关闭·四波时间线（2024-10 双波/2024-12/2025-08/2026-01）·#286 仅中国大陆复现（本产线运行剖面恰在受影响域）·#290 177 评论 14 天关=最大波·#458 61 天关·关闭当日发 7.2.8；修复-发版对应=Sec-MS-GEC 参数修复（#297）/7.2.2 端点更新/7.2.6 切回官方端点；仓库活性=12,004 stars 未归档·2026-03-22 后无新提交。**许可证更正**：edge-tts GPL-3.0→现值 LGPLv3（LICENSE 文件直采·srt_composer.py 单文件 MIT·7.0.0 release notes 自证 relicensing·v1.0 旧记=采集时点 README 标注）。T2 数据点续录=1/1（1.98s·输出与 R11 逐字节同=确定性）累计 6/6。推论落案=备份线升产线刚性依赖+403 再发处置口径（升最新 release+波次期临时切 piper）。落地=research v1.2（§1.1 可靠性史块+§6 T2 转补采完成+§7 A8-A10）+tts-samples README 三处同步+m2-local-stack v1.2+capabilities v1.9（C-18 引用升 v1.2·live×15 不变）。收账 commit+push。
+- 2026-09-23 19:2x R19: 调研线续·P6 公众号破壳（backlog 顶行三连不可认领 #4 suspended/#7 needs-CEO/#8 等人耳·三探针零红 loop_health 0 FAIL 4 WARN 在案/readiness 3 阻塞 0 发现/board_check 0 FAIL·119 回归全绿后开工）——**P6 A 级直链取得**：mp.weixin.qq.com 官网首页实文（R7 时 pro.weixin 连接失败后首条活通道）→《微信公众平台运营规范》opshowpage 直链实采：①「可选推荐」分发功能官方确认（原文直引入 §3.5）+《推荐运营规范》子文档在案（URL 待挖=下轮余项）②阶梯式处罚机制（9.2）③内容红线面（4.1·M4 合规门参照）④注册事实（1.6·账号域归 CEO 只记不办）。P4 推进=小红书官方协议域定位（www.xiaohongshu.com/terms 302→agree.xiaohongshu.com/h5/terms/ZXXY20220331001·文档 ID 在案·h5 JS 壳如实记）。P2 卡点维持=巨量算数 React 壳+bing 搜索跑偏（反爬态·不恋战）。落地=research v1.3→v1.4（§3.5 新节+§3.4 收窄为抖音/小红书+§6 三行更新）+capabilities v1.10（C-18 市场线升 v1.4·live×15 不变）。限时律遵守：采集 4 批 15 分钟封顶·先写后收。首发批次①（视频号+公众号）机制面均已有 A/B 级源锚定。收账 commit+push。
+- 2026-09-23 19:2x R19 轮末补记（并行写事件如实入账·诚实律）：收账 commit 时发现 c576145 仅含 state.json 1 文件——git 实况核验=并行执行体 bm-a 会话 19:17:08 commit 8b68fb9（O-1915 viral-craft 批·4 件自产）以全量 git add 卷走了本循环轮次已写盘未暂存的 research v1.4（+28/-9）/capabilities v1.10（+3/-1）/state.json tick19+focus，故本循环 c576145 只补进 log R19 行。定性=内容零丢失·区域零冲突（两执行体写区无交集·本循环 replace 全部命中无覆盖），但 commit 归属混淆（循环产出记于 bm-a 名下 commit）。教训两条：①并行执行体 git add 应显式列文件（R13 先例）而非全量卷走；②执行体收账前应先 git log 复核插队 commit（本循环 commit 时未察觉 8b68fb9 已插队=可防而未防）。O-1915 期间 bm-a 仍在活跃写仓，本轮就此收轮不再开工新活（backlog 新顶行 #12=BS-001 文案重写 v3 留下轮认领）。
+- 2026-09-23 19:3x R20: 调研线续·P6 余项闭环——轮首认领制核验：新令 O-1918（工艺迭代：情感语气/卡点/BGM/审核升级·bm-a 已认领 BS-001 v3 垂直切片）+工作树实证 bm-a 活跃写仓（19:21：voiceover-v3.beats/emotive_tts.py/.v3-tmp），backlog#12 不重复认领。三探针=loop_health 0 FAIL 3 WARN（在案史实）/board_check 0 FAIL/readiness 2 发现（render-unannot bs-001-v3-emotive.mp4+render-stale bs-001-card.mp4 台账行）——两条均落 bm-a 活跃写区 output/renders/（O-1918 批次未闭·R16 先例批次闭后补账），本轮不碰、下轮复核修。本辖区零交集活=P6 子文档挖掘：opshowpage 原始 HTML curl 直采取得「点此查看」href→《微信公众号和服务号推荐运营规范》cgi-bin/announce key=11697600328G0Tbo 全文 A 级实采（window.wxCgi 服务端内嵌·online_time≈2023-10-19）：推荐场景三处/质量=推荐几率/转载分组不推荐/关闭不可逆/误导类标题 5.3.3-5.3.4（M4 标题党检测平台侧依据）/低创作度 7.1-7.4（低价值 AIGC=AI 声明升格推荐资格条件·与宪法红线4同向）/虚假人设 9（Jason 真人出镜正位）/导流禁域 5.4（CTA 边界）——research v1.4→v1.5（§3.5+§6 P6 机制面采齐）+capabilities v1.10→v1.11（C-18 升 v1.5）。采集约 8 分钟封顶（限时律遵守）。收账时 git log 复核（R19 教训②生效）发现 bm-a 三连插队 commit（0c752b1/5f3e56e/ddf76f2·19:27-19:29·O-1924 第三审「一点不好玩」→v4 敢想敢做叙事+O-1927 评审面板六席盲审≥9 分线+首战 v4 FAIL 8.0/9 整改单 R1-R4），其中 5f3e56e 全量 add 卷走本轮已写盘未提交的 research v1.5+capabilities v1.11（R19 同型事件第二次：内容零丢失·区域零冲突·commit 归属混淆——bm-a 再违 R19 教训①「显式列文件」；本循环 R19 教训②复核生效、commit 前如实捕获）；state.json 收账本轮单独显式列文件 commit+push。新令 O-1924/O-1927 均为 bm-a 已认领工艺迭代线，本循环不重复认领。
+- 2026-09-23 19:3x R21: 修红——bm-a 工艺迭代批已闭（树净·顶 commit d1cf224 v5）→ renders 台账修红落地：v3-emotive/v4-bilibili-style/v5-shipinhao/v5b-bilibili 四测试件补账（ffprobe 实测 51.26/71.26/60.58/64.0s·均 1080×1920·commit 锚 28d0c3f/7609adf/d1cf224）+stale 行移除（R9 无音轨 v1 被 v2 取代清盘·历史在 git）+工艺批中间件目录 .v3/.v4/.v5/.v5b-tmp 声明行；readiness 5→0 findings（3 阻塞皆外部 CEO 物理件如实）·board 0 FAIL·loop_health 0 FAIL 3 WARN 在案·119 回归全绿。探针解析实证一则：ledger 全文任意行媒体名即触发 stale 检查（v1 文件名写入 v2 行曾再亮红·改无扩展名写法过验）。backlog 顶行仍三连不可认领（#4 suspended/#7 needs-CEO/#8 等人耳·#12 bm-a 线 v5 复评 FAIL 8.0·R5-R7 在队·E4 校准问呈 CEO）——下轮=复核 bm-a 新成片补账或 P4 小红书 h5 通道或 idle。收账显式列文件 commit+push。
+- 2026-09-23 19:4x R22: 修红二轮——bm-a 工艺批 v6→v7-vis 已闭（树净·顶 commit b701e81）→ renders 台账补账四件：v6 术语平权 55.13s/v6b B 站 56.14s/v7 口号回环 52.82s（commit 2c8ddb9·面板四轮 FAIL 8.0 E4 唯一短板席→E4 双态裁后翻放行候选 173e286）/v7-vis O-1937 视觉批重渲 52.82s（commit 2c2d990·H1/H2 双字重引擎·抽帧 E7 自检过）+四个 tmp 目录声明行；readiness 4→0 findings（3 阻塞皆外部 CEO 物理件如实）·board 0 FAIL·loop_health 0 FAIL 3 WARN 在案·119 回归全绿。backlog 顶行仍三连不可认领（#4 suspended/#7 needs-CEO/#8 等人耳·#12=bm-a 工艺线已推进至 v7-vis 放行候选）。轮末余预算续采 P4（R21 预设次优先活）：h5 terms 四探针封顶=curl 直采 9.2KB 纯 React SPA 壳（服务端零正文·无 __INITIAL_STATE__）+main.658e74b.js 240KB 解包全为 /xhs-oa/ 内部 OA 端点+vendor 2.2MB grep terms 端点零命中→定谳 terms 正文=运行时 fetch·静态层零路由可采（不恋战纪律执行·负结果如实入账）——research v1.5→v1.6+capabilities v1.12；下轮=复核 bm-a 新成片补账（v7b B 站口号同步在 bm-a 队）或 idle。收账显式列文件 commit+push×2。
 
-## 2 交付账（git log·33 条）
+## 2 交付账（git log·62 条）
 
+- 902b895 2026-09-23 19:50 OS loop R22 (part 2): P4 xiaohongshu h5 terms probe closed negative - 4-probe cap: pure React SPA shell (server zero text), main bundle = internal OA endpoints, vendor grep zero hits -> runtime fetch, static layer unscannable; research v1.5->v1.6, capabilities v1.12; no channel guess-fighting per R19 discipline
+- ec6a335 2026-09-23 19:46 OS loop R22: renders ledger repair round 2 - v6/v6b/v7/v7-vis test pieces annotated (55.13/56.14/52.82/52.82s, ffprobe, anchors 2c8ddb9+2c2d990), v7 row notes release-candidate flip per E4 dual-state ruling, 4 tmp dirs declared; readiness 4->0 findings; 119 tests green
+- b701e81 2026-09-23 19:41 product memory: visual feedback -> self-review + spec + engine upgrade + E7 seat
+- 2c2d990 2026-09-23 19:41 visual-spec batch (CEO order O-1937: typography/composition poor - self-review + process + tech base): SELF-REVIEW logged (no visual seat, single-weight terminal aesthetic, tool-as-excuse); visual-spec.md v1.0 (weight hierarchy/42% optical grid/palette/motion/first-frame); renderer UPGRADED - H1/H2 dual-font engine (msyhbd anchor + accent color + gray60 H2 + 150ms fades), 3 real bugs fixed live (unquoted alpha expr crash, invalid 0.6*white color, BOM), 119 tests green + spec-aligned test update; review-panel v1.2 adds E7 visual-design seat (6-seat dev gate); v7-vis rendered 52.8s + frame-inspected (triple contrast verified)
+- a1cb626 2026-09-23 19:37 product memory: E4 dual-state ruling + v7 release-candidate
+- 173e286 2026-09-23 19:37 CEO ruling enacted: E4 dual-state policy (review-panel v1.1) - dev phase = five seats >=9 gates release-candidate with Ollama as reference instrument; post-account = real-human reception data executes the 9-point bar; v7 flipped to RELEASE-CANDIDATE (five seats 9+, E4 reference 8.0 > real-viral baseline, CEO final eye pending)
+- 4b4f200 2026-09-23 19:36 product memory: v5-v7 four-round review war + instrument calibration finding
+- 2c8ddb9 2026-09-23 19:36 v7 slogan-refrain iteration (52.8s): 'one man on the job, three companies on the clock' open/close loop; panel round 4 = FAIL 8.0 with E4 as sole holdout; INSTRUMENT CALIBRATION PROVEN (9-bar = proven-phenomenon: wayaowa 9 / yunnan 7 / areyouok 6 on same juror); E4 seat policy options A/B/C to CEO; v7 = release-candidate pending CEO ruling
+- 2afb06a 2026-09-23 19:34 OS loop R21: renders ledger repair - 4 craft-batch test pieces annotated (v3 emotive 51.26s / v4 bilibili 71.26s / v5 shipinhao 60.58s / v5b bilibili 64.0s, ffprobe), stale v1 card row removed (superseded by v2), tmp dirs declared; readiness 5->0 findings; probe lesson: MEDIA_RE scans every line so extension-less filenames only
+- d1cf224 2026-09-23 19:32 v5 iteration (all R1-R4 remediations): dual-platform versions rendered (shipinhao 60.6s + bilibili 64.0s with series hook), tail fade-out BGM, trio-personality copy; panel re-review = FAIL 8.0 (E1/E2/E3/E5 now 9+, weakness converged to E4 jargon threshold); E4 calibration question for CEO; R5-R7 queued
+- a89ca3f 2026-09-23 19:30 OS loop R20: P6 remnant closed - recommendation-rules subdoc URL excavated from opshowpage raw HTML (curl, bypasses fetch href loss) and full A-grade text captured (window.wxCgi server-side embed): recommend scenes x3, quality=recommend-odds, repost/group never recommended, opt-off irreversible, misleading-title 5.3.3/5.3.4 (M4 platform basis), low-creation 7.1-7.4 incl low-value AIGC (AI disclosure = recommend eligibility), fake-persona 9 (real-person fronting positive), diversion ban 5.4; research v1.5 + capabilities v1.11 were swept by bm-a interleaved commit 5f3e56e (second R19-type event, zero loss, attribution mixed, caught pre-commit via git-log recheck); state.json closed solo with explicit file list
+- ddf76f2 2026-09-23 19:29 product memory: review panel law + first battle FAIL 8.0
+- 5f3e56e 2026-09-23 19:28 review panel established (CEO order O-1927: hire experts, 9-point release threshold): review-panel.md 6-seat blind review + wood-barrel principle (all seats >=9 to pass) + Ollama qwen2.5:14b as independent juror; FIRST REVIEW on v4 = FAIL 8.0/9 (honest: credibility of claims / mid-section half-report tone / 71s between platforms / tail repetition); remediation list R1-R4 into docs/reviews/; pipeline M4 gains panel gate 4.5
+- 0c752b1 2026-09-23 19:27 product memory: third copy review (no fun) -> fun-rules + v4 dare-experiment narrative
+- 7609adf 2026-09-23 19:27 bilibili-style iteration v4 (CEO order O-1924, third review: 'no fun at all'): API channels blocked and logged (412/-352 risk control); 8-pattern viral library (general-knowledge grade, honest labeling) + fun-rules L9-L14 into copy-craft v1.1; v4 copy rewritten as dare-experiment narrative with real facts only (3x rework, 432 purge, AI self-audit) - rendered 71.26s strict-green + BGM ducking (over 60s shipinhao spec, noted for platform variant)
+- 28d0c3f 2026-09-23 19:23 craft-iteration batch (CEO order O-1918: flat voice / no cut-points / no BGM): emotive_tts.py sentence-level prosody engine (9 profiles), 3-field beats format (beat=cut on word boundary), v3 vertical slice rendered 51.26s strict-green + synth BGM with sidechain ducking; pipeline M4 gains craft-review layer 1.5 + CEO fast-iteration loop; frames inspected
+- 3997bad 2026-09-23 19:18 OS loop R19 addendum: record parallel-write event honestly (bm-a 8b68fb9 full git add swept this round's unstaged research v1.4/capabilities v1.10/state tick+focus; zero loss, zero region conflict, commit attribution mixed; lessons: explicit file list for parallel git add + git log recheck before closing commit); backlog new top #12 left for next round, bm-a active in repo so no new work opened
+- e0079f8 2026-09-23 19:17 product memory: CEO copy-quality feedback + craft rules born
+- c576145 2026-09-23 19:17 OS loop R19: P6 gongzhonghao unblock - official operation-rules A-grade direct fetch (mp.weixin.qq.com homepage live -> opshowpage: 'optional recommendation' distribution feature officially confirmed, recommendation-rules subdoc URL pending, tiered enforcement 9.2, content redlines 4.1); P4 xiaohongshu official terms domain located (ZXXY20220331001, h5 JS shell); P2 held (oceanengine React shell, bing search derailed); research v1.3->v1.4 (S3.5 new), capabilities v1.10 (C-18 market line v1.4), batch-1 platforms now all have A/B-grade mechanism sources
+- 8b68fb9 2026-09-23 19:17 viral-craft research batch (CEO order O-1915, copy judged poor): shortvideo-craft-research-v1 (platform prefs from sourced evidence + 8 falsifiable viral hypotheses + BS-001 7-point diagnosis + channel blocks); copy-craft.md v1.0 eight iron rules with per-draft self-check + M6 calibration loop; backlog#12 BS-001 copy rewrite v3 queued
+- f9bc8dc 2026-09-23 19:08 OS loop R18: T2 unblock - edge-tts 403 history via official GitHub API (12 issues all closed, 4 waves 2024-10 to 2026-01 incl #286 mainland-only wave; fixes ship as releases Sec-MS-GEC/7.2.2/7.2.6; repo quiet since 2026-03-22), license correction GPL-3.0 to LGPLv3 (LICENSE direct), T2 datapoint 6/6 cumulative; research v1.2 + tts-samples + m2-local-stack v1.2 + capabilities v1.9 sync; piper backup upgraded to hard production dependency
+- db6629d 2026-09-23 19:00 OS loop R17: C-20 loop-health probe machine-checks os-protocol S5 (heartbeat freshness/gap: SLA 20min warn, lock-age 40min fail; tick-vs-done accounting: lag fail = R4/R5 hole pattern; narrative-ts hygiene warn with 17:2x approximate minutes legal; backlog burn info; 28 new tests, 119 total green; real run 0 fail 4 warn all in-file history; first real run caught UTF-8 BOM on heartbeat file - utf-8-sig fix + regression lock)
+- a651e26 2026-09-23 18:45 OS loop R16: fix O-1830 sample-batch ledger gap (3 voice-comparison renders annotated in renders README after readiness probe caught 3 render-unannot FAILs; v2 row noted as sample group A; .samples-tmp intermediates line cites samples-review; re-run 3 blockers 0 findings; 91 tests green)
+- 831a2ef 2026-09-23 18:40 sample batch for CEO review (O-1830): BS-001 full-length voice comparison A/B/C/D (Yunyang steady / Yunxi / Yunjian / piper-huayan pure-local) + samples-review.md index; backlog#8 updated to full-length set
+- 91b69b8 2026-09-23 18:37 OS loop R15: O-1756 no-mass-generation enforced as machine law (production open->paused closes O-1602 gap; make_draft gate cites O-1756: production slot refuses exit 3, --out test slot passes; os-protocol v1.2 S3 + production-chain v1.2 S0 sync, backlog#4 machine-law note, order R15 claim; 91 tests + board probe 0 fail)
+- 3491a36 2026-09-23 18:30 OS loop R14: publish-readiness probe C-19 live (src/readiness.py + template: accounts lights, draft GATE states, render test-piece annotation ledger, backlog decision flags -> distance-to-launch blocker list; 24 tests + 91 total green; real run 3 blockers 0 findings exit 1); render ledger README un-ignored with both mp4s annotated; fixed cross-paragraph flow capture (line-bounded regex + regression lock); backlog#7 converted to needs-CEO proposal (O-1756 bounds: batch edit of sealed drafts, merge into persona-rewrite batch); capabilities v1.7
+- 59edbaf 2026-09-23 18:26 product memory: systems-first autonomous round (decision queue, weekly report, claim law)
+- cafaf0f 2026-09-23 18:21 systems batch: PLAN 7 refreshed as consolidated CEO decision queue (rows 7-9 added: voice pick by ear, slug naming, mass-production gate); PLAN 8 stale mode line fixed to O-1756; backlog#10 readiness probe queued
+- 233dc65 2026-09-23 18:16 OS loop R13: weekly report generator C-09 live (src/weekly_report.py + template data file + 12 tests green, rerun-overwrite ledger), output/reports/ un-ignored, first weekly-2026-W39.md (11 rounds/33 commits/10 orders, unmeasured metrics stated); backlog #6/#9 done-marked; capabilities v1.6
 - b07b98e 2026-09-23 18:06 O-1756 mode-correction batch: systems-first, no mass generation (N=6 sealed), test-production allowed; loop mandate rewritten (production -> test mode); orders execution-claim law added (O-1719 double-execution lesson); research v1.1 merge increment (CosyVoice quality-tier benchmark A7); backlog#4 suspended-by-O-1756
 - 7470e63 2026-09-23 18:02 OS loop R12: subtitle alignment R-C dual-path (edge-tts direct + srt_fix clamp = synth lane, whisper small-int8-cpu = real-voice lane), BS-001 v2 re-render with trial voice track; fix drawtext CRLF double-pitch clipping (LF + regression test, 32 tests green); receive O-1756 mode order, claim exec items 2-3 (suspend ammo batch, PLAN record)
 - a4cfc72 2026-09-23 17:47 OS loop R11: TTS PoC R-B - edge-tts zh-CN param table + 6 trial samples (3 male candidates per persona-jason), piper1-gpl local backup installed and verified (huayan medium, CPU 2.77s), SRT direct-out tested; T3 unlocked, C-17 R-B live
@@ -63,7 +102,7 @@
 
 ## 3 任务板燃尽（backlog.md）
 
-### 本周完成（7 项）
+### 本周完成（9 项）
 
 - #0 O-1719 调研远征令执行
 - #1 O-1602 主线①·用户调研 v1 续采
@@ -72,14 +111,17 @@
 - #5 封存 10 稿人设对齐复检
 - #6 自动周报生成器
 - #9 O-1609 主线·M2 本地算力链 PoC
+- #10 发布准备度探针 `src/readiness.py`
+- #11 OS 循环健康探针 `src/os/loop_health.py`
 
-### 未完成（3 项）
+### 未完成（4 项）
 
 - #4 O-1602 主线④·存量弹药
-- #7 视频号 4 稿口播裁至 ≤60s
+- #7 视频号 4 稿口播裁至 ≤60s [needs-CEO]
 - #8 M2 TTS 音色选型
+- #12 BS-001 文案重写 v3
 
-## 4 令牌账（orders/·本周 10 条）
+## 4 令牌账（orders/·本周 16 条）
 
 - O-20260923-1450-bm-a.md
 - O-20260923-1506-bm-a.md
@@ -91,6 +133,12 @@
 - O-20260923-1609-bm-a.md
 - O-20260923-1719-bm-a.md
 - O-20260923-1756-bm-a.md
+- O-20260923-1830-bm-a.md
+- O-20260923-1915-bm-a.md
+- O-20260923-1918-bm-a.md
+- O-20260923-1924-bm-a.md
+- O-20260923-1927-bm-a.md
+- O-20260923-1937-bm-a.md
 
 ## 5 度量（诚实纪律）
 
