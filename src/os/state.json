@@ -5,13 +5,14 @@
   "production": "paused",
   "paused_by": "O-20260923-1525-bm-a",
   "installed": "2026-09-23",
-  "tick": 2,
+  "tick": 3,
   "mandate": "src/os/iteration_prompt.txt",
   "protocol": "docs/os-protocol.md",
   "backlog": "src/os/backlog.md",
-  "focus": "backlog#2 variant-templates",
+  "focus": "backlog#3 board-consistency-probe",
   "log": [
     "2026-09-23 15:36 R1: 完成 backlog#1——tests/test_draft_lint.py 12 用例全绿（fixtures 假稿 10 件+manifest，真稿零接触）；真稿回归 10 稿 0 FAIL（4 条时长 WARN=已知 blocked-by-pause 项）；计划任务在跑、git 无锁、本轮回写 commit+push。",
-    "2026-09-23 15:44 R2: 完成 backlog#2——docs/variant-templates.md v1.0（11 平台骨架块+变体头登记块+套用检查单；规格复用 media-matrix/playbook，易过期数字标以平台现行规则为准）；C-07 升 live；开工前检查 git 无锁干净；收账 commit+push。"
+    "2026-09-23 15:44 R2: 完成 backlog#2——docs/variant-templates.md v1.0（11 平台骨架块+变体头登记块+套用检查单；规格复用 media-matrix/playbook，易过期数字标以平台现行规则为准）；C-07 升 live；开工前检查 git 无锁干净；收账 commit+push。",
+    "2026-09-23 15:58 R3: 完成 backlog#3——src/board_check.py 台账一致性探针（状态流自 ideas.md 声明动态解析·改词汇不改代码；8 类 FAIL=vocab/dup-id/bad-status/drafts-dir/bad-name/orphan/overstate/stale·超报与滞后双向亮红）；tests/test_board_check.py 11 用例全绿（6 台账夹具+运行时临时稿目录·真稿零接触）·draft_lint 回归 12 用例全绿；真板回归=5 题 10 稿 0 FAIL 一一对应；C-08 升 live；首跑曾现 ID_RE 无捕获组笔误即修（自检闭环）；收账 commit+push。"
   ]
 }
