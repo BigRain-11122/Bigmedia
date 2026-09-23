@@ -32,3 +32,28 @@ python src\render\srt_fix.py --in <tmp>\subs-yunxi-raw.srt --out <tmp>\subs-yunx
 python src\render\render_card_video.py --cards data\sources\bs001\cards.json --srt <tmp>\subs-yunxi.srt --voiceover data\sources\bs001\voiceover.txt --strict --audio <tmp>\audio-yunxi.mp3 --out output\renders\bs-001-voice-B-yunxi.mp4
 ```
 （C 同构换 Yunjian；D=piper 合成→whisper 对轴→免 strict 渲染；中间件存 `output/renders/.samples-tmp/`）
+
+## 五、赛博组 v8（O-20260923-2136-bm-a·2026-09-23 21:5X）
+
+> CEO 令「声音更加赛博一点，机器人一点，文案也是」——**A-D 拟人音色组被本组接替为现行候选**（听感保留对照）。
+> 同稿（v8 系统日志体·机器叙述者「三号公司 AI 本机」）·同视觉（v7-vis 模板）·同 BGM ducking，唯一变量=**赛博档位**。
+
+| 件 | 档位 | 文件 | 听点 |
+|---|---|---|---|
+| **light** | 轻度赛博（保情感抑扬+轻机械纹理） | `output/renders/bs-001-v8-cyber-light.mp4`（51.6s） | 最接近人声的冷叙述——若嫌 mid 太机器，听这件 |
+| **mid** | **标准机器人（推荐位）** | `output/renders/bs-001-v8-cyber-mid.mp4`（53.2s） | 音高压平+金属颤音——机检实证事实词零损·评审推荐档 |
+| **full** | 深度合成（极端参考端） | `output/renders/bs-001-v8-cyber-full.mp4`（54.9s） | 终端合成音质感——够赛博但 ASR 实测打糊事实词（一名/0元/瓶酒），不建议量产 |
+
+- **可懂度分级证据**：三档 ASR 转写比对（faster-whisper·`asr-check.srt`）——light/mid=同 whisper-small 固有同音字噪音；full=真实损耗（详见 `docs/reviews/review-20260923-bs001-v8.md` §一）。
+- **文案同步转体**：机器叙述者+系统日志体（系统启动/检测到/自动唤醒/转发指令）——「这条视频就是我剪的」机器自指梗；正典=`docs/copy-craft.md` §2.6。
+- **决策映射**：CEO 拣音定档 → 锁 `--cyber` 档位为产线默认（backlog #8 更新）+PLAN §7-7 签批；整改清单（人味补钩/数字锚前移/视觉赛博同步）在 v8 评审台账 §三，待拣音后一并执行。
+
+### 复现（命令实录·赛博组）
+
+```
+python src\render\emotive_tts.py --beats data\sources\bs001\voiceover-v8-cyber.beats.txt --voice zh-CN-YunyangNeural --out output\renders\.v8-mid --cyber mid --template output\renders\.v7vis-tmp\cards-vis.json --order "O-20260923-2136-bm-a (cyber voice dial + system-log copy)"
+:: BGM sidechain ducking（$T=字卡末拍+0.8s 尾）
+ffmpeg -y -i output\renders\.v8-mid\audio.mp3 -stream_loop -1 -i output\renders\.v7vis-tmp\bgm.mp3 -filter_complex "[1:a]volume=0.32[bg];[bg][0:a]sidechaincompress=threshold=0.03:ratio=10:attack=25:release=350[duck];[0:a]apad=whole_dur=$T[vp];[vp][duck]amix=inputs=2:duration=first:normalize=0[a]" -map "[a]" -t $T -c:a libmp3lame -qscale:a 4 output\renders\.v8-mid\audio-bgm.mp3
+python src\render\render_card_video.py --cards output\renders\.v8-mid\cards.json --srt output\renders\.v8-mid\subs.srt --voiceover output\renders\.v8-mid\voiceover.txt --strict --audio output\renders\.v8-mid\audio-bgm.mp3 --out output\renders\bs-001-v8-cyber-mid.mp4
+```
+（light/full 同构换 `--cyber` 档与目录；ASR 听检=`python src\render\whisper_to_srt.py --audio <tmp>\audio.mp3 --out <tmp>\asr-check.srt`）

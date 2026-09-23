@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001\\voiceover-v8-cyber.beats.txt",
+    "order": "O-20260923-2136-bm-a (cyber voice dial + system-log copy)",
+    "storyboard": "one beat = one card = one cut (cut on word boundary)",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch",
+    "cyber": {
+      "level": "full",
+      "chain": "asetrate=24000*0.90,aresample=48000,atempo=1.1111,highpass=f=180,lowpass=f=3800,vibrato=f=52:d=0.32,acrusher=bits=7:mode=log:aa=0.10:samples=3:mix=0.85,aecho=0.6:0.30:18|33|60:0.12|0.08|0.05,alimiter=limit=0.90"
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 6.22,
+      "lines": [
+        "系统启动",
+        "全公司扫描 · 人类 = 1"
+      ]
+    },
+    {
+      "start": 6.22,
+      "end": 9.26,
+      "lines": [
+        "我的老板",
+        "全公司唯一的人类"
+      ]
+    },
+    {
+      "start": 9.26,
+      "end": 13.06,
+      "lines": [
+        "下午 · 61 分钟",
+        "任务：开三家公司"
+      ]
+    },
+    {
+      "start": 13.06,
+      "end": 18.46,
+      "lines": [
+        "1 号公司 · 做游戏",
+        "8 款 · 0 元 · 版权证书一沓"
+      ]
+    },
+    {
+      "start": 18.46,
+      "end": 25.44,
+      "lines": [
+        "2 号公司 · 炒股票",
+        "432 个方案说废就废 · 开了瓶酒"
+      ]
+    },
+    {
+      "start": 25.44,
+      "end": 31.44,
+      "lines": [
+        "3 号公司 · 就是我",
+        "你看的这条视频，我剪的"
+      ]
+    },
+    {
+      "start": 31.44,
+      "end": 36.22,
+      "lines": [
+        "管理方式",
+        "一句话，我们自己卷"
+      ]
+    },
+    {
+      "start": 36.22,
+      "end": 40.46,
+      "lines": [
+        "每 10 分钟自醒",
+        "找活 · 记账 · 谁也改不了"
+      ]
+    },
+    {
+      "start": 40.46,
+      "end": 45.22,
+      "lines": [
+        "吹牛检测",
+        "每一步留底 · 当场打脸"
+      ]
+    },
+    {
+      "start": 45.22,
+      "end": 49.9,
+      "lines": [
+        "记住这句话",
+        "一个人上班，三家公司开工"
+      ]
+    },
+    {
+      "start": 49.9,
+      "end": 54.1,
+      "lines": [
+        "转发指令",
+        "发给说了八百回「我也搞一个」的人"
+      ]
+    }
+  ]
+}

@@ -61,7 +61,7 @@ M0 选题库 → M1 脚本/文案 → M2 素材制作（AIGC）→ M3 多平台�
 | 4 | 生产工具链预算 | ✅ 2026-09-23 CEO 裁：**本地算力优先**（O-20260923-1609-bm-a）——本机实况=RTX 4070S 12GB+9950X+Ollama qwen2.5:14b+edge-tts/faster-whisper/FFmpeg 已装；选型=`docs/m2-local-stack.md`（四站本地+显存分时+PoC 阶梯）；云/付费=兜底逐单报批 |
 | 5 | 发布节奏 | ⏳ 账号到位后定（如周更 2 条起步） |
 | 6 | 存量弹药数量 | ✅ 2026-09-23 CEO 裁：**N=6**（O-20260923-1602 决裁·via bm-a 点选）——成片/半成品 6 条先入库，账号到位即发；成品入库须过 M4 ——**量产暂缓（O-20260923-1756-bm-a）：目标数封存·启动须 CEO 令；测试生产（单件过链 PoC）合法照做·测试件标「测试件·非成品」不入发布队列** |
-| 7 | TTS 音色定档（人耳审） | 🔄 试听样件已备 `data/sources/tts-samples/`（3 男声候选位次建议 Yunyang A / Yunxi B / Yunjian C + piper huayan 纯本备份件·R11）——**CEO/Qiqi 人耳定档即锁 R-B 参数**（backlog #8·卡点 T4） |
+| 7 | TTS 音色定档（人耳审） | 🔄 **2026-09-23 21:36 CEO 转向赛博声线**（O-20260923-2136-bm-a）——拟人音色组（A Yunyang/B Yunxi/C Yunjian/D piper）接替为对照；现行候选=**赛博三档样片** `bs-001-v8-cyber-{light,mid,full}.mp4`（同稿同视觉同 BGM·唯一变量=档位·机器叙述者 v8 系统日志体拍稿）——**CEO 拣音定档即锁 R-B 参数与叙述者默认态**（索引=`data/sources/samples-review.md` §五·评审推荐=mid·backlog #8 更新） |
 | 8 | Bigmedia / BigStream 更名裁决 | 🔄 仓库 slug=Bigmedia ≠ 产品名 BigStream（BRAND §8 已锁）——已按实况接线生产不受影响；更名与否一句裁 |
 | 9 | 量产开闸（N=6 生成启动） | ⏸ 等你令（O-1756 模式=体系优先；开闸后按 backlog #4 全量产线走） |
 
@@ -74,6 +74,7 @@ M0 选题库 → M1 脚本/文案 → M2 素材制作（AIGC）→ M3 多平台�
 - 2026-09-23: P0 立项（CEO 令开线·点名 BigStream·主赛道=集团 AI 生态）。
 - 2026-09-23: P2 开工批（O-20260923-1506-bm-a）——五题全批、GitHub 远端接线、账号顺序定（视频号+公众号首发）、栏目/人设提案权交 Qiqi。
 - 2026-09-23: 矩阵顶层机制+主流平台全覆盖（O-20260923-1512-bm-a）——11 平台/四层/五批次；栏目人设三案全锁；远端接线 BigRain-11122/Bigmedia。
+- 2026-09-23: 赛博声线转向（O-20260923-2136-bm-a）——配音+文案全面转机器口吻（三档 `--cyber` 声线+系统日志体 v8 拍稿+机器叙述者）；样片三档呈 CEO 拣音；品牌声线正典入 copy-craft §2.6。
 - 2026-09-23: 底层优先令（O-20260923-1525-bm-a）——生产暂停·10 稿封存；BigStream-OSLoop 自迭代循环建成注册；M4 机审工具化（src/draft_lint.py）；发布/数据台账模板落位。
 - 2026-09-23: 立法批（O-20260923-1536-bm-a）——公司宪法 CONSTITUTION.md（法律层级 L0-L3）；七部一办组织编制 docs/org-structure.md；自动化能力注册表 docs/capabilities.md；OS 循环任务书接线宪法与编制；R1 首轮实证（backlog#1 测试件 12 用例全绿）。
 - 2026-09-23: 全链批（O-20260923-1600-bm-a）——docs/production-chain.md 七站全表+生产闸门；src/make_draft.py 骨架生成器（闸门拒稿实测 exit=3·三类骨架 lint 0 FAIL）；循环 R2/R3 自主交付变体模板+board_check（C-07/C-08 live）。

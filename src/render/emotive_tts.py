@@ -13,9 +13,23 @@ Outputs (to --out DIR):
                    the cut-point discipline of O-1918)
     voiceover.txt  plain spoken text (renderer --strict baseline)
 
+Cyber voice dial (O-20260923-2136-bm-a: voice more cyber/robotic):
+    --cyber light|mid|full   post-processing texture on the final audio.
+    light = keep emotive prosody, add subtle machine texture;
+    mid   = flatten pitch to robot monotone + metallic chain;
+    full  = deep-synthesis chain (pitch dropped, band-limited, crushed).
+    Chains are duration-preserving (asetrate drop compensated by atempo),
+    asserted by ffprobe before/after, so SRT cues and card cuts stay valid.
+
+    --template CARDS_JSON  adopt font/video/aigc_notice/tail/meta sections
+                           from an existing cards file (e.g. the v7-vis
+                           visual-spec template) instead of built-in defaults.
+    --order STR            override meta.order for provenance.
+
 Encoding rule: this source is pure ASCII; Chinese lives in the beats file.
 Usage:
     python src/render/emotive_tts.py --beats FILE --voice VOICE --out DIR
+        [--cyber light|mid|full] [--template CARDS_JSON] [--order STR]
 """
 import json
 import subprocess
@@ -33,6 +47,57 @@ PROFILES = {
     "close": ["--rate=-10%", "--pitch=-2Hz"],
     "cta":   ["--rate=+3%", "--pitch=+2Hz"],
 }
+
+# O-20260923-2136-bm-a cyber dial: light keeps the emotive melody and only
+# adds texture; mid/full flatten pitch to robot monotone (rate variation
+# stays = rhythm preserved, melody removed) and push the texture harder.
+# Every chain is duration-preserving: the asetrate pitch drop is exactly
+# compensated by atempo=1/factor, everything else (vibrato/acrusher/EQ/
+# echo) keeps sample count - so SRT cues and card cuts stay valid.
+CYBER_PITCH_HZ = {"mid": -8, "full": -12}
+CYBER_RATE_SHIFT = {"mid": "-4%", "full": "-8%"}
+
+CYBER_CHAINS = {
+    # cold narrator: barely machined, fully intelligible
+    "light": ("highpass=f=110,lowpass=f=7800,"
+              "vibrato=f=30:d=0.10,"
+              "acrusher=bits=10:mode=log:aa=0.15:mix=0.50,"
+              "alimiter=limit=0.95"),
+    # standard robot: metallic flutter + band-limited + light slapback
+    "mid": ("asetrate=24000*0.95,aresample=48000,atempo=1.0526,"
+            "highpass=f=150,lowpass=f=5200,"
+            "vibrato=f=42:d=0.22,"
+            "acrusher=bits=8:mode=log:aa=0.12:mix=0.80,"
+            "aecho=0.6:0.25:22|38:0.10|0.06,"
+            "alimiter=limit=0.95"),
+    # deep synthesis: pitch-dropped terminal voice, rate-crushed
+    "full": ("asetrate=24000*0.90,aresample=48000,atempo=1.1111,"
+             "highpass=f=180,lowpass=f=3800,"
+             "vibrato=f=52:d=0.32,"
+             "acrusher=bits=7:mode=log:aa=0.10:samples=3:mix=0.85,"
+             "aecho=0.6:0.30:18|33|60:0.12|0.08|0.05,"
+             "alimiter=limit=0.90"),
+}
+
+
+def cyberize(profiles, pitch_hz, rate_shift):
+    """Flatten a profile table toward robot monotone: uniform pitch, rate
+    variation kept (rhythm stays, melody goes) plus a global rate shift."""
+    shift = int(rate_shift.rstrip("%"))
+    out = {}
+    for name, flags in profiles.items():
+        new_flags = []
+        for f in flags:
+            if f.startswith("--rate="):
+                val = int(f[len("--rate="):].rstrip("%"))
+                new_flags.append("--rate=%+d%%" % (val + shift))
+            elif f.startswith("--pitch="):
+                continue
+            else:
+                new_flags.append(f)
+        new_flags.append("--pitch=%dHz" % pitch_hz)
+        out[name] = new_flags
+    return out
 
 
 def run(cmd):
@@ -62,6 +127,7 @@ def fmt_ts(t):
 
 def main(argv):
     beats_path = voice = out_dir = None
+    cyber = template = order = None
     i = 1
     while i < len(argv):
         if argv[i] == "--beats":
@@ -73,11 +139,29 @@ def main(argv):
         elif argv[i] == "--out":
             i += 1
             out_dir = Path(argv[i])
+        elif argv[i] == "--cyber":
+            i += 1
+            cyber = argv[i]
+        elif argv[i] == "--template":
+            i += 1
+            template = argv[i]
+        elif argv[i] == "--order":
+            i += 1
+            order = argv[i]
         i += 1
     if not (beats_path and voice and out_dir):
-        print("usage: emotive_tts.py --beats FILE --voice VOICE --out DIR")
+        print("usage: emotive_tts.py --beats FILE --voice VOICE --out DIR"
+              " [--cyber light|mid|full] [--template CARDS_JSON] [--order STR]")
+        return 2
+    if cyber and cyber not in CYBER_CHAINS:
+        print("FAIL unknown --cyber level: %s (light|mid|full)" % cyber)
         return 2
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    profiles = PROFILES
+    if cyber in CYBER_PITCH_HZ:
+        profiles = cyberize(PROFILES, CYBER_PITCH_HZ[cyber],
+                            CYBER_RATE_SHIFT[cyber])
 
     beats = []
     for line in beats_path.read_text(encoding="utf-8").splitlines():
@@ -100,7 +184,7 @@ def main(argv):
     t0 = 0.0
     for idx, b in enumerate(beats):
         seg = out_dir / ("seg%02d.mp3" % idx)
-        cmd = ["edge-tts", "--voice", voice] + PROFILES[b["profile"]] + \
+        cmd = ["edge-tts", "--voice", voice] + profiles[b["profile"]] + \
               ["--text", b["text"], "--write-media", str(seg)]
         run(cmd)
         d = probe_dur(seg)
@@ -123,6 +207,20 @@ def main(argv):
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
          "-c:a", "libmp3lame", "-qscale:a", "4", str(audio)])
 
+    if cyber:
+        pre = probe_dur(audio)
+        raw = out_dir / "audio-raw.mp3"
+        audio.replace(raw)
+        run(["ffmpeg", "-y", "-i", str(raw), "-af", CYBER_CHAINS[cyber],
+             "-c:a", "libmp3lame", "-qscale:a", "4", str(audio)])
+        post = probe_dur(audio)
+        if abs(post - pre) > 0.35:
+            print("FAIL cyber chain drifted duration %.2fs -> %.2fs"
+                  " (SRT/card timeline would break)" % (pre, post))
+            return 1
+        print("OK cyber=%s voice %.2fs -> %.2fs (chain preserved timeline)"
+              % (cyber, pre, post))
+
     srt = out_dir / "subs.srt"
     srt_lines = []
     for idx, a, z, text in cues:
@@ -132,19 +230,32 @@ def main(argv):
     (out_dir / "voiceover.txt").write_text(
         "\n".join(spoken_lines) + "\n", encoding="utf-8")
 
-    meta = {
-        "meta": {
-            "topic": "v3-emotive",
-            "variant": "shipinhao 60s card cut (9:16)",
-            "tool": "src/render/emotive_tts.py",
-            "voice": voice,
-            "beats": str(beats_path),
-            "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
-            "storyboard": "one beat = one card = one cut (cut on word boundary)",
-            "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch",
-        },
-        "video": {"width": 1080, "height": 1920, "fps": 30, "bg": "black"},
-        "font": {
+    base_cfg = {}
+    if template:
+        base_cfg = json.loads(Path(template).read_text(encoding="utf-8"))
+        notice = str(base_cfg.get("aigc_notice", "")).strip()
+        if not notice:
+            print("FAIL template %s has empty aigc_notice (red line)" % template)
+            return 2
+
+    meta = dict(base_cfg.get("meta") or {})
+    meta.update({
+        "topic": meta.get("topic", "v3-emotive"),
+        "variant": meta.get("variant", "shipinhao 60s card cut (9:16)"),
+        "tool": "src/render/emotive_tts.py",
+        "voice": voice,
+        "beats": str(beats_path),
+        "order": order or meta.get(
+            "order", "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)"),
+    })
+    if cyber:
+        meta["cyber"] = {"level": cyber, "chain": CYBER_CHAINS[cyber]}
+
+    cards_doc = {
+        "meta": meta,
+        "video": base_cfg.get("video") or {
+            "width": 1080, "height": 1920, "fps": 30, "bg": "black"},
+        "font": base_cfg.get("font") or {
             "file": "C:/Windows/Fonts/msyh.ttc",
             "cards_size": 60,
             "subs_size": 44,
@@ -152,12 +263,13 @@ def main(argv):
             "subs_bottom": 300,
             "line_spacing": 14,
         },
-        "aigc_notice": "\u672c\u89c6\u9891\u7531 AI \u751f\u6210 \u00b7 AIGC \u4f9d\u6cd5\u6807\u8bc6",
-        "tail": 0.8,
+        "aigc_notice": base_cfg.get(
+            "aigc_notice", "\u672c\u89c6\u9891\u7531 AI \u751f\u6210 \u00b7 AIGC \u4f9d\u6cd5\u6807\u8bc6"),
+        "tail": base_cfg.get("tail", 0.8),
         "cards": cards,
     }
     (out_dir / "cards.json").write_text(
-        json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        json.dumps(cards_doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print("OK beats=%d duration=%.2fs audio=%s" % (len(beats), t0, audio))
     for idx, a, z, text in cues:
