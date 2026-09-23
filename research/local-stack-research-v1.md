@@ -74,9 +74,9 @@ faster-whisper 官方 README 基准（同精度比 openai/whisper "up to 4 times
 | # | 项 | 卡点 | 解锁动作 |
 |---|---|---|---|
 | T1 | ComfyUI 官方 GPU 选购/最低显存页 | 本轮未采（wiki 页） | R-D 触发时补采 |
-| T2 | edge-tts 可靠性历史（403/风控） | 未采 issues 列表 | R-B 试录时顺带记录失败率 |
-| T3 | piper1-gpl 语音库是否沿用 v1.0.0（含 zh_CN huayan） | 未采后继仓 voices 清单 | R-B 装机时以 `--list-voices` 实测为准 |
-| T4 | Piper zh_CN huayan medium 试听质量 | 音频须人耳听（Qiqi/CEO 终审面） | R-B 产样件后呈样 |
+| T2 | edge-tts 可靠性历史（403/风控） | 官方 issues 列表仍未采；试录数据点起录=2026-09-23 R11 单轮 5/5 成功（`data/sources/tts-samples/` §1） | 多轮累计+补采 issues |
+| T3 | piper1-gpl 语音库是否沿用 v1.0.0（含 zh_CN huayan） | **已解锁（R11 实测）**：pip 包无 --list-voices·语音=外置 ONNX·沿用 HF rhasspy/piper-voices v1.0.0（huayan medium 拉取即用·`data/sources/tts-samples/` §3） | — |
+| T4 | Piper zh_CN huayan medium 试听质量 | **样件已呈**（huayan-medium-default.mp3·R11） | 人耳终审（backlog #8·Qiqi/CEO） |
 | T5 | GPL-3.0 工具链的产品分发改编边界 | 法务级问题 | 仅内部生产使用无碍；若未来分发工具须另议 [needs-CEO] |
 
 ## §7 来源清单（2026-09-23 采·全 A 级=官方一手）
@@ -90,3 +90,4 @@ faster-whisper 官方 README 基准（同精度比 openai/whisper "up to 4 times
 
 ## 变更记录
 - 2026-09-23: v1.0 首采（O-20260923-1719-bm-a）——TTS/STT/文生图三站官方一手证据+本机锚点；§6 留五卡点。
+- 2026-09-23: R11 轮——§6 卡点 T3 解锁、T2 起录、T4 样件呈样（试录实况=`data/sources/tts-samples/README.md`）；正文断言未动。

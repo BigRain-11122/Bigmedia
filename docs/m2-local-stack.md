@@ -43,7 +43,7 @@
 ## §4 PoC 阶梯（backlog 驱动·循环可执行）
 
 1. **R-A** 口播→成品最小闭环 PoC：`src/render/` 落一个 FFmpeg 时间线脚本——输入=口播 txt + SRT + 字卡模板 → 输出=9:16 mp4（黑底白字卡版 BS-001 60s 口播）——**纯本地·零安装**。
-2. **R-B** edge-tts 音色参数表（音色随 `docs/persona-jason.md` 定——Jason 出镜·负值参数连写式 `--rate=-50%`）+ 试录样件落 `data/sources/tts-samples/`；**本地替代备份=piper1-gpl**（`pip install piper-tts`·zh_CN huayan medium 候选·旧 Piper 仓已官方归档）真装真听对比；试听终审=Qiqi/CEO 人耳项（T4）。
+2. **R-B done 2026-09-23**（台账=`data/sources/tts-samples/README.md`）——edge-tts 参数表+6 样件（男声 3 候选位次建议 Yunyang A/Yunxi B/Yunjian C·Yunyang 沉稳档 `--rate=-10% --pitch=-2Hz`·`--write-subtitles` 直出 SRT 实测）；**piper1-gpl 真装真录**（`pip install piper-tts`·zh_CN huayan medium 63MB 模型落 `data/assets/piper-models/`（gitignored）·纯 CPU 2.77s 合成 8.17s 音频·T3 解锁）；试听终审=Qiqi/CEO 人耳项（T4·backlog #8）。
 3. **R-C** faster-whisper 字幕对轴脚本（口播 wav → SRT → 硬字幕合成入 R-A 流水）——双路对比：edge-tts `--write-subtitles` 直出 SRT（TTS 侧词级时间戳）vs STT 反推，PoC 择优。
 4. **R-D** （后置）ComfyUI 安装评估报告——仅在首发数据证明需要 AIGC 画面时提请。
 
@@ -56,3 +56,4 @@
 - 2026-09-23: v1.0 立册（CEO 令 O-20260923-1609-bm-a）——四站本地选型+显存分时+PoC 阶梯；四站三件已装实测。
 - 2026-09-23: R-A 落地——`src/render/render_card_video.py`（口播 txt+SRT+字卡 JSON→9:16 mp4·AIGC 标识常驻烧录·CJK 折行防裁·纯本地零安装）；BS-001 黑底白字卡版实渲染过（1080×1920·58.8s·三段抽帧目检）。本机 ffmpeg 9.0.1（gyan full）实况两条：①已删 `-filter_complex_script` 选项→用 `-filter_complex` 内联；②drawtext 无 fontconfig 会崩→fontfile 必须显式（脚本已内置校验）。
 - 2026-09-23: v1.1 按证据升级（CEO 令 O-20260923-1719-bm-a·证据=research/local-stack-research-v1.md）——TTS 备份线更名 piper1-gpl（旧 Piper 仓归档）；撤回「可载 SDXL 级」无源断言（官方无最低显存声明·T1 卡点）；faster-whisper 基准入表（GPU int8 2926MB / CPU int8 1477MB）；分时纪律按当日实测修订；R-B/R-C 对齐人设卡（Jason 出镜）。
+- 2026-09-23: R-B 落地（OS 循环 R11）——TTS 双轨试录：edge-tts 参数表+6 样件、piper1-gpl 真装真录（huayan medium·纯 CPU 2.77s·模型 gitignored 于 data/assets/piper-models/）；T3 解锁（后继仓沿用 HF rhasspy/piper-voices）；位次建议 Yunyang A——选型定档待人耳终审（backlog #8）。
