@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "topic": "BS-001",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "source_draft": "data/drafts/20260923-BS-001-视频号-v1.md",
+    "srt_status": "placeholder timing hand-split per storyboard (PoC R-A); regenerate via faster-whisper alignment at R-C before any release",
+    "storyboard": "draft 分镜提示 5 段：钩子 0-3 / 三联 3-15 / 机制 15-40 / 证据 40-50 / CTA 50-58",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch"
+  },
+  "video": { "width": 1080, "height": 1920, "fps": 30, "bg": "black" },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0, "end": 3,
+      "lines": ["三家 AI 公司，同时开工", "员工名单里", "只有一个人类"]
+    },
+    {
+      "start": 3, "end": 15,
+      "lines": ["① 游戏公司", "8 款软著 · 零服务器 · 零预算", "② 量化公司", "35 个策略 · 诚实门禁不过不上岗", "③ 媒体公司（就是它剪的这条视频）"]
+    },
+    {
+      "start": 15, "end": 40,
+      "lines": ["CEO：只做决策，点完就走", "AI：执行落账 · 永不删除", "每 10 分钟，公司自醒一轮找活干", "机器之间：互相派活 · 互相交账"]
+    },
+    {
+      "start": 40, "end": 50, "size": 72,
+      "lines": ["全过程写在代码库", "每一分钟", "都能审计"]
+    },
+    {
+      "start": 50, "end": 58,
+      "lines": ["完整版实录 → 公众号", "转给那个总说「等我单干」的朋友", "也许不用等，先雇个 AI"]
+    }
+  ]
+}

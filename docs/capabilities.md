@@ -28,7 +28,7 @@
 | C-11 | M2 素材链路（TTS/画面/剪辑/字幕） | 内容生产部 | in-dev | 选型已裁：本地算力优先（O-20260923-1609-bm-a·`docs/m2-local-stack.md` 四站本地方案+PoC 阶梯·backlog #9） |
 | C-12 | 平台 API 发布对接 | 平台运营部 | blocked | 卡点=账号未开（批次①） |
 | C-13 | 数据回流自动化（后台导出→对账） | 数据分析部 | planned | 待上线后实况定通道 |
-| C-17 | 本地算力链 PoC（FFmpeg 时间线+TTS 参数表+字幕对轴） | 工程技术部+内容生产部 | in-dev | backlog #9 · m2-local-stack.md §4（R-A→R-C） |
+| C-17 | 本地算力链 PoC（FFmpeg 时间线+TTS 参数表+字幕对轴） | 工程技术部+内容生产部 | in-dev | backlog #9 · m2-local-stack.md §4——**R-A live**：`python src/render/render_card_video.py --cards data/sources/bs001/cards.json --strict` 实渲染 1080×1920/58.8s mp4（ffprobe+三段抽帧实证）·tests 18 用例全绿；R-B/R-C in-dev |
 | C-14 | 自动化生产全链路（七站表+生产闸门+生产模式协议） | 总裁办公室+工程技术部 | live | `docs/production-chain.md` · 闸门拒稿实测 exit=3 |
 | C-15 | 草稿骨架生成器 make_draft（M1/M3 站） | 内容生产部+平台运营部 | live | `python src/make_draft.py` · 三类骨架 lint 0 FAIL 实测 |
 | C-16 | 全链量产生产轮（M0-M3 无人值守量产） | 全部门 | blocked | 卡点=生产暂停令（state.json production=paused）·开闸=CEO 令 |

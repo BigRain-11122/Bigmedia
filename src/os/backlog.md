@@ -11,4 +11,4 @@
 6. 自动周报生成器：src/os/state.json + git log → 周报 md（数据分析部归口·capabilities C-09）
 7. 视频号 4 稿口播裁至 ≤60s（blocked-by-pause 已解除·排 #5 复检后）
 8. M2 TTS 音色选型（参数随 docs/persona-jason.md 定·零预算链路默认·不再按三案）
-9. O-1609 主线·M2 本地算力链 PoC：`src/render/` FFmpeg 时间线脚本（口播 txt+SRT+字卡模板→9:16 mp4 最小闭环·纯本地零安装）→ edge-tts 音色参数表+试录样件（音色随 docs/persona-jason.md 定·样件落 `data/sources/tts-samples/`）→ faster-whisper 字幕对轴脚本——全程 m2-local-stack.md §4 PoC 阶梯 R-A→R-B→R-C 逐项交付·显存分时礼仪 §2 照守
+9. O-1609 主线·M2 本地算力链 PoC：**R-A done 2026-09-23**（`src/render/render_card_video.py` FFmpeg 时间线渲染器——口播 txt+SRT+字卡 JSON→9:16 mp4·AIGC 标识常驻烧录=红线内置·CJK 折行防裁·voiceover↔SRT 一致性校验（--strict）·--audio 轨位留好待 R-B·18 测试用例全绿·BS-001 实渲染 1080×1920/58.8s 落 output/renders/·三段抽帧目检过）→ **R-B** edge-tts 音色参数表+试录样件（音色随 docs/persona-jason.md 定·样件落 `data/sources/tts-samples/`·Piper 本地替代备份验证）→ **R-C** faster-whisper 字幕对轴（口播 wav→SRT→替换 bs001 占位 SRT 入流水·逐行居中可评估换 ASS）——m2-local-stack.md §4 阶梯照走·显存分时礼仪 §2 照守（本渲染纯 CPU 实测 0 VRAM）

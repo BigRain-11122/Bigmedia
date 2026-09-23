@@ -53,3 +53,4 @@
 ## 变更记录
 
 - 2026-09-23: v1.0 立册（CEO 令 O-20260923-1609-bm-a）——四站本地选型+显存分时+PoC 阶梯；四站三件已装实测。
+- 2026-09-23: R-A 落地——`src/render/render_card_video.py`（口播 txt+SRT+字卡 JSON→9:16 mp4·AIGC 标识常驻烧录·CJK 折行防裁·纯本地零安装）；BS-001 黑底白字卡版实渲染过（1080×1920·58.8s·三段抽帧目检）。本机 ffmpeg 9.0.1（gyan full）实况两条：①已删 `-filter_complex_script` 选项→用 `-filter_complex` 内联；②drawtext 无 fontconfig 会崩→fontfile 必须显式（脚本已内置校验）。
