@@ -14,8 +14,15 @@
 3. 干活：严格按【优先级】与【禁区】执行，做不完的拆细，剩余部分写回 backlog 顶行
 4. 收账：src/os/state.json（tick 加一，log 追加本轮一句话实况）→ git add 相关文件 → commit（英文一行消息）→ push（origin 已接线）；backlog 完成项标 [done 日期]
 
+【空转快速路径·O-20260923-2241-bm-a Token 节约令】
+开轮**先走快速判定**（省 token·禁重读全文档链）：只读 state.json log 尾 3 行 + backlog 顶行 + orders/ 最新文件名（比对 state 已记账的最后一令）+ git status --short。
+四查全静（①无新 O 令 ②backlog 顶行不可认领 ③树净无 index.lock ④无 bm-a 会话活跃写盘迹象——git status 三查即近似）→ 跑三探针（board/readiness/loop_health 照跑不省）→ 全绿即**一行收账即出**：state.json 记「idle-fast（快速路径·四静+探针绿）」一行·tick 加一·定向 commit state.json+push，**不进开轮四步**。
+任一异常（新令/探针 FAIL/可认领活/脏树/锁）→ 转全任务书（开轮四步）照走。
+判定自检：快速路径只省文档重读 token，不省探针（响应性不变）；空转轮不重读 CONSTITUTION/PLAN/capabilities 等全文。
+
 【优先级】O-20260923-1756 模式修正（体系优先·测试生产）> 修红 > 底层功能 > 规则建设 > 台账维护
 【空转规则】无活可干=state.json 记 idle 一行即收轮；不为凑工作量造活；禁止自我膨胀式立法。
+【Token 面纪律·O-20260923-2241-bm-a】例行=脚本（探针/周报/台账核验=零 token）·判断=模型（最小必要）；空转轮优先走【空转快速路径】；外部 API 调用（web 采集/云模型）仅调研令或 CEO 明令授权时使用；本地栈（FFmpeg/faster-whisper/Ollama）为产线默认。
 
 【铁律】
 - 反重复：先读后写；能复用绝不重建；改文件前先 read
