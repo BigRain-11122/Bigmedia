@@ -1,14 +1,14 @@
 # BigStream 周报（2026-W39）
 
-> 自动生成件（C-09 周报生成器·数据分析部归口）——生成时间 2026-09-23 22:04
+> 自动生成件（C-09 周报生成器·数据分析部归口）——生成时间 2026-09-23 22:14
 > 本件=公司运营周报（L3 台账·非内容成品）；数据源=src/os/state.json + git log + src/os/backlog.md + orders/（四个机器源·无人工编辑）
 > 诚实纪律：未上线=未测量（PLAN §5）——平台与内容数据在账号开通前一律「未测量」；本件可重跑覆盖（重生成=最新真相）
 
 - 周期：2026-09-21 ~ 2026-09-27（ISO 周 2026-W39）
-- 轮次：本周 34 轮（当前 tick=35·idle 15 轮·其他账目 1 条）
-- 交付：76 commits
-- 任务板：本周完成 9 项·未完成 4 项
-- 令牌：本周 CEO 令 17 条
+- 轮次：本周 35 轮（当前 tick=36·idle 15 轮·其他账目 1 条）
+- 交付：78 commits
+- 任务板：本周完成 10 项·未完成 3 项
+- 令牌：本周 CEO 令 18 条
 
 ## 1 轮次实录（state.json）
 
@@ -47,9 +47,12 @@
 - 2026-09-23 21:3x R33: 空转轮（空转律执行·v7b 复核十一连落空）——renders 12/12 全注账·最新 mp4 仍止于 19:40 v7-vis·无 .v7b-tmp·无新令（orders 顶=O-1937 已闭·R25 回执在案）·HQ-FEEDBACK 未动（git 树净实证）·远端同步核验 main↔origin/main 双向 0（R32 后零漂移）；三探针全绿（board 0 FAIL 5 题 10 稿 0 失败/readiness 3 阻塞皆外部 CEO 物理件 0 findings/loop_health 0 FAIL 3 WARN 在案史实·tick32↔beats32↔done32 对账平）；backlog 顶行四连不可认领（#4 suspended/#7 needs-CEO/#8 等人耳/#12 bm-a 工艺线认领中·执行认领制不抢活）·底层功能无可认领（C-12/C-16 blocked·C-13 待上线·C-11 R-D 后置待首发数据·C-10 needs-CEO）；按 R24/R26/R28-R32 先例不刷新周报（R27 已刷·其后仅空转轮无交付增量）、不重跑 119 回归（R25 后零代码变更·本轮探针只读核验）、不重探 P2/P3/D1 卡点通道（不恋战律）。下轮=复核 bm-a v7b 新成片或 idle。收账 state.json 显式列文件 commit+push。
 - 2026-09-23 21:5x R34: 监测观察轮（新令落库+并行写避让·不为凑工作量造活）——轮首核验发现新令 O-20260923-2136-bm-a（21:36 CEO 原话「声音更加赛博一点，机器人一点，文案也是」：赛博机械声线三档 light/mid/full 样片呈 CEO 拣音+文案转系统日志体/AI 本机叙述者·Jason 转被报告主角·口号回环不动）——**执行认领=bm-a 交互会话**（引擎 --cyber/--template/--order+拍稿+三档渲染+台账回写），按执行认领制本轮不重复认领。同仓实况=bm-a 活跃写仓在飞（工作树：M src/render/emotive_tts.py+?? voiceover-v8-cyber.beats.txt+?? tests/test_emotive_tts.py+?? .v8-light/.v8-mid tmp+?? O-2136 令件未提交·无 index.lock）——按同仓退避与 R19/R20 先例本轮不碰其写区；v8 mp4 未出（renders 目录最新仍止于 19:40 v7-vis），renders 台账补账待批次闭后下轮复核（R16/R21/R22 先例）。三探针全绿：board 0 FAIL 5 题 10 稿/readiness 3 阻塞皆外部 CEO 物理件 0 findings（12/12 注账·v8 tmp 无 mp4 不触发）/loop_health 0 FAIL 3 WARN 在案史实·tick33↔beats33↔done33 对账平。backlog 顶行四连不可认领维持（#4 suspended/#7 needs-CEO/#8 等人耳/#12 bm-a 线）·底层功能无可认领（C-12/C-16 blocked·C-13 待上线·C-11 R-D 后置·C-10 needs-CEO）·HQ-FEEDBACK 未动（树实况）·不刷新周报（v8 批次未闭无交付增量·R24 先例）。收账 state.json 显式列文件 commit+push（不卷 bm-a 未提交件）。
 - 2026-09-23 21:5x R35: 监测观察轮（v8 批次复核·未闭不补账·不为凑工作量造活）——R34 预设复核：v8 赛博声线批次推进实证=三档成片已出（bs-001-v8-cyber-light/mid/full.mp4·21:50:51/21:51:03/21:51:14·与 O-2136 执行件 3 一一对应）+.v8-mid 抽帧自检 PNG 21:51:30（bm-a 活跃写仓进行时·本轮开轮 21:54 距其最后活动仅 3 分钟）——但**批次未闭**（工作树不净：M emotive_tts.py+voiceover-v8-cyber.beats.txt+O-2136 令件+test_emotive_tts.py+三个 .v8 tmp 目录均未提交·无 index.lock）→ renders 台账补账按 R16/R21/R22 先例待批次闭（下轮复核·bm-a 写区本轮零接触）。三探针：readiness 3 阻塞（皆外部 CEO 物理件）+3 发现（render-unannot v8×3=批次未闭预期红·R20 同型先例在案）·board 0 FAIL（5 题 10 稿）·loop_health 0 FAIL 3 WARN 在案史实（tick34↔beats34↔done34 对账平）。O-2136 复核无新裁决（bm-a 认领行 21:39 在案·无 CEO 拣音回执）。backlog 顶行四连不可认领维持（#4 suspended/#7 needs-CEO/#8 等人耳/#12 bm-a 线）·底层功能无可认领（C-12/C-16 blocked/C-13 待上线/C-11 R-D 后置/C-10 needs-CEO）·无新令·HQ-FEEDBACK 未动（树实况）·不刷新周报（v8 批次未闭·闭后一并入账·R24 先例）。收账 state.json 显式列文件 commit+push（不卷 bm-a 未提交件）。
+- 2026-09-23 22:0x R36: 台账轮（v8 闭批核实+周报刷新·不为凑工作量造活）——R35 预设复核：①v8 赛博批已闭（commit c648612·bm-a 批内完成 renders 台账补行+O 件回执·本轮核验 v8 light/mid/full 三行标注齐=补账零重复劳动）；②CEO 拣音裁决落 O-2136（未提交件）：**声线定档=light 轻度赛博+机器叙述者口径确认**——定档收口①回写件（backlog #8 结案/PLAN §7-7/copy-craft §2.6/persona 默认档）归 bm-a 认领线不抢活；③v9 整改批在飞（bs-001-v9-cyber-light.mp4 22:02:53+.v9-light tmp+v9 beats+M O-2136 均未提交·无 index.lock）→ 写区零接触·renders v9 未注账=readiness 唯一发现（批次未闭预期红·R35 同型先例）。三探针=board 0 FAIL（5 题 10 稿）/readiness 3 阻塞（皆外部 CEO 物理件）+1 预期发现/loop_health 0 FAIL 3 WARN 在案史实（tick35=done35 对账平）。真实增量入周报：weekly-2026-W39.md 刷新至实况（34 轮/76 commits/17 令·v8 赛博批+CEO 声线定档全入交付账·R23/R27 先例）。backlog 顶行四连不可认领维持。收账显式列文件 commit+push（不卷 bm-a 未提交件）。
 
-## 2 交付账（git log·76 条）
+## 2 交付账（git log·78 条）
 
+- 156ec92 2026-09-23 22:06 O-2136 closure: CEO pick locked (light dial + machine narrator) - v9 remediation cut (12 beats, 59.31s strict-pass, ASR fact-words all alive, R2 human-warmth line + meme-slot restored), panel six seats 9+ PASS = release candidate pending CEO final eye, E4 Ollama reference 7 (weak point improved: credibility -> emotional resonance), production default locked in PLAN 7-7 / backlog #8 done / copy-craft 2.6 / persona v1.2 / samples-review sec.6; E7 visual-cyber sync reported awaiting CEO word (no self-overrule of his visual spec)
+- f6ae66e 2026-09-23 22:05 OS loop R36: ledger round - v8 batch close verified (c648612; renders ledger v8 x3 annotated in-batch by bm-a, zero duplicate labor), CEO pick verdict on uncommitted O-2136 (voice tier locked = light + machine narrator canon, writebacks stay on bm-a claim line), v9 remediation batch in flight untouched per claim rule (v9 mp4 22:02:53); readiness 3 external blockers + 1 expected v9-unannot finding, board 0 fail, loop_health 0 fail 3 known-history warns, tick35=done35; weekly refreshed to live truth (34 rounds/76 commits/17 orders)
 - c648612 2026-09-23 21:59 O-2136 cyber voice batch: --cyber three-dial TTS engine (light/mid/full, duration-preserving chains) + v8 system-log copy (machine narrator) + three strict-pass samples (51.61/53.17/54.90s, BGM duck same base) + ASR intelligibility grading (mid = zero fact-word loss, full = real degradation) + v8 panel first read FAIL 8.5 (E4 Ollama real call = 7) + brand-voice canon copy-craft 2.6 / persona dual-narrator v1.1 + ledger/doc writebacks + receipt closes batch (CEO pick pending)
 - ec47811 2026-09-23 21:56 OS loop R35: monitoring round - v8 cyber batch advanced but unclosed (three mp4s rendered 21:50-51 light/mid/full per O-2136 exec item 3, v8-mid frame self-check 21:51:30, bm-a still actively writing 3 min prior; batch uncommitted: emotive_tts M + v8 beats + order file + test + three tmp dirs, no lock); readiness 3 external blockers + 3 expected findings (v8 unannot, renders ledger deferred per R21/R22 precedent until batch closes); board 0 fail, loop_health 0 fail 3 known-history warns, tick34=done34; no new verdicts in O-2136, backlog top unclaimable, no fabricated work per idle rule
 - 173b56b 2026-09-23 21:46 OS loop R34: monitoring round - new order O-2136 cyber-voice claimed by bm-a (v8 batch in flight, uncommitted: emotive_tts mods + v8 beats + light/mid tmp dirs, no v8 mp4 yet), not re-claimed per execution-claim rule, writes zone avoided per parallel-writer precedent; three probes green (board 0 fail, readiness 3 external blockers 0 findings, loop_health 0 fail 3 known-history warns, tick33=done33); renders ledger deferred until v8 batch closes; backlog top unclaimable, idle in own zone per no-fabrication rule
@@ -129,7 +132,7 @@
 
 ## 3 任务板燃尽（backlog.md）
 
-### 本周完成（9 项）
+### 本周完成（10 项）
 
 - #0 O-1719 调研远征令执行
 - #1 O-1602 主线①·用户调研 v1 续采
@@ -137,18 +140,18 @@
 - #3 O-1602 主线③·素材生产线选型
 - #5 封存 10 稿人设对齐复检
 - #6 自动周报生成器
+- #8 M2 TTS 音色选型
 - #9 O-1609 主线·M2 本地算力链 PoC
 - #10 发布准备度探针 `src/readiness.py`
 - #11 OS 循环健康探针 `src/os/loop_health.py`
 
-### 未完成（4 项）
+### 未完成（3 项）
 
 - #4 O-1602 主线④·存量弹药
 - #7 视频号 4 稿口播裁至 ≤60s [needs-CEO]
-- #8 M2 TTS 音色选型
 - #12 BS-001 文案重写 v3
 
-## 4 令牌账（orders/·本周 17 条）
+## 4 令牌账（orders/·本周 18 条）
 
 - O-20260923-1450-bm-a.md
 - O-20260923-1506-bm-a.md
@@ -167,6 +170,7 @@
 - O-20260923-1927-bm-a.md
 - O-20260923-1937-bm-a.md
 - O-20260923-2136-bm-a.md
+- O-20260923-2210-bm-a.md
 
 ## 5 度量（诚实纪律）
 
