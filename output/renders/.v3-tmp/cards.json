@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001\\voiceover-v3.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "storyboard": "one beat = one card = one cut (cut on word boundary)",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION §2-4); publish also requires M4 gate + platform AIGC switch"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.54,
+      "lines": [
+        "61 分钟",
+        "开了 3 家公司"
+      ]
+    },
+    {
+      "start": 5.54,
+      "end": 9.05,
+      "lines": [
+        "员工表 · 人类 = 1",
+        "就是我"
+      ]
+    },
+    {
+      "start": 9.05,
+      "end": 13.58,
+      "lines": [
+        "① 游戏公司",
+        "8 款软著 · 0 服务器 · 0 预算"
+      ]
+    },
+    {
+      "start": 13.58,
+      "end": 17.9,
+      "lines": [
+        "② 量化公司",
+        "不及格 = 不上岗"
+      ]
+    },
+    {
+      "start": 17.9,
+      "end": 20.69,
+      "lines": [
+        "③ 媒体公司",
+        "正在剪这条视频"
+      ]
+    },
+    {
+      "start": 20.69,
+      "end": 24.84,
+      "lines": [
+        "CEO 只干一件事",
+        "拍板，点完就走"
+      ]
+    },
+    {
+      "start": 24.84,
+      "end": 29.59,
+      "lines": [
+        "每道命令进账本",
+        "谁也删不掉"
+      ]
+    },
+    {
+      "start": 29.59,
+      "end": 35.11,
+      "lines": [
+        "每 10 分钟自醒",
+        "找活 → 干完 → 记账"
+      ]
+    },
+    {
+      "start": 35.11,
+      "end": 39.05,
+      "lines": [
+        "两台电脑 = 同事",
+        "互相派活 · 互相交账"
+      ]
+    },
+    {
+      "start": 39.05,
+      "end": 43.82,
+      "lines": [
+        "全过程在代码库",
+        "每一分钟可查账"
+      ]
+    },
+    {
+      "start": 43.82,
+      "end": 48.36,
+      "lines": [
+        "61 分钟 · 3 家",
+        "缺的从来不是时间"
+      ]
+    },
+    {
+      "start": 48.36,
+      "end": 51.26,
+      "lines": [
+        "转给「还在等准备好」的朋友"
+      ]
+    }
+  ]
+}
