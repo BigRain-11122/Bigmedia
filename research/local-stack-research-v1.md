@@ -1,4 +1,4 @@
-# 本地生产能力环境·技术调研 v1.0（local-stack-research）
+# 本地生产能力环境·技术调研 v1.1（local-stack-research）
 
 > CEO 令 O-20260923-1719-bm-a（调研远征令）第②件交付。归口=工程技术部（技术调研线）。
 > 纪律：`docs/research-protocol.md` v1.0（源分级律/零断言/台账律/限时律）。所有断言带源编号【A#/M#】；推论显式标【推论】；未采到=入 §6 卡点台账，不硬编。
@@ -104,7 +104,9 @@ faster-whisper 官方 README 基准（同精度比 openai/whisper "up to 4 times
 - A4 https://raw.githubusercontent.com/rhasspy/piper/master/VOICES.md （官方语音清单 v1.0.0）
 - A5 https://raw.githubusercontent.com/SYSTRAN/faster-whisper/master/README.md （官方基准表·MIT）
 - A6 https://raw.githubusercontent.com/comfyanonymous/ComfyUI/master/README.md （官方 README·GPL-3.0）
+- A7 https://github.com/FunAudioLLM/CosyVoice （官方 README 评测表+模型清单·2026-09-23 交互会话采）
 
 ## 变更记录
 - 2026-09-23: v1.0 首采（O-20260923-1719-bm-a）——TTS/STT/文生图三站官方一手证据+本机锚点；§6 留五卡点。
 - 2026-09-23: R11 轮——§6 卡点 T3 解锁、T2 起录、T4 样件呈样（试录实况=`data/sources/tts-samples/README.md`）；正文断言未动。
+- 2026-09-23: v1.1 交互会话增量（并行执行 O-1719 撞车后合并·认领制由此立）——新增 §1.3 中文质量轨候选（CosyVoice 官方评测表·A7）；R-B 若轻量线不达质量线即有官方依据可循。
