@@ -57,14 +57,17 @@ M0 选题库 → M1 脚本/文案 → M2 素材制作（AIGC）→ M3 多平台�
 |---|---|---|
 | 1 | GitHub 建私库并接 remote | ✅ 已建·实际名 BigRain-11122/Bigmedia（O-20260923-1512-bm-a）·已接线 push；slug≠产品名，更名与否待 CEO 裁 |
 | 2 | 账号开通顺序 | ✅ 2026-09-23 CEO 批：视频号+公众号（首发）→ B站 → 微博 → YouTube |
-| 3 | 栏目/人设名 | 🔄 交 Qiqi 提案 2-3 套（`docs/column-persona-proposals.md`）·CEO 终审点名 |
+| 3 | 栏目/人设名 | 🔄 人设卡 v1.0 已落（`docs/persona-jason.md`·Jason 本人出镜 build-in-public）——**待 Qiqi 抽样终审+CEO 过目**；三案口吻降级为栏目变体（`docs/column-persona-proposals.md`） |
 | 4 | 生产工具链预算 | ✅ 2026-09-23 CEO 裁：**本地算力优先**（O-20260923-1609-bm-a）——本机实况=RTX 4070S 12GB+9950X+Ollama qwen2.5:14b+edge-tts/faster-whisper/FFmpeg 已装；选型=`docs/m2-local-stack.md`（四站本地+显存分时+PoC 阶梯）；云/付费=兜底逐单报批 |
-| 5 | 发布节奏 | 账号到位后定（如周更 2 条起步） |
+| 5 | 发布节奏 | ⏳ 账号到位后定（如周更 2 条起步） |
 | 6 | 存量弹药数量 | ✅ 2026-09-23 CEO 裁：**N=6**（O-20260923-1602 决裁·via bm-a 点选）——成片/半成品 6 条先入库，账号到位即发；成品入库须过 M4 ——**量产暂缓（O-20260923-1756-bm-a）：目标数封存·启动须 CEO 令；测试生产（单件过链 PoC）合法照做·测试件标「测试件·非成品」不入发布队列** |
+| 7 | TTS 音色定档（人耳审） | 🔄 试听样件已备 `data/sources/tts-samples/`（3 男声候选位次建议 Yunyang A / Yunxi B / Yunjian C + piper huayan 纯本备份件·R11）——**CEO/Qiqi 人耳定档即锁 R-B 参数**（backlog #8·卡点 T4） |
+| 8 | Bigmedia / BigStream 更名裁决 | 🔄 仓库 slug=Bigmedia ≠ 产品名 BigStream（BRAND §8 已锁）——已按实况接线生产不受影响；更名与否一句裁 |
+| 9 | 量产开闸（N=6 生成启动） | ⏸ 等你令（O-1756 模式=体系优先；开闸后按 backlog #4 全量产线走） |
 
 ## §8 扩容路径
 
-- OS 循环：**已建成点火**（CEO 令 O-20260923-1525-bm-a·推翻原文「P3 后再装」）——BigStream-OSLoop 10 分钟/轮；协议=`docs/os-protocol.md`·任务书=`src/os/iteration_prompt.txt`·账本=`src/os/state.json`·任务板=`src/os/backlog.md`。本阶段循环模式=底层优先，内容生产全面暂停（恢复须 CEO 令）。
+- OS 循环：**已建成点火**（CEO 令 O-20260923-1525-bm-a·推翻原文「P3 后再装」）——BigStream-OSLoop 10 分钟/轮；协议=`docs/os-protocol.md`·任务书=`src/os/iteration_prompt.txt`·账本=`src/os/state.json`·任务板=`src/os/backlog.md`。**当前模式=O-20260923-1756-bm-a：体系优先·不量产生成·允许测试生产（任务书为准·逐令热改）**。
 - 多机：单机足够（媒体生产非算力密集）；若视频渲染吃重，走集团共享机纪律（governance §6）。
 
 ## 变更记录
