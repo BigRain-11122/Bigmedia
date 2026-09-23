@@ -9,7 +9,7 @@
 
 ```markdown
 ---
-母稿: data/drafts/<母稿文件名>
+母稿= data/drafts/<母稿文件名>
 选题号: BS-0XX
 平台: <平台名>
 栏目人设: <A 超体日志 / B AI 打工实录 / C 一人集团 ·待 CEO 点名>

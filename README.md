@@ -36,19 +36,22 @@ BigStream/
 ├── CONSTITUTION.md    <- 公司宪法（顶层规则·法律层级·宪法红线）
 ├── PLAN.md            <- 公司总纲（阶段/生产线/合规/CEO 待决清单）
 ├── orders/            <- CEO 令牌台账（/CEO 触发·追加式）
-├── docs/              <- org-structure.md / capabilities.md / os-protocol.md / media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md
+├── docs/              <- production-chain.md / org-structure.md / capabilities.md / os-protocol.md / media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md / variant-templates.md
 ├── data/
 │   ├── ideas/         <- 选题库（ideas.md 一行一题）
 │   ├── drafts/        <- 脚本与文案草稿（10 稿封存·生产暂停中）
 │   └── sources/       <- 素材与来源引用（可溯链）
 ├── output/            <- 成品库（二进制 gitignored；schedule.md/analytics.md 台账入库）
-├── src/               <- draft_lint.py（M4 机审）+ os/（OS 循环四件套+任务书+state+backlog）
+├── src/               <- draft_lint.py（M4 机审）· board_check.py（链路一致性）· make_draft.py（骨架生成）· os/（OS 循环四件套+任务书+state+backlog+skeletons）
 └── tests/             <- 脚本测试（按需建）
 ```
 
 ## Run commands
 
 - M4 机审全量：`python src/draft_lint.py`
+- 链路一致性：`python src/board_check.py`
+- 草稿骨架生成：`python src/make_draft.py <选题号> <平台键>`（11 平台键见文件头注；生产位受生产闸门管控，paused 态拒稿）
+- 生产闸门态：`src/os/state.json` 的 `production` 字段（现 paused·开闸须 CEO 令）
 - OS 循环注册/自愈：`powershell -NoProfile -ExecutionPolicy Bypass -File src/os/register_loop_task.ps1`
 - 循环实况：`logs/probe-heartbeat.txt`（心跳）· `src/os/state.json`（tick 账本）
 

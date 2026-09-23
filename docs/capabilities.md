@@ -20,7 +20,7 @@
 | C-03 | CEO 令牌台账（/CEO→O 文件） | 总裁办公室 | live | `orders/` 5 令实录 |
 | C-04 | 三级记忆体系 | 工程技术部 | live | 媒体线 CODELY.md + 本仓 CODELY.md |
 | C-05 | 发布/数据台账结构 | 平台运营部+数据分析部 | live | `output/schedule.md`+`output/analytics.md` |
-| C-06 | draft_lint 测试件 | 工程技术部 | in-dev | backlog #1 |
+| C-06 | draft_lint 测试件 | 工程技术部 | live | `tests/test_draft_lint.py` · 12 用例全绿（R1 commit e4c55dc） |
 | C-07 | 11 平台变体骨架模板 | 平台运营部 | live | `docs/variant-templates.md` · 11 骨架块+登记块+检查单（backlog#2·R2 commit） |
 | C-08 | 选题-台账一致性探针 | 选题研究部 | live | `python src/board_check.py` · 真板 5 题 10 稿 0 FAIL 实测（backlog#3·R3 commit） |
 | C-09 | 自动周报生成器（state+commits→周报） | 数据分析部 | in-dev | backlog #6 |
@@ -28,6 +28,9 @@
 | C-11 | M2 素材链路（TTS/形象选型） | 内容生产部 | blocked | 卡点=CEO 待决+账号 |
 | C-12 | 平台 API 发布对接 | 平台运营部 | blocked | 卡点=账号未开（批次①） |
 | C-13 | 数据回流自动化（后台导出→对账） | 数据分析部 | planned | 待上线后实况定通道 |
+| C-14 | 自动化生产全链路（七站表+生产闸门+生产模式协议） | 总裁办公室+工程技术部 | live | `docs/production-chain.md` · 闸门拒稿实测 exit=3 |
+| C-15 | 草稿骨架生成器 make_draft（M1/M3 站） | 内容生产部+平台运营部 | live | `python src/make_draft.py` · 三类骨架 lint 0 FAIL 实测 |
+| C-16 | 全链量产生产轮（M0-M3 无人值守量产） | 全部门 | blocked | 卡点=生产暂停令（state.json production=paused）·开闸=CEO 令 |
 
 ## §3 能力建设循环
 
@@ -36,3 +39,4 @@
 ## 变更记录
 
 - 2026-09-23: v1.0 建册（CEO 令 O-20260923-1536-bm-a）——live×5 / in-dev×4 / blocked×3 / planned×1。
+- 2026-09-23: v1.1 全链批（CEO 令 O-20260923-1600-bm-a）——C-06 升 live（R1）；OS 循环 R2/R3 自主升 C-07/C-08 live；新增 C-14/C-15 live、C-16 闸门 blocked。现 live×8 / in-dev×1 / blocked×4。

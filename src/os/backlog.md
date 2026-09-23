@@ -8,3 +8,4 @@
 4. [needs-CEO] 生产暂停解除后的 M2 素材链路选型提案（TTS 音色/形象 prompt，按三案参数）
 5. [blocked-by-pause] 视频号 4 稿口播实测 67-77s（draft_lint 实测·超 60s 规格）：恢复生产后统一裁至 ≤60s 或定快节奏读法
 6. 自动周报生成器：src/os/state.json + git log → 周报 md（数据分析部归口·capabilities C-09）
+7. 为 src/make_draft.py 写测试件 tests/test_make_draft.py（夹具制：--out 临时目录生成三类骨架→draft_lint 断言 0 FAIL→清理；加闸门拒稿路径断言 exit=3；版本律拒覆盖断言 exit=5）
