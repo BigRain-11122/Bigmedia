@@ -1,0 +1,17 @@
+# BigStream — product repo local exclusions
+# heavy binaries & artifacts (video/image renders) never enter git
+output/
+data/assets/
+*.mp4
+*.mov
+*.avi
+*.wav
+# secrets (docs/accounts.md discipline)
+.env
+.env.*
+# runtime junk
+__pycache__/
+*.pyc
+*.log
+.codely-cli/scheduled_tasks.json
+.codely-cli/auto-saves/
