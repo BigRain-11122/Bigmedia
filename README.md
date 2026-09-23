@@ -12,6 +12,7 @@
 | 母体 | FLUX Group（超体宇宙集团）· FLUX Media 线 |
 | CEO | Jason（`/CEO` 口令发令 → `orders/` 台账落册，见 PLAN.md §0） |
 | 文化分管 | Qiqi（品牌嗓音·人文内核·内容人设终审） |
+| 栏目矩阵 | 三案全锁（2026-09-23 终审）：《超体日志》主轴 ·《AI 打工实录》短视频变体 ·《一人集团》深度线（`docs/column-persona-proposals.md`） |
 | 执行 | AI 内容生产线（`docs/content-pipeline.md`） |
 
 ## 定位与主赛道（CEO 裁决 2026-09-23）
@@ -21,9 +22,10 @@
 - WALL-E 面：clean content, not garbage feed——干净内容，不做垃圾流。
 - 扩展赛道（后置）：量化投资知识、游戏与小游戏行业——由选题库数据决定开不开。
 
-## 平台矩阵（CEO 令 2026-09-23）
+## 平台矩阵（CEO 令 2026-09-23 · 主流全覆盖）
 
-视频号 · 公众号 · B站 · YouTube · 新浪微博（详见 `docs/platform-playbook.md`；账号 = CEO 物理件，见 `docs/accounts.md`）。
+11 平台四层：视频号 · 公众号 · 抖音 · 小红书 · 快手 · B站 · 知乎 · 今日头条 · 微博 · YouTube · TikTok。
+顶层机制=`docs/media-matrix.md`；单平台策略=`docs/platform-playbook.md`；账号台账=`docs/accounts.md`（开号=CEO 物理件，分五批）。
 
 ## Structure
 
@@ -32,7 +34,7 @@ BigStream/
 ├── README.md          <- 本文件（公司章程入口）
 ├── PLAN.md            <- 公司总纲（阶段/生产线/合规/CEO 待决清单）
 ├── orders/            <- CEO 令牌台账（/CEO 触发·追加式）
-├── docs/              <- content-pipeline.md / platform-playbook.md / accounts.md
+├── docs/              <- media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md
 ├── data/
 │   ├── ideas/         <- 选题库（ideas.md 一行一题）
 │   ├── drafts/        <- 脚本与文案草稿
