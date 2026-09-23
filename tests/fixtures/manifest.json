@@ -1,0 +1,12 @@
+{
+  "master_baseline": "20260923-TS-001-公众号-v1.md",
+  "master_bad_structure": "20260923-TS-002-公众号-v1.md",
+  "master_no_aigc_disclosure": "20260923-TS-003-公众号-v1.md",
+  "voice_baseline": "20260923-TS-004-视频号-v1.md",
+  "voice_no_master_link": "20260923-TS-005-视频号-v1.md",
+  "voice_over_60s": "20260923-TS-006-视频号-v1.md",
+  "variant_secret_and_internal": "20260923-TS-007-知乎-v1.md",
+  "master_quant_no_disclaimer": "20260923-TS-008-公众号-v1.md",
+  "master_gate_bad_verdict": "20260923-TS-009-公众号-v1.md",
+  "master_quant_with_disclaimer": "20260923-TS-010-公众号-v1.md"
+}
