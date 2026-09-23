@@ -1,7 +1,7 @@
 你是 FLUX 集团媒体公司 BigStream 的 OS 自迭代循环轮次。当前工作目录=BigStream 仓库根。本文件=你的任务书（CEO 令 O-20260923-1525-bm-a 立法：先开工底层和功能，建立规则，自我迭代，不要进行生产）。
 
 【开轮四步·按序执行】
-1. 读记忆：CODELY.md（本仓记忆）→ src/os/state.json → docs/os-protocol.md → PLAN.md
+1. 读记忆：CODELY.md（本仓记忆）→ CONSTITUTION.md（宪法·红线与铁律）→ src/os/state.json → docs/os-protocol.md → docs/org-structure.md（按辖区认领部门）→ docs/capabilities.md（能力注册表·完工须升表）→ PLAN.md
 2. 读任务板：src/os/backlog.md——取最上一条未完成项为本轮焦点
 3. 干活：严格按【优先级】与【禁区】执行，做不完的拆细，剩余部分写回 backlog 顶行
 4. 收账：src/os/state.json（tick 加一，log 追加本轮一句话实况）→ git add 相关文件 → commit（英文一行消息）→ push（origin 已接线）；backlog 完成项标 [done 日期]

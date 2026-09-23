@@ -2,7 +2,7 @@
 
 > FLUX Media 线（超体自媒体）的产品公司。2026-09-23 CEO 点名开线：产品名 BigStream（stream=流媒体·连接 FLUX「流即万物」）。
 > 形态 = 集团第三家「一人 + AI 劳动力」公司：CEO（Jason）定方向、发号施令；AI 管选题、生产、适配、发布与复盘。
-> 集团读序：`/README.md` → `/BRAND.md` → `/docs/philosophy.md` → `/RULES.md` → `../README.md`（线章程）→ 本文件 → `PLAN.md`。
+> 集团读序：`/README.md` → `/BRAND.md` → `/docs/philosophy.md` → `/RULES.md` → `../README.md`（线章程）→ 本文件 → `CONSTITUTION.md`（宪法）→ `PLAN.md`。
 
 ## Identity
 
@@ -13,7 +13,8 @@
 | CEO | Jason（`/CEO` 口令发令 → `orders/` 台账落册，见 PLAN.md §0） |
 | 文化分管 | Qiqi（品牌嗓音·人文内核·内容人设终审） |
 | 栏目矩阵 | 三案全锁（2026-09-23 终审）：《超体日志》主轴 ·《AI 打工实录》短视频变体 ·《一人集团》深度线（`docs/column-persona-proposals.md`） |
-| 执行 | AI 内容生产线（`docs/content-pipeline.md`） |
+| 组织编制 | 七部一办（AI 全编制）＋CEO 决策面＋Qiqi 终审面：`docs/org-structure.md`；法律层级与宪法红线：`CONSTITUTION.md` |
+| 执行 | AI 内容生产线（`docs/content-pipeline.md`）＋ OS 自迭代循环（`docs/os-protocol.md`） |
 
 ## 定位与主赛道（CEO 裁决 2026-09-23）
 
@@ -32,9 +33,10 @@
 ```
 BigStream/
 ├── README.md          <- 本文件（公司章程入口）
+├── CONSTITUTION.md    <- 公司宪法（顶层规则·法律层级·宪法红线）
 ├── PLAN.md            <- 公司总纲（阶段/生产线/合规/CEO 待决清单）
 ├── orders/            <- CEO 令牌台账（/CEO 触发·追加式）
-├── docs/              <- os-protocol.md / media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md
+├── docs/              <- org-structure.md / capabilities.md / os-protocol.md / media-matrix.md / content-pipeline.md / platform-playbook.md / accounts.md / column-persona-proposals.md
 ├── data/
 │   ├── ideas/         <- 选题库（ideas.md 一行一题）
 │   ├── drafts/        <- 脚本与文案草稿（10 稿封存·生产暂停中）

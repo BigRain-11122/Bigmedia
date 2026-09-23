@@ -7,3 +7,4 @@
 3. 选题库-台账一致性探针：校验 ideas.md 状态字段与 data/drafts 文件名前缀一一对应（可并入 draft_lint 或独立 src/board_check.py）
 4. [needs-CEO] 生产暂停解除后的 M2 素材链路选型提案（TTS 音色/形象 prompt，按三案参数）
 5. [blocked-by-pause] 视频号 4 稿口播实测 67-77s（draft_lint 实测·超 60s 规格）：恢复生产后统一裁至 ≤60s 或定快节奏读法
+6. 自动周报生成器：src/os/state.json + git log → 周报 md（数据分析部归口·capabilities C-09）
