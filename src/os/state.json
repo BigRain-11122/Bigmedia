@@ -5,11 +5,11 @@
   "production": "open",
   "opened_by": "O-20260923-1602-bm-a",
   "installed": "2026-09-23",
-  "tick": 9,
+  "tick": 10,
   "mandate": "src/os/iteration_prompt.txt",
   "protocol": "docs/os-protocol.md",
   "backlog": "src/os/backlog.md",
-  "focus": "backlog#9 R-B edge-tts voice param table per docs/persona-jason.md + trial samples to data/sources/tts-samples/ (then R-C faster-whisper alignment to replace bs001 placeholder SRT; R-A renderer done R9)",
+  "focus": "backlog#9 R-B per research/local-stack-research-v1.md: edge-tts param table + trial samples to data/sources/tts-samples/ (voice per docs/persona-jason.md), piper1-gpl fallback trial (pip piper-tts, zh_CN huayan); R-C dual path faster-whisper vs edge-tts --write-subtitles; T1-T5 ledger unlocks (O-1719 R10 landed)",
   "log": [
     "2026-09-23 15:36 R1: 完成 backlog#1——tests/test_draft_lint.py 12 用例全绿（fixtures 假稿 10 件+manifest，真稿零接触）；真稿回归 10 稿 0 FAIL（4 条时长 WARN=已知 blocked-by-pause 项）；计划任务在跑、git 无锁、本轮回写 commit+push。",
     "2026-09-23 15:44 R2: 完成 backlog#2——docs/variant-templates.md v1.0（11 平台骨架块+变体头登记块+套用检查单；规格复用 media-matrix/playbook，易过期数字标以平台现行规则为准）；C-07 升 live；开工前检查 git 无锁干净；收账 commit+push。",
@@ -18,6 +18,7 @@
     "2026-09-23 17:05 R6: backlog#1 续采批次——research/user-research-v1.md 升 v1.1：§3.2 视频号官方算法披露实采（微信珊瑚安全 2025-04-02·腾讯云转载存档：社交好友关系推荐+好友推荐曝光加权）；§3.3 B站官方「个性化推荐算法说明」公示页定位（直连 JS 壳空·快照部分原文）+2025Q3 财报官方 AI 数据（中国经营报 2025-11-14：AI心智最强社区·月活近10万AI UP主·AI播放时长+50%·日活1.17亿）；§4 对标池通道已核（up-data.cn/百大名单/aicoder 线索·可信级逐条标注）；§5-3 B站位次结论升级（证据足）。P5 降优先级；P6/P2/P4/B1 逐人数据未动如实留账；backlog#1 余项收窄。期间另执行体完成主线②（persona-jason.md·commits f707943/9ae2407），无锁无冲突，分工实测可行。收账 commit+push。",
     "2026-09-23 17:2x R7: backlog#1 续采批次二——research/user-research-v1.md 升 v1.2：aicoder 线索页破壳（首页 hash-SPA→iframe reports/*.html 子报告直链），B站+公众号 20+20 逐人名单线索落 §4（线索级·未对照·不作引用·零断言纪律维持），含花叔「超级个体」与本案叙事象限信号；卡点如实入 §6：trust.douyin.com（P2）JS 壳空、up-data.cn（B1）JS 壳空、pro.weixin.qq.com（P6）连接失败——官方原文仍零断言。R5 教训生效：先写后收、限时分批（本轮采集约 18 分钟封顶即转写入）。backlog#1 余项收窄=三平台名单+逐人四件对照（账号开通后）。收账 commit+push。",
     "2026-09-23 17:45 R8: backlog#1 名单阶段收官——aicoder 四子报告续采（reports/shipinhao/douyin/xiaohongshu/zhihu.html·视频号/抖音/小红书/知乎 20×4），research 升 v1.3：全站六平台 120 位线索池落 §4（线索级·未对照·不作引用·零断言纪律维持）；首页实采确认六平台构成、YouTube 无子报告（对标4 另寻通道）；跨平台重复名信号（一人跨 2-4 平台）入 §4；§6 B1 名单项收官、余项=账号开通后逐人四件对照；P2/P3/P4/P6/D1 官方原文通道卡点维持台账跟踪。backlog#1 标 done，下轮焦点=#4 弹药产线经 #9 PoC R-A。采集约 15 分钟封顶、先写后收（R5 教训持续生效）。收账 commit+push。",
-    "2026-09-23 17:25 R9: backlog#9 R-A 交付——src/render/render_card_video.py（口播 txt+SRT+字卡 JSON→9:16 mp4·纯本地零安装 CPU 渲染·AIGC 标识常驻烧录=红线内置拒渲染空声明·CJK 按画幅预算折行防裁·voiceover↔SRT 一致性 --strict 校验·--audio 轨位留好待 R-B）；BS-001 三件套数据件落 data/sources/bs001/（voiceover.txt=母稿口播全文·subs.srt=占位时间轴待 R-C 重生成·cards.json=5 卡时间线+溯源 meta）；tests/test_render_card.py 18 用例全绿+draft_lint/board_check 回归全绿；BS-001 实渲染 output/renders/bs-001-card.mp4（1080×1920·58.8s·768KB·ffprobe 实证）·三段抽帧目检（字卡/字幕/AIGC 标识完整无截断无乱码）。踩坑实录：①本机 ffmpeg 9.0.1 已删 -filter_complex_script→改 -filter_complex 内联；②drawtext 缺 fontconfig 会崩→fontfile 必须显式；③链首 [0:v] 后逗号=空过滤器名（已修+测试锁）；④长字幕超宽裁切→折行器入脚本。drawtext 多行=块居中行内左对齐（无逐行居中）→R-C 可评估换 ASS。下轮焦点=#9 R-B edge-tts 音色参数表+试录样件。收账 commit+push。"
+    "2026-09-23 17:25 R9: backlog#9 R-A 交付——src/render/render_card_video.py（口播 txt+SRT+字卡 JSON→9:16 mp4·纯本地零安装 CPU 渲染·AIGC 标识常驻烧录=红线内置拒渲染空声明·CJK 按画幅预算折行防裁·voiceover↔SRT 一致性 --strict 校验·--audio 轨位留好待 R-B）；BS-001 三件套数据件落 data/sources/bs001/（voiceover.txt=母稿口播全文·subs.srt=占位时间轴待 R-C 重生成·cards.json=5 卡时间线+溯源 meta）；tests/test_render_card.py 18 用例全绿+draft_lint/board_check 回归全绿；BS-001 实渲染 output/renders/bs-001-card.mp4（1080×1920·58.8s·768KB·ffprobe 实证）·三段抽帧目检（字卡/字幕/AIGC 标识完整无截断无乱码）。踩坑实录：①本机 ffmpeg 9.0.1 已删 -filter_complex_script→改 -filter_complex 内联；②drawtext 缺 fontconfig 会崩→fontfile 必须显式；③链首 [0:v] 后逗号=空过滤器名（已修+测试锁）；④长字幕超宽裁切→折行器入脚本。drawtext 多行=块居中行内左对齐（无逐行居中）→R-C 可评估换 ASS。下轮焦点=#9 R-B edge-tts 音色参数表+试录样件。收账 commit+push。",
+    "2026-09-23 17:5x R10: O-1719 调研远征令五件全落地——②research/local-stack-research-v1.md v1.0 首采（官方 A 级证据：edge-tts=微软云端免费接口·SSML 已被收紧仅剩单 voice+单 prosody；Piper 旧仓 2025-10-06 官方归档→后继 OHF-Voice/piper1-gpl（pip piper-tts·GPL-3.0·官方正寻维护者）·zh_CN huayan 在案；faster-whisper 官方基准 large int8 GPU 2926MB/small int8 CPU 1477MB；ComfyUI 官方无固定最低显存声明·smart VRAM+--disable-api-nodes 纯离线；本机 M1 实测空闲显存 1.5GB·当日 3.4→1.5 波动=分时纪律实证）③docs/research-protocol.md v1.0 立制（源分级 A/B/C/D+M·零断言·台账律·限时律·双线归口·R4-R8+本轮实践固化）④m2-local-stack 升 v1.1——撤回「可载 SDXL 级」无源断言·TTS 备份线更名 piper1-gpl·分时阈值按官方基准修订⑤C-18 调研能力入册 live（现 live×11）·O 件随轮落册。采集两批并行约 15 分钟封顶（R5 教训持续生效）。下轮焦点=#9 R-B 按新证据执行。收账 commit+push。"
   ]
 }

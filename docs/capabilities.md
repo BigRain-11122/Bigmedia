@@ -32,6 +32,7 @@
 | C-14 | 自动化生产全链路（七站表+生产闸门+生产模式协议） | 总裁办公室+工程技术部 | live | `docs/production-chain.md` · 闸门拒稿实测 exit=3 |
 | C-15 | 草稿骨架生成器 make_draft（M1/M3 站） | 内容生产部+平台运营部 | live | `python src/make_draft.py` · 三类骨架 lint 0 FAIL 实测 |
 | C-16 | 全链量产生产轮（M0-M3 无人值守量产） | 全部门 | blocked | 卡点=生产暂停令（state.json production=paused）·开闸=CEO 令 |
+| C-18 | 调研能力（双线·协议化） | 选题研究部+工程技术部 | live | `docs/research-protocol.md` v1.0（O-20260923-1719-bm-a）·市场线=user-research v1.3（R8·120 位线索池）·技术线=local-stack-research v1.0（官方 A 级证据 6 件+本机 M1 实测） |
 
 ## §3 能力建设循环
 
@@ -42,3 +43,4 @@
 - 2026-09-23: v1.0 建册（CEO 令 O-20260923-1536-bm-a）——live×5 / in-dev×4 / blocked×3 / planned×1。
 - 2026-09-23: v1.1 全链批（CEO 令 O-20260923-1600-bm-a）——C-06 升 live（R1）；OS 循环 R2/R3 自主升 C-07/C-08 live；新增 C-14/C-15 live、C-16 闸门 blocked。现 live×8 / in-dev×1 / blocked×4。
 - 2026-09-23: v1.2 本地算力批（CEO 令 O-20260923-1609-bm-a）——C-11 解除 CEO 待决卡点转 in-dev（本地算力优先·选型=v1 四站本地）；新增 C-17 本地链 PoC in-dev（backlog #9）。现 live×8 / in-dev×3 / blocked×3 / planned×1。
+- 2026-09-23: v1.3 调研远征批（CEO 令 O-20260923-1719-bm-a）——新增 C-18 调研能力（双线协议化）live：research-protocol v1.0 立制+技术线首采 local-stack-research v1.0（含撤回 m2 一条无源断言）。现 live×11 / in-dev×3 / blocked×3 / planned×1。
