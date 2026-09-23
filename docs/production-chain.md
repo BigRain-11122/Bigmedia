@@ -21,9 +21,9 @@
 |---|---|---|---|---|
 | M0 选题 | 半自动 | OS 循环生产轮提案（源=集团 git 实况）+ `board_check.py` 一致性探针（C-08 live） | CEO 批注门；每题来源可溯 | gated（闸门关） |
 | M1 母稿 | 半自动 | `src/make_draft.py` 骨架生成（C-15）+ AI 会话填充 | 命名/版本律；骨架自带 GATE PENDING | gated |
-| M2 素材 | 半自动 | **本地算力链**（C-11 in-dev·选型已裁=本地优先 O-20260923-1609-bm-a）：edge-tts/faster-whisper/FFmpeg/opencv 已装·四站方案=`docs/m2-local-stack.md`·PoC=backlog #9 | 素材脱敏审；来源可溯 | in-dev |
+| M2 素材 | 半自动 | **本地算力链**（C-11 in-dev·选型已裁=本地优先 O-20260923-1609-bm-a）：edge-tts/faster-whisper/FFmpeg/opencv 已装·四站方案=`docs/m2-local-stack.md`·PoC=backlog #9 | 素材脱敏审；来源可溯；**人味规格环节（O-2210）：拍稿预算含空气预算（60s→≤55s 文本）·配音走 `--human` 种子** | in-dev |
 | M3 变体 | 全自动骨架 | `docs/variant-templates.md` 11 平台骨架（C-07 live）+ make_draft 变体位 | 母稿链接登记；lint 0 FAIL | gated |
-| M4 审查 | 全动机审＋人工点人审 | `src/draft_lint.py`（C-01 live·12 用例）+ 嗓音人审（Qiqi/CEO 抽样） | FAIL=禁发布，无例外 | **live** |
+| M4 审查 | 全动机审＋人工点人审 | `src/draft_lint.py`（C-01 live·12 用例）+ 层 1.5 工艺审（铁律趣律/视觉审）+ **层 1.6 AI 感机检（`src/ai_feel_check.py`·O-2210：gap-zero/gap-uniform/pacing/prosody 四 FAIL 档）** + 嗓音人审（Qiqi/CEO 抽样） | FAIL=禁发布，无例外 | **live** |
 | M5 发布 | 半自动 | `output/schedule.md` 台账（C-05）；公众号草稿 API+YouTube Data API=接口已定（C-12 blocked·账号） | 发布=M4 PASS+账号就绪双前置 | blocked |
 | M6 复盘 | 半自动 | `output/analytics.md`+周报生成器（C-09 in-dev） | 未上线=未测量；周对账一行制 | in-dev |
 
@@ -45,3 +45,4 @@
 - 2026-09-23: v1.0 建链（CEO 令 O-20260923-1600-bm-a）——七站全表+生产闸门+生产模式协议；M4 已 live，M0/M1/M3 骨架就绪待闸，M2/M5 blocked（选型/账号），M6 in-dev。
 - 2026-09-23: v1.1 本地算力批（CEO 令 O-20260923-1609-bm-a）——M2 站选型已裁=**本地算力优先**（四站本地方案+显存分时+PoC 阶梯=`docs/m2-local-stack.md`）；M2 由 blocked 转 in-dev。
 - 2026-09-23: v1.2 闸门机牢同步（CEO 令 O-20260923-1756-bm-a 模式修正·R15 补落）——O-1602 开闸态与本令「不量产」意图不符属机牢缺口：`production` 回 `paused`+`mode` 改 systems-first；make_draft 闸门报错文案引用本令；测试生产位（`--out` 临时目录）不受闸门影响照旧放行（令中「允许测试生产」）。§1 站表实况 gated 行随闸门态恢复正确。
+- 2026-09-23: v1.3 人味机制批（CEO 令 O-20260923-2210-bm-a「从底层要去ai感觉，做好相关机制」）——M2 增人味规格环节（空气预算律·`--human` 种子）；M4 增层 1.6 AI 感机检（`src/ai_feel_check.py` 四指纹）；规格正典=`docs/human-feel-spec.md`；首战实证 v9 FAIL（零间隙节拍器）→v10 PASS。

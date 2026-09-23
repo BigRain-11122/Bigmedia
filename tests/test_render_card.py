@@ -195,6 +195,24 @@ class TestPlanAndMatch(unittest.TestCase):
             plan = rcv.build_render_plan(cards_cfg(), cues, d)
             self.assertIn("C\\:/fake/font.ttc", plan["filter_text"])
 
+    def test_grain_appends_noise_vignette_after_text(self):
+        """O-20260923-2210-bm-a: grain>0 = film grain + vignette, appended
+        after all text layers (never before them), and off by default."""
+        cues = []
+        with tempfile.TemporaryDirectory() as d:
+            base = rcv.build_render_plan(cards_cfg(), cues, d)
+            self.assertNotIn("noise=alls=", base["filter_text"])
+            self.assertNotIn("vignette", base["filter_text"])
+            with tempfile.TemporaryDirectory() as d2:
+                grainy = rcv.build_render_plan(cards_cfg(), cues, d2, grain=7)
+                ft = grainy["filter_text"]
+                self.assertIn("noise=alls=7:allf=t+u", ft)
+                self.assertIn("vignette=angle=PI/6", ft)
+                # texture stages come last: nothing after the vignette
+                self.assertTrue(ft.rstrip().endswith("vignette=angle=PI/6[v]"))
+                # timeline untouched by the aesthetic pass
+                self.assertAlmostEqual(base["duration"], grainy["duration"])
+
 
 def _tmp_srt(content):
     import tempfile as tf

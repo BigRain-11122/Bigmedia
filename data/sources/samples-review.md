@@ -63,3 +63,29 @@ python src\render\render_card_video.py --cards output\renders\.v8-mid\cards.json
 - **声线定档=light 轻度赛博**；**叙述者=机器态确认**（系统日志体正典化）——拟人组 A-D 降为对照留档。
 - **v9 定档版**=`output/renders/bs-001-v9-cyber-light.mp4`（59.31s·12 拍·beat2 增「爽的是我们，累的是他」人味反转·beat9 回归甩锅交账梗）——评审六席 9+ **PASS=放行候选**（`docs/reviews/review-20260923-bs001-v9.md`）·待 CEO 终审最后一键。
 - 产线默认参数已锁：`emotive_tts --cyber light` + 机器叙述者拍稿（copy-craft §2.6）——mid/full 留档对照（full 禁量产·ASR 实证伤事实词）。
+
+## 七、人味机制组 v10（O-20260923-2210-bm-a·2026-09-23 22:2X）
+
+> CEO 令「从底层要去ai感觉，做好相关机制」——四站人味机制+机检门一次建成（规格=`docs/human-feel-spec.md`）。
+> **v10 = v9 同稿同档位，唯一变量=人味机制**（干净 A/B）。
+
+| 机制 | 实现 | v9（前） | v10（后） |
+|---|---|---|---|
+| 逐段微抖动 | `--human 42`（率±3%/音高±2Hz·种子可复现） | 每句同一副嗓 | 逐句微变 |
+| 呼吸间隙 | 句间 0.12-0.48s 变长（时间线随实测重算零漂移） | **全零=节拍器感（机检 FAIL）** | 0.22-0.58s 变长（机检 PASS） |
+| 呼吸声 | 长句后 50% 概率 brown-noise 呼吸 | 无 | 实装 |
+| 房间底噪 | pink noise −44dB 床+微早期反射 | 真空 TTS | 有空气感 |
+| 画面质感 | `--grain 7 --bg 0x0a0a0d`（颗粒+暗角+深灰底） | 纯黑模板指纹 | 制作感（抽帧验图在案） |
+
+- **机检门首战**：`src/ai_feel_check.py` 对 v9 逮出 gap-zero（其余 pacing/prosody/copy 全 PASS——v9 文本结构本身健康）→ v10 全 PASS。
+- v10 成片=`output/renders/bs-001-v10-humanfeel.mp4`（64.06s·19.1MB·strict 过·ASR 事实词全存活）。
+- **诚实入账**：64.06s 超 60s 规格（呼吸空气 +4.75s）→ 立法**空气预算律**（60s 视频文本预算 ≤55s·L15）：量产版须先删文案后保空气，不靠压间隙换时长。
+
+### 复现（命令实录·v10）
+
+```
+python src\render\emotive_tts.py --beats data\sources\bs001\voiceover-v9-cyber.beats.txt --voice zh-CN-YunyangNeural --out output\renders\.v10-light --cyber light --human 42 --template output\renders\.v7vis-tmp\cards-vis.json --order "O-20260923-2210-bm-a (human-feel dial, seed 42)"
+:: BGM duck 同 §五实录（$T=64.06）
+python src\render\render_card_video.py --cards output\renders\.v10-light\cards.json --srt output\renders\.v10-light\subs.srt --voiceover output\renders\.v10-light\voiceover.txt --strict --audio output\renders\.v10-light\audio-bgm.mp3 --grain 7 --bg 0x0a0a0d --out output\renders\bs-001-v10-humanfeel.mp4
+python src\ai_feel_check.py --beats data\sources\bs001\voiceover-v9-cyber.beats.txt --srt output\renders\.v10-light\subs.srt
+```

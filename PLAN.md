@@ -75,6 +75,7 @@ M0 选题库 → M1 脚本/文案 → M2 素材制作（AIGC）→ M3 多平台�
 - 2026-09-23: P2 开工批（O-20260923-1506-bm-a）——五题全批、GitHub 远端接线、账号顺序定（视频号+公众号首发）、栏目/人设提案权交 Qiqi。
 - 2026-09-23: 矩阵顶层机制+主流平台全覆盖（O-20260923-1512-bm-a）——11 平台/四层/五批次；栏目人设三案全锁；远端接线 BigRain-11122/Bigmedia。
 - 2026-09-23: 赛博声线转向（O-20260923-2136-bm-a）——配音+文案全面转机器口吻（三档 `--cyber` 声线+系统日志体 v8 拍稿+机器叙述者）；样片三档呈 CEO 拣音；品牌声线正典入 copy-craft §2.6。
+- 2026-09-23: 去 AI 感机制（O-20260923-2210-bm-a）——四站人味机制一次建成（`--human` 种子化配音抖动/呼吸/底噪+`--grain/--bg` 画面质感+`ai_feel_check.py` 四指纹机检门=M4 层 1.6+空气预算律 L15）；机检首战 A/B：v9 gap-zero FAIL→v10 全 PASS；规格=human-feel-spec.md·C-21 live。
 - 2026-09-23: 底层优先令（O-20260923-1525-bm-a）——生产暂停·10 稿封存；BigStream-OSLoop 自迭代循环建成注册；M4 机审工具化（src/draft_lint.py）；发布/数据台账模板落位。
 - 2026-09-23: 立法批（O-20260923-1536-bm-a）——公司宪法 CONSTITUTION.md（法律层级 L0-L3）；七部一办组织编制 docs/org-structure.md；自动化能力注册表 docs/capabilities.md；OS 循环任务书接线宪法与编制；R1 首轮实证（backlog#1 测试件 12 用例全绿）。
 - 2026-09-23: 全链批（O-20260923-1600-bm-a）——docs/production-chain.md 七站全表+生产闸门；src/make_draft.py 骨架生成器（闸门拒稿实测 exit=3·三类骨架 lint 0 FAIL）；循环 R2/R3 自主交付变体模板+board_check（C-07/C-08 live）。

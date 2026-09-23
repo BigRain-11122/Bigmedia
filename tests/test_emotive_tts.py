@@ -91,5 +91,54 @@ class TestCyberChains(unittest.TestCase):
         self.assertGreater(f_full, f_mid)
 
 
+class TestHumanFeel(unittest.TestCase):
+    """O-20260923-2210-bm-a: seeded micro-variance = the anti-metronome
+    contract (reproducible renders, bounded jitter, breaths only after
+    long sentences)."""
+
+    def test_human_series_deterministic_and_bounded(self):
+        a = et.human_series(42, 5)
+        b = et.human_series(42, 5)
+        self.assertEqual(a, b)
+        self.assertEqual(5, len(a))
+        for rate_jit, pitch_jit in a:
+            self.assertTrue(et.HUMAN_RATE_JIT[0] <= rate_jit <= et.HUMAN_RATE_JIT[1])
+            self.assertTrue(et.HUMAN_PITCH_JIT[0] <= pitch_jit <= et.HUMAN_PITCH_JIT[1])
+
+    def test_boundary_plan_varies_within_range(self):
+        durs = [5.9, 2.9, 3.8, 5.4, 6.4, 5.5, 4.3, 4.2, 5.7, 4.4, 4.2]
+        plan = et.boundary_plan(7, durs)
+        self.assertEqual(len(durs) - 1, len(plan))
+        for item in plan:
+            lo = et.HUMAN_GAP_BASE - et.HUMAN_GAP_SPREAD
+            hi = et.HUMAN_GAP_BASE + et.HUMAN_GAP_SPREAD
+            self.assertTrue(lo - 1e-9 <= item["gap"] <= hi + 1e-9)
+        gaps = [i["gap"] for i in plan]
+        self.assertGreater(max(gaps) - min(gaps), 0.05,
+                            "gaps must vary (uniform gaps = AI metronome)")
+
+    def test_breath_only_after_long_beats(self):
+        durs = [5.0, 1.0, 5.0, 1.0, 6.0, 1.0]
+        for seed in range(20):
+            for i, item in enumerate(et.boundary_plan(seed, durs)):
+                if item["breath"]:
+                    self.assertGreaterEqual(
+                        durs[i], et.HUMAN_BREATH_AFTER_S,
+                        "seed %d breath after short beat %d" % (seed, i))
+
+    def test_boundary_plan_deterministic(self):
+        durs = [5.0, 1.0, 5.0, 1.0]
+        self.assertEqual(et.boundary_plan(3, durs), et.boundary_plan(3, durs))
+        self.assertNotEqual(et.boundary_plan(3, durs), et.boundary_plan(4, durs))
+
+    def test_jitter_flags_merges_existing_values(self):
+        out = et.jitter_flags(["--rate=-8%", "--pitch=-3Hz"], 2, 1)
+        self.assertEqual(["--rate=-6%", "--pitch=-2Hz"], out)
+
+    def test_jitter_flags_adds_when_profile_bare(self):
+        out = et.jitter_flags([], -2, 3)  # body profile carries no flags
+        self.assertEqual(["--rate=-2%", "--pitch=+3Hz"], out)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -192,7 +192,7 @@ def _q(p):
     return "'" + _fpath(p) + "'"
 
 
-def build_render_plan(cfg, cues, tmpdir):
+def build_render_plan(cfg, cues, tmpdir, grain=0):
     """Build the drawtext filtergraph. Text bodies go through temp
     textfiles so multi-line CJK renders without escaping issues.
 
@@ -204,6 +204,11 @@ def build_render_plan(cfg, cues, tmpdir):
       composed around the optical center line (42% frame height).
     - 150ms fade in/out per card (S4) via alpha expression.
     Cards without the new keys render exactly as before.
+
+    O-20260923-2210-bm-a human-feel dial: grain>0 appends film grain
+    (temporal+uniform noise) + soft vignette after all text layers - the
+    flat digital "template" look reads as cheap-AI; grain+vignette read
+    as produced film. Pure aesthetic pass, zero timeline impact.
     """
     tmpdir = Path(tmpdir)
     font = cfg["font"]
@@ -299,6 +304,9 @@ def build_render_plan(cfg, cues, tmpdir):
             "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
             ":line_spacing=%d:x=(w-text_w)/2:y=h-%d:enable='between(t,%.3f,%.3f)'"
             % (font_q, _q(body), int(font["subs_size"]), ls, subs_bottom, s, e))
+    if grain and int(grain) > 0:
+        chain.append("noise=alls=%d:allf=t+u" % int(grain))
+        chain.append("vignette=angle=PI/6")
     return {
         # "[0:v]" must sit directly before the first filter: a comma after a
         # link label reads as an empty filter name to the graph parser.
@@ -321,6 +329,10 @@ def main(argv=None):
     ap.add_argument("--audio")
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--grain", type=int, default=0,
+                    help="film grain + vignette intensity 0-20 (O-2210)")
+    ap.add_argument("--bg",
+                    help="override video bg color (e.g. 0x0a0a0d)")
     args = ap.parse_args(argv)
 
     cards_path = Path(args.cards)
@@ -329,6 +341,8 @@ def main(argv=None):
     except ValueError as e:
         print("FAIL cards: %s" % e)
         return 2
+    if args.bg:
+        cfg["video"]["bg"] = args.bg
     font_path = Path(cfg["font"]["file"])
     if not font_path.exists():
         print("FAIL font file not found: %s (override font.file in cards JSON)" % font_path)
@@ -371,7 +385,7 @@ def main(argv=None):
 
     tmpdir = Path(tempfile.mkdtemp(prefix="bsrender-"))
     try:
-        plan = build_render_plan(cfg, cues, tmpdir)
+        plan = build_render_plan(cfg, cues, tmpdir, grain=args.grain)
         if args.dry_run:
             print("dry-run ok: cards=%d cues=%d duration=%.3fs out=%s"
                   % (len(cfg["cards"]), len(cues), plan["duration"], out_path))
