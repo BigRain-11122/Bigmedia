@@ -5,17 +5,18 @@
   "production": "open",
   "opened_by": "O-20260923-1602-bm-a",
   "installed": "2026-09-23",
-  "tick": 7,
+  "tick": 8,
   "mandate": "src/os/iteration_prompt.txt",
   "protocol": "docs/os-protocol.md",
   "backlog": "src/os/backlog.md",
-  "focus": "backlog#1 research remainder (P6 gzh official source, P2 douyin trust center, B1 remaining 3 platforms + per-creator cross-check)",
+  "focus": "backlog#4 ammo N=6 (production line = local-compute PoC first, backlog#9); next actionable = #9 R-A FFmpeg timeline minimal loop (voiceover txt+SRT+card template -> 9:16 mp4, pure local, per m2-local-stack.md)",
   "log": [
     "2026-09-23 15:36 R1: 完成 backlog#1——tests/test_draft_lint.py 12 用例全绿（fixtures 假稿 10 件+manifest，真稿零接触）；真稿回归 10 稿 0 FAIL（4 条时长 WARN=已知 blocked-by-pause 项）；计划任务在跑、git 无锁、本轮回写 commit+push。",
     "2026-09-23 15:44 R2: 完成 backlog#2——docs/variant-templates.md v1.0（11 平台骨架块+变体头登记块+套用检查单；规格复用 media-matrix/playbook，易过期数字标以平台现行规则为准）；C-07 升 live；开工前检查 git 无锁干净；收账 commit+push。",
     "2026-09-23 15:58 R3: 完成 backlog#3——src/board_check.py 台账一致性探针（状态流自 ideas.md 声明动态解析·改词汇不改代码；8 类 FAIL=vocab/dup-id/bad-status/drafts-dir/bad-name/orphan/overstate/stale·超报与滞后双向亮红）；tests/test_board_check.py 11 用例全绿（6 台账夹具+运行时临时稿目录·真稿零接触）·draft_lint 回归 12 用例全绿；真板回归=5 题 10 稿 0 FAIL 一一对应；C-08 升 live；首跑曾现 ID_RE 无捕获组笔误即修（自检闭环）；收账 commit+push。",
     "2026-09-23 17:05 账目修复（R6 承办）：tick 3→6 补齐断洞——R4（16:02 轮·心跳 exit=1）实为 O-1602 批次1 已交付（research v1.0 commit 1fa6a98+治理面同步）但漏 tick；R5（16:22 轮）25 分钟超时被杀 exit=1 零产出（死因=调研采集启动过晚，证据=logs/probe-heartbeat.txt+logs/iteration-loop）。规程教训：轮内采集须限时分批、先写后收。",
     "2026-09-23 17:05 R6: backlog#1 续采批次——research/user-research-v1.md 升 v1.1：§3.2 视频号官方算法披露实采（微信珊瑚安全 2025-04-02·腾讯云转载存档：社交好友关系推荐+好友推荐曝光加权）；§3.3 B站官方「个性化推荐算法说明」公示页定位（直连 JS 壳空·快照部分原文）+2025Q3 财报官方 AI 数据（中国经营报 2025-11-14：AI心智最强社区·月活近10万AI UP主·AI播放时长+50%·日活1.17亿）；§4 对标池通道已核（up-data.cn/百大名单/aicoder 线索·可信级逐条标注）；§5-3 B站位次结论升级（证据足）。P5 降优先级；P6/P2/P4/B1 逐人数据未动如实留账；backlog#1 余项收窄。期间另执行体完成主线②（persona-jason.md·commits f707943/9ae2407），无锁无冲突，分工实测可行。收账 commit+push。",
-    "2026-09-23 17:2x R7: backlog#1 续采批次二——research/user-research-v1.md 升 v1.2：aicoder 线索页破壳（首页 hash-SPA→iframe reports/*.html 子报告直链），B站+公众号 20+20 逐人名单线索落 §4（线索级·未对照·不作引用·零断言纪律维持），含花叔「超级个体」与本案叙事象限信号；卡点如实入 §6：trust.douyin.com（P2）JS 壳空、up-data.cn（B1）JS 壳空、pro.weixin.qq.com（P6）连接失败——官方原文仍零断言。R5 教训生效：先写后收、限时分批（本轮采集约 18 分钟封顶即转写入）。backlog#1 余项收窄=三平台名单+逐人四件对照（账号开通后）。收账 commit+push。"
+    "2026-09-23 17:2x R7: backlog#1 续采批次二——research/user-research-v1.md 升 v1.2：aicoder 线索页破壳（首页 hash-SPA→iframe reports/*.html 子报告直链），B站+公众号 20+20 逐人名单线索落 §4（线索级·未对照·不作引用·零断言纪律维持），含花叔「超级个体」与本案叙事象限信号；卡点如实入 §6：trust.douyin.com（P2）JS 壳空、up-data.cn（B1）JS 壳空、pro.weixin.qq.com（P6）连接失败——官方原文仍零断言。R5 教训生效：先写后收、限时分批（本轮采集约 18 分钟封顶即转写入）。backlog#1 余项收窄=三平台名单+逐人四件对照（账号开通后）。收账 commit+push。",
+    "2026-09-23 17:45 R8: backlog#1 名单阶段收官——aicoder 四子报告续采（reports/shipinhao/douyin/xiaohongshu/zhihu.html·视频号/抖音/小红书/知乎 20×4），research 升 v1.3：全站六平台 120 位线索池落 §4（线索级·未对照·不作引用·零断言纪律维持）；首页实采确认六平台构成、YouTube 无子报告（对标4 另寻通道）；跨平台重复名信号（一人跨 2-4 平台）入 §4；§6 B1 名单项收官、余项=账号开通后逐人四件对照；P2/P3/P4/P6/D1 官方原文通道卡点维持台账跟踪。backlog#1 标 done，下轮焦点=#4 弹药产线经 #9 PoC R-A。采集约 15 分钟封顶、先写后收（R5 教训持续生效）。收账 commit+push。"
   ]
 }
