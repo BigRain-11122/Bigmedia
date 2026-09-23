@@ -17,11 +17,11 @@
 | 框架 | torch 2.11.0+cu128 | 就绪 |
 | 文生图 | ComfyUI 未装 | **缺口·后置** |
 
-## §1 四站本地选型（v1.1·证据=research/local-stack-research-v1.md）
+## §1 四站本地选型（v1.2·证据=research/local-stack-research-v1.md）
 
 | 站 | 本地方案 | 算力位 | 备注 |
 |---|---|---|---|
-| 配音 TTS | edge-tts（音色参数随 `docs/persona-jason.md` 人设卡定——O-1602 令人设=Jason 本人出镜；三案口吻=栏目变体保留） | 云端免费接口·零预算 | v1.1 证据（research §1）：edge-tts=微软**云端**免费接口（GPL-3.0）·微软已移除自定义 SSML（仅剩单 voice+单 prosody）=收紧先例→**备份必做**：纯本地替代=piper1-gpl（旧 rhasspy/piper 仓 2025-10-06 官方归档·后继仓 `pip install piper-tts`·GPL-3.0·官方正寻维护者）；zh_CN huayan（x_low/medium）语音在案 |
+| 配音 TTS | edge-tts（音色参数随 `docs/persona-jason.md` 人设卡定——O-1602 令人设=Jason 本人出镜；三案口吻=栏目变体保留） | 云端免费接口·零预算 | v1.2 证据（research §1·R18 补采）：edge-tts=微软**云端**免费接口（许可证现值 **LGPLv3**·R18 更正）·微软已移除自定义 SSML（仅剩单 voice+单 prosody）=收紧先例+**403 波次史四波在案**（2024-10×2/2024-12/2025-08/2026-01·#286 仅大陆复现·修复均以发版收口·仓库 2026-03-22 后无新提交）→**备份必做且升产线刚性依赖**（403 再发=升最新 release+波次期临时切 piper）：纯本地替代=piper1-gpl（旧 rhasspy/piper 仓 2025-10-06 官方归档·后继仓 `pip install piper-tts`·GPL-3.0·官方正寻维护者）；zh_CN huayan（x_low/medium）语音在案 |
 | 文案推理 | 本地 Ollama（qwen2.5:14b 起草·7b 快迭代·bge-m3 选题向量化） | 本地 GPU | 交互会话+循环双轨 |
 | 字幕对轴 | faster-whisper（口播→时间戳→SRT） | 本地 GPU/CPU 双路 | v1.1 证据（research §2 官方基准）：large-v2 int8 GPU=2926MB 显存·small int8 CPU=1477MB RAM——**显存窗口<3GB 走 CPU int8**；无需系统 FFmpeg（PyAV 捆绑）；AIGC 显著标识字幕同时合成 |
 | 剪辑合成 | FFmpeg 时间线脚本（字卡/黑底白字/实录画面拼接）+ opencv 封面合成 | 本地 CPU | `src/render/` 脚本位 |
@@ -58,3 +58,4 @@
 - 2026-09-23: v1.1 按证据升级（CEO 令 O-20260923-1719-bm-a·证据=research/local-stack-research-v1.md）——TTS 备份线更名 piper1-gpl（旧 Piper 仓归档）；撤回「可载 SDXL 级」无源断言（官方无最低显存声明·T1 卡点）；faster-whisper 基准入表（GPU int8 2926MB / CPU int8 1477MB）；分时纪律按当日实测修订；R-B/R-C 对齐人设卡（Jason 出镜）。
 - 2026-09-23: R-B 落地（OS 循环 R11）——TTS 双轨试录：edge-tts 参数表+6 样件、piper1-gpl 真装真录（huayan medium·纯 CPU 2.77s·模型 gitignored 于 data/assets/piper-models/）；T3 解锁（后继仓沿用 HF rhasspy/piper-voices）；位次建议 Yunyang A——选型定档待人耳终审（backlog #8）。
 - 2026-09-23: R-C 落地（OS 循环 R12）——双路字幕对轴裁决+BS-001 v2 音轨重渲；连带修红 drawtext CRLF 行距翻倍（LF 写出+回归锁）；PoC 阶梯 R-A/R-B/R-C 全 done，R-D 维持后置。
+- 2026-09-23: v1.2（OS 循环 R18·随 research v1.2 同步）——TTS 行证据更新：edge-tts 许可证更正 LGPLv3（LICENSE 直采）；403 四波风控史入案（#286 仅大陆复现）→备份线升**产线刚性依赖**；403 再发处置口径=升最新 release+波次期临时切 piper。

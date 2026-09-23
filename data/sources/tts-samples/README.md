@@ -22,14 +22,14 @@
 | `huayan-medium-default.mp3` | **piper1-gpl**（纯本地 CPU） | zh_CN-huayan **medium** | 默认（length_scale=1.0） | 8.17s | 60,882 B |
 
 - 时长口径=ffprobe 实测；标 ~ 号=未逐件 probe（同句同引擎，量级一致）。
-- **T2 数据点**：edge-tts 本轮 5 次合成 5/5 首试成功、零失败（单轮样本·不足为可靠性结论，续录）。
+- **T2 数据点（续录·R18）**：edge-tts 累计 **6/6 首试成功零失败**——R11 5/5 + R18 1/1（2026-09-23·1.98s·输出 57,744 B 与 R11 `yunyang-default.mp3` 逐字节同=确定性输出）。波次史与 403 再发处置口径=research §1.1 v1.2 可靠性史块；仍不足为可靠性结论，续录。
 
 ## §2 edge-tts 参数表（官方 CLI 实测面·v7.2.8）
 
 - 音色：`--voice zh-CN-XXXNeural`；清单：`edge-tts --list-voices`（本机 zh-CN 实况全表=`edge-voices-zhCN.txt`：男声 4=Yunjian/Yunxi/Yunxia/Yunyang·女声 2·方言 2；**Azure 全量音色不在 edge 通道内**——如 Yunze/Yunye 未出现，以本机实测清单为准）。
 - 语速/音量/音调：`--rate=±X%` `--volume=±X%` `--pitch=±XHz`——**负值必须连写式**（`--rate=-10%`，空格式会被吞，research §1.1 A1 在案）。
 - 文件进出：`--file 输入.txt --write-media 输出.mp3`；字幕直出：`--write-subtitles 输出.srt`（词级时间戳·实测 3 句 3 轴可用；cue1/cue2 有 50ms 重叠——R-C 对轴时处理）。
-- 性质：微软**云端**免费接口（GPL-3.0·A1）——零支出但算力在微软侧，收紧风险在案（SSML 已削）→ 备份线必做（本台账 §3 即备份验证）。
+- 性质：微软**云端**免费接口（许可证现值 LGPLv3·research §1.1 v1.2 更正）——零支出但算力在微软侧，收紧风险在案（SSML 已削+403 波次史四波）→ 备份线=**产线刚性依赖**（本台账 §3 即备份验证）。
 
 复现命令（本目录内）：
 ```
@@ -62,7 +62,7 @@ edge-tts --voice zh-CN-YunyangNeural --file trial-line.txt --write-media yunyang
 
 | # | 项 | 本轮实况 |
 |---|---|---|
-| T2 | edge-tts 可靠性 | 单轮 5/5 成功——数据点起录，待多轮累计 |
+| T2 | edge-tts 可靠性 | 累计 6/6（R11 5/5+R18 1/1）；**issues 史已补采**（research v1.2 §1.1：四波 403+#286 大陆专属+修复-发版对应）——数据点续录；波次期切备份线 |
 | T3 | piper1-gpl 语音库 | **解锁**：无 list CLI·外置 ONNX·沿用 HF rhasspy/piper-voices v1.0.0（§3） |
 | T4 | huayan 试听质量 | **样件已呈**（`huayan-medium-default.mp3`）——待人耳 |
 | T5 | GPL 分发边界 | 不变（内部生产使用无碍） |
