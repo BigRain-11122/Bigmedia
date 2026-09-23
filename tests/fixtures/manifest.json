@@ -16,5 +16,16 @@
   "board_ideas_badstatus": "board/ideas_badstatus.md",
   "board_ideas_noflow": "board/ideas_noflow.md",
   "report_state_ok": "report/state_ok.json",
-  "report_backlog_ok": "report/backlog_ok.md"
+  "report_backlog_ok": "report/backlog_ok.md",
+  "readiness_accounts_ok": "readiness/accounts_ok.md",
+  "readiness_accounts_noflow": "readiness/accounts_noflow.md",
+  "readiness_accounts_badstatus": "readiness/accounts_badstatus.md",
+  "readiness_accounts_nobatch": "readiness/accounts_nobatch.md",
+  "readiness_accounts_multiflow": "readiness/accounts_multiflow.md",
+  "readiness_accounts_ready": "readiness/accounts_ready.md",
+  "readiness_backlog_flags": "readiness/backlog_flags.md",
+  "readiness_backlog_clean": "readiness/backlog_clean.md",
+  "readiness_renders_ok": "readiness/renders_ledger_ok.md",
+  "readiness_renders_bare": "readiness/renders_ledger_bare.md",
+  "readiness_renders_stale": "readiness/renders_ledger_stale.md"
 }
