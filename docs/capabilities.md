@@ -36,6 +36,7 @@
 | C-19 | 发布准备度探针（readiness probe） | 平台运营部 | live | `python src/readiness.py` · backlog#10（R14）——四只读源聚合（accounts 亮灯=状态流自台账解析·GATE 态=GATE_RE 复用 draft_lint·renders 测试件「测试件·非成品」标注核验·backlog 决策标记）→距离首发阻塞清单·stdout/--out·24 测试用例全绿·真跑 3 阻塞 0 发现 exit 1（阻塞=批次①账号未开+10 稿 GATE PENDING+#7 [needs-CEO]） |
 | C-20 | OS 循环健康探针（loop_health） | 工程技术部 | live | `python src/os/loop_health.py` · backlog#11（R17）——os-protocol §5 判据机器化：心跳新鲜度/间隔（SLA 20 分钟=WARN·锁龄 40 分钟=FAIL 停跳线）+tick↔done 轮次对账（账目滞后=FAIL·防 R4/R5 型断洞）+台账时间戳卫生（乱序/缺行=WARN·近似分钟 17:2x 合法）+backlog 燃尽率（info）——28 测试用例全绿·真跑 0 FAIL 4 WARN（皆为在案史实：R8/R9+R10/R11 叙事时间戳漂移、R4+R5 修复行、R5 26 分钟长轮间隙）；首战自检闭环=真跑揭心跳文件 UTF-8 BOM（PowerShell 5.1 Add-Content 所写）致首行失解析→utf-8-sig 修复+回归锁 |
 | C-21 | 去 AI 感人味链（human-feel dial+gate） | 工程技术部 | live | `emotive_tts --human <seed>`（逐段微抖动/变长呼吸间隙/呼吸声/房间底噪·种子可复现）+`render_card_video --grain/--bg`（胶片颗粒+暗角+深灰底）+`python src/ai_feel_check.py`（四指纹机检门=M4 层 1.6·gap-zero/gap-uniform/pacing-metronome/prosody-flat·首战 A/B：v9 gap-zero FAIL→v10 全 PASS）——O-20260923-2210-bm-a·规格=human-feel-spec.md·13 新测试（总 140 绿） |
+| C-22 | 平台规格门（platform_spec_check） | 工程技术部 | live | `python src/platform_spec_check.py --video FILE --platform NAME`（M4 层 1.7·时长实测红线工具化）——ffprobe 时长/画幅 vs `docs/platform-playbook.md` 规格表**实解析**（单一真相零漂移·多画幅平台/无时长窗平台=INFO）；10 单测绿·首战舰队体检 14 件：视频号线 9 PASS+2 时长超窗在案（v5 60.58s/v10 64.06s）+**B站三件全低于 3-15min 窗=B站纵深格式重制定位修正（backlog #14）**；v9 仅 0.7s 余量=空气预算律（L15）必要性再证 |
 
 ## §3 能力建设循环
 
@@ -57,3 +58,4 @@
 - 2026-09-23: v1.11 调研闭环批（OS 循环 R20）——C-18 市场线引用升 v1.5：P6 余项闭环——《微信公众号和服务号推荐运营规范》子文档 URL 从 opshowpage 原始 HTML 直采取得并全文 A 级实采（推荐场景三处/质量=推荐几率/转载分组不推荐/关闭不可逆/误导类标题/低创作度含低价值 AIGC/虚假人设/导流禁域）。live×15 不变。
 - 2026-09-23: v1.12 调研定谳批（OS 循环 R22）——C-18 市场线引用升 v1.6：P4 小红书 h5 terms 通道四探针深挖定谳=纯 React SPA 壳（服务端零正文）+三 bundle 解包（main=内部 OA 端点·vendor grep 零命中）→运行时 fetch·静态层不可采（负结果如实入账·research §6 P4 通道收窄）。live×15 不变。
 - 2026-09-23: v1.13 人味机制批（O-20260923-2210-bm-a）——C-21 去 AI 感人味链入册 live：`--human` 种子化配音微抖动+呼吸间隙+呼吸声+房间底噪、`--grain/--bg` 画面质感层、`ai_feel_check.py` 四指纹机检门（M4 层 1.6·首战 v9 FAIL→v10 PASS）；规格=human-feel-spec.md。live×16。
+- 2026-09-23: v1.14 平台规格门批（O-2210 自治续）——C-22 `platform_spec_check.py` 入册 live（M4 层 1.7·时长实测红线工具化·playbook 实解析单一真相）；首战舰队体检=B站三件低于 3-15min 窗→B站纵深格式重制定位修正（backlog #14）。live×17。
