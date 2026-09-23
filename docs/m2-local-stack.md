@@ -20,7 +20,7 @@
 
 | 站 | 本地方案 | 算力位 | 备注 |
 |---|---|---|---|
-| 配音 TTS | edge-tts（三案音色参数化；三案人设=A 记录员知性/B 零号轻快/C 镜像沉稳） | 云端免费接口·零预算 | 注：edge-tts 为免费接口非本地推理——**纯本地替代=Piper/CosyVoice（PoC 待验证后择一为正式）**；账目零云支出 |
+| 配音 TTS | edge-tts（音色参数随 `docs/persona-jason.md` 人设卡定——O-1602 令人设=Jason 本人出镜；三案口吻=栏目变体保留） | 云端免费接口·零预算 | 注：edge-tts 为免费接口非本地推理——**纯本地替代=Piper/CosyVoice（PoC 待验证后择一为正式）**；账目零云支出 |
 | 文案推理 | 本地 Ollama（qwen2.5:14b 起草·7b 快迭代·bge-m3 选题向量化） | 本地 GPU | 交互会话+循环双轨 |
 | 字幕对轴 | faster-whisper（口播→时间戳→SRT） | 本地 GPU | AIGC 显著标识字幕同时合成 |
 | 剪辑合成 | FFmpeg 时间线脚本（字卡/黑底白字/实录画面拼接）+ opencv 封面合成 | 本地 CPU | `src/render/` 脚本位 |
