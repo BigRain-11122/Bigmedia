@@ -131,6 +131,83 @@ class TestBuildCues(unittest.TestCase):
         self.assertEqual(cues[0][2], CJK)
 
 
+class TestParamFace(unittest.TestCase):
+    """C2 calibration wiring: the new knobs must reach model.transcribe
+    without needing the real model (fake module injection)."""
+
+    def _with_fake_model(self, **call_kwargs):
+        import types
+        recorded = {}
+
+        class _Seg:
+            words = [types.SimpleNamespace(start=0.0, end=1.0, word="a")]
+
+        class _Model:
+            def __init__(self, model_size, device="cpu", compute_type="int8"):
+                recorded["model_size"] = model_size
+
+            def transcribe(self, audio, language=None, word_timestamps=False,
+                           vad_filter=False, beam_size=1,
+                           condition_on_previous_text=True,
+                           initial_prompt=None, **extra):
+                recorded["transcribe"] = dict(
+                    language=language, beam_size=beam_size,
+                    condition_on_previous_text=condition_on_previous_text,
+                    initial_prompt=initial_prompt)
+                return [_Seg()], types.SimpleNamespace(duration=1.0)
+
+        fake = types.ModuleType("faster_whisper")
+        fake.WhisperModel = _Model
+        old = sys.modules.get("faster_whisper")
+        sys.modules["faster_whisper"] = fake
+        try:
+            w2s.transcribe_to_cues("whatever.wav", **call_kwargs)
+        finally:
+            if old is None:
+                sys.modules.pop("faster_whisper", None)
+            else:
+                sys.modules["faster_whisper"] = old
+        return recorded
+
+    def test_defaults_reach_transcribe_unchanged(self):
+        rec = self._with_fake_model()
+        kw = rec["transcribe"]
+        self.assertEqual(kw["beam_size"], 1)
+        self.assertTrue(kw["condition_on_previous_text"])
+        self.assertIsNone(kw["initial_prompt"])
+        self.assertEqual(rec["model_size"], "small")
+
+    def test_tuned_params_reach_transcribe(self):
+        rec = self._with_fake_model(
+            model_size="medium", beam_size=5,
+            condition_on_previous_text=False,
+            initial_prompt="domain register")
+        kw = rec["transcribe"]
+        self.assertEqual(kw["beam_size"], 5)
+        self.assertFalse(kw["condition_on_previous_text"])
+        self.assertEqual(kw["initial_prompt"], "domain register")
+        self.assertEqual(rec["model_size"], "medium")
+
+    def test_cli_defaults_preserve_current_behavior(self):
+        a = w2s.build_parser().parse_args(
+            ["--audio", "a.wav", "--out", "a.srt"])
+        self.assertEqual(a.model, "small")
+        self.assertEqual(a.language, "zh")
+        self.assertEqual(a.max_chars, 20)
+        self.assertEqual(a.beam_size, 1)
+        self.assertFalse(a.no_context)
+        self.assertIsNone(a.initial_prompt)
+
+    def test_cli_qc_recipe_flags(self):
+        a = w2s.build_parser().parse_args(
+            ["--audio", "a.wav", "--out", "a.srt", "--model", "medium",
+             "--beam-size", "5", "--no-context", "--initial-prompt", "p"])
+        self.assertEqual(a.model, "medium")
+        self.assertEqual(a.beam_size, 5)
+        self.assertTrue(a.no_context)
+        self.assertEqual(a.initial_prompt, "p")
+
+
 class TestRenderRegressions(unittest.TestCase):
     def test_render_textfiles_use_lf_not_crlf(self):
         # CRLF textfiles make drawtext treat \r as an extra break:

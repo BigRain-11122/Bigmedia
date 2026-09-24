@@ -30,7 +30,7 @@
 | # | 项 | 落点 | 优先 | 状态 |
 |---|---|---|---|---|
 | C1 | ffmpeg 高级剪辑技能（速度曲线/字幕动态滤镜/转场品质参数） | R-E/R-A 引擎升级备件 | 中 | open |
-| C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | **claimed（OS 循环 R169）** |
+| C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | **done 2026-09-24**（R169 四配置对照+medium 探针：模型档位=主因子 13.07%→5.53%·参数面噪声级·工具落三旋钮+S2 QC recipe） |
 | C3 | edge-tts 情感参数实验（SSML/rate-pitch 曲线=人味链 v2 输入） | C-21 升级备件 | 中 | open |
 | C4 | Ollama 专家席提示词迭代（评审质量=S 席分数校准） | expert-roster 数据件升级 | 常态 | open |
 
@@ -46,3 +46,4 @@
 - 2026-09-24: **常态令扩面**（O-20260924-2118-bm-a·bm-a 会话）——CEO 点名迭代面=剪辑能力+审美+**段子**；B5 段子·幽默工艺项入池（缺口=趣律 L9-L14 在案但零对标拆解）；剪辑审美既有项 C1/B2/B3 继承 CEO 锚；配套=user-research v1.8 §9 段子工艺面首版底座（分群笑点谱系+五梗位分群标注）。
 - 2026-09-24: **A3 done**（OS 循环 R168·R167 认领 d7b24ed 续做·**正中 CEO 扩面令「迭代剪辑能力」锚**）——真直切引擎四步全落：①`build_fades` cut→`fade_s=0`（CUT_FADE_S·0.05s 二帧淡入近似退役）②`xfade_chain`→`build_runs` run 分组（fade 链内接+cut 处 concat 真拼·边界帧量化+per-run tpad/trim 帧精确落点+段渲染+1 安全帧防混合饥饿）③层 1.8 门新代数 `d_k=span_k+incoming fade`+cut-blended 回归断言（0.05 复辟=FAIL·独立常量律）④测试 27 门测绿（4 新·203 全回归绿）+bs-001-v13 bilibili/douyin 双件重渲（层 1.8 双全 PASS+spec douyin 双 PASS/B站画幅 PASS+时长 FAIL=#14 在案口径+ai_feel 0 FAIL 0 WARN 同母版音轴）+MAD 逐像素验图（切点单帧全距跳 79-136·切前 0.0=零混合残留·fade 对照组连续渐变=两机制面对照成立）——E8 在案弱项闭环（live-A bilibili/v12 douyin 行欠账销账）。
 - 2026-09-24: **C2 claimed**（OS 循环 R169）——实验设计四配置对照（base greedy 现行默认/beam5/beam5+condition_on_previous_text=False/beam5+noctx+initial_prompt 域提示）×基准=v12 母版音轨（cyber light 产线默认声）×CER 度量（Levenshtein/字符级·对拍 voiceover-v9-cyber.beats 参考文本）；锚点=station-reviews L19「61 的 ASR 同音衰减（噪声级）」+.v10-light/asr-check.srt 在案实证（类的是/罢款/林圆/说备就备/自己劝/谁也赶不了）。
+- 2026-09-24: **C2 done**（OS 循环 R169·claim 36432e9 两步制）——**技能学习池首件闭环**：①基准更正=v12 音轨实为 v11-trim 时间线（57.39s）·参考文本改用 voiceover-v11-trim.beats（首跑对拍 v9-cyber 致 26.7% 虚高·方法论自纠后基线=13.07%——度量伪差分离：61→六十一/432→四百三十二/10→十=数字形差非错误）；②四配置读数=beam5 零增益（26/232 不动）·noctx +1 字+提速 30%（8.1s vs 12.2s）·域 initial_prompt **反劣化**（一名→印明新错·负结果如实入档=提示词面禁盲用）；③**medium int8 探针=主因子定谳**：raw CER 5.53%（11/199）·同音位点 12→8（累→类/方案→网/废→费×2/活→我/账→着全修复·瓶→品新增 1·事实词零损维持）；④交付=工具三旋钮 `--beam-size/--no-context/--initial-prompt`（默认值不动=无实测增益不改行为）+**S2 asr-check QC recipe=`--model medium --beam-size 5 --no-context`**（首载 ~1min·57s 片 ~21s·small 默认=快道）+测试 4 新（fake 模块注入零真模型·207 全回归绿）+m2-local-stack 变更记录行；实验件=%TEMP% 一次性（可复现法在工具 docstring）。

@@ -11,9 +11,24 @@ is the universal lane.
 CPU int8 by default (shared-machine etiquette, m2-local-stack S2:
 no VRAM contention with the Ollama residents).
 
+C2 calibration (queue R169, v12 mother track = cyber light voice,
+57s BGM mix, ref = v11-trim beats, char-level Levenshtein CER):
+- small int8 baseline (this tool's defaults) raw CER 13.07%
+- beam_size=5: no measurable change (params are noise-level here)
+- condition_on_previous_text=False: ~1 char gain + ~30% faster
+- domain initial_prompt: DEGRADED (new homophone errors on small)
+- medium int8 + beam5 + no-context: raw CER 5.53% -> model size is
+  the dominant factor (homophone sites 12 -> 8, real-word damage
+  still zero; first model download ~1min, then ~21s per 57s clip)
+S2 asr-check QC recipe: --model medium --beam-size 5 --no-context;
+small (defaults) stays the fast lane. Defaults unchanged on
+purpose: no behavior change without measured gain.
+
 Usage:
     python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt
     python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt --model small
+    python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt \
+        --model medium --beam-size 5 --no-context   # S2 QC pass
 
 ASCII rule: code/comments English; Chinese only in data files.
 Exit codes: 0 ok; 2 bad args/model or transcription error.
@@ -74,13 +89,19 @@ def build_cues(words, max_chars=20):
 
 
 def transcribe_to_cues(audio, model_size="small", language="zh",
-                       max_chars=20):
+                       max_chars=20, beam_size=1,
+                       condition_on_previous_text=True,
+                       initial_prompt=None):
     """Run faster-whisper CPU int8 with word timestamps, return
-    (cues, dropped, info_duration)."""
+    (cues, dropped, info_duration). C2 param face exposed here;
+    see module docstring for measured calibration values."""
     from faster_whisper import WhisperModel
     model = WhisperModel(model_size, device="cpu", compute_type="int8")
     segments, info = model.transcribe(
-        str(audio), language=language, word_timestamps=True, vad_filter=True)
+        str(audio), language=language, word_timestamps=True, vad_filter=True,
+        beam_size=beam_size,
+        condition_on_previous_text=condition_on_previous_text,
+        initial_prompt=initial_prompt)
     words = []
     for seg in segments:
         for w in (seg.words or []):
@@ -90,21 +111,37 @@ def transcribe_to_cues(audio, model_size="small", language="zh",
     return fixed, dropped, float(getattr(info, "duration", 0.0))
 
 
-def main(argv=None):
+def build_parser():
     ap = argparse.ArgumentParser(description="faster-whisper SRT alignment")
     ap.add_argument("--audio", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--model", default="small")
     ap.add_argument("--language", default="zh")
     ap.add_argument("--max-chars", type=int, default=20)
-    args = ap.parse_args(argv)
+    ap.add_argument("--beam-size", type=int, default=1,
+                    help="beam width; 1 = greedy (measured: no gain "
+                         "on the cyber-light track class)")
+    ap.add_argument("--no-context", action="store_true",
+                    help="condition_on_previous_text=False; short-clip "
+                         "QC recipe (measured: ~1 char gain, ~30%% faster)")
+    ap.add_argument("--initial-prompt", default=None,
+                    help="domain bias prompt (measured: DEGRADED small "
+                         "model accuracy - use with caution)")
+    return ap
+
+
+def main(argv=None):
+    args = build_parser().parse_args(argv)
     audio = Path(args.audio)
     if not audio.exists():
         print("FAIL audio not found: %s" % audio)
         return 2
     try:
         cues, dropped, dur = transcribe_to_cues(
-            audio, args.model, args.language, args.max_chars)
+            audio, args.model, args.language, args.max_chars,
+            beam_size=args.beam_size,
+            condition_on_previous_text=not args.no_context,
+            initial_prompt=args.initial_prompt)
     except Exception as e:  # model load/download or transcription failure
         print("FAIL transcribe: %s: %s" % (type(e).__name__, e))
         return 2
