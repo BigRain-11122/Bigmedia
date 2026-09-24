@@ -1,0 +1,234 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "shipinhao",
+ "visual_mode": "matched",
+ "visual_ratio": 0.833,
+ "cards_only_beats": [
+  6,
+  11
+ ],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 5.233,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 2,
+   "time_s": 9.6,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 3,
+   "time_s": 12.467,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 4,
+   "time_s": 18.233,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 5,
+   "time_s": 22.767,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 6,
+   "time_s": 27.733,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 7,
+   "time_s": 32.9,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 38.5,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 9,
+   "time_s": 44.5,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 10,
+   "time_s": 48.267,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 11,
+   "time_s": 53.933,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 5.233,
+   "treatment": "punch",
+   "hit": true,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4"
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 4.647,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4"
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 3.147,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4"
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 6.047,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4"
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 4.813,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4"
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 5.247,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4"
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 5.447,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u5426\u5b9a\u6027\u4e8b\u5b9e\uff08\u96f6\u6761/\u4e0d\u5b58\u5728\uff09\u65e0\u53ef\u62cd\u753b\u9762\uff0c\u6587\u5b57\u5373\u8bc1\u636e\uff08footage-matching-spec \u00a71\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 5.88,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4"
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 6.28,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4"
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 4.047,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-vertical.mp4"
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 5.947,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4"
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 5.147,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "CTA \u5bfc\u6d41\u62cd\u5e38\u89c4\u7eaf\u5b57\u5361\uff08footage-matching-spec \u00a71\uff09",
+   "visual_source": null
+  }
+ ],
+ "hits": [
+  0
+ ],
+ "f_max_s": 0.28,
+ "last_beat_end_s": 58.0,
+ "tail_s": 0.8,
+ "duration_expected_s": 58.8,
+ "hard_cut_s": 0.0
+}
