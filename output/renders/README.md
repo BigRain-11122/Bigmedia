@@ -22,8 +22,8 @@
 | bs-001-v8-cyber-full.mp4 | 测试件·非成品 | O-2136 赛博声线组 full（极端参考端）：深度合成链（降调+52Hz 颤+位深压碎+窄频带）·ASR 实测打糊事实词（1080×1920·54.90s·strict 过） |
 | bs-001-v9-cyber-light.mp4 | 测试件·非成品 | O-2136 定档版（CEO 点选 light+机器叙述者）：双整改（爽/累反转+甩锅交账梗回归）·12 拍（1080×1920·59.31s·strict 过·ASR 事实词全存活）——评审六席 9+ **PASS=放行候选**待 CEO 终审（docs/reviews/review-20260923-bs001-v9.md） |
 | bs-001-v10-humanfeel.mp4 | 测试件·非成品 | O-2210 人味机制实证件：v9 同稿唯一变量=四站人味机制（微抖动/呼吸间隙/呼吸声/房间底噪/颗粒暗角深灰底·seed42·grain7）——机检门 A/B：v9 gap-zero FAIL→v10 全 PASS；**64.06s 超 60s=空气预算律立法诱因（机制演示件·量产按 L15 裁文本预算）**（1080×1920·strict 过·ASR 事实词全存活） |
-| bs-001-live-A-pixelboard.mp4 | 测试件·非成品 | O-1115 实录素材试跑 A 版：**Biggame 总控真实录屏底版**（像素小镇看板 45s 实录·gdigrab 区域采集·blur-pad 竖版）+H1/H2 字卡+字幕+AIGC+grain7——复用 v10 全套音频/时间线（产线默认）·strict 过·抽帧验图过；**11:5X 迭代重渲**：标点优先断行（「人类，/检测到一名。」验图过）+AIGC 对比度 0.6→0.8+字符丢失 bug 修（断行丢 ch·no-char-lost 测试锁）；spec 门=时长 64.06s 超窗同 v10 在案（机制演示件） |
-| bs-001-live-B-puredoc.mp4 | 测试件·非成品 | O-1115 实录素材试跑 B 版：**纯实录纪录片式**（同底版无字卡·字幕+AIGC+grain4）——strict 过·同 11:5X 迭代重渲（断行+对比度修复同 A）；spec 同超窗在案；A/B 双版=「实拍+字卡」vs「纯实录」两种剪辑路线呈 CEO 拣式 |
+| bs-001-live-A-pixelboard.mp4 | 测试件·非成品 | O-1115 实录素材试跑 A 版：**Biggame 总控真实录屏底版**（像素小镇看板 45s 实录·gdigrab 区域采集·blur-pad 竖版）+H1/H2 字卡+字幕+AIGC+grain7——复用 v10 全套音频/时间线（产线默认）·strict 过·抽帧验图过；11:5X 迭代重渲（标点断行+AIGC 0.8+字符丢失修）；**终审团六席 9+ PASS=放行候选**（review-20260924-bs001-live·E4 同稿沿用参考 7）=**现行最新过审件待 CEO 拣式**；spec 时长超窗同 v10 在案 |
+| bs-001-live-B-puredoc.mp4 | 测试件·非成品 | O-1115 实录素材试跑 B 版：**纯实录纪录片式**（同底版无字卡·字幕+AIGC+grain4）——strict 过·同 11:5X 迭代重渲；终审对照读数=木桶 8.5（E1/E2 无字卡锚降半档·E7 无叠压 9）=对照候选·A/B 差异=拣式依据；spec 同超窗在案 |
 | bs-001-poster-v10-cover.png | 测试件·非成品 | O-1043 审计 R1 封面快路（backlog#16·R116）：渲染器 `--poster` 封面帧导出——首卡满可见位 t=0.150s（字面首帧=淡入 150ms 空帧·机律改取满可见帧·复用链=v10 时间线 grain7/深灰底/strict）；1080×1920 PNG·验图过（H1 满可见+H2 弱化+AIGC 标识+颗粒暗角·零缺陷）；S2 双门在案：ai_feel all-PASS 0 FAIL 0 WARN + spec 视频号画幅 PASS/时长超窗 FAIL 同 v10 线读数（机制演示件）；M5「封面」代用产线实证（C-27·ComfyUI 线留远期） |
 
 > 中间件（独立临时音轨/SRT）存 `output/renders/.samples-tmp/`——O-1830 复现用（samples-review.md §四声明）·非渲染成品·不入本表。
