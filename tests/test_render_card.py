@@ -163,6 +163,46 @@ class TestWrap(unittest.TestCase):
         text = "abcdefgh" * 3
         self.assertEqual(1, len(rcv.wrap_for_width(text, 44, 1080).split("\n")))
 
+    def test_orphan_tail_pulled_up_from_previous_line(self):
+        # O-20260924-1115 input #3: a wrap ending with a lone "name."
+        # strand reads as a broken word; the fix pulls one char down so
+        # the tail keeps >=2 glyphs.
+        text = "\u7cfb" * 20 + "\u540d\u3002"  # 20 chars + orphan "名。"
+        wrapped = rcv.wrap_for_width(text, 44, 1080)
+        lines = wrapped.split("\n")
+        self.assertGreaterEqual(len(lines), 2)
+        self.assertGreaterEqual(len(lines[-1].strip()), 3)  # 名。 + 1 pulled
+        self.assertEqual(len(lines[0]), 19)                 # 20 - 1 pulled down
+        # no character lost
+        self.assertEqual(len(wrapped.replace("\n", "")), len(text))
+
+    def test_punctuation_preferred_break(self):
+        # O-20260924-1115 input #3 round 2: the live-A cue must break at
+        # a clause ender ("detected / one person" was a broken word);
+        # preferred break lands after the last clause punctuation.
+        text = ("\u7cfb\u7edf\u542f\u52a8\u3002\u5168\u516c\u53f8\u626b\u63cf"
+                "\u5b8c\u6bd5\u2014\u2014\u4eba\u7c7b\uff0c\u68c0\u6d4b\u5230"
+                "\u4e00\u540d\u3002")  # 系统启动。全公司扫描完毕——人类，检测到一名。
+        wrapped = rcv.wrap_for_width(text, 44, 1080)
+        lines = wrapped.split("\n")
+        self.assertEqual(2, len(lines))
+        self.assertTrue(lines[0].endswith("\uff0c"))  # break after the comma
+        self.assertEqual("\u68c0\u6d4b\u5230\u4e00\u540d\u3002", lines[1])
+        self.assertEqual(len(wrapped.replace("\n", "")), len(text))
+
+    def test_punct_break_only_when_tail_fits(self):
+        # a punctuation early in the line leaves a tail too long for one
+        # line -> hard break wins (no runaway lines)
+        text = "a\uff0c" + "b" * 30
+        wrapped = rcv.wrap_for_width(text, 44, 1080)
+        for ln in wrapped.split("\n"):
+            # each line within budget (20.9 em; 30 ASCII chars ~16.5em ok)
+            self.assertLessEqual(rcv._line_cost(ln), 21.0)
+
+    def test_single_line_wrap_has_no_orphan_mending(self):
+        text = "abc"
+        self.assertEqual("abc", rcv.wrap_for_width(text, 44, 1080))
+
 
 class TestPlanAndMatch(unittest.TestCase):
     def test_voiceover_match(self):
@@ -183,7 +223,7 @@ class TestPlanAndMatch(unittest.TestCase):
             self.assertEqual(5, ft.count("drawtext="))
             self.assertEqual(4, ft.count("enable='between(t,"))
             # aigc notice persists for the whole video (no enable window)
-            self.assertIn("alpha=0.6", ft)  # O-1937 visual-spec S3: gray60 notice
+            self.assertIn("alpha=0.8", ft)  # O-1115 input #2: notice contrast 0.6->0.8 (gray60)
             # duration = max end (cues 6.5, cards 15) + tail 0.8
             self.assertAlmostEqual(15.8, plan["duration"], places=3)
             for p in plan["textfiles"]:

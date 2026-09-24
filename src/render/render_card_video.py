@@ -135,23 +135,67 @@ def _em_cost(ch):
     return 0.55
 
 
+def _line_cost(s):
+    return sum(_em_cost(ch) for ch in s)
+
+
+# clause enders for punctuation-preferred subtitle breaks (O-20260924-1115)
+_BREAK_AFTER = set(",.!?;:...,"
+                   "\uff0c\u3002\uff01\uff1f\uff1b\uff1a\u3001\u2026")
+
+
+def _prefer_punct_break(cur, next_cost, budget):
+    """Given a full line `cur` that cannot take the next char, choose
+    the break: prefer after the LAST clause punctuation when that
+    leaves a next line that still fits; else hard-break at the edge.
+    Returns (head, tail_next_line_start). Pure."""
+    best = -1
+    for i, ch in enumerate(cur):
+        if ch in _BREAK_AFTER:
+            best = i
+    if best != -1:
+        tail = cur[best + 1:]
+        if len(tail) >= 2 and _line_cost(tail) + next_cost <= budget:
+            return cur[:best + 1], tail
+    return cur, ""
+
+
 def wrap_for_width(text, fontsize, frame_w, margin=80):
     """Greedy-wrap text so each rendered line fits the frame budget.
-    Existing newlines are respected (wrapped per paragraph)."""
+    Existing newlines are respected (wrapped per paragraph).
+
+    O-20260924-1115 iteration inputs #3 (two rounds):
+    (a) punctuation-preferred breaks - when a wrap point is reached,
+    prefer breaking after the last clause punctuation in the line, so
+    subtitles read as natural clauses instead of splitting words like
+    "detected / one person".
+    (b) orphan-tail mending - a wrap stranding a tiny last line reads
+    as a broken word; pull one char down so the tail keeps >=2 glyphs.
+    """
     budget = (frame_w - 2 * margin) / float(fontsize)
     out_lines = []
     for para in str(text).split("\n"):
         cur, cur_cost = "", 0.0
+        para_lines = []
         for ch in para:
             c = _em_cost(ch)
             if cur and cur_cost + c > budget:
-                out_lines.append(cur)
-                cur, cur_cost = ch, c
+                head, tail = _prefer_punct_break(cur, c, budget)
+                para_lines.append(head)
+                # NB: ch must join the new line - dropping it loses a
+                # glyph (caught by the no-char-lost test assertions).
+                cur, cur_cost = tail + ch, _line_cost(tail + ch)
             else:
                 cur += ch
                 cur_cost += c
         if cur:
-            out_lines.append(cur)
+            para_lines.append(cur)
+        if (len(para_lines) >= 2
+                and len(para_lines[-1].strip()) <= 2
+                and len(para_lines[-2]) > 1):
+            para_lines[-1] = para_lines[-2][-1] + para_lines[-1]
+            para_lines[-2] = para_lines[-2][:-1]
+        out_lines += para_lines
     return "\n".join(out_lines)
 
 
@@ -261,7 +305,7 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
         chain = ["[0:v]"]
     chain.append(
         "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
-        ":alpha=0.6:x=48:y=48:line_spacing=%d"
+        ":alpha=0.8:x=48:y=48:line_spacing=%d"
         % (font_q, _q(aigc_p), int(font["aigc_size"]),
            _COLORS.get(spec["h2_color"], "white"), ls))
     for i, c in enumerate(cfg["cards"]):
