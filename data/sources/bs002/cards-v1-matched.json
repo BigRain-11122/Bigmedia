@@ -1,0 +1,194 @@
+{
+  "meta": {
+    "topic": "BS-002",
+    "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs002\\voiceover-v5.beats.txt",
+    "order": "D-BS-06 production open: BS-002 batch-1 shipinhao piece; v12 full-set default per D-BS-01; v5 beats = window-budget trim pass 2 of S1-cleared v3 (render tail 0.8s budgeted)",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.24,
+      "lines": [
+        "系统日志",
+        "03:00 · 办公室 · 人数 0"
+      ],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "全公司态势总览值守画面（多公司面板在案·凌晨扫描视图；同源注记=复用 BS-001 合规素材库）"
+      }
+    },
+    {
+      "start": 5.24,
+      "end": 9.61,
+      "lines": [
+        "检测到",
+        "公司还在上班 · 员工是我"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "本司 OS 循环日志实时滚动画面（AI 值守在岗的直接证据）"
+      }
+    },
+    {
+      "start": 9.61,
+      "end": 12.47,
+      "lines": [
+        "自动唤醒",
+        "每 10 分钟一次"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "循环日志行滚动可见（唤醒节律留痕；同源多用注记）"
+      }
+    },
+    {
+      "start": 12.47,
+      "end": 18.24,
+      "lines": [
+        "唤醒序列",
+        "读记忆 · 看任务板 · 干活 · 写账 · 一天 144 圈"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "state/任务板/写账日志行滚动（读记忆-看板-干活-写账序列的载体；同源多用注记）"
+      }
+    },
+    {
+      "start": 18.24,
+      "end": 22.77,
+      "lines": [
+        "体检先行",
+        "19 项自检 · 修自己排第一"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "体检/探针输出行可见（board/readiness/loop_health 真跑行即此类日志；同源多用注记）"
+      }
+    },
+    {
+      "start": 22.77,
+      "end": 27.75,
+      "lines": [
+        "续命指令",
+        "闹钟快过期 · 我批的"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "日志指令行画面（指令与任务留底的载体；同源多用注记）"
+      }
+    },
+    {
+      "start": 27.75,
+      "end": 32.89,
+      "lines": [
+        "会议记录",
+        "本公司 · 0 条"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "否定性事实（零条/不存在）无可拍画面，文字即证据（footage-matching-spec §1）"
+      }
+    },
+    {
+      "start": 32.89,
+      "end": 38.51,
+      "lines": [
+        "为什么",
+        "记忆和账本 · 就是交接"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "记忆/账本日志行滚动（记忆与账本留痕面；同源多用注记）"
+      }
+    },
+    {
+      "start": 38.51,
+      "end": 44.5,
+      "lines": [
+        "心跳扫描",
+        "量化 10 分钟 · 游戏 10 分钟 · 进化周日 09:17"
+      ],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "态势总览多公司面板（三家公司循环节律总览；同源多用注记）"
+      }
+    },
+    {
+      "start": 44.5,
+      "end": 48.27,
+      "lines": [
+        "日志可查",
+        "不是段子 · 每步留底"
+      ],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+        "req": "评审台账文档画面（每步留底的台账形态）"
+      }
+    },
+    {
+      "start": 48.27,
+      "end": 53.94,
+      "lines": [
+        "记住这句话",
+        "把公司 · 做成操作系统 · 会都不用开"
+      ],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "全公司态势总控视图（操作系统化总览意象；同源多用注记）"
+      }
+    },
+    {
+      "start": 53.94,
+      "end": 58.0,
+      "lines": [
+        "转发指令",
+        "拆解在公众号 · 转给开会大王"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "CTA 导流拍常规纯字卡（footage-matching-spec §1）"
+      }
+    }
+  ]
+}
