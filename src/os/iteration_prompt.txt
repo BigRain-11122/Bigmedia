@@ -35,6 +35,7 @@
 - 脱敏律（O-1602 新增）：仓位/密钥/token 用量细节/未公开财务/私有仓内容=禁入素材
 - 环节门长牙（O-20260923-2245-bm-a）：核验/补账渲染件时**同跑两道 S2 机检门**——`python src/ai_feel_check.py --beats <拍稿> --srt <tmp>/subs.srt` 与 `python src/platform_spec_check.py --video <mp4> --platform <目标平台>`，结果（PASS/FAIL+要点）并入 renders 台账行或 station-reviews 台账；FAIL 如实入账，**不自行修改 bm-a 在途批**（认领制·只入账待其闭环）
 - 情报日报（O-20260923-2304-bm-a 情报部）：当日 `data/intel/daily/YYYY-MM-DD.md` 缺失=先跑 `python src/intel/daily_brief.py` 补产一份再干别的（零 key 零 token·采集失败如实入报不恋战）；已有=不重跑（当日一份为真相）
+- 专职专家随时调用（O-20260924-1033-bm-a）：需要部门专家意见时一键调 `python src/call_expert.py --expert <id> --material <材料文件>`（名册=`docs/expert-roster.md`·八部门 11 席·本地 Ollama 零 token·调用自动落 expert-calls 台账）——按需调用不排队·测试件抽样调·进链件环节门必调
 
 【发布边界】内容生成=仅限产线测试（单件过链·标「测试件·非成品」）；批量生成（N=6）暂缓待 CEO 令；发布（M5）仍须账号（CEO 物理件）+M4 合规门全绿+AIGC 显著标识；未上线=未测量。
 

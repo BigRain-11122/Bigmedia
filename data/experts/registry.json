@@ -1,0 +1,71 @@
+{
+  "model": "qwen2.5:14b",
+  "experts": [
+    {
+      "id": "orders-auditor",
+      "dept": "总裁办公室",
+      "role": "令务督察官",
+      "prompt_file": "data/experts/prompts/orders-auditor.txt"
+    },
+    {
+      "id": "hot-intel",
+      "dept": "情报部",
+      "role": "热点情报官",
+      "prompt_file": "data/experts/prompts/hot-intel.txt"
+    },
+    {
+      "id": "brand-taste",
+      "dept": "品牌文化部",
+      "role": "品牌口味官",
+      "prompt_file": "data/experts/prompts/brand-taste.txt"
+    },
+    {
+      "id": "S0-topic",
+      "dept": "选题研究部",
+      "role": "S0 选题官",
+      "prompt_file": "data/experts/prompts/S0-topic.txt"
+    },
+    {
+      "id": "S1-script",
+      "dept": "内容生产部",
+      "role": "S1 编剧官",
+      "prompt_file": "data/experts/prompts/S1-script.txt"
+    },
+    {
+      "id": "S2-voice",
+      "dept": "内容生产部",
+      "role": "S2 配音听审官（文本侧）",
+      "prompt_file": "data/experts/prompts/S2-voice.txt"
+    },
+    {
+      "id": "S3-variant",
+      "dept": "平台运营部",
+      "role": "S3 变体官",
+      "prompt_file": "data/experts/prompts/S3-variant.txt"
+    },
+    {
+      "id": "S5-publish",
+      "dept": "平台运营部",
+      "role": "S5 发布官",
+      "prompt_file": "data/experts/prompts/S5-publish.txt"
+    },
+    {
+      "id": "S4-compliance",
+      "dept": "合规审查部",
+      "role": "S4 合规官",
+      "prompt_file": "data/experts/prompts/S4-compliance.txt"
+    },
+    {
+      "id": "S6-data",
+      "dept": "数据分析部",
+      "role": "S6 数据官",
+      "prompt_file": "data/experts/prompts/S6-data.txt"
+    },
+    {
+      "id": "loop-engineer",
+      "dept": "工程技术部",
+      "role": "底座审计官",
+      "prompt_file": "data/experts/prompts/loop-engineer.txt"
+    }
+  ]
+}
