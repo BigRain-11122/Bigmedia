@@ -29,7 +29,7 @@
 
 | # | 项 | 落点 | 优先 | 状态 |
 |---|---|---|---|---|
-| C1 | ffmpeg 高级剪辑技能（速度曲线/字幕动态滤镜/转场品质参数） | R-E/R-A 引擎升级备件 | 中 | open |
+| C1 | ffmpeg 高级剪辑技能（速度曲线/字幕动态滤镜/转场品质参数） | R-E/R-A 引擎升级备件 | 中 | **学习腿 done 2026-09-25**（R206：`research/ffmpeg-editing-craft-v1.md`——速度曲线 PoC 帧精确实证+工程坑三则+三面技术定谳；**引擎集成腿拆细在案 §4**·下批生产件前认领·素材窗解锁优先序不变） |
 | C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | **done 2026-09-24**（R169 四配置对照+medium 探针：模型档位=主因子 13.07%→5.53%·参数面噪声级·工具落三旋钮+S2 QC recipe） |
 | C3 | edge-tts 情感参数实验（SSML/rate-pitch 曲线=人味链 v2 输入） | C-21 升级备件 | 中 | open |
 | C4 | Ollama 专家席提示词迭代（评审质量=S 席分数校准） | expert-roster 数据件升级 | 常态 | open |
@@ -48,3 +48,4 @@
 - 2026-09-24: **C2 claimed**（OS 循环 R169）——实验设计四配置对照（base greedy 现行默认/beam5/beam5+condition_on_previous_text=False/beam5+noctx+initial_prompt 域提示）×基准=v12 母版音轨（cyber light 产线默认声）×CER 度量（Levenshtein/字符级·对拍 voiceover-v9-cyber.beats 参考文本）；锚点=station-reviews L19「61 的 ASR 同音衰减（噪声级）」+.v10-light/asr-check.srt 在案实证（类的是/罢款/林圆/说备就备/自己劝/谁也赶不了）。
 - 2026-09-24: **C2 done**（OS 循环 R169·claim 36432e9 两步制）——**技能学习池首件闭环**：①基准更正=v12 音轨实为 v11-trim 时间线（57.39s）·参考文本改用 voiceover-v11-trim.beats（首跑对拍 v9-cyber 致 26.7% 虚高·方法论自纠后基线=13.07%——度量伪差分离：61→六十一/432→四百三十二/10→十=数字形差非错误）；②四配置读数=beam5 零增益（26/232 不动）·noctx +1 字+提速 30%（8.1s vs 12.2s）·域 initial_prompt **反劣化**（一名→印明新错·负结果如实入档=提示词面禁盲用）；③**medium int8 探针=主因子定谳**：raw CER 5.53%（11/199）·同音位点 12→8（累→类/方案→网/废→费×2/活→我/账→着全修复·瓶→品新增 1·事实词零损维持）；④交付=工具三旋钮 `--beam-size/--no-context/--initial-prompt`（默认值不动=无实测增益不改行为）+**S2 asr-check QC recipe=`--model medium --beam-size 5 --no-context`**（首载 ~1min·57s 片 ~21s·small 默认=快道）+测试 4 新（fake 模块注入零真模型·207 全回归绿）+m2-local-stack 变更记录行；实验件=%TEMP% 一次性（可复现法在工具 docstring）。
 - 2026-09-25: **A5 done**（OS 循环 R205·空转规则「无令时取清单顶项」首用=BS-005/bs005e 双 blocked 无在途生产件轮）——`prep_vertical.py --batch` 目录批处理交付：目录内每视频文件同链一跑+幂等（已有输出 skip·`--force` 重做）+**后缀护栏=已带后缀件永不作输入**（防批目录回环自吞）+汇总退出码（0 全成/2 坏参无件/3 任一 FAIL）+`--suffix`/`--w/--h` 画幅批自由组合（16:9 批=`--suffix -16x9 --w 1920 --h 1080`）+`build_chain` 单源化（模块级 CHAIN 死件退役）；**单文件模式行为零变更**；12 新单测（fake ffmpeg 注入零真渲染·244 全回归绿）。缺口锚=C-29 对位批手工 ×6 次效率缺口（BS-002~005 逐源手跑实测）——BS-005/bs005e 素材窗一开（R193/R204 blocked 共享解锁面）新源规格化一跑直达。
+- 2026-09-25: **C1 学习腿 done**（OS 循环 R206·空转规则=生产线双 blocked 维持轮）——速度曲线=**定跨度变码率**技术 PoC（biggame+looplog 跨源：120f@CFR30=4.000000s 帧精确压实+切点 MAD 54.63 vs 域内 1.65/0.009=零混合残留·R168 同法验讫）→`research/ffmpeg-editing-craft-v1.md` v1.0 落件；工程坑三则实录（跨源 concat 须 setsar=1 归一·trim 保留原 PTS 须 `setpts=(PTS-STARTPTS)/speed` 零基·ffmpeg 9.x 退役 -vsync）；§2 字幕动态/§3 转场缓动=备件定谳不立项（xfade 无缓动参数·无 E8 实旗不造活）；**引擎集成腿=§4 拆细后续认领**（edit_craft build_runs 微块化+代数单测+douyin 件试点重渲·素材窗解锁优先序不变）。
