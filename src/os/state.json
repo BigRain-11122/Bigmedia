@@ -5,11 +5,11 @@
   "production": "paused",
   "opened_by": "O-20260923-1756-bm-a",
   "installed": "2026-09-23",
-  "tick": 111,
+  "tick": 112,
   "mandate": "src/os/iteration_prompt.txt",
   "protocol": "docs/os-protocol.md",
   "backlog": "src/os/backlog.md",
-  "focus": "R111 idle-fast round closed (four-quiet + probes green). Next round fast-path first: check CEO verdict (v10 vs v9), new orders, new render mp4s needing ledger + S2 dual gate; all-quiet = idle-fast one-line close",
+  "focus": "R112 order-receipt round closed (O-1033 on-call expert roster verified landed: six items + expert-calls ledger spot-checked, C-24 live x19). Next round fast-path first: check CEO verdict (v10 vs v9), new orders, new render mp4s needing ledger + S2 dual gate; call_expert on demand when test/in-chain pieces are produced; all-quiet = idle-fast one-line close",
   "log": [
     "2026-09-23 15:36 R1: 完成 backlog#1——tests/test_draft_lint.py 12 用例全绿（fixtures 假稿 10 件+manifest，真稿零接触）；真稿回归 10 稿 0 FAIL（4 条时长 WARN=已知 blocked-by-pause 项）；计划任务在跑、git 无锁、本轮回写 commit+push。",
     "2026-09-23 15:44 R2: 完成 backlog#2——docs/variant-templates.md v1.0（11 平台骨架块+变体头登记块+套用检查单；规格复用 media-matrix/playbook，易过期数字标以平台现行规则为准）；C-07 升 live；开工前检查 git 无锁干净；收账 commit+push。",
@@ -152,6 +152,7 @@
     ,
     "2026-09-24 10:2x R110: idle-fast（快速路径·四静+探针绿·不进开轮四步）——①无新令（orders 顶=O-2304·已记账）②backlog 顶行不可认领（#4 suspended/#7 needs-CEO/#13 needs-CEO/#14 量产门后）③树净零锁（HEAD=R109·12320de·无 bm-a 活跃写盘迹象·零插队）④renders 17/17 注账止于 v10 22:21 无新件（S2 双机检门无触发对象）；CEO v10-vs-v9 定夺仍无回执（无新 commit·无回示）；当日日报 2026-09-24 在案不重跑（Test-Path 实证）；三探针全绿（board 0 FAIL·5 题 10 稿/readiness 4 阻塞皆外部 CEO 物理件+决策·0 发现·首跑 --quiet 传参笔误即改直跑=R72/R98 同型操作红非探针红/loop_health 0 FAIL 4 WARN 在案史实·tick109=beats109=done109 对账平）——一行收账即出。下轮快速路径首查：CEO 定夺/新令/v11 首走门台账行。"
     ,
-    "2026-09-24 10:3x R111: idle-fast（快速路径·四静+探针绿·不进开轮四步）——①无新令（orders 顶=O-2304·已记账）②backlog 顶行不可认领（#4 suspended/#7 needs-CEO/#13 needs-CEO/#14 量产门后）③树净零锁（HEAD=R110·143989f·无 bm-a 活跃写盘迹象·零插队）④renders 17/17 注账止于 v10 22:21 无新件（S2 双机检门无触发对象）；CEO v10-vs-v9 定夺仍无回执（无新 commit·无回示）；当日日报 2026-09-24 在案不重跑；三探针全绿（board 0 FAIL·5 题 10 稿/readiness 4 阻塞皆外部 CEO 物理件+决策·0 发现/loop_health 0 FAIL 4 WARN 在案史实·tick110=beats110=done110 对账平）——一行收账即出。下轮快速路径首查：CEO 定夺/新令/v11 首走门台账行。"
+    "2026-09-24 10:3x R111: idle-fast（快速路径·四静+探针绿·不进开轮四步）——①无新令（orders 顶=O-2304·已记账）②backlog 顶行不可认领（#4 suspended/#7 needs-CEO/#13 needs-CEO/#14 量产门后）③树净零锁（HEAD=R110·143989f·无 bm-a 活跃写盘迹象·零插队）④renders 17/17 注账止于 v10 22:21 无新件（S2 双机检门无触发对象）；CEO v10-vs-v9 定夺仍无回执（无新 commit·无回示）；当日日报 2026-09-24 在案不重跑；三探针全绿（board 0 FAIL·5 题 10 稿/readiness 4 阻塞皆外部 CEO 物理件+决策·0 发现/loop_health 0 FAIL 4 WARN 在案史实·tick110=beats110=done110 对账平）——一行收账即出。下轮快速路径首查：CEO 定夺/新令/v11 首走门台账行。",
+    "2026-09-24 10:4x R112: 收令核验轮（O-1033 专职专家名册令收讫·落地核验全过·不为凑工作量造活）——轮首四查：orders 顶=O-20260924-1033-bm-a（相对记账尾 O-2304 为新令）→全任务书照走。收令核验=bm-a 认领全套交付（commit 01fed38·六件全闭环）；落地核验四查全过：①名册 docs/expert-roster.md 八部门 11 席②data/experts/registry.json+11 提示词盘上实证③src/call_expert.py 在（UTF-8 子进程管道=PS5.1 GBK 乱码坑根治）④expert-calls 台账首行真实（hot-intel×2026-09-24 日报 10:34 exit 0·结论首行与回执一致）⑤C-24 live 行核对一致（x19）⑥任务书专家调用条已在 mandate 生效（按需调用不排队·测试件抽样调·进链件环节门必调——本轮核验轮无进链件无测试件产出=不调·首调实证已在案反重复）。renders 17/17 注账止于 v10 22:21 无新件（S2 双机检门无触发对象）·CEO v10-vs-v9 定夺仍无回执（01fed38 后无新 commit）·当日日报 2026-09-24 在案不重跑；三探针=board 0 FAIL（5 题 10 稿·exit 0）/readiness 4 阻塞皆外部 CEO 物理件+决策 0 发现（exit 1=阻塞≠失败口径）/loop_health 0 FAIL 4 WARN 在案史实（tick111↔beats111↔done111 对账平）。backlog 顶行四连不可认领（#4 suspended/#7 needs-CEO/#13 needs-CEO/#14 量产门后）。下轮=快速路径首查（CEO 定夺/新令/新渲染件台账行·专家按需调用），全静即 idle-fast。收账显式列文件 commit+push。"
   ]
 }
