@@ -21,7 +21,7 @@ try:
     p = subprocess.run(['ollama', 'run', 'qwen2.5:14b'], input=prompt.encode('utf-8'),
                        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1500)
     raw = p.stdout.decode('utf-8', errors='replace')
-    result['verdict'] = re.sub(r'\x1b\[[0-9;]*[A-Za-z]', '', raw).strip()
+    result['verdict'] = re.sub(r'\x1b\[[0-9;?]*[A-Za-z]', '', raw).strip()  # '?25l/h' cursor codes included (R182 fix, R177 call_model same class)
 except subprocess.TimeoutExpired:
     result['verdict'] = 'TIMEOUT-1500s'
 io.open(os.path.join(HERE, 'e4-result.json'), 'w', encoding='utf-8').write(
