@@ -1,0 +1,43 @@
+{
+ "total_span_s": 472.58,
+ "spoken_total_s": 407.62,
+ "max_rolling60_spoken_s": 54.29,
+ "segments": [
+  {
+   "seg": 1,
+   "beats": 7,
+   "span_s": 43.42,
+   "spoken_s": 38.02
+  },
+  {
+   "seg": 2,
+   "beats": 10,
+   "span_s": 72.84,
+   "spoken_s": 65.33
+  },
+  {
+   "seg": 3,
+   "beats": 24,
+   "span_s": 162.88,
+   "spoken_s": 144.22
+  },
+  {
+   "seg": 4,
+   "beats": 14,
+   "span_s": 100.82,
+   "spoken_s": 87.5
+  },
+  {
+   "seg": 5,
+   "beats": 8,
+   "span_s": 40.13,
+   "spoken_s": 35.59
+  },
+  {
+   "seg": 6,
+   "beats": 6,
+   "span_s": 40.77,
+   "spoken_s": 36.96
+  }
+ ]
+}
