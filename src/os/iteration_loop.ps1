@@ -40,14 +40,20 @@ function Beat([string]$m) {
     Add-Content -Path $heart -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') osloop: $m" -Encoding UTF8
 }
 
-# ---- single-instance: previous headless round still alive? ----
+# ---- single-instance: D-20260925-03 guard (pid in lock + liveness probe
+# + atomic CreateNew; debounce floor 1.2x budget, hard cap = LockMaxAgeMinutes).
+# Manual-launch races now hit the same atomic grab; stale-lock restarts probe
+# the recorded holder PID before taking over (old behavior was age-only). ----
 $lock = Join-Path $logDir 'round.lock'
-if (Test-Path $lock) {
-    $age = ((Get-Date) - (Get-Item $lock).LastWriteTime).TotalMinutes
-    if ($age -lt $LockMaxAgeMinutes) { Log "skip: previous round still running (age=$([int]$age)min)"; Beat 'skip (round in flight)'; exit 0 }
-    Log "stale round lock expired (age=$([int]$age)min) - taking over"
+$guard = Join-Path $PSScriptRoot 'lock_guard.ps1'
+$takeoverMin = [int][Math]::Round(1.2 * $RoundTimeoutMinutes)
+$decision = & $guard -LockPath $lock -TakeoverMinMinutes $takeoverMin -HardCapMinutes $LockMaxAgeMinutes
+if (-not $decision -or $decision -notmatch '^decision=own') {
+    Log "skip: $decision"
+    Beat 'skip (round in flight)'
+    exit 0
 }
-Set-Content -Path $lock -Value $stamp -Encoding UTF8
+Log "lock acquired: $decision"
 
 try {
     Log "iteration round start $stamp"
