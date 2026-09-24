@@ -44,6 +44,7 @@
 > 赛博批中间件（O-2136）存 `.v8-light/`/`.v8-mid/`/`.v8-full/`/`.v9-light/`（分句段+赛博链前后音轨+BGM duck 混音+cards-vis 模板合并件+subs+ASR 可懂度检查 srt+抽帧图）——同性质非成品·不入本表。
 > 人味批中间件（O-2210）存 `.v10-light/`（分句段+呼吸声件+间隙件+房间底噪前后音轨+BGM duck 混音+cards+subs+ASR 检查 srt+抽帧图）——同上。
 > 实录批素材与中间件（O-1115）存 `data/sources/footage/`（raw 录屏+竖版预处理+探针帧·**素材层=源资产归档位**·retention R2）+ `output/renders/.live-tmp-frame-*.png`（验图帧）——素材入数据账·帧为中间件。
+> **citywatch 源裁净窗（#23 v14 ④·R188 2026-09-25）**：`citywatch-vertical`/`citywatch-16x9` 双源（data/sources/footage/·mp4 gitignored·素材名无扩展名写法=R21/R147 探针防误报惯例）重编码帧精确裁至 **0-4.4s 净窗（实测 4.400s）**——原 18s·尾段 ~5-18s 录穿豆包聊天窗=隐私面（R186 探针多时点定界+F-001~F-003 受污染拍实锤）·edit_craft matched 模式 `-stream_loop -1` 自源 0s 起循环 → 裁后任意拍任意时长全程净窗（受污染拍 b0/b1/b8/b10 自愈）；`citywatch-raw` 原样留档（本地 gitignored·R186 证据链取证件）·自 v14 重渲批起生产面生效。
 > 封面快路中间件（O-1043 R1·R116）存 `.poster-tmp/`（--poster 功能集成测试源 mp4·v10 同参重渲）——同性质非成品·不入本表。
 > 剪辑工艺批证据件与中间件（CEO 剪辑反馈令·2026-09-24）：`bs-001-live-A-edit-*.mp4.plan.json`=层 1.8 机检门计划证据件（**入 git**）；`.edit-tmp-grid.png`/`.edit-tmp-grid-bili.png`=抽帧验图网格帧（四格·入 git 留档）——单帧中间件已清盘。
 > 素材对位批证据件（CEO 工作流反馈令·2026-09-24）：分镜对位表=`data/sources/bs001/cards-v10-matched.json`（**入 git**）+`bs-001-v11-match-shipinhao.mp4.plan.json`（**入 git**）+`.edit-tmp-grid-v11.png`=12 拍对位核验网格（**入 git**）；逐镜素材=`data/sources/footage/*-vertical` 五源盘上在档（citywatch/biggame-cockpit/looplog/reviewsdoc/editgrid·mp4 gitignored·源资产归档位声明同 O-1115 行·非本表行=R21 无扩展名写法防探针 stale 误报）；**作废件如实**：bigmoney-ctrl（渲染现持仓面=脱敏禁用）/fleetmon+bigmoney-town（录穿第三方窗口=隐私作废）两案入 footage-matching-spec §2。

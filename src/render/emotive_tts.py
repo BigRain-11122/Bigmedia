@@ -416,8 +416,10 @@ def main(argv):
             "subs_bottom": 300,
             "line_spacing": 14,
         },
+        # 2026-09-25 #23 v14 + D-BS-03 4.5: mechanical square-bracket
+        # AIGC body (prose notice retired with this batch).
         "aigc_notice": base_cfg.get(
-            "aigc_notice", "\u672c\u89c6\u9891\u7531 AI \u751f\u6210 \u00b7 AIGC \u4f9d\u6cd5\u6807\u8bc6"),
+            "aigc_notice", "[AIGC\u00b7AI \u751f\u6210\u5185\u5bb9]"),
         "tail": base_cfg.get("tail", 0.8),
         "cards": cards,
     }

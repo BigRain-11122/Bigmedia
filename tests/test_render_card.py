@@ -223,11 +223,29 @@ class TestPlanAndMatch(unittest.TestCase):
             self.assertEqual(5, ft.count("drawtext="))
             self.assertEqual(4, ft.count("enable='between(t,"))
             # aigc notice persists for the whole video (no enable window)
-            self.assertIn("alpha=0.8", ft)  # O-1115 input #2: notice contrast 0.6->0.8 (gray60)
+            self.assertIn("alpha=0.9", ft)  # #23 v14: notice contrast notch up (0.8 gray60 -> 0.9 white)
             # duration = max end (cues 6.5, cards 15) + tail 0.8
             self.assertAlmostEqual(15.8, plan["duration"], places=3)
             for p in plan["textfiles"]:
                 self.assertTrue(Path(p).exists())
+
+    def test_build_plan_title_backing_box(self):
+        # #23 v14 (2): H1/H2 render over a local dark backing box;
+        # boxborderw = h1_gap/2+6 on BOTH boxes (12px overlap = one
+        # seamless block). AIGC notice gets NO box (scope: contrast
+        # brightening only, stays persistent top-left).
+        cfg = cards_cfg()
+        cfg["font"].update({
+            "h1_font": "C:/fake/h1.ttc", "h1_size": 100, "h1_color": "accent",
+            "h2_size": 50, "h2_color": "gray60", "h1_gap": 56,
+            "optical_center": 0.42})
+        cfg["cards"] = [{"start": 0, "end": 3,
+                         "lines": ["head", "sub one", "sub two"]}]
+        with tempfile.TemporaryDirectory() as d:
+            ft = rcv.build_render_plan(cfg, [], d)["filter_text"]
+        self.assertEqual(2, ft.count(
+            "box=1:boxcolor=0x000000@0.55:boxborderw=34"))
+        self.assertIn("fontcolor=white:alpha=0.9", ft)
 
     def test_build_plan_escapes_colon(self):
         cues = []

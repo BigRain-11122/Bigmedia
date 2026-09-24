@@ -306,11 +306,14 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
         chain = ["[0:v]", "scale=%d:%d,setsar=1" % (frame_w, frame_h)]
     else:
         chain = ["[0:v]"]
+    # 2026-09-25 #23 v14: notice contrast one notch up - gray60@0.8
+    # read as near-invisible over live footage (cover-verify verdict,
+    # schedule.md registration); dedicated white@0.9, decoupled from
+    # h2_color (O-1115 0.6->0.8 history in git).
     chain.append(
-        "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
-        ":alpha=0.8:x=48:y=48:line_spacing=%d"
-        % (font_q, _q(aigc_p), int(font["aigc_size"]),
-           _COLORS.get(spec["h2_color"], "white"), ls))
+        "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
+        ":alpha=0.9:x=48:y=48:line_spacing=%d"
+        % (font_q, _q(aigc_p), int(font["aigc_size"]), ls))
     for i, c in enumerate(cfg["cards"]):
         start, end = float(c["start"]), float(c["end"])
         alpha = fade_alpha(start, end)
@@ -327,11 +330,17 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
             h1_extra = ""
             if alpha:
                 h1_extra = ":alpha=%s" % alpha
+            # 2026-09-25 #23 v14 (2): local dark backing behind the
+            # title block - white-on-gray H1/H2 read poorly over busy
+            # log footage. boxborderw = h1_gap/2+6 on BOTH boxes so
+            # they overlap 12px and read as one seamless block.
+            bbw = int(spec["h1_gap"]) // 2 + 6
             chain.append(
                 "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+                ":box=1:boxcolor=0x000000@0.55:boxborderw=%d"
                 ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
                 % (h1f_q, _q(h1_body), h1_size, _COLORS.get(spec["h1_color"], "white"),
-                   ls, h1_y, start, end, h1_extra))
+                   bbw, ls, h1_y, start, end, h1_extra))
             if h2_lines:
                 h2_body = textfile(
                     "\n".join(wrap_for_width(x, h2_size, frame_w) for x in h2_lines),
@@ -343,10 +352,11 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
                     h2_extra = ":alpha=%s" % alpha
                 chain.append(
                     "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+                    ":box=1:boxcolor=0x000000@0.55:boxborderw=%d"
                     ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
                     % (font_q, _q(h2_body), h2_size,
                        _COLORS.get(spec["h2_color"], "white"),
-                       ls, h2_y, start, end, h2_extra))
+                       bbw, ls, h2_y, start, end, h2_extra))
         else:
             size = int(c.get("size", font["cards_size"]))
             body_text = "\n".join(

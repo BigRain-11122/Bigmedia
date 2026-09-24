@@ -43,7 +43,7 @@
     "h1_gap": 56,
     "optical_center": 0.42
   },
-  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "aigc_notice": "[AIGC·AI 生成内容]",
   "tail": 0.8,
   "cards": [
     {
