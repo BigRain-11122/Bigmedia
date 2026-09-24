@@ -1,13 +1,13 @@
 # BigStream 周报（2026-W39）
 
-> 自动生成件（C-09 周报生成器·数据分析部归口）——生成时间 2026-09-24 11:37
+> 自动生成件（C-09 周报生成器·数据分析部归口）——生成时间 2026-09-24 11:54
 > 本件=公司运营周报（L3 台账·非内容成品）；数据源=src/os/state.json + git log + src/os/backlog.md + orders/（四个机器源·无人工编辑）
 > 诚实纪律：未上线=未测量（PLAN §5）——平台与内容数据在账号开通前一律「未测量」；本件可重跑覆盖（重生成=最新真相）
 
 - 周期：2026-09-21 ~ 2026-09-27（ISO 周 2026-W39）
 - 轮次：本周 117 轮（当前 tick=115·idle 90 轮·其他账目 1 条）
-- 交付：175 commits
-- 任务板：本周完成 11 项·未完成 6 项
+- 交付：176 commits
+- 任务板：本周完成 12 项·未完成 5 项
 - 令牌：本周 CEO 令 26 条
 
 ## 1 轮次实录（state.json）
@@ -131,8 +131,9 @@
 - 2026-09-24 11:0x R114: 收令验轮（O-1057 周自审令收讫·落地核验全过·不为凑工作量造活）——轮首四查：orders 顶=O-20260924-1057-bm-a（相对记账尾 O-1043 为新令）→全任务书照走。收令核验=bm-a 全套交付闭环（commit 033c738 11:02:47：os-protocol §7 v1.5 常设节律+self_audit.py 数据包件+4 单测+首期 2026-W39 数据包+周报告判读五项填毕+C-25 live·首跑 REPO parents 坑当场修=与 daily_brief 同型·工程教训入 C-25·机制自下周期起全自动无人值守）；任务书周自审条已在本轮 mandate 实证生效；W39 周审在案不重跑（已有=不重跑·下期 W40 看点=整改四项运转复查+日报连续性跨周检验）·当日日报 2026-09-24 在案不重跑。三探针全绿（board 0 FAIL·5 题 10 稿/readiness 4 阻塞皆外部 CEO 物理件+决策 0 发现/loop_health 0 FAIL 4 WARN 在案史实·tick113↔beats113↔done113 对账平）。T1 催办律 48h 核查=无超线项（v9/v10 放行候选 09-23 22:0x·48h 线=09-25 22:0x）。**#16 认领再避让**：bm-a 批后仍活跃写盘（033c738 后新写：call_expert.py 11:04:23+expert-calls.md 11:06:17 秒级新鲜·含 staged 迹象）=树未静→循 R113 先例（树静后开工）·下轮首查树静即领。CEO v10-vs-v9 定夺仍无回示（renders 17/17 注账止于 v10 22:21 无新件）。收账显式列文件 commit+push（只动 state.json·不卷 bm-a 在飞件）。
 - 2026-09-24 11:2x R115: 收令核验轮（O-1115 实录素材令收讫·回执核实+S2 双机检门执法跑+周报刷新·不为凑工作量造活）——轮首四查：orders 顶=O-20260924-1115-bm-a（相对记账尾 O-1057 为新令）→全任务书照走。收令核验=bm-a 认领+回执闭环（commit 7c545e5 11:20:22 实证：record_screen.py 录制站（ctypes 找窗+gdigrab 采集·CEO 令临时窗口录毕即关）+渲染器 --bgvideo/--no-cards 升级+live-A 混合/live-B 纯实录双版本（复用 v10 全套时间线·反重复）+抽帧验图+renders 台账两行+samples-review §八+C-26 live x21·四条迭代输入如实入账·待 CEO 双版本拣式）。轮初在途避让（11:23 核验时 bm-a 秒级活跃写盘：M render_card_video.py+test_render_card.py+live-A/B 重渲 11:21:43/51——diff 判明=字幕断词修（_line_cost/_prefer_punct_break）非 #16 --poster 特征→写区零接触 R34/R35 先例）；**批间突变·迭代批闭（5b7b09d 11:25:26：标点优先断行+AIGC 对比度 0.6→0.8+live-A/B 重渲 strict 过+173 测试绿+renders 台账 4 行同步）→树静即执法**：S2 双机检门跑终版（O-2245 循环执法面·环节门长牙）——ai_feel 门=全 PASS（gaps 11 处 0.220-0.583s 变化/pacing CV 0.161/prosody 9 档 12 拍/copy CV 0.189·0 FAIL 0 WARN·拍稿=v9-cyber.beats+srt=.v10-light/subs.srt 复用链实证）+spec 门微信视频号=画幅 9:16 PASS/时长 64.06s 超窗 FAIL（双件同读数·与回执如实记录零偏差·同 v10 在案机制演示件·量产按空气预算律 L15 裁）——回执记录与独立复核一致·零新账（反重复）。三探针全绿=board 0 FAIL（5 题 10 稿·exit 0）/readiness 4 阻塞皆外部 CEO 物理件+决策 0 发现（19 renders 全注账·live-A/B 已入账）/loop_health 0 FAIL 4 WARN 在案史实（tick114↔beats114↔done114 对账平）。当日日报 2026-09-24 在案不重跑·W39 周审在案不重跑·T1 催办律核查=无超线项（v9/v10 放行候选 48h 线=09-25 22:0x 未到）。台账维护=weekly-2026-W39.md 刷新（上刷 R43 23:13·117 轮/175 commits/26 令·O-1033 专家名册+O-1043 审计批（F1→#15/R1→#16 入板）+O-1057 周自审 C-25+C-24 判词存档硬化+O-1115 实录双版本全入账·R27 先例）。**#16 认领四度避让**：迭代批虽闭但 bm-a 会话今晨五连 commit（10:34→11:25 持续在飞）·#16 文件=其刚收笔热区（同文件碰撞风险高）·轮预算余量不足半程——留待下轮树静全预算认领（--poster+tests+标 done）。下轮=快速路径首查：无新令+bm-a 静默→认领 #16；在途则续避让。收账显式列文件 commit+push（state.json+weekly）。
 
-## 2 交付账（git log·175 条）
+## 2 交付账（git log·176 条）
 
+- 6fe186e 2026-09-24 11:37 R115 order-receipt + S2 enforcement round: O-1115 live-footage receipt verified via 7c545e5 (record_screen.py capture station + renderer --bgvideo/--no-cards + live-A/B dual versions + C-26 live, CEO A/B pick pending); bm-a iteration batch closed mid-round (5b7b09d punctuation-preferred word-split + AIGC contrast 0.8, 173 tests green, live-A/B re-rendered strict-pass) -> S2 dual gates run on settled artifacts as standing enforcement face: ai_feel all-PASS (0 FAIL 0 WARN) + WeChat-channels spec aspect PASS / duration 64.06s over-window FAIL, both matching receipt zero drift, no new ledger rows needed (anti-duplication); probes green (board 0 FAIL, readiness 4 external CEO blockers 0 findings, loop_health 0 FAIL 4 WARN in-case); weekly refreshed to 117 rounds/175 commits/26 orders; #16 poster claim deferred 4th time (bm-a session hot - 5 commits this morning - and #16 files are their just-closed hot zone; full-budget claim next round when quiet)
 - 5b7b09d 2026-09-24 11:25 Live-sample iteration round (autonomous, non-style-gated fixes only): subtitle wrap now punctuation-preferred (clause enders break first - 'detected/one person' word-split mended to break after the comma, frame-verified), orphan-tail mending kept, AIGC notice contrast 0.6->0.8 (compliance legibility, not style); round-1 implementation had a real glyph-loss bug at the break (dropped the triggering char) caught by the no-char-lost test assertions and fixed; +4 unit tests (173 green); both live-A and live-B re-rendered strict-pass with the fixes, frame check confirms natural clause break; style-gated inputs (card/UI overlap banding, mid-band framing) intentionally left for CEO's A/B pick per scope discipline
 - 7c545e5 2026-09-24 11:20 O-1115 real-footage test run: recorded Biggame master-control (pixel town board) ourselves and cut it into multiple video versions - record_screen.py capture station (ctypes window lookup + gdigrab region capture, zero install; CEO-ordered temporary window auto-closed after recording per silence law; even-dims fix for x264 odd-height crash in-code), 45s first recording verified by frame analysis (HUD/dept buildings/group-cockpit dialog with all three subsidiaries incl. 'media company under construction'/walking NPCs/marquee all captured), blur-pad vertical preprocess, renderer --bgvideo real-footage background (filter-chain-head scale insert bug fixed in-batch) + --no-cards pure-documentary cut, 19 render tests green; TWO versions rendered strict-pass reusing the v10 full timeline (production defaults, anti-duplication): live-A cards-over-footage hybrid (64.06s 31.7MB) and live-B pure-documentary (15.8MB); frame check: layers correct, cards readable, AIGC in place; four honest iteration inputs logged (card/UI text overlap, AIGC contrast, subtitle word-split, mid-band density); ai_feel all-PASS, spec duration over-window same as v10 on record (mechanism demo piece); renders ledger + samples-review sec.8 with reproduction commands + C-26 live (x21)
 - e3ba2ef 2026-09-24 11:11 R114 order-receipt: O-1057 weekly self-audit verified landed (033c738: protocol S7 + self_audit.py + W39 pack/report + C-25 live), W39 audit + daily brief on file no rerun, probes green, #16 claim deferred again (bm-a session still writing call_expert/expert-calls), tree-quiet check next round
@@ -311,7 +312,7 @@
 
 ## 3 任务板燃尽（backlog.md）
 
-### 本周完成（11 项）
+### 本周完成（12 项）
 
 - #0 O-1719 调研远征令执行
 - #1 O-1602 主线①·用户调研 v1 续采
@@ -324,15 +325,15 @@
 - #10 发布准备度探针 `src/readiness.py`
 - #11 OS 循环健康探针 `src/os/loop_health.py`
 - #12 BS-001 文案重写 v3
+- #16 封面快路
 
-### 未完成（6 项）
+### 未完成（5 项）
 
 - #4 O-1602 主线④·存量弹药
 - #7 视频号 4 稿口播裁至 ≤60s [needs-CEO]
 - #13 BGM 音源选型 [needs-CEO]
 - #14 B站版=纵深格式重制
 - #15 口吻改写批
-- #16 封面快路
 
 ## 4 令牌账（orders/·本周 26 条）
 

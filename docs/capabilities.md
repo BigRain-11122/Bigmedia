@@ -41,6 +41,7 @@
 | C-24 | 专职专家调用器（call_expert） | 全部门（工程技术部供工具） | live | `python src/call_expert.py --expert <id> --material <文件>`（O-20260924-1033-bm-a）——八部门 11 席名册（`docs/expert-roster.md`·registry+提示词外置数据件）·本地 Ollama 零 token·**UTF-8 子进程管道=PS5.1 GBK 管道乱码坑根治**（09-23 原生管道实证）·调用自动落 `docs/reviews/expert-calls.md` 台账（行级追加）；6 单测绿·首调实证=hot-intel×2026-09-24 日报（赛道 top3+红线预警+一句话结论·expert-calls 在案） |
 | C-25 | 周自审数据包（self_audit） | 总裁办公室（循环归口执行） | live | `python src/os/self_audit.py`（O-20260924-1057 周期自审令·os-protocol §7）——零 token 自动采集：三探针+state/backlog/orders/环节台账/renders 盘账/全量测试/git 7 日→`docs/audits/packs/<ISO周>-pack.md`；判读层=循环轮按五清单填 `docs/audits/<ISO周>-self-audit.md`（当周缺=任意轮补产·与日情报报同款触发律）；4 单测绿·首期 W39 数据包+报告在案（首跑路径 bug=REPO parents 少一级→src\docs 误落·同 daily_brief 型坑当场修——**src/ 下建仓根引用件必须 parents[2] 起步**·两案实证入工程教训） |
 | C-26 | 屏录采集站（record_screen+bgvideo） | 内容生产部（工程技术部供仪器） | live | `python src/render/record_screen.py --open-app <URL> --title <窗口题> --seconds N --out FILE [--close]`（O-20260924-1115 实录素材令）——ctypes 精确找窗取形+FFmpeg gdigrab 区域采集（零安装）+开窗/关窗辅助（CEO 令授权临时窗·录毕即关·静默律外例）；偶数尺寸修复在案（x264 拒奇数·首跑 1366x1079 崩）；**渲染器 `--bgvideo` 实拍底版**（滤镜链头 scale 插链修复在案）+`--no-cards` 纯实录版；首录实证=Biggame 总控 45s（像素看板·验图过）·live-A/live-B 双版本试跑呈 CEO |
+| C-27 | 封面快路（--poster 封面帧导出） | 平台运营部（工程技术部供仪器） | live | `render_card_video.py --poster <out.png>`（O-20260924-1043 审计 R1·backlog#16·R116）——M5 发布物「封面」零新依赖代用产线：封面帧=首卡满可见位 t=start+0.15s（字面首帧=淡入 150ms 空帧·超短卡回退中点·--no-cards t=0）；4 单测（render 27 例）+全回归 176 绿；v10 时间线集成实证=`output/renders/bs-001-poster-v10-cover.png`（1080×1920·验图过·S2 双门在案：ai_feel all-PASS+spec 视频号画幅 PASS/时长超窗同 v10 线读数）；C-16 ComfyUI 图像生成线留远期 |
 
 ## §3 能力建设循环
 
@@ -69,3 +70,4 @@
 - 2026-09-24: v1.19 实录素材批（CEO 令 O-20260924-1115-bm-a）——C-26 屏录采集站入册 live（record_screen 录制站+渲染器 `--bgvideo`/`--no-cards`）+Biggame 总控 45s 首录+live-A/live-B 双版本试跑（素材层=去 AI 感最强一环落地）。live×21。
 - 2026-09-23: v1.13 人味机制批（O-20260923-2210-bm-a）——C-21 去 AI 感人味链入册 live：`--human` 种子化配音微抖动+呼吸间隙+呼吸声+房间底噪、`--grain/--bg` 画面质感层、`ai_feel_check.py` 四指纹机检门（M4 层 1.6·首战 v9 FAIL→v10 PASS）；规格=human-feel-spec.md。live×16。
 - 2026-09-23: v1.14 平台规格门批（O-2210 自治续）——C-22 `platform_spec_check.py` 入册 live（M4 层 1.7·时长实测红线工具化·playbook 实解析单一真相）；首战舰队体检=B站三件低于 3-15min 窗→B站纵深格式重制定位修正（backlog #14）。live×17。
+- 2026-09-24: v1.20 封面快路批（O-1043 审计 R1·backlog#16·OS 循环 R116）——C-27 `--poster` 封面帧导出入册 live（M5「封面」零新依赖代用产线·首卡满可见机律+4 单测+v10 集成实证+S2 双门在案）。live×22。

@@ -254,6 +254,31 @@ class TestPlanAndMatch(unittest.TestCase):
                 self.assertAlmostEqual(base["duration"], grainy["duration"])
 
 
+class TestPosterTime(unittest.TestCase):
+    """--poster cover-frame timestamp (audit O-1043 R1, backlog #16):
+    cards fade in over 150ms (visual-spec S4), so a literal t=0 frame
+    carries background + AIGC notice only - the cover frame is the
+    first card at FULL opacity."""
+
+    def test_first_card_full_visibility(self):
+        # cards_cfg default first card: start=0 -> full opacity at 0.15s
+        self.assertAlmostEqual(0.15, rcv.poster_time(cards_cfg()), places=3)
+
+    def test_nonzero_start(self):
+        cfg = cards_cfg(cards=[{"start": 2, "end": 8, "lines": ["a"]}])
+        self.assertAlmostEqual(2.15, rcv.poster_time(cfg), places=3)
+
+    def test_ultra_short_card_mid(self):
+        # fade-in would land past the card end -> mid-card instead
+        cfg = cards_cfg(cards=[{"start": 0, "end": 0.1, "lines": ["a"]}])
+        self.assertAlmostEqual(0.05, rcv.poster_time(cfg), places=3)
+
+    def test_no_cards_zero(self):
+        # --no-cards documentary cut: no card moment, literal first frame
+        self.assertAlmostEqual(0.0, rcv.poster_time(cards_cfg(cards=[])),
+                               places=3)
+
+
 def _tmp_srt(content):
     import tempfile as tf
     d = tf.mkdtemp(prefix="bsrcv-test-")

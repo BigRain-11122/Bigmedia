@@ -12,6 +12,7 @@ Usage:
     python src/render/render_card_video.py --cards ... --dry-run     # plan only
     python src/render/render_card_video.py --cards ... --audio a.wav # mux voice
     python src/render/render_card_video.py --cards ... --strict      # srt/voiceover mismatch = FAIL
+    python src/render/render_card_video.py --cards ... --poster c.png # + cover frame PNG
 
 Inputs (defaults resolve next to the cards file):
     --cards      JSON timeline template: video/font/aigc_notice/tail/cards[]. Required.
@@ -377,6 +378,26 @@ def voiceover_matches(voiceover_text, cues):
     return norm_text(voiceover_text) == norm_text("".join(t for _, _, t in cues))
 
 
+def poster_time(cfg):
+    """Cover-frame timestamp for --poster (audit O-1043 R1, backlog #16).
+
+    A literal t=0 frame is a poor cover: cards fade in over 150ms
+    (visual-spec S4), so t=0 carries background + AIGC notice only.
+    The cover frame = the first card at FULL opacity; an ultra-short
+    first card falls back to mid-card; a no-cards documentary cut has
+    no better moment than the literal first frame (t=0).
+    """
+    cards = cfg.get("cards") or []
+    if not cards:
+        return 0.0
+    first = cards[0]
+    s, e = float(first["start"]), float(first["end"])
+    t = s + 0.15
+    if e <= t:
+        t = (s + e) / 2.0
+    return t
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description="R-A card timeline renderer")
     ap.add_argument("--cards", required=True)
@@ -395,6 +416,10 @@ def main(argv=None):
                          "looped, scaled to frame, replaces the color source")
     ap.add_argument("--no-cards", action="store_true",
                     help="pure-documentary cut: AIGC notice + subs only")
+    ap.add_argument("--poster",
+                    help="after a successful render, export the cover "
+                         "frame to this PNG (first card at full opacity; "
+                         "ignored with --dry-run) - audit O-1043 R1")
     args = ap.parse_args(argv)
 
     cards_path = Path(args.cards)
@@ -511,6 +536,24 @@ def main(argv=None):
         if probe.returncode != 0:
             print("FAIL ffprobe exit %d" % probe.returncode)
             return 4
+        if args.poster:
+            poster_path = Path(args.poster)
+            poster_path.parent.mkdir(parents=True, exist_ok=True)
+            t_poster = poster_time(cfg)
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-ss", "%.3f" % t_poster, "-i", str(out_path),
+                   "-frames:v", "1", str(poster_path)]
+            try:
+                run = subprocess.run(cmd, capture_output=True, text=True)
+            except FileNotFoundError:
+                print("FAIL ffmpeg not found on PATH")
+                return 3
+            if run.returncode != 0 or not poster_path.exists():
+                print("FAIL poster export exit %d" % run.returncode)
+                print(run.stderr[-800:])
+                return 4
+            print("poster: %s (cover frame at t=%.3fs)"
+                  % (poster_path, t_poster))
         size_kb = out_path.stat().st_size // 1024
         print("OK %s" % out_path)
         print("cards=%d cues=%d duration=%.3fs size=%dKB"
