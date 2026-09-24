@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | A1 | B站深潜稿结构研究（3-15min 叙事框架调研→拍稿骨架·#14 前置件） | O-1043 审计+#14+规格前置律（B站时长窗） | **高**（开闸后即用） | **done 2026-09-24**（`research/bilibili-deepdive-structure-v1.md`：六段式+BS-001 深纵骨架 v0.1+三卡点） |
 | A2 | douyin profile 首件实渲+验图（三 profile 唯一无实证件） | editing-craft-spec §4 已定义无实证 | 中 | **done 2026-09-24**（`bs-001-v12-douyin-9x16.mp4`：层 1.8 全 PASS+抖音窗双 PASS+五拍头白闪 YAVG 196 全中——三 profile 实证收官） |
-| A3 | 真直切渲染路（硬切=2 帧淡入近似→concat 直切·E8 弱项在案） | review-v12 E8 弱项 | 低 | **claimed by OS loop R167**（A2 已闭碰撞解除·两步制 claim；本轮预算内执行·余项拆细回写） |
+| A3 | 真直切渲染路（硬切=2 帧淡入近似→concat 直切·E8 弱项在案） | review-v12 E8 弱项 | 低 | **claimed by OS loop R167**（claim=d7b24ed 两步制·碰撞解除后首做轮；改造面评估毕=引擎级四步·预算尽拆细回写·下轮续做） |
 | A4 | 标题工业化：平台标题 A/B 模板（对表公众号 5.3.3 误导标题红线） | user-research §3.5+M5 发布物清单 | 中 | **done 2026-09-24**（`docs/title-craft.md` v1.0：负面四禁对表+批次①②四槽位模板+A/B 六步+登记制式·A3 顺延注记在案=claim 时 A2 在飞碰撞·A2 已于 e54cbad 闭批碰撞解除） |
 | A5 | prep 批处理（--batch 目录模式·对位批手工 ×6 次的效率缺口） | C-29 执行实况 | 低 | open |
 
@@ -40,3 +40,4 @@
 - 附注（循环静默期实况·常态令首夜验证）：循环 R150-R165 独立收执集团 P-62/P-65/P-61 三批（组织精简/研究协议 v2.0/状态导出件）+断轮自修+对会话在途批正确避让——双执行体分工在无令时段健康运转。
 - 2026-09-24: **A2 done**（bm-a 会话·e54cbad）——douyin profile 首件 `bs-001-v12-douyin-9x16.mp4`：层 1.8 全 PASS+抖音窗双 PASS+五拍头白闪客观验图全中——三 profile（视频号柔/B站硬切/抖音快）实证全收官，一条时间线三种剪辑语言。
 - 2026-09-24: **A4 done**（OS 循环 R166）——`docs/title-craft.md` v1.0 立制（负面四禁对表公众号 5.3.3/5.3.4 A 级源+视频号/公众号/B站/抖音四槽位模板+A/B 候选→发布→回流六步+变体头/发布物双落登记制式·远期平台不预写=无实证不立法）；循环侧两步认领制首用（claimed d5f5b9f→done 同轮闭环）；A3 顺延注记（claim 时碰撞在飞 A2·其已闭批碰撞解除·下轮可做）。
+- 2026-09-24: **A3 claimed**（OS 循环 R167·d7b24ed）——改造面评估毕，真直切=引擎级升级非单参改动，预算尽拆细四步回写：①`build_fades`/时间轴：cut 边界改 `fade_s=0` 语义（d_k 不延展·现值 HARD_CUT_S=0.05s 二帧淡入近似在案）②`xfade_chain`：cut run 分组 concat 直拼（filter_complex 内联·xfade 边界照旧）③`edit_craft_check` timeline 代数同步 cut d=0+硬切断言升级 ④单测+双 profile（bilibili/douyin）重渲验证+层 1.8 复跑+S2 三门执法+台账双行。注：HARD_CUT_S 0.05→0.001 单参路已在评估中排除（xfade transition="cut" 词汇 crash 史在 L69-70·且 0.001s fade 仍残留 1 帧 crossfade 混合帧≠真直切·concat 路为正解）。
