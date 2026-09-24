@@ -1,0 +1,196 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "profile": "bilibili",
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 6.1,
+   "fade_s": 0.16,
+   "type": "circleopen"
+  },
+  {
+   "k": 2,
+   "time_s": 11.21,
+   "fade_s": 0.05,
+   "type": "cut"
+  },
+  {
+   "k": 3,
+   "time_s": 15.39,
+   "fade_s": 0.16,
+   "type": "distance"
+  },
+  {
+   "k": 4,
+   "time_s": 21.14,
+   "fade_s": 0.05,
+   "type": "cut"
+  },
+  {
+   "k": 5,
+   "time_s": 27.87,
+   "fade_s": 0.16,
+   "type": "radial"
+  },
+  {
+   "k": 6,
+   "time_s": 33.95,
+   "fade_s": 0.05,
+   "type": "cut"
+  },
+  {
+   "k": 7,
+   "time_s": 38.51,
+   "fade_s": 0.16,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 43.25,
+   "fade_s": 0.05,
+   "type": "cut"
+  },
+  {
+   "k": 9,
+   "time_s": 49.74,
+   "fade_s": 0.16,
+   "type": "rectcrop"
+  },
+  {
+   "k": 10,
+   "time_s": 54.63,
+   "fade_s": 0.05,
+   "type": "cut"
+  },
+  {
+   "k": 11,
+   "time_s": 59.3,
+   "fade_s": 0.16,
+   "type": "hblur"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 6.26,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 1,
+   "src_off_s": 5.49,
+   "dur_s": 5.27,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 2,
+   "src_off_s": 10.089,
+   "dur_s": 4.34,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.05
+  },
+  {
+   "idx": 3,
+   "src_off_s": 13.851,
+   "dur_s": 5.91,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.16
+  },
+  {
+   "idx": 4,
+   "src_off_s": 19.026,
+   "dur_s": 6.89,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.05
+  },
+  {
+   "idx": 5,
+   "src_off_s": 25.083,
+   "dur_s": 6.24,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 6,
+   "src_off_s": 30.555,
+   "dur_s": 4.72,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 7,
+   "src_off_s": 34.659,
+   "dur_s": 4.9,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.16
+  },
+  {
+   "idx": 8,
+   "src_off_s": 38.925,
+   "dur_s": 6.65,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 9,
+   "src_off_s": 4.766,
+   "dur_s": 5.05,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 10,
+   "src_off_s": 9.167,
+   "dur_s": 4.83,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0
+  },
+  {
+   "idx": 11,
+   "src_off_s": 13.37,
+   "dur_s": 4.92,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.16
+  }
+ ],
+ "hits": [
+  0,
+  2,
+  3,
+  4,
+  7,
+  11
+ ],
+ "f_max_s": 0.16,
+ "last_beat_end_s": 63.26,
+ "tail_s": 0.8,
+ "duration_expected_s": 64.06,
+ "hard_cut_s": 0.05
+}

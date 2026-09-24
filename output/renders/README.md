@@ -25,6 +25,8 @@
 | bs-001-live-A-pixelboard.mp4 | 测试件·非成品 | O-1115 实录素材试跑 A 版：**Biggame 总控真实录屏底版**（像素小镇看板 45s 实录·gdigrab 区域采集·blur-pad 竖版）+H1/H2 字卡+字幕+AIGC+grain7——复用 v10 全套音频/时间线（产线默认）·strict 过·抽帧验图过；11:5X 迭代重渲（标点断行+AIGC 0.8+字符丢失修）；**终审团六席 9+ PASS=放行候选**（review-20260924-bs001-live·E4 同稿沿用参考 7）=**现行最新过审件待 CEO 拣式**；spec 时长超窗同 v10 在案 |
 | bs-001-live-B-puredoc.mp4 | 测试件·非成品 | O-1115 实录素材试跑 B 版：**纯实录纪录片式**（同底版无字卡·字幕+AIGC+grain4）——strict 过·同 11:5X 迭代重渲；终审对照读数=木桶 8.5（E1/E2 无字卡锚降半档·E7 无叠压 9）=对照候选·A/B 差异=拣式依据；spec 同超窗在案 |
 | bs-001-poster-v10-cover.png | 测试件·非成品 | O-1043 审计 R1 封面快路（backlog#16·R116）：渲染器 `--poster` 封面帧导出——首卡满可见位 t=0.150s（字面首帧=淡入 150ms 空帧·机律改取满可见帧·复用链=v10 时间线 grain7/深灰底/strict）；1080×1920 PNG·验图过（H1 满可见+H2 弱化+AIGC 标识+颗粒暗角·零缺陷）；S2 双门在案：ai_feel all-PASS 0 FAIL 0 WARN + spec 视频号画幅 PASS/时长超窗 FAIL 同 v10 线读数（机制演示件）；M5「封面」代用产线实证（C-27·ComfyUI 线留远期） |
+| bs-001-live-A-edit-shipinhao.mp4 | 测试件·非成品 | **CEO 剪辑反馈令首战（2026-09-24「剪辑 卡点 转场 特效什么都没有」）·视频号 profile 剪辑版**：同 live-A 母版全套（实录底版+v10 时间线+audio-bgm 混音+grain7）+R-E 剪辑层（C-28）——12 段 zoompan Ken Burns 推拉+命中拍 punch[0/2/7/11]+11 全柔和转场链[fade/dissolve/smoothleft/smoothup/distance·0.28s]·转场在拍点完成=卡点切声线；**层 1.8 门 PASS（11/11 边界落 cue 锚·时间轴保持代数过）**；spec 门=画幅 PASS/时长 64.06s 超窗 FAIL 同 v10 线在案；ai_feel all-PASS（同母版音轨）；抽帧验图过（四格取景差异成立/AIGC 全帧/字幕全·.edit-tmp-grid.png） |
+| bs-001-live-A-edit-bilibili.mp4 | 测试件·非成品 | **CEO 剪辑反馈令首战·B站 profile 口味对照版**：同母版+R-E 剪辑层——**6 转场[smoothleft/circleopen/rectcrop/distance/hblur/radial·0.16s]+5 硬切[0.05s 二帧]=硬切为主知识区节奏**+命中拍[0/2/3/4/7/11]全 punch+60ms 白闪；层 1.8 门 PASS；**B站 spec 双 FAIL 如实在案（9:16≠16:9 画幅+64s≠3-15min 时长窗）=B站纵深格式重制仍归 backlog #14（量产开闸后）——本件=剪辑口味对照件非 B站合规件**；与 shipinhao 版的密度差（转场比/命中拍/白闪）=「每个平台用户喜好不一样」的直接 A/B 证据 |
 
 > 中间件（独立临时音轨/SRT）存 `output/renders/.samples-tmp/`——O-1830 复现用（samples-review.md §四声明）·非渲染成品·不入本表。
 > 工艺迭代批中间件（O-1918/O-1924/v5）存 `.v3-tmp/`/`.v4-tmp/`/`.v5-tmp/`/`.v5b-tmp/`（分句音频段+BGM+无 BGM 底版+beats 三栏稿）——同性质非成品·不入本表（R21 声明）。
@@ -33,3 +35,4 @@
 > 人味批中间件（O-2210）存 `.v10-light/`（分句段+呼吸声件+间隙件+房间底噪前后音轨+BGM duck 混音+cards+subs+ASR 检查 srt+抽帧图）——同上。
 > 实录批素材与中间件（O-1115）存 `data/sources/footage/`（raw 录屏+竖版预处理+探针帧·**素材层=源资产归档位**·retention R2）+ `output/renders/.live-tmp-frame-*.png`（验图帧）——素材入数据账·帧为中间件。
 > 封面快路中间件（O-1043 R1·R116）存 `.poster-tmp/`（--poster 功能集成测试源 mp4·v10 同参重渲）——同性质非成品·不入本表。
+> 剪辑工艺批证据件与中间件（CEO 剪辑反馈令·2026-09-24）：`bs-001-live-A-edit-*.mp4.plan.json`=层 1.8 机检门计划证据件（**入 git**）；`.edit-tmp-grid.png`/`.edit-tmp-grid-bili.png`=抽帧验图网格帧（四格·入 git 留档）——单帧中间件已清盘。

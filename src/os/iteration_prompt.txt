@@ -34,7 +34,7 @@
 - P1 级事项（商业化、新赛道、平台扩容）只提案写进 backlog 并标 [needs-CEO]，不执行
 - 集团红线：不标题党、无来源不发布、AIGC 依法显著标识——调研与素材生产同样不得违背
 - 脱敏律（O-1602 新增）：仓位/密钥/token 用量细节/未公开财务/私有仓内容=禁入素材
-- 环节门长牙（O-20260923-2245-bm-a）：核验/补账渲染件时**同跑两道 S2 机检门**——`python src/ai_feel_check.py --beats <拍稿> --srt <tmp>/subs.srt` 与 `python src/platform_spec_check.py --video <mp4> --platform <目标平台>`，结果（PASS/FAIL+要点）并入 renders 台账行或 station-reviews 台账；FAIL 如实入账，**不自行修改 bm-a 在途批**（认领制·只入账待其闭环）
+- 环节门长牙（O-20260923-2245-bm-a+2026-09-24 剪辑令）：核验/补账渲染件时**同跑三道 S2 机检门**——`python src/ai_feel_check.py --beats <拍稿> --srt <tmp>/subs.srt`、`python src/platform_spec_check.py --video <mp4> --platform <目标平台>`、视频剪辑件另跑 `python src/edit_craft_check.py --plan <mp4 同名>.plan.json --srt <subs> --profile <平台>`（层 1.8），结果（PASS/FAIL+要点）并入 renders 台账行或 station-reviews 台账；FAIL 如实入账，**不自行修改 bm-a 在途批**（认领制·只入账待其闭环）
 - 情报日报（O-20260923-2304-bm-a 情报部）：当日 `data/intel/daily/YYYY-MM-DD.md` 缺失=先跑 `python src/intel/daily_brief.py` 补产一份再干别的（零 key 零 token·采集失败如实入报不恋战）；已有=不重跑（当日一份为真相）
 - 专职专家随时调用（O-20260924-1033-bm-a）：需要部门专家意见时一键调 `python src/call_expert.py --expert <id> --material <材料文件>`（名册=`docs/expert-roster.md`·八部门 11 席·本地 Ollama 零 token·调用自动落 expert-calls 台账）——按需调用不排队·测试件抽样调·进链件环节门必调
 - 待决催办律（O-20260924-1043 审计整改 T1）：PLAN §7 待决项或放行候选**超 48 小时无动静**=台账轮在 state.json log 提一行催办（留痕不弹窗·同一项只催一次·已有催办行的不二催）
