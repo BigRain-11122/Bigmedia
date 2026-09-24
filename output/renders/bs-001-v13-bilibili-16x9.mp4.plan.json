@@ -1,0 +1,239 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "bilibili",
+ "visual_mode": "matched",
+ "visual_ratio": 0.833,
+ "cards_only_beats": [
+  6,
+  11
+ ],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 5.3,
+   "fade_s": 0.16,
+   "type": "circleopen"
+  },
+  {
+   "k": 2,
+   "time_s": 10.167,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 3,
+   "time_s": 13.433,
+   "fade_s": 0.16,
+   "type": "distance"
+  },
+  {
+   "k": 4,
+   "time_s": 18.733,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 5,
+   "time_s": 25.433,
+   "fade_s": 0.16,
+   "type": "radial"
+  },
+  {
+   "k": 6,
+   "time_s": 30.5,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 7,
+   "time_s": 34.8,
+   "fade_s": 0.16,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 39.267,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 9,
+   "time_s": 44.8,
+   "fade_s": 0.16,
+   "type": "rectcrop"
+  },
+  {
+   "k": 10,
+   "time_s": 48.933,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 11,
+   "time_s": 53.633,
+   "fade_s": 0.16,
+   "type": "hblur"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 5.3,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-16x9.mp4"
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 5.027,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-16x9.mp4"
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 3.267,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-16x9.mp4"
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 5.46,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.16,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-16x9.mp4"
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 6.7,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-16x9.mp4"
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 5.227,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.16,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/editgrid-16x9.mp4"
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 4.3,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u53e3\u53f7\u62cd\uff1a\u91d1\u53e5\u7559\u767d\uff0c\u5168\u5c4f\u5b57\u5361\u5373\u753b\u9762",
+   "visual_source": null
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 4.627,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.16,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-16x9.mp4"
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 5.533,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-16x9.mp4"
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 4.293,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-16x9.mp4"
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 4.7,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-16x9.mp4"
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 4.693,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "CTA \u62cd\uff1a\u884c\u52a8\u6307\u4ee4\u7559\u767d\uff0c\u5b57\u5361\u5373\u753b\u9762",
+   "visual_source": null
+  }
+ ],
+ "hits": [
+  0,
+  2,
+  3,
+  4,
+  5,
+  7
+ ],
+ "f_max_s": 0.16,
+ "last_beat_end_s": 57.367,
+ "tail_s": 0.8,
+ "duration_expected_s": 58.167,
+ "hard_cut_s": 0.0
+}

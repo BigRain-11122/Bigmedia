@@ -14,10 +14,12 @@ at fixed timestamps, so the edit layer MUST NOT shift beats):
                   punch + optional 60ms white flash-in on hit beats);
                   d_k = span_k + F_max so the xfade algebra always has
                   enough tail (overshoot is trimmed by -t at the end).
-  2. xfade chain: per-boundary fades END at the beat boundary (the new
+  2. splice     : per-boundary fades END at the beat boundary (the new
                   card lands exactly when its transition completes);
-                  hard cuts = 1-frame 0.001s xfade (bilibili knowledge
-                  style) with the profile's transition/cut pattern.
+                  hard cuts = TRUE splices - fades chain into runs, runs
+                  join via concat, zero blend frames (A3 2026-09-24: the
+                  2-frame 0.05s xfade approximation retired after the E8
+                  review flagged it; per-run trim lands cuts frame-exact).
   3. compose    : R-A text plan (cards + subs + AIGC notice) burned over
                   the edited background + voice mux, same encode as R-A.
 
@@ -38,6 +40,7 @@ Exit codes: 0 ok; 2 validation error; 3 ffmpeg/ffprobe missing;
 """
 import argparse
 import json
+import math
 import shutil
 import subprocess
 import sys
@@ -84,9 +87,11 @@ PROFILES = {
         "flash": True,
     },
 }
-HARD_CUT_S = 0.05       # 2-frame xfade ~= hard cut (0.001s sub-frame
-                        # duration EOFs the chain - bilibili 2026-09-24
-                        # render came out 11.2s, stopped at first cut)
+CUT_FADE_S = 0.0        # A3 true hard cut = concat splice, zero blend.
+                        # The retired 0.05s 2-frame xfade approximation
+                        # lives in git history (E8 review weak point);
+                        # sub-frame 0.001s EOFs the chain - bilibili
+                        # 2026-09-24 render stopped at the first cut.
 # platform duration windows (playbook single truth; pre-flight WARN so a
 # window breach surfaces BEFORE burning render minutes - platform spec
 # prelaw 2026-09-24. WARN not FAIL: the bilibili deep-dive (#14) knowingly
@@ -97,6 +102,10 @@ INTER_S = 70.0          # looped footage intermediate length (s)
 SRC_OFF_MOD = 40.0      # per-segment source window offset modulus (s)
 PUNCH_FRAMES = 10       # 0.35s at 30fps punch-in ramp
 FPS = 30
+SEG_SAFETY_S = 1.0 / FPS  # +1 render frame per segment: a blend never
+                          # starves mid-chain; per-run trim cuts the
+                          # overshoot frame-exact (invisible: it sits at
+                          # a splice/fade tail, never at a beat head)
 
 
 def beat_boundaries(cfg):
@@ -122,7 +131,7 @@ def build_fades(profile, n_seg):
             fades.append({"fade_s": profile["fade_s"], "type": t})
             last_type = t
         else:
-            fades.append({"fade_s": HARD_CUT_S, "type": "cut"})
+            fades.append({"fade_s": CUT_FADE_S, "type": "cut"})
             last_type = None
     return fades
 
@@ -203,6 +212,12 @@ def plan_edit(cfg, profile_name):
     cards = cfg["cards"]
     n = len(cards)
     bounds = beat_boundaries(cfg)
+    # frame-quantize boundaries: concat splices land frame-exact only on
+    # the frame grid (A3). Internal = nearest frame, final = ceil so the
+    # expected duration always covers the cues. Max shift 1 frame = 33ms,
+    # far under every gate tolerance; R-A text burns at original times.
+    bounds = ([0.0] + [round(t * FPS) / FPS for t in bounds[1:-1]]
+              + [math.ceil(bounds[-1] * FPS) / FPS])
     fades = build_fades(profile, n)
     vis = _plan_visuals(cards)
     matched = vis is not None
@@ -213,7 +228,16 @@ def plan_edit(cfg, profile_name):
     f_max = profile["fade_s"]
     tail = float(cfg.get("tail", 0.5))
     spans = [bounds[k + 1] - bounds[k] for k in range(n)]
-    durs = [spans[k] + f_max for k in range(n - 1)] + [spans[-1] + tail + f_max]
+    # A3 algebra: d_k = span_k + incoming fade. A fade-in beat starts
+    # early (its blend opens at b_k - f_k) but still ENDS at b_{k+1};
+    # cuts add 0. The old span+f_max blanket is retired - per-run trim
+    # lands each concat seam frame-exact, no over-provision needed.
+    if n == 1:
+        durs = [spans[0] + tail]
+    else:
+        durs = [spans[k] + (fades[k - 1]["fade_s"] if k else 0.0)
+                for k in range(n - 1)]
+        durs.append(spans[-1] + fades[-1]["fade_s"] + tail)
     segments = []
     for k in range(n):
         # flash fires AFTER the incoming transition completes - otherwise
@@ -255,7 +279,7 @@ def plan_edit(cfg, profile_name):
         "last_beat_end_s": round(bounds[-1], 3),
         "tail_s": tail,
         "duration_expected_s": round(bounds[-1] + tail, 3),
-        "hard_cut_s": HARD_CUT_S,
+        "hard_cut_s": CUT_FADE_S,
     }
 
 
@@ -318,12 +342,13 @@ def render_segments(plan, cfg, footage, tmpdir):
     for s in plan["segments"]:
         nf = int(round(s["dur_s"] * FPS))
         seg = tmpdir / ("seg%02d.mp4" % s["idx"])
+        rt = s["dur_s"] + SEG_SAFETY_S      # +1 blend-safety frame (A3)
         flat = matched and s.get("cards_only")
         if flat:
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-f", "lavfi", "-i",
                    "color=c=%s:s=%dx%d:r=%d:d=%.3f"
-                   % (CARD_ONLY_BG, w, h, FPS, s["dur_s"]),
+                   % (CARD_ONLY_BG, w, h, FPS, rt),
                    "-vf", "setsar=1,fps=%d" % FPS, "-r", str(FPS),
                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
                    "-pix_fmt", "yuv420p", str(seg)]
@@ -348,13 +373,13 @@ def render_segments(plan, cfg, footage, tmpdir):
                 return None
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-stream_loop", "-1", "-i", str(src),
-                   "-t", "%.3f" % s["dur_s"], "-vf", vf, "-r", str(FPS),
+                   "-t", "%.3f" % rt, "-vf", vf, "-r", str(FPS),
                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
                    "-pix_fmt", "yuv420p", str(seg)]
         else:
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-ss", "%.3f" % s["src_off_s"], "-i", str(inter),
-                   "-t", "%.3f" % s["dur_s"], "-vf", vf, "-r", str(FPS),
+                   "-t", "%.3f" % rt, "-vf", vf, "-r", str(FPS),
                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
                    "-pix_fmt", "yuv420p", str(seg)]
         if not _run(cmd):
@@ -363,24 +388,57 @@ def render_segments(plan, cfg, footage, tmpdir):
     return segs
 
 
+def build_runs(n_seg, boundaries):
+    """Partition segments into splice runs (A3): a cut boundary starts a
+    new run, so every INTERNAL boundary of a run is a fade. Runs join by
+    concat = the true hard cut; single-segment runs are legal."""
+    runs = [[0]]
+    for k in range(1, n_seg):
+        if boundaries[k - 1]["type"] == "cut":
+            runs.append([k])
+        else:
+            runs[-1].append(k)
+    return runs
+
+
 def xfade_chain(plan, segs, tmpdir, w, h):
-    """Stage 2: chain per-boundary xfades (fades END at beat boundaries)."""
+    """Stage 2: fades chain inside runs; runs splice via concat (A3).
+
+    No blend frame at a cut: the outgoing run is trimmed frame-exact
+    (tpad clone-fills a shortfall - invisible, it sits at the splice),
+    concat joins run ends directly. Offsets inside a run are run-local
+    (the plan's boundaries are frame-quantized, so round() recovers
+    exact frame indices and seams land frame-exact, non-accumulating)."""
     n = len(segs)
     if n == 1:
         return segs[0]
-    parts, prev = [], "0:v"
-    for k in range(1, n):
-        b = plan["boundaries"][k - 1]
-        out = "v%d" % k if k < n - 1 else "vbg"
-        # NB: "cut" is plan vocabulary only - ffmpeg xfade has no such
-        # transition (exit 3131621040 "Not yet implemented", 2026-09-24
-        # bilibili render crash). A 0.001s fade = the 1-frame hard cut.
-        t = b["type"] if b["type"] != "cut" else "fade"
-        parts.append("[%s][%d:v]xfade=transition=%s:duration=%.3f:"
-                     "offset=%.3f[%s]"
-                     % (prev, k, t, b["fade_s"], b["time_s"] - b["fade_s"],
-                        out))
-        prev = out
+    bounds = plan["boundaries"]
+    runs = build_runs(n, bounds)
+    tail_frames = int(math.ceil(plan["tail_s"] * FPS))
+    parts, labels = [], []
+    for r, run in enumerate(runs):
+        a, b = run[0], run[-1]
+        f0 = 0 if a == 0 else int(round(bounds[a - 1]["time_s"] * FPS))
+        f1 = (int(round(plan["last_beat_end_s"] * FPS)) + tail_frames
+              if b == n - 1 else int(round(bounds[b]["time_s"] * FPS)))
+        s0 = f0 / float(FPS)                 # run-local timeline origin
+        prev = "%d:v" % a
+        for j in range(a, b):                # internal fades of the run
+            bo = bounds[j]
+            out = "r%dx%d" % (r, j)
+            parts.append("[%s][%d:v]xfade=transition=%s:duration=%.3f:"
+                         "offset=%.3f[%s]"
+                         % (prev, j + 1, bo["type"], bo["fade_s"],
+                            bo["time_s"] - bo["fade_s"] - s0, out))
+            prev = out
+        lab = "vbg" if len(runs) == 1 else "vr%d" % r
+        parts.append("[%s]tpad=stop_mode=clone:stop_duration=%.3f,"
+                     "trim=end_frame=%d,setpts=PTS-STARTPTS[%s]"
+                     % (prev, 0.5, f1 - f0, lab))
+        labels.append("[%s]" % lab)
+    if len(runs) > 1:
+        parts.append("".join(labels) +
+                     "concat=n=%d:v=1:a=0[vbg]" % len(runs))
     edited = tmpdir / "edited_bg.mp4"
     cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y"]
     for seg in segs:

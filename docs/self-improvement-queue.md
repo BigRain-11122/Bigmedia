@@ -11,7 +11,7 @@
 |---|---|---|---|---|
 | A1 | B站深潜稿结构研究（3-15min 叙事框架调研→拍稿骨架·#14 前置件） | O-1043 审计+#14+规格前置律（B站时长窗） | **高**（开闸后即用） | **done 2026-09-24**（`research/bilibili-deepdive-structure-v1.md`：六段式+BS-001 深纵骨架 v0.1+三卡点） |
 | A2 | douyin profile 首件实渲+验图（三 profile 唯一无实证件） | editing-craft-spec §4 已定义无实证 | 中 | **done 2026-09-24**（`bs-001-v12-douyin-9x16.mp4`：层 1.8 全 PASS+抖音窗双 PASS+五拍头白闪 YAVG 196 全中——三 profile 实证收官） |
-| A3 | 真直切渲染路（硬切=2 帧淡入近似→concat 直切·E8 弱项在案） | review-v12 E8 弱项 | 低 | **claimed by OS loop R167**（claim=d7b24ed 两步制·碰撞解除后首做轮；改造面评估毕=引擎级四步·预算尽拆细回写·下轮续做） |
+| A3 | 真直切渲染路（硬切=2 帧淡入近似→concat 直切·E8 弱项在案） | review-v12 E8 弱项 | 低 | **done 2026-09-24**（OS 循环 R167 认领 d7b24ed→R168 四步全落：cut fade_s=0+run 分组 concat+帧量化 per-run trim+check 新代数 cut-blended 断言+4 新单测+bs-001-v13 双件重渲三层门执法+MAD 验图·E8 弱项闭环） |
 | A4 | 标题工业化：平台标题 A/B 模板（对表公众号 5.3.3 误导标题红线） | user-research §3.5+M5 发布物清单 | 中 | **done 2026-09-24**（`docs/title-craft.md` v1.0：负面四禁对表+批次①②四槽位模板+A/B 六步+登记制式·A3 顺延注记在案=claim 时 A2 在飞碰撞·A2 已于 e54cbad 闭批碰撞解除） |
 | A5 | prep 批处理（--batch 目录模式·对位批手工 ×6 次的效率缺口） | C-29 执行实况 | 低 | open |
 
@@ -44,3 +44,4 @@
 - 2026-09-24: **A4 done**（OS 循环 R166）——`docs/title-craft.md` v1.0 立制（负面四禁对表公众号 5.3.3/5.3.4 A 级源+视频号/公众号/B站/抖音四槽位模板+A/B 候选→发布→回流六步+变体头/发布物双落登记制式·远期平台不预写=无实证不立法）；循环侧两步认领制首用（claimed d5f5b9f→done 同轮闭环）；A3 顺延注记（claim 时碰撞在飞 A2·其已闭批碰撞解除·下轮可做）。
 - 2026-09-24: **A3 claimed**（OS 循环 R167·d7b24ed）——改造面评估毕，真直切=引擎级升级非单参改动，预算尽拆细四步回写：①`build_fades`/时间轴：cut 边界改 `fade_s=0` 语义（d_k 不延展·现值 HARD_CUT_S=0.05s 二帧淡入近似在案）②`xfade_chain`：cut run 分组 concat 直拼（filter_complex 内联·xfade 边界照旧）③`edit_craft_check` timeline 代数同步 cut d=0+硬切断言升级 ④单测+双 profile（bilibili/douyin）重渲验证+层 1.8 复跑+S2 三门执法+台账双行。注：HARD_CUT_S 0.05→0.001 单参路已在评估中排除（xfade transition="cut" 词汇 crash 史在 L69-70·且 0.001s fade 仍残留 1 帧 crossfade 混合帧≠真直切·concat 路为正解）。
 - 2026-09-24: **常态令扩面**（O-20260924-2118-bm-a·bm-a 会话）——CEO 点名迭代面=剪辑能力+审美+**段子**；B5 段子·幽默工艺项入池（缺口=趣律 L9-L14 在案但零对标拆解）；剪辑审美既有项 C1/B2/B3 继承 CEO 锚；配套=user-research v1.8 §9 段子工艺面首版底座（分群笑点谱系+五梗位分群标注）。
+- 2026-09-24: **A3 done**（OS 循环 R168·R167 认领 d7b24ed 续做·**正中 CEO 扩面令「迭代剪辑能力」锚**）——真直切引擎四步全落：①`build_fades` cut→`fade_s=0`（CUT_FADE_S·0.05s 二帧淡入近似退役）②`xfade_chain`→`build_runs` run 分组（fade 链内接+cut 处 concat 真拼·边界帧量化+per-run tpad/trim 帧精确落点+段渲染+1 安全帧防混合饥饿）③层 1.8 门新代数 `d_k=span_k+incoming fade`+cut-blended 回归断言（0.05 复辟=FAIL·独立常量律）④测试 27 门测绿（4 新·203 全回归绿）+bs-001-v13 bilibili/douyin 双件重渲（层 1.8 双全 PASS+spec douyin 双 PASS/B站画幅 PASS+时长 FAIL=#14 在案口径+ai_feel 0 FAIL 0 WARN 同母版音轴）+MAD 逐像素验图（切点单帧全距跳 79-136·切前 0.0=零混合残留·fade 对照组连续渐变=两机制面对照成立）——E8 在案弱项闭环（live-A bilibili/v12 douyin 行欠账销账）。

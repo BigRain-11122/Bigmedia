@@ -18,8 +18,10 @@ AI-feel gate, layer 1.6). Spec: docs/editing-craft-spec.md v1.0.
   effect        hit beats <= profile cap; flash only where the profile
                 allows; hits must actually get the punch treatment.
   timeline      the edit layer must NOT shift beats: segment durations
-                must satisfy d_k = span_k + f_max (final +tail) and the
-                expected duration must cover every cue.
+                must satisfy d_k = span_k + incoming fade (cuts add 0;
+                final +tail) and the expected duration must cover every
+                cue. Hard cuts must blend NOTHING (fade_s = 0, true
+                concat splice - A3 2026-09-24).
 
 INDEPENDENCE LAW (group governance S10 defense #2): the spec constants
 below are deliberately NOT imported from render/edit_craft.py - the
@@ -48,9 +50,11 @@ ALIGN_MIN = 0.90         # >= this share of boundaries aligned to voice
 DUR_TOL_S = 0.05         # timeline preservation tolerance
 TAIL_MAX_S = 3.0         # expected duration may exceed last cue end by <=this
 MOVES = ("ken_in", "ken_out", "punch")
-HARD_CUT_MAX_S = 0.08    # xfade <= this reads as a hard cut (2-frame
-                         # 0.05s is the floor: sub-frame 0.001 EOFs the
-                         # xfade chain - bilibili render 2026-09-24)
+HARD_CUT_FADE_S = 0.0   # A3 true splice: a hard cut must blend NOTHING
+                         # (concat join). Any fade_s > 0 at a cut = the
+                         # retired 2-frame 0.05s approximation = FAIL.
+                         # (0.001s sub-frame was never legal either: it
+                         # EOFs the xfade chain - bilibili 2026-09-24)
 VISUAL_RATIO_MIN = 0.80  # footage-matching-spec S3: matched-beat share
 
 SPEC = {
@@ -220,10 +224,11 @@ def check(plan, cues, profile_name):
         findings.append(("FAIL", "transition-pool",
                          "off-vocabulary transitions: %s" % bad_pool))
     for c in cuts:
-        if float(c["fade_s"]) > HARD_CUT_MAX_S:
-            findings.append(("FAIL", "cut-too-slow",
-                             "hard cut fade %.3fs > %.2fs at t=%.3f"
-                             % (c["fade_s"], HARD_CUT_MAX_S, c["time_s"])))
+        if float(c["fade_s"]) != HARD_CUT_FADE_S:
+            findings.append(("FAIL", "cut-blended",
+                             "hard cut fade_s=%.3f != 0 at t=%.3f: cuts "
+                             "must be true concat splices, no blend frame"
+                             % (float(c["fade_s"]), c["time_s"])))
     prev = None
     for b in trans:
         if float(b["fade_s"]) < spec["fade_min_s"] or \
@@ -254,20 +259,23 @@ def check(plan, cues, profile_name):
         findings.append(("WARN", "tail-bloat",
                          "expected exceeds last cue end by %.3fs"
                          % (expected - max(e for _, e, _ in cues))))
-    f_max = float(plan.get("f_max_s", 0.0))
     tail = float(plan.get("tail_s", 0.0))
     ends = [0.0] + times + [float(plan.get("last_beat_end_s", 0.0))]
     for s in segs:
         k = s["idx"]
         span = ends[k + 1] - ends[k]
-        want = (span + f_max) if k < len(segs) - 1 else (span + tail + f_max)
+        # A3 algebra: incoming fade of seg k = boundary k (cuts add 0,
+        # seg 0 starts at 0); the old span+f_max blanket is retired
+        inc = float(bounds[k - 1]["fade_s"]) if 1 <= k <= len(bounds) else 0.0
+        want = span + inc + (tail if k == len(segs) - 1 else 0.0)
         if abs(s["dur_s"] - want) > DUR_TOL_S + 0.01:
             findings.append(("FAIL", "timeline-drift",
                              "segment %d dur %.3fs != algebra %.3fs"
                              % (k, s["dur_s"], want)))
     if segs and not any(f[1] == "timeline-drift" for f in findings):
         findings.append(("PASS", "timeline",
-                         "durations satisfy the xfade algebra (beats fixed)"))
+                         "durations satisfy the run algebra "
+                         "(fade chains + true-splice cuts, beats fixed)"))
     return findings
 
 

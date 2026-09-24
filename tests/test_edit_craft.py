@@ -81,18 +81,62 @@ class TestPlanner(unittest.TestCase):
             self.assertTrue(all(0 < b < 60.0 for b in bounds))
 
     def test_duration_algebra_preserves_beats(self):
-        # d_k = span_k + f_max (last: + tail), so xfade offsets keep beats
+        # A3: d_k = span_k + incoming fade (last: + tail); cuts add 0 -
+        # concat runs trim frame-exact, no f_max blanket needed
         for name in ec.PROFILES:
             plan = ec.plan_edit(self.cfg, name)
-            f_max = plan["f_max_s"]
             ends = [0.0] + [b["time_s"] for b in plan["boundaries"]] + \
                 [plan["last_beat_end_s"]]
             for s in plan["segments"]:
                 k = s["idx"]
                 span = ends[k + 1] - ends[k]
-                want = (span + f_max) if k < self.n - 1 else \
-                    (span + plan["tail_s"] + f_max)
+                inc = (plan["boundaries"][k - 1]["fade_s"]
+                       if 1 <= k <= len(plan["boundaries"]) else 0.0)
+                want = span + inc + (plan["tail_s"] if k == self.n - 1
+                                     else 0.0)
                 self.assertAlmostEqual(s["dur_s"], want, places=2)
+
+    def test_true_hard_cuts_blend_nothing(self):
+        # A3: cut fade_s must be exactly 0 - the retired 0.05s 2-frame
+        # approximation was the E8 review weak point
+        for name in ("bilibili", "douyin"):
+            plan = ec.plan_edit(self.cfg, name)
+            cuts = [b for b in plan["boundaries"] if b["type"] == "cut"]
+            self.assertTrue(cuts, name)
+            for c in cuts:
+                self.assertEqual(c["fade_s"], 0.0)
+            self.assertEqual(plan["hard_cut_s"], 0.0)
+
+    def test_boundaries_frame_quantized(self):
+        # concat splices land frame-exact only on the frame grid;
+        # odd-time cards quantize to it (max shift 1 frame = 33ms).
+        # Plan JSON keeps 3dp, so assert frame RECOVERABILITY via
+        # round() (the engine's own trim math), not raw exactness.
+        cfg = fixture_cfg()
+        for i, c in enumerate(cfg["cards"]):
+            c["start"] = i * 5 + 0.017
+            c["end"] = (i + 1) * 5 + 0.017
+        plan = ec.plan_edit(cfg, "douyin")
+        for b in plan["boundaries"]:
+            frames = b["time_s"] * ec.FPS
+            self.assertLess(abs(frames - round(frames)), 0.1)
+        self.assertGreaterEqual(plan["last_beat_end_s"], 11 * 5 + 0.017)
+        frames = plan["last_beat_end_s"] * ec.FPS
+        self.assertLess(abs(frames - round(frames)), 0.1)
+
+    def test_runs_split_only_at_cuts(self):
+        # fade chains build runs; cut boundaries are the concat seams
+        plan = ec.plan_edit(self.cfg, "douyin")
+        self.assertEqual([len(r) for r in
+                          ec.build_runs(self.n, plan["boundaries"])],
+                         [3, 2, 3, 2, 2])
+        plan_b = ec.plan_edit(self.cfg, "bilibili")
+        self.assertEqual([len(r) for r in
+                          ec.build_runs(self.n, plan_b["boundaries"])],
+                         [2] * 6)
+        plan_s = ec.plan_edit(self.cfg, "shipinhao")
+        self.assertEqual(ec.build_runs(self.n, plan_s["boundaries"]),
+                         [list(range(self.n))])
 
     def test_hits_deterministic_and_capped(self):
         for name, prof in ec.PROFILES.items():
@@ -194,6 +238,18 @@ class TestGate(unittest.TestCase):
         bad["segments"][2]["dur_s"] += 0.4
         f = self.findings(bad)
         self.assertEqual(f.get("timeline-drift"), "FAIL")
+
+    def test_cut_blend_regression_fails(self):
+        # A3 independence law: the executor regressing to the retired
+        # 0.05s 2-frame approximation must FAIL here, not pass silently
+        plan = ec.plan_edit(self.cfg, "bilibili")
+        self.assertTrue(any(b["type"] == "cut" for b in plan["boundaries"]))
+        for b in plan["boundaries"]:
+            if b["type"] == "cut":
+                b["fade_s"] = 0.05
+                break
+        f = {x[1]: x[0] for x in ecc.check(plan, self.cues, "bilibili")}
+        self.assertEqual(f.get("cut-blended"), "FAIL")
 
     def test_independence_constants_match_engine(self):
         # drift between engine profiles and gate SPEC must FAIL loudly:
