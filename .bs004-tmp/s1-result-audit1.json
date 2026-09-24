@@ -1,0 +1,7 @@
+{
+ "exit": 0,
+ "expert": "S1-script",
+ "material": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\data\\sources\\bs004\\s1-review-material.md",
+ "verdict": "### 违律清单\n1. **L15** | “按多数剧本，这是崩溃的一天。但门禁的职责不是放行，是拦假。”\n | 口语化表达过多，需保持系统日志体的机械风格。\n2. **L15** | “更狠的是：每批同场跑 20 条纯随机入场的假策略。” | 口语化表达\n，不符合机器叙述者要求。\n3. **L15** | “你刷到的『神策略』，有几个敢跟随机对照比？” | 口语化提问，不\n符合机器叙述者要求。\n\n### 总裁决\n稿件整体符合基本评审标准，但在机械风格和口语化表达方面有轻微违律，需调整为系\n统日志体叙述。",
+ "verdict_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\docs\\reviews\\expert-verdicts\\20260925-004440-S1-script.md"
+}
