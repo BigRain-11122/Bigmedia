@@ -1,0 +1,1 @@
+OK .bs001-dd-tmp\audio.mp3 -> .bs001-dd-tmp\asr-check.srt cues=100 dropped=0 audio_dur=472.60s model=medium-int8-cpu
