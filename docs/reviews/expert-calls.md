@@ -12,3 +12,5 @@
 | 2026-09-24 22:03 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220331-S1-script.md ｜ ### 违律清单 |
 | 2026-09-24 22:04 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220446-S1-script.md ｜ ### 违律清单 |
 | 2026-09-24 22:05 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220539-S1-script.md ｜ ### 违律清单 |
+| 2026-09-24 22:43 | S1-script | S1 编剧官（内容生产部） | data\sources\bs003\s1-review-material.md | 3 | FAIL ollama timeout (300s)——无判词（BS-003 S1 门首调·qwen2.5:14b 冷加载疑似）｜R175 手补行（工具只记成功调用·失败如实入账） |
+| 2026-09-24 22:48 | S1-script | S1 编剧官（内容生产部） | data\sources\bs003\s1-review-material.md | 3 | FAIL ollama timeout (300s)——无判词（复跑同型·ollama ps=服务在/队列空/模型未载=冷加载超窗定谳）｜R175 手补行 |
