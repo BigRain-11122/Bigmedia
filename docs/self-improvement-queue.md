@@ -9,7 +9,7 @@
 | # | 项 | 缺口锚 | 优先 | 状态 |
 |---|---|---|---|---|
 | A1 | B站深潜稿结构研究（3-15min 叙事框架调研→拍稿骨架·#14 前置件） | O-1043 审计+#14+规格前置律（B站时长窗） | **高**（开闸后即用） | **done 2026-09-24**（`research/bilibili-deepdive-structure-v1.md`：六段式+BS-001 深纵骨架 v0.1+三卡点） |
-| A2 | douyin profile 首件实渲+验图（三 profile 唯一无实证件） | editing-craft-spec §4 已定义无实证 | 中 | **claimed 2026-09-24 by bm-a session** |
+| A2 | douyin profile 首件实渲+验图（三 profile 唯一无实证件） | editing-craft-spec §4 已定义无实证 | 中 | **done 2026-09-24**（`bs-001-v12-douyin-9x16.mp4`：层 1.8 全 PASS+抖音窗双 PASS+五拍头白闪 YAVG 196 全中——三 profile 实证收官） |
 | A3 | 真直切渲染路（硬切=2 帧淡入近似→concat 直切·E8 弱项在案） | review-v12 E8 弱项 | 低 | open |
 | A4 | 标题工业化：平台标题 A/B 模板（对表公众号 5.3.3 误导标题红线） | user-research §3.5+M5 发布物清单 | 中 | **claimed 2026-09-24 by OS loop R166**（A3 顺延：低优先+edit_craft 渲染路径与已认领 A2 实证件碰撞·引擎升级后置于 A2 闭批） |
 | A5 | prep 批处理（--batch 目录模式·对位批手工 ×6 次的效率缺口） | C-29 执行实况 | 低 | open |
