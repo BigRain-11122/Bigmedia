@@ -14,3 +14,5 @@
 | 2026-09-24 22:05 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220539-S1-script.md ｜ ### 违律清单 |
 | 2026-09-24 22:43 | S1-script | S1 编剧官（内容生产部） | data\sources\bs003\s1-review-material.md | 3 | FAIL ollama timeout (300s)——无判词（BS-003 S1 门首调·qwen2.5:14b 冷加载疑似）｜R175 手补行（工具只记成功调用·失败如实入账） |
 | 2026-09-24 22:48 | S1-script | S1 编剧官（内容生产部） | data\sources\bs003\s1-review-material.md | 3 | FAIL ollama timeout (300s)——无判词（复跑同型·ollama ps=服务在/队列空/模型未载=冷加载超窗定谳）｜R175 手补行 |
+| 2026-09-24 23:18 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs003\s1-review-material.md | 0 | full text=expert-verdicts/20260924-231848-S1-script.md / ### 违律清单 (1500s wrapper: cold-load fix) |
+| 2026-09-24 23:29 | S1-script | S1 编剧官（内容生产部） | data\sources\bs003\s1-review-material.md | 0 | full text=expert-verdicts/20260924-232958-S1-script.md / ### 违律清单 (1500s wrapper: cold-load fix) |

@@ -2,11 +2,11 @@
 """S1 gate call for BS-003 (wrapper around call_expert internals).
 
 Why: call_expert.main() hard-binds a 300s subprocess timeout; on this
-machine a cold 9GB load plus long-prompt eval exceeds it (R175 x2 FAIL,
-R176 x1 auto-cancel). This wrapper reuses call_expert registry/prompt/
-verdict-archive/ledger-row code verbatim, and only raises the subprocess
-timeout to 1500s and detaches the run from the shell 5-min no-output
-guard (background invocation + result file). Same ollama CLI channel as
+machine a cold 9GB load plus long-prompt eval exceeds it (R175/R176 x1 auto-cancel). This wrapper reuses call_expert registry/prompt/
+call_model/verdict-archive/ledger-row code verbatim, and only raises the
+subprocess timeout to 1500s and detaches the run from the shell 5-min
+no-output guard (background invocation + result file). call_model now
+strips ollama ANSI stream codes (shared fix). Same ollama CLI channel as
 call_model. Result -> .bs003-tmp/s1-result.json. ASCII source; Chinese
 stays in data files (encoding law)."""
 import json
@@ -31,11 +31,7 @@ def main():
         (REPO / ex["prompt_file"]).read_text(encoding="utf-8"),
         Path(MATERIAL).read_text(encoding="utf-8"))
     try:
-        p = subprocess.run(["ollama", "run", ex["model"]],
-                           input=prompt.encode("utf-8"),
-                           capture_output=True, timeout=1500)
-        out = p.stdout.decode("utf-8", "replace")
-        code = p.returncode
+        code, out = ce.call_model(ex["model"], prompt, timeout=1500)
     except subprocess.TimeoutExpired:
         code, out = 3, ""
     result = {"exit": code, "expert": EXPERT_ID, "material": MATERIAL,

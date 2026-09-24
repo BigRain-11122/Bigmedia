@@ -22,6 +22,7 @@ Exit codes: 0 ok; 2 bad args / unknown expert / missing files;
             3 ollama call failed; 4 ledger append failed (verdict kept).
 """
 import json
+import re
 import subprocess
 import sys
 from datetime import datetime
@@ -32,6 +33,10 @@ REGISTRY = REPO / "data" / "experts" / "registry.json"
 LEDGER = REPO / "docs" / "reviews" / "expert-calls.md"
 VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
 DEFAULT_TIMEOUT = 300
+# ollama streams ANSI line-erase codes on slow generations (cold-load
+# case); without stripping they land verbatim in verdict archives
+# (2026-09-24 BS-003 S1 case).
+_ANSI_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
 
 
 def load_registry(path=REGISTRY):
@@ -62,7 +67,7 @@ def call_model(model, prompt, timeout=DEFAULT_TIMEOUT):
     p = subprocess.run(["ollama", "run", model],
                        input=prompt.encode("utf-8"),
                        capture_output=True, timeout=timeout)
-    out = p.stdout.decode("utf-8", "replace")
+    out = _ANSI_RE.sub("", p.stdout.decode("utf-8", "replace"))
     return p.returncode, out
 
 
