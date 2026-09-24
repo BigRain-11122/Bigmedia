@@ -1,0 +1,8 @@
+{
+ "exit": 0,
+ "expert": "S1-script",
+ "material": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\data\\sources\\bs004\\s1-review-material.md",
+ "verdict": "### 违律清单\n无\n\n### 总分\n10\n\n### 一句话总裁决\nPASS，稿件严格遵循了copy-craft规则，没有违律，量化数据溯源完整，文本结构符合\n要求。",
+ "note": "S1 v1.5 smoke (backlog #24): format validation on closed BS-004 v3 material, not a gate verdict",
+ "verdict_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\docs\\reviews\\expert-verdicts\\20260925-023121-S1-script.md"
+}
