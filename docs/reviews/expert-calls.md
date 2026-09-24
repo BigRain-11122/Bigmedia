@@ -9,3 +9,6 @@
 | 2026-09-24 11:06 | hot-intel | 热点情报官（情报部） | data\intel\daily\2026-09-24.md | 0 | 全文=expert-verdicts/20260924-110617-hot-intel.md ｜ ### 适配本赛道的 top3 热点 |
 | 2026-09-24 17:07 | S0-topic | S0 选题官（选题研究部） | research\viral-shortvideo-workflows-v1.md | 0 | 全文=expert-verdicts/20260924-170720-S0-topic.md ｜ ### 评审结果 |
 | 2026-09-24 21:39 | brand-taste | 品牌口味官（品牌文化部） | docs\persona-jason.md | 0 | 全文=expert-verdicts/20260924-213934-brand-taste.md ｜ ### 品牌偏离点清单 |
+| 2026-09-24 22:03 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220331-S1-script.md ｜ ### 违律清单 |
+| 2026-09-24 22:04 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220446-S1-script.md ｜ ### 违律清单 |
+| 2026-09-24 22:05 | S1-script | S1 编剧官（内容生产部） | data\sources\bs002\s1-review-material.md | 0 | 全文=expert-verdicts/20260924-220539-S1-script.md ｜ ### 违律清单 |
