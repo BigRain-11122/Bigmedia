@@ -5,6 +5,7 @@ output/*
 !output/analytics.md
 !output/reports/
 !output/renders/
+!output/finished.md
 data/assets/
 *.mp4
 *.mov
