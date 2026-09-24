@@ -1,0 +1,240 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "shipinhao",
+ "visual_mode": "matched",
+ "visual_ratio": 0.167,
+ "cards_only_beats": [
+  0,
+  1,
+  2,
+  3,
+  5,
+  7,
+  8,
+  9,
+  10,
+  11
+ ],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 5.6,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 2,
+   "time_s": 11.367,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 3,
+   "time_s": 16.933,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 4,
+   "time_s": 21.267,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 5,
+   "time_s": 25.867,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 6,
+   "time_s": 31.2,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 7,
+   "time_s": 36.9,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 41.567,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 9,
+   "time_s": 46.033,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 10,
+   "time_s": 50.333,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 11,
+   "time_s": 54.233,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 5.6,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u5f15\u64ce\u58f0\u660e\u62cd\uff1a\u5f15\u64ce\u7f16\u8f91\u5668\u5de5\u7a0b\u89c6\u56fe\u5b9e\u51b5=\u5f00\u7a97\u5b9e\u5f55\u6279\u5f85\u5f55\uff08\u771f\u9762\u677f\u5230\u4f4d\u524d cards-only \u9010\u62cd\u6ce8\u7406\u7531\u00b7\u00a72\uff09\uff1b\u9a7e\u9a76\u8231\u5f39\u7a97\u4e3a\u96c6\u56e2\u6c47\u62a5\u9762\u975e\u5f15\u64ce\u8bc1\u636e\uff0c\u907f\u7528",
+   "visual_source": null
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 6.047,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u7248\u672c\u53f7\u753b\u9762=\u5f15\u64ce\u7f16\u8f91\u5668 About/\u6a21\u5757\u914d\u7f6e\u9762\u677f\uff08\u5f00\u7a97\u5b9e\u5f55\u6279\u5f85\u5f55\uff09\uff1b\u6e90\u6c60\u65e0\u7248\u672c\u53f7\u754c\u9762\uff0c\u7eaf\u5b57\u5361\u951a\u70b9 1.10.3\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 5.847,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u300c\u771f\u5b9e\u4f7f\u7528\u300d\u76f4\u63a5\u8bc1\u636e=\u5f15\u64ce\u7f16\u8f91\u5668\u5b9e\u51b5\uff08\u5f00\u7a97\u5b9e\u5f55\u6279\u5f85\u5f55\uff09\uff1b\u9a7e\u9a76\u8231 HUD \u6570\u5b57\u4e0e\u672c\u62cd\u4e3b\u5f20\u65e0\u5bf9\u5e94\uff0c\u907f\u7528\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 4.613,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u8f6f\u8457\u8bc1\u4e66/\u8d26\u672c\u9762\u677f=\u5f00\u7a97\u5b9e\u5f55\u6279\u5019\u9009+BigMoney \u5185\u90e8\u4ef6\u5224\u654f\u611f\u7981\u7528\uff08R192 b31/b58 \u5148\u4f8b\uff09\uff1bHUD\u300c\u5f85\u5ba1 4 \u6b3e\u300d\u4e0e 8 \u6b3e\u6570\u5b57\u9519\u4f4d\u907f\u7528\uff1b\u7eaf\u5b57\u5361\u951a\u70b9 8/0\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 4.88,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4"
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 5.613,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u4e09\u7aef\u6a21\u5757\u914d\u7f6e\u9762\u677f=\u5f15\u64ce\u7f16\u8f91\u5668\u5b9e\u51b5\uff08\u5f00\u7a97\u5b9e\u5f55\u6279\u5f85\u5f55\uff09\uff1b\u6e90\u6c60\u65e0\u6a21\u5757\u914d\u7f6e\u753b\u9762\uff0c\u7eaf\u5b57\u5361\u951a\u70b9\u4e09\u7aef\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 5.98,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4"
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 4.947,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u4fee\u8f9e\u5224\u5b9a\u62cd\uff1a\u65e5\u5fd7\u5224\u5b9a\u4f53\u7531\u5b57\u5e55\u627f\u62c5\uff0c\u6e90\u6c60\u65e0\u5bf9\u5e94\u753b\u9762\uff0c\u7eaf\u5b57\u5361\uff08BS-005 b8 \u540c\u578b\u00b7\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 4.747,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u5baa\u6cd5/\u7ea6\u675f\u6587\u672c\u753b\u9762=\u5f00\u7a97\u5b9e\u5f55\u6279\u5019\u9009\uff08R193 \u5448\u62a5\u5df2\u542b\uff09\uff1b\u516c\u544a\u680f\u300c8 \u9879\u300d\u4e0e 12 \u6761\u6570\u5b57\u9519\u4f4d\u907f\u7528\uff1b\u7eaf\u5b57\u5361\u951a\u70b9 12\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 4.58,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u672c\u62cd\u5373\u300c\u6ca1\u6709\u6536\u5165\u6570\u636e\u300d\u7684\u8bda\u5b9e\u58f0\u660e\uff08\u672a\u4e0a\u7ebf=\u672a\u6d4b\u91cf\uff09\uff1a\u4efb\u4f55\u6570\u636e\u753b\u9762\u4e0e\u4e3b\u5f20\u76f8\u53cd\uff1bHUD \u00a50 \u4e3a\u6e38\u620f\u5185\u8ba1\u6570\u975e\u6536\u5165\u8bc1\u636e\uff0c\u907f\u7528\uff08\u00a72+\u8bda\u5b9e\u5f8b\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 4.18,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u7ed3\u6784\u7ed3\u8bba\u62cd\u4e3a\u5168\u7247\u8bba\u70b9\u6536\u675f\uff0c\u7eaf\u5b57\u5361\uff08BS-005 b11 \u540c\u578b\u00b7\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 4.913,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "CTA \u5e38\u89c4\u62cd\u7eaf\u5b57\u5361\uff08\u00a71\u00b7BS-002/BS-003/BS-004/BS-005 \u540c\u578b\u5148\u4f8b\uff09",
+   "visual_source": null
+  }
+ ],
+ "hits": [],
+ "f_max_s": 0.28,
+ "last_beat_end_s": 58.067,
+ "tail_s": 0.8,
+ "duration_expected_s": 58.867,
+ "hard_cut_s": 0.0
+}

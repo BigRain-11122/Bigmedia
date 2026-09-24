@@ -1,0 +1,197 @@
+{
+  "meta": {
+    "topic": "BS-005e",
+    "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs005e\\voiceover-v3.beats.txt",
+    "order": "D-BS-06 production open: BS-005e engine-enhanced shipinhao piece (N6-mapped 6th item, pillar-4 debut, F-007 target); v12 full-set default per D-BS-01; S1 v1.5 real-gate 10/10 PASS zero-flag on v1 material (R204 first-read, verdict 20260925-054444); air-budget mechanical cuts v1 65.68s -> v2 59.05s -> v3 58.05s in-window (1.95s margin, L15, card anchors intact, facts 8/0/1.10.3/12 intact); visual declarations probe-evidenced (biggame-cockpit 10-frame multi-timepoint scan R192); editor-panel live-record batch (b1/b2/b3/b6) pending = cards-only with per-beat reasons, declared expected state, S2 visual-ratio gate stays 0.80 (conflict-of-interest abstention, BS-005 precedent)",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "probe_note": "R192 biggame-cockpit 10-frame multi-timepoint scan: pixel campus + master-control popup stable full-length; R193 full window enumeration: no openable Biggame master-control window (Game window = UGit diff view, main screen = Tuanjie DemoScene, both non-game); editor-panel live-record batch = bm-a/CEO physical action pending (status line, no urging); until real panels land, engine-declaration beats stay cards-only per footage-matching-spec S2",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.6,
+      "lines": [
+        "引擎日志",
+        "8 款软著 · 全部国产引擎"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "引擎声明拍：引擎编辑器工程视图实况=开窗实录批待录（真面板到位前 cards-only 逐拍注理由·§2）；驾驶舱弹窗为集团汇报面非引擎证据，避用"
+      }
+    },
+    {
+      "start": 5.6,
+      "end": 11.36,
+      "lines": [
+        "版本在册",
+        "团结引擎 1.10.3"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "版本号画面=引擎编辑器 About/模块配置面板（开窗实录批待录）；源池无版本号界面，纯字卡锚点 1.10.3（§2）"
+      }
+    },
+    {
+      "start": 11.36,
+      "end": 16.93,
+      "lines": [
+        "性质判定",
+        "不是恰饭 · 真实使用"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "「真实使用」直接证据=引擎编辑器实况（开窗实录批待录）；驾驶舱 HUD 数字与本拍主张无对应，避用（§2）"
+      }
+    },
+    {
+      "start": 16.93,
+      "end": 21.25,
+      "lines": [
+        "账本盘点",
+        "8 款 · 0 元 · 版权证书一沓"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "软著证书/账本面板=开窗实录批候选+BigMoney 内部件判敏感禁用（R192 b31/b58 先例）；HUD「待审 4 款」与 8 款数字错位避用；纯字卡锚点 8/0（§2）"
+      }
+    },
+    {
+      "start": 21.25,
+      "end": 25.86,
+      "lines": [
+        "开发名单",
+        "总控机 + 分治机军团"
+      ],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+        "req": "窗口标题「Biggame·小游戏公司总控」+弹窗「2/3机并网」=总控机与分治机并网状态直接证据（探针 0-44s 全程在帧）；同源多用注记（b7 像素小镇同源·§3·BS-005 b5 同位先例）"
+      }
+    },
+    {
+      "start": 25.86,
+      "end": 31.2,
+      "lines": [
+        "产线实况",
+        "三端模块 · 微信小游戏",
+        "Windows",
+        "安卓"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "三端模块配置面板=引擎编辑器实况（开窗实录批待录）；源池无模块配置画面，纯字卡锚点三端（§2）"
+      }
+    },
+    {
+      "start": 31.2,
+      "end": 36.91,
+      "lines": [
+        "像素小镇",
+        "管理公司 = 放置游戏"
+      ],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+        "req": "像素园区+各部门楼宇+集团驾驶舱管理弹窗=「管理公司就是放置游戏」直接证据（探针 10 帧全程像素小镇经营态在帧）；同源多用注记（b5 总控同源·§3·BS-005 b7 同位先例）"
+      }
+    },
+    {
+      "start": 36.91,
+      "end": 41.58,
+      "lines": [
+        "不吹判定",
+        "不吹做不到 · 实况入册"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "修辞判定拍：日志判定体由字幕承担，源池无对应画面，纯字卡（BS-005 b8 同型·§2）"
+      }
+    },
+    {
+      "start": 41.58,
+      "end": 46.02,
+      "lines": [
+        "约束在册",
+        "12 条工程约束 · 红线先于创意"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "宪法/约束文本画面=开窗实录批候选（R193 呈报已含）；公告栏「8 项」与 12 条数字错位避用；纯字卡锚点 12（§2）"
+      }
+    },
+    {
+      "start": 46.02,
+      "end": 50.33,
+      "lines": [
+        "诚实交底",
+        "收入数据 : 未上线未测量"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "本拍即「没有收入数据」的诚实声明（未上线=未测量）：任何数据画面与主张相反；HUD ¥0 为游戏内计数非收入证据，避用（§2+诚实律）"
+      }
+    },
+    {
+      "start": 50.33,
+      "end": 54.23,
+      "lines": [
+        "结构结论",
+        "国产引擎 · 真做产品 · 如实播报"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "结构结论拍为全片论点收束，纯字卡（BS-005 b11 同型·§2）"
+      }
+    },
+    {
+      "start": 54.23,
+      "end": 58.05,
+      "lines": [
+        "交底+转发",
+        "完整拆解在公众号 · 想做独立游戏"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "CTA 常规拍纯字卡（§1·BS-002/BS-003/BS-004/BS-005 同型先例）"
+      }
+    }
+  ]
+}
