@@ -87,6 +87,12 @@ PROFILES = {
 HARD_CUT_S = 0.05       # 2-frame xfade ~= hard cut (0.001s sub-frame
                         # duration EOFs the chain - bilibili 2026-09-24
                         # render came out 11.2s, stopped at first cut)
+# platform duration windows (playbook single truth; pre-flight WARN so a
+# window breach surfaces BEFORE burning render minutes - platform spec
+# prelaw 2026-09-24. WARN not FAIL: the bilibili deep-dive (#14) knowingly
+# renders short until the content expansion is unsealed)
+PROFILE_WINDOW_S = {"shipinhao": (30, 60), "bilibili": (180, 900),
+                    "douyin": (15, 60)}
 INTER_S = 70.0          # looped footage intermediate length (s)
 SRC_OFF_MOD = 40.0      # per-segment source window offset modulus (s)
 PUNCH_FRAMES = 10       # 0.35s at 30fps punch-in ramp
@@ -437,6 +443,12 @@ def main(argv=None):
         return 2
 
     plan = plan_edit(cfg, args.profile)
+    win = PROFILE_WINDOW_S.get(args.profile)
+    if win and not (win[0] <= plan["duration_expected_s"] <= win[1]):
+        print("WARN duration %.2fs outside the %s window %d-%ds "
+              "(platform spec prelaw 2026-09-24 - fix the script budget "
+              "or the target platform, do not ship the breach)"
+              % (plan["duration_expected_s"], args.profile, win[0], win[1]))
     if plan.get("visual_mode") != "matched" and not args.bgvideo:
         print("FAIL bgvideo required for legacy (non-matched) cards")
         return 2

@@ -30,15 +30,25 @@ CHAIN = (
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="blur-pad vertical prep")
+    ap = argparse.ArgumentParser(description="blur-pad canvas prep")
     ap.add_argument("--in", required=True, dest="inp")
     ap.add_argument("--out")
     ap.add_argument("--fps", type=int, default=30)
+    ap.add_argument("--w", type=int, default=W,
+                    help="canvas width (platform spec prelaw 2026-09-24)")
+    ap.add_argument("--h", type=int, default=H,
+                    help="canvas height (16:9 targets: --w 1920 --h 1080)")
     args = ap.parse_args(argv)
+    w, h = int(args.w), int(args.h)
     src = Path(args.inp)
     if not src.exists():
         print("FAIL input not found: %s" % src)
         return 2
+    chain = ("[0:v]split=2[bg][fg];"
+             "[bg]scale=%d:%d:force_original_aspect_ratio=increase,"
+             "crop=%d:%d,gblur=sigma=28[b];"
+             "[fg]scale=%d:%d:force_original_aspect_ratio=decrease[f];"
+             "[b][f]overlay=(W-w)/2:(H-h)/2,setsar=1[v]" % (w, h, w, h, w, h))
     out = Path(args.out) if args.out else src.with_name(
         src.stem + "-vertical.mp4")
     if not args.out:
@@ -52,7 +62,7 @@ def main(argv=None):
         return 0
     out.parent.mkdir(parents=True, exist_ok=True)
     cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-           "-i", str(src), "-vf", CHAIN, "-r", str(int(args.fps)),
+           "-i", str(src), "-vf", chain, "-r", str(int(args.fps)),
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "19",
            "-pix_fmt", "yuv420p", str(out)]
     try:
