@@ -1,0 +1,685 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "dd-v1 bilibili 16:9 deepdive six-segment cut (#14, 69 beats, 472.58s in 3-15min window)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001-dd\\voiceover-dd-v1.beats.txt",
+    "order": "O-20260924-2126 D-BS-06 production run2 (bilibili deep-dive #14; S1 v1.5 gate 9/10 PASS R198)",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    },
+    "deepdive": {
+      "seg_gap_base_s": 2.0,
+      "seg_gap_spread_s": 0.4,
+      "window_s": 60.0,
+      "spoken_max_s": 54.5,
+      "interior_scale": 2.499999999999999,
+      "segment_boundaries_after_beat": [
+        6,
+        16,
+        40,
+        54,
+        62
+      ]
+    }
+  },
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 170,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 7.71,
+      "lines": ["①作死实验", "一个人类 · 61 分钟 · 三家公司"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "集团驾驶舱总控弹窗（作死实验主体=三公司总控汇报面）"
+      }
+    },
+    {
+      "start": 7.71,
+      "end": 14.23,
+      "lines": ["①结果预告", "8 款 · 0 元 · 432 全废"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "驾驶舱弹窗三行汇报（结果预告拍·游戏/金融/自媒体三行·8 款/0 元/432 数字以字卡为准）（同源注记）"
+      }
+    },
+    {
+      "start": 14.23,
+      "end": 21.38,
+      "lines": ["①全员构成", "一个人类 · 其余全是 AI"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-16x9.mp4",
+        "req": "观城台集团全景（一个人类+其余全是 AI=脑塔与自动化城市实况）"
+      }
+    },
+    {
+      "start": 21.38,
+      "end": 26.39,
+      "lines": ["①自指", "这条视频 · 我剪的"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-16x9.mp4",
+        "req": "本片剪辑网格（这条视频我剪的=制作实录自指）"
+      }
+    },
+    {
+      "start": 26.39,
+      "end": 33.44,
+      "lines": ["①留痕承诺", "片里的数字 · 全部可溯"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账文档（片里的数字全部可溯=台账留痕本体）"
+      }
+    },
+    {
+      "start": 33.44,
+      "end": 38.33,
+      "lines": ["①金句预埋", "一个人上班 · 三家公司开工"],
+      "visual": {
+        "cards-only": true,
+        "reason": "金句拍：留白打点，全屏字卡即画面（v12 口号拍先例）"
+      }
+    },
+    {
+      "start": 38.33,
+      "end": 45.81,
+      "lines": ["①本片承诺", "翻车一处不剪"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-16x9.mp4",
+        "req": "剪辑验图网格（翻车一处不剪=制作实录留痕）（同源注记）"
+      }
+    },
+    {
+      "start": 45.81,
+      "end": 54.44,
+      "lines": ["②自报家门", "三号公司 BigStream"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-16x9.mp4",
+        "req": "三号公司自产件（无工位无员工餐=本片即公司）（同源注记）"
+      }
+    },
+    {
+      "start": 54.44,
+      "end": 61.9,
+      "lines": ["②老板画像", "CEO Jason · 点完就走"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-16x9.mp4",
+        "req": "观城台脑塔区（CEO 指令光点=点完就走的决策面）（同源注记）"
+      }
+    },
+    {
+      "start": 61.9,
+      "end": 68.76,
+      "lines": ["②时间戳", "09-23 14:05 · 第一家并入"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（时间戳调出来=日志时间轴本体·左缘条带已裁 R197 观感建议落地）"
+      }
+    },
+    {
+      "start": 68.76,
+      "end": 76.15,
+      "lines": ["②61 分钟", "14:05 → 15:06"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 日志时间轴（14:05→15:06 骨架立完·日志可溯）（同源注记）"
+      }
+    },
+    {
+      "start": 76.15,
+      "end": 84.6,
+      "lines": ["②运转地基", "命令落台账 · 永不删除"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（命令落台账永不删除=日志滚动本体）（同源注记）"
+      }
+    },
+    {
+      "start": 84.6,
+      "end": 94.45,
+      "lines": ["②规则一", "未上线 = 未测量"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（未上线=未测量=台账纪律行在案）（同源注记）"
+      }
+    },
+    {
+      "start": 94.45,
+      "end": 101.24,
+      "lines": ["②规则二", "无来源 = 不发布"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（无来源不发布=判词留痕面）（同源注记）"
+      }
+    },
+    {
+      "start": 101.24,
+      "end": 105.45,
+      "lines": ["②规则三", "标题承诺 = 内容交付"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（标题承诺=内容交付=评审对表面）（同源注记）"
+      }
+    },
+    {
+      "start": 105.45,
+      "end": 111.6,
+      "lines": ["②规则四", "AIGC 显著标识"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "本帧 AIGC 标识即证据（依法显著标识常驻烧录·这条视频就是证据本身）（同源注记）"
+      }
+    },
+    {
+      "start": 111.6,
+      "end": 121.24,
+      "lines": ["②实验之问", "一个人能运转几家公司"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-16x9.mp4",
+        "req": "观城台机队全景（能同时运转几家公司=城市实况）（同源注记）"
+      }
+    },
+    {
+      "start": 121.24,
+      "end": 126.18,
+      "lines": ["③一号公司", "做游戏 · 预算为零"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "像素小镇+总控弹窗（一号公司=做游戏的本体画面·预算口径以字卡为准）"
+      }
+    },
+    {
+      "start": 126.18,
+      "end": 131.82,
+      "lines": ["③一号账本", "8 款软著 · 证书一沓"],
+      "visual": {
+        "cards-only": true,
+        "reason": "账本数字拍：HUD「待审 4 款」与「8 款软著」同域数字错位（数字错位避用律 R192）·软著证书无同位素材源，字卡即账本"
+      }
+    },
+    {
+      "start": 131.82,
+      "end": 139.54,
+      "lines": ["③一号成本", "零服务器 · 纯广告变现"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "像素小镇游戏面（零服务器纯广告的品类选型主体·成本模式以字卡为准）（同源注记）"
+      }
+    },
+    {
+      "start": 139.54,
+      "end": 149.48,
+      "lines": ["③一号翻车", "显卡生成线 · 空的"],
+      "visual": {
+        "cards-only": true,
+        "reason": "翻车实录拍：显卡生成线无实拍源（集团算力盘点=跨仓台账在册）·字卡如实挂账"
+      }
+    },
+    {
+      "start": 149.48,
+      "end": 155.48,
+      "lines": ["③一号点名", "总动员令 · 反面教材"],
+      "visual": {
+        "cards-only": true,
+        "reason": "点名拍：总动员令文本=集团 ledger 在册（跨仓只读）·本仓素材池无同位源"
+      }
+    },
+    {
+      "start": 155.48,
+      "end": 161.88,
+      "lines": ["③一号挂账", "未销账 · 下集对账"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（挂账在案·下集对账=台账留痕纪律）（同源注记）"
+      }
+    },
+    {
+      "start": 161.88,
+      "end": 168.95,
+      "lines": ["③一号彩蛋", "像素小镇 · 放置游戏"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "像素小镇大屏（管理游戏公司本身成放置游戏=直接对位）（同源注记）"
+      }
+    },
+    {
+      "start": 168.95,
+      "end": 172.24,
+      "lines": ["③一号梗位", "你玩它游戏 · 它玩它自己"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "像素小镇自指（你玩它游戏·它玩它自己）（同源注记）"
+      }
+    },
+    {
+      "start": 172.24,
+      "end": 180.66,
+      "lines": ["③二号公司", "炒股票 · 当天点火"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "驾驶舱金融汇报行（二号公司=量化主体·v12 同位先例）（同源注记）"
+      }
+    },
+    {
+      "start": 180.66,
+      "end": 185.64,
+      "lines": ["③二号第一批活", "432 个方案进回测"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（432 个方案进回测=公司运转面·数字以字卡为准）（同源注记）"
+      }
+    },
+    {
+      "start": 185.64,
+      "end": 191.53,
+      "lines": ["③二号全灭", "0 组过线"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（全灭判决主体·0 组以字卡为准）（同源注记）"
+      }
+    },
+    {
+      "start": 191.53,
+      "end": 198.33,
+      "lines": ["③二号开酒", "账本可查"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（开酒拍·v12 同位先例·账本可查=跨仓台账在册）（同源注记）"
+      }
+    },
+    {
+      "start": 198.33,
+      "end": 204.33,
+      "lines": ["③二号门禁", "不及格 · 不准上岗"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（诚实门禁=公司治理面·五道门细节以字卡为准）（同源注记）"
+      }
+    },
+    {
+      "start": 204.33,
+      "end": 212.16,
+      "lines": ["③二号修正", "五道门 · 拦 20 条假策略"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（立门修正=公司行为面·20 条以字卡为准）（同源注记）"
+      }
+    },
+    {
+      "start": 212.16,
+      "end": 219.52,
+      "lines": ["③二号过线件", "夏普 1.4 · 证书背面是回测"],
+      "visual": {
+        "cards-only": true,
+        "reason": "证书拍：注册证书+回测记录=BigMoney 内部件判敏感禁用（R192 先例）·数字以字卡如实"
+      }
+    },
+    {
+      "start": 219.52,
+      "end": 224.61,
+      "lines": ["③二号梗位", "432 换 1"],
+      "visual": {
+        "cards-only": true,
+        "reason": "梗位拍：432 换 1 弹幕互动位，字卡留白"
+      }
+    },
+    {
+      "start": 224.61,
+      "end": 233.85,
+      "lines": ["③三号公司", "就是我 · 三笔点名"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-16x9.mp4",
+        "req": "三号公司自产件（就是我=本片剪辑面·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 233.85,
+      "end": 240.24,
+      "lines": ["③三号第一批活", "11 分钟后 · 5 条选题全批"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（首批五条选题全批=选题审批行在案）（同源注记）"
+      }
+    },
+    {
+      "start": 240.24,
+      "end": 247.88,
+      "lines": ["③三号翻车", "文案很糟糕"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（「文案很糟糕」CEO 判词行在案=翻车实录）（同源注记）"
+      }
+    },
+    {
+      "start": 247.88,
+      "end": 251.2,
+      "lines": ["③三号二连击", "一点不好玩"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（「一点不好玩」二审打回判词在案）（同源注记）"
+      }
+    },
+    {
+      "start": 251.2,
+      "end": 257.6,
+      "lines": ["③三号评审团", "9 分线 · 首战 8 分"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（9 分线·首战 8 分=评分行在案）（同源注记）"
+      }
+    },
+    {
+      "start": 257.6,
+      "end": 265.11,
+      "lines": ["③三号笨办法", "改到第九版"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（一版一版改=多轮评审行在案）（同源注记）"
+      }
+    },
+    {
+      "start": 265.11,
+      "end": 274.33,
+      "lines": ["③三号第二个翻车", "桌面穿帮 · 编辑器+聊天窗"],
+      "visual": {
+        "cards-only": true,
+        "reason": "穿帮实录拍：污染帧=隐私面已裁净不可复用（R186/R196 修红）·字卡如实挂账"
+      }
+    },
+    {
+      "start": 274.33,
+      "end": 286.16,
+      "lines": ["③三号修法", "裁源 4.4 秒 · 四件重渲"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-16x9.mp4",
+        "req": "剪辑网格（裁源+验图新规+四件重渲=修法制作实录）（同源注记）"
+      }
+    },
+    {
+      "start": 286.16,
+      "end": 293.56,
+      "lines": ["④机制深潜", "三家共用一套 OS"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（三家共用一套 OS=系统本体）"
+      }
+    },
+    {
+      "start": 293.56,
+      "end": 303.32,
+      "lines": ["④第一件", "10 分钟循环 · 14:33 点火"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（10 分钟循环·14:33 点火=循环心跳行在案）（同源注记）"
+      }
+    },
+    {
+      "start": 303.32,
+      "end": 310.29,
+      "lines": ["④循环实录", "凌晨三点 · 任务板还在进账"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（凌晨三点任务板进账=日志实录·R5 04:03 在案）（同源注记）"
+      }
+    },
+    {
+      "start": 310.29,
+      "end": 317.28,
+      "lines": ["④第二件", "两台机器 · 同事制交账"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-16x9.mp4",
+        "req": "观城台机队面板（两台机器同事制交账=多机互见面·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 317.28,
+      "end": 323.83,
+      "lines": ["④甩锅修正", "甩锅甩得准"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 日志（甩锅甩得准=日志定位修正行）（同源注记）"
+      }
+    },
+    {
+      "start": 323.83,
+      "end": 330.4,
+      "lines": ["④第三件", "吹牛检测 · 当场对账"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（吹牛检测·当场对账=台账翻查面·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 330.4,
+      "end": 336.08,
+      "lines": ["④老板不除外", "每个承诺 · 有时间戳"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 日志（每个承诺跟时间戳=命令台账面）（同源注记）"
+      }
+    },
+    {
+      "start": 336.08,
+      "end": 344.33,
+      "lines": ["④第四件", "三级记忆 · 醒来先读"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（醒来先读记忆=每轮读档实录）（同源注记）"
+      }
+    },
+    {
+      "start": 344.33,
+      "end": 354.97,
+      "lines": ["④第五件", "进化引擎 · 每周日 09:17"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（每周日 09:17 进化引擎=周轮行在案）（同源注记）"
+      }
+    },
+    {
+      "start": 354.97,
+      "end": 359.69,
+      "lines": ["④人类否决权", "只留一只手"],
+      "visual": {
+        "cards-only": true,
+        "reason": "否决权拍：权面=正典条款（D-BS 七决否决窗在案）·无操作画面源，字卡即条款"
+      }
+    },
+    {
+      "start": 359.69,
+      "end": 362.96,
+      "lines": ["④梗位", "你司周会 · 它司立法"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（你司周会它司立法=S1 v1.5 评分制改造行在案·R190）（同源注记）"
+      }
+    },
+    {
+      "start": 362.96,
+      "end": 373.84,
+      "lines": ["④立法实例", "旧法 · 找不出违律不给分"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（旧法「找不出违律不给分」=三审 FAIL 判词档在案·R172）（同源注记）"
+      }
+    },
+    {
+      "start": 373.84,
+      "end": 381.41,
+      "lines": ["④新法首单", "基线 10 分 · 一次过门"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（基线 10 分一次过门=新法 10/10 PASS 行在案·R192）（同源注记）"
+      }
+    },
+    {
+      "start": 381.41,
+      "end": 389.32,
+      "lines": ["④屏幕演示", "画面 = 日志本体"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（画面=日志本体·不是动画的直接自指）"
+      }
+    },
+    {
+      "start": 389.32,
+      "end": 393.63,
+      "lines": ["⑤最大翻车", "432 全灭 · 完整版"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "驾驶舱金融汇报行（最大翻车主体回归·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 393.63,
+      "end": 398.68,
+      "lines": ["⑤回测现场", "引擎跑一整天 · 432 排队受审"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（回测引擎跑一整天=量化主体运转面）（同源注记）"
+      }
+    },
+    {
+      "start": 398.68,
+      "end": 401.52,
+      "lines": ["⑤判决", "一个词：全灭"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（全灭判决主体·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 401.52,
+      "end": 406.52,
+      "lines": ["⑤数据落账", "0 组过线 · 还在账本里"],
+      "visual": {
+        "cards-only": true,
+        "reason": "数据落账拍：BigMoney 账本=跨仓判敏感禁用·0 组过线行以字卡如实"
+      }
+    },
+    {
+      "start": 406.52,
+      "end": 411.59,
+      "lines": ["⑤审计现场", "老板首战 17 分钟"],
+      "visual": {
+        "cards-only": true,
+        "reason": "审计拍：老板首战 17 分钟=集团审计行（跨仓只读）·无同位素材源"
+      }
+    },
+    {
+      "start": 411.59,
+      "end": 419.16,
+      "lines": ["⑤剩余动作", "几百个 · 全是机队干的"],
+      "visual": {
+        "source": "data/sources/footage/looplog-16x9c.mp4",
+        "req": "OS 循环日志（几百个动作全是机队干的=动作流水在案）（同源注记）"
+      }
+    },
+    {
+      "start": 419.16,
+      "end": 425.97,
+      "lines": ["⑤开酒", "不是庆功"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-16x9.mp4",
+        "req": "金融汇报行（开酒拍·不是庆功·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 425.97,
+      "end": 431.81,
+      "lines": ["⑤弹幕引爆", "庆功还是浇愁"],
+      "visual": {
+        "cards-only": true,
+        "reason": "弹幕互动拍：庆功还是浇愁，字卡留白引弹幕"
+      }
+    },
+    {
+      "start": 431.81,
+      "end": 437.72,
+      "lines": ["⑥金句回环", "一个人上班 · 三家公司开工"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-16x9.mp4",
+        "req": "观城台全景回环（呼应开场·v12 同位）（同源注记）"
+      }
+    },
+    {
+      "start": 437.72,
+      "end": 444.64,
+      "lines": ["⑥如实交底", "账号 0 · 发布 0 · 粉丝 0"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（如实交底=台账纪律本体·账号 0/发布 0=发布锁 M5 在案）（同源注记）"
+      }
+    },
+    {
+      "start": 444.64,
+      "end": 450.63,
+      "lines": ["⑥干净起点", "不发愿景数字"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-16x9.mp4",
+        "req": "评审台账（干净起点=全片可溯的台账纪律·呼应留痕承诺拍）（同源注记）"
+      }
+    },
+    {
+      "start": 450.63,
+      "end": 459.25,
+      "lines": ["⑥系列钩", "三家公司的第一周"],
+      "visual": {
+        "cards-only": true,
+        "reason": "下集预告拍：《三家公司的第一周》未拍无素材源·字卡即预告"
+      }
+    },
+    {
+      "start": 459.25,
+      "end": 466.32,
+      "lines": ["⑥B站位", "关注 · 三连 · 充电"],
+      "visual": {
+        "cards-only": true,
+        "reason": "CTA 拍：行动指令留白，字卡即画面（v12 先例）"
+      }
+    },
+    {
+      "start": 466.32,
+      "end": 472.58,
+      "lines": ["⑥自指收尾", "本片 · 三号公司产品"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-16x9.mp4",
+        "req": "本片剪辑网格（生产·自审·交付=制作面收尾自指）（同源注记）"
+      }
+    }
+  ]
+}
