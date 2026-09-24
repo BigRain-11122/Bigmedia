@@ -50,5 +50,6 @@
 
 - S1 编剧官：**升裁放行毕（R185）**——audit3 4 旗全核驳（同判词互斥+自证伪差+结构误读+母稿事实）·返工 2/2 尽·实质改进已收（v2 三拍机械式+v3 b7 判定式）·后链不降档
 - 空气预算+TTS：**v6 定稿 58.73s（R185）**
-- S2/S3/E8/M4/成品库：未起链（随轮拆细：cards 对位表（五源探针先核画面实况·footage-matching-spec 默认素材兜底禁令）→R-E shipinhao 渲染→S2 三门→E8→M4→F-004）
+- S2 机检面：**全绿毕（R186）**——对位表 `cards-v1-matched.json` 落 req 前五源探针帧核画面实况（R186 发现：citywatch 源尾段 ~5-18s 录穿豆包聊天窗=隐私面·三件成品实锤→#23 扩面修红追记在 station-reviews；BS-004 规避=citywatch 仅 b3 拍 2.73s 全程落净窗）；对位率 10/12=83%（looplog×4/citywatch×1/editgrid×2/biggame-cockpit×1/reviewsdoc×2+cards-only×2[夏普拍=BigMoney 唯一源判敏感禁用·CTA+合规拍]）；R-E shipinhao 12 段 11 柔转场 0 硬切→bs-004-v1-shipinhao-60s.mp4（9:16 1080×1920·58.75s）；S2 三门=ai_feel 0 FAIL 0 WARN+层 1.8 六面 PASS+spec 微信视频号双 PASS（1.3s 余量）；抽帧验图 8 帧 b3 零录穿+语义对位+AIGC 水印全帧可读；引擎修红=R-E 首遇裸 %（「年化 3.8%」drawtext Stray %）→expansion=none 五处修+% 回归锁（217 全回归绿）
+- E8 终审/M4/成品库：**未走（下轮 R187）**——E8 八席（S2 席 ASR 事实词核验 R169 QC recipe 先跑+E4 参考仪异步）→M4→F-004 登记
 - 素材预判：量化主题=BigMoney 面素材**脱敏律加严**（footage-matching-spec §2 在案：渲染现持仓/总控画面判敏感禁用——BS-003 工牌二同型先例）；字卡锚点（432/3.8%/0 组/20 条/五道门）+looplog/reviewsdoc 源池外须先探针核验

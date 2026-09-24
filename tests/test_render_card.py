@@ -235,6 +235,25 @@ class TestPlanAndMatch(unittest.TestCase):
             plan = rcv.build_render_plan(cards_cfg(), cues, d)
             self.assertIn("C\\:/fake/font.ttc", plan["filter_text"])
 
+    def test_build_plan_percent_literal(self):
+        """BS-004 first hit: a bare % in card/sub/notice text must survive
+        the filtergraph. drawtext's default expansion mode parses % as a
+        %{} sequence start (ffmpeg "Stray %" exit); every drawtext runs
+        expansion=none (the plan never uses %{} features)."""
+        cfg = cards_cfg(cards=[{"start": 0, "end": 4, "lines": ["3.8%", "pct"]}],
+                        notice="AI generated 100%")
+        cues = [(0.0, 4.0, "best 3.8%")]
+        with tempfile.TemporaryDirectory() as d:
+            plan = rcv.build_render_plan(cfg, cues, d)
+            ft = plan["filter_text"]
+            self.assertEqual(ft.count("drawtext="),
+                             ft.count("drawtext=expansion=none:"))
+            self.assertNotIn("%{", ft)
+            joined = "\n".join(Path(p).read_text(encoding="utf-8")
+                              for p in plan["textfiles"])
+            self.assertIn("3.8%", joined)
+            self.assertIn("100%", joined)
+
     def test_grain_appends_noise_vignette_after_text(self):
         """O-20260923-2210-bm-a: grain>0 = film grain + vignette, appended
         after all text layers (never before them), and off by default."""

@@ -1,0 +1,195 @@
+{
+  "meta": {
+    "topic": "BS-004",
+    "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs004\\voiceover-v6.beats.txt",
+    "order": "D-BS-06 production open: BS-004 batch-1 shipinhao piece; v12 full-set default per D-BS-01; v6 beats = S1 escalated release (audit3 4 flags all refuted, rework 2/2 exhausted, R185) + air-budget 3 cuts v3 67.21s -> v6 58.73s in-window (1.2s margin, mechanical, facts intact)",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "probe_note": "R186 five-source probe before req: looplog/reviewsdoc/editgrid/biggame-cockpit stable full-length (no window switch); citywatch-vertical.mp4 tail (approx 5-18s) records through a Doubao chat window (privacy face, footage-matching-spec S2) - only the clean 0-4.4s watch-terminal window is usable; beat b3 (2.73s) stays entirely inside the clean window",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 4.44,
+      "lines": [
+        "庆功酒开瓶",
+        "432 全灭 · 0 组过线"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "BS-OSLoop 日志滚动+判定行可见（「系统日志：」开场的日志载体；同源多用注记）"
+      }
+    },
+    {
+      "start": 4.44,
+      "end": 9.51,
+      "lines": [
+        "全灭现场",
+        "最好一组 · 年化 3.8%"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "密集 FAIL/超时判定行可见（批量全灭判定现场的日志形态；同源多用注记）"
+      }
+    },
+    {
+      "start": 9.51,
+      "end": 15.45,
+      "lines": [
+        "门禁职责",
+        "剧本崩溃 · 日志拦假"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "健康检查/拦截判定行可见（门禁日志=拦截不放行的判定形态；同源多用注记）"
+      }
+    },
+    {
+      "start": 15.45,
+      "end": 18.18,
+      "lines": [
+        "全灭证门活",
+        "门还活着"
+      ],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "值守监控台运行态可见（门还活着=值守终端仍在运行的证据；本段 2.73s 全程落源前段值守净窗·源尾段录穿聊天窗已 R186 探针定界·段内不触及）"
+      }
+    },
+    {
+      "start": 18.18,
+      "end": 23.29,
+      "lines": [
+        "随机对照",
+        "20 条假策略 · 同场跑"
+      ],
+      "visual": {
+        "source": "data/sources/footage/editgrid-vertical.mp4",
+        "req": "多分镜格同框并列可见（多条目同场并列的网格形态·意象对位声明）"
+      }
+    },
+    {
+      "start": 23.29,
+      "end": 27.29,
+      "lines": [
+        "随机基线",
+        "样本外 · 夏普 1.4"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "样本外/夏普量化实况唯一源=BigMoney 总控（渲染探针帧现持仓/净值·判敏感禁用·footage-matching-spec §2 在案），纯字卡声明不造假素材（BS-003 工牌二同拍先例）"
+      }
+    },
+    {
+      "start": 27.29,
+      "end": 31.69,
+      "lines": [
+        "神策略判定",
+        "随机对照 · 不敢比"
+      ],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+        "req": "驾驶舱态势屏+行情计数条可见（「刷屏」屏幕表演态的驾驶舱意象·行情计数 0 项如实在帧=无业绩注脚·意象对位声明）"
+      }
+    },
+    {
+      "start": 31.69,
+      "end": 37.97,
+      "lines": [
+        "五道门",
+        "基线全灭→组合软化"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "流水线/工序阶段行可见（五道门=多道工序串联的流程形态·意象对位声明；同源多用注记）"
+      }
+    },
+    {
+      "start": 37.97,
+      "end": 42.14,
+      "lines": [
+        "注册证书",
+        "首批在册交易员"
+      ],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+        "req": "台账在册条目+日期行可见（在册=台账登记的证据形态；同源多用注记）"
+      }
+    },
+    {
+      "start": 42.14,
+      "end": 45.39,
+      "lines": [
+        "诚实标注",
+        "强到哪 · 死在哪"
+      ],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+        "req": "verdict+证据链接列可见（诚实标注=判定+证据链的台账形态；同源多用注记）"
+      }
+    },
+    {
+      "start": 45.39,
+      "end": 53.44,
+      "lines": [
+        "五句清单",
+        "照妖镜 · 开酒"
+      ],
+      "visual": {
+        "source": "data/sources/footage/editgrid-vertical.mp4",
+        "req": "分镜清单格并列可见（清单=逐条并列的网格形态；同源多用注记）"
+      }
+    },
+    {
+      "start": 53.44,
+      "end": 58.72,
+      "lines": [
+        "合规+转发",
+        "不构成投资建议 · 想学量化"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "CTA 导流拍常规纯字卡（footage-matching-spec §1·BS-002/BS-003 同拍先例）+量化合规拍纯字卡强化「不构成投资建议」声明"
+      }
+    }
+  ]
+}

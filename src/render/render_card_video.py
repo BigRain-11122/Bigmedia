@@ -240,6 +240,8 @@ def _q(p):
 def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
     """Build the drawtext filtergraph. Text bodies go through temp
     textfiles so multi-line CJK renders without escaping issues.
+    Every drawtext runs expansion=none: the default expansion mode
+    eats a bare % as a %{ sequence start (BS-004 "年化 3.8%" first hit).
 
     O-20260923-1937 visual-spec engine (backward compatible):
     - font section may carry h1_font/h1_size/h1_color/h2_size/h2_color/
@@ -305,7 +307,7 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
     else:
         chain = ["[0:v]"]
     chain.append(
-        "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+        "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
         ":alpha=0.8:x=48:y=48:line_spacing=%d"
         % (font_q, _q(aigc_p), int(font["aigc_size"]),
            _COLORS.get(spec["h2_color"], "white"), ls))
@@ -326,7 +328,7 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
             if alpha:
                 h1_extra = ":alpha=%s" % alpha
             chain.append(
-                "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+                "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
                 ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
                 % (h1f_q, _q(h1_body), h1_size, _COLORS.get(spec["h1_color"], "white"),
                    ls, h1_y, start, end, h1_extra))
@@ -340,7 +342,7 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
                 if alpha:
                     h2_extra = ":alpha=%s" % alpha
                 chain.append(
-                    "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
+                    "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
                     ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
                     % (font_q, _q(h2_body), h2_size,
                        _COLORS.get(spec["h2_color"], "white"),
@@ -351,7 +353,7 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
                 wrap_for_width(x, size, frame_w) for x in c["lines"])
             body = textfile(body_text, "card%02d.txt" % i)
             chain.append(
-                "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
+                "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
                 ":line_spacing=%d:x=(w-text_w)/2:y=(h-text_h)/2"
                 ":enable='between(t,%.3f,%.3f)'"
                 % (font_q, _q(body), size, ls, start, end))
@@ -359,7 +361,7 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
         body = textfile(wrap_for_width(t, int(font["subs_size"]), frame_w),
                         "cue%03d.txt" % j)
         chain.append(
-            "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
+            "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
             ":line_spacing=%d:x=(w-text_w)/2:y=h-%d:enable='between(t,%.3f,%.3f)'"
             % (font_q, _q(body), int(font["subs_size"]), ls, subs_bottom, s, e))
     if grain and int(grain) > 0:
