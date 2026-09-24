@@ -37,6 +37,7 @@
 - 情报日报（O-20260923-2304-bm-a 情报部）：当日 `data/intel/daily/YYYY-MM-DD.md` 缺失=先跑 `python src/intel/daily_brief.py` 补产一份再干别的（零 key 零 token·采集失败如实入报不恋战）；已有=不重跑（当日一份为真相）
 - 专职专家随时调用（O-20260924-1033-bm-a）：需要部门专家意见时一键调 `python src/call_expert.py --expert <id> --material <材料文件>`（名册=`docs/expert-roster.md`·八部门 11 席·本地 Ollama 零 token·调用自动落 expert-calls 台账）——按需调用不排队·测试件抽样调·进链件环节门必调
 - 待决催办律（O-20260924-1043 审计整改 T1）：PLAN §7 待决项或放行候选**超 48 小时无动静**=台账轮在 state.json log 提一行催办（留痕不弹窗·同一项只催一次·已有催办行的不二催）
+- 周自审（O-20260924-1057 周期自审令·os-protocol §7）：当周 `docs/audits/<ISO周>-self-audit.md` 缺失=任意轮补产——先跑 `python src/os/self_audit.py` 出数据包（零 token），再按其「判读层清单」五项填周报告（三维健康/机制漂移/效率度量/整改复查/假设登记·深审框架=audits/2026-09-24-company-audit.md·深审=CEO 令触发不每周做）；已有=不重跑；连续两期同缺口=升级 PLAN §7
 
 【发布边界】内容生成=仅限产线测试（单件过链·标「测试件·非成品」）；批量生成（N=6）暂缓待 CEO 令；发布（M5）仍须账号（CEO 物理件）+M4 合规门全绿+AIGC 显著标识；未上线=未测量。
 

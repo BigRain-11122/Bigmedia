@@ -39,6 +39,7 @@
 | C-22 | 平台规格门（platform_spec_check） | 工程技术部 | live | `python src/platform_spec_check.py --video FILE --platform NAME`（M4 层 1.7·时长实测红线工具化）——ffprobe 时长/画幅 vs `docs/platform-playbook.md` 规格表**实解析**（单一真相零漂移·多画幅平台/无时长窗平台=INFO）；10 单测绿·首战舰队体检 14 件：视频号线 9 PASS+2 时长超窗在案（v5 60.58s/v10 64.06s）+**B站三件全低于 3-15min 窗=B站纵深格式重制定位修正（backlog #14）**；v9 仅 0.7s 余量=空气预算律（L15）必要性再证 |
 | C-23 | 情报日报采集器（daily_brief） | 情报部 | live | `python src/intel/daily_brief.py`（O-20260923-2304-bm-a·零 key 零 token）——B站热门 API+知乎热榜 API 双源实采（2026-09-23 带浏览器 UA 实测双通·B站此前 412 风控在案·带 UA 后通）；日报=`data/intel/daily/YYYY-MM-DD.md`（重跑=当日最新真相）·四路赋能（S0 选题弹药/copy-craft 校准/评审 rubric/S4 风险雷达）·负结果如实入报（零断言）；6 解析单测绿·首份日报 20 条实采在案；循环接线=当日缺任意轮补产（任务书铁律区）——**无人值守实证：2026-09-24 日报由 OS 循环夜间自动产出** |
 | C-24 | 专职专家调用器（call_expert） | 全部门（工程技术部供工具） | live | `python src/call_expert.py --expert <id> --material <文件>`（O-20260924-1033-bm-a）——八部门 11 席名册（`docs/expert-roster.md`·registry+提示词外置数据件）·本地 Ollama 零 token·**UTF-8 子进程管道=PS5.1 GBK 管道乱码坑根治**（09-23 原生管道实证）·调用自动落 `docs/reviews/expert-calls.md` 台账（行级追加）；6 单测绿·首调实证=hot-intel×2026-09-24 日报（赛道 top3+红线预警+一句话结论·expert-calls 在案） |
+| C-25 | 周自审数据包（self_audit） | 总裁办公室（循环归口执行） | live | `python src/os/self_audit.py`（O-20260924-1057 周期自审令·os-protocol §7）——零 token 自动采集：三探针+state/backlog/orders/环节台账/renders 盘账/全量测试/git 7 日→`docs/audits/packs/<ISO周>-pack.md`；判读层=循环轮按五清单填 `docs/audits/<ISO周>-self-audit.md`（当周缺=任意轮补产·与日情报报同款触发律）；4 单测绿·首期 W39 数据包+报告在案（首跑路径 bug=REPO parents 少一级→src\docs 误落·同 daily_brief 型坑当场修——**src/ 下建仓根引用件必须 parents[2] 起步**·两案实证入工程教训） |
 
 ## §3 能力建设循环
 
@@ -61,5 +62,6 @@
 - 2026-09-23: v1.12 调研定谳批（OS 循环 R22）——C-18 市场线引用升 v1.6：P4 小红书 h5 terms 通道四探针深挖定谳=纯 React SPA 壳（服务端零正文）+三 bundle 解包（main=内部 OA 端点·vendor grep 零命中）→运行时 fetch·静态层不可采（负结果如实入账·research §6 P4 通道收窄）。live×15 不变。
 - 2026-09-23: v1.15 情报部批（CEO 令 O-20260923-2304-bm-a）——C-23 `daily_brief.py` 入册 live（零 key 双源热榜采集·首份日报 20 条实采）+**情报部编制成立**（org-structure v2.0 七部一办→八部一办）+顶层设计统摄件（BLUEPRINT v1.0）。live×18。
 - 2026-09-24: v1.16 专职专家批（CEO 令 O-20260924-1033-bm-a）——C-24 `call_expert.py` 入册 live（八部门 11 席名册+一键调用+调用台账+UTF-8 管道修复·首调 hot-intel 实证）+名册正典 `docs/expert-roster.md` v1.0；循环任务书接线（按需调用纪律）。live×19。
+- 2026-09-24: v1.17 周期自审批（CEO 令 O-20260924-1057-bm-a）——C-25 `self_audit.py` 入册 live（周自审数据包零 token+判读五清单·os-protocol §7 立法）+首期 W39 数据包与报告在案+BLUEPRINT §7 节律行+任务书接线（当周缺任意轮补产）。live×20。
 - 2026-09-23: v1.13 人味机制批（O-20260923-2210-bm-a）——C-21 去 AI 感人味链入册 live：`--human` 种子化配音微抖动+呼吸间隙+呼吸声+房间底噪、`--grain/--bg` 画面质感层、`ai_feel_check.py` 四指纹机检门（M4 层 1.6·首战 v9 FAIL→v10 PASS）；规格=human-feel-spec.md。live×16。
 - 2026-09-23: v1.14 平台规格门批（O-2210 自治续）——C-22 `platform_spec_check.py` 入册 live（M4 层 1.7·时长实测红线工具化·playbook 实解析单一真相）；首战舰队体检=B站三件低于 3-15min 窗→B站纵深格式重制定位修正（backlog #14）。live×17。
