@@ -51,7 +51,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from render_card_video import (  # noqa: E402  (battle-tested R-A pieces)
-    load_cards, parse_srt, build_render_plan)
+    load_cards, parse_srt, build_render_plan, fc_args)
 
 # -- platform taste profiles (editing-craft-spec S4; hypotheses, M6) ------
 # pattern: per-boundary True=transition False=hard cut (cycled k=1..n-1)
@@ -458,7 +458,9 @@ def compose(cfg, cues, edited, audio, out_path, grain, duration):
                "-i", str(edited)]
         if audio:
             cmd += ["-i", str(audio)]
-        cmd += ["-filter_complex", plan["filter_text"], "-map", "[v]"]
+        # long decks blow the CreateProcess 32K cmdline cap (R199,
+        # BS-001-DD): fc_args swaps to -/filter_complex <file> transport
+        cmd += fc_args(plan["filter_text"], tmpdir) + ["-map", "[v]"]
         if audio:
             cmd += ["-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-shortest"]
         cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "20",

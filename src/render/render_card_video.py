@@ -386,6 +386,26 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
     }
 
 
+# CreateProcess caps lpCommandLine at 32767 chars. A compose-stage graph
+# is one argv element, so long decks blow the cap: BS-001-DD (69 beats,
+# 208 drawtext entries) measured 74825 filter chars / 75119 cmdline chars
+# and CreateProcess refused the spawn (surfaced as FileNotFoundError,
+# R199). Threshold leaves ~4.7K headroom for the rest of the argv.
+FC_INLINE_LIMIT = 28000
+
+
+def fc_args(filter_text, tmpdir):
+    """Transport for the compose graph: inline -filter_complex while the
+    command line fits, else -/filter_complex <file> (the generic
+    read-option-value-from-file syntax, which this 9.0.1 gyan build
+    supports even though it dropped -filter_complex_script)."""
+    if len(filter_text) < FC_INLINE_LIMIT:
+        return ["-filter_complex", filter_text]
+    fc_file = Path(tmpdir) / "fc.txt"
+    fc_file.write_text(filter_text, encoding="utf-8")
+    return ["-/filter_complex", str(fc_file)]
+
+
 def voiceover_matches(voiceover_text, cues):
     return norm_text(voiceover_text) == norm_text("".join(t for _, _, t in cues))
 
@@ -514,8 +534,10 @@ def main(argv=None):
             cmd += ["-i", str(audio_path)]
         # NB: this ffmpeg build (9.0.1 gyan full) dropped
         # -filter_complex_script, so the graph goes inline as one argv
-        # element (pure ASCII, no shell quoting involved via subprocess).
-        cmd += ["-filter_complex", plan["filter_text"], "-map", "[v]"]
+        # element (pure ASCII, no shell quoting involved via subprocess)
+        # while it fits the CreateProcess 32K cap; long decks switch to
+        # -/filter_complex <file> via fc_args (R199, BS-001-DD first hit).
+        cmd += fc_args(plan["filter_text"], tmpdir) + ["-map", "[v]"]
         if audio_path is not None:
             cmd += ["-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-shortest"]
         if args.bgvideo:

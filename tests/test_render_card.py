@@ -316,6 +316,60 @@ class TestPosterTime(unittest.TestCase):
                                places=3)
 
 
+class TestFcArgs(unittest.TestCase):
+    """Compose-graph transport (R199): inline -filter_complex while the
+    command line fits the CreateProcess 32K cap; long decks (BS-001-DD
+    69 beats / 208 drawtext entries = 74825 chars) swap to
+    -/filter_complex <file> (this 9.0.1 gyan build dropped
+    -filter_complex_script; the generic -/<opt> <file> syntax survives)."""
+
+    def test_short_inline(self):
+        args = rcv.fc_args("[0:v]null[v]", ".")
+        self.assertEqual(["-filter_complex", "[0:v]null[v]"], args)
+
+    def test_boundary_inline(self):
+        # threshold is an exclusive cap: len == limit still overflows
+        # headroom, so exact-limit text goes to the file transport
+        import tempfile as tf
+        d = Path(tf.mkdtemp(prefix="bsrcv-fcb-"))
+        try:
+            text = "a" * rcv.FC_INLINE_LIMIT
+            args = rcv.fc_args(text, d)
+            self.assertEqual(["-/filter_complex", str(d / "fc.txt")], args)
+            self.assertTrue((d / "fc.txt").exists())
+        finally:
+            import shutil
+            shutil.rmtree(d, ignore_errors=True)
+
+    def test_long_file_transport_roundtrip(self):
+        import tempfile as tf
+        d = Path(tf.mkdtemp(prefix="bsrcv-fc-"))
+        try:
+            text = "x" * (rcv.FC_INLINE_LIMIT + 1)
+            args = rcv.fc_args(text, d)
+            self.assertEqual(2, len(args))
+            self.assertEqual("-/filter_complex", args[0])
+            self.assertEqual(d / "fc.txt", Path(args[1]))
+            self.assertEqual(text, (d / "fc.txt").read_text(encoding="utf-8"))
+        finally:
+            import shutil
+            shutil.rmtree(d, ignore_errors=True)
+
+    def test_real_dd_scale_uses_file(self):
+        # scale regression lock: a 69-beat-scale graph (74K chars measured
+        # on the real DD deck, R199) must take the file transport
+        text = "drawtext=..." * 18700  # ~74800 chars
+        import tempfile as tf
+        d = Path(tf.mkdtemp(prefix="bsrcv-fc2-"))
+        try:
+            args = rcv.fc_args(text, d)
+            self.assertEqual("-/filter_complex", args[0])
+            self.assertGreater(rcv.FC_INLINE_LIMIT, 20000)
+        finally:
+            import shutil
+            shutil.rmtree(d, ignore_errors=True)
+
+
 def _tmp_srt(content):
     import tempfile as tf
     d = tf.mkdtemp(prefix="bsrcv-test-")
