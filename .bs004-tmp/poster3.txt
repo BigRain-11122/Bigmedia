@@ -1,0 +1,38 @@
+ found on PATH")
+            return 3
+        if probe.returncode != 0:
+            print("FAIL ffprobe exit %d" % probe.returncode)
+            return 4
+        if args.poster:
+            poster_path = Path(args.poster)
+            poster_path.parent.mkdir(parents=True, exist_ok=True)
+            t_poster = poster_time(cfg)
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-ss", "%.3f" % t_poster, "-i", str(out_path),
+                   "-frames:v", "1", str(poster_path)]
+            try:
+                run = subprocess.run(cmd, capture_output=True, text=True)
+            except FileNotFoundError:
+                print("FAIL ffmpeg not found on PATH")
+                return 3
+            if run.returncode != 0 or not poster_path.exists():
+     
+=====
+         return 4
+        if args.poster:
+            poster_path = Path(args.poster)
+            poster_path.parent.mkdir(parents=True, exist_ok=True)
+            t_poster = poster_time(cfg)
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-ss", "%.3f" % t_poster, "-i", str(out_path),
+                   "-frames:v", "1", str(poster_path)]
+            try:
+                run = subprocess.run(cmd, capture_output=True, text=True)
+            except FileNotFoundError:
+                print("FAIL ffmpeg not found on PATH")
+                return 3
+            if run.returncode != 0 or not poster_path.exists():
+                print("FAIL poster export exit %d" % run.returncode)
+                print(run.stderr[-800:])
+                return 4
+      

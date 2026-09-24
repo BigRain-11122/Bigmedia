@@ -1,0 +1,12 @@
+subtitles, persistent AIGC notice). Pure local, zero install: only needs
+    --cards      JSON timeline template: video/font/aigc_notice/tail/cards[]. Required.
+    AIGC notice is a red line (CONSTITUTION S2-4): a cards file without a
+    non-empty aigc_notice is refused (exit 2) and the notice is burned
+    for key in ("video", "font", "aigc_notice", "cards"):
+    notice = str(cfg["aigc_notice"]).strip()
+        raise ValueError("aigc_notice is empty - AIGC labeling is a red line"
+        ("font", ("file", "cards_size", "subs_size", "aigc_size", "subs_bottom")),
+    aigc_p = textfile(str(cfg["aigc_notice"]).strip(), "aigc.txt")
+        % (font_q, _q(aigc_p), int(font["aigc_size"]), ls))
+    (visual-spec S4), so t=0 carries background + AIGC notice only.
+                    help="pure-documentary cut: AIGC notice + subs only")

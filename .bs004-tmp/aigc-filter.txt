@@ -1,0 +1,33 @@
+n).
+        return ("'if(lt(t,%.3f),0,if(lt(t,%.3f),(t-%.3f)/%.3f,"
+                "if(lt(t,%.3f),1,if(lt(t,%.3f),(%.3f-t)/%.3f,0))))'"
+                % (start, f, start, ms, g, end, end, ms))
+
+    aigc_p = textfile(str(cfg["aigc_notice"]).strip(), "aigc.txt")
+    ends = [e for _, e, _ in cues] + [float(c["end"]) for c in cfg["cards"]]
+    duration = max(ends) + float(cfg.get("tail", 0.5))
+
+    if bg_video:
+        # real-footage head: scale the recorded background to the frame.
+        # NB: chain[0] "[0:v]" feeds the NEXT element directly (filtergraph
+        # label shorthand - a comma after the label would read as an empty
+        # filter name), so scale enters the chain as element #1.
+        frame_w = int(cfg["video"]["width"])
+        frame_h = int(cfg["video"]["height"])
+        chain = ["[0:v]", "scale=%d:%d,setsar=1" % (frame_w, frame_h)]
+    else:
+        chain = ["[0:v]"]
+    # 2026-09-25 #23 v14: notice contrast one notch up - gray60@0.8
+    # read as near-invisible over live footage (cover-verify verdict,
+    # schedule.md registration); dedicated white@0.9, decoupled from
+    # h2_color (O-1115 0.6->0.8 history in git).
+    chain.append(
+        "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
+        ":alpha=0.9:x=48:y=48:line_spacing=%d"
+        % (font_q, _q(aigc_p), int(font["aigc_size"]), ls))
+    for i, c in enumerate(cfg["cards"]):
+        start, end = float(c["start"]), float(c["end"])
+        alpha = fade_alpha(start, end)
+        if spec["h1_font"] and c.get("lines"):
+            h1_text = str(c["lines"][0]).strip()
+ 

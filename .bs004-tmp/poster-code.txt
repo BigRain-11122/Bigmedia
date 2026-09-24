@@ -1,0 +1,28 @@
+IGC notice). Pure local, zero install: only needs
+ffmpeg on PATH. CPU-only encode (libx264), no VRAM contention - safe to
+run beside the Ollama resident models (shared-machine etiquette S2).
+
+Usage:
+    python src/render/render_card_video.py --cards data/sources/bs001/cards.json
+    python src/render/render_card_video.py --cards ... --dry-run     # plan only
+    python src/render/render_card_video.py --cards ... --audio a.wav # mux voice
+    python src/render/render_card_video.py --cards ... --strict      # srt/voiceover mismatch = FAIL
+    python src/render/render_card_video.py --cards ... --poster c.png # + cover frame PNG
+
+Inputs (defaults resolve next to the cards file):
+    --cards      JSON timeline template: video/font/aigc_notice/tail/cards[]. Required.
+    --srt        subtitles; default <cards dir>/subs.srt
+    --voiceover  plain-text script; default <cards dir>/voiceover.txt
+                 (consistency check: SRT text must equal voiceover text
+                 after whitespace normalization; mismatch = WARN, or FAIL
+                 with --strict)
+
+Laws enforced:
+    AIGC notice is a red line (CONSTITUTION S2-4): a cards file without a
+    non-empty aigc_notice is refused (exit 2) and the notice is burned
+    into every frame for the full duration.
+    Encoding rule: this script is pure ASCII. Chinese lives only in the
+    UTF-8 data files it consumes (cards.json / srt / txt).
+
+Exit codes: 0 ok; 2 validation/red-line error; 3 ffmpeg/ffprobe missing;
+            4

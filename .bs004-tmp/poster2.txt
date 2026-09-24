@@ -1,0 +1,50 @@
+.returncode != 0 or not poster_path.exists():
+                print("FAIL poster export exit %d" % run.returncode)
+                print(run.stderr[-800:])
+                return 4
+            print("poster: %s (cover frame at t=%.3fs)"
+                  % (poster_path, t_poster))
+        size_kb = out_path.stat().st_size // 1024
+        print("OK %s" % out_path)
+        print("cards=%d cues=%d duration=%.3fs size=%dKB"
+              % (len(cfg["cards"]), len(cues), plan["duration"], size_kb))
+        print(probe.stdout.strip())
+        return 0
+    finally:
+        shutil.rmtree(tmpdir, ignor
+=====
+    print("FAIL poster export exit %d" % run.returncode)
+                print(run.stderr[-800:])
+                return 4
+            print("poster: %s (cover frame at t=%.3fs)"
+                  % (poster_path, t_poster))
+        size_kb = out_path.stat().st_size // 1024
+        print("OK %s" % out_path)
+        print("cards=%d cues=%d duration=%.3fs size=%dKB"
+              % (len(cfg["cards"]), len(cues), plan["duration"], size_kb))
+        print(probe.stdout.strip())
+        return 0
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+
+if __name__ == "__main__":
+    sys.exit(m
+=====
+ poster export exit %d" % run.returncode)
+                print(run.stderr[-800:])
+                return 4
+            print("poster: %s (cover frame at t=%.3fs)"
+                  % (poster_path, t_poster))
+        size_kb = out_path.stat().st_size // 1024
+        print("OK %s" % out_path)
+        print("cards=%d cues=%d duration=%.3fs size=%dKB"
+              % (len(cfg["cards"]), len(cues), plan["duration"], size_kb))
+        print(probe.stdout.strip())
+        return 0
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

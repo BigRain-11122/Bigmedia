@@ -1,0 +1,22 @@
+def poster_time(cfg):
+    """Cover-frame timestamp for --poster (audit O-1043 R1, backlog #16).
+
+    A literal t=0 frame is a poor cover: cards fade in over 150ms
+    (visual-spec S4), so t=0 carries background + AIGC notice only.
+    The cover frame = the first card at FULL opacity; an ultra-short
+    first card falls back to mid-card; a no-cards documentary cut has
+    no better moment than the literal first frame (t=0).
+    """
+    cards = cfg.get("cards") or []
+    if not cards:
+        return 0.0
+    first = cards[0]
+    s, e = float(first["start"]), float(first["end"])
+    t = s + 0.15
+    if e <= t:
+        t = (s + e) / 2.0
+    return t
+
+
+def main(argv=None):
+    ap = argparse.Argume

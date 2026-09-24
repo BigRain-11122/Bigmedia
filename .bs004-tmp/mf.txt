@@ -1,0 +1,6 @@
+{
+ "readiness_renders_ok": "readiness/renders_ledger_ok.md",
+ "readiness_renders_bare": "readiness/renders_ledger_bare.md",
+ "readiness_renders_stale": "readiness/renders_ledger_stale.md",
+ "readiness_renders_product": "readiness/renders_ledger_product.md"
+}

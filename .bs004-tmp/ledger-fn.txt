@@ -1,0 +1,33 @@
+ts/test_readiness.py
+"""
+import contextlib
+import io
+import json
+import shutil
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
+
+import readiness  # noqa: E402
+
+FIXTURES = Path(__file__).resolve().parent / "fixtures"
+MANIFEST = json.loads((FIXTURES / "manifest.json").read_text(encoding="utf-8"))
+
+
+def ledger(key):
+    return FIXTURES / MANIFEST[key]
+
+
+def make_dir(case, prefix):
+    d = Path(tempfile.mkdtemp(prefix=prefix))
+    case.addCleanup(shutil.rmtree, d, ignore_errors=True)
+    return d
+
+
+def make_drafts(case, spec):
+    """spec = [(filename, GATE verdict or None)] -> drafts dir."""
+  
