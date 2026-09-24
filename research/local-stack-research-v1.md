@@ -1,4 +1,4 @@
-# 本地生产能力环境·技术调研 v1.2（local-stack-research）
+# 本地生产能力环境·技术调研 v1.3（local-stack-research）
 
 > CEO 令 O-20260923-1719-bm-a（调研远征令）第②件交付。归口=工程技术部（技术调研线）。
 > 纪律：`docs/research-protocol.md` v1.0（源分级律/零断言/台账律/限时律）。所有断言带源编号【A#/M#】；推论显式标【推论】；未采到=入 §6 卡点台账，不硬编。
@@ -117,8 +117,20 @@ faster-whisper 官方 README 基准（同精度比 openai/whisper "up to 4 times
 - A9 GitHub 官方 API：repos/rany2/edge-tts/releases（7.0.0→7.2.8 release notes·修复-发版对应）
 - A10 https://raw.githubusercontent.com/rany2/edge-tts/master/LICENSE （官方 LICENSE 文件·LGPLv3+srt_composer.py 单文件 MIT）
 
+## 结论应用表（P-20260924-65 存量补表·2026-09-24）
+
+| 结论 | 落点（四选一） | 状态 |
+|---|---|---|
+| edge-tts 主力+piper1-gpl 备份升产线刚性依赖+403 再发处置口径（§1.1） | ②文档修改=`docs/m2-local-stack.md` §TTS（v1.2 已接）+①任务单=backlog #9 R-B 双轨试录（done·tts-samples 台账） | 已闭环 |
+| 中文质量轨候选·CosyVoice 官方评测（§1.3） | ②文档修改=m2-local-stack 备份线质量轨依据（piper 不达人设线时启用） | 已闭环 |
+| faster-whisper CPU int8 路线+词级时间戳（§2） | ①任务单=backlog #9 R-C（`src/render/whisper_to_srt.py` 落地·done·真人原声通用件） | 已闭环 |
+| ComfyUI 后置+显存分时纪律（§3） | ③决策呈报=量产开闸后装机裁决（C-16 远期占位·显存窗口前提）+②文档修改=m2-local-stack §1/§2 | 接线中 |
+| §6 T5 GPL-3.0 分发边界 | ③决策呈报=[needs-CEO]（仅未来分发工具时另议·当前内部使用无碍） | 接线中 |
+| T4 huayan 人耳终审 | 已由 CEO 声线定档收口（O-2136 点选 light+piper 降对照组留档·backlog #8 done） | 已闭环 |
+
 ## 变更记录
 - 2026-09-23: v1.0 首采（O-20260923-1719-bm-a）——TTS/STT/文生图三站官方一手证据+本机锚点；§6 留五卡点。
 - 2026-09-23: R11 轮——§6 卡点 T3 解锁、T2 起录、T4 样件呈样（试录实况=`data/sources/tts-samples/README.md`）；正文断言未动。
 - 2026-09-23: v1.1 交互会话增量（并行执行 O-1719 撞车后合并·认领制由此立）——新增 §1.3 中文质量轨候选（CosyVoice 官方评测表·A7）；R-B 若轻量线不达质量线即有官方依据可循。
 - 2026-09-23: v1.2（OS 循环 R18·T2 卡点补采）——§1.1 新增可靠性史块（403 四波时间线·12 issues 全关·#286 仅大陆复现·修复-发版对应·仓库活性）；**许可证更正** edge-tts GPL-3.0→现值 LGPLv3（A10 LICENSE 直采+A9 7.0.0 自证 relicensing）；推论④⑤⑥（备份线升产线刚性依赖+403 再发处置口径）；§6 T2 转「补采完成·数据点续录」；§7 增 A8/A9/A10。
+- 2026-09-24: v1.3（OS 循环 R155·集团 P-20260924-65 存量补表）——结论应用表入件（正典 `cph4/research-protocol.md` §二.1 制式）；调研内容语义零改动。

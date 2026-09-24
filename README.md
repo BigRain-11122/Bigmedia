@@ -41,7 +41,8 @@ BigStream/
 │   ├── ideas/         <- 选题库（ideas.md 一行一题）
 │   ├── drafts/        <- 脚本与文案草稿（10 稿封存·生产暂停中）
 │   └── sources/       <- 素材与来源引用（可溯链）
-├── output/            <- 成品库（二进制 gitignored；schedule.md/analytics.md 台账入库）
+├── output/          <- 成品库（二进制 gitignored；schedule.md/analytics.md 台账入库）
+├── research/        <- 调研面（P-65 声明行：双线=市场线→选题研究部·技术线→工程技术部；消费方=M0 选题/人设/平台策略/情报日报 + M2 素材链选型；行程标准与结论应用律正典=../cph4/research-protocol.md，本司细则=docs/research-protocol.md 指针件）
 ├── src/               <- draft_lint.py（M4 机审）· board_check.py（链路一致性）· make_draft.py（骨架生成）· os/（OS 循环四件套+任务书+state+backlog+skeletons）
 └── tests/             <- 脚本测试（按需建）
 ```

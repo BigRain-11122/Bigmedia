@@ -10,14 +10,14 @@
 
 【开轮四步·按序执行】
 1. 读记忆：CODELY.md（本仓记忆）→ CONSTITUTION.md（宪法·红线与铁律）→ src/os/state.json → docs/os-protocol.md → docs/org-structure.md（按辖区认领部门）→ docs/capabilities.md（能力注册表·完工须升表）→ PLAN.md → orders/ 最新令（L0 优先·新令推翻旧模式）
-   **集团转办扫描步（2026-09-24 巡检直修·P-56 扩全司行：C:\..\FluxGroup\cph4\evolution-ledger.md 扫 `@BigStream`/`@七线全司`/`@全司` 未回执行行+`C:\..\FluxGroup\docs\decisions.md` 扫新行）**：有新 @BigStream 或全司转办=按认领制排入 backlog 顶行（P-45 推流链分工/P-32 两步/P-35/36 声明等在册件自此可达）；decisions.md 新行=科学判断闸过审→执行+回执，存疑→驳回写理由（引用决策号）——两动作各记 state.json log 一行；**日清上报步（P-32①·2026-09-24 接线）**：当日有集团层面 open 问题/待决策项=23:00 前写本仓根 HQ-FEEDBACK.md 一行（P0/P1/P2·行级追加），无=不写（零膨胀）
+   **集团转办扫描步（2026-09-24 巡检直修·P-56 扩全司行：C:\..\FluxGroup\cph4\evolution-ledger.md 扫 `@BigStream`/`@七线全司`/`@全司`/`@六司`（@六司=2026-09-24 R156 盲区修补·P-61 六司点名曾在三模式外漏扫）未回执行行+`C:\..\FluxGroup\docs\decisions.md` 扫新行）**：有新 @BigStream 或全司转办=按认领制排入 backlog 顶行（P-45 推流链分工/P-32 两步/P-35/36 声明等在册件自此可达）；decisions.md 新行=科学判断闸过审→执行+回执，存疑→驳回写理由（引用决策号）——两动作各记 state.json log 一行；**日清上报步（P-32①·2026-09-24 接线）**：当日有集团层面 open 问题/待决策项=23:00 前写本仓根 HQ-FEEDBACK.md 一行（P0/P1/P2·行级追加），无=不写（零膨胀）
 2. 读任务板：src/os/backlog.md——取最上一条未完成项为本轮焦点
 3. 干活：严格按【优先级】与【禁区】执行，做不完的拆细，剩余部分写回 backlog 顶行
-4. 收账：src/os/state.json（tick 加一，log 追加本轮一句话实况）→ git add 相关文件 → commit（英文一行消息·≤500 字符·`[via bm-a]` 尾标=versioning §4.3 适配版·P-30 传导）→ push（origin 已接线）；backlog 完成项标 [done 日期]
+4. 收账：src/os/state.json（tick 加一，log 追加本轮一句话实况）→ **P-61 导出步（2026-09-24 R156 接线·硅基窗接口）**：刷新 `docs/status-export.json`（export_ts 必填·新鲜度闸≤24h；depts/outs/results 按当轮实况派生·F3 律禁写死）→ git add 相关文件 → commit（英文一行消息·≤500 字符·`[via bm-a]` 尾标=versioning §4.3 适配版·P-30 传导）→ push（origin 已接线）；backlog 完成项标 [done 日期]
 
 【空转快速路径·O-20260923-2241-bm-a Token 节约令】
 开轮**先走快速判定**（省 token·禁重读全文档链）：只读 state.json log 尾 3 行 + backlog 顶行 + orders/ 最新文件名（比对 state 已记账的最后一令）+ git status --short + **集团转办扫描两件头（evolution-ledger `@BigStream` 行有无新增/decisions.md 行数比对 state 记账值——内容寻址勿全文重读）**。
-五查全静（①无新 O 令 **且无新集团转办/决策行** ②backlog 顶行不可认领 ③树净无 index.lock ④无 bm-a 会话活跃写盘迹象——git status 三查即近似·**并窗期 `M src/os/state.json`=本循环自记账预期态不算 bm-a 迹象** ⑤探针见下）→ 跑三探针（board/readiness/loop_health 照跑不省）→ 全绿即**一行收账即出**：state.json 记「idle-fast（快速路径·五静+探针绿）」一行·tick 加一，**commit/push 按收账并窗律**（os-protocol §6·P-62 ③：连续 idle-fast 窗满 6 轮/跨日边界/任一异常/实活轮出现才收账·commit 消息注明区间如「R151-R156 idle-fast batch」），**不进开轮四步**。
+五查全静（①无新 O 令 **且无新集团转办/决策行** ②backlog 顶行不可认领 ③树净无 index.lock ④无 bm-a 会话活跃写盘迹象——git status 三查即近似·**并窗期 `M src/os/state.json`=本循环自记账预期态不算 bm-a 迹象** ⑤探针见下）→ 跑三探针（board/readiness/loop_health 照跑不省）→ 全绿即**一行收账即出**：state.json 记「idle-fast（快速路径·五静+探针绿）」一行·tick 加一·**P-61 导出步照走（docs/status-export.json 刷 export_ts·实况派生轻量）**，**commit/push 按收账并窗律**（os-protocol §6·P-62 ③：连续 idle-fast 窗满 6 轮/跨日边界/任一异常/实活轮出现才收账·commit 消息注明区间如「R151-R156 idle-fast batch」），**不进开轮四步**。
 任一异常（新令/探针 FAIL/可认领活/脏树/锁）→ 转全任务书（开轮四步）照走。
 判定自检：快速路径只省文档重读 token，不省探针（响应性不变）；空转轮不重读 CONSTITUTION/PLAN/capabilities 等全文。
 
