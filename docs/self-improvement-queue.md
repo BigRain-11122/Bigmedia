@@ -30,7 +30,7 @@
 | # | 项 | 落点 | 优先 | 状态 |
 |---|---|---|---|---|
 | C1 | ffmpeg 高级剪辑技能（速度曲线/字幕动态滤镜/转场品质参数） | R-E/R-A 引擎升级备件 | 中 | open |
-| C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | open |
+| C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | **claimed（OS 循环 R169）** |
 | C3 | edge-tts 情感参数实验（SSML/rate-pitch 曲线=人味链 v2 输入） | C-21 升级备件 | 中 | open |
 | C4 | Ollama 专家席提示词迭代（评审质量=S 席分数校准） | expert-roster 数据件升级 | 常态 | open |
 
@@ -45,3 +45,4 @@
 - 2026-09-24: **A3 claimed**（OS 循环 R167·d7b24ed）——改造面评估毕，真直切=引擎级升级非单参改动，预算尽拆细四步回写：①`build_fades`/时间轴：cut 边界改 `fade_s=0` 语义（d_k 不延展·现值 HARD_CUT_S=0.05s 二帧淡入近似在案）②`xfade_chain`：cut run 分组 concat 直拼（filter_complex 内联·xfade 边界照旧）③`edit_craft_check` timeline 代数同步 cut d=0+硬切断言升级 ④单测+双 profile（bilibili/douyin）重渲验证+层 1.8 复跑+S2 三门执法+台账双行。注：HARD_CUT_S 0.05→0.001 单参路已在评估中排除（xfade transition="cut" 词汇 crash 史在 L69-70·且 0.001s fade 仍残留 1 帧 crossfade 混合帧≠真直切·concat 路为正解）。
 - 2026-09-24: **常态令扩面**（O-20260924-2118-bm-a·bm-a 会话）——CEO 点名迭代面=剪辑能力+审美+**段子**；B5 段子·幽默工艺项入池（缺口=趣律 L9-L14 在案但零对标拆解）；剪辑审美既有项 C1/B2/B3 继承 CEO 锚；配套=user-research v1.8 §9 段子工艺面首版底座（分群笑点谱系+五梗位分群标注）。
 - 2026-09-24: **A3 done**（OS 循环 R168·R167 认领 d7b24ed 续做·**正中 CEO 扩面令「迭代剪辑能力」锚**）——真直切引擎四步全落：①`build_fades` cut→`fade_s=0`（CUT_FADE_S·0.05s 二帧淡入近似退役）②`xfade_chain`→`build_runs` run 分组（fade 链内接+cut 处 concat 真拼·边界帧量化+per-run tpad/trim 帧精确落点+段渲染+1 安全帧防混合饥饿）③层 1.8 门新代数 `d_k=span_k+incoming fade`+cut-blended 回归断言（0.05 复辟=FAIL·独立常量律）④测试 27 门测绿（4 新·203 全回归绿）+bs-001-v13 bilibili/douyin 双件重渲（层 1.8 双全 PASS+spec douyin 双 PASS/B站画幅 PASS+时长 FAIL=#14 在案口径+ai_feel 0 FAIL 0 WARN 同母版音轴）+MAD 逐像素验图（切点单帧全距跳 79-136·切前 0.0=零混合残留·fade 对照组连续渐变=两机制面对照成立）——E8 在案弱项闭环（live-A bilibili/v12 douyin 行欠账销账）。
+- 2026-09-24: **C2 claimed**（OS 循环 R169）——实验设计四配置对照（base greedy 现行默认/beam5/beam5+condition_on_previous_text=False/beam5+noctx+initial_prompt 域提示）×基准=v12 母版音轨（cyber light 产线默认声）×CER 度量（Levenshtein/字符级·对拍 voiceover-v9-cyber.beats 参考文本）；锚点=station-reviews L19「61 的 ASR 同音衰减（噪声级）」+.v10-light/asr-check.srt 在案实证（类的是/罢款/林圆/说备就备/自己劝/谁也赶不了）。
