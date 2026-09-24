@@ -88,5 +88,27 @@ class TestLedgerRow(unittest.TestCase):
         self.assertIn("| - |", row)
 
 
+class TestVerdictArchive(unittest.TestCase):
+    def test_file_name_deterministic(self):
+        self.assertEqual("20260924-103300-hot-intel.md",
+                         ce.verdict_file_name("hot-intel", "20260924-103300"))
+        name = ce.verdict_file_name("S0-topic")
+        self.assertTrue(name.endswith("-S0-topic.md"))
+
+    def test_save_verdict_writes_full_text_with_header(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = ce.save_verdict(Path(d), "x.md", "hot-intel",
+                                "\u60c5\u62a5\u5b98", "\u60c5\u62a5\u90e8",
+                                "qwen2.5:14b", "brief.md",
+                                "\u7ed3\u8bba\u7b2c\u4e00\u884c\n\u7b2c\u4e8c\u884c")
+            text = p.read_text(encoding="utf-8")
+            self.assertTrue(text.startswith("# hot-intel"))
+            self.assertIn("\u60c5\u62a5\u90e8", text)              # dept
+            self.assertIn("qwen2.5:14b", text)                     # model
+            self.assertIn("brief.md", text)                        # material
+            self.assertIn("\u7ed3\u8bba\u7b2c\u4e00\u884c", text)     # full body
+            self.assertIn("\u7b2c\u4e8c\u884c", text)              # not truncated
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

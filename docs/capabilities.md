@@ -63,5 +63,6 @@
 - 2026-09-23: v1.15 情报部批（CEO 令 O-20260923-2304-bm-a）——C-23 `daily_brief.py` 入册 live（零 key 双源热榜采集·首份日报 20 条实采）+**情报部编制成立**（org-structure v2.0 七部一办→八部一办）+顶层设计统摄件（BLUEPRINT v1.0）。live×18。
 - 2026-09-24: v1.16 专职专家批（CEO 令 O-20260924-1033-bm-a）——C-24 `call_expert.py` 入册 live（八部门 11 席名册+一键调用+调用台账+UTF-8 管道修复·首调 hot-intel 实证）+名册正典 `docs/expert-roster.md` v1.0；循环任务书接线（按需调用纪律）。live×19。
 - 2026-09-24: v1.17 周期自审批（CEO 令 O-20260924-1057-bm-a）——C-25 `self_audit.py` 入册 live（周自审数据包零 token+判读五清单·os-protocol §7 立法）+首期 W39 数据包与报告在案+BLUEPRINT §7 节律行+任务书接线（当周缺任意轮补产）。live×20。
+- 2026-09-24: v1.18 结论存档修（自治续·C-24 补强）——专家调用**结论全文落盘** `docs/reviews/expert-verdicts/<时间>-<id>.md`+台账行显链（首调 hot-intel 结论曾因控制台 GBK 乱码全文丢失=可审计性缺口实证）；hot-intel 重调补档成功；+2 单测（总 168）。
 - 2026-09-23: v1.13 人味机制批（O-20260923-2210-bm-a）——C-21 去 AI 感人味链入册 live：`--human` 种子化配音微抖动+呼吸间隙+呼吸声+房间底噪、`--grain/--bg` 画面质感层、`ai_feel_check.py` 四指纹机检门（M4 层 1.6·首战 v9 FAIL→v10 PASS）；规格=human-feel-spec.md。live×16。
 - 2026-09-23: v1.14 平台规格门批（O-2210 自治续）——C-22 `platform_spec_check.py` 入册 live（M4 层 1.7·时长实测红线工具化·playbook 实解析单一真相）；首战舰队体检=B站三件低于 3-15min 窗→B站纵深格式重制定位修正（backlog #14）。live×17。

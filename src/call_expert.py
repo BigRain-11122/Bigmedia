@@ -30,6 +30,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 REGISTRY = REPO / "data" / "experts" / "registry.json"
 LEDGER = REPO / "docs" / "reviews" / "expert-calls.md"
+VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
 DEFAULT_TIMEOUT = 300
 
 
@@ -71,6 +72,32 @@ def ledger_row(expert_id, role, dept, material, exit_code, note):
     note = (note or "-").replace("|", "/").replace("\n", " ")[:160]
     return "| %s | %s | %s（%s） | %s | %s | %s |\n" % (
         stamp, expert_id, role, dept, material, exit_code, note)
+
+
+def verdict_file_name(expert_id, stamp=None):
+    """Deterministic archive file name for one call's full verdict (pure)."""
+    stamp = stamp or datetime.now().strftime("%Y%m%d-%H%M%S")
+    return "%s-%s.md" % (stamp, expert_id)
+
+
+def save_verdict(out_dir, file_name, expert_id, role, dept, model,
+                 material, verdict):
+    """Write the FULL verdict to its archive file; returns the path.
+    The ledger only keeps the first line - without this the full text
+    only ever existed in a GBK-garbled console (2026-09-24 hot-intel
+    case: verdict lost)."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / file_name
+    body = [
+        "# %s - %s（%s）结论全文" % (expert_id, role, dept),
+        "",
+        "> 时间=%s · 模型=%s · 材料=%s" % (
+            datetime.now().strftime("%Y-%m-%d %H:%M"), model, material),
+        "> 机制=call_expert.py（O-20260924-1033·本件为结论存档·台账行=expert-calls.md）",
+        "",
+    ]
+    path.write_text("\n".join(body) + verdict + "\n", encoding="utf-8")
+    return path
 
 
 def main(argv):
@@ -120,16 +147,30 @@ def main(argv):
     print("OK %s [%s - %s]" % (expert_id, ex["dept"], ex["role"]))
     print("----- verdict -----")
     print(verdict)
+    # full verdict archive first (auditability: the console is GBK-lossy)
+    try:
+        vname = verdict_file_name(expert_id)
+        vpath = save_verdict(VERDICT_DIR, vname, expert_id, ex["role"],
+                             ex["dept"], ex["model"], str(material_path),
+                             verdict)
+        print("----- verdict archive -----")
+        print(str(vpath))
+    except OSError as e:
+        print("WARN verdict archive failed: %s" % e)
+        vname = ""
     # audit trail: every call lands in the ledger (best effort)
     try:
         first_line = verdict.splitlines()[0][:120] if verdict else "-"
+        if vname:
+            first_line = "全文=expert-verdicts/%s ｜ %s" % (vname, first_line)
         row = ledger_row(expert_id, ex["role"], ex["dept"],
                          str(material_path), 0, first_line)
         if not LEDGER.exists():
             LEDGER.write_text(
                 "# 专职专家调用台账（Expert Calls Ledger）\n\n"
                 "> 机制=`docs/expert-roster.md`（O-20260924-1033-bm-a）。"
-                "行级追加禁改写；每次 call_expert.py 真调自动落一行。\n\n"
+                "行级追加禁改写；每次 call_expert.py 真调自动落一行"
+                "（结论全文=expert-verdicts/ 目录·本表只存首行）。\n\n"
                 "| 时间 | 专家 | 身份（部门） | 材料 | 退出 | 结论首行 |\n"
                 "|---|---|---|---|---|---|\n", encoding="utf-8")
         with LEDGER.open("a", encoding="utf-8") as f:
