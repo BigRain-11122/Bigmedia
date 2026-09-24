@@ -192,7 +192,7 @@ def _q(p):
     return "'" + _fpath(p) + "'"
 
 
-def build_render_plan(cfg, cues, tmpdir, grain=0):
+def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
     """Build the drawtext filtergraph. Text bodies go through temp
     textfiles so multi-line CJK renders without escaping issues.
 
@@ -209,6 +209,10 @@ def build_render_plan(cfg, cues, tmpdir, grain=0):
     (temporal+uniform noise) + soft vignette after all text layers - the
     flat digital "template" look reads as cheap-AI; grain+vignette read
     as produced film. Pure aesthetic pass, zero timeline impact.
+
+    O-20260924-1115-bm-a real-footage dial: bg_video=True swaps the
+    filtergraph head from a color source to [0:v] scaled to the frame -
+    input-side selection (color lavfi vs recorded mp4) happens in main().
     """
     tmpdir = Path(tmpdir)
     font = cfg["font"]
@@ -245,7 +249,16 @@ def build_render_plan(cfg, cues, tmpdir, grain=0):
     ends = [e for _, e, _ in cues] + [float(c["end"]) for c in cfg["cards"]]
     duration = max(ends) + float(cfg.get("tail", 0.5))
 
-    chain = ["[0:v]"]
+    if bg_video:
+        # real-footage head: scale the recorded background to the frame.
+        # NB: chain[0] "[0:v]" feeds the NEXT element directly (filtergraph
+        # label shorthand - a comma after the label would read as an empty
+        # filter name), so scale enters the chain as element #1.
+        frame_w = int(cfg["video"]["width"])
+        frame_h = int(cfg["video"]["height"])
+        chain = ["[0:v]", "scale=%d:%d,setsar=1" % (frame_w, frame_h)]
+    else:
+        chain = ["[0:v]"]
     chain.append(
         "drawtext=fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
         ":alpha=0.6:x=48:y=48:line_spacing=%d"
@@ -333,6 +346,11 @@ def main(argv=None):
                     help="film grain + vignette intensity 0-20 (O-2210)")
     ap.add_argument("--bg",
                     help="override video bg color (e.g. 0x0a0a0d)")
+    ap.add_argument("--bgvideo",
+                    help="real-footage background video (O-20260924-1115); "
+                         "looped, scaled to frame, replaces the color source")
+    ap.add_argument("--no-cards", action="store_true",
+                    help="pure-documentary cut: AIGC notice + subs only")
     args = ap.parse_args(argv)
 
     cards_path = Path(args.cards)
@@ -343,6 +361,12 @@ def main(argv=None):
         return 2
     if args.bg:
         cfg["video"]["bg"] = args.bg
+    if args.no_cards:
+        # keep the timeline (cue ends drive duration); drop card layers
+        cfg["cards"] = []
+    if args.bgvideo and not Path(args.bgvideo).exists():
+        print("FAIL bgvideo not found: %s" % args.bgvideo)
+        return 2
     font_path = Path(cfg["font"]["file"])
     if not font_path.exists():
         print("FAIL font file not found: %s (override font.file in cards JSON)" % font_path)
@@ -385,7 +409,8 @@ def main(argv=None):
 
     tmpdir = Path(tempfile.mkdtemp(prefix="bsrender-"))
     try:
-        plan = build_render_plan(cfg, cues, tmpdir, grain=args.grain)
+        plan = build_render_plan(cfg, cues, tmpdir, grain=args.grain,
+                                 bg_video=bool(args.bgvideo))
         if args.dry_run:
             print("dry-run ok: cards=%d cues=%d duration=%.3fs out=%s"
                   % (len(cfg["cards"]), len(cues), plan["duration"], out_path))
@@ -394,11 +419,16 @@ def main(argv=None):
             return 0
 
         v = cfg["video"]
-        cmd = [ "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-                "-f", "lavfi", "-i",
-                "color=c=%s:s=%dx%d:r=%d:d=%.3f"
-                % (v.get("bg", "black"), int(v["width"]), int(v["height"]),
-                   int(v["fps"]), plan["duration"]) ]
+        if args.bgvideo:
+            # real-footage head: loop the recording, drive length by -t
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-stream_loop", "-1", "-i", str(args.bgvideo)]
+        else:
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-f", "lavfi", "-i",
+                   "color=c=%s:s=%dx%d:r=%d:d=%.3f"
+                   % (v.get("bg", "black"), int(v["width"]), int(v["height"]),
+                      int(v["fps"]), plan["duration"])]
         if audio_path is not None:
             cmd += ["-i", str(audio_path)]
         # NB: this ffmpeg build (9.0.1 gyan full) dropped
@@ -407,6 +437,8 @@ def main(argv=None):
         cmd += ["-filter_complex", plan["filter_text"], "-map", "[v]"]
         if audio_path is not None:
             cmd += ["-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-shortest"]
+        if args.bgvideo:
+            cmd += ["-t", "%.3f" % plan["duration"]]
         cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "20",
                 "-pix_fmt", "yuv420p", "-movflags", "+faststart",
                 "-r", str(int(v["fps"])), str(out_path)]

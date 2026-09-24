@@ -89,3 +89,26 @@ python src\render\emotive_tts.py --beats data\sources\bs001\voiceover-v9-cyber.b
 python src\render\render_card_video.py --cards output\renders\.v10-light\cards.json --srt output\renders\.v10-light\subs.srt --voiceover output\renders\.v10-light\voiceover.txt --strict --audio output\renders\.v10-light\audio-bgm.mp3 --grain 7 --bg 0x0a0a0d --out output\renders\bs-001-v10-humanfeel.mp4
 python src\ai_feel_check.py --beats data\sources\bs001\voiceover-v9-cyber.beats.txt --srt output\renders\.v10-light\subs.srt
 ```
+
+## 八、实录素材组（O-20260924-1115·2026-09-24 11:2X）
+
+> CEO 令「Biggame总控 自行去录制画面，然后剪接出各个视频版本，试跑一次」——**素材层升级**：真实画面替代纯色底=去 AI 感最强一环（今晨审计缺口落地）。
+> 录源=Biggame 像素小镇看板（窗口标题「Biggame · 小游戏公司总控」·自包含活数据页·只读打开）·45s 实录（gdigrab 区域采集·15fps）→blur-pad 竖版 1080×1920。复用 v10 全套（音频/字幕/字卡时间线=产线默认·反重复）。
+
+| 件 | 剪辑路线 | 文件 | 听看点 |
+|---|---|---|---|
+| **live-A** | **实拍底版+字卡混合** | `output/renders/bs-001-live-A-pixelboard.mp4`（64.06s·31.7MB） | 真实录屏做底+H1/H2 字卡浮层+字幕+AIGC+grain7——「游戏公司实拍讲集团故事」 |
+| **live-B** | **纯实录纪录片式** | `output/renders/bs-001-live-B-puredoc.mp4`（64.06s·15.8MB） | 同底版无字卡（`--no-cards`）·纯字幕+grain4——让画面自己说话 |
+
+- **抽帧验图（A）**：层级成立（模糊底+清晰横幅+白字描边卡+底部字幕+左上 AIGC）；四条迭代输入如实入账：①字卡与游戏 UI 文字局部叠压 ②AIGC 对比度偏弱 ③字幕断词（「一名」拆行）④中段 UI 信息密度高只作氛围层。
+- **机检**：ai_feel 全 PASS（复用 v10 时间线）；spec 门=时长 64.06s 超窗（同 v10 在案·机制演示件·量产按空气预算律 L15 裁）。
+- **决策映射**：CEO 拣式（A 混合/B 纯实录/按选题选）→锁「实拍底版」为产线新默认层（`--bgvideo`）+四条迭代输入入整改队列。
+
+### 复现（命令实录·实录组）
+
+```
+python src\render\record_screen.py --open-app "file:///C:/Users/sjs20/Desktop/FluxGroup/gaming/MiniGame/%E5%83%8F%E7%B4%A0%E5%B0%8F%E9%95%87%E7%9C%8B%E6%9D%BF.html#test" --title "小游戏公司总控" --seconds 45 --out data\sources\footage\biggame-cockpit-raw.mp4 --close
+ffmpeg -y -i data\sources\footage\biggame-cockpit-raw.mp4 -filter_complex "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=24:2[bg];[0:v]scale=1080:-2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2" -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p data\sources\footage\biggame-cockpit-vertical.mp4
+python src\render\render_card_video.py --cards output\renders\.v10-light\cards.json --srt output\renders\.v10-light\subs.srt --voiceover output\renders\.v10-light\voiceover.txt --strict --audio output\renders\.v10-light\audio-bgm.mp3 --bgvideo data\sources\footage\biggame-cockpit-vertical.mp4 --grain 7 --out output\renders\bs-001-live-A-pixelboard.mp4
+（B 版同构加 --no-cards 换 --grain 4 与 --out）
+```
