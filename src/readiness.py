@@ -72,6 +72,14 @@ FLOW_LINE_RE = re.compile(FLOW_MARKER + r"[\uff1a:]\s*([^\uff1b;\n]+)")
 
 TEST_MARK = "\u6d4b\u8bd5\u4ef6\u00b7\u975e\u6210\u54c1"  # test-piece mark
 PRODUCT_MARK = "\u6210\u54c1\u00b7\u6279\u6b21"  # production-piece mark (D-BS-06 gate-open era; covers .mp4 only rows)
+# superseded historical piece (2026-09-25 #23 v14 batch era): rectification
+# re-renders replace registered goods but the old mp4s stay on disk as
+# historical archive rows - "superseded by <new>" cells are a third legal
+# state, not an unannotated leak. Both substrings together avoid false
+# hits from prose that merely says "replaced" ("...beit v2 取代清盘" lines
+# lack the 已被 prefix).
+SUPERSEDED_A = "\u5df2\u88ab"  # "has been" prefix
+SUPERSEDED_B = "\u53d6\u4ee3"  # "superseded/replaced" word
 STATUS_WORD = "\u72b6\u6001"  # status column header word
 BATCH_WORD = "\u6279\u6b21"  # batch word in accounts remark
 BATCH1_MARK = "\u2460"  # circled-one first-batch marker
@@ -172,7 +180,9 @@ def parse_renders(renders_dir, ledger_path):
         for line in text.splitlines():
             for m in MEDIA_RE.finditer(line):
                 name = m.group(0).lower()
-                seen[name] = seen.get(name, False) or (TEST_MARK in line or PRODUCT_MARK in line)
+                ok = (TEST_MARK in line or PRODUCT_MARK in line
+                      or (SUPERSEDED_A in line and SUPERSEDED_B in line))
+                seen[name] = seen.get(name, False) or ok
     rows = []
     for name in media:
         annotated = seen.get(name.lower(), False)

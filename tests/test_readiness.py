@@ -163,6 +163,19 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(fail_codes(findings), set())
         self.assertEqual([ok for _, ok in rows], [True])
 
+    def test_superseded_mark_passes_and_prose_guard(self):
+        # #23 v14 rectification-batch era: rows superseded by re-renders
+        # are a third legal state ("has been ... superseded" cells), while
+        # prose lines that merely mention replacement without the prefix
+        # stay unannotated (false-hit guard).
+        d = make_renders(self, ["gamma.mp4", "delta.mp4"],
+                         "readiness_renders_superseded")
+        rows, findings = readiness.parse_renders(d, d / "README.md")
+        self.assertEqual(fail_codes(findings), {"render-unannot"})
+        marks = dict(rows)
+        self.assertEqual(marks["gamma.mp4"], True)
+        self.assertEqual(marks["delta.mp4"], False)
+
     def test_missing_ledger_fails(self):
         d = make_renders(self, ["alpha.mp4"], None)
         rows, findings = readiness.parse_renders(d, d / "README.md")

@@ -35,8 +35,11 @@ VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
 DEFAULT_TIMEOUT = 300
 # ollama streams ANSI line-erase codes on slow generations (cold-load
 # case); without stripping they land verbatim in verdict archives
-# (2026-09-24 BS-003 S1 case).
+# (2026-09-24 BS-003 S1 case). Braille spinner glyphs (U+2800 block)
+# are a second pollution class seen on long generations (2026-09-25
+# BS-004 E4 case).
 _ANSI_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+_SPINNER_RE = re.compile(r"[\u2800-\u28ff]")
 
 
 def load_registry(path=REGISTRY):
@@ -68,6 +71,7 @@ def call_model(model, prompt, timeout=DEFAULT_TIMEOUT):
                        input=prompt.encode("utf-8"),
                        capture_output=True, timeout=timeout)
     out = _ANSI_RE.sub("", p.stdout.decode("utf-8", "replace"))
+    out = _SPINNER_RE.sub("", out)
     return p.returncode, out
 
 
