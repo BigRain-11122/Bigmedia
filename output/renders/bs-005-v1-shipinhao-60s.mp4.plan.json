@@ -1,0 +1,240 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "shipinhao",
+ "visual_mode": "matched",
+ "visual_ratio": 0.167,
+ "cards_only_beats": [
+  0,
+  1,
+  2,
+  3,
+  5,
+  7,
+  8,
+  9,
+  10,
+  11
+ ],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 7.467,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 2,
+   "time_s": 11.233,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 3,
+   "time_s": 17.067,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 4,
+   "time_s": 22.267,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 5,
+   "time_s": 26.333,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 6,
+   "time_s": 30.333,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 7,
+   "time_s": 36.2,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 41.467,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 9,
+   "time_s": 46.333,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 10,
+   "time_s": 50.733,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 11,
+   "time_s": 54.567,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 7.467,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u56db\u4e0d\u4e3b\u5f20\u65e0\u753b\u9762\u8bc1\u636e\uff1a\u9a7e\u9a76\u8231\u5f39\u7a97\u4e3a\u96c6\u56e2\u6c47\u62a5\u9762\uff0cHUD \u6570\u5b57\uff08\u62cd\u677f4\u6b3e/\u884c\u52a88\u9879\uff09\u4e0e\u672c\u62cd\u4e3b\u5f20\u9519\u4f4d\uff0c\u7528\u5373\u58f0\u753b\u9519\u4f4d\uff1bhook \u7eaf\u5b57\u5361\u627f\u62c5\uff08footage-matching-spec \u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 4.047,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u6e90\u6c60\u65e0\u8d26\u672c/\u8f6f\u8457\u753b\u9762\uff1aHUD\u300c\u5f85\u5ba1 4 \u6b3e\u300d\u300c\u4eca\u65e5 153 \u7b14\u300d\u4e0e\u672c\u62cd 8 \u6b3e\u8f6f\u8457\u6570\u5b57\u9519\u4f4d\uff0c\u907f\u7528\uff1b\u8d26\u672c\u62cd\u7eaf\u5b57\u5361\u951a\u70b9 8\uff08\u00a72 \u65e0\u6e90\u6ce8\u7406\u7531\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 6.113,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u8bbe\u8ba1\u903b\u8f91\u62cd\u65e0\u73a9\u6cd5/\u5e7f\u544a\u4f4d\u753b\u9762\uff1a\u6e90\u6c60\u4e94\u6e90\u5747\u4e3a\u603b\u63a7/\u65e5\u5fd7/\u53f0\u8d26/\u526a\u8f91\u9762\uff0c\u65e0\u6e38\u620f\u5185\u753b\u9762\uff1b\u903c\u6c2a\u2192\u503c\u5f97\u505c\u7559\u4e3a\u8bbe\u8ba1\u58f0\u660e\uff0c\u7eaf\u5b57\u5361\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 5.48,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u96f6\u670d\u52a1\u5668\u9009\u578b\u62cd\u65e0\u670d\u52a1\u5668/\u67b6\u6784\u753b\u9762\uff1a\u6e90\u6c60\u65e0\u5bf9\u5e94\u8bc1\u636e\u9762\uff0c\u7eaf\u5b57\u5361\uff08\u00a72 \u65e0\u6e90\u6ce8\u7406\u7531\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 4.347,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4"
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 4.28,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u9a7e\u9a76\u8231\u4ec5\u89c1\u300c\u6570\u636e 2 \u5206\u949f\u524d\u81ea\u52a8\u5237\u65b0\u300d\u6807\u7b7e\uff08\u8282\u5f8b\u6570\u5b57\u4e0e\u672c\u62cd 10 \u5206\u949f\u4e3b\u5f20\u9519\u4f4d\u3001\u673a\u5236\u8bed\u8a00\u4e0d\u540c\uff09\uff0c10 \u5206\u949f\u5feb\u7167\u65e0\u753b\u9762\u8bc1\u636e\uff0c\u907f\u7528\u5373\u8bda\u5b9e\uff1b\u7eaf\u5b57\u5361\u951a\u70b9 10 \u5206\u949f\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 6.147,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4"
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 5.547,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u906e\u7f9e\u5e03\u4e09\u8fde\u5224\u5b9a\u4e3a\u4fee\u8f9e\u5224\u65ad\u62cd\uff0c\u6e90\u6c60\u65e0\u4e70\u91cf/\u4e0a\u4e91/\u6c2a\u91d1\u5bf9\u5e94\u753b\u9762\uff1b\u65e5\u5fd7\u5224\u5b9a\u4f53\u7531\u5b57\u5e55\u627f\u62c5\uff0c\u7eaf\u5b57\u5361\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 5.147,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u6e90\u6c60\u65e0\u5baa\u6cd5/\u7ea6\u675f\u6587\u672c\u753b\u9762\uff1a\u56ed\u533a\u300c\u516c\u544a\u680f\u00b78\u9879\u300d\u4e0e\u672c\u62cd 12 \u6761\u6570\u5b57\u9519\u4f4d\uff0c\u907f\u7528\uff1b12 \u6761\u7ea2\u7ebf\u7eaf\u5b57\u5361\u951a\u70b9\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 4.68,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u672c\u62cd\u5373\u300c\u6ca1\u6709\u6536\u5165\u6570\u636e\u300d\u7684\u8bda\u5b9e\u58f0\u660e\uff08\u672a\u4e0a\u7ebf=\u672a\u6d4b\u91cf\uff09\uff1a\u4efb\u4f55\u6570\u636e\u753b\u9762\u53cd\u800c\u4e0e\u4e3b\u5f20\u76f8\u53cd\uff1bHUD \u00a50 \u4e3a\u6e38\u620f\u5185\u8ba1\u6570\u975e\u6536\u5165\u8bc1\u636e\uff0c\u907f\u7528\uff08\u00a72+\u8bda\u5b9e\u5f8b\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 4.113,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u7ed3\u6784\u7ed3\u8bba\u62cd\u65e0\u753b\u9762\u8bc1\u636e\uff1a\u64a4\u906e\u7f9e\u5e03\u4e3a\u5168\u7247\u8bba\u70b9\u6536\u675f\uff0c\u7eaf\u5b57\u5361\uff08\u00a72\uff09",
+   "visual_source": null
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 4.913,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "CTA \u5e38\u89c4\u62cd\u7eaf\u5b57\u5361\uff08footage-matching-spec \u00a71\u00b7BS-002/BS-003/BS-004 \u540c\u578b\u5148\u4f8b\uff09",
+   "visual_source": null
+  }
+ ],
+ "hits": [],
+ "f_max_s": 0.28,
+ "last_beat_end_s": 58.4,
+ "tail_s": 0.8,
+ "duration_expected_s": 59.2,
+ "hard_cut_s": 0.0
+}

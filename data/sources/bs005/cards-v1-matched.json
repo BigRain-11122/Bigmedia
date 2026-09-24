@@ -1,0 +1,195 @@
+{
+ "meta": {
+  "topic": "BS-004",
+  "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\bs005\\voiceover-v3.beats.txt",
+  "order": "D-BS-06 production open: BS-005 batch-1 shipinhao piece (5th of N=6); v12 full-set default per D-BS-01; v3 beats = S1 v1.5 first real-gate 10/10 PASS zero-flag (R192) + air-budget cuts v1 66.16s -> v2 61.03s -> v3 58.39s in-window (1.6s margin, mechanical L15, card anchors intact, facts 8/10/12 intact); visual declarations probe-evidenced (biggame-cockpit 10-frame multi-timepoint scan R192)",
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "one beat = one card = one cut = one matched shot",
+  "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+  "probe_note": "R186 five-source probe before req: looplog/reviewsdoc/editgrid/biggame-cockpit stable full-length (no window switch); citywatch-vertical.mp4 tail (approx 5-18s) records through a Doubao chat window (privacy face, footage-matching-spec S2) - only the clean 0-4.4s watch-terminal window is usable; beat b3 (2.73s) stays entirely inside the clean window",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  }
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 100,
+  "h1_color": "accent",
+  "h2_size": 50,
+  "h2_color": "gray60",
+  "h1_gap": 56,
+  "optical_center": 0.42
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 7.45,
+   "lines": [
+    "剧本反写",
+    "不融资 · 不买量 · 不上云 · 不氪金"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "四不主张无画面证据：驾驶舱弹窗为集团汇报面，HUD 数字（拍板4款/行动8项）与本拍主张错位，用即声画错位；hook 纯字卡承担（footage-matching-spec §2）"
+   }
+  },
+  {
+   "start": 7.45,
+   "end": 11.24,
+   "lines": [
+    "账本盘点",
+    "8 款软著 · 纯 IAA"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "源池无账本/软著画面：HUD「待审 4 款」「今日 153 笔」与本拍 8 款软著数字错位，避用；账本拍纯字卡锚点 8（§2 无源注理由）"
+   }
+  },
+  {
+   "start": 11.24,
+   "end": 17.08,
+   "lines": [
+    "设计逻辑",
+    "逼氪 → 值得停留"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "设计逻辑拍无玩法/广告位画面：源池五源均为总控/日志/台账/剪辑面，无游戏内画面；逼氪→值得停留为设计声明，纯字卡（§2）"
+   }
+  },
+  {
+   "start": 17.08,
+   "end": 22.26,
+   "lines": [
+    "零服务器选型",
+    "重后端 ✂ · 成本为零"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "零服务器选型拍无服务器/架构画面：源池无对应证据面，纯字卡（§2 无源注理由）"
+   }
+  },
+  {
+   "start": 22.26,
+   "end": 26.32,
+   "lines": [
+    "AI 军团",
+    "总控机 + 分治机军团"
+   ],
+   "visual": {
+    "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+    "req": "窗口标题「Biggame·小游戏公司总控」+弹窗「2/3机并网」=总控机与机器并网状态直接证据（探针 0-44s 全程在帧）；同源多用注记（b7 像素小镇同源·§3）"
+   }
+  },
+  {
+   "start": 26.32,
+   "end": 30.35,
+   "lines": [
+    "快照节律",
+    "10 分钟 · 自动重写"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "驾驶舱仅见「数据 2 分钟前自动刷新」标签（节律数字与本拍 10 分钟主张错位、机制语言不同），10 分钟快照无画面证据，避用即诚实；纯字卡锚点 10 分钟（§2）"
+   }
+  },
+  {
+   "start": 30.35,
+   "end": 36.21,
+   "lines": [
+    "像素小镇",
+    "管理公司 = 放置游戏"
+   ],
+   "visual": {
+    "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+    "req": "像素园区+各部门楼宇+集团驾驶舱管理弹窗=「管理游戏公司本身就是放置游戏」直接证据（探针 10 帧全程像素小镇·NPC/车辆/施工围挡经营态在帧）；同源多用注记（b5 总控同源·§3）"
+   }
+  },
+  {
+   "start": 36.21,
+   "end": 41.47,
+   "lines": [
+    "遮羞布判定",
+    "买量 · 上云 · 氪金"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "遮羞布三连判定为修辞判断拍，源池无买量/上云/氪金对应画面；日志判定体由字幕承担，纯字卡（§2）"
+   }
+  },
+  {
+   "start": 41.47,
+   "end": 46.33,
+   "lines": [
+    "约束清单",
+    "12 条工程约束 · 红线先于创意"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "源池无宪法/约束文本画面：园区「公告栏·8项」与本拍 12 条数字错位，避用；12 条红线纯字卡锚点（§2）"
+   }
+  },
+  {
+   "start": 46.33,
+   "end": 50.73,
+   "lines": [
+    "诚实交底",
+    "收入数据 : 未上线未测量"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "本拍即「没有收入数据」的诚实声明（未上线=未测量）：任何数据画面反而与主张相反；HUD ¥0 为游戏内计数非收入证据，避用（§2+诚实律）"
+   }
+  },
+  {
+   "start": 50.73,
+   "end": 54.57,
+   "lines": [
+    "结构结论",
+    "撤遮羞布 · 剩下的才是产品"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "结构结论拍无画面证据：撤遮羞布为全片论点收束，纯字卡（§2）"
+   }
+  },
+  {
+   "start": 54.57,
+   "end": 58.39,
+   "lines": [
+    "交底+转发",
+    "完整拆解在公众号 · 想做独立游戏"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "CTA 常规拍纯字卡（footage-matching-spec §1·BS-002/BS-003/BS-004 同型先例）"
+   }
+  }
+ ]
+}

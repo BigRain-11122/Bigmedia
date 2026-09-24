@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "topic": "BS-004",
+    "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs005\\voiceover-v3.beats.txt",
+    "order": "D-BS-06 production open: BS-005 batch-1 shipinhao piece; air-budget cut v3 (mechanical, L15, card-anchor aligned phrases, facts 8/10/12 intact)",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "probe_note": "R186 five-source probe before req: looplog/reviewsdoc/editgrid/biggame-cockpit stable full-length (no window switch); citywatch-vertical.mp4 tail (approx 5-18s) records through a Doubao chat window (privacy face, footage-matching-spec S2) - only the clean 0-4.4s watch-terminal window is usable; beat b3 (2.73s) stays entirely inside the clean window",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 7.45,
+      "lines": [
+        "剧本反写",
+        "不融资 · 不买量 · 不上云 · 不氪金"
+      ]
+    },
+    {
+      "start": 7.45,
+      "end": 11.24,
+      "lines": [
+        "账本盘点",
+        "8 款软著 · 纯 IAA"
+      ]
+    },
+    {
+      "start": 11.24,
+      "end": 17.08,
+      "lines": [
+        "设计逻辑",
+        "逼氪 → 值得停留"
+      ]
+    },
+    {
+      "start": 17.08,
+      "end": 22.26,
+      "lines": [
+        "零服务器选型",
+        "重后端 ✂ · 成本为零"
+      ]
+    },
+    {
+      "start": 22.26,
+      "end": 26.32,
+      "lines": [
+        "AI 军团",
+        "总控机 + 分治机军团"
+      ]
+    },
+    {
+      "start": 26.32,
+      "end": 30.35,
+      "lines": [
+        "快照节律",
+        "10 分钟 · 自动重写"
+      ]
+    },
+    {
+      "start": 30.35,
+      "end": 36.21,
+      "lines": [
+        "像素小镇",
+        "管理公司 = 放置游戏"
+      ]
+    },
+    {
+      "start": 36.21,
+      "end": 41.47,
+      "lines": [
+        "遮羞布判定",
+        "买量 · 上云 · 氪金"
+      ]
+    },
+    {
+      "start": 41.47,
+      "end": 46.33,
+      "lines": [
+        "约束清单",
+        "12 条工程约束 · 红线先于创意"
+      ]
+    },
+    {
+      "start": 46.33,
+      "end": 50.73,
+      "lines": [
+        "诚实交底",
+        "收入数据 : 未上线未测量"
+      ]
+    },
+    {
+      "start": 50.73,
+      "end": 54.57,
+      "lines": [
+        "结构结论",
+        "撤遮羞布 · 剩下的才是产品"
+      ]
+    },
+    {
+      "start": 54.57,
+      "end": 58.39,
+      "lines": [
+        "交底+转发",
+        "完整拆解在公众号 · 想做独立游戏"
+      ]
+    }
+  ]
+}
