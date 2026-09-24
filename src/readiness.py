@@ -27,7 +27,7 @@ Findings (machine-discipline breaches; FAIL or WARN):
                     repeated here so the report is self-contained)
     render-dir      renders directory missing
     render-ledger   media files exist but no README.md ledger
-    render-unannot  media file not annotated with the test-piece mark
+    render-unannot  media file not annotated with a test-piece/production mark
     render-stale    ledger row references a media file not on disk
 
 Blockers (distance to first publish - the honest pre-launch state,
@@ -71,6 +71,7 @@ from weekly_report import DONE_RE, ITEM_RE, first_clause  # noqa: E402
 FLOW_LINE_RE = re.compile(FLOW_MARKER + r"[\uff1a:]\s*([^\uff1b;\n]+)")
 
 TEST_MARK = "\u6d4b\u8bd5\u4ef6\u00b7\u975e\u6210\u54c1"  # test-piece mark
+PRODUCT_MARK = "\u6210\u54c1\u00b7\u6279\u6b21"  # production-piece mark (D-BS-06 gate-open era; covers .mp4 only rows)
 STATUS_WORD = "\u72b6\u6001"  # status column header word
 BATCH_WORD = "\u6279\u6b21"  # batch word in accounts remark
 BATCH1_MARK = "\u2460"  # circled-one first-batch marker
@@ -171,7 +172,7 @@ def parse_renders(renders_dir, ledger_path):
         for line in text.splitlines():
             for m in MEDIA_RE.finditer(line):
                 name = m.group(0).lower()
-                seen[name] = seen.get(name, False) or (TEST_MARK in line)
+                seen[name] = seen.get(name, False) or (TEST_MARK in line or PRODUCT_MARK in line)
     rows = []
     for name in media:
         annotated = seen.get(name.lower(), False)

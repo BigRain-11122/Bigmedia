@@ -155,6 +155,14 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(fail_codes(findings), {"render-unannot"})
         self.assertEqual(rows[0][1], False)
 
+    def test_production_mark_passes(self):
+        # D-BS-06 gate-open era: ledger rows carrying the production mark
+        # (e.g. "production.batches") count as annotated inventory.
+        d = make_renders(self, ["gamma.mp4"], "readiness_renders_product")
+        rows, findings = readiness.parse_renders(d, d / "README.md")
+        self.assertEqual(fail_codes(findings), set())
+        self.assertEqual([ok for _, ok in rows], [True])
+
     def test_missing_ledger_fails(self):
         d = make_renders(self, ["alpha.mp4"], None)
         rows, findings = readiness.parse_renders(d, d / "README.md")
@@ -263,14 +271,18 @@ class CliTests(unittest.TestCase):
         self.assertEqual(rc, 2)
 
     def test_real_repo_smoke_not_ready(self):
-        """Read-only smoke on the real repo: pre-launch state must exit 1."""
+        """Read-only smoke on the real repo: pre-launch state must exit 1.
+
+        Draft-GATE counts drift as production batches flip verdicts
+        (D-BS-06 gate-open era), so assert the pattern, not the count.
+        """
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             rc = readiness.main(["readiness.py"])
         self.assertEqual(rc, 1)
         out = buf.getvalue()
         self.assertIn("NOT READY", out)
-        self.assertIn("10/10 draft(s) not GATE PASS", out)
+        self.assertIn("draft(s) not GATE PASS", out)
         self.assertIn(readiness.TEST_MARK, out)  # real render ledger annotated
 
 
