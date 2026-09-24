@@ -8,6 +8,7 @@
 - 闸门态=`src/os/state.json` 字段 `production`（现值 **paused** · O-20260923-1756-bm-a 模式修正「不量产」；开闸史=O-1602 批次2 曾 open·本表当时未同步属滞后·O-1756 回关；量产开闸须 CEO 令）。
 - **开闸**=CEO 令 → 总裁办公室落 O 文件 + 翻 `state.json`（`production: open`）+ 改循环任务书生产段（任务书=数据件可热改，无需重装）+ `board_check` 回归。**关闸同律**。
 - 机牢执行：`src/make_draft.py` 生产位（`data/drafts/`）在 paused 态拒稿（exit 3）——闸门长牙，不靠自觉。
+- **测试件产线停点**（集团 ledger P-20260924-62 ④·2026-09-24 起生效）：体系验证使命已毕（全回归 176 绿+全链 PoC 梯 R-A/B/C+首件全绿 v12-shipinhao+走链彩排完成）——停点后不再新产渲染测试件/新素材试录件，**例外仅二门**：①CEO 令点名（工艺迭代/拣式件）②新机制件须 PoC 实证（单件过链·标「测试件·非成品」·批闭即收账）。存量冻结=`output/renders/` 台账现状（顶层 24 mp4＋7 png＋5 plan.json＋17 tmp 中间件目录·2026-09-24 实测）全量留存至量产开闸批；开闸时按「发布件替换清盘」处置（被发布件取代者清盘·git 历史留档·mp4 本 gitignored=盘面清）；**批闭即收 tmp 中间件**=既行惯例升格为律。CEO 待决面（拣式/终审）不再因测试件扩面。
 
 ## §1 自动化级定义
 
@@ -19,7 +20,7 @@
 
 | 站 | 自动化级 | 工具/执行体 | 门禁 | 实况 |
 |---|---|---|---|---|
-| M0 选题 | 半自动 | OS 循环生产轮提案（**两源合流=集团 git 实况+情报部日报**·O-2304）+ `board_check.py` 一致性探针（C-08 live） | CEO 批注门；每题来源可溯；**S0 选题官环节门** | gated（闸门关） |
+| M0 选题 | 半自动 | OS 循环生产轮提案（**两源合流=集团 git 实况+情报日报**·O-2304·P-62 ② 后两源同归选题研究部）+ `board_check.py` 一致性探针（C-08 live） | CEO 批注门；每题来源可溯；**S0 选题官环节门** | gated（闸门关） |
 | M1 母稿 | 半自动 | `src/make_draft.py` 骨架生成（C-15）+ AI 会话填充 | 命名/版本律；骨架自带 GATE PENDING；**拍稿预算=目标平台窗内（L15 落地执法·2026-09-24 平台规格前置律：视频号 30-60s→文本预算·B站 3-15min=独立深潜稿——渲染非目标格式然后记 FAIL=违规操作，FAIL 是给漂移抓的不是正确生产的替代品）**；**S1 编剧官环节门（铁律自检表随稿·进链件 ≥9）** | gated |
 | M2 素材 | 半自动 | **本地算力链**（C-11 in-dev·选型已裁=本地优先 O-20260923-1609-bm-a）：edge-tts/faster-whisper/FFmpeg/opencv 已装·四站方案=`docs/m2-local-stack.md`·PoC=backlog #9；**逐镜采集站**（record_screen 开窗-录-即关+`focus_window` 置顶+prep_vertical 竖版规格化·2026-09-24 对位批） | 素材脱敏**渲染探针**审（footage-matching-spec §2：源码关键词扫描不够+活动桌面律）；来源可溯；**分镜对位表前置**（cards `visual` 字段·CEO 工作流令 2026-09-24）；人味规格环节（O-2210）：拍稿预算含空气预算·配音走 `--human` 种子；**S2 配音听审官环节门（ASR+ai_feel+spec 三机检前置）** | in-dev |
 | M3 变体 | 全自动骨架 | `docs/variant-templates.md` 11 平台骨架（C-07 live）+ make_draft 变体位+**R-E 对位剪辑站**（每拍绑定 `visual.source`·素材壁纸禁令·C-28/C-29） | 母稿链接登记；lint 0 FAIL；**S3 变体官环节门（平台语态/规格窗/剪辑工艺 profile/对位声明完备·进链件 ≥9）** | gated |
@@ -55,3 +56,4 @@
 - 2026-09-24: v1.7 剪辑工艺批（CEO 剪辑反馈令「剪辑 卡点 转场 特效什么都没有，而且每个平台用户喜好都不一样！好好反思」）——M3 升「格式+工艺」双适配（平台口味 profiles=`docs/editing-craft-spec.md` v1.0）；M4 增层 1.8 `src/edit_craft_check.py`；R-E 剪辑站 `src/render/edit_craft.py`（zoompan 卡点特效+xfade 转场+绝对时间轴保持代数）；E8 评审席（review-panel v1.5）；**live-A 六席 9+ 更账=剪辑面从未被测量（假绿灯教训）**；首战=BS-001 同稿双平台样件（shipinhao 全转场柔和版/bilibili 硬切强调版）。
 - 2026-09-24: v1.8 素材对位工作流批（CEO 令「录制的内容也和说辞文案完全不匹配，反思工作流，建立正确严谨专业的工作流」）——正典=`docs/footage-matching-spec.md` v1.0（分镜对位表 cards `visual` 契约+逐镜采集+按表选镜+对位机检+纯字卡明示）；M2 增逐镜采集站（`focus_window` 置顶+`prep_vertical` 竖版规格化+**脱敏渲染探针律+活动桌面律**——BigMoney 总控渲染现持仓面判敏感作废/两镜录穿第三方窗口当场删除=两实证入规格）；M3 增 R-E 多源选镜（每拍绑定素材·默认素材兜底禁令）；层 1.8 增对位面（visual-undeclared/missing-file/cards-only-no-reason/ratio ≥0.80）；首战=bs-001-v11-match（12 拍对位核验零不匹配·对位率 83%）。
 - 2026-09-24: v1.9 平台规格前置律批（CEO 批评「每个平台需要的视频时长和比例都不一样，你要考虑周全，为什么老让我来提」）——M1 拍稿预算按目标平台窗（L15 首次执行）+M3 按目标画幅渲染+**渲染非目标格式然后记 FAIL=违规操作**；引擎=`prep_vertical --w/--h` 画幅参数+R-E `PROFILE_WINDOW_S` pre-flight 窗口预警；首战双件=bs-001-v12-shipinhao-60s（**时长入窗·空气预算压缩 ~9s 事实零删改·纯净音轨=BGM 方案 A 预采纳）+bs-001-v12-bilibili-16x9（**画幅 16:9 达标**·时长窗如实 FAIL=深潜扩制归 #14 量产开闸后）。
+- 2026-09-24: v2.0 组织精简批（集团 ledger P-20260924-62 ②④）——§0 增测试件产线停点（例外二门+存量冻结至开闸批+批闭即收 tmp 中间件升律）；M0 两源接线同步（情报部并入选题研究部·BLUEPRINT/org-structure 同批·机制与工具零变更）。

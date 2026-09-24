@@ -95,7 +95,7 @@ def collect(limit=TOP_N):
 def render_brief(day, result):
     """Render the markdown daily brief (data file - Chinese fine here)."""
     lines = []
-    lines.append("# 情报日报 %s（BigStream 情报部·自动采集）" % day)
+    lines.append("# 情报日报 %s（BigStream 选题研究部·情报雷达·自动采集）" % day)
     lines.append("")
     lines.append("> 生成器=`src/intel/daily_brief.py`（零 key 零 token·O-20260923-2304-bm-a）·协议=research-protocol（零断言·负结果如实）。")
     lines.append("> 用途=S0 选题官弹药 / copy-craft 校准参照 / 评审团 rubric 依据 / S4 合规风险雷达。")

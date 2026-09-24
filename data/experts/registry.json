@@ -9,7 +9,7 @@
     },
     {
       "id": "hot-intel",
-      "dept": "情报部",
+      "dept": "选题研究部",
       "role": "热点情报官",
       "prompt_file": "data/experts/prompts/hot-intel.txt"
     },
