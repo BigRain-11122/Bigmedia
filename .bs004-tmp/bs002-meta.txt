@@ -1,0 +1,48 @@
+﻿{
+ "meta": {
+  "topic": "BS-002",
+  "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\bs002\\voiceover-v5.beats.txt",
+  "order": "D-BS-06 production open: BS-002 batch-1 shipinhao piece; v12 full-set default per D-BS-01; v5 beats = window-budget trim pass 2 of S1-cleared v3 (render tail 0.8s budgeted)",
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "one beat = one card = one cut = one matched shot",
+  "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  }
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 100,
+  "h1_color": "accent",
+  "h2_size": 50,
+  "h2_color": "gray60",
+  "h1_gap": 56,
+  "optical_center": 0.42
+ },
+ "aigc_notice": "����Ƶ�� AI ���� �� AIGC ������ʶ",
+ "tail": 0.8
+}
