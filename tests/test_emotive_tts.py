@@ -140,5 +140,73 @@ class TestHumanFeel(unittest.TestCase):
         self.assertEqual(["--rate=-2%", "--pitch=+3Hz"], out)
 
 
+class TestDeepDive(unittest.TestCase):
+    """Backlog #14 deep-dive assembly law: >=2s segment breathing and
+    <=55s spoken inside any rolling 60s window (bilibili 3-15min format).
+    Pure simulation - no TTS/network/ffmpeg."""
+
+    @staticmethod
+    def _beats(marks):
+        return [{"profile": "body",
+                 "card_lines": [("%s x / y" % m) if m else "x / y"],
+                 "text": "t"} for m in marks]
+
+    def test_detect_boundaries_on_mark_changes(self):
+        beats = self._beats(["①", "①", "②", "②", "③", "③"])
+        self.assertEqual([1, 3], et.detect_segment_boundaries(beats))
+
+    def test_unmarked_beats_yield_no_boundaries(self):
+        self.assertEqual([], et.detect_segment_boundaries(self._beats(
+            [None, None, None])))
+
+    def test_unmarked_stretch_inherits_no_spurious_boundary(self):
+        # a mid-segment beat without a mark must not split the segment
+        beats = self._beats(["①", None, "①", "②"])
+        self.assertEqual([2], et.detect_segment_boundaries(beats))
+
+    def test_rolling60_spoken_dense_timeline_exceeds_law(self):
+        durs = [5.0] * 12
+        plan = [{"gap": 0.05, "breath": False} for _ in range(11)]
+        self.assertGreater(et._rolling60_spoken(durs, plan),
+                           et.DEEPDIVE_SPOKEN_MAX)
+
+    def test_rolling60_spoken_short_timeline_counts_all(self):
+        durs = [3.0, 3.0]
+        plan = [{"gap": 0.5, "breath": False}]
+        # total span 6.5s < 60s window: spoken = 6.0
+        self.assertAlmostEqual(6.0, et._rolling60_spoken(durs, plan))
+
+    def test_deepdive_plan_satisfies_both_laws(self):
+        durs = [5.0] * 12
+        boundaries = [5]
+        plan, scale = et.deepdive_plan(42, durs, boundaries)
+        self.assertGreaterEqual(scale, 1.0)
+        self.assertLessEqual(et._rolling60_spoken(durs, plan),
+                             et.DEEPDIVE_SPOKEN_MAX)
+        for i, item in enumerate(plan):
+            if i in boundaries:
+                self.assertGreaterEqual(item["gap"], et.DEEPDIVE_SEG_GAP_BASE)
+            else:
+                self.assertGreaterEqual(item["gap"], 0.12)
+
+    def test_deepdive_plan_deterministic(self):
+        durs = [5.0] * 12
+        self.assertEqual(et.deepdive_plan(7, durs, [5]),
+                         et.deepdive_plan(7, durs, [5]))
+
+    def test_deepdive_plan_scale_grows_when_law_fails_at_base(self):
+        # dense speech at human base gaps cannot pass: solver must scale
+        durs = [5.0] * 30
+        plan, scale = et.deepdive_plan(42, durs, [])
+        self.assertGreater(scale, 1.0)
+        self.assertLessEqual(et._rolling60_spoken(durs, plan),
+                             et.DEEPDIVE_SPOKEN_MAX)
+
+    def test_deepdive_plan_unsatisfiable_exits(self):
+        # one beat longer than the spoken law: gaps can never fix it
+        with self.assertRaises(SystemExit):
+            et.deepdive_plan(42, [60.0, 3.0], [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

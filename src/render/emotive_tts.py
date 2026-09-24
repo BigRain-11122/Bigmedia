@@ -41,6 +41,7 @@ Usage:
         [--cyber light|mid|full] [--human SEED]
         [--template CARDS_JSON] [--order STR]
 """
+import bisect
 import json
 import random
 import subprocess
@@ -125,6 +126,20 @@ HUMAN_BREATH_AFTER_S = 4.2   # insert breath after segments this long
 HUMAN_BREATH_PROB = 0.5       # ...but only with this probability
 HUMAN_ROOMTONE_AMP = 0.006    # pink noise bed amplitude (~-44 dB)
 
+# ---- deep-dive assembly law (backlog #14, bilibili 3-15min format) -------
+# Law: >=2s breathing between the six segments, and <=55s of speech inside
+# any rolling 60s window. The solver below scales interior gaps until the
+# simulated timeline passes; boundary gaps never drop below the law.
+
+DEEPDIVE_SEG_GAP_BASE = 2.0     # law: segment boundary breathing floor
+DEEPDIVE_SEG_GAP_SPREAD = 0.4   # seeded jitter on top (never below base)
+DEEPDIVE_WINDOW_S = 60.0        # law window
+DEEPDIVE_SPOKEN_MAX = 54.5      # law: <=55s spoken, 0.5s safety margin
+DEEPDIVE_SCALE_STEP = 0.15      # interior-gap scale increment per retry
+DEEPDIVE_SCALE_MAX = 8.0        # hard cap = unsatisfiable law (FAIL teeth)
+DEEPDIVE_BREATH_S = 0.22        # nominal breath element duration (sim only)
+CIRCLED_DIGITS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳"
+
 
 def human_series(seed, n):
     """Seeded per-segment jitter plan: [(rate_jit, pitch_jit), ...]."""
@@ -145,6 +160,94 @@ def boundary_plan(seed, durations):
         breath = d >= HUMAN_BREATH_AFTER_S and rng.random() < HUMAN_BREATH_PROB
         plan.append({"gap": gap, "breath": breath})
     return plan
+
+
+def detect_segment_boundaries(beats):
+    """Boundary indices (plan position = gap AFTER that beat) where the
+    leading circled-digit segment mark on the first card line changes.
+    Beats without a mark inherit the previous mark; a fully unmarked
+    beats file yields no boundaries (interior law still enforced)."""
+    def mark(b):
+        first = b["card_lines"][0] if b["card_lines"] else ""
+        for ch in first:
+            if ch in CIRCLED_DIGITS:
+                return ch
+        return None
+    boundaries = []
+    prev = mark(beats[0])
+    for i in range(1, len(beats)):
+        cur = mark(beats[i])
+        if cur is not None and prev is not None and cur != prev:
+            boundaries.append(i - 1)
+        if cur is not None:
+            prev = cur
+    return boundaries
+
+
+def _rolling60_spoken(durations, plan):
+    """Simulate the assembly timeline and return the max seconds of speech
+    inside any rolling DEEPDIVE_WINDOW_S window. Simulation is conservative:
+    it ignores mp3 padding, which only ever adds air."""
+    spans = []
+    t = 0.0
+    for i, d in enumerate(durations):
+        spans.append((t, t + d))
+        t += d
+        if i < len(plan):
+            if plan[i]["breath"]:
+                t += DEEPDIVE_BREATH_S
+            t += plan[i]["gap"]
+    starts = [s for s, _ in spans]
+    ends = [e for _, e in spans]
+    cands = sorted(set(starts) |
+                   {e - DEEPDIVE_WINDOW_S for e in ends if e > DEEPDIVE_WINDOW_S})
+    best = 0.0
+    for w0 in cands:
+        if w0 < 0:
+            continue
+        w1 = w0 + DEEPDIVE_WINDOW_S
+        i0 = bisect.bisect_left(ends, w0)
+        spok = 0.0
+        for s, e in spans[i0:]:
+            if s >= w1:
+                break
+            spok += min(e, w1) - max(s, w0)
+        if spok > best:
+            best = spok
+    return best
+
+
+def deepdive_plan(seed, durations, boundaries):
+    """Law-driven gap plan for the deep-dive format. Segment boundaries get
+    >= DEEPDIVE_SEG_GAP_BASE seconds of breathing; interior gaps scale up
+    from the human base until every rolling 60s window holds at most
+    DEEPDIVE_SPOKEN_MAX of speech. Deterministic in (seed, durations).
+    Returns (plan, interior_scale). Exits non-zero if the scale cap is hit
+    (a single beat longer than the spoken law cannot be fixed by gaps)."""
+    rng = random.Random((seed * 104729) + 13)
+    jitters = [rng.uniform(-HUMAN_GAP_SPREAD, HUMAN_GAP_SPREAD)
+               for _ in range(len(durations) - 1)]
+    breaths = [d >= HUMAN_BREATH_AFTER_S and rng.random() < HUMAN_BREATH_PROB
+               for d in durations[:-1]]
+    seg_jits = [rng.uniform(0.0, DEEPDIVE_SEG_GAP_SPREAD)
+                for _ in range(len(durations) - 1)]
+    bset = set(boundaries)
+    scale = 1.0
+    while scale <= DEEPDIVE_SCALE_MAX:
+        plan = []
+        for i in range(len(durations) - 1):
+            if i in bset:
+                gap = round(DEEPDIVE_SEG_GAP_BASE + seg_jits[i], 3)
+            else:
+                gap = max(0.12, round(scale * (HUMAN_GAP_BASE + jitters[i]), 3))
+            plan.append({"gap": gap, "breath": breaths[i]})
+        if _rolling60_spoken(durations, plan) <= DEEPDIVE_SPOKEN_MAX:
+            return plan, scale
+        scale += DEEPDIVE_SCALE_STEP
+    print("FAIL deepdive law unsatisfiable within scale cap %.1f "
+          "(a single beat likely exceeds the %.0fs spoken law)"
+          % (DEEPDIVE_SCALE_MAX, DEEPDIVE_SPOKEN_MAX))
+    sys.exit(1)
 
 
 def jitter_flags(flags, rate_jit, pitch_jit):
@@ -220,6 +323,7 @@ def main(argv):
     beats_path = voice = out_dir = None
     cyber = template = order = None
     human_seed = None
+    deepdive = False
     i = 1
     while i < len(argv):
         if argv[i] == "--beats":
@@ -243,14 +347,20 @@ def main(argv):
         elif argv[i] == "--human":
             i += 1
             human_seed = int(argv[i])
+        elif argv[i] == "--deepdive":
+            deepdive = True
         i += 1
     if not (beats_path and voice and out_dir):
         print("usage: emotive_tts.py --beats FILE --voice VOICE --out DIR"
               " [--cyber light|mid|full] [--human SEED]"
-              " [--template CARDS_JSON] [--order STR]")
+              " [--template CARDS_JSON] [--order STR] [--deepdive]")
         return 2
     if cyber and cyber not in CYBER_CHAINS:
         print("FAIL unknown --cyber level: %s (light|mid|full)" % cyber)
+        return 2
+    if deepdive and human_seed is None:
+        print("FAIL --deepdive requires --human SEED "
+              "(breathing law needs the gap machinery)")
         return 2
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -279,7 +389,15 @@ def main(argv):
     # human off = zero-gap TTS metronome (the classic AI tell); human on =
     # seeded varied gaps (+ optional breaths), timeline follows probed
     # durations of every inserted element, so SRT/cards never drift.
-    if human_seed is not None:
+    dd_boundaries = dd_scale = None
+    if deepdive:
+        dd_boundaries = detect_segment_boundaries(beats)
+        plan, dd_scale = deepdive_plan(human_seed, durations, dd_boundaries)
+        print("OK deepdive law plan: %d segment boundaries, seg_gap>=%.1fs"
+              " interior_scale=%.2f (spoken<=%.1fs per %.0fs window)"
+              % (len(dd_boundaries), DEEPDIVE_SEG_GAP_BASE, dd_scale,
+                 DEEPDIVE_SPOKEN_MAX, DEEPDIVE_WINDOW_S))
+    elif human_seed is not None:
         plan = boundary_plan(human_seed, durations)
     else:
         plan = [{"gap": 0.0, "breath": False} for _ in range(len(beats) - 1)]
@@ -402,6 +520,15 @@ def main(argv):
             "breath_after_s": HUMAN_BREATH_AFTER_S,
             "breath_prob": HUMAN_BREATH_PROB,
             "roomtone_amp": HUMAN_ROOMTONE_AMP,
+        }
+    if deepdive:
+        meta["deepdive"] = {
+            "seg_gap_base_s": DEEPDIVE_SEG_GAP_BASE,
+            "seg_gap_spread_s": DEEPDIVE_SEG_GAP_SPREAD,
+            "window_s": DEEPDIVE_WINDOW_S,
+            "spoken_max_s": DEEPDIVE_SPOKEN_MAX,
+            "interior_scale": dd_scale,
+            "segment_boundaries_after_beat": dd_boundaries,
         }
 
     cards_doc = {
