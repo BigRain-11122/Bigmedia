@@ -51,6 +51,7 @@ MOVES = ("ken_in", "ken_out", "punch")
 HARD_CUT_MAX_S = 0.08    # xfade <= this reads as a hard cut (2-frame
                          # 0.05s is the floor: sub-frame 0.001 EOFs the
                          # xfade chain - bilibili render 2026-09-24)
+VISUAL_RATIO_MIN = 0.80  # footage-matching-spec S3: matched-beat share
 
 SPEC = {
     "shipinhao": {
@@ -118,8 +119,11 @@ def check(plan, cues, profile_name):
                              "%d/%d boundaries on cue edges (+-%.2fs)"
                              % (aligned, len(bounds), BEAT_TOL_S)))
 
-    # 2. no static segments; hits get the punch
-    static = [s for s in segs if s.get("treatment") not in MOVES]
+    # 2. no static segments; hits get the punch (cards-only beats may be
+    # flat color - declared static-by-design, footage-matching-spec S3)
+    static = [s for s in segs
+              if s.get("treatment") not in MOVES
+              and not (s.get("cards_only") and s.get("treatment") == "flat")]
     if static:
         findings.append(("FAIL", "static-seg",
                          "%d segment(s) without camera movement: the "
@@ -129,6 +133,46 @@ def check(plan, cues, profile_name):
                          "all %d segments move (%s)"
                          % (len(segs),
                             "/".join(sorted(set(s["treatment"] for s in segs))))))
+
+    # 2.5 visual matching face (footage-matching-spec S1/S3/S4)
+    if plan.get("visual_mode", "legacy") != "matched":
+        findings.append(("WARN", "visual-legacy",
+                         "single-background legacy style: footage is a "
+                         "wallpaper, not per-beat evidence (matching spec)"))
+    else:
+        undeclared = [s["idx"] for s in segs
+                      if not s.get("cards_only") and not s.get("visual_source")]
+        if undeclared:
+            findings.append(("FAIL", "visual-undeclared",
+                             "beats without visual declaration (default "
+                             "footage banned): %s" % undeclared))
+        no_reason = [s["idx"] for s in segs
+                     if s.get("cards_only")
+                     and not str(s.get("cards_only_reason", "")).strip()]
+        if no_reason:
+            findings.append(("FAIL", "cards-only-no-reason",
+                             "cards-only beats without reason: %s" % no_reason))
+        missing = []
+        for s in segs:
+            if s.get("visual_source"):
+                q = Path(s["visual_source"])
+                q = q if q.is_absolute() else REPO / q
+                if not q.exists():
+                    missing.append(s["visual_source"])
+        if missing:
+            findings.append(("FAIL", "visual-missing-file",
+                             "declared visual sources not on disk: %s"
+                             % missing))
+        ratio = float(plan.get("visual_ratio", 0.0))
+        if ratio < VISUAL_RATIO_MIN:
+            findings.append(("FAIL", "visual-ratio",
+                             "matched-beat ratio %.2f < %.2f: too many "
+                             "cards-only beats" % (ratio, VISUAL_RATIO_MIN)))
+        else:
+            findings.append(("PASS", "visual-ratio",
+                             "per-beat matched footage %.2f (%d/%d beats)"
+                             % (ratio, len(segs) - len(plan.get(
+                                 "cards_only_beats", [])), len(segs))))
     missed = [i for i in hits
               if not any(s["idx"] == i and s["treatment"] == "punch"
                          for s in segs)]

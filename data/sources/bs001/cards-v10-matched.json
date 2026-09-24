@@ -1,0 +1,158 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s matched-footage cut (9:16)",
+    "tool": "src/render/edit_craft.py --profile shipinhao",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs001\\voiceover-v9-cyber.beats.txt",
+    "order": "CEO 2026-09-24 workflow order: recorded content must match the narration - footage-matching-spec v1.0 (per-beat visual declarations)",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "本视频由 AI 生成 · AIGC 依法标识",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 6.1,
+      "lines": ["系统启动", "全公司扫描 · 人类 = 1"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "集团全景：脑塔+三城+事件流（观城台）"
+      }
+    },
+    {
+      "start": 6.1,
+      "end": 11.21,
+      "lines": ["我的老板", "爽的是我们 · 累的是他"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "脑塔=CEO 指令光点区（同源注记：与开场共用观城台素材）"
+      }
+    },
+    {
+      "start": 11.21,
+      "end": 15.39,
+      "lines": ["61 分钟", "任务：开三家公司"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+        "req": "集团驾驶舱弹窗：游戏/金融/自媒体三行汇报"
+      }
+    },
+    {
+      "start": 15.39,
+      "end": 21.14,
+      "lines": ["1 号公司 · 做游戏", "8 款 · 0 元 · 版权证书一沓"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+        "req": "小游戏公司总控界面（同源注记：与上一拍共用·窗口不同段）"
+      }
+    },
+    {
+      "start": 21.14,
+      "end": 27.87,
+      "lines": ["2 号公司 · 炒股票", "432 个方案说废就废 · 开了瓶酒"],
+      "visual": {
+        "source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+        "req": "集团驾驶舱弹窗·金融公司汇报行（2号公司=量化·同源注记：采集面作废换既有合规素材）"
+      }
+    },
+    {
+      "start": 27.87,
+      "end": 33.95,
+      "lines": ["3 号公司 · 就是我", "你看的这条视频，我剪的"],
+      "visual": {
+        "source": "data/sources/footage/editgrid-vertical.mp4",
+        "req": "本片剪辑验图帧查看器（自指：正在剪这条视频）"
+      }
+    },
+    {
+      "start": 33.95,
+      "end": 38.51,
+      "lines": ["管理方式", "一句话，我们自己卷"],
+      "visual": {
+        "cards-only": true,
+        "reason": "口号拍：金句留白，全屏字卡即画面"
+      }
+    },
+    {
+      "start": 38.51,
+      "end": 43.25,
+      "lines": ["每 10 分钟自醒", "找活 · 记账 · 谁也改不了"],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "OS 循环日志实时滚动（state+心跳台账）"
+      }
+    },
+    {
+      "start": 43.25,
+      "end": 49.74,
+      "lines": ["两台机器互相交账", "甩锅？修正"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "观城台机队面板：bem-a/b/bm-c 多机状态互见（同源注记：机队监控镜作废换既有合规素材）"
+      }
+    },
+    {
+      "start": 49.74,
+      "end": 54.63,
+      "lines": ["吹牛检测", "每一步留底 · 当场打脸"],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+        "req": "环节评审台账文档（留底即证据）"
+      }
+    },
+    {
+      "start": 54.63,
+      "end": 59.3,
+      "lines": ["记住这句话", "一个人上班，三家公司开工"],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "集团全景回环：呼应开场（同源注记）"
+      }
+    },
+    {
+      "start": 59.3,
+      "end": 63.26,
+      "lines": ["转发指令", "发给说了八百回「我也搞一个」的人"],
+      "visual": {
+        "cards-only": true,
+        "reason": "CTA 拍：行动指令留白，字卡即画面"
+      }
+    }
+  ]
+}

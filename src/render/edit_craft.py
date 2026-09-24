@@ -121,29 +121,66 @@ def build_fades(profile, n_seg):
     return fades
 
 
-def pick_hits(cards, cap):
-    """Deterministic hit beats: open + evenly-spaced digit beats + last."""
+def pick_hits(cards, cap, exclude=()):
+    """Deterministic hit beats: open + evenly-spaced digit beats + last;
+    cards-only beats never carry punch/flash (they have no footage)."""
+    skip = set(exclude)
+    n = len(cards)
     digit = [i for i, c in enumerate(cards)
              if any(ch.isdigit() for ch in str(c["lines"][0]))]
-    mid_need = max(0, cap - 2)
+    digit = [i for i in digit if i != 0 and i != n - 1 and i not in skip]
+    ends = [i for i in (0, n - 1) if i not in skip]
+    mid_need = max(0, cap - len(ends))
     mids = []
     if digit and mid_need:
-        mids = [digit[int(k * (len(digit) - 1) / max(mid_need - 1, 1))]
-                for k in range(mid_need)] if mid_need > 1 else digit[:1]
+        mids = ([digit[int(k * (len(digit) - 1) / max(mid_need - 1, 1))]
+                 for k in range(mid_need)] if mid_need > 1 else digit[:1])
     seen, hits = set(), []
-    for i in [0] + mids + [len(cards) - 1]:
+    for i in ends[:1] + mids + (ends[1:] if len(ends) > 1 else []):
         if i not in seen and len(hits) < cap:
             seen.add(i)
             hits.append(i)
     return sorted(hits)
 
 
-def pick_treatments(n_seg, hits):
-    """punch on hits; ken_in/ken_out alternating elsewhere (no static)."""
+def _plan_visuals(cards):
+    """Validate + normalize per-beat visual declarations (footage-matching
+    spec S1). All-or-nobody: one declared beat makes undeclared beats an
+    error (no silent default footage = the wallpaper sin). None declared
+    = legacy single-background mode (archived style, gate WARNs it)."""
+    if not any(c.get("visual") for c in cards):
+        return None
+    vis = []
+    for i, c in enumerate(cards):
+        v = c.get("visual")
+        if not v:
+            raise ValueError("beat %d has no visual declaration "
+                             "(footage-matching-spec S1: source or "
+                             "cards-only, default footage banned)" % i)
+        if v.get("cards-only"):
+            reason = str(v.get("reason", "")).strip()
+            if not reason:
+                raise ValueError("beat %d cards-only without reason" % i)
+            vis.append({"cards_only": True, "reason": reason, "source": None})
+        else:
+            src = str(v.get("source", "")).strip()
+            if not src:
+                raise ValueError("beat %d visual missing source" % i)
+            vis.append({"cards_only": False, "reason": "",
+                        "source": src})
+    return vis
+
+
+def pick_treatments(n_seg, hits, flat=()):
+    """punch on hits; ken_in/ken_out alternating elsewhere; flat color
+    for cards-only beats (declared static-by-design, gate exempts)."""
     out = []
+    flat = set(flat)
     flip = False
     for i in range(n_seg):
-        if i in hits:
+        if i in flat:
+            out.append("flat")
+        elif i in hits:
             out.append("punch")
         else:
             out.append("ken_in" if not flip else "ken_out")
@@ -161,13 +198,16 @@ def plan_edit(cfg, profile_name):
     n = len(cards)
     bounds = beat_boundaries(cfg)
     fades = build_fades(profile, n)
-    hits = pick_hits(cards, profile["hit_cap"])
-    treat = pick_treatments(n, hits)
+    vis = _plan_visuals(cards)
+    matched = vis is not None
+    cards_only = ([i for i in range(n) if vis[i]["cards_only"]]
+                  if matched else [])
+    hits = pick_hits(cards, profile["hit_cap"], exclude=cards_only)
+    treat = pick_treatments(n, hits, flat=cards_only)
     f_max = profile["fade_s"]
     tail = float(cfg.get("tail", 0.5))
     spans = [bounds[k + 1] - bounds[k] for k in range(n)]
     durs = [spans[k] + f_max for k in range(n - 1)] + [spans[-1] + tail + f_max]
-    offs = [(bounds[k] - fades[k - 1]["fade_s"]) for k in range(1, n)]
     segments = []
     for k in range(n):
         # flash fires AFTER the incoming transition completes - otherwise
@@ -178,17 +218,28 @@ def plan_edit(cfg, profile_name):
         flash = bool(profile["flash"] and k in hits)
         segments.append({
             "idx": k,
-            "src_off_s": round((bounds[k] * 0.9) % SRC_OFF_MOD, 3),
+            "src_off_s": 0.0 if matched else
+            round((bounds[k] * 0.9) % SRC_OFF_MOD, 3),
             "dur_s": round(durs[k], 3),
             "treatment": treat[k],
             "hit": k in hits,
             "flash": flash,
             "flash_st_s": round(incoming, 3) if flash else 0.0,
+            "cards_only": k in cards_only,
+            "cards_only_reason": (vis[k]["reason"] if matched
+                                  and vis[k]["cards_only"] else ""),
+            "visual_source": (vis[k]["source"] if matched
+                              and not vis[k]["cards_only"] else None),
         })
+    ratio = (n - len(cards_only)) / float(n) if matched else 0.0
     return {
         "engine": "R-E",
         "spec": "docs/editing-craft-spec.md",
+        "visual_spec": "docs/footage-matching-spec.md",
         "profile": profile_name,
+        "visual_mode": "matched" if matched else "legacy",
+        "visual_ratio": round(ratio, 3),
+        "cards_only_beats": cards_only,
         "boundaries": [{"k": k + 1, "time_s": round(bounds[k + 1], 3),
                         "fade_s": fades[k]["fade_s"], "type": fades[k]["type"]}
                        for k in range(n - 1)],
@@ -227,34 +278,79 @@ def _run(cmd):
     return True
 
 
+CARD_ONLY_BG = "0x0a0a0d"   # deep gray (human-feel era bg) for cards-only
+
+
+def _resolve_src(p):
+    """Repo-relative visual source paths resolve against the repo root."""
+    q = Path(p)
+    return q if q.is_absolute() else REPO / q
+
+
 def render_segments(plan, cfg, footage, tmpdir):
-    """Stage 1: looped intermediate + one camera-treated segment per beat."""
+    """Stage 1: one camera-treated segment per beat.
+
+    Matched mode (footage-matching spec): each beat renders from ITS
+    declared visual source (short recordings loop inside the beat);
+    cards-only beats render a flat deep-gray source (declared
+    static-by-design). Legacy mode keeps the single looped intermediate
+    (archived wallpaper style - the gate WARNs it, new pieces must not).
+    """
     w, h = int(cfg["video"]["width"]), int(cfg["video"]["height"])
-    inter = tmpdir / "inter.mp4"
-    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-           "-stream_loop", "-1", "-i", str(footage),
-           "-vf", "scale=%d:%d,setsar=1,fps=%d" % (w, h, FPS),
-           "-t", "%.2f" % INTER_S, "-c:v", "libx264", "-preset", "veryfast",
-           "-crf", "18", "-pix_fmt", "yuv420p", str(inter)]
-    if not _run(cmd):
-        return None
+    matched = plan.get("visual_mode") == "matched"
+    inter = None
+    if not matched:
+        inter = tmpdir / "inter.mp4"
+        cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+               "-stream_loop", "-1", "-i", str(footage),
+               "-vf", "scale=%d:%d,setsar=1,fps=%d" % (w, h, FPS),
+               "-t", "%.2f" % INTER_S, "-c:v", "libx264", "-preset", "veryfast",
+               "-crf", "18", "-pix_fmt", "yuv420p", str(inter)]
+        if not _run(cmd):
+            return None
     segs = []
     for s in plan["segments"]:
         nf = int(round(s["dur_s"] * FPS))
+        seg = tmpdir / ("seg%02d.mp4" % s["idx"])
+        flat = matched and s.get("cards_only")
+        if flat:
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-f", "lavfi", "-i",
+                   "color=c=%s:s=%dx%d:r=%d:d=%.3f"
+                   % (CARD_ONLY_BG, w, h, FPS, s["dur_s"]),
+                   "-vf", "setsar=1,fps=%d" % FPS, "-r", str(FPS),
+                   "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                   "-pix_fmt", "yuv420p", str(seg)]
+            if not _run(cmd):
+                return None
+            segs.append(seg)
+            continue
         # setpts rebase FIRST: -ss before -i keeps input PTS at the seek
         # offset, so a segment-head fade at st=0 never fires (the bilibili
         # white flash silently vanished until this rebase, 2026-09-24).
-        vf = ("setpts=PTS-STARTPTS,"
+        vf = ("setpts=PTS-STARTPTS,scale=%d:%d,setsar=1,fps=%d,"
               "zoompan=z=%s:x='iw/2-(iw/zoom)/2':y='ih/2-(ih/zoom)/2'"
-              ":d=1:s=%dx%d:fps=%d" % (_zoom_expr(s["treatment"], nf), w, h, FPS))
+              ":d=1:s=%dx%d:fps=%d"
+              % (w, h, FPS, _zoom_expr(s["treatment"], nf), w, h, FPS))
         if s["flash"]:
             vf += ",fade=t=in:st=%.3f:d=0.06:color=white" % s.get("flash_st_s", 0.0)
-        seg = tmpdir / ("seg%02d.mp4" % s["idx"])
-        cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-               "-ss", "%.3f" % s["src_off_s"], "-i", str(inter),
-               "-t", "%.3f" % s["dur_s"], "-vf", vf, "-r", str(FPS),
-               "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
-               "-pix_fmt", "yuv420p", str(seg)]
+        if matched:
+            src = _resolve_src(s["visual_source"])
+            if not src.exists():
+                print("FAIL visual source not found (beat %d): %s"
+                      % (s["idx"], src))
+                return None
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-stream_loop", "-1", "-i", str(src),
+                   "-t", "%.3f" % s["dur_s"], "-vf", vf, "-r", str(FPS),
+                   "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                   "-pix_fmt", "yuv420p", str(seg)]
+        else:
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-ss", "%.3f" % s["src_off_s"], "-i", str(inter),
+                   "-t", "%.3f" % s["dur_s"], "-vf", vf, "-r", str(FPS),
+                   "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                   "-pix_fmt", "yuv420p", str(seg)]
         if not _run(cmd):
             return None
         segs.append(seg)
@@ -317,7 +413,9 @@ def main(argv=None):
     ap.add_argument("--profile", required=True, choices=sorted(PROFILES))
     ap.add_argument("--cards", required=True)
     ap.add_argument("--srt", required=True)
-    ap.add_argument("--bgvideo", required=True)
+    ap.add_argument("--bgvideo",
+                    help="legacy single-background footage; unused when "
+                         "cards declare per-beat visuals")
     ap.add_argument("--audio")
     ap.add_argument("--out")
     ap.add_argument("--grain", type=int, default=0)
@@ -332,9 +430,6 @@ def main(argv=None):
     if not Path(args.srt).exists():
         print("FAIL srt not found: %s" % args.srt)
         return 2
-    if not Path(args.bgvideo).exists():
-        print("FAIL bgvideo not found: %s" % args.bgvideo)
-        return 2
     try:
         cues = parse_srt(Path(args.srt))
     except ValueError as e:
@@ -342,6 +437,12 @@ def main(argv=None):
         return 2
 
     plan = plan_edit(cfg, args.profile)
+    if plan.get("visual_mode") != "matched" and not args.bgvideo:
+        print("FAIL bgvideo required for legacy (non-matched) cards")
+        return 2
+    if args.bgvideo and not Path(args.bgvideo).exists():
+        print("FAIL bgvideo not found: %s" % args.bgvideo)
+        return 2
     meta = cfg.get("meta") or {}
     topic = str(meta.get("topic", "")).strip().lower().replace(" ", "-") or "edit"
     out_path = (Path(args.out) if args.out else
@@ -359,7 +460,9 @@ def main(argv=None):
 
     tmpdir = Path(tempfile.mkdtemp(prefix="bsedit-"))
     try:
-        segs = render_segments(plan, cfg, Path(args.bgvideo), tmpdir)
+        segs = render_segments(plan, cfg,
+                               Path(args.bgvideo) if args.bgvideo else None,
+                               tmpdir)
         if segs is None:
             return 4
         w, h = int(cfg["video"]["width"]), int(cfg["video"]["height"])

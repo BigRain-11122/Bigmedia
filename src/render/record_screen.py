@@ -66,6 +66,20 @@ def close_window(title_part):
     return True
 
 
+def focus_window(title_part):
+    """Bring the window to front before capture. gdigrab records the
+    desktop REGION, not the window - if another app (e.g. a maximized
+    editor) sits on top, the recording shows the wrong app. 2026-09-24:
+    the CityWatch and fleet-monitor shots captured a Unity editor."""
+    hit = find_window(title_part)
+    if not hit:
+        return False
+    user32 = ctypes.windll.user32
+    user32.ShowWindow(hit[0], 9)   # SW_RESTORE
+    user32.SetForegroundWindow(hit[0])
+    return True
+
+
 def open_edge_app(url):
     """Launch Edge in app mode (clean window, no tabs). Best effort."""
     subprocess.run(
@@ -124,6 +138,7 @@ def main(argv=None):
         return 2
     hwnd, rect = hit
     print("OK window hwnd=%s rect=%s" % (hwnd, rect))
+    focus_window(args.title)   # gdigrab records the region, front it (2026-09-24 lesson)
     time.sleep(args.wait)
     code, err = record_region(rect, args.seconds, out, args.fps)
     if code != 0:

@@ -11,6 +11,7 @@ Run:
 """
 import copy
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -31,6 +32,25 @@ def fixture_cfg(n=12, step=5.0, tail=0.8):
                       "lines": [h1, "second line"]})
     return {"cards": cards, "tail": tail,
             "video": {"width": 1080, "height": 1920, "fps": 30}}
+
+
+def fixture_cfg_visual(cards_only_idx=(6, 11), n=12):
+    """Cards with per-beat visual declarations (footage-matching S1);
+    footage beats point at real temp files - the gate existence check
+    needs them on disk."""
+    cfg = fixture_cfg(n=n)
+    holder = tempfile.TemporaryDirectory()
+    root = Path(holder.name)
+    for i, c in enumerate(cfg["cards"]):
+        if i in cards_only_idx:
+            c["visual"] = {"cards-only": True,
+                           "reason": "cta" if i == n - 1 else "slogan"}
+        else:
+            f = root / ("shot%02d.mp4" % i)
+            f.write_bytes(b"")
+            c["visual"] = {"source": str(f), "req": "matched shot"}
+    cfg["_holder"] = holder  # keep the temp dir alive with the cfg
+    return cfg
 
 
 def aligned_cues(bounds, step):
@@ -184,6 +204,82 @@ class TestGate(unittest.TestCase):
             self.assertGreaterEqual(prof["fade_s"], spec["fade_min_s"])
             for t in prof["pool"]:
                 self.assertIn(t, spec["pool"])
+
+
+class TestVisualMatching(unittest.TestCase):
+    """footage-matching-spec: per-beat evidence, no default footage."""
+
+    def setUp(self):
+        self.cfg = fixture_cfg_visual()
+        self.plan = ec.plan_edit(self.cfg, "shipinhao")
+        bounds = [0.0] + [b["time_s"] for b in self.plan["boundaries"]] + \
+            [self.plan["last_beat_end_s"]]
+        self.cues = aligned_cues(bounds, 5.0)
+
+    def tearDown(self):
+        self.cfg["_holder"].cleanup()
+
+    def findings(self, plan):
+        return {f[1]: f[0] for f in ecc.check(plan, self.cues, "shipinhao")}
+
+    def test_matched_plan_carries_per_beat_sources(self):
+        self.assertEqual(self.plan["visual_mode"], "matched")
+        for s in self.plan["segments"]:
+            if s["cards_only"]:
+                self.assertIsNone(s["visual_source"])
+                self.assertEqual(s["treatment"], "flat")
+                self.assertTrue(s["cards_only_reason"])
+            else:
+                self.assertTrue(s["visual_source"])
+                self.assertIn(s["treatment"], ("ken_in", "ken_out", "punch"))
+        self.assertAlmostEqual(self.plan["visual_ratio"], 10.0 / 12, places=3)
+        self.assertNotIn(11, self.plan["hits"])  # cards-only never hits
+
+    def test_partial_declaration_raises(self):
+        # one undeclared beat among declared ones = the wallpaper sin
+        cfg = fixture_cfg_visual()
+        cfg["_holder"].cleanup()
+        cfg["cards"][3].pop("visual")
+        with self.assertRaises(ValueError):
+            ec.plan_edit(cfg, "shipinhao")
+
+    def test_cards_only_without_reason_raises(self):
+        cfg = fixture_cfg_visual()
+        cfg["_holder"].cleanup()
+        cfg["cards"][6]["visual"] = {"cards-only": True}
+        with self.assertRaises(ValueError):
+            ec.plan_edit(cfg, "shipinhao")
+
+    def test_gate_matched_clean_passes(self):
+        f = self.findings(self.plan)
+        self.assertFalse(any(v == "FAIL" for v in f.values()), f)
+        self.assertEqual(f.get("visual-ratio"), "PASS")
+
+    def test_gate_visual_missing_file_fails(self):
+        bad = copy.deepcopy(self.plan)
+        bad["segments"][0]["visual_source"] = "no/such/shot.mp4"
+        f = self.findings(bad)
+        self.assertEqual(f.get("visual-missing-file"), "FAIL")
+
+    def test_gate_undeclared_beat_fails(self):
+        bad = copy.deepcopy(self.plan)
+        bad["segments"][0]["visual_source"] = None
+        f = self.findings(bad)
+        self.assertEqual(f.get("visual-undeclared"), "FAIL")
+
+    def test_gate_ratio_below_line_fails(self):
+        # 7 of 12 cards-only = 0.583 < 0.80 (spec S3 line)
+        cfg = fixture_cfg_visual(cards_only_idx=(1, 2, 4, 6, 8, 9, 11))
+        plan = ec.plan_edit(cfg, "shipinhao")
+        cfg["_holder"].cleanup()
+        f = self.findings(plan)
+        self.assertEqual(f.get("visual-ratio"), "FAIL")
+
+    def test_gate_legacy_warns_not_fails(self):
+        cfg = fixture_cfg()
+        plan = ec.plan_edit(cfg, "shipinhao")
+        f = self.findings(plan)
+        self.assertEqual(f.get("visual-legacy"), "WARN")
 
 
 if __name__ == "__main__":
