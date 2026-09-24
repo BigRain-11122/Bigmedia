@@ -51,7 +51,7 @@ CEO（Jason·决策面）── 文化分管（Qiqi·人文终审）
 
 ## §6 技术底座（m2-local-stack·本地优先）
 
-四站全本地：edge-tts（云端免费接口·piper 纯本地备份线）/faster-whisper/FFmpeg/Ollama qwen2.5:14b（评审独立仪）；机检门五件=board_check/draft_lint/ai_feel_check/platform_spec_check/readiness（零 token 脚本）；BGM 音源三案呈报待裁（bgm-sourcing-research）。
+四站全本地：edge-tts（云端免费接口·piper 纯本地备份线）/faster-whisper/FFmpeg/Ollama qwen2.5:14b（评审独立仪）；**零 token 机检件逐注**（2026-09-24 审计 R2）：board_check/draft_lint/ai_feel_check/platform_spec_check/readiness/weekly_report/daily_brief/call_expert=全部纯脚本或本地 Ollama·零 API；BGM 音源三案呈报待裁（bgm-sourcing-research）。情报日报采集失败的记录路径=当日 md「通道卡点」节（负结果如实入报·daily_brief 内置渲染）。
 
 ## §7 运转节律
 
