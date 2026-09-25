@@ -1,0 +1,9 @@
+H1 size 84 budget 10.95em | H2 size 44 budget 20.91em
+6.15  em  budget 10.95 em  single=True  城市图鉴 013
+8.40  em  budget 20.91 em  single=True  C-00022 · 何雨欣
+16.25 em  budget 20.91 em  single=True  碳基市民 · 新市民派 · 女 · 25 岁
+13.35 em  budget 20.91 em  single=True  MEDIA 城 · 七段街区 · 主播
+20.00 em  budget 20.91 em  single=True  信条：「流量像潮水，我是灯塔不是渔船。」
+9.10  em  budget 20.91 em  single=True  尝鲜 · 攒劲 · 热肠
+20.00 em  budget 20.91 em  single=True  全城唯一把「真实时间」打进直播标题的主播
+EM_CHECK: ALL OK
