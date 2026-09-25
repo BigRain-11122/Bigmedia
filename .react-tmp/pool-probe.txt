@@ -1,0 +1,105 @@
+POOL TOP KEYS: {'axes': ('dict', 6), 'sprite': ('dict', 12)}
+--- POOL RAIN HITS (96) ---
+/axes/烟火/rain/1 = 雨天吃碗热乎面，真舒坦
+/axes/烟火/rain/4 = 油盐酱醋都备好，雨天不用慌
+/axes/烟火/rain/6 = 撑把伞，雨水别沾衣裳
+/axes/烟火/rain/7 = 雨天出门，早点吃个热乎的
+/axes/烟火/rain/9 = 面条汤里加点葱花，雨天吃起来暖和
+/axes/烟火/rain/12 = 雨伞下走着走着，就忘了这天是下雨的
+/axes/烟火/rain/14 = 今天的雨真大，伞都被淋透了
+/axes/烟火/rain/15 = 伞布下也挡不住这雨的调皮
+/axes/烟火/rain/16 = 早起的摊主也躲不开这雨的冷意
+/axes/烟火/rain/17 = 食堂师傅这菜还得接着炒，不管天晴雨天
+/axes/烟火/typhoon/9 = 风雨来了家家忙，加固招牌不能忘
+/axes/秩序/rain/0 = 伞光摇曳，雨夜也添了几分暖意
+/axes/秩序/rain/2 = 这雨不大，刚好添点清凉
+/axes/秩序/rain/4 = 雨中行人，各有各的风度
+/axes/秩序/rain/6 = 伞光摇曳，雨丝也不燥
+/axes/秩序/rain/8 = 撑把伞出门，总比淋雨强
+/axes/秩序/rain/10 = 雨天出门少，安全第一要紧
+/axes/秩序/rain/11 = 别看雨大，出门得有防备
+/axes/秩序/rain/12 = 这雨天，最好还是撑把伞
+/axes/秩序/rain/14 = 伞光映在水洼，这雨天也有了几分景致
+/axes/秩序/rain/15 = 这雨天的伞光，还真添了几分雅兴
+/axes/秩序/rain/17 = 这样下雨天，倒也多了些闲情
+/axes/秩序/typhoon/11 = 门窗关紧别大意，风大雨大要牢记
+/axes/秩序/heatwave/5 = 流汗多得像下雨，衣服都溻湿了
+/axes/求新/rain/0 = 雨伞下看雨，别有一番风味
+/axes/求新/rain/1 = 打伞的少年，是不是偷偷喜欢淋雨？
+/axes/求新/rain/2 = 雨水敲打伞面，叮叮咚咚好听得很
+/axes/求新/rain/3 = 今天不下雨，明天有伞光吗？
+/axes/求新/rain/4 = 换个角度，雨天也有光，挺好
+/axes/求新/rain/5 = 直播间里，我也能分享这雨伞下的世界
+/axes/求新/rain/7 = 雨天拍短视频，流量翻几番
+/axes/求新/rain/8 = 伞光映在雨幕里，真好看
+/axes/求新/rain/9 = 下雨天也有诗和远方
+/axes/求新/rain/10 = 直播间的雨景，给观众们分享
+/axes/求新/rain/12 = 学徒的手艺，雨中更显灵巧
+/axes/求新/rain/13 = 换个角度看，雨也是风景
+/axes/求新/rain/14 = 雨伞下也能种出彩虹呀
+/axes/求新/rain/16 = 雨水打在伞上，好个清静
+/axes/求新/rain/17 = 今儿这雨，给街巷添了新景
+/axes/求新/typhoon/16 = 招牌都跟人一样，得防风避雨才壮
+/axes/怀旧/morning/9 = 伞骨咔咔响，人生故事多得像这雨后的路
+/axes/怀旧/night/1 = 雨停了，收伞的手艺可不能丢
+/axes/怀旧/weekend/11 = 雨停了，伞收一收吧
+/axes/怀旧/weekend/16 = 下雨天修伞，天晴了补鞋，日子得慢慢过
+/axes/怀旧/rain/0 = 撑着伞走过雨巷，就像打开了旧日的记忆箱
+/axes/怀旧/rain/2 = 档案馆的雨天，总让我想起那些未完的故事
+/axes/怀旧/rain/3 = 雨声敲打着伞面，仿佛在诉说着过往的风霜
+/axes/怀旧/rain/4 = 老克勒说，雨天适合听旧唱片，看旧电影
+/axes/怀旧/rain/7 = 这雨天，倒像是给这城添了点古旧味
+/axes/怀旧/rain/8 = 撑把伞，雨天也不失风度
+/axes/怀旧/rain/11 = 雨天出门，还得带把伞，省得淋着
+/axes/怀旧/rain/13 = 这雨啊，淋湿了街，也滋润了伞
+/axes/怀旧/rain/15 = 伞布子湿了可得快收，别让雨淋坏了
+/axes/怀旧/rain/16 = 撑着伞看雨，倒也自在，有几分闲趣
+/axes/怀旧/rain/17 = 这雨天，家里的旧伞又派上用场了
+/axes/怀旧/typhoon/2 = 档案里藏着故事，外面是风雨，两样都别忽视
+/axes/怀旧/typhoon/17 = 雨怕是躲不过了，得赶紧收衣服
+/axes/怀旧/heatwave/2 = 这雨是不来的好，不然伞都要晒化了
+/axes/怀旧/coldsnap/9 = 伞布再旧，总比淋雨强
+/axes/怀旧/market_open/1 = 雨天多了，得赶紧去修修伞，免得漏雨
+/axes/怀旧/market_open/10 = 这行情像极了昨天的雨，说来就来
+/axes/怀旧/market_close/7 = 听那窗外雨声嘀嗒，好像老伙计在低语
+/axes/怀旧/market_close/8 = 刚收盘，这股市跟这伞摊上的雨点儿似的，说下就下
+/axes/怀旧/festival/7 = 旧伞上哪怕有个小破洞，也遮得住春雨
+/axes/侠气/rain/0 = 街雨淋湿了伞，人却淋不着心
+/axes/侠气/rain/2 = 伞光下，信使笑：雨中情更真
+/axes/侠气/rain/3 = 调解阿姨叹：一场雨，大家都不急
+/axes/侠气/rain/5 = 雨水洗净尘，顺便洗去烦恼
+/axes/侠气/rain/8 = 撑把伞多走几步路不就避雨了嘛
+/axes/侠气/rain/9 = 雨天街上伞光点点，多浪漫
+/axes/侠气/rain/11 = 船长说过，风雨中才能见英雄
+/axes/侠气/rain/12 = 别急，慢慢走，雨有雨的韵味
+/axes/侠气/rain/14 = 雨天出门带把伞，也成风景了
+/axes/侠气/rain/15 = 雨天打伞多讲究，红伞绿伞都不挡风雨
+/axes/侠气/heatwave/10 = 信使身上汗如雨下，可包裹还得按时送到
+/axes/逍遥/rain/0 = 雨伞底下，也是好时光
+/axes/逍遥/rain/1 = 茶香伴雨声，静待云开
+/axes/逍遥/rain/3 = 雨天多了，鱼也肥了点
+/axes/逍遥/rain/4 = 撑伞看雨，别有一番滋味
+/axes/逍遥/rain/6 = 雨天也得找乐子，撑把伞也是
+/axes/逍遥/rain/7 = 伞光底下好钓鱼，雨水泡茶更香
+/axes/逍遥/rain/8 = 雨伞下看雨点，也挺有味
+/axes/逍遥/rain/10 = 雨天出门，得有点闲情
+/axes/逍遥/rain/11 = 江边钓手也爱看这雨景
+/axes/逍遥/rain/13 = 街边小吃更诱人，雨中吃才有味
+/axes/逍遥/rain/14 = 撑把伞，雨天也逍遥
+/axes/逍遥/rain/15 = 伞光摇曳雨丝长，
+/axes/逍遥/typhoon/7 = 大风大雨寻常事，茶室还能卖茶叶
+/axes/逍遥/typhoon/12 = 风急雨骤，招牌需牢，咱们市民有见识
+/sprite/rain/0 = 叮叮咚咚，雨水轻敲
+/sprite/rain/2 = 灯灵闪烁，雨夜更明
+/sprite/rain/4 = 叮咚雨滴落，伞光共闪烁
+/sprite/rain/7 = 啾啾鸣叫，雨中觅食欢腾
+/sprite/rain/8 = 叮叮作响，雨水洗亮水晶
+/sprite/rain/10 = 叮咚雨点轻，伞光共舞行
+/sprite/typhoon/3 = 风雨交加/光猫共坚守
+--- CARDS.JSON KEYS: ['aigc_notice', 'cards', 'font', 'meta', 'tail', 'video']
+video: {"width": 1080, "height": 1080, "fps": 30, "bg": "black"}
+font: {"file": "C:/Windows/Fonts/msyh.ttc", "cards_size": 50, "subs_size": 38, "subs_bottom": 110, "aigc_size": 30, "line_spacing": 12, "h1_font": "C:/Windows/Fonts/msyhbd.ttc", "h1_size": 84, "h1_color": "accent", "h2_size": 50, "h2_color": "white", "h1_gap": 36, "optical_center": 0.24}
+cards[0] keys: ['end', 'lines', 'start']
+cards[0] non-lines: {"start": 0.0, "end": 2.6}
+cards[0] lines: ["城市图鉴 016", "C-00025 · 陆海峰", "碳基市民 · 弄堂派 · 男 · 52 岁", "江面与光桥 · 渡轮航道 · 渡轮船长", "信条：「船稳，人心才稳。」", "稳 · 直性子 · 记性好", "全城唯一保留「慢班渡轮」的船长"]
+meta keys: ['aspect_note', 'attribution_rule', 'editorial_value', 'form', 'hit_chain_m0', 'line', 'red_line', 'source_facts', 'source_pointer', 'tool', 'topic', 'triple_label']

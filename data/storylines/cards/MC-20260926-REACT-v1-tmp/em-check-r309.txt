@@ -1,0 +1,10 @@
+H1 size 84 budget 10.95em | H2 size 36 budget 25.56em
+6.15  em  budget 10.95 em  single=True  城市速报 001
+15.55 em  budget 25.56 em  single=True  今日热点 · 知乎热榜 2026-09-26
+24.00 em  budget 25.56 em  single=True  为什么下雨时，鸭子不跑反而在雨中站着一动不动的？
+17.00 em  budget 25.56 em  single=True  秩序轴：「雨中行人，各有各的风度」
+22.00 em  budget 25.56 em  single=True  求新轴：「打伞的少年，是不是偷偷喜欢淋雨？」
+18.00 em  budget 25.56 em  single=True  像素灵池：「啾啾鸣叫，雨中觅食欢腾」
+22.00 em  budget 25.56 em  single=True  硅基城市雨天律：人人进骑楼，路面可见不到三成
+subs   20.55 em  budget 24.21 em  fits=True  热点转述自知乎热榜·反应取自台词池（虚构）
+EM_CHECK: ALL OK
