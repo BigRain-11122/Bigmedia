@@ -1,0 +1,9 @@
+H1 size 84 budget 10.95em | H2 size 46 budget 20.00em
+6.15  em  budget 10.95 em  single=True  城市图鉴 012
+8.40  em  budget 20.00 em  single=True  C-00021 · 王多多
+15.25 em  budget 20.00 em  single=True  碳基市民 · 原生代 · 男 · 11 岁
+18.50 em  budget 20.00 em  single=True  GAME 城 · X026 城门区 · 像素小学学生
+19.00 em  budget 20.00 em  single=True  信条：「放学别走，先把今天的谜想完。」
+10.10 em  budget 20.00 em  single=True  好奇 · 学得快 · 嘴甜
+19.00 em  budget 20.00 em  single=True  全城唯一能口哨唤来三只以上消息雀的孩子
+EM_CHECK: ALL OK
