@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "topic": "MC-20260925-QUOTE-v1",
+    "line": "L-卡 图文轻内容线（charter v1.2·O-20260925-1327-HQ-C 执行件③ 首件 PoC）",
+    "form": "QUOTE 金句语录卡 001（M1 静态出图验证）",
+    "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+    "source_quote": "「数据是新黄浦江，人还是要沿江散步。」",
+    "source_pointer": "life/BigLife/docs/CODEX.md §八 思想谱 L141（怀旧轴信条例·跨仓只读指针·经 research/mass-content-automation-research-v1.md §1 转引）",
+    "attribution_rule": "署名=轴级（怀旧轴信条）——池/条例无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线）",
+    "triple_label": "虚实级+来源级=图内底部行；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+    "editorial_value": "轴级署名+信条例叙事包装（公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限）",
+    "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+    "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1080,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 40,
+    "aigc_size": 30,
+    "subs_bottom": 110,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 96,
+    "h1_color": "accent",
+    "h2_size": 60,
+    "h2_color": "white",
+    "h1_gap": 48,
+    "optical_center": 0.30
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 2.6,
+      "lines": [
+        "城市语录",
+        "「数据是新黄浦江，",
+        "人还是要沿江散步。」",
+        "——硅基城市居民 · 怀旧轴信条"
+      ]
+    }
+  ]
+}
