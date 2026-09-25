@@ -1,0 +1,409 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "douyin",
+ "visual_mode": "matched",
+ "visual_ratio": 0.833,
+ "cards_only_beats": [
+  6,
+  11
+ ],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 5.3,
+   "fade_s": 0.12,
+   "type": "slideup"
+  },
+  {
+   "k": 2,
+   "time_s": 10.167,
+   "fade_s": 0.12,
+   "type": "circleopen"
+  },
+  {
+   "k": 3,
+   "time_s": 13.433,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 4,
+   "time_s": 18.733,
+   "fade_s": 0.12,
+   "type": "hblur"
+  },
+  {
+   "k": 5,
+   "time_s": 25.433,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 6,
+   "time_s": 30.5,
+   "fade_s": 0.12,
+   "type": "slideup"
+  },
+  {
+   "k": 7,
+   "time_s": 34.8,
+   "fade_s": 0.12,
+   "type": "circleopen"
+  },
+  {
+   "k": 8,
+   "time_s": 39.267,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 9,
+   "time_s": 44.8,
+   "fade_s": 0.12,
+   "type": "hblur"
+  },
+  {
+   "k": 10,
+   "time_s": 48.933,
+   "fade_s": 0.0,
+   "type": "cut"
+  },
+  {
+   "k": 11,
+   "time_s": 53.633,
+   "fade_s": 0.12,
+   "type": "slideup"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 5.3,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4",
+   "ramp": [
+    {
+     "src_start_s": 0.0,
+     "src_end_s": 4.833333,
+     "speed": 1.0,
+     "out_frames": 145
+    },
+    {
+     "src_start_s": 4.833333,
+     "src_end_s": 5.1,
+     "speed": 1.142857,
+     "out_frames": 7
+    },
+    {
+     "src_start_s": 5.1,
+     "src_end_s": 5.366667,
+     "speed": 1.6,
+     "out_frames": 5
+    },
+    {
+     "src_start_s": 5.366667,
+     "src_end_s": 5.633333,
+     "speed": 2.666667,
+     "out_frames": 3
+    }
+   ]
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 4.987,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 3.387,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.12,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+   "ramp": [
+    {
+     "src_start_s": 0.0,
+     "src_end_s": 2.933333,
+     "speed": 1.0,
+     "out_frames": 88
+    },
+    {
+     "src_start_s": 2.933333,
+     "src_end_s": 3.2,
+     "speed": 1.142857,
+     "out_frames": 7
+    },
+    {
+     "src_start_s": 3.2,
+     "src_end_s": 3.466667,
+     "speed": 1.6,
+     "out_frames": 5
+    },
+    {
+     "src_start_s": 3.466667,
+     "src_end_s": 3.733333,
+     "speed": 2.666667,
+     "out_frames": 3
+    }
+   ]
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 5.3,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+   "ramp": [
+    {
+     "src_start_s": 0.0,
+     "src_end_s": 4.833333,
+     "speed": 1.0,
+     "out_frames": 145
+    },
+    {
+     "src_start_s": 4.833333,
+     "src_end_s": 5.1,
+     "speed": 1.142857,
+     "out_frames": 7
+    },
+    {
+     "src_start_s": 5.1,
+     "src_end_s": 5.366667,
+     "speed": 1.6,
+     "out_frames": 5
+    },
+    {
+     "src_start_s": 5.366667,
+     "src_end_s": 5.633333,
+     "speed": 2.666667,
+     "out_frames": 3
+    }
+   ]
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 6.82,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.12,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/biggame-cockpit-vertical.mp4",
+   "ramp": [
+    {
+     "src_start_s": 0.0,
+     "src_end_s": 6.366667,
+     "speed": 1.0,
+     "out_frames": 191
+    },
+    {
+     "src_start_s": 6.366667,
+     "src_end_s": 6.633333,
+     "speed": 1.142857,
+     "out_frames": 7
+    },
+    {
+     "src_start_s": 6.633333,
+     "src_end_s": 6.9,
+     "speed": 1.6,
+     "out_frames": 5
+    },
+    {
+     "src_start_s": 6.9,
+     "src_end_s": 7.166667,
+     "speed": 2.666667,
+     "out_frames": 3
+    }
+   ]
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 5.067,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/editgrid-vertical.mp4",
+   "ramp": [
+    {
+     "src_start_s": 0.0,
+     "src_end_s": 4.6,
+     "speed": 1.0,
+     "out_frames": 138
+    },
+    {
+     "src_start_s": 4.6,
+     "src_end_s": 4.866667,
+     "speed": 1.142857,
+     "out_frames": 7
+    },
+    {
+     "src_start_s": 4.866667,
+     "src_end_s": 5.133333,
+     "speed": 1.6,
+     "out_frames": 5
+    },
+    {
+     "src_start_s": 5.133333,
+     "src_end_s": 5.4,
+     "speed": 2.666667,
+     "out_frames": 3
+    }
+   ]
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 4.42,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "\u53e3\u53f7\u62cd\uff1a\u91d1\u53e5\u7559\u767d\uff0c\u5168\u5c4f\u5b57\u5361\u5373\u753b\u9762",
+   "visual_source": null,
+   "ramp": null
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 4.587,
+   "treatment": "punch",
+   "hit": true,
+   "flash": true,
+   "flash_st_s": 0.12,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": [
+    {
+     "src_start_s": 0.0,
+     "src_end_s": 4.133333,
+     "speed": 1.0,
+     "out_frames": 124
+    },
+    {
+     "src_start_s": 4.133333,
+     "src_end_s": 4.4,
+     "speed": 1.142857,
+     "out_frames": 7
+    },
+    {
+     "src_start_s": 4.4,
+     "src_end_s": 4.666667,
+     "speed": 1.6,
+     "out_frames": 5
+    },
+    {
+     "src_start_s": 4.666667,
+     "src_end_s": 4.933333,
+     "speed": 2.666667,
+     "out_frames": 3
+    }
+   ]
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 5.533,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 4.253,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 4.7,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/citywatch-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 4.653,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "CTA \u62cd\uff1a\u884c\u52a8\u6307\u4ee4\u7559\u767d\uff0c\u5b57\u5361\u5373\u753b\u9762",
+   "visual_source": null,
+   "ramp": null
+  }
+ ],
+ "hits": [
+  0,
+  2,
+  3,
+  4,
+  5,
+  7
+ ],
+ "ramp_beats": [
+  0,
+  2,
+  3,
+  4,
+  5,
+  7
+ ],
+ "f_max_s": 0.12,
+ "last_beat_end_s": 57.367,
+ "tail_s": 0.8,
+ "duration_expected_s": 58.167,
+ "hard_cut_s": 0.0
+}
