@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+# R263 idle-fast close: state.json tick/log/ts/task/focus refresh + status-export export_ts refresh
+import io
+import json
+
+ROOT = r"C:\Users\sjs20\Desktop\FluxGroup\media\BigStream"
+SP = ROOT + r"\src\os\state.json"
+XP = ROOT + r"\docs\status-export.json"
+
+TS = "2026-09-25 16:03:09"
+LOG_R263 = "2026-09-25 16:03 R263: idle-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 4/6）——①无新令（orders 顶=O-20260925-1327-HQ-C·R249 已记账）②backlog 顶行不可认领（#29 ①②③④+E4 全毕〔R250-R253〕·P2 图像类 PoC=bm-a 会话协作面〔MCP 通道会话独占〕不可领·ch.6 网文稿未落=novel 目录实证止 ch.5〔SC-001-05 09:10:33·cta 双钩已埋待 bm-a〕·#15 随量产逐件·#17 needs-CEO·#21 周日件今周五不到）③树态=并窗自记账预期态（M state.json+M status-export.json）+自产 tmp 探针件未提交（批闭收账惯例维持）·无 index.lock（Test-Path 实证）·无 bm-a 活跃写盘迹象（novel 止 ch.5/comic 止 ep.2 零新进展）④素材窗迹象核=Biggame 总控窗开态延续但仍被 CEO 硅基仪表盘 F11 全屏窗覆盖（r263_biggame_probe.py=r262 同型免 focus 取帧 rc=0·会话验图定谳：覆盖层=硅基生命元宇宙仪表盘〔6 家公司/18 款游戏+bm-c 心跳 1077min 告警=R262 1067min+10min 延续态+里程碑 M1 在建+M1.5 萌发黄点+指令通道离线+等你拍板卡「视频号、公众号，开号」媒体公司行与在案口径一致〕·帧内零 软著账本/12 条约束/玩法机制 新面板=D-BS-08 复活条款零触发·脱敏四项全无零敏感面）→留档观察待覆盖层关闭后安全窗复核；集团扫描=ledger 严格行含 @ 四模式 15 行=锚零新转办·decisions UTF8 非空行 29（总行 32 双口径）=锚零新行零动作；例行件=日报 2026-09-25+W39 周审在案不重跑（Test-Path 实证）·global-benchmarks 更新记录 2026-09-24 day1 ≤7 天跳过刷新（下期 ~10-01）·T1 催办=已裁项停用口径无超线项·当日无集团层新 open 问题=HQ-FEEDBACK 不写（零膨胀）·tokens:local=0（探针纯脚本+会话内建验图零本地模型调用·P-54⑤ 计量律如实记）；三探针全绿=board 0 FAIL（5 题 10 稿 5 in production·exit 0）/readiness 3 阻塞皆外部 CEO 面（账号批次①+6/10 GATE+#17）+0 发现（弃件清账新基线维持·阻塞≠失败口径 exit 1）/loop_health 0 FAIL 17 WARN 皆在案史实（11 log-order+6 heartbeat-gap·tick262=done262 对账平·state-ts 门执法零红零滞后）——一行收账即出（本轮不 commit·并窗轮 4/6·P-61 导出步照刷 export_ts+实况派生轻量）。下轮=R264 快速路径首查（新令/集团转办/素材窗〔覆盖层关闭后安全窗复核〕/ch.6 落盘迹象），全静即 idle-fast（5/6）。"
+TASK_R263 = "R263: idle-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 4/6）——①无新令（orders 顶=O-20260925-1327-HQ-C·R249 已记账）②backlog 顶行不可认领（#29 ①②③④+E4 全毕〔R250-R253〕·P2 图像类 PoC=bm-a 会话协作面〔MCP 通道会话独占〕不可领·ch.6 网文稿未落=novel 目录实证止 ch.5〔SC-001-05 09:10:33〕·#15 随量产逐件·#17 needs-CEO·#21 周日件今周五不到）③树态=并窗自记账预期态（M state.json+M status-export.json）+自产 tmp 探针件未提交·无 index.lock·无 bm-a 活跃写盘迹象④素材窗迹象核=Biggame 总控窗开态延续但仍被 CEO 硅基仪表盘 F11 全屏窗覆盖（bm-c 心跳 1077min 告警延续态·里程碑 M1 在建+M1.5 萌发黄点·零新面板=D-BS-08 复活条款零触发·零敏感面）；三探针全绿（board 0 FAIL·readiness 3 阻塞皆外部 CEO 面 0 发现·loop_health 0 FAIL 17 WARN 在案史实）；集团双锚静（ledger @15/decisions 29〔总 32〕）。"
+FOCUS_R264 = "R264: 快速路径首查（新令/集团转办/素材窗〔Biggame 总控窗 R263 仍被 CEO 硅基仪表盘 F11 覆盖〔bm-c 告警 1077min 延续态·里程碑 M1 在建+M1.5 萌发黄点〕·安全窗=覆盖层关闭后取帧核 D-BS-08 复活条款·面板扩容〕/ch.6 网文稿落盘迹象）→全静即 idle-fast（5/6）；可选项=O-1327 P2 图像类（梗图/贺图/壁纸）云通道 PoC=bm-a 会话协作面（MCP 通道会话独占·循环只备材料）；锚：ledger @15/decisions 29（总 32·D-BS 系新增=本仓 docs/decisions.md 非集团件）/orders 尾 O-20260925-1327-HQ-C；readiness 预期=3 blocker+0 finding（弃件清账新基线维持）"
+
+st = json.load(io.open(SP, encoding="utf-8"))
+assert st["tick"] == 262, "unexpected tick: %r" % st["tick"]
+assert "R262" in st["log"][-1], "last log entry is not R262"
+st["tick"] = 263
+st["log"].append(LOG_R263)
+st["focus"] = FOCUS_R264
+st["ts"] = TS
+st["task"] = TASK_R263
+io.open(SP, "w", encoding="utf-8", newline="\n").write(
+    json.dumps(st, ensure_ascii=False, indent=1) + "\n")
+chk = json.load(io.open(SP, encoding="utf-8"))
+print("STATE_OK tick=%d log=%d ts=%s" % (chk["tick"], len(chk["log"]), chk["ts"]))
+
+xp = json.load(io.open(XP, encoding="utf-8"))
+xp["export_ts"] = "2026-09-25T16:03:09+08:00"
+io.open(XP, "w", encoding="utf-8", newline="\n").write(
+    json.dumps(xp, ensure_ascii=False, indent=2) + "\n")
+chk2 = json.load(io.open(XP, encoding="utf-8"))
+print("EXPORT_OK ts=%s" % chk2["export_ts"])
