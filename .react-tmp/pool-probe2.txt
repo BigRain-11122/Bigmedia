@@ -1,0 +1,90 @@
+AXES: ['侠气', '怀旧', '求新', '烟火', '秩序', '逍遥']
+BUCKETS(12): ['ceo_order', 'coldsnap', 'dusk', 'festival', 'heatwave', 'market_close', 'market_open', 'morning', 'night', 'rain', 'typhoon', 'weekend']
+SPRITE buckets: ['ceo_order', 'coldsnap', 'dusk', 'festival', 'heatwave', 'market_close', 'market_open', 'morning', 'night', 'rain', 'typhoon', 'weekend']
+
+TOTAL QUOTES: 1440
+
+=== FOOD-topic3 hits: 198 ===
+/烟火/morning/4 = 厨房里飘出香气，今天菜市场的新鲜货真新鲜
+/烟火/morning/5 = 别急着走，来一份豆腐脑，保证暖胃又解馋
+/烟火/morning/7 = 菜新鲜了人更嗨
+/烟火/morning/8 = 早起的鸟儿有虫吃，咱们摊上见
+/烟火/morning/12 = 青菜萝卜两厢情愿，咱这价格明镜儿似的
+/烟火/dusk/0 = 江面上的光，一天又要过完了
+/烟火/dusk/1 = 炒锅里的菜香，晚风也带走了
+/烟火/dusk/3 = 灶台上还有俩饺子，留着明早
+/烟火/dusk/6 = 江面上的光真美，一天又要结束啦
+/烟火/dusk/8 = 江面的光闪得人心暖和
+/烟火/dusk/10 = 晚上吃的啥，白天想啥
+/烟火/dusk/12 = 收摊子咯，今儿的鱼汤卖得真不错
+/烟火/dusk/13 = 菜场里的活儿，一天到晚忙不停
+/烟火/dusk/14 = 江面的光闪得眼睛都花了
+/烟火/dusk/15 = 江面这反光，一天又要过完了
+/烟火/dusk/16 = 卖了这最后一筐菜，早点回去做饭
+/烟火/night/3 = 卖点小菜，给夜归人添点儿味儿
+/烟火/night/6 = 夜深了，人散了，摊位上还留着烟火味
+/烟火/night/12 = 灶台边忙活，热乎劲儿才上头
+/烟火/night/15 = 熬了大半夜的锅，汤汁才够味儿
+/烟火/weekend/1 = 锅里炖着的排骨散发着诱人的香味
+/烟火/weekend/2 = 小菜园里的青菜又嫩了一茬
+/烟火/weekend/3 = 面条汤里打个旋儿，再撒点葱花
+/烟火/weekend/7 = 面条汤滚着呢，爱喝热乎的来碗
+/烟火/weekend/9 = 菜场挑菜选个头正正好
+/烟火/weekend/10 = 食堂炒菜香飘四方方
+/烟火/weekend/14 = 早点吃完了，晚上再来呀
+/烟火/weekend/17 = 早市上的青菜最便宜
+/烟火/rain/1 = 雨天吃碗热乎面，真舒坦
+/烟火/rain/5 = 菜场里买菜，要挑新鲜的
+/烟火/rain/7 = 雨天出门，早点吃个热乎的
+/烟火/rain/9 = 面条汤里加点葱花，雨天吃起来暖和
+/烟火/rain/10 = 菜场里买把伞，回家路上不用怕
+/烟火/rain/11 = 锅里头的汤，得等一会儿才冒热气
+/烟火/rain/13 = 食堂里加点菜，这顿饭才吃得香
+/烟火/rain/17 = 食堂师傅这菜还得接着炒，不管天晴雨天
+/烟火/typhoon/1 = 汤圆收好，别让风吹走
+/烟火/typhoon/3 = 菜场阿姨早收摊，家里加固门
+/烟火/typhoon/5 = 早点回家吃饭，外面风大不好
+/烟火/typhoon/7 = 早点儿回家，这天气出门真不是滋味
+
+=== PRICE-topic5 hits: 22 ===
+/烟火/morning/12 = 青菜萝卜两厢情愿，咱这价格明镜儿似的
+/烟火/night/10 = 今儿这肉价不错，明早多买点
+/烟火/weekend/13 = 市场买卖讲价，公平公正正
+/烟火/market_open/7 = 米价又涨了点，赶紧看看
+/烟火/market_close/5 = 锅里的炖肉香得很
+/烟火/market_close/6 = 今天蔬菜价格又涨了点
+/烟火/market_close/15 = 卖了大半辈子鸡蛋，这价格还是有点乱
+/秩序/market_close/2 = 这行情平稳下来就好，明儿个还得接着稳
+/秩序/market_close/17 = 今个行情稳当，明儿也放心
+/求新/morning/6 = 出摊了，别看我，我这新货可贵！
+/求新/heatwave/4 = 热得我连烤肉都不想做了，直接去吃冷饮了！
+/求新/market_open/1 = 这行情，比我还爱新鲜事物
+/求新/market_open/11 = 这行情，就像画画，得大胆尝试
+/求新/market_open/14 = 新货来了，得赶紧看看能不能出个好价钱
+/怀旧/market_open/2 = 这行情涨跌不定，得小心着点儿
+/怀旧/market_open/10 = 这行情像极了昨天的雨，说来就来
+/怀旧/market_close/2 = 今儿这行情，比我还慢呢
+/侠气/morning/13 = 市集上讨价还价，生活的小确幸就在这一句
+/侠气/market_open/5 = 大风大浪见得多了，啥行情没经历过
+/侠气/market_open/7 = 隔壁老李又在吆喝什么低价货
+/侠气/market_open/13 = 交易所一开锣，咱们得好好琢磨琢磨行情了
+/sprite/market_open/2 = 啾啾鸣叫行情起
+
+=== HAIR-topic9 hits: 2 ===
+/秩序/coldsnap/1 = 得把保暖措施做到位，防寒潮
+/侠气/coldsnap/3 = 调解阿姨叹气，这寒潮真够呛，日子还得过
+
+=== bucket quote counts per axis ===
+ceo_order: 108
+coldsnap: 108
+dusk: 108
+festival: 108
+heatwave: 108
+market_close: 108
+market_open: 108
+morning: 108
+night: 108
+rain: 108
+typhoon: 108
+weekend: 108
+sprite: 12

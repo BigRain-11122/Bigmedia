@@ -1,0 +1,10 @@
+H1 size 84 budget 10.95em | H2 size 28 budget 32.86em (ladder pick)
+6.15  em  budget 10.95 em  single=True  城市速报 002
+15.55 em  budget 32.86 em  single=True  今日热点 · 知乎热榜 2026-09-26
+32.10 em  budget 32.86 em  single=True  全国牛肉批发均价涨至一公斤 71 元，创两年来新高，受哪些因素影响？
+17.00 em  budget 32.86 em  single=True  烟火轴：「米价又涨了点，赶紧看看」
+22.00 em  budget 32.86 em  single=True  侠气轴：「大风大浪见得多了，啥行情没经历过」
+14.00 em  budget 32.86 em  single=True  像素灵池：「啾啾鸣叫行情起」
+20.25 em  budget 32.86 em  single=True  QUANT 食堂信条：「行情再绿，汤是热的。」
+subs   23.55 em  budget 24.21 em  fits=True  热点转述自知乎热榜·反应与信条皆取自虚构城市档案
+EM_CHECK: ALL OK
