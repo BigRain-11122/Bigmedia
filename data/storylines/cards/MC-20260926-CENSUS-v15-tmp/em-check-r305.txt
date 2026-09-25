@@ -1,0 +1,9 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em
+6.15  em  budget 10.95 em  single=True  城市图鉴 015
+7.40  em  budget 23.00 em  single=True  C-00024 · 缪一
+18.20 em  budget 23.00 em  single=True  硅基民 · 精灵系 · 无定 · 编译纪 3 年
+15.35 em  budget 23.00 em  single=True  MEDIA 城 · 信号塔街区 · 字幕君
+21.00 em  budget 23.00 em  single=True  信条：「字幕慢半帧，都是对说话人的辜负。」
+11.10 em  budget 23.00 em  single=True  学得快 · 有条理 · 追更
+21.00 em  budget 23.00 em  single=True  全城唯一给方言字幕手工标注「语气」的字幕君
+EM_CHECK: ALL OK
