@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "topic": "MC-20260925-QUOTE-v2",
+    "line": "L-卡 图文轻内容线（charter v1.2）",
+    "form": "QUOTE 金句语录卡 002（hit-chain v1.0 §9 首件实证·全链审查留痕件）",
+    "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+    "source_quote": "「布要顺着纹路剪，日子要顺着人心过。」",
+    "source_pointer": "life/BigLife/docs/CODEX.md §八 思想谱 L138（烟火轴信条例·六轴表格序首条·跨仓只读指针）",
+    "attribution_rule": "署名=轴级（烟火轴信条）——池/条例无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线）",
+    "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+    "editorial_value": "轴级署名+情境标注（气质列 verbatim「柴米油盐的踏实」）+信条例叙事包装（公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限）",
+    "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差对仗具象·布/日子 纹路/人心/情 1 温和共鸣非强极点·如实/时 2 常青面如实标·信条例=IP 世界观固有零衰减/台 2 公众号图文方图承载=MC-001 S3 实证复用）——O-20260925-1931-HQ-C 执行件③ 首件实证（hit-chain-mechanism v1.0 §2/§9）",
+    "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+    "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1080,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 40,
+    "aigc_size": 30,
+    "subs_bottom": 110,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 96,
+    "h1_color": "accent",
+    "h2_size": 60,
+    "h2_color": "white",
+    "h1_gap": 48,
+    "optical_center": 0.30
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 2.6,
+      "lines": [
+        "城市语录 002",
+        "「布要顺着纹路剪，",
+        "日子要顺着人心过。」",
+        "——硅基城市居民 · 烟火轴信条"
+      ]
+    }
+  ]
+}
