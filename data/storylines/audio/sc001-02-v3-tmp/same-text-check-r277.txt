@@ -1,0 +1,8 @@
+novel body paras: 12
+beats: 13 (types: hook/punch/body/body/body/beat/body/turn/proof/close/punch/wink/cta)
+paras missed: 0
+cta spokenized OK: True
+cta: 下一章：时空校准师朱鸿奎——输了棋的人，交出一轮免费校表。
+hook triple-label OK: True
+A1 hook-position OK: True
+x1.5 register inheritance OK: True (vulgar found: [])
