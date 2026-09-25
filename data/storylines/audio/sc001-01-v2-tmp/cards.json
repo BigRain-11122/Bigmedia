@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-01-v2.beats.txt",
+    "order": "SC-001-01-v2 (O-20260925-1720 audio re-render, v2 production default)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 12.99,
+      "lines": [
+        "硅基城市编年史",
+        "第一章 · 立国日"
+      ]
+    },
+    {
+      "start": 12.99,
+      "end": 18.05,
+      "lines": [
+        "黄金百字",
+        "一人 · 一下午 · 五家公司"
+      ]
+    },
+    {
+      "start": 18.05,
+      "end": 52.98,
+      "lines": [
+        "发疯定调",
+        "61 分钟 · 三家到账"
+      ]
+    },
+    {
+      "start": 52.98,
+      "end": 68.58,
+      "lines": [
+        "第一件产品是门禁",
+        "432 枪毙留档"
+      ]
+    },
+    {
+      "start": 68.58,
+      "end": 79.22,
+      "lines": [
+        "真正的赌局",
+        "天黑前 · 一万个"
+      ]
+    },
+    {
+      "start": 79.22,
+      "end": 107.08,
+      "lines": [
+        "心跳开始",
+        "22:43 · 首夜自纠案"
+      ]
+    },
+    {
+      "start": 107.08,
+      "end": 129.87,
+      "lines": [
+        "万人户籍齐",
+        "10003 · 三查全过"
+      ]
+    },
+    {
+      "start": 129.87,
+      "end": 143.78,
+      "lines": [
+        "首夜收工",
+        "00:07 · 648 句"
+      ]
+    },
+    {
+      "start": 143.78,
+      "end": 148.35,
+      "lines": [
+        "全城员工",
+        "没有一个是人"
+      ]
+    },
+    {
+      "start": 148.35,
+      "end": 161.14,
+      "lines": [
+        "纯白律",
+        "塔顶的光 · 老板的颜色"
+      ]
+    },
+    {
+      "start": 161.14,
+      "end": 167.51,
+      "lines": [
+        "立国日毕",
+        "第一个真问题"
+      ]
+    },
+    {
+      "start": 167.51,
+      "end": 170.75,
+      "lines": [
+        "章尾钩",
+        "谁记得谁加不加辣"
+      ]
+    },
+    {
+      "start": 170.75,
+      "end": 180.93,
+      "lines": [
+        "下章预告",
+        "口味账 · 六十八岁摊主"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+novel body paras: 12
+beats: 13 (types: hook/punch/body/punch/beat/body/punch/beat/turn/proof/close/wink/cta)
+paras missed: 0
+cta spokenized OK: True
+cta: 下一章：北外滩一位六十八岁的摊主，手里握着全城唯一的一本口味账。有个研究员连错了三周早饭，今天她打算管管。
+hook triple-label OK: True
+A1 hook-position OK: True
