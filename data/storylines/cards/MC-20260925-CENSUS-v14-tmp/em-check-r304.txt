@@ -1,0 +1,9 @@
+H1 size 84 budget 10.95em | H2 size 50 budget 18.40em
+6.15  em  budget 10.95 em  single=True  城市图鉴 014
+8.40  em  budget 18.40 em  single=True  C-00023 · 潘志明
+15.25 em  budget 18.40 em  single=True  碳基市民 · 原生代 · 男 · 47 岁
+15.35 em  budget 18.40 em  single=True  MEDIA 城 · 选题馆街区 · 选题官
+17.00 em  budget 18.40 em  single=True  信条：「毙稿不毙人，选题选良心。」
+10.10 em  budget 18.40 em  single=True  记性好 · 端水 · 较真
+18.00 em  budget 18.40 em  single=True  全城唯一保留「毙稿理由档案」的选题官
+EM_CHECK: ALL OK
