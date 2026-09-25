@@ -1,0 +1,9 @@
+H1 size 84 budget 10.95em | H2 size 50 budget 18.40em
+6.15  em  budget 10.95 em  single=True  城市图鉴 016
+8.40  em  budget 18.40 em  single=True  C-00025 · 陆海峰
+15.25 em  budget 18.40 em  single=True  碳基市民 · 弄堂派 · 男 · 52 岁
+16.10 em  budget 18.40 em  single=True  江面与光桥 · 渡轮航道 · 渡轮船长
+13.00 em  budget 18.40 em  single=True  信条：「船稳，人心才稳。」
+10.10 em  budget 18.40 em  single=True  稳 · 直性子 · 记性好
+15.00 em  budget 18.40 em  single=True  全城唯一保留「慢班渡轮」的船长
+EM_CHECK: ALL OK
