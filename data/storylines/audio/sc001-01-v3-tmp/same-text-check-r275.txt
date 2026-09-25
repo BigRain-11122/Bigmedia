@@ -1,0 +1,8 @@
+novel body paras: 13
+beats: 14 (types: hook/punch/body/body/punch/beat/body/punch/beat/proof/turn/close/wink/cta)
+paras missed: 0
+cta spokenized OK: True
+cta: 下一章：那本口味账的主人，编号 C-00010。QUANT 城有个总错过早饭的研究员，在她的账上挂着名——这本账，全城只此一份。
+hook triple-label OK: True
+A1 hook-position OK: True
+x1.5 register inheritance OK: True (vulgar found: [])

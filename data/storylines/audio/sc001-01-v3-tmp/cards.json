@@ -1,0 +1,152 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-01-v3.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 12.99,
+      "lines": [
+        "硅基城市编年史",
+        "第一章 · 立国日"
+      ]
+    },
+    {
+      "start": 12.99,
+      "end": 19.13,
+      "lines": [
+        "黄金百字",
+        "一人 · 一下午 · 五公司"
+      ]
+    },
+    {
+      "start": 19.13,
+      "end": 40.28,
+      "lines": [
+        "系统架构决策",
+        "14:50 · 人类依赖项逐行删除"
+      ]
+    },
+    {
+      "start": 40.28,
+      "end": 66.2,
+      "lines": [
+        "三线点亮",
+        "61 分钟 · 432 全下线"
+      ]
+    },
+    {
+      "start": 66.2,
+      "end": 69.43,
+      "lines": [
+        "第一件产品是门禁",
+        "审计留档 · 无人可改"
+      ]
+    },
+    {
+      "start": 69.43,
+      "end": 84.01,
+      "lines": [
+        "真正的赌局",
+        "21:30 · 天亮前交付"
+      ]
+    },
+    {
+      "start": 84.01,
+      "end": 105.32,
+      "lines": [
+        "心跳上线",
+        "22:43 · 首夜自纠案"
+      ]
+    },
+    {
+      "start": 105.32,
+      "end": 127.01,
+      "lines": [
+        "万人交付",
+        "23:42 · 三查全过"
+      ]
+    },
+    {
+      "start": 127.01,
+      "end": 141.94,
+      "lines": [
+        "首日收工",
+        "00:07 · 648 句 · 16 条年轮"
+      ]
+    },
+    {
+      "start": 141.94,
+      "end": 157.66,
+      "lines": [
+        "纯白律",
+        "塔顶的光 · 全城唯一例外"
+      ]
+    },
+    {
+      "start": 157.66,
+      "end": 163.33,
+      "lines": [
+        "全城员工",
+        "没有一个是人"
+      ]
+    },
+    {
+      "start": 163.33,
+      "end": 172.31,
+      "lines": [
+        "立国日毕",
+        "04:30 · 蒸笼开始发光"
+      ]
+    },
+    {
+      "start": 172.31,
+      "end": 175.97,
+      "lines": [
+        "章尾钩",
+        "一万人的口味账"
+      ]
+    },
+    {
+      "start": 175.97,
+      "end": 187.51,
+      "lines": [
+        "下章预告",
+        "口味账 · 编号 C-00010"
+      ]
+    }
+  ]
+}

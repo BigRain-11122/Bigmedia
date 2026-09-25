@@ -1,0 +1,3 @@
+desktop=2048x1152 raw=(-7,-7,2062,1118) clamped=(0,0,2048,1110)
+ffmpeg_rc=0
+frame_kb=813
