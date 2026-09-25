@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "topic": "MC-20260925-QUOTE-v4",
+    "line": "L-卡 图文轻内容线（charter v1.2）",
+    "form": "QUOTE 金句语录卡 004（hit-chain v1.0 全链审查留痕·系列量产按序领件）",
+    "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+    "source_quote": "「像素越小，心眼越大。」",
+    "source_pointer": "life/BigLife/docs/CODEX.md §八 思想谱 L140（求新轴信条例·六轴表格序第三条·跨仓只读指针）",
+    "attribution_rule": "署名=轴级（求新轴信条）——池/条例无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线）",
+    "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+    "editorial_value": "轴级署名+情境标注（气质列 verbatim「尝鲜与创造」）+信条例叙事包装（公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限）",
+    "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差对仗结构·像素小/心眼大 的数字反差+像素=硅基城市 IP 核心具象意象·「心眼」口语双关/情 1 求新乐观面温和共鸣非强极点·如实/时 2 常青面如实标·信条例=IP 世界观固有零衰减/台 2 公众号图文方图承载=MC-001/002/003 S3 实证复用）——量产线按序领件（hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·系列表格序第三条）",
+    "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+    "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1080,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 40,
+    "aigc_size": 30,
+    "subs_bottom": 110,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 96,
+    "h1_color": "accent",
+    "h2_size": 60,
+    "h2_color": "white",
+    "h1_gap": 48,
+    "optical_center": 0.30
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 2.6,
+      "lines": [
+        "城市语录 004",
+        "「像素越小，」",
+        "「心眼越大。」",
+        "——硅基城市居民 · 求新轴信条"
+      ]
+    }
+  ]
+}
