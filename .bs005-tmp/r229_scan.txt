@@ -1,0 +1,23 @@
+ORDERS_TOP: README.md
+LEDGER_AT_LINES: 14 (anchor 14)
+DECISIONS_NONEMPTY: 24 (anchor 24)
+NOVEL_FILES: SC-001-01-v1.md, SC-001-02-v1.md, SC-001-03-v1.md, SC-001-04-v1.md, SC-001-05-v1.md
+COMIC_FILES: SC-002-01-art.jpeg, SC-002-01-texts.json, SC-002-01-v1.md, SC-002-01-v1.png, SC-002-02-art.png, SC-002-02-texts.json, SC-002-02-v1.md, SC-002-02-v1.png
+WINDOW_COUNT: 15
+BIGGAME_CONSOLE: False
+WINDOW_TITLES:
+ - Unity Error
+ - UGit
+ - Game
+ - GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Editor 1.10.3* <DX11>
+ - Tuanjie Cowork
+ - dev.codelycowork.desktop-siw
+ - Window
+ - WeatherProfiles_24h - 文件资源管理器
+ - 关于 tbAgent
+ - Windows 输入体验
+ - HMI by Jason Sun - Unity Version Control (11.0.16.10371)
+ - Lovart | The world's first design agent for all design purposes 和另外 1 个页面 - 用户配置 1 - Microsoft​ Edge
+ - 豆包
+ - 硅基生命元宇宙 · FLUX - 个人 - Microsoft​ Edge
+ - Program Manager

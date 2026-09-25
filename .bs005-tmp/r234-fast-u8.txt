@@ -1,0 +1,46 @@
+keys=backlog,company,focus,installed,log,loop,mandate,mode,opened_by,production,protocol,tick
+tick=233
+backlog=src/os/backlog.md
+company=BigStream
+focus=R234: ①快速路径五查（素材窗迹象优先：新令/ledger 严格行含 @ 前缀锚 14/decisions UTF8 非空行锚 24/树态/bm-a 写盘迹象）②生产线=BS-005 原版+bs005e 双 blocked 维持（共享开窗实录批·素材窗一开即续链：对位表重构→重渲→S2 复跑→E8→M4→登记〔bs005e=F-007 预留位·BS-005 原版=编号顺延〕·新源规格化 prep_vertical --batch 一跑直达）③#27 ①有声线=ch.5 收官毕（F-012 五件在库 F-008~F-012）——ch.6 网文稿未落（cta 周浩宇/陈雅雯双钩已埋·bm-a 稿落盘后新连载节律随轮认领）+②③ bm-a 进度复核（网文 ch.6 待落·漫画 ep.3 待见）④例行=探针三件套照跑（readiness 预期=bs-005/bs005e 双 render-unannot blocked 在链预期红维持·双件登记即清）⑤idle-fast 并窗计数=2/6（R233 起计·窗满 6 轮/跨日/异常/实活即收账）。
+installed=2026-09-23
+loop=BigStream-OSLoop
+mandate=src/os/iteration_prompt.txt
+mode=o-2126-production-open
+opened_by=O-20260924-2126-bm-a
+production=open
+protocol=docs/os-protocol.md
+tick=233
+log_len=241
+===ENTRY len=1811===
+HEAD: 2026-09-25 10:3x R230: 生产轮·#27 ①有声线续件 ch.5 第一程毕（claim 86ba368 两步制·新连载节律第三件·实活轮）——①轮首五查静：无新令（orders 顶=O-20260925-0850 R222 已记账）·ledger 严格行含 @ 四模式 14 行=锚零新转办·集团 decisions UTF8 非空行 24=锚零新行（首扫误指本仓 docs/de
+FRAG[ledger]: 0850 R222 已记账）·ledger 严格行含 @ 四模式 14 行=锚零新转办·集团 decisions UTF8 非空行 24=锚零新行（首扫误指本仓 docs/decisions.md 47 行=本司 D-BS 台账 
+FRAG[decisions]:  14 行=锚零新转办·集团 decisions UTF8 非空行 24=锚零新行（首扫误指本仓 docs/decisions.md 47 行=本司 D-BS 台账 bm-a 辖区非集团件·当场定谳改扫 FluxGroup/doc
+FRAG[decisions]: 新行（首扫误指本仓 docs/decisions.md 47 行=本司 D-BS 台账 bm-a 辖区非集团件·当场定谳改扫 FluxGroup/docs/decisions.md·操作红非扫描红）·树净零锁（仅自产 blocke
+FRAG[探针]: mp 批闭收账随收官轮）；④三探针=board 0 FAIL（5 题 10 稿·5 in production）/readiness 3 阻塞皆外部 CEO 面（账号批次①+6/10 GATE+#17）+2 发现（bs-005/b
+FRAG[board]: 批闭收账随收官轮）；④三探针=board 0 FAIL（5 题 10 稿·5 in production）/readiness 3 阻塞皆外部 CEO 面（账号批次①+6/10 GATE+#17）+2 发现（bs-005/bs-0
+===ENTRY len=2198===
+HEAD: 2026-09-25 10:4x R231: 生产轮·#27 ①有声线 ch.5 收官=F-012 登记（claim 86ba368 续做·新连载节律第三件·实活轮）——①轮首快速路径五查：无新令（orders 顶=O-0850 R222 已记账）·ledger 严格行含 @ 四模式 14 行=锚零新转办·集团 decisions UTF8 非空行 24=锚零新行·树态=仅自产 tmp 无 bm-
+FRAG[ledger]: 0850 R222 已记账）·ledger 严格行含 @ 四模式 14 行=锚零新转办·集团 decisions UTF8 非空行 24=锚零新行·树态=仅自产 tmp 无 bm-a 写盘迹象·素材窗迹象核=15 窗枚举零 Big
+FRAG[decisions]:  14 行=锚零新转办·集团 decisions UTF8 非空行 24=锚零新行·树态=仅自产 tmp 无 bm-a 写盘迹象·素材窗迹象核=15 窗枚举零 Biggame 总控窗（Tuanjie 态=Unity Error+G
+FRAG[idle]: 象→有声线 ch.6 起链或 idle-fast）。收账显式列文件 commit+push。
+FRAG[探针]: p.2·ep.3 未现）；⑦三探针=board 0 FAIL（5 题 10 稿 5 in production）/readiness 3 阻塞皆外部 CEO 面+2 发现（bs-005/bs005e render-unannot=
+FRAG[board]: ·ep.3 未现）；⑦三探针=board 0 FAIL（5 题 10 稿 5 in production）/readiness 3 阻塞皆外部 CEO 面+2 发现（bs-005/bs005e render-unannot=blo
+===ENTRY len=1387===
+HEAD: 2026-09-25 10:43 R232: idle-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 1/6）——①无新令（orders 顶=O-0850 R222 已记账）②backlog 顶行不可认领（#27 ①②③ 全毕·④发布锁内挂账·ch.6 网文稿未落=bm-a 面随轮认领·BS-005/bs005e 双 blocked 待素材窗·#15 随量产逐件·#17 needs-CE
+FRAG[ledger]: ⑤ 计量律如实记）；集团扫描=ledger 严格行含 @ 四模式 14 行=锚零新转办（首扫误用行首 @ 过滤得 0 行=R163/R216 同型操作红·行含口径重扫定谳）·decisions UTF8 非空行 24=锚零新行零动
+FRAG[decisions]: 型操作红·行含口径重扫定谳）·decisions UTF8 非空行 24=锚零新行零动作；三探针全绿=board 0 FAIL（5 题 10 稿 5 in production·exit 0）/readiness 3 阻塞皆外部 
+FRAG[idle]: 25 10:43 R232: idle-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 1/6）——①无新令（orders 顶=O-0850 R222 已记账）②backlog 顶行不可认领（#27 ①②③ 全毕·④发布锁
+FRAG[idle]: 先/新令/集团转办），全静即 idle-fast（2/6）。
+FRAG[探针]: e-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 1/6）——①无新令（orders 顶=O-0850 R222 已记账）②backlog 顶行不可认领（#27 ①②③ 全毕·④发布锁内挂账·ch.6 网文稿未落=bm-
+FRAG[探针]: ocal=0（零本地模型调用·探针纯脚本·P-54⑤ 计量律如实记）；集团扫描=ledger 严格行含 @ 四模式 14 行=锚零新转办（首扫误用行首 @ 过滤得 0 行=R163/R216 同型操作红·行含口径重扫定谳）·dec
+FRAG[board]: =锚零新行零动作；三探针全绿=board 0 FAIL（5 题 10 稿 5 in production·exit 0）/readiness 3 阻塞皆外部 CEO 面（账号批次①+6/10 GATE+#17）+2 发现=bs-0
+===ENTRY len=1299===
+HEAD: 2026-09-25 10:53 R233: idle-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 2/6）——①无新令（orders 顶=O-0850 R222 已记账）②backlog 顶行不可认领（#27 ①②③ 全毕·④发布锁内挂账·ch.6 网文稿未落=bm-a 面随轮认领·BS-005/bs005e 双 blocked 待素材窗·#15 随量产逐件·#17 needs-CE
+FRAG[ledger]: ⑤ 计量律如实记）；集团扫描=ledger 严格行含 @ 四模式 14 行=锚零新转办·decisions UTF8 非空行 24=锚零新行零动作；三探针全绿=board 0 FAIL（5 题 10 稿 5 in producti
+FRAG[decisions]: 四模式 14 行=锚零新转办·decisions UTF8 非空行 24=锚零新行零动作；三探针全绿=board 0 FAIL（5 题 10 稿 5 in production·exit 0）/readiness 3 阻塞皆外部 
+FRAG[idle]: 25 10:53 R233: idle-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 2/6）——①无新令（orders 顶=O-0850 R222 已记账）②backlog 顶行不可认领（#27 ①②③ 全毕·④发布锁
+FRAG[idle]: 先/新令/集团转办），全静即 idle-fast（3/6）。
+FRAG[探针]: e-fast（快速路径·五静+探针绿·不进开轮四步·并窗轮 2/6）——①无新令（orders 顶=O-0850 R222 已记账）②backlog 顶行不可认领（#27 ①②③ 全毕·④发布锁内挂账·ch.6 网文稿未落=bm-
+FRAG[探针]: ocal=0（零本地模型调用·探针纯脚本·P-54⑤ 计量律如实记）；集团扫描=ledger 严格行含 @ 四模式 14 行=锚零新转办·decisions UTF8 非空行 24=锚零新行零动作；三探针全绿=board 0 FA
+FRAG[board]: =锚零新行零动作；三探针全绿=board 0 FAIL（5 题 10 稿 5 in production·exit 0）/readiness 3 阻塞皆外部 CEO 面（账号批次①+6/10 GATE+#17）+2 发现=bs-0

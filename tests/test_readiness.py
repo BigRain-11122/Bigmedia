@@ -176,6 +176,19 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(marks["gamma.mp4"], True)
         self.assertEqual(marks["delta.mp4"], False)
 
+    def test_disposed_mark_passes_and_prose_guard(self):
+        # D-BS-08 escalation-disposal era: rows disposed by ruling stay
+        # on disk as archive rows ("disposed ... archived" cells) = fourth
+        # legal state, while prose lines that merely mention discarding
+        # without the archive qualifier stay unannotated (false-hit guard).
+        d = make_renders(self, ["gamma.mp4", "delta.mp4"],
+                         "readiness_renders_disposed")
+        rows, findings = readiness.parse_renders(d, d / "README.md")
+        self.assertEqual(fail_codes(findings), {"render-unannot"})
+        marks = dict(rows)
+        self.assertEqual(marks["gamma.mp4"], True)
+        self.assertEqual(marks["delta.mp4"], False)
+
     def test_missing_ledger_fails(self):
         d = make_renders(self, ["alpha.mp4"], None)
         rows, findings = readiness.parse_renders(d, d / "README.md")

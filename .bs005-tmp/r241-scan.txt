@@ -1,0 +1,33 @@
+LEDGER matches: 15 (anchor=14)
+  LED: | P-2026-09-24-62 | 09-24 | **组织精简转办波+T2 立法排期（综合件 v2 自决面执行）**（权源=CEO 委托决策令 v2 午后+09-24 ~12:35 组织审计令·综合件=R-20260924-org-s
+  LED: | P-2026-09-24-64 | 09-24 | **观测窗品质批 2：好好把可视化做好**（CEO 令 09-24 ~18:4x「好好把可视化做好」——P-59/P-61 姊妹精修件·视觉方向 CEO 已认可零改·本件=执行品质+数
+  LED: | P-2026-09-24-65 | 09-24 | **调研行程与结论应用律立法+八线派工**（CEO 令 09-24 ~19:10「出去调研行程的标准和结论 要注意应用，各业务和子公司都要」——正典=`cph4/research-pr
+  LED: | P-2026-09-24-76 | 09-24 | **粉丝经营三线令：鹅厂采集/粉丝维护/建群自动化调研派工+三司部门设计**（CEO 令 09-24 ~21:20「相关指挥公司去做技术架构…采集鹅厂产品的弹幕、评论…粉丝维护自动化…
+  LED: | P-2026-09-25-01 | 09-25 | **算力总动员令 2：全资源启动（CEO 令 2026-09-25 ~00:40「CEO 命令，机器群全部启动所有算力资源，加速工作进度！」——与 P-54 极限令/P-55 总动员同
+  LED: | P-2026-09-25-03 | 09-25 | **集团巡检首班整改派单·PT-20260925-02（P2）@BigStream：fleet 心跳写手缺陷（NO_TS+task 冻结 R173）**（同巡检班·docs/patro
+DECISIONS nonempty: 29 total: 32 (anchor=24 nonempty / 27 total)
+NOVEL files: 5 -> SC-001-01-v1.md, SC-001-02-v1.md, SC-001-03-v1.md, SC-001-04-v1.md, SC-001-05-v1.md
+  NOVEL newest: 09-25 09:10 SC-001-05-v1.md
+COMIC files: 8 -> SC-002-01-art.jpeg, SC-002-01-texts.json, SC-002-01-v1.md, SC-002-01-v1.png, SC-002-02-art.png, SC-002-02-texts.json, SC-002-02-v1.md, SC-002-02-v1.png
+  COMIC newest: 09-25 09:09 SC-002-02-v1.md
+AUDIO files: 21 -> SC-001-05-v1.beats.txt, SC-001-05-v1.mp3, SC-001-05-v1.srt, sc001-01-v1-tmp, sc001-02-v1-tmp, sc001-03-v1-tmp, sc001-04-v1-tmp, sc001-05-v1-tmp
+  AUDIO newest: 09-25 10:36 README.md
+WINDOWS visible: 14
+  WIN: Tuanjie Cowork
+  WIN: UGit
+  WIN: dev.codelycowork.desktop-siw
+  WIN: Game
+  WIN: GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Editor 1.10.3* <DX11>
+  WIN: Window
+  WIN: WeatherProfiles_24h - 文件资源管理器
+  WIN: 关于 tbAgent
+  WIN: Windows 输入体验
+  WIN: HMI by Jason Sun - Unity Version Control (11.0.16.10371)
+  WIN: Lovart | The world's first design agent for all design purposes 和另外 1 个页面 - 用户配置 1 - Microsoft​ Edge
+  WIN: 豆包
+  WIN: 硅基生命元宇宙 · FLUX - 个人 - Microsoft​ Edge
+  WIN: Program Manager
+BIGGAME-MASTER-CONTROL-HIT: NONE
+DAILY-BRIEF 2026-09-25: True
+W39-AUDIT: True
+AUDITS dir: 2026-09-24-company-audit.md, 2026-W39-self-audit.md, packs

@@ -29,5 +29,6 @@
   "readiness_renders_bare": "readiness/renders_ledger_bare.md",
   "readiness_renders_stale": "readiness/renders_ledger_stale.md",
   "readiness_renders_product": "readiness/renders_ledger_product.md",
-  "readiness_renders_superseded": "readiness/renders_ledger_superseded.md"
+  "readiness_renders_superseded": "readiness/renders_ledger_superseded.md",
+  "readiness_renders_disposed": "readiness/renders_ledger_disposed.md"
 }

@@ -1,0 +1,12 @@
+AXIS: 烟火
+  morning: "热乎的油条来一打，今天的生意兴隆喽"
+  morning: "赶紧把摊子支起来，人一多就不容易找着位儿"
+  festival: "灯笼一挂，年味儿就足了"
+  festival: "热腾的豆浆配上油条，一整天都精神"
+AXIS 烟火 total=216
+AXIS 秩序 total=216
+AXIS 求新 total=216
+AXIS 怀旧 total=216
+AXIS 侠气 total=216
+AXIS 逍遥 total=216
+axes total=1296; sprite total=144

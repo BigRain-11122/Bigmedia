@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<!-- 集团唯一观测窗（CEO 令 2026-09-24 ~16:45）·P-59 数据驱动正典版 v2：数据=硅基生命元宇宙-data.js（tools/siliconwatch/generate.ps1 生成·SiliconWatchTick 10min）·维护面=HQ 观测线·本文件为 canonical 正典源——board_gen.py 产出的应与本件一致·勿在此重引入写死数据 -->
+<!-- U198 真直连（CEO 令 2026-09-25「我点哪里就真的直接可以发送给他命令」）：指令通道=本机 CeoDeskServer API（127.0.0.1:8791·tools/CeoDeskServer.ps1）→ 直投 .codely-cli/engine-tick/ceo-desk-inbox/ceo-desk.jsonl → tick Step0 CEO-DESK 消费（U 号落册+⚡立即开工）；回执面板轮询 /api/cmds。旧 File-System-Access 目录授权通道废除。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>硅基生命元宇宙 · FLUX</title>
+<style>
+:root{
+  --bg:#060a13; --panel:#0c1322;
+  --line:#1a2538; --line2:#22304a;
+  --txt:#c3cfe2; --dim:#62748f; --dim2:#46566f;
+  --teal:#5eead4; --amber:#fbbf24; --red:#f87171; --green:#4ade80;
+  --violet:#a78bfa; --pink:#f472b6; --blue:#60a5fa; --orange:#fb923c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{background:var(--bg);color:var(--txt);font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;font-size:clamp(12px,0.35vw + 11.2px,13.5px);line-height:1.5;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;background:
+  radial-gradient(ellipse 80% 50% at 50% -10%,#14233d55,transparent),
+  radial-gradient(circle at 15% 20%,#5eead40a,transparent 40%),
+  radial-gradient(circle at 85% 80%,#a78bfa0a,transparent 40%),var(--bg);overflow-x:hidden}
+.gridbg{position:fixed;inset:0;z-index:0;opacity:.5;
+  background-image:repeating-linear-gradient(0deg,transparent 0 47px,#0f1a2c 47px 48px),repeating-linear-gradient(90deg,transparent 0 47px,#0f1a2c 47px 48px)}
+.wrap{position:relative;z-index:1;max-width:1320px;margin:0 auto;padding:clamp(12px,3vw,22px)}
+
+.brain{position:relative;background:linear-gradient(135deg,#0e1729f6,#0a1120f2);border:1px solid var(--line2);border-radius:clamp(12px,2vw,16px);padding:clamp(16px,3vw,24px);overflow:hidden;margin-bottom:14px}
+.brain::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),var(--violet),transparent);opacity:.6}
+.brain-top{display:flex;align-items:center;gap:clamp(12px,2.5vw,20px);flex-wrap:wrap}
+.brain-icon{width:clamp(44px,11vw,58px);height:clamp(44px,11vw,58px);flex:none;animation:bp 3s infinite}
+@keyframes bp{0%,100%{filter:drop-shadow(0 0 8px #5eead466)}50%{filter:drop-shadow(0 0 22px #5eead4cc)}}
+.brain h1{font-size:clamp(18px,4.6vw,23px);color:#fff;letter-spacing:clamp(1px,1vw,2px)}
+.brain .sub{font-size:clamp(10px,2.6vw,11.5px);color:var(--dim);margin-top:3px}
+.brain-stats{margin-left:auto;display:flex;gap:clamp(12px,3.5vw,26px)}
+.bs{text-align:center}
+.bs .n{font-size:clamp(19px,5.6vw,25px);font-weight:700;line-height:1}
+.bs .l{font-size:clamp(9px,2.4vw,10.5px);color:var(--dim);margin-top:4px}
+
+.weather{display:flex;align-items:center;gap:10px;margin-top:clamp(12px,2.5vw,16px);flex-wrap:wrap;font-size:clamp(11px,2.8vw,12.5px);color:var(--dim)}
+.weather .clk{font-weight:700;color:var(--teal);font-variant-numeric:tabular-nums;letter-spacing:1px}
+.weather .wcity{display:inline-flex;align-items:center;gap:5px;background:#0a1120;border:1px solid var(--line);border-radius:20px;padding:3px 11px}
+.weather .wcity b{color:#dbe6f5;font-weight:700}
+.weather .sep{color:var(--dim2)}
+
+.city-prog{margin-top:clamp(16px,3vw,22px)}
+.cp-label{display:flex;justify-content:space-between;font-size:clamp(10px,2.6vw,11.5px);color:var(--dim);margin-bottom:9px;flex-wrap:wrap;gap:6px}
+.cp-label b{color:var(--teal)}
+.cp-scroll{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#22304a transparent;-webkit-overflow-scrolling:touch}
+.cp-scroll::-webkit-scrollbar{height:5px}
+.cp-scroll::-webkit-scrollbar-thumb{background:#22304a;border-radius:3px}
+.cp-track{display:flex;min-width:max-content}
+.mile{flex:1;min-width:72px;text-align:center;position:relative;padding-top:22px}
+@media(min-width:720px){.cp-track{min-width:0}.mile{min-width:0}}
+.mile::before{content:'';position:absolute;top:6px;left:0;right:0;height:3px;background:var(--line)}
+.mile:first-child::before{left:50%}.mile:last-child::before{right:50%}
+.mile .dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:4px;background:var(--line);border:2px solid var(--bg);z-index:2}
+.mile.done .dot{background:var(--teal);box-shadow:0 0 10px #5eead499}
+.mile.done::before{background:var(--teal)}
+.mile.now .dot{background:var(--amber);box-shadow:0 0 12px #fbbf24cc;animation:bp 1.6s infinite}
+.mile .ml{font-size:clamp(10px,2.8vw,11.5px);font-weight:700;color:var(--dim2)}
+.mile.done .ml{color:var(--teal)}.mile.now .ml{color:var(--amber)}
+.mile .md{font-size:clamp(9px,2.4vw,10px);color:var(--dim2);margin-top:2px}
+
+.sec-title{display:flex;align-items:center;gap:11px;margin:clamp(20px,4vw,28px) 0 13px;font-size:clamp(12px,3vw,13.5px);font-weight:700;color:#9fb2d0}
+.sec-title .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent)}
+.sec-title .sq{width:9px;height:9px;flex:none}
+.sec-title .hint{font-size:clamp(10px,2.6vw,11px);font-weight:400;color:var(--dim)}
+
+.ceo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:10px}
+.ceo-item{background:linear-gradient(180deg,#121a2b,#0b1120);border:1px solid var(--line2);border-radius:11px;padding:13px 14px;position:relative}
+.ceo-item.hot{border-color:#fbbf2466;box-shadow:0 0 18px #fbbf2414}
+.ceo-item .q{position:absolute;top:11px;right:12px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.q.must{background:#fbbf2422;color:var(--amber)}
+.q.phys{background:#60a5fa1c;color:var(--blue)}
+.q.ai{background:#a78bfa1a;color:var(--violet)}
+.q.later{background:#46566f22;color:var(--dim)}
+.ceo-item .qt{font-size:clamp(12px,3vw,13.5px);font-weight:700;color:#fff;padding-right:58px;line-height:1.35}
+.ceo-item .qd{font-size:clamp(10.5px,2.7vw,11.5px);color:var(--dim);margin-top:6px;line-height:1.45}
+.ceo-item .qw{font-size:10px;color:var(--teal);margin-top:8px}
+
+.subs{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+@media(max-width:900px){.subs{grid-template-columns:1fr}}
+.sub{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#0d1526,#090f1c);overflow:hidden;display:flex;flex-direction:column}
+.sub-head{display:flex;align-items:center;gap:13px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.sub-icon{width:42px;height:42px;flex:none;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#0a1120;border:1px solid var(--line2)}
+.sub-icon svg{width:28px;height:28px}
+.sub-nm{font-size:clamp(14px,3.4vw,15.5px);font-weight:700;color:#fff}
+.sub-do{font-size:clamp(10.5px,2.7vw,11.5px);color:var(--dim);margin-top:2px}
+.sub-act{font-size:clamp(9.5px,2.5vw,10.5px);color:var(--teal);margin-top:3px}
+.sub-goal{font-size:clamp(9.5px,2.5vw,10.5px);color:var(--amber);margin-top:2px;line-height:1.45}
+.sub-badge{margin-left:auto;flex:none}
+.badge{font-size:clamp(9.5px,2.5vw,10.5px);padding:4px 10px;border-radius:20px;font-weight:700;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.badge .b-dot{width:7px;height:7px;border-radius:50%}
+.b-work{background:#4ade8018;color:var(--green)}.b-work .b-dot{background:var(--green);animation:bk 1.4s infinite}
+.b-standby{background:#fbbf2415;color:var(--amber)}.b-standby .b-dot{background:var(--amber)}
+.b-paused{background:#5d709218;color:var(--dim)}.b-paused .b-dot{background:var(--dim)}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.25}}
+
+.block-label{font-size:10px;letter-spacing:1px;color:var(--dim2);padding:12px 16px 0;font-weight:700}
+.depts{padding:9px 16px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:7px}
+.dept{display:flex;align-items:flex-start;gap:8px;background:#0a1120;border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.dept .st{width:7px;height:7px;border-radius:50%;margin-top:4px;flex:none}
+.st.on{background:var(--green);box-shadow:0 0 7px var(--green);animation:bk 1.4s infinite}
+.st.wait{background:var(--amber)}.st.off{background:var(--dim2)}
+.dept .dn{font-size:clamp(10.5px,2.7vw,11.5px);font-weight:700;color:#dbe6f5}
+.dept .dt{font-size:clamp(10px,2.5vw,10.5px);color:var(--dim);margin-top:2px;line-height:1.35}
+
+.outs{padding:9px 16px 0}
+.out-line{display:flex;align-items:center;gap:8px;font-size:clamp(10.5px,2.7vw,11.5px);padding:4px 0}
+.out-line .st{width:6px;height:6px;border-radius:50%;flex:none}
+.out-line .on{background:var(--green)}.out-line .wait{background:var(--amber)}.out-line .off{background:var(--dim2)}
+.out-line .txt{min-width:0}
+.out-line .tag{margin-left:auto;font-size:9px;color:var(--dim);flex:none;padding-left:8px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:clamp(9.5px,2.5vw,10.5px);padding:3px 8px;border-radius:6px;background:#0a1120;border:1px solid var(--line)}
+.chip.live{color:var(--amber);border-color:#fbbf2444}
+.chip.wip{color:var(--teal)}
+
+.results{display:flex;gap:7px;padding:13px 16px 15px;flex-wrap:wrap;margin-top:auto}
+.res{flex:1 1 70px;background:#080e1a;border:1px solid var(--line);border-radius:8px;padding:8px 4px;text-align:center}
+.res .v{font-size:clamp(13.5px,3.8vw,15.5px);font-weight:700;line-height:1}
+.res .k{font-size:clamp(9.5px,2.5vw,10.5px);color:var(--dim);margin-top:4px}
+
+.fleet{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:11px}
+.machine{background:linear-gradient(180deg,#0d1526,#090f1c);border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.machine.stale{opacity:.45}
+.mname{font-size:clamp(12px,3vw,13.5px);font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.mrole{font-size:clamp(9.5px,2.5vw,10.5px);color:var(--dim);margin-top:2px}
+.flag{margin-left:auto;font-size:8px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.flag.gidle{background:#4ade8018;color:var(--green)}
+.flag.yheavy{background:#fbbf2415;color:var(--amber)}
+.flag.stale{background:#5d709218;color:var(--dim)}
+.flag.warn{background:#f871711c;color:var(--red)}
+.flag.cloud{background:#60a5fa18;color:var(--blue)}
+.flag.ceo{background:#a78bfa18;color:var(--violet)}
+.mspec{font-size:clamp(9.5px,2.5vw,10.5px);color:var(--dim);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);line-height:1.6}
+.mnow{font-size:clamp(9.5px,2.5vw,10.5px);color:var(--teal);margin-top:6px}
+
+footer{margin-top:clamp(18px,4vw,26px);padding:13px 18px;background:#0c1322cc;border:1px solid var(--line);border-radius:11px;font-size:clamp(10px,2.6vw,11px);color:var(--dim);display:flex;gap:10px;align-items:flex-start}
+footer .d{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:bk 1.5s infinite;flex:none;margin-top:4px}
+footer b{color:var(--teal)}
+
+.nodata{margin:40px auto;max-width:760px;background:#0c1322;border:1px solid #f8717166;border-radius:12px;padding:22px 26px;color:#f87171;font-size:13.5px;line-height:1.8}
+.nodata b{color:#fff}
+.banner{margin:0 0 14px;padding:11px 15px;background:#f8717112;border:1px solid #f8717140;border-radius:10px;color:#f87171;font-size:clamp(10.5px,2.7vw,11.5px);line-height:1.6}
+.banner b{color:#ffd6d6}
+.wstale{color:var(--amber)}
+
+@media(max-width:560px){
+  .brain-stats{width:100%;margin-left:0;justify-content:space-between;gap:8px}
+  .bs{flex:1}
+  .sub-head{flex-wrap:wrap}
+  .sub-badge{order:3}
+}
+
+/* command channel (P-59 v4): clickable cards + CEO direct-order modal */
+.sub,.machine,.ceo-item,.pri-row{cursor:pointer}
+.sub:hover,.machine:hover,.ceo-item:hover{border-color:#5eead466;box-shadow:0 0 14px #5eead41a}
+.cmdbar{display:flex;align-items:center;gap:12px;margin:0 0 14px;flex-wrap:wrap}
+.cmdbtn{background:#5eead41a;border:1px solid #5eead455;color:var(--teal);font-weight:700;font-size:13px;padding:10px 18px;border-radius:11px;cursor:pointer;letter-spacing:1px}
+.cmdbtn:hover{background:#5eead433;box-shadow:0 0 18px #5eead42a}
+.cmdhint{font-size:11px;color:var(--dim)}
+.modal-bg{position:fixed;inset:0;background:#060a13d9;z-index:50;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{width:min(600px,94vw);background:linear-gradient(180deg,#121a2b,#0b1120);border:1px solid #5eead455;border-radius:14px;padding:18px 20px;box-shadow:0 0 44px #5eead422}
+.modal h3{color:#fff;font-size:15px;margin-bottom:3px}
+.modal .mto{font-size:11px;color:var(--teal);margin-bottom:10px}
+.modal textarea{width:100%;min-height:110px;background:#060a13;border:1px solid var(--line2);border-radius:9px;color:#dbe6f5;font:inherit;padding:10px;resize:vertical;box-sizing:border-box}
+.modal textarea:focus{outline:none;border-color:#5eead455}
+.modal .mrow{display:flex;gap:9px;margin-top:11px;flex-wrap:wrap;align-items:center}
+.mbtn{border:none;border-radius:9px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+.msend{background:#5eead422;color:var(--teal);border:1px solid #5eead455}
+.msend:hover{background:#5eead444}
+.mcancel{background:#22304a22;color:var(--dim)}
+.mnote{font-size:10.5px;color:var(--dim);margin-top:9px;line-height:1.7}
+.mnote b{color:var(--teal)}
+
+/* ===== P-64 批2 视觉精修（CEO 令 09-24 ~18:4x 好好把可视化做好·视觉方向不变） ===== */
+/* ① 字号两档制：L 档=结构面（标题/数值），S 档=注脚面；1600px 断点切档 */
+:root{--fsL:13.5px;--fsS:11px;--bg2:#0a1120}
+@media(max-width:1599px){:root{--fsL:12.5px;--fsS:10.5px}}
+.sec-title{font-size:var(--fsL)}
+.sec-title .hint,.block-label,.cmdhint{font-size:var(--fsS)}
+.sub-nm{font-size:calc(var(--fsL) + 2px)}
+.res .v{font-size:calc(var(--fsL) + 3px)}
+.bs .n{font-size:calc(var(--fsL) + 9px)}
+.mile .ml{font-size:var(--fsS)}
+.mnote{font-size:var(--fsS)}
+/* ② chips 网格对齐（等宽格·过长省略·不再参差换行） */
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
+.chip{text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ③ 断卡黑灯态：更暗+去饱和+断联倒计时行（stale 可见性） */
+.machine.stale{opacity:.4;filter:grayscale(.55)}
+.m-stale{margin-top:7px;font-size:var(--fsS);color:var(--red);line-height:1.4;display:flex;align-items:center;gap:6px}
+.m-stale::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--red);flex:none;animation:bk 1.2s infinite}
+/* E-079 软化态：心跳账面滞后但 git 实产活——不进黑灯区，琥珀态+证据行（信息密度律：证据行承载实质） */
+.machine.gsoft{opacity:.88}
+.flag.gsoft{background:#f59e0b26;color:var(--amber)}
+.m-ev{margin-top:7px;font-size:var(--fsS);color:var(--amber);line-height:1.4;display:flex;align-items:center;gap:6px}
+.m-ev::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--amber);flex:none}
+/* ④ 心跳一拍：每 10 分钟数据刷新时全城窗灯微脉冲（锚真实 tick·非装饰动画） */
+.sub,.machine{transition:box-shadow .45s}
+body.beat .sub,body.beat .machine{box-shadow:0 0 18px #5eead42e}
+.gridbg{transition:opacity .45s}
+body.beat .gridbg{opacity:.62}
+/* ⑤ 暗色统一：暗面板归一 token；每卡快照戳/实况徽标 */
+.res{background:var(--bg2)}
+.dept{background:var(--bg2)}
+.chip{background:var(--bg2)}
+.weather .wcity{background:var(--bg2)}
+.sub-src{font-size:var(--fsS);color:var(--dim);margin-top:4px}
+.sub-src.live{color:var(--green)}
+.sub-src.estale{color:var(--amber)}
+
+/* ===== U198 真直连（CEO 令 09-25）：双键弹窗+回执面板+通道徽标 ===== */
+.mtodo{background:#fbbf2418;color:var(--amber);border:1px solid #fbbf2455}
+.mtodo:hover{background:#fbbf2433;box-shadow:0 0 18px #fbbf242a}
+.mbtn:disabled{opacity:.45;cursor:default}
+.receipts{border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#0d1526,#090f1c);padding:11px 15px;margin:0 0 14px}
+.receipts .rhead{font-size:var(--fsS);color:var(--dim);letter-spacing:1px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.rc-row{display:flex;align-items:center;gap:9px;padding:5px 0;font-size:var(--fsS);border-bottom:1px dashed #1a253855}
+.rc-row:last-child{border-bottom:none}
+.rc-ts{color:var(--dim2);font-variant-numeric:tabular-nums;flex:none}
+.rc-tx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt);flex:1}
+.rc-badge{flex:none;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.rc-b-nb{background:#fbbf2422;color:var(--amber)}
+.rc-b-td{background:#46566f22;color:var(--dim)}
+.rc-b-done{background:#4ade8018;color:var(--green)}
+.rc-offline{background:#5d709218;color:var(--red);font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px}
+.rc-apiok{color:var(--dim2);font-size:10px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="gridbg"></div>
+<div class="wrap" id="app"></div>
+
+<div class="modal-bg" id="cmdbg">
+ <div class="modal" id="cmdbox">
+  <h3>⚡ 下达指令</h3>
+  <div class="mto" id="cmdto">致：集团</div>
+  <textarea id="cmdta" placeholder="一句话。选一键：⚡马上办=立即开工执行；📝记待办=入册排队下轮。"></textarea>
+  <div class="mrow">
+   <button class="mbtn msend" id="cmdnow">⚡ 马上办</button>
+   <button class="mbtn mtodo" id="cmdtodo">📝 记待办</button>
+   <button class="mbtn mcancel" id="cmdcancel">取消</button>
+  </div>
+  <div class="mnote" id="cmdnote">真直连（U198）：指令经本机直投通道即刻落 <b>引擎收件箱</b>——⚡马上办=立即触发引擎班开工执行；📝记待办=入册登记后按排期入轨。回执实时见「我的指令与回执」面板。<br>通道离线时指令自动复制到剪贴板（粘贴给任意 AI 窗口即入令流）。</div>
+ </div>
+</div>
+
+<script src="硅基生命元宇宙-data.js"></script>
+<script>
+const ICO={
+ game:'<rect x="2" y="5" width="12" height="8" fill="#8B6EF0"/><rect x="4" y="8" width="2" height="2" fill="#060a13"/><rect x="10" y="7" width="2" height="1" fill="#060a13"/><rect x="10" y="9" width="2" height="1" fill="#060a13"/><rect x="12" y="8" width="1" height="2" fill="#060a13"/><rect x="9" y="8" width="1" height="2" fill="#060a13"/>',
+ money:'<rect x="3" y="9" width="2" height="5" fill="#fbbf24"/><rect x="7" y="6" width="2" height="8" fill="#fbbf24"/><rect x="11" y="4" width="2" height="10" fill="#fbbf24"/><rect x="2" y="13" width="12" height="1" fill="#fbbf24"/><rect x="11" y="3" width="2" height="1" fill="#4ade80"/>',
+ stream:'<rect x="3" y="3" width="10" height="10" fill="#60a5fa"/><rect x="6" y="6" width="4" height="4" fill="#060a13"/><rect x="13" y="5" width="1" height="1" fill="#60a5fa"/><rect x="13" y="8" width="1" height="1" fill="#60a5fa"/><rect x="13" y="11" width="1" height="1" fill="#60a5fa"/>',
+ domain:'<rect x="3" y="3" width="10" height="10" fill="none" stroke="#5eead4"/><rect x="7" y="3" width="2" height="10" fill="#5eead4"/><rect x="3" y="7" width="10" height="2" fill="#5eead4"/><rect x="5" y="5" width="1" height="1" fill="#5eead4"/><rect x="10" y="5" width="1" height="1" fill="#5eead4"/><rect x="5" y="10" width="1" height="1" fill="#5eead4"/><rect x="10" y="10" width="1" height="1" fill="#5eead4"/>',
+ life:'<rect x="4" y="1" width="8" height="6" fill="#f472b6"/><rect x="5" y="3" width="2" height="2" fill="#4ade80"/><rect x="9" y="3" width="2" height="2" fill="#4ade80"/><rect x="6" y="8" width="4" height="5" fill="#f472b6"/><rect x="5" y="9" width="1" height="3" fill="#f472b6"/><rect x="10" y="9" width="1" height="3" fill="#f472b6"/>',
+ compute:'<rect x="4" y="4" width="8" height="8" fill="#fb923c"/><rect x="6" y="6" width="4" height="4" fill="#060a13"/><rect x="2" y="6" width="2" height="1" fill="#fb923c"/><rect x="2" y="9" width="2" height="1" fill="#fb923c"/><rect x="12" y="6" width="2" height="1" fill="#fb923c"/><rect x="12" y="9" width="2" height="1" fill="#fb923c"/><rect x="6" y="2" width="1" height="2" fill="#fb923c"/><rect x="9" y="2" width="1" height="2" fill="#fb923c"/><rect x="6" y="12" width="1" height="2" fill="#fb923c"/><rect x="9" y="12" width="1" height="2" fill="#fb923c"/>'
+};
+function svg(c){return '<svg viewBox="0 0 16 16" shape-rendering="crispEdges">'+c+'</svg>';}
+function stCls(s){return s===1?'on':s===2?'wait':'off';}
+function badge(s){
+ if(s===1)return '<div class="badge b-work"><span class="b-dot"></span>正在干活</div>';
+ if(s===2)return '<div class="badge b-standby"><span class="b-dot"></span>待命</div>';
+ return '<div class="badge b-paused"><span class="b-dot"></span>静默</div>';
+}
+const QLBL={must:'要你定',phys:'要你办',ai:'AI 在自决',pre:'先定一下',later:'不急'};
+const SRCZH={'live-export':'⚡ 实况接口','export-stale':'接口过期·回退策展','curated':'策展快照'};
+const MST={done:'已毕',building:'在建',partial:'部分达成',next:'下一站',planned:'排队中',vision:'远期'};
+const KINDZH={clear:'晴',cloud:'多云',rain:'雨',snow:'雪',fog:'雾',storm:'风暴',unknown:'—'};
+
+const DATA=window.SILICON_DATA||null;
+const app=document.getElementById('app');
+window.onerror=function(msg,src,line,col){document.getElementById('app').innerHTML='<div class="nodata">JS_ERROR: '+msg+' @ line '+line+':'+col+'</div>';};
+
+if(!DATA){
+ app.innerHTML='<div class="nodata"><b>数据文件缺失</b>（硅基生命元宇宙-data.js 未生成）——当前为无数据态，非实时画面。<br>修复：运行 <b>tools/siliconwatch/generate.ps1</b>，或等 SiliconWatchTick（10 分钟）自动刷新后本页自恢复。<br>诚实律：无数据时绝不用写死的旧数字冒充实况。</div>';
+}else{
+try{
+let h='';
+
+const stales=(DATA.fleet||[]).filter(m=>m.flag==='stale');
+if(stales.length){
+ h+='<div class="banner">⚠ <b>'+stales.length+' 台机器心跳超过 30 分钟</b>：'+stales.map(m=>m.n+'（'+(m.age_min>0?m.age_min:'?')+' 分钟）').join(' / ')+'——机器可能仍在干活，但账面断了（已灰显·黑灯区律）。</div>';
+}
+
+h+='<div class="brain"><div class="brain-top">'+
+ '<svg class="brain-icon" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="6" y="2" width="4" height="2" fill="#5eead4"/><rect x="4" y="4" width="8" height="2" fill="#5eead4"/><rect x="2" y="6" width="12" height="4" fill="#5eead4"/><rect x="4" y="10" width="8" height="2" fill="#5eead4"/><rect x="6" y="12" width="4" height="2" fill="#5eead4"/><rect x="7" y="7" width="2" height="2" fill="#060a13"/><rect x="1" y="7" width="1" height="2" fill="#fbbf24"/><rect x="14" y="7" width="1" height="2" fill="#fbbf24"/></svg>'+
+ '<div><h1>硅基生命元宇宙</h1><div class="sub">你是集团的大脑，这是你俯瞰全城的地方</div></div>'+
+ '<div class="brain-stats">'+
+ '<div class="bs"><div class="n" style="color:#4ade80">'+DATA.stats.companies+'</div><div class="l">家公司</div></div>'+
+ '<div class="bs"><div class="n" style="color:#5eead4">'+DATA.stats.games+'</div><div class="l">款游戏</div></div>'+
+ '<div class="bs"><div class="n" style="color:#a78bfa">'+DATA.stats.residents+'</div><div class="l">个居民</div></div>'+
+ '<div class="bs"><div class="n" style="color:#fbbf24">'+DATA.stats.machines+'</div><div class="l">台机器</div></div></div></div>';
+
+h+='<div class="weather"><span class="clk" id="clk"></span><span class="sep">|</span>'+
+ (DATA.weather||[]).map(function(w){
+  var s='<span class="wcity">'+w.name+' <b>'+w.temp+'℃</b> '+(KINDZH[w.kind]||w.kind);
+  if(w.hi!=null&&w.lo!=null)s+=' · '+w.lo+'~'+w.hi+'℃';
+  s+='</span>';
+  if(w.stale)s+='<span class="wstale">（'+w.src+'·缓存）</span>';
+  return s;
+ }).join('<span class="sep">·</span>')+'</div>';
+
+var act=(DATA.miles||[]).filter(function(m){return m.status==='building'||m.status==='partial';});
+var nxt=(DATA.miles||[]).filter(function(m){return m.status==='next';})[0];
+var cpTxt=act.map(function(m){return m.id+' '+(MST[m.status]||m.status);}).join(' · ');
+if(nxt)cpTxt+=(cpTxt?' · ':'')+'下一站 '+nxt.id;
+h+='<div class="city-prog"><div class="cp-label"><span>城，造到哪了</span><b>'+(cpTxt||'—')+'</b></div><div class="cp-scroll"><div class="cp-track" id="cpTrack">'+
+ (DATA.miles||[]).map(function(m){
+  var cls=m.status==='done'?'done':(m.status==='building'||m.status==='partial')?'now':'';
+  var d=(m.name||'').split('（')[0];
+  return '<div class="mile '+cls+'"><span class="dot"></span><div class="ml">'+m.id+'</div><div class="md">'+d+'</div></div>';
+ }).join('')+'</div></div></div></div>';
+
+h+='<div class="cmdbar"><span class="cmdbtn" data-cmd="集团（总控）" data-pre="">⚡ 直接发令</span><span class="cmdhint">或点击任意公司卡 / 机器卡 / 待拍板事项，对它直接下指令——⚡马上办=立即开工·📝记待办=入队下轮</span><span id="apibadge" class="rc-apiok"></span></div>';
+h+='<div class="receipts" id="receipts"><div class="rhead">📮 我的指令与回执</div><div id="rcbody"></div></div>';
+h+='<div class="sec-title"><span class="sq" style="background:#fbbf24;box-shadow:0 0 8px #fbbf24"></span>等你拍板的事<span class="hint">策展快照 '+DATA.ceo_queue_ts+' · 已拍板项已剔除</span><span class="ln"></span></div><div class="ceo-grid">';
+(DATA.ceo_queue||[]).forEach(function(c){
+ var qc=(c.q==='ai')?'ai':(c.q==='must'?'must':(c.q==='phys'?'phys':'later'));
+ h+='<div class="ceo-item '+(c.hot?'hot':'')+'" data-cmd="'+c.t+'" data-pre="拍板：'+c.t+'&#10;我的决定：" title="来源：HQ 策展层（与 docs/orders.md 对账）·点击可拍板"><span class="q '+qc+'">'+(QLBL[c.q]||c.q)+'</span>'+
+  '<div class="qt">'+c.t+'</div><div class="qd">'+c.d+'</div><div class="qw">'+c.w+'</div></div>';
+});
+h+='</div>';
+
+// CEO retrospective: recent orders trail (derived from docs/orders.md tail)
+if(DATA.recent&&DATA.recent.length){
+ h+='<div class="sec-title"><span class="sq" style="background:#60a5fa;box-shadow:0 0 8px #60a5fa"></span>'+(DATA.recent_sec||'你最近的令与结果')+'<span class="hint">'+(DATA.recent_hint||'')+'</span><span class="ln"></span></div>';
+ h+='<div class="sub" style="border-top:2px solid #60a5fa"><div class="outs">';
+ DATA.recent.forEach(function(r){h+='<div class="out-line"><span class="st on"></span><span class="txt">'+r.t+' '+r.q+'</span><span class="tag">'+r.st+'</span></div>';});
+ h+='</div></div>';
+}
+
+// priority stack + veto-window correction levers (CEO order 09-24 ~18:05)
+if(DATA.priority){
+ h+='<div class="sec-title"><span class="sq" style="background:#fbbf24;box-shadow:0 0 8px #fbbf24"></span>'+(DATA.priority.sec||'当前优先级')+'<span class="hint">'+(DATA.priority.hint||'')+'</span><span class="ln"></span></div>';
+ h+='<div class="sub" style="border-top:2px solid #fbbf24"><div class="outs">';
+ (DATA.priority.items||[]).forEach(function(p,i){h+='<div class="out-line pri-row" data-cmd="'+p[0]+' '+p[1]+'" data-pre="优先级调整：'+p[0]+' '+p[1]+'&#10;我的令："><span class="st '+(i===0?'on':'wait')+'"></span><span class="txt"><b style="color:#fff">'+p[0]+'</b> '+p[1]+'</span><span class="tag">'+p[3]+' · '+p[2]+'</span></div>';});
+ h+='</div>';
+ if(DATA.veto&&DATA.veto.length){h+='<div class="block-label">'+(DATA.priority.veto_label||'')+'</div><div class="outs"><div class="chips">'+DATA.veto.map(function(v){return '<span class="chip live">'+v+'</span>';}).join('')+'</div></div>';}
+ h+='</div>';
+}
+
+h+='<div class="sec-title"><span class="sq" style="background:#5eead4;box-shadow:0 0 8px #5eead4"></span>六家公司，都在忙啥<span class="hint">'+(DATA.snapshot_note||'')+'</span><span class="ln"></span></div><div class="subs">';
+(DATA.subs||[]).forEach(function(s){
+ h+='<div class="sub" style="border-top:2px solid '+s.accent+'" data-cmd="'+s.nm+'" data-pre="致 '+s.nm+'："><div class="sub-head">'+
+  '<div class="sub-icon" style="box-shadow:inset 0 0 12px '+s.accent+'22">'+svg(ICO[s.ico]||'')+'</div>'+
+  '<div><div class="sub-nm">'+s.nm+'</div><div class="sub-do">'+s.do+'</div><div class="sub-act">'+(s.act||'')+'</div>'+(s.goal?'<div class="sub-goal">'+s.goal+'</div>':'')+
+  (s.src?'<div class="sub-src'+(s.src==='live-export'?' live':(s.src==='export-stale'?' estale':''))+'">'+(s.src==='live-export'?'⚡ 实况接口 · '+s.nm+' 实时自报':((SRCZH[s.src]||s.src)+' · 数据戳 '+s.snapshot))+'</div>':'')+'</div>'+
+  '<div class="sub-badge">'+badge(s.status)+'</div></div>';
+
+ if(s.depts&&s.depts.length){
+  h+='<div class="block-label">各个部门</div><div class="depts">'+
+   s.depts.map(function(d){return '<div class="dept"><span class="st '+stCls(d.s)+'"></span><div><div class="dn">'+d.n+'</div><div class="dt">'+d.t+'</div></div></div>';}).join('')+'</div>';
+ }
+ if(s.outs&&s.outs.length){
+  h+='<div class="block-label">做出来的东西</div><div class="outs">'+
+   s.outs.map(function(o){if(!o)return '';return '<div class="out-line"><span class="st '+o[1]+'"></span><span class="txt">'+o[0]+'</span><span class="tag">'+o[2]+'</span></div>';}).join('')+'</div>';
+ }
+ if(s.chips&&s.chips.length){
+  h+='<div class="block-label">做出来的东西</div><div class="outs"><div class="chips">'+
+   s.chips.map(function(c){if(!c)return '';return '<span class="chip '+c[1]+'">'+c[0]+'</span>';}).join('')+'</div></div>';
+ }
+ h+='<div class="results">'+(s.results||[]).map(function(r){return '<div class="res"><div class="v" style="color:'+s.accent+'">'+r[0]+'</div><div class="k">'+r[1]+'</div></div>';}).join('')+'</div></div>';
+});
+h+='</div>';
+
+h+='<div class="subs" style="margin-top:13px">';
+if(DATA.labs){
+ var L=DATA.labs;
+ h+='<div class="sub" data-cmd="实验室 CPH4" data-pre="致实验室：" title="点击可对实验室下指令" style="border-top:2px solid #5eead4"><div class="sub-head">'+
+  '<div class="sub-icon" style="box-shadow:inset 0 0 12px #5eead422">'+svg(ICO.domain)+'</div>'+
+  '<div><div class="sub-nm">'+L.nm+'</div><div class="sub-do">'+L.do+'</div><div class="sub-act">'+(L.act||'')+'</div></div>'+
+  '<div class="sub-badge">'+badge(L.status)+'</div></div>';
+ h+='<div class="results">'+
+  '<div class="res"><div class="v" style="color:#5eead4">'+L.in_flight+'</div><div class="k">'+L.s_inflight+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#fbbf24">'+L.transferred+'</div><div class="k">'+L.s_transferred+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#4ade80">'+L.done+'</div><div class="k">'+L.s_done+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#a78bfa">'+L.dec_today+'</div><div class="k">'+L.s_dec+'</div></div></div>';
+ h+='<div class="outs">';
+ (L.research||[]).forEach(function(r,idx){h+='<div class="out-line"><span class="st on"></span><span class="txt">'+(idx===0?L.l_research+'：':'')+r.n+'</span><span class="tag">'+r.ts+'</span></div>';});
+ (L.rounds||[]).forEach(function(rd){h+='<div class="out-line"><span class="st wait"></span><span class="txt">'+L.l_rounds+'：'+rd.n+'</span><span class="tag">下次 '+rd.next+'</span></div>';});
+ h+='</div></div>';
+}
+if(DATA.residents){
+ var R=DATA.residents;
+ h+='<div class="sub" style="border-top:2px solid #f472b6"><div class="sub-head">'+
+  '<div class="sub-icon" style="box-shadow:inset 0 0 12px #f472b622">'+svg(ICO.life)+'</div>'+
+  '<div><div class="sub-nm">'+R.nm+'</div><div class="sub-do">'+R.do+'</div><div class="sub-act">'+(R.act||'')+'</div></div>'+
+  '<div class="sub-badge">'+badge(R.status)+'</div></div>';
+ h+='<div class="results">'+
+  '<div class="res"><div class="v" style="color:#f472b6">'+R.census+'</div><div class="k">'+R.s_census+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#5eead4">'+R.ringed+'</div><div class="k">'+R.s_ringed+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#fbbf24">'+R.today_ring+'</div><div class="k">'+R.s_today+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#a78bfa">'+R.pool+'</div><div class="k">'+R.s_pool+'</div></div>'+
+  '<div class="res"><div class="v" style="color:#60a5fa">'+R.latest_ring+'</div><div class="k">'+R.s_latest+'</div></div></div>';
+ if(R.chips&&R.chips.length){h+='<div class="outs"><div class="chips">'+R.chips.map(function(c){if(!c)return '';return '<span class="chip '+c[1]+'">'+c[0]+'</span>';}).join('')+'</div></div>';}
+ h+='</div>';
+}
+if(DATA.flow){
+ h+='<div class="sub" style="border-top:2px solid #fb923c"><div class="sub-head">'+
+  '<div class="sub-icon" style="box-shadow:inset 0 0 12px #fb923c22">'+svg(ICO.compute)+'</div>'+
+  '<div><div class="sub-nm">运转流程（集团的发动机）</div><div class="sub-do">令出必达的闭环——你发令·机器转·你复盘</div></div>'+
+  '<div class="sub-badge"><div class="badge b-work"><span class="b-dot"></span>在转</div></div></div>';
+ h+='<div class="outs">';
+ (DATA.flow.loop||[]).forEach(function(l,i){h+='<div class="out-line"><span class="st '+(i===0?'on':'wait')+'"></span><span class="txt">'+(i+1)+'. '+l+'</span></div>';});
+ h+='</div></div>';
+ h+='<div class="sub" style="border-top:2px solid #8B6EF0"><div class="sub-head">'+
+  '<div class="sub-icon" style="box-shadow:inset 0 0 12px #8B6EF022">'+svg(ICO.game)+'</div>'+
+  '<div><div class="sub-nm">顶层设计（集团的宪法面）</div><div class="sub-do">组织·分级·正典地图·矫正通道</div></div>'+
+  '<div class="sub-badge"><div class="badge b-work"><span class="b-dot"></span>在册</div></div></div>';
+ h+='<div class="outs">';
+ (DATA.flow.design||[]).forEach(function(l,i){h+='<div class="out-line"><span class="st on"></span><span class="txt">'+l+'</span></div>';});
+ h+='</div></div>';
+}
+h+='</div>';
+
+h+='<div class="sec-title"><span class="sq" style="background:#60a5fa;box-shadow:0 0 8px #60a5fa"></span>机器和算力<span class="hint">断心跳>30分钟=灰显（黑灯区律）·悬停看原始心跳</span><span class="ln"></span></div><div class="fleet">';
+(DATA.fleet||[]).forEach(function(m){
+ h+='<div class="machine'+(m.flag==='stale'?' stale':(m.flag==='gsoft'?' gsoft':''))+'" data-cmd="'+m.n+'" data-pre="致 '+m.n+'：安排任务 " title="'+(m.title||'')+' · 点击可对这台机器下指令"><div class="mname">'+m.n+'<span class="flag '+m.flag+'">'+m.ft+'</span></div><div class="mrole">'+m.role+'</div><div class="mspec">'+m.spec+'</div><div class="mnow">'+m.now+'</div>'+(m.ev?'<div class="m-ev">'+m.ev+'</div>':'')+(m.flag==='stale'?'<div class="m-stale">心跳断联 '+(m.age_min>0?m.age_min:'?')+' 分钟——机器可能仍在干活，账面已进黑灯区</div>':'')+'</div>';
+});
+h+='</div>';
+
+h+='<footer><span class="d"></span><span>'+DATA.footer+'</span></footer>';
+
+app.innerHTML=h;
+}catch(e){app.innerHTML='<div class="nodata">RENDER_ERROR: '+(e&&e.message?e.message:String(e))+'</div>';}
+}
+
+function centerNow(){
+ const track=document.getElementById('cpTrack');
+ if(!track)return;
+ if(window.innerWidth<720){
+  const now=track.querySelector('.mile.now');
+  if(now){now.scrollIntoView({inline:'center',block:'nearest'});}
+ }
+}
+window.addEventListener('resize',centerNow);
+centerNow();
+function tickClk(){var d=new Date(),p=n=>(n<10?'0'+n:n);var el=document.getElementById('clk');if(el)el.textContent=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
+tickClk();setInterval(tickClk,1000);
+setInterval(function(){location.reload();},600000);
+// P-64 批2：心跳一拍——页面数据每次 10 分钟刷新（真实 tick）时全城窗灯微脉冲一次，非装饰
+function heartBeat(){document.body.classList.add('beat');setTimeout(function(){document.body.classList.remove('beat');},2600);}
+heartBeat();setInterval(heartBeat,600000);
+
+// ===== CEO direct-order channel v5 (U198, CEO order 2026-09-25): REAL delivery =====
+// click card -> modal -> POST to local CeoDeskServer API -> engine inbox
+// (ceo-desk-inbox/ceo-desk.jsonl) -> tick Step0 consumes (U-row + archive).
+// mode=now fires MiniGameEngineTick immediately; mode=todo rides the 10-min
+// cadence. Receipts panel polls GET /api/cmds (pending vs U-number archived).
+// Offline -> clipboard fallback with an honest note. No directory grants, no
+// manual file moves (the v4 File-System-Access path is retired).
+(function(){
+ var bg=document.getElementById('cmdbg'),ta=document.getElementById('cmdta'),
+     to=document.getElementById('cmdto'),note=document.getElementById('cmdnote'),
+     bnow=document.getElementById('cmdnow'),btodo=document.getElementById('cmdtodo'),
+     cancel=document.getElementById('cmdcancel'),badge=document.getElementById('apibadge'),
+     rcbox=document.getElementById('receipts'),rcbody=document.getElementById('rcbody');
+ if(!bg)return;
+ var API='http://127.0.0.1:8791';
+ var FLOW='真直连（U198）：指令经本机直投通道即刻落 <b>引擎收件箱</b>——⚡马上办=立即触发引擎班开工执行；📝记待办=入册登记后按排期入轨。回执实时见「我的指令与回执」面板。<br>通道离线时指令自动复制到剪贴板（粘贴给任意 AI 窗口即入令流）。';
+ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+ function openModal(target,prefix){
+  to.textContent='致：'+target;
+  ta.value=prefix||'';
+  bg.classList.add('open');
+  note.innerHTML=FLOW;
+  setTimeout(function(){ta.focus();},50);
+ }
+ function closeModal(){bg.classList.remove('open');}
+ function fetchJ(path,opts,ms){
+  return new Promise(function(res,rej){
+   var ctl=('AbortController' in window)?(new AbortController()):null;
+   var t=setTimeout(function(){if(ctl)ctl.abort();rej(new Error('timeout'));},ms||4500);
+   var init=opts||{};
+   if(ctl)init.signal=ctl.signal;
+   fetch(API+path,init).then(function(r){
+    clearTimeout(t);
+    if(!r.ok){rej(new Error('http'+r.status));return;}
+    r.json().then(function(j){res(j);},function(e){rej(e);});
+   },function(e){clearTimeout(t);rej(e);});
+  });
+ }
+ function setBadge(up){
+  if(badge){badge.className=up?'rc-apiok':'rc-offline';badge.textContent=up?'● 指令通道在线':'● 指令通道离线';}
+ }
+ function renderCmds(j){
+  if(!rcbody)return;
+  var rows=(j&&j.cmds)||[];
+  if(!rows.length){rcbody.innerHTML='<div class="rc-row"><span class="rc-tx" style="color:var(--dim)">尚无指令记录——点击任意公司卡 / 机器卡，或「⚡ 直接发令」。</span></div>';return;}
+  rows=rows.slice().sort(function(a,b){return String(b.ts||'').localeCompare(String(a.ts||''));}).slice(0,20);
+  var h2='';
+  rows.forEach(function(r){
+   var st=(r.status==='done')?('<span class="rc-badge rc-b-done">✅ 已入册 '+(r.u||'')+'</span>')
+        :((r.mode==='now')?'<span class="rc-badge rc-b-nb">⚡ 待执行</span>':'<span class="rc-badge rc-b-td">📝 排队</span>');
+   var t=String(r.tx||'');if(t.length>76)t=t.slice(0,76)+'…';
+   h2+='<div class="rc-row"><span class="rc-ts">'+esc(String(r.ts||'').slice(5,16))+'</span><span class="rc-tx" title="'+esc(r.tx||'')+'">'+esc(t)+'</span>'+st+'</div>';
+  });
+  rcbody.innerHTML=h2;
+ }
+ function pollNow(){
+  fetchJ('/api/cmds').then(function(j){setBadge(true);renderCmds(j);},function(){setBadge(false);});
+ }
+ function sendCmd(mode){
+  var txt=ta.value.trim();
+  if(!txt){note.innerHTML='<b>空指令未发送。</b>';return;}
+  var btn=(mode==='now')?bnow:btodo,orig=btn.textContent;
+  btn.disabled=true;btn.textContent='发送中…';
+  var payload={text:txt,target:to.textContent.replace('致：',''),mode:mode,src:'siliconview',act:'指令',id:''};
+  fetchJ('/api/cmd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)},6000)
+   .then(function(j){
+    if(!j||!j.ok)throw new Error((j&&j.err)||'bad');
+    note.innerHTML='<b>✅ 已送达引擎收件箱（'+j.vid+'）</b><br>'+(mode==='now'?'⚡ 已触发引擎班立即开工——执行进度见回执面板与本页各卡实况。':'📝 已入册排队——下个引擎班认领执行，回执见下方面板。');
+    ta.value='';pollNow();setTimeout(closeModal,2200);
+   },function(){
+    var plain='【CEO 直令→'+to.textContent.replace('致：','')+'】'+txt;
+    var p=(navigator.clipboard&&navigator.clipboard.writeText)?navigator.clipboard.writeText(plain):Promise.reject(new Error('noclip'));
+    p.then(function(){note.innerHTML='<b>通道离线——指令已复制到剪贴板</b>，粘贴给任意 AI 窗口即入令流（直投服务未运行：OS 任务 MiniGameCeoDeskServer）。';},
+           function(){note.innerHTML='<b>发送失败：</b>通道离线且剪贴板不可用。指令文本：<br>'+esc(plain);});
+   })
+   .then(function(){btn.disabled=false;btn.textContent=orig;},function(){btn.disabled=false;btn.textContent=orig;});
+ }
+ document.addEventListener('click',function(ev){
+  var el=ev.target.closest('[data-cmd]');
+  if(el){ev.preventDefault();ev.stopPropagation();openModal(el.getAttribute('data-cmd'),(el.getAttribute('data-pre')||'').replace(/&#10;/g,'\n'));}
+ });
+ bnow.onclick=function(){sendCmd('now');};
+ btodo.onclick=function(){sendCmd('todo');};
+ cancel.onclick=closeModal;
+ bg.addEventListener('click',function(ev){if(ev.target===bg)closeModal();});
+ document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeModal();});
+ pollNow();setInterval(pollNow,30000);
+})();
+
+</script>
+</body>
+</html>

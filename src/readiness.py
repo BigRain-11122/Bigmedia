@@ -27,7 +27,8 @@ Findings (machine-discipline breaches; FAIL or WARN):
                     repeated here so the report is self-contained)
     render-dir      renders directory missing
     render-ledger   media files exist but no README.md ledger
-    render-unannot  media file not annotated with a test-piece/production mark
+    render-unannot  media file not annotated with a test-piece/production/
+                    disposed mark
     render-stale    ledger row references a media file not on disk
 
 Blockers (distance to first publish - the honest pre-launch state,
@@ -80,6 +81,12 @@ PRODUCT_MARK = "\u6210\u54c1\u00b7\u6279\u6b21"  # production-piece mark (D-BS-0
 # lack the 已被 prefix).
 SUPERSEDED_A = "\u5df2\u88ab"  # "has been" prefix
 SUPERSEDED_B = "\u53d6\u4ee3"  # "superseded/replaced" word
+# disposed piece (2026-09-25 D-BS-08 era): escalation-disposal renders stay
+# on disk as archive rows - "弃件...留档" cells are a fourth legal state,
+# not an unannotated leak. Both substrings together avoid false hits from
+# prose that merely mentions discarding ("弃件" alone in narrative lines).
+DISPOSED_A = "\u5f03\u4ef6"  # "disposed/discarded" mark
+DISPOSED_B = "\u7559\u6863"  # "archived on disk" qualifier
 STATUS_WORD = "\u72b6\u6001"  # status column header word
 BATCH_WORD = "\u6279\u6b21"  # batch word in accounts remark
 BATCH1_MARK = "\u2460"  # circled-one first-batch marker
@@ -181,7 +188,8 @@ def parse_renders(renders_dir, ledger_path):
             for m in MEDIA_RE.finditer(line):
                 name = m.group(0).lower()
                 ok = (TEST_MARK in line or PRODUCT_MARK in line
-                      or (SUPERSEDED_A in line and SUPERSEDED_B in line))
+                      or (SUPERSEDED_A in line and SUPERSEDED_B in line)
+                      or (DISPOSED_A in line and DISPOSED_B in line))
                 seen[name] = seen.get(name, False) or ok
     rows = []
     for name in media:

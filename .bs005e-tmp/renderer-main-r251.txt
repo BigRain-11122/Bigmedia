@@ -1,0 +1,157 @@
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="R-A card timeline renderer")
+    ap.add_argument("--cards", required=True)
+    ap.add_argument("--srt")
+    ap.add_argument("--voiceover")
+    ap.add_argument("--out")
+    ap.add_argument("--audio")
+    ap.add_argument("--strict", action="store_true")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--grain", type=int, default=0,
+                    help="film grain + vignette intensity 0-20 (O-2210)")
+    ap.add_argument("--bg",
+                    help="override video bg color (e.g. 0x0a0a0d)")
+    ap.add_argument("--bgvideo",
+                    help="real-footage background video (O-20260924-1115); "
+                         "looped, scaled to frame, replaces the color source")
+    ap.add_argument("--no-cards", action="store_true",
+                    help="pure-documentary cut: AIGC notice + subs only")
+    ap.add_argument("--poster",
+                    help="after a successful render, export the cover "
+                         "frame to this PNG (first card at full opacity; "
+                         "ignored with --dry-run) - audit O-1043 R1")
+    args = ap.parse_args(argv)
+
+    cards_path = Path(args.cards)
+    try:
+        cfg = load_cards(cards_path)
+    except ValueError as e:
+        print("FAIL cards: %s" % e)
+        return 2
+    if args.bg:
+        cfg["video"]["bg"] = args.bg
+    if args.no_cards:
+        # keep the timeline (cue ends drive duration); drop card layers
+        cfg["cards"] = []
+    if args.bgvideo and not Path(args.bgvideo).exists():
+        print("FAIL bgvideo not found: %s" % args.bgvideo)
+        return 2
+    font_path = Path(cfg["font"]["file"])
+    if not font_path.exists():
+        print("FAIL font file not found: %s (override font.file in cards JSON)" % font_path)
+        return 2
+
+    cards_dir = cards_path.parent
+    srt_path = Path(args.srt) if args.srt else cards_dir / "subs.srt"
+    if not srt_path.exists():
+        print("FAIL srt not found: %s" % srt_path)
+        return 2
+    try:
+        cues = parse_srt(srt_path)
+    except ValueError as e:
+        print("FAIL srt: %s" % e)
+        return 2
+
+    vo_path = Path(args.voiceover) if args.voiceover else cards_dir / "voiceover.txt"
+    if vo_path.exists():
+        vo_text = vo_path.read_text(encoding="utf-8-sig")
+        if not voiceover_matches(vo_text, cues):
+            msg = "voiceover txt and SRT text differ after normalization"
+            if args.strict:
+                print("FAIL %s (%s)" % (msg, vo_path))
+                return 2
+            print("WARN %s - placeholder SRT? recheck at R-C alignment" % msg)
+    elif args.voiceover:
+        print("FAIL voiceover not found: %s" % vo_path)
+        return 2
+
+    audio_path = Path(args.audio) if args.audio else None
+    if audio_path is not None and not audio_path.exists():
+        print("FAIL audio not found: %s" % audio_path)
+        return 2
+
+    meta = cfg.get("meta") or {}
+    topic = str(meta.get("topic", "")).strip().lower().replace(" ", "-")
+    out_path = Path(args.out) if args.out else (
+        REPO / "output" / "renders" / ((topic or cards_path.stem) + "-card.mp4"))
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    tmpdir = Path(tempfile.mkdtemp(prefix="bsrender-"))
+    try:
+        plan = build_render_plan(cfg, cues, tmpdir, grain=args.grain,
+                                 bg_video=bool(args.bgvideo))
+        if args.dry_run:
+            print("dry-run ok: cards=%d cues=%d duration=%.3fs out=%s"
+                  % (len(cfg["cards"]), len(cues), plan["duration"], out_path))
+            print("--- filtergraph ---")
+            print(plan["filter_text"])
+            return 0
+
+        v = cfg["video"]
+        if args.bgvideo:
+            # real-footage head: loop the recording, drive length by -t
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-stream_loop", "-1", "-i", str(args.bgvideo)]
+        else:
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-f", "lavfi", "-i",
+                   "color=c=%s:s=%dx%d:r=%d:d=%.3f"
+                   % (v.get("bg", "black"), int(v["width"]), int(v["height"]),
+                      int(v["fps"]), plan["duration"])]
+        if audio_path is not None:
+            cmd += ["-i", str(audio_path)]
+        # NB: this ffmpeg build (9.0.1 gyan full) dropped
+        # -filter_complex_script, so the graph goes inline as one argv
+        # element (pure ASCII, no shell quoting involved via subprocess)
+        # while it fits the CreateProcess 32K cap; long decks switch to
+        # -/filter_complex <file> via fc_args (R199, BS-001-DD first hit).
+        cmd += fc_args(plan["filter_text"], tmpdir) + ["-map", "[v]"]
+        if audio_path is not None:
+            cmd += ["-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-shortest"]
+        if args.bgvideo:
+            cmd += ["-t", "%.3f" % plan["duration"]]
+        cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "20",
+                "-pix_fmt", "yuv420p", "-movflags", "+faststart",
+                "-r", str(int(v["fps"])), str(out_path)]
+        try:
+            run = subprocess.run(cmd, capture_output=True, text=True)
+        except FileNotFoundError:
+            print("FAIL ffmpeg not found on PATH")
+            return 3
+        if run.returncode != 0:
+            print("FAIL ffmpeg exit %d" % run.returncode)
+            print(run.stderr[-2000:])
+            print("--- filtergraph tail ---")
+            print(plan["filter_text"][-1500:])
+            return 4
+
+        try:
+            probe = subprocess.run(
+                ["ffprobe", "-v", "error", "-select_streams", "v:0",
+                 "-show_entries", "stream=width,height,codec_name",
+                 "-show_entries", "format=duration",
+                 "-of", "default=noprint_wrappers=1", str(out_path)],
+                capture_output=True, text=True)
+        except FileNotFoundError:
+            print("FAIL ffprobe not found on PATH")
+            return 3
+        if probe.returncode != 0:
+            print("FAIL ffprobe exit %d" % probe.returncode)
+            return 4
+        if args.poster:
+            poster_path = Path(args.poster)
+            poster_path.parent.mkdir(parents=True, exist_ok=True)
+            t_poster = poster_time(cfg)
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-ss", "%.3f" % t_poster, "-i", str(out_path),
+                   "-frames:v", "1", str(poster_path)]
+            try:
+                run = subprocess.run(cmd, capture_output=True, text=True)
+            except FileNotFoundError:
+                print("FAIL ffmpeg not found on PATH")
+                return 3
+            if run.returncode != 0 or not poster_path.exists():
+                print("FAIL poster export exit %d" % run.returncode)
+                print(run.stderr[-800:])
+                return 4
+            print("poster: %s (cover frame at t=

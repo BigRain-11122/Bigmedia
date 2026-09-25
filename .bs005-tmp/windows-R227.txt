@@ -1,0 +1,8 @@
+count: 15
+biggame_window: False
+tuanjie_titles:
+ - Unity Error
+ - Game
+ - GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Ed
+ - Tuanjie Cowork
+ - HMI by Jason Sun - Unity Version Control (11.0.16.10371)

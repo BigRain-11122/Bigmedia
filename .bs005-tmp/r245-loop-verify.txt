@@ -1,0 +1,4 @@
+exit=0
+- [WARN] heartbeat-gap: beat gap 20 min (2026-09-25 04:28 -> 2026-09-25 04:49) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] account-ahead: tick=245 ahead of done beats=244 - repair bump or off-beat accounting
+loop health: WARN (0 fail, 18 warn)

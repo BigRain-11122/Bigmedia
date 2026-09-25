@@ -1,0 +1,16 @@
+LEDGER matched lines: 14 (anchor=14)
+  tail: | P-2026-09-24-65 | 09-24 | **调研行程与结论应用律立法+八线派工**（CEO 令 09-24 ~19:10「出去调研行程的标准和结论 要注意应用，各业务和子公司都要」——正典=`cph4/research-protocol.md` v1.0：①行程标准=立项三问[为谁而研·消费方点名/仓内
+  tail: | P-2026-09-24-76 | 09-24 | **粉丝经营三线令：鹅厂采集/粉丝维护/建群自动化调研派工+三司部门设计**（CEO 令 09-24 ~21:20「相关指挥公司去做技术架构…采集鹅厂产品的弹幕、评论…粉丝维护自动化…建群、维护群都要自动化…微信群、QQ 群还有任何其他的，你替我想丰富一点。相关子
+  tail: | P-2026-09-25-01 | 09-25 | **算力总动员令 2：全资源启动（CEO 令 2026-09-25 ~00:40「CEO 命令，机器群全部启动所有算力资源，加速工作进度！」——与 P-54 极限令/P-55 总动员同族·本批=全资源盘点+缺口收口+派工·CPU 借池面由 P-2026-09-24
+GROUP decisions non-empty lines: 24 (anchor=24)
+WINDOWS visible: 15
+BIGGAME master-control windows: 0
+Tuanjie/Unity states: Unity Error | GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Editor 1.10.3* <DX11> | Tuanjie Cowork | HMI by Jason Sun - Unity Version Control (11.0.16.10371)
+all titles: Unity Error | UGit | Game | GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Editor 1.10.3* <DX11> | Tuanjie Cowork | dev.codelycowork.desktop-siw | Window | WeatherProfiles_24h - 文件资源管理器 | 关于 tbAgent | Windows 输入体验 | HMI by Jason Sun - Unity Version Control (11.0.16.10371) | Lovart | The world's first design agent for all design purposes 和另外 1 个页面 - 用户配置 1 - Microsoft​ Edge | 豆包 | 硅基生命元宇宙 · FLUX - 个人 - Microsoft​ Edge | Program Manager
+sc001-05-v1-tmp entries 36: audio-pre-room.mp3, audio-raw.mp3, audio.mp3, breath00.mp3, breath02.mp3, breath05.mp3, breath09.mp3, cards.json, concat.txt, gap00.mp3, gap01.mp3, gap02.mp3, gap03.mp3, gap04.mp3, gap05.mp3, gap06.mp3, gap07.mp3, gap08.mp3, gap09.mp3, gap10.mp3, same-text-check-r230.txt, same_text_r230.py, seg00.mp3, seg01.mp3, seg02.mp3, seg03.mp3, seg04.mp3, seg05.mp3, seg06.mp3, seg07.mp3, seg08.mp3, seg09.mp3, seg10.mp3, seg11.mp3, subs.srt, voiceover.txt
+audio/SC-001-05-v1.mp3 mtime=1790303225.4438086 size=1227668
+audio/SC-001-05-v1.srt mtime=1790303225.486159 size=3450
+audio/SC-001-05-v1.beats.txt mtime=1790303131.0263405 size=3506
+audio/README.md mtime=1790303260.6677752 size=16766
+novel: SC-001-01-v1.md, SC-001-02-v1.md, SC-001-03-v1.md, SC-001-04-v1.md, SC-001-05-v1.md
+comic: SC-002-01-art.jpeg, SC-002-01-texts.json, SC-002-01-v1.md, SC-002-01-v1.png, SC-002-02-art.png, SC-002-02-texts.json, SC-002-02-v1.md, SC-002-02-v1.png

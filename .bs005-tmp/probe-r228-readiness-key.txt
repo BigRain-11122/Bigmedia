@@ -1,0 +1,8 @@
+> 口径：距离首发＝批次①账号亮灯＋10 稿 M4 门全绿＋测试件纪律零发现；未上线＝未测量；阻塞≠失败（发布前诚实态）。
+| bs-005-v1-shipinhao-60s.mp4 | (missing test-piece mark) |
+| bs-005e-v1-shipinhao-60s.mp4 | (missing test-piece mark) |
+## 距离首发的阻塞清单（3 项）
+## 探针发现项（findings·机器纪律核验）
+- [FAIL] render-unannot: media file not annotated as test piece: bs-005-v1-shipinhao-60s.mp4
+- [FAIL] render-unannot: media file not annotated as test piece: bs-005e-v1-shipinhao-60s.mp4
+readiness: 3 blocker(s), 2 finding(s) -> NOT READY

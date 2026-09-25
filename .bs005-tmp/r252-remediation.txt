@@ -1,0 +1,5 @@
+s1-current: rect=(420, 120, 1318, 881) zoomed=False
+s1-current: probe rc=0 png=True
+s2-after-f11: rect=(0, 0, 2048, 1152) zoomed=False
+s2-after-f11: probe rc=0 png=True
+STEPS_DONE

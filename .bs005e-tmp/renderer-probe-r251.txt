@@ -1,0 +1,80 @@
+def parse_srt(path):
+    """Parse SRT into ordered, non-overlapping [(start, end, text)]."""
+    raw = Path(path).read_text(encoding="utf-8-sig")
+    blocks = [b for b in re.split(r"\r?\n\s*\r?\n", raw.strip()) if b.strip()]
+    if not blocks:
+        raise ValueError("SRT file is empty: %s" % path)
+    cues = []
+    for i, block in enumerate(blocks, 1):
+        lines = [ln for ln in block.splitlines() if ln.strip()]
+        if len(lines) < 3 or not lines[0].strip().isdigit():
+            raise ValueError("SRT block %d: expected index/timing/text" % i)
+        if "-->" not in lines[1]:
+            raise ValueError("SRT block %d: missing '-->' timing line" % i)
+        left, _, right = lines[1].partition("-->")
+        start, end = _t(left), _t(right)
+        text = "\n".join(ln.strip() for ln in lines[2:])
+        if not text:
+            raise ValueError("SRT block %d: empty cue text" %
+def poster_time(cfg):
+    """Cover-frame timestamp for --poster (audit O-1043 R1, backlog #16).
+
+    A literal t=0 frame is a poor cover: cards fade in over 150ms
+    (visual-spec S4), so t=0 carries background + AIGC notice only.
+    The cover frame = the first card at FULL opacity; an ultra-short
+    first card falls back to mid-card; a no-cards documentary cut has
+    no better moment than the literal first frame (t=0).
+    """
+    cards = cfg.get("cards") or []
+    if not cards:
+        return 0.0
+    first = cards[0]
+    s, e = float(first["start"]), float(first["end"])
+    t = s + 0.15
+    if e <= t:
+        t = (s + e) / 2.0
+    return t
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="R-A card timeline renderer")
+    ap.add_argument("--cards", required=True)
+   
+ln for ln in block.splitlines() if ln.strip()] |         if len(lines) < 3 or not lines[0].strip().isdigit(): |             raise ValueError("SRT block %d: expected index/timing/text" % i) |         if "-->" not in lines[1]: |             raise Val
+---
+ingle-font rendering, fully backward compatible).""" |     font = cfg["font"] |     h1 = font.get("h1_font", "") |     if h1 and font_path_check and not Path(h1).exists(): |         raise ValueError("font.h1_font not found: %s" % h1) |     return { |  
+---
+ering, fully backward compatible).""" |     font = cfg["font"] |     h1 = font.get("h1_font", "") |     if h1 and font_path_check and not Path(h1).exists(): |         raise ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font
+---
+ compatible).""" |     font = cfg["font"] |     h1 = font.get("h1_font", "") |     if h1 and font_path_check and not Path(h1).exists(): |         raise ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_si
+---
+t"] |     h1 = font.get("h1_font", "") |     if h1 and font_path_check and not Path(h1).exists(): |         raise ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |  
+---
+1 and font_path_check and not Path(h1).exists(): |         raise ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "whit
+---
+ not Path(h1).exists(): |         raise ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": i
+---
+      raise ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": int(font.get("h2_size", 52)
+---
+e ValueError("font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": int(font.get("h2_size", 52)), |        
+---
+"font.h1_font not found: %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": int(font.get("h2_size", 52)), |         "h2_color": 
+---
+ %s" % h1) |     return { |         "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": int(font.get("h2_size", 52)), |         "h2_color": font.get("h2_color", "gr
+---
+       "h1_font": h1, |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": int(font.get("h2_size", 52)), |         "h2_color": font.get("h2_color", "gray60"), |         "h1_gap":
+---
+ |         "h1_size": int(font.get("h1_size", 96)), |         "h1_color": font.get("h1_color", "white"), |         "h2_size": int(font.get("h2_size", 52)), |         "h2_color": font.get("h2_color", "gray60"), |         "h1_gap": int(font.get("h1_gap
+---
+t("h2_size", 52)), |         "h2_color": font.get("h2_color", "gray60"), |         "h1_gap": int(font.get("h1_gap", 48)), |         "optical_center": float(font.get("optical_center", 0.42)), |     } |  |  | def _q(p): |     return "'" + _fpath(p) + "'" |  |  | d
+---
+    "h2_color": font.get("h2_color", "gray60"), |         "h1_gap": int(font.get("h1_gap", 48)), |         "optical_center": float(font.get("optical_center", 0.42)), |     } |  |  | def _q(p): |     return "'" + _fpath(p) + "'" |  |  | def build_render_plan(cf
+---
+923-1937 visual-spec engine (backward compatible): |     - font section may carry h1_font/h1_size/h1_color/h2_size/h2_color/ |       h1_gap and optical_center (default 0.42) - visual-spec.md S1-S2. |     - per card, lines[0] renders as H1 (bold a
+---
+ visual-spec engine (backward compatible): |     - font section may carry h1_font/h1_size/h1_color/h2_size/h2_color/ |       h1_gap and optical_center (default 0.42) - visual-spec.md S1-S2. |     - per card, lines[0] renders as H1 (bold anchor fo
+---
+spec engine (backward compatible): |     - font section may carry h1_font/h1_size/h1_color/h2_size/h2_color/ |       h1_gap and optical_center (default 0.42) - visual-spec.md S1-S2. |     - per card, lines[0] renders as H1 (bold anchor font, acce
+---
+: |     - font section may carry h1_font/h1_size/h1_color/h2_size/h2_color/ |       h1_gap and optical_center (default 0.42) - visual-spec.md S1-S2. |     - per card, lines[0] renders as H1 (bold anchor font, accent color, |       largest), remaini
+---

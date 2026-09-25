@@ -1,0 +1,17 @@
+pid=61948(err) hwnd=32377908 rect=(13, 13, 1366, 1079) title=Biggame · 小游戏公司总控
+pid=36288(err) hwnd=6357464 rect=(-7, -7, 2062, 1118) title=硅基生命元宇宙 · FLUX 和另外 1 个页面 - 个人 - Microsoft​ Edge
+pid=41432(err) hwnd=199322 rect=(1008, 533, 32, 38) title=Window
+pid=44512(err) hwnd=4068352 rect=(0, 0, 14, 14) title=dev.codelycowork.desktop-siw
+pid=15328(err) hwnd=4526334 rect=(-25600, -25600, 159, 27) title=WeatherProfiles_24h - 文件资源管理器
+pid=16644(?) hwnd=66464 rect=(0, 0, 0, 0) title=关于 tbAgent
+pid=21280(err) hwnd=132140 rect=(0, 0, 2048, 1152) title=Windows 输入体验
+pid=11736(err) hwnd=5313314 rect=(-25600, -25600, 159, 27) title=HMI by Jason Sun - Unity Version Control (11.0.16.10371)
+pid=36288(err) hwnd=918286 rect=(-25600, -25600, 159, 27) title=Lovart | The world's first design agent for all design purposes 和另外 1 个页面 - 用户配置 1 - Microsoft​ Edge
+pid=24336(err) hwnd=66974 rect=(-25600, -25600, 159, 27) title=豆包
+pid=44512(err) hwnd=1181278 rect=(-25600, -25600, 159, 27) title=Tuanjie Cowork
+pid=57448(err) hwnd=1707032 rect=(-25600, -25600, 159, 27) title=GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Editor 1.10.3* <DX11>
+pid=45204(err) hwnd=10752004 rect=(-25600, -25600, 159, 27) title=UGit
+pid=15328(err) hwnd=66056 rect=(-2048, 0, 4096, 1152) title=Program Manager
+focus_ok=True console_rect_after=(13,13,1366,1079) capture=(13,13,1366,1078)
+foreground_hwnd=32377908 is_target=True
+ffmpeg_rc=0 frame=probe-biggame-r249-f2.png

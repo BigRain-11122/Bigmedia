@@ -1,0 +1,4 @@
+rc=0 dur=42.3s
+OK window hwnd=32377908 rect=(13, 13, 1366, 1079)
+OK recorded C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\footage\biggame-console-raw.mp4 (40s @15fps, 841KB)
+DONE

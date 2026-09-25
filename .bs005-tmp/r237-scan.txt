@@ -1,0 +1,6 @@
+decisions nonempty=24 total=27 mtime=09-25 00:05
+ledger @lines=14 mtime=09-25 03:11
+biggame_window=[]
+tuanjie_titles=['Tuanjie Cowork', 'Game', 'GUIAgentUnity - DemoScene - Windows, Mac, Linux - Tuanjie Ed', 'HMI by Jason Sun - Unity Version Control (11.0.16.10371)']
+storylines newest 6=[('09-25 10:36', 'audio/README.md'), ('09-25 10:27', 'audio/SC-001-05-v1.srt'), ('09-25 10:27', 'audio/SC-001-05-v1.mp3'), ('09-25 10:25', 'audio/SC-001-05-v1.beats.txt'), ('09-25 10:05', 'audio/SC-001-04-v1.srt'), ('09-25 10:05', 'audio/SC-001-04-v1.mp3')]
+audio README mtime=09-25 10:36

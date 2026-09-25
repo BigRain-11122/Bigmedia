@@ -1,0 +1,7 @@
+silicon-dashboard-top-raw.mp4: fg_is_target=False rc=0
+OK window hwnd=6357464 rect=(420, 120, 1318, 881)
+OK recorded C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\footage\silicon-dashboard-top-raw.mp4 (40s @15fps, 3615KB)
+silicon-dashboard-bottom-raw.mp4: fg_is_target=True rc=0
+OK window hwnd=6357464 rect=(420, 120, 1318, 881)
+OK recorded C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\footage\silicon-dashboard-bottom-raw.mp4 (40s @15fps, 680KB)
+DONE rc1=0 rc2=0

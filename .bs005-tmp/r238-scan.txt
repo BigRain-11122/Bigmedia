@@ -1,0 +1,12 @@
+ledger_at_lines=14 (anchor=14) mtime=09-25 03:11:54
+ledger_last_match=| P-2026-09-25-01 | 09-25 | **算力总动员令 2：全资源启动（CEO 令 2026-09-25 ~00:40「CEO 命令，机器群全部启动所有算力资源，加速工作进度！」——与 P-54 极限令/P-55 总动员同
+decisions_nonempty=24 (anchor=24) total=27 (anchor=27) mtime=09-25 00:05:40
+index_lock=False
+storylines_novel=[('SC-001-05-v1.md', '09-25 09:10'), ('SC-001-04-v1.md', '09-25 09:05'), ('SC-001-03-v1.md', '09-25 09:04')]
+storylines_comic=[('SC-002-02-v1.md', '09-25 09:09'), ('SC-002-02-v1.png', '09-25 09:09'), ('SC-002-02-art.png', '09-25 09:09')]
+storylines_audio=[('README.md', '09-25 10:36'), ('SC-001-05-v1.srt', '09-25 10:27'), ('SC-001-05-v1.mp3', '09-25 10:27')]
+orders_top=O-20260925-0850-bm-a.md mtime=09-25 09:04
+state_tick=237 production=open
+daily_report=True
+global_benchmarks_mtime=09-24 16:17
+week_audit=['2026-W39-self-audit.md']
