@@ -40,8 +40,12 @@ Findings:
   FAIL  state-file/schema/tick      state ledger unusable
   FAIL  state-production             production value outside regimes
   FAIL  log-ts                       entry lacks leading timestamp
+  FAIL  state-ts                     ts field missing/malformed (fleet
+                                   heartbeat face, PT-20260925-02)
   FAIL  account-lag                 done beats > tick (rounds ran,
                                    accounting missing - the R4/R5 bug)
+  WARN  state-ts-stale/future        closing step not refreshing ts /
+                                   future stamping (clock skew)
   WARN  heartbeat-gap                beat gap over --max-gap (SLA)
   WARN  account-ahead                tick ahead of done beats (repair
                                    bump or off-beat accounting)
@@ -67,10 +71,11 @@ from weekly_report import DONE_RE, ITEM_RE  # noqa: E402  board format truth
 BEAT_RE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) osloop: (.+)$")
 ROUND_DONE_RE = re.compile(r"round done exit=(\d+)")
 LOG_TS_RE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d[0-9x])")
-STATE_REQUIRED = ("loop", "mode", "production", "tick", "backlog", "log")
+STATE_REQUIRED = ("loop", "mode", "production", "tick", "backlog", "log", "ts", "task")
 PRODUCTION_REGIMES = ("paused", "open")
 LOCK_AGE_MIN = 40  # iteration_loop.ps1 LockMaxAgeMinutes - staleness bound
 SLA_GAP_MIN = 20   # fleet comm SLA - advisory bound (rounds may run 25m)
+STATE_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 
 
 def parse_beats(path):
@@ -226,6 +231,30 @@ def cross_check(beats, state, done, now, max_age, max_gap, findings):
             findings.append(("WARN", "account-ahead",
                              "tick=%d ahead of done beats=%d - repair bump "
                              "or off-beat accounting" % (tick, len(done))))
+    # PT-20260925-02 writer face: state.ts is the machine-readable heartbeat
+    # stamp the group fleet-audit reads (beats file is gitignored, so state.json
+    # is the only aliveness face a remote clone can verify).
+    if state:
+        ts = state.get("ts")
+        if not isinstance(ts, str) or not STATE_TS_RE.match(ts.strip()):
+            findings.append(("FAIL", "state-ts",
+                             "state ts missing/malformed (want YYYY-MM-DD "
+                             "HH:MM:SS, refreshed at closing): %r" % (ts,)))
+        else:
+            try:
+                ts_dt = datetime.strptime(ts.strip(), "%Y-%m-%d %H:%M:%S")
+                age = (now - ts_dt).total_seconds() / 60.0
+                if age > LOCK_AGE_MIN:
+                    findings.append(("WARN", "state-ts-stale",
+                                     "state ts %.0f min old (> %d min) - closing "
+                                     "step not refreshing ts" % (age, LOCK_AGE_MIN)))
+                elif age < -5:
+                    findings.append(("WARN", "state-ts-future",
+                                     "state ts %.0f min ahead of clock - future "
+                                     "stamping or clock skew" % (-age)))
+            except ValueError:
+                findings.append(("FAIL", "state-ts",
+                                 "state ts unparseable: %r" % (ts,)))
 
 
 def main(argv):

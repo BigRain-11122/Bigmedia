@@ -15,7 +15,7 @@
 
 触发链：OS 计划任务 → wscript 隐身 → powershell 启动器 → `codely -y -p <任务书>`（工作目录=本仓根）。
 装法（自愈/新机同一条命令）：`powershell -NoProfile -ExecutionPolicy Bypass -File src/os/register_loop_task.ps1`
-心跳/日志：`logs/probe-heartbeat.txt` + `logs/iteration-loop/`（gitignored·运行时排气；账本证据走 state.json 与 git log）。
+心跳/日志：`logs/probe-heartbeat.txt` + `logs/iteration-loop/`（gitignored·运行时排气；账本证据走 state.json 与 git log）。**机读心跳面（v1.10·PT-20260925-02 巡检整改）**：state.json 顶导 `ts`+`task` 字段=集团 fleet-audit 判活直读面（beat 文件 gitignored=远端克隆永不可见·旧判据靠 log 正则推断=巡检 NO_TS 定谳缺陷）——ts=收账时刻秒级 ASCII·task=本轮实况首 60 字·**随每轮收账刷新**（含 idle-fast 轮）·loop_health state-ts 门执法（缺失/畸形=FAIL·滞后 >40min/未来戳=WARN）。
 选型依据：会话内 durable cron 只在 CLI 开窗时空转（BigMoney 实证 8.8 小时零跳动）——OS 级任务是唯一无窗存活的 10 分钟通道。
 
 ## §2 每轮动作（以任务书全文为准）
@@ -76,3 +76,4 @@
 - 2026-09-24: v1.7 §8 集团传导增补（ledger P-20260924-54/55 收讫·R140）——whisper 转录线评估提前完成回执（启用口径=产线转录默认本地·零云端）+tokens:local=N 计量律接线（轮账有本地模型调用即记·idle 如实 0）+机队总动员回执（效率面体系件全速与 N=6 封存不动并行·原话锚定律+借池点名响应制·点名权在集团夜轮）。
 - 2026-09-24: v1.8 §8 P-56 收讫——全球基准面首版落地（`docs/global-benchmarks.md` v1.0·四节+9 条执行标准+AIGC 办法官方全文直采 A 级锚）+7 日刷新周期入任务书铁律+转办扫描模式扩 `@七线全司`/`@全司` 行（全员令漏扫防）。
 - 2026-09-24: v1.9 组织精简批（集团 ledger P-20260924-62 ①③）——§6 增 idle-fast 收账并窗律（照记律不变+窗满 6 轮/跨日/异常/实活四触发+并窗期 state.json 脏=预期态不算 bm-a 写盘迹象·防 150+ 噪声 commit）；层位声明评审团指针改指 dept-review-mechanism §6（四重面合一）。
+- 2026-09-25: v1.10 机读心跳面（集团巡检 PT-20260925-02/P-2026-09-25-03 整改·R241）——state.json 顶导 `ts`+`task` 字段入法（fleet-audit 判活直读·不再依赖 log 正则推断）+任务书收账步两处同步（含 idle-fast 轮照刷）+loop_health state-ts 门（STATE_REQUIRED 增 ts/task·缺失/畸形=FAIL·滞后 >40min/未来戳=WARN·33 用例绿）。回执=orders/O-20260925-1153-BG-C 认领行。

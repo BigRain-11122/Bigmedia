@@ -50,13 +50,17 @@ def beat_lines(spec):
     return "\n".join(lines) + "\n"
 
 
-def make_state(tick=2, production="paused", log=None):
+def make_state(tick=2, production="paused", log=None, ts=None, task="R-test ok"):
     state = {"company": "BigStream", "loop": "BigStream-OSLoop",
              "mode": "o-test", "production": production,
              "installed": "2026-09-23", "tick": tick, "mandate": "x",
              "protocol": "y", "backlog": "z",
              "log": log if log is not None else
              ["2026-09-23 15:00 r1 ok", "2026-09-23 15:10 r2 ok"]}
+    if ts is None:
+        ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    state["ts"] = ts
+    state["task"] = task
     return state
 
 
@@ -247,6 +251,38 @@ class CrossCheckTests(unittest.TestCase):
         _, findings = self.check(spec, make_state(tick=2))
         self.assertEqual(warn_codes(findings), {"account-ahead"})
         self.assertEqual(fail_codes(findings), set())
+
+    # ---- PT-20260925-02 writer-face locks: state.ts is the machine-readable
+    # heartbeat stamp (beats file is gitignored; state.json is the only
+    # aliveness face a remote clone can verify). Missing/malformed = FAIL,
+    # stale over lock age / future-stamped = WARN. ----
+
+    def test_state_ts_missing_fails(self):
+        state = make_state(tick=1)
+        del state["ts"]
+        _, findings = self.check([(5, "round done exit=0")], state)
+        self.assertEqual(fail_codes(findings), {"state-ts"})
+
+    def test_state_ts_malformed_fails(self):
+        _, findings = self.check([(5, "round done exit=0")],
+                                 make_state(tick=1, ts="2026-09-25 noon"))
+        self.assertEqual(fail_codes(findings), {"state-ts"})
+
+    def test_state_ts_stale_warns(self):
+        stale = (datetime.now() - timedelta(minutes=50)).strftime("%Y-%m-%d %H:%M:%S")
+        _, findings = self.check([(5, "round done exit=0")], make_state(tick=1, ts=stale))
+        self.assertEqual(warn_codes(findings), {"state-ts-stale"})
+        self.assertEqual(fail_codes(findings), set())
+
+    def test_state_ts_future_warns(self):
+        ahead = (datetime.now() + timedelta(minutes=10)).strftime("%Y-%m-%d %H:%M:%S")
+        _, findings = self.check([(5, "round done exit=0")], make_state(tick=1, ts=ahead))
+        self.assertEqual(warn_codes(findings), {"state-ts-future"})
+        self.assertEqual(fail_codes(findings), set())
+
+    def test_state_ts_fresh_passes(self):
+        _, findings = self.check([(5, "round done exit=0")], make_state(tick=1))
+        self.assertEqual(findings, [])
 
 
 class CliTests(unittest.TestCase):
