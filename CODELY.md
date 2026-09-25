@@ -13,7 +13,7 @@
 - [2026-09-24] 现行模式与边界（O-20260923-1756 体系优先·state.json 为唯一真相）：搭建工作流/体系/技术底层优先，**不量产生成**（存量弹药 N=6 封存·启动须 CEO 令），**测试生产合法**（单件过链 PoC 标「测试件·非成品」→output/renders/ 与 data/sources/tts-samples/）；发布（M5）前置=账号（批次①视频号+公众号·CEO 物理件未开）+M4 合规门全绿+AIGC 显著标识——账号到位前一切产出零发布，未上线=未测量。
 - [2026-09-24] 现行待决（真相源=PLAN.md §7 决策队列+backlog·此处仅指针）：CEO v10-vs-v9 终审定夺、live-A/B 实录格式拣式、账号批次①、量产开闸、BGM 三案（#13）、Bigmedia 更名、直播链分工（#17·集团 P-45）、周自审常设（os-protocol §7）。
 - [2026-09-23] 品牌事实：远端 slug=Bigmedia ≠ 产品名 BigStream（BRAND.md §8 已锁），更名与否待 CEO 裁。
-- [2026-09-24] 正典入口指针（法条单一真相在 docs/·CODELY.md 只存指针）：宪法=CONSTITUTION.md（法律层级+红线 7 条+铁律：反重复/同仓退避/编码律/空转律）；产线=docs/content-pipeline.md（M0-M6·M4 合规门=发布前置硬门）；评审=docs/dept-review-mechanism.md（P-62 ① 单一真相：S0-S6 环节门+§6 终审团八席 ≥9 木桶·E4 双态制·循环=常设执法面·review-panel.md=退役指针）；文案=docs/copy-craft.md（八铁律+趣律·§2.6 声线正典）；视觉=docs/visual-spec.md；人设=docs/persona-jason.md（Jason 真人出镜·四柱）；平台=docs/media-matrix.md（11 平台四层·账号五批次）；本地栈=docs/m2-local-stack.md（本地算力优先·显存分时）。
+- [2026-09-24] 正典入口指针（法条单一真相在 docs/·CODELY.md 只存指针）：宪法=CONSTITUTION.md（法律层级+红线 7 条+铁律：反重复/同仓退避/编码律/空转律）；产线=docs/content-pipeline.md（M0-M6·M4 合规门=发布前置硬门）；评审=docs/dept-review-mechanism.md（P-62 ① 单一真相：S0-S6 环节门+§6 终审团八席 ≥9 木桶·E4 双态制·循环=常设执法面·review-panel.md=退役指针）；文案=docs/copy-craft.md（八铁律+趣律·§2.6 声线正典）；视觉=docs/visual-spec.md；人设=docs/persona-jason.md（Jason 真人出镜·四柱）；平台=docs/media-matrix.md（11 平台四层·账号五批次）；本地栈=docs/m2-local-stack.md（本地算力优先·显存分时）；爆款链=docs/hit-chain-mechanism.md（O-20260925-1931-HQ-C·每站量化爆款判据+站审爆款面清单：M0 选题四维分/M6 四指标反哺选题权重·承接不替代 M4 硬门与红线五条）。
 - [2026-09-24] 记忆热/冷分层（集团 decision D-20260924-01 已落地·R130）：本件=热层（近窗高引用+铁律/法条/CEO 令指针常驻·append 制）；冷层=按月整编 `research/memory-archive/<YYYYMM>.md`（全量留 git=归档非清除）——2026-09-23 开线日事件史 20 条（Feedback 5+Project 15·原文保真）见 `research/memory-archive/202609.md`。
 
 ### Reference
