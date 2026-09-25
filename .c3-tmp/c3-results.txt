@@ -1,0 +1,16 @@
+A0 profile=hook | dur=3.384s centroid=2837.4
+A0 profile=punch | dur=2.928s centroid=2957.4
+A0 profile=body | dur=3.120s centroid=2895.4
+A1 rate_m14 | dur=3.600s
+A1 rate_0 | dur=3.120s
+A1 rate_p8 | dur=2.880s
+A2 pitch_m12 | dur=3.120s centroid=2708.7
+A2 pitch_0 | dur=3.120s centroid=2907.8
+A2 pitch_p12 | dur=3.120s centroid=3045.3
+A3 vol_m50 | mean=-34.7dB max=-13.1dB dur=3.120s
+A3 vol_0 | mean=-28.7dB max=-7.1dB dur=3.120s
+A3 vol_p50 | mean=-25.2dB max=-5.0dB dur=3.120s
+A4 light pitch_m12 | centroid 2708.7 -> 2212.9 (delta=-495.8 Hz)
+A4 light pitch_p12 | centroid 3045.3 -> 2353.0 (delta=-692.3 Hz)
+A5 stepped halves | durA=2.952s durB=2.136s concat=5.088s (sum=5.088 padding=0.000s) centroidA=2810.9 centroidB=2948.1
+A5 stepped whole | mean=-26.6dB max=-3.3dB
