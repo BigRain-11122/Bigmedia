@@ -85,6 +85,12 @@ PROFILES = {
         "fade_s": 0.12,
         "hit_cap": 8,
         "flash": True,
+        # C1 speed-ramp pilot (research/ffmpeg-editing-craft-v1 S1.4):
+        # punch beats close on an ease-in speed ladder (whip feel), then
+        # the pattern's next boundary lands as usual. bilibili keeps it
+        # off (knowledge-zone conservative), shipinhao keeps the warm
+        # fleet default (D-BS-01 flagship style untouched).
+        "ramp": {"window_s": 0.5, "ladder": [1.2, 1.6667, 2.5]},
     },
 }
 CUT_FADE_S = 0.0        # A3 true hard cut = concat splice, zero blend.
@@ -106,6 +112,8 @@ SEG_SAFETY_S = 1.0 / FPS  # +1 render frame per segment: a blend never
                           # starves mid-chain; per-run trim cuts the
                           # overshoot frame-exact (invisible: it sits at
                           # a splice/fade tail, never at a beat head)
+RAMP_MAX_SHARE = 0.4     # ramp window <= 40% of the beat span (C1)
+RAMP_MIN_HEAD_F = 3       # head micro-block floor (frames)
 
 
 def beat_boundaries(cfg):
@@ -225,6 +233,7 @@ def plan_edit(cfg, profile_name):
                   if matched else [])
     hits = pick_hits(cards, profile["hit_cap"], exclude=cards_only)
     treat = pick_treatments(n, hits, flat=cards_only)
+    ramp_cfg = profile.get("ramp")
     f_max = profile["fade_s"]
     tail = float(cfg.get("tail", 0.5))
     spans = [bounds[k + 1] - bounds[k] for k in range(n)]
@@ -246,6 +255,9 @@ def plan_edit(cfg, profile_name):
         # land at fade end = exactly when the new card is fully visible.
         incoming = fades[k - 1]["fade_s"] if k > 0 else 0.0
         flash = bool(profile["flash"] and k in hits)
+        ramp = (build_micro_blocks(durs[k], ramp_cfg["window_s"],
+                                   ramp_cfg["ladder"])
+                if ramp_cfg and treat[k] == "punch" else None)
         segments.append({
             "idx": k,
             "src_off_s": 0.0 if matched else
@@ -260,6 +272,7 @@ def plan_edit(cfg, profile_name):
                                   and vis[k]["cards_only"] else ""),
             "visual_source": (vis[k]["source"] if matched
                               and not vis[k]["cards_only"] else None),
+            "ramp": ramp,
         })
     ratio = (n - len(cards_only)) / float(n) if matched else 0.0
     return {
@@ -275,6 +288,7 @@ def plan_edit(cfg, profile_name):
                        for k in range(n - 1)],
         "segments": segments,
         "hits": hits,
+        "ramp_beats": [s["idx"] for s in segments if s["ramp"]],
         "f_max_s": f_max,
         "last_beat_end_s": round(bounds[-1], 3),
         "tail_s": tail,
@@ -315,6 +329,75 @@ def _resolve_src(p):
     """Repo-relative visual source paths resolve against the repo root."""
     q = Path(p)
     return q if q.is_absolute() else REPO / q
+
+
+def build_micro_blocks(dur_s, window_s, ladder):
+    """C1 fixed-span variable-rate micro-blocks for ONE beat segment
+    (research/ffmpeg-editing-craft-v1 S1.4).
+
+    Timeline algebra untouched: total output frames == the plain render
+    (round(dur*FPS) + 1 blend-safety frame). The ramp tail only consumes
+    MORE source content at ladder speeds (ease-in whip; audio/subtitle/
+    card layers live on the final timeline and never see this). Block
+    edges land on the 1/FPS frame grid: per block the source window is
+    an integer frame count and the actual speed is n_src/n_out (exact),
+    so the fps=30 resample drops frames cleanly at near-integer ratios.
+    Degenerate beats (too short to hold head + ladder) return None and
+    render plain."""
+    nf = int(round(dur_s * FPS))
+    total = nf + int(round(SEG_SAFETY_S * FPS))
+    ladder = [float(v) for v in ladder if v > 1.0]
+    if nf < 6 or len(ladder) < 2:
+        return None
+    n_win = int(round(min(window_s, RAMP_MAX_SHARE * dur_s) * FPS))
+    if n_win < 2 * len(ladder):
+        return None
+    inv = [1.0 / v for v in ladder]        # equal source share per step
+    z = sum(inv)
+    outs = [max(1, int(round(n_win * w / z))) for w in inv]
+    outs[-1] += n_win - sum(outs)         # frame-grid drift lands on last
+    head = total - n_win
+    if outs[-1] < 1 or head < RAMP_MIN_HEAD_F:
+        return None
+    blocks = [{"src_start_s": 0.0, "src_end_s": round(head / FPS, 6),
+               "speed": 1.0, "out_frames": head}]
+    s_off = head / FPS
+    for v, n_out in zip(ladder, outs):
+        n_src = max(n_out + 1, int(round(n_out * v)))   # speed stays > 1
+        blocks.append({"src_start_s": round(s_off, 6),
+                       "src_end_s": round(s_off + n_src / FPS, 6),
+                       "speed": round(n_src / float(n_out), 6),
+                       "out_frames": n_out})
+        s_off += n_src / FPS
+    return blocks
+
+
+def ramp_filter_complex(s, blocks, w, h, src_off_s):
+    """filter_complex for one ramp segment (C1): split the (looped)
+    source; per micro-block trim + setpts rebase/speed in ONE setpts
+    (pitfall 2: divide-after-subtract ordering), fps, setsar=1 (pitfall
+    1: SAR normalize per block); concat the blocks (S1.4 in-segment
+    splice); then the SAME zoompan+flash treatment chain as a plain
+    segment - the punch-in curve runs over the full beat, the tail
+    simply plays it faster."""
+    n = len(blocks)
+    parts = ["[0:v]split=%d%s" % (n, "".join("[ms%d]" % i
+                                             for i in range(n)))]
+    for i, b in enumerate(blocks):
+        parts.append("[ms%d]trim=start=%.6f:end=%.6f,"
+                     "setpts=(PTS-STARTPTS)/%.6f,fps=%d,setsar=1[m%d]"
+                     % (i, src_off_s + b["src_start_s"],
+                        src_off_s + b["src_end_s"], b["speed"], FPS, i))
+    parts.append("".join("[m%d]" % i for i in range(n)) +
+                 "concat=n=%d:v=1:a=0[cat]" % n)
+    nf = int(round(s["dur_s"] * FPS))
+    vf = ("[cat]scale=%d:%d,setsar=1,zoompan=z=%s:x='iw/2-(iw/zoom)/2'"
+          ":y='ih/2-(ih/zoom)/2':d=1:s=%dx%d:fps=%d"
+          % (w, h, _zoom_expr(s["treatment"], nf), w, h, FPS))
+    if s["flash"]:
+        vf += ",fade=t=in:st=%.3f:d=0.06:color=white" % s.get("flash_st_s", 0.0)
+    parts.append(vf + "[v]")
+    return ";".join(parts)
 
 
 def render_segments(plan, cfg, footage, tmpdir):
@@ -365,12 +448,26 @@ def render_segments(plan, cfg, footage, tmpdir):
               % (w, h, FPS, _zoom_expr(s["treatment"], nf), w, h, FPS))
         if s["flash"]:
             vf += ",fade=t=in:st=%.3f:d=0.06:color=white" % s.get("flash_st_s", 0.0)
+        src = None
         if matched:
             src = _resolve_src(s["visual_source"])
             if not src.exists():
                 print("FAIL visual source not found (beat %d): %s"
                       % (s["idx"], src))
                 return None
+        else:
+            src = inter
+        if s.get("ramp"):
+            # C1 speed-ramp render (S1.4): micro-block chain replaces the
+            # plain -t consumption; same total frames, same treatment.
+            fc = ramp_filter_complex(s, s["ramp"], w, h, s["src_off_s"])
+            cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                   "-stream_loop", "-1", "-i", str(src),
+                   "-filter_complex", fc, "-map", "[v]",
+                   "-t", "%.3f" % rt, "-r", str(FPS),
+                   "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                   "-pix_fmt", "yuv420p", str(seg)]
+        elif matched:
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-stream_loop", "-1", "-i", str(src),
                    "-t", "%.3f" % rt, "-vf", vf, "-r", str(FPS),

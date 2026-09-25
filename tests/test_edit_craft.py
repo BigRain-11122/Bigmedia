@@ -338,5 +338,123 @@ class TestVisualMatching(unittest.TestCase):
         self.assertEqual(f.get("visual-legacy"), "WARN")
 
 
+class TestRampMicroBlocks(unittest.TestCase):
+    """C1 engine-integration algebra (research/ffmpeg-editing-craft-v1
+    S1.4): fixed-span variable-rate - total output frames unchanged,
+    micro-block edges on the 1/FPS grid, exact per-block speeds."""
+
+    LADDER = [1.2, 1.6667, 2.5]
+
+    def test_span_algebra_sum_equals_plain_render(self):
+        for dur in (1.5, 2.37, 4.83, 7.5, 12.0):
+            blocks = ec.build_micro_blocks(dur, 0.5, self.LADDER)
+            self.assertIsNotNone(blocks, dur)
+            self.assertEqual(sum(b["out_frames"] for b in blocks),
+                             int(round(dur * ec.FPS)) + 1)
+
+    def test_head_speed_one_and_ladder_ascending_consumption(self):
+        blocks = ec.build_micro_blocks(4.83, 0.5, self.LADDER)
+        self.assertEqual(blocks[0]["speed"], 1.0)
+        speeds = [b["speed"] for b in blocks[1:]]
+        self.assertTrue(all(v > 1.0 for v in speeds))
+        self.assertEqual(speeds, sorted(speeds))      # ease-in ladder
+        # window law: ramp tail <= 40% of the beat span
+        self.assertLessEqual(sum(b["out_frames"] for b in blocks[1:]),
+                             0.4 * 4.83 * ec.FPS + 0.5)
+
+    def test_source_windows_contiguous_and_frame_quantized(self):
+        blocks = ec.build_micro_blocks(4.83, 0.5, self.LADDER)
+        self.assertEqual(blocks[0]["src_start_s"], 0.0)
+        for prev, cur in zip(blocks, blocks[1:]):
+            self.assertAlmostEqual(prev["src_end_s"], cur["src_start_s"],
+                                   places=6)
+        for b in blocks:
+            # every source edge is an integer source-frame multiple
+            # (6dp rounding leaves <1e-4 frame = sub-frame residue only)
+            for edge in (b["src_start_s"], b["src_end_s"]):
+                self.assertAlmostEqual(edge * ec.FPS, round(edge * ec.FPS),
+                                       places=4)
+            # actual speed is exact: n_src/n_out (no drift accumulation)
+            n_out = b["out_frames"]
+            n_src = round((b["src_end_s"] - b["src_start_s"]) * ec.FPS)
+            self.assertAlmostEqual(b["speed"], n_src / float(n_out),
+                                   places=5)
+
+    def test_ramp_consumes_more_source_than_window(self):
+        blocks = ec.build_micro_blocks(4.83, 0.5, self.LADDER)
+        src_total = (blocks[-1]["src_end_s"] - blocks[0]["src_start_s"])
+        out_total = sum(b["out_frames"] for b in blocks) / ec.FPS
+        self.assertGreater(src_total, out_total)     # S1.1 fixed-span law
+
+    def test_short_beat_degrades_to_none(self):
+        self.assertIsNone(ec.build_micro_blocks(0.05, 0.5, self.LADDER))
+        self.assertIsNone(ec.build_micro_blocks(0.2, 0.5, self.LADDER))
+        # window clamped to 40% of span: 1.2s beat still ramps (smaller)
+        blocks = ec.build_micro_blocks(1.2, 0.5, self.LADDER)
+        self.assertIsNotNone(blocks)
+        self.assertLessEqual(sum(b["out_frames"] for b in blocks[1:]),
+                             round(0.4 * 1.2 * ec.FPS))
+
+    def test_douyin_ramps_punch_beats_only(self):
+        cfg = fixture_cfg()
+        plan = ec.plan_edit(cfg, "douyin")
+        ramped = [s["idx"] for s in plan["segments"] if s["ramp"]]
+        self.assertEqual(ramped, plan["ramp_beats"])
+        self.assertEqual(ramped, plan["hits"])       # punch treatment beats
+        for s in plan["segments"]:
+            if s["ramp"]:
+                self.assertEqual(s["treatment"], "punch")
+        # A3 span algebra untouched by the ramp: d_k == span_k + incoming
+        # fade (recomputed from THIS plan's own boundaries - profiles
+        # differ in fade_s, so cross-profile dur lists legitimately
+        # differ; the law is per-plan, not per-profile-pair).
+        bts = ([0.0] + [b["time_s"] for b in plan["boundaries"]]
+               + [plan["last_beat_end_s"]])
+        last = len(plan["segments"]) - 1
+        for k, s in enumerate(plan["segments"]):
+            span = bts[k + 1] - bts[k]
+            incoming = plan["boundaries"][k - 1]["fade_s"] if k else 0.0
+            expected = span + incoming + (plan["tail_s"] if k == last else 0.0)
+            self.assertAlmostEqual(s["dur_s"], expected, places=3)
+        # beat times themselves are profile-independent
+        plain = ec.plan_edit(cfg, "shipinhao")
+        self.assertEqual([b["time_s"] for b in plan["boundaries"]],
+                         [b["time_s"] for b in plain["boundaries"]])
+
+    def test_other_profiles_ramp_off(self):
+        cfg = fixture_cfg()
+        for name in ("shipinhao", "bilibili"):
+            plan = ec.plan_edit(cfg, name)
+            self.assertTrue(all(s["ramp"] is None
+                                for s in plan["segments"]))
+
+    def test_cards_only_beats_never_ramp(self):
+        cfg = fixture_cfg_visual(cards_only_idx=(0, 6, 11))
+        plan = ec.plan_edit(cfg, "douyin")
+        cfg["_holder"].cleanup()
+        for s in plan["segments"]:
+            if s["cards_only"]:
+                self.assertIsNone(s["ramp"])
+        # beat 0 is cards-only here, so it must not be a ramp beat even
+        # though the plain fixture makes it a hit
+        self.assertNotIn(0, plan["ramp_beats"])
+
+    def test_filter_string_carries_pitfall_trio(self):
+        cfg = fixture_cfg()
+        plan = ec.plan_edit(cfg, "douyin")
+        seg = next(s for s in plan["segments"] if s["ramp"])
+        fc = ec.ramp_filter_complex(seg, seg["ramp"], 1080, 1920, 0.0)
+        n_blocks = len(seg["ramp"])
+        self.assertIn("[0:v]split=%d" % n_blocks, fc)
+        # pitfall 1: per-block setsar + one more on the treatment chain
+        self.assertEqual(fc.count("setsar=1"), n_blocks + 1)
+        # pitfall 2: rebase+speed in ONE setpts, divide AFTER subtract
+        self.assertEqual(fc.count("setpts=(PTS-STARTPTS)/"), n_blocks)
+        self.assertIn("concat=n=%d:v=1:a=0[cat]" % n_blocks, fc)
+        self.assertIn("zoompan=", fc)                          # treatment
+        if seg["flash"]:
+            self.assertIn("fade=t=in", fc)
+
+
 if __name__ == "__main__":
     unittest.main()
