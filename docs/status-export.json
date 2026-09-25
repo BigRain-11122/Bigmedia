@@ -1,5 +1,5 @@
 {
-  "export_ts": "2026-09-25T12:18:24+08:00",
+  "export_ts": "2026-09-25T13:13:25+08:00",
   "do": "AI 媒体产线：M0-M6 全链 OS 自治（量产已开闸 D-BS-06·成品库生产模式·发布仍锁账号物理件·未上线=未测量）+硅基城市内容宇宙三线新纪元（O-20260925-0850 CEO 亲署：网文/有声/漫画）",
   "depts": [
     {
@@ -39,7 +39,7 @@
     },
     {
       "n": "工程技术部",
-      "t": "OS 循环 R241（转办收讫轮：PT-20260925-02 fleet 心跳写手整改全落——state.json ts+task 机读心跳面双字段+任务书/os-protocol v1.10 落律+loop_health state-ts 门 33 用例绿+回执 orders/O-20260925-1153-BG-C·decisions D-07~11 回执·R239-R241 并窗收账）",
+      "t": "OS 循环 R247（idle-fast 快速路径·五静+探针绿：orders 顶 O-1153 维持·ledger 15/decisions 29 双锚零新转办·素材窗 14 窗零 Biggame 总控窗双 blocked 维持·ch.6 未落/ep.3 未现零新进展·state.ts/task 心跳面第六轮刷新零红·**并窗 6/6 窗满=batch commit R242-R247**）",
       "s": 1
     }
   ],
@@ -52,7 +52,7 @@
     [
       "OS 循环",
       "on",
-      "tick 241·R241（PT-02 三整改闭：①ts+task 字段落位 ②task 逐轮律+显式字段 ③回执附 R241+push 佐证；decisions 5 新行过审〔D-07 时点差指 R182·D-08~11 非本司面知悉〕·board 0 fail/readiness 3+2 同集/loop 0 fail 17 warn 历史·素材窗零 Biggame 总控窗·bm-a 零新写盘〔ch.6 未落/ep.3 未现〕）"
+      "tick 247·R247（idle-fast：五静〔orders 顶 O-1153·backlog 顶 #28 done·树净零锁·bm-a 零新写盘〕+探针绿〔board 0 fail/readiness 3+2 同集预期/loop 0 fail 17 warn 历史·state-ts 第六轮过〕·素材窗 14 窗零 Biggame 总控窗·ch.6 未落/ep.3 未现零新进展·**并窗 6/6 窗满=batch R242-R247 收账·窗重置 1/6**）"
     ],
     [
       "量产产线",
@@ -143,7 +143,7 @@
   ],
   "results": [
     [
-      "241",
+      "247",
       "OS 轮次"
     ],
     [
