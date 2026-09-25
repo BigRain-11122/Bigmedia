@@ -1,0 +1,9 @@
+H1 size 84 budget 10.95em | H2 size 46 budget 20.00em
+6.15  em  budget 10.95 em  single=True  城市图鉴 018
+8.40  em  budget 20.00 em  single=True  C-00027 · 邓建国
+15.25 em  budget 20.00 em  single=True  碳基市民 · 通勤族 · 男 · 50 岁
+19.10 em  budget 20.00 em  single=True  外环感知网 · 感知塔站 · 感知塔站值守员
+16.00 em  budget 20.00 em  single=True  信条：「台风天的日志最见人品。」
+11.10 em  budget 20.00 em  single=True  守时 · 防微杜渐 · 旷达
+16.00 em  budget 20.00 em  single=True  全城唯一给每场大风起名字的值守员
+EM_CHECK: ALL OK
