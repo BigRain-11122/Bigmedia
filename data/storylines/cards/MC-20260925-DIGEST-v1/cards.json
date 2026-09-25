@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "topic": "MC-20260925-DIGEST-v1",
+    "line": "L-卡 图文轻内容线（charter v1.2）",
+    "form": "DIGEST 盘点图文 001（hit-chain v1.0 全链审查留痕·P0 形态扩展首件·#36 R289 提案「下一位=盘点类图文」口径落地）",
+    "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+    "source_facts": "立国日数字盘点六条：立国日 2026-09-23 一个下午/61 分钟三家公司骨架立完/432 个炒股方案 0 组过线/8 款软著 0 元成本/老板首战决策合计 17 分钟/剩余几百个动作全 AI 完成每步留痕",
+    "source_pointer": "data/sources/bs001-dd/s1-review-material.md 事实溯源对表 24 行（M4 在案·其源=20260923-BS-001-公众号-v1.md 母稿时间轴+「CEO 在这个下午做了什么」节+12 拍母稿+一/二号公司母稿+内部台账实况）——编年史 A 级史源跨仓只读指针·一料多吃（charter §3）",
+    "attribution_rule": "署名=纪实线编年史档案级（charter §2.1 纪实线·无居民名面=零虚构署名·人设权红线照守）",
+    "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「基于硅基城市真实事件（立国日台账档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+    "editorial_value": "叙事包装=立国日数字盘点档案体（数字对照结构+时间锚 2026-09-23+盘点体裁）——选材与排序即编辑动作（公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限）",
+    "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 数字反差链：61 分钟 vs 老板决策 17 分钟〔一人上班三家公司开工=已验爆款母题·F-001/F-005/F-006 同源〕+432 全废 0 过线+8 款 0 元=三组数字反差前置/情 1 立国惊叹吃瓜温和共鸣如实非强极点/时 2 立国 3 日时点·复盘档案常青面如实/台 2 公众号方图承载=MC-001~006 S3 实证复用·盘点=公众号主流图文格式〔O-1327 research §2 #2 A 级通识〕）——P0 形态扩展首件（#36 提案落地·hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open）",
+    "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·系列 S3 实证复用·平台规格窗随 M5 发布案复核）",
+    "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；脱敏律核=六条数字全为已过 M4 在册件口径（母稿/DD 件）·零仓位/密钥/token 量/未公开财务面；成品只入库·发布=M5 账号物理件+M4 全绿"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1080,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 50,
+    "subs_size": 38,
+    "subs_bottom": 110,
+    "aigc_size": 30,
+    "line_spacing": 12,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 84,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "white",
+    "h1_gap": 36,
+    "optical_center": 0.24
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 2.6,
+      "lines": [
+        "城市盘点 001",
+        "立国日 2026-09-23 · 一个下午",
+        "61 分钟 · 三家公司骨架立完",
+        "432 个炒股方案 · 0 组过线",
+        "8 款软著 · 0 元成本",
+        "老板决策合计 · 17 分钟",
+        "剩余几百个动作 · 全 AI 完成·每步留痕"
+      ]
+    }
+  ]
+}
