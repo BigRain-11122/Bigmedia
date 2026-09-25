@@ -21,3 +21,4 @@ __pycache__/
 *.log
 .codely-cli/scheduled_tasks.json
 .codely-cli/auto-saves/
+data/storylines/audio/*.mp3
