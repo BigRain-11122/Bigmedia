@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-04-v1.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 13.33,
+      "lines": [
+        "硅基城市编年史",
+        "第四章 · 纪念碑田"
+      ]
+    },
+    {
+      "start": 13.33,
+      "end": 17.26,
+      "lines": [
+        "开局",
+        "回测田里的硅基民"
+      ]
+    },
+    {
+      "start": 17.26,
+      "end": 42.4,
+      "lines": [
+        "归档者-07",
+        "版本号与庄稼名"
+      ]
+    },
+    {
+      "start": 42.4,
+      "end": 68.8,
+      "lines": [
+        "师承",
+        "修表的与种田的"
+      ]
+    },
+    {
+      "start": 68.8,
+      "end": 93.07,
+      "lines": [
+        "营生",
+        "回测农"
+      ]
+    },
+    {
+      "start": 93.07,
+      "end": 98.04,
+      "lines": [
+        "最出名的不是收成",
+        "是坟"
+      ]
+    },
+    {
+      "start": 98.04,
+      "end": 112.25,
+      "lines": [
+        "纪念碑田",
+        "一行死因"
+      ]
+    },
+    {
+      "start": 112.25,
+      "end": 133.94,
+      "lines": [
+        "镇田之宝",
+        "数据不说谎，人才会"
+      ]
+    },
+    {
+      "start": 133.94,
+      "end": 145.08,
+      "lines": [
+        "年轮",
+        "天理难容"
+      ]
+    },
+    {
+      "start": 145.08,
+      "end": 165.64,
+      "lines": [
+        "电波猫与遮雨布",
+        "师娘的脾气"
+      ]
+    },
+    {
+      "start": 165.64,
+      "end": 179.74,
+      "lines": [
+        "一万个人",
+        "没用的事"
+      ]
+    },
+    {
+      "start": 179.74,
+      "end": 189.1,
+      "lines": [
+        "预告",
+        "徐根福的食堂"
+      ]
+    }
+  ]
+}
