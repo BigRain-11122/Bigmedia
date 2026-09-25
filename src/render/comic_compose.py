@@ -63,11 +63,12 @@ def main():
     d = ImageDraw.Draw(layer)
     cx = w // 2
 
-    # header band: series title + episode id
+    # header band: series title + episode id (episode on second line to
+    # avoid horizontal overlap with long titles)
     draw_band(d, 0, head_h, w, 255)
-    d.text((int(40 * s), int(34 * s)), texts["title"], font=f_title,
+    d.text((int(40 * s), int(28 * s)), texts["title"], font=f_title,
            fill=(255, 255, 255, 255))
-    d.text((w - int(40 * s), int(56 * s)), texts["episode"], font=f_ep,
+    d.text((w - int(40 * s), int(100 * s)), texts["episode"], font=f_ep,
            fill=(200, 200, 200, 255), anchor="ra")
 
     # AIGC notice chip (top-left of art area, D-BS-03 machine format,
