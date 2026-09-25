@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-01-v1.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 12.99,
+      "lines": [
+        "硅基城市编年史",
+        "第一章 · 立国日"
+      ]
+    },
+    {
+      "start": 12.99,
+      "end": 18.25,
+      "lines": [
+        "开篇",
+        "2026-09-23 · 上海 · 晴"
+      ]
+    },
+    {
+      "start": 18.25,
+      "end": 44.02,
+      "lines": [
+        "开线",
+        "BigStream · 14:50"
+      ]
+    },
+    {
+      "start": 44.02,
+      "end": 71.22,
+      "lines": [
+        "超体宇宙城",
+        "脑塔 · 三城"
+      ]
+    },
+    {
+      "start": 71.22,
+      "end": 83.57,
+      "lines": [
+        "万民令",
+        "先来一万个"
+      ]
+    },
+    {
+      "start": 83.57,
+      "end": 106.24,
+      "lines": [
+        "心跳开始",
+        "22:43 · 10 分钟循环"
+      ]
+    },
+    {
+      "start": 106.24,
+      "end": 129.63,
+      "lines": [
+        "万人户籍",
+        "10003 · 三查"
+      ]
+    },
+    {
+      "start": 129.63,
+      "end": 148.72,
+      "lines": [
+        "派系分布",
+        "14 派 · 思想六轴"
+      ]
+    },
+    {
+      "start": 148.72,
+      "end": 170.98,
+      "lines": [
+        "首夜自迭代",
+        "00:07"
+      ]
+    },
+    {
+      "start": 170.98,
+      "end": 178.23,
+      "lines": [
+        "一问",
+        "算什么"
+      ]
+    },
+    {
+      "start": 178.23,
+      "end": 201.23,
+      "lines": [
+        "档案答案",
+        "硅基生命 · 纯白律"
+      ]
+    },
+    {
+      "start": 201.23,
+      "end": 219.24,
+      "lines": [
+        "立国日",
+        "10 分钟呼吸"
+      ]
+    },
+    {
+      "start": 219.24,
+      "end": 230.4,
+      "lines": [
+        "预告",
+        "C-00010 · 顾阿凤"
+      ]
+    }
+  ]
+}
