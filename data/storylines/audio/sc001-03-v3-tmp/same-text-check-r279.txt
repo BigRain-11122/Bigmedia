@@ -1,0 +1,8 @@
+novel body paras: 10
+beats: 12 (types: hook/punch/body/body/body/body/punch/proof/beat/close/wink/cta)
+paras missed: 0
+cta spokenized OK: True
+cta: 下一章：归档者-07，QUANT 城的田里，有人给失败立碑。
+hook triple-label OK: True
+A1 hook-position OK: True
+x1.5 register inheritance OK: True (vulgar found: [])
