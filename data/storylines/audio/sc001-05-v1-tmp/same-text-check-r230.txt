@@ -1,0 +1,6 @@
+novel body paras: 12
+beats: 12 (types: hook/body/body/body/body/punch/body/body/body/proof/close/cta)
+paras missed: 0
+cta spokenized OK: True
+cta: 下一章：全城被惦记最多的人——周浩宇，二十八岁，总错过早饭，顿顿泡面，两个长辈的名单上都有他。而他最怕又最服的，是风控官陈雅雯。
+hook triple-label OK: True

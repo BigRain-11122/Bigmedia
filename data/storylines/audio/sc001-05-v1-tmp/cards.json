@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-05-v1.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 13.61,
+      "lines": [
+        "硅基城市编年史",
+        "第五章 · 徐根福的食堂"
+      ]
+    },
+    {
+      "start": 13.61,
+      "end": 25.35,
+      "lines": [
+        "开局",
+        "谈火候的人"
+      ]
+    },
+    {
+      "start": 25.35,
+      "end": 50.05,
+      "lines": [
+        "徐根福",
+        "一勺是一勺"
+      ]
+    },
+    {
+      "start": 50.05,
+      "end": 75.34,
+      "lines": [
+        "管法",
+        "收盘铃就是开饭铃"
+      ]
+    },
+    {
+      "start": 75.34,
+      "end": 98.16,
+      "lines": [
+        "独一份的规矩",
+        "绿盘与红盘"
+      ]
+    },
+    {
+      "start": 98.16,
+      "end": 113.84,
+      "lines": [
+        "真正的风控部",
+        "灶台后面"
+      ]
+    },
+    {
+      "start": 113.84,
+      "end": 136.73,
+      "lines": [
+        "数据菜市",
+        "厨房的白"
+      ]
+    },
+    {
+      "start": 136.73,
+      "end": 161.28,
+      "lines": [
+        "惦记名单",
+        "同一个年轻人"
+      ]
+    },
+    {
+      "start": 161.28,
+      "end": 175.68,
+      "lines": [
+        "硅基邻居",
+        "做人的样子"
+      ]
+    },
+    {
+      "start": 175.68,
+      "end": 184.28,
+      "lines": [
+        "年轮",
+        "好好吃饭"
+      ]
+    },
+    {
+      "start": 184.28,
+      "end": 194.13,
+      "lines": [
+        "按行情调味",
+        "汤是热的"
+      ]
+    },
+    {
+      "start": 194.13,
+      "end": 207.26,
+      "lines": [
+        "预告",
+        "被惦记最多的人"
+      ]
+    }
+  ]
+}
