@@ -1,0 +1,4 @@
+row_ok=True
+gate_ok=True
+status_ok=True
+chg_ok=True
