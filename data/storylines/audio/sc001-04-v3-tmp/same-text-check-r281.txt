@@ -1,0 +1,8 @@
+novel body paras: 12
+beats: 13 (types: hook/punch/body/body/body/beat/punch/punch/proof/body/body/close/cta)
+paras missed: 0
+cta spokenized OK: True
+cta: 下一章：留饭的人——QUANT 食堂大厨徐根福，全城唯一按涨跌调菜谱的人。
+hook triple-label OK: True
+A1 hook-position OK: True
+x1.5 register inheritance OK: True (vulgar found: [])

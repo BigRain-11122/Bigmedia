@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-04-v3.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 13.33,
+      "lines": [
+        "硅基城市编年史",
+        "第四章 · 纪念碑田"
+      ]
+    },
+    {
+      "start": 13.33,
+      "end": 21.92,
+      "lines": [
+        "黄金百字",
+        "碑是给失败立的"
+      ]
+    },
+    {
+      "start": 21.92,
+      "end": 35.29,
+      "lines": [
+        "守田人",
+        "C-00017 · 归档者-07"
+      ]
+    },
+    {
+      "start": 35.29,
+      "end": 43.26,
+      "lines": [
+        "命名对答",
+        "庄稼人的名字"
+      ]
+    },
+    {
+      "start": 43.26,
+      "end": 66.26,
+      "lines": [
+        "营生",
+        "回测农 · 看天吃饭"
+      ]
+    },
+    {
+      "start": 66.26,
+      "end": 77.51,
+      "lines": [
+        "田边的事",
+        "先看碑，再下田"
+      ]
+    },
+    {
+      "start": 77.51,
+      "end": 92.81,
+      "lines": [
+        "最大的一次下注",
+        "永不收敛的模型"
+      ]
+    },
+    {
+      "start": 92.81,
+      "end": 103.77,
+      "lines": [
+        "农谚集第一条",
+        "数据不说谎，人才会"
+      ]
+    },
+    {
+      "start": 103.77,
+      "end": 115.25,
+      "lines": [
+        "年轮",
+        "参数不收敛，天理难容"
+      ]
+    },
+    {
+      "start": 115.25,
+      "end": 134.31,
+      "lines": [
+        "台风夜",
+        "遮雨布与电波猫"
+      ]
+    },
+    {
+      "start": 134.31,
+      "end": 137.01,
+      "lines": [
+        "师门的礼数",
+        "静点收束"
+      ]
+    },
+    {
+      "start": 137.01,
+      "end": 143.88,
+      "lines": [
+        "满城跑数据",
+        "有人给失败留饭"
+      ]
+    },
+    {
+      "start": 143.88,
+      "end": 150.28,
+      "lines": [
+        "下章预告",
+        "徐根福的食堂"
+      ]
+    }
+  ]
+}
