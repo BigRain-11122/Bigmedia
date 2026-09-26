@@ -1,0 +1,2 @@
+﻿+++ b/cph4/evolution-ledger.md
++| P-2026-09-26-19 | 09-26 | **SDXL 本地生产配方实测令·硅基城市场景道**（CEO 令 ~23:2x「去研究一下 sdxl 本地大模型各种设置，模型，参数等技巧，尽快测出来适合生产硅基城市，高效高质稳定输出」·orders O-2026-0926-009）@FluxVerse @MiniGame 产线 @city-lab 技术底座 | 实测台=bm-a 4070S 12GB ComfyUI--lowvram；主件=cph4/research/R-20260926-sdxl-cit
