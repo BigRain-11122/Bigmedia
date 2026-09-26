@@ -1,0 +1,135 @@
+=== board exit=0 ===
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+
+=== readiness exit=1 ===
+# BigStream 发布准备度报告（Readiness Probe）
+
+> 生成：2026-09-26 18:52｜探针：`src/readiness.py`（平台运营部归口·纯只读·重跑即刷新）
+> 口径：距离首发＝批次①账号亮灯＋10 稿 M4 门全绿＋测试件纪律零发现；未上线＝未测量；阻塞≠失败（发布前诚实态）。
+
+## ① 账号亮灯（11 平台·状态流：未注册→已注册→已认证→API 可用）
+
+| 平台 | 状态 | 备注 |
+|---|---|---|
+| 微信视频号 | 未注册 | 批次① |
+| 微信公众号 | 未注册 | 订阅号 vs 服务号由 CEO 定 · 批次① |
+| 抖音 | 未注册 | 批次② |
+| 小红书 | 未注册 | 批次③ |
+| 快手 | 未注册 | 批次③ |
+| B站 | 未注册 | 批次② |
+| 知乎 | 未注册 | 批次④ |
+| 今日头条 | 未注册 | 批次④ |
+| 新浪微博 | 未注册 | 批次④ |
+| YouTube | 未注册 | Google 账号体系 · 批次⑤ |
+| TikTok | 未注册 | 海外线 · 批次⑤ |
+
+## ② 稿件 GATE 态（10 稿）
+
+| 稿件 | GATE |
+|---|---|
+| 20260923-BS-001-公众号-v1.md | PENDING |
+| 20260923-BS-001-视频号-v1.md | PASS |
+| 20260923-BS-002-公众号-v1.md | PENDING |
+| 20260923-BS-002-视频号-v1.md | PASS |
+| 20260923-BS-003-公众号-v1.md | PENDING |
+| 20260923-BS-003-视频号-v1.md | PASS |
+| 20260923-BS-004-公众号-v1.md | PENDING |
+| 20260923-BS-004-视频号-v1.md | PASS |
+| 20260923-BS-005-公众号-v1.md | PENDING |
+| 20260923-BS-005-视频号-v1.md | PENDING |
+
+## ③ 产线测试件（`output/renders/`·42 件·标注核验「测试件·非成品」）
+
+| 文件 | 标注 |
+|---|---|
+| bs-001-card-v2.mp4 | 测试件·非成品 |
+| bs-001-dd-v1-bilibili-16x9.mp4 | 测试件·非成品 |
+| bs-001-live-A-edit-bilibili.mp4 | 测试件·非成品 |
+| bs-001-live-A-edit-shipinhao.mp4 | 测试件·非成品 |
+| bs-001-live-A-pixelboard.mp4 | 测试件·非成品 |
+| bs-001-live-B-puredoc.mp4 | 测试件·非成品 |
+| bs-001-v10-humanfeel.mp4 | 测试件·非成品 |
+| bs-001-v11-match-shipinhao.mp4 | 测试件·非成品 |
+| bs-001-v12-bilibili-16x9.mp4 | 测试件·非成品 |
+| bs-001-v12-douyin-9x16.mp4 | 测试件·非成品 |
+| bs-001-v12-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-001-v13-bilibili-16x9.mp4 | 测试件·非成品 |
+| bs-001-v13-douyin-9x16.mp4 | 测试件·非成品 |
+| bs-001-v14-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-001-v14b-douyin-9x16.mp4 | 测试件·非成品 |
+| bs-001-v14b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-001-v15-douyin-9x16.mp4 | 测试件·非成品 |
+| bs-001-v3-emotive.mp4 | 测试件·非成品 |
+| bs-001-v4-bilibili-style.mp4 | 测试件·非成品 |
+| bs-001-v5-shipinhao.mp4 | 测试件·非成品 |
+| bs-001-v5b-bilibili.mp4 | 测试件·非成品 |
+| bs-001-v6-shipinhao.mp4 | 测试件·非成品 |
+| bs-001-v6b-bilibili.mp4 | 测试件·非成品 |
+| bs-001-v7-shipinhao.mp4 | 测试件·非成品 |
+| bs-001-v7-vis.mp4 | 测试件·非成品 |
+| bs-001-v8-cyber-full.mp4 | 测试件·非成品 |
+| bs-001-v8-cyber-light.mp4 | 测试件·非成品 |
+| bs-001-v8-cyber-mid.mp4 | 测试件·非成品 |
+| bs-001-v9-cyber-light.mp4 | 测试件·非成品 |
+| bs-001-voice-B-yunxi.mp4 | 测试件·非成品 |
+| bs-001-voice-C-yunjian.mp4 | 测试件·非成品 |
+| bs-001-voice-D-huayan-local.mp4 | 测试件·非成品 |
+| bs-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-002-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-002-v2b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005e-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+
+**[needs-CEO]（1 项）**
+
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+
+**[suspended]（0 项）**
+
+- none
+
+## 距离首发的阻塞清单（3 项）
+
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+
+## 探针发现项（findings·机器纪律核验）
+
+- none
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+
+=== loop_health exit=0 ===
+loop health probe: heartbeat=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\logs\probe-heartbeat.txt state=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json backlog=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\backlog.md
+summary: tick=414, beats=418 (done=414 nonzero=4 skip=4 timeout=0 error=0), log=426 entries, backlog=68 items 56 done (82% burn)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-24 21:5x -> 2026-09-24 21:46 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 01:3x -> 2026-09-25 01:37 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 05:3x -> 2026-09-25 05:1x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 05:5x -> 2026-09-25 05:4x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 06:1x -> 2026-09-25 06:17 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 09:3x -> 2026-09-25 09:0x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 10:2x -> 2026-09-25 10:17 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 10:4x -> 2026-09-25 10:43 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 23:5x -> 2026-09-25 23:59 (narrative hygiene; approximate minutes allowed)
+- [WARN] heartbeat-gap: beat gap 26 min (2026-09-23 16:15 -> 2026-09-23 16:41) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-09-24 11:12 -> 2026-09-24 11:38) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-09-24 23:14 -> 2026-09-24 23:34) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-09-25 00:00 -> 2026-09-25 00:20) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-09-25 02:35 -> 2026-09-25 02:56) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-09-25 04:28 -> 2026-09-25 04:49) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-09-25 18:08 -> 2026-09-25 18:28) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 28 min (2026-09-26 12:53 -> 2026-09-26 13:21) over 20 min comm SLA - long rounds may breach legitimately
+loop health: WARN (0 fail, 20 warn)
+
