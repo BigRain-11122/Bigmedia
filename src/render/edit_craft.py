@@ -546,11 +546,15 @@ def xfade_chain(plan, segs, tmpdir, w, h):
     return edited if _run(cmd) else None
 
 
-def compose(cfg, cues, edited, audio, out_path, grain, duration):
+def compose(cfg, cues, edited, audio, out_path, grain, duration,
+            series=None, h1_glow=False, scanlines=False, sys_status=False):
     """Stage 3: R-A text plan burned over the edited background + voice."""
     tmpdir = Path(tempfile.mkdtemp(prefix="bsedit-tail-"))
     try:
-        plan = build_render_plan(cfg, cues, tmpdir, grain=grain, bg_video=True)
+        plan = build_render_plan(cfg, cues, tmpdir, grain=grain, bg_video=True,
+                                 series=series, h1_glow=h1_glow,
+                                 scanlines=scanlines, sys_status=sys_status)
+        intro_s = float(plan["intro_s"])
         cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                "-i", str(edited)]
         if audio:
@@ -560,10 +564,13 @@ def compose(cfg, cues, edited, audio, out_path, grain, duration):
         cmd += fc_args(plan["filter_text"], tmpdir) + ["-map", "[v]"]
         if audio:
             cmd += ["-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-shortest"]
+            if intro_s > 0:
+                # T1 intro shifts the video head; the audio follows it
+                cmd += ["-af", "adelay=%d:all=1" % round(intro_s * 1000)]
         cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "20",
                 "-pix_fmt", "yuv420p", "-movflags", "+faststart",
                 "-r", str(int(cfg["video"]["fps"])),
-                "-t", "%.3f" % duration, str(out_path)]
+                "-t", "%.3f" % (duration + intro_s), str(out_path)]
         if not _run(cmd):
             return False
         return True
@@ -582,8 +589,34 @@ def main(argv=None):
     ap.add_argument("--audio")
     ap.add_argument("--out")
     ap.add_argument("--grain", type=int, default=0)
+    ap.add_argument("--series-badge", action="store_true",
+                    help="S5.5 T2: top-right BigStream series badge, "
+                         "constant for the whole video")
+    ap.add_argument("--series-id",
+                    help="S5.5 T5 series/episode id (e.g. 'BS-001 EP.01'); "
+                         "rides the badge line, required by --series-intro")
+    ap.add_argument("--series-intro", action="store_true",
+                    help="S5.5 T1: 1.5-2s black series intro head (the "
+                         "<=60s short route uses the badge instead)")
+    ap.add_argument("--intro-s", type=float, default=1.5,
+                    help="T1 intro head length in seconds (clamped 1.5-2.0)")
+    ap.add_argument("--h1-glow", action="store_true",
+                    help="S4.5(1): H1 accent border glow (restrained tier)")
+    ap.add_argument("--scanlines", action="store_true",
+                    help="S4.5(3): CRT scanline ambience (<=8%% cap)")
+    ap.add_argument("--sys-status", action="store_true",
+                    help="S4.5(2): per-cue sys.beat=NN t=MM:SS status line")
     ap.add_argument("--plan-only", action="store_true")
     args = ap.parse_args(argv)
+
+    if args.series_intro and not (args.series_id or "").strip():
+        print("FAIL --series-intro requires --series-id "
+              "(S5.5 T5: every piece carries series code + episode)")
+        return 2
+    series = {"badge": bool(args.series_badge),
+              "id": (args.series_id or "").strip(),
+              "intro": bool(args.series_intro),
+              "intro_s": args.intro_s}
 
     try:
         cfg = load_cards(Path(args.cards))
@@ -600,6 +633,15 @@ def main(argv=None):
         return 2
 
     plan = plan_edit(cfg, args.profile)
+    # S5.5/S4.5 evidence fields (spec machine-check anchors ride plan.json)
+    plan["series"] = {"intro": bool(series["intro"]),
+                      "intro_s": (min(2.0, max(1.5, float(series["intro_s"])))
+                                  if series["intro"] else 0.0),
+                      "badge": bool(series["badge"]),
+                      "id": series["id"]}
+    plan["s45_dials"] = {"h1_glow": bool(args.h1_glow),
+                         "scanlines": bool(args.scanlines),
+                         "sys_status": bool(args.sys_status)}
     win = PROFILE_WINDOW_S.get(args.profile)
     if win and not (win[0] <= plan["duration_expected_s"] <= win[1]):
         print("WARN duration %.2fs outside the %s window %d-%ds "
@@ -639,7 +681,9 @@ def main(argv=None):
         if edited is None:
             return 4
         if not compose(cfg, cues, edited, Path(args.audio) if args.audio else None,
-                       out_path, args.grain, plan["duration_expected_s"]):
+                       out_path, args.grain, plan["duration_expected_s"],
+                       series=series, h1_glow=args.h1_glow,
+                       scanlines=args.scanlines, sys_status=args.sys_status):
             return 4
         print("OK %s" % out_path)
         print("profile=%s treatments=%d transitions=%d hardcuts=%d hits=%s"
