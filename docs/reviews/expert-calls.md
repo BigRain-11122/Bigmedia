@@ -29,3 +29,4 @@
 | 2026-09-25 05:44 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs005e\s1-review-material.md | 0 | full text=expert-verdicts/20260925-054444-S1-script.md / 总分：10 (1500s wrapper: S1 v1.5 gate, BS-005e Tuanjie-engine enhanced beats v1) |
 | 2026-09-26 02:27 | S1-script | S1 编剧官（内容生产部） | data\experts\fixtures\s1-calib-fixture-v2.md | 0 | 全文=expert-verdicts/20260926-022700-S1-script.md ｜ ①违律清单： |
 | 2026-09-27 00:35 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs001\s1-review-material-v15.md | 0 | full text=expert-verdicts/20260927-003531-S1-script.md / 总分：9 (1500s wrapper: S1 v1.5 gate BS-001 v15 remake) |
+| 2026-09-27 01:16 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs002\s1-review-material-v15.md | 0 | full text=expert-verdicts/20260927-011643-S1-script.md / 总分：10 (1500s wrapper: S1 v1.5 gate BS-002 v15 remake) |
