@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 003
+16.80 em  budget 23.00 em  margin +6.20em  single=True  三线扩展日 2026-09-25 · 晨 08:50
+20.00 em  budget 23.00 em  margin +3.00em  single=True  「创建有声小说，网文，漫画等一系列条线，
+14.00 em  budget 23.00 em  margin +9.00em  single=True  主打硅基城市里面发生的一切，
+11.00 em  budget 23.00 em  margin +12.00em  single=True  你们先调研，然后开始」
+16.65 em  budget 23.00 em  margin +6.35em  single=True  老板 1 句话 · 当天 3 条线立制开工
+18.95 em  budget 23.00 em  margin +4.05em  single=True  素材：万人库 · 14 派系 · 台词池 1200+
+19.75 em  budget 23.00 em  margin +3.25em  single=True  首章《立国日》约 1100 字 · 漫画首话四格
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（三线扩展令台账档案）
+EM_CHECK: ALL OK

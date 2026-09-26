@@ -1,0 +1,25 @@
+    python src/render/render_card_video.py --cards ... --poster c.png # + cover frame PNG
+def poster_time(cfg):
+    """Cover-frame timestamp for --poster (audit O-1043 R1, backlog #16).
+    ap.add_argument("--cards", required=True)
+    ap.add_argument("--srt")
+    ap.add_argument("--voiceover")
+    ap.add_argument("--out")
+    ap.add_argument("--audio")
+    ap.add_argument("--strict", action="store_true")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--grain", type=int, default=0,
+    ap.add_argument("--bg",
+    ap.add_argument("--bgvideo",
+    ap.add_argument("--no-cards", action="store_true",
+    ap.add_argument("--poster",
+        if args.poster:
+            poster_path = Path(args.poster)
+            poster_path.parent.mkdir(parents=True, exist_ok=True)
+            t_poster = poster_time(cfg)
+                   "-ss", "%.3f" % t_poster, "-i", str(out_path),
+                   "-frames:v", "1", str(poster_path)]
+            if run.returncode != 0 or not poster_path.exists():
+                print("FAIL poster export exit %d" % run.returncode)
+            print("poster: %s (cover frame at t=%.3fs)"
+                  % (poster_path, t_poster))

@@ -1,0 +1,9 @@
+103:         ("font", ("file", "cards_size", "subs_size", "aigc_size", "subs_bottom")),
+231:         "h1_gap": int(font.get("h1_gap", 48)),
+232:         "optical_center": float(font.get("optical_center", 0.42)),
+248:       h1_gap and optical_center (default 0.42) - visual-spec.md S1-S2.
+268:     subs_bottom = int(font["subs_bottom"])
+329:             h1_y = "(h*%.2f-text_h/2)" % spec["optical_center"]
+329:             h1_y = "(h*%.2f-text_h/2)" % spec["optical_center"]
+349:                         % (spec["optical_center"], int(spec["h1_gap"])))
+376:             % (font_q, _q(body), int(font["subs_size"]), ls, subs_bottom, s, e))
