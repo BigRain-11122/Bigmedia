@@ -1,0 +1,29 @@
+now=2026-09-26 22:05:04
+ollama_api_tags_ok=true models=4
+  model=bge-m3:latest
+  model=qwen2.5:14b
+  model=qwen2.5:7b-instruct
+  model=qwen3-coder:30b
+  detail=bge-m3:latest size_GB=1.16 family=bert quant=F16 ctx=8192
+  detail=qwen2.5:14b size_GB=8.99 family=qwen2 quant=Q4_K_M ctx=32768
+  detail=qwen2.5:7b-instruct size_GB=4.68 family=qwen2 quant=Q4_K_M ctx=32768
+  detail=qwen3-coder:30b size_GB=18.56 family=qwen3moe quant=Q4_K_M ctx=262144
+ollama_exe_rows=1
+  proc=ollama.exe 23412 Console 1 250,008 K
+startup_lnk=True path_has_ollama=True
+gpu=NVIDIA GeForce RTX 4070 SUPER, 12282 MiB, 6557 MiB
+git_tracked_files=2832
+git_size_rows_parsed=2832
+git_tracked_gt50MB=0
+git_tracked_gt95MB=0 (U187 absolute ban)
+git_tracked_max=7MB .bs001-dy-tmp/probe-r316/tile-r316.png
+piper_dir_exists=True
+  piper_file=zh_CN-huayan-medium.onnx 60MB
+  piper_file=zh_CN-huayan-medium.onnx.json 0MB
+piper_total_MB=60 (on-disk, untracked)
+git_tracked_data_assets=0
+git_tracked_piper=0
+git_check_ignore_piper=.gitignore:9:data/assets/	data/assets/piper-models/model.onnx
+gitignore_has_piper=False
+gitattributes_lfs=False
+ollama_models_dir_outside_repo=True
