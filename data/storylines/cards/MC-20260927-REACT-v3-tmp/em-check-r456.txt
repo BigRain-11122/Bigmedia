@@ -1,0 +1,18 @@
+DAILY   8. 财务自由的感觉是怎样的？  FOUND  (heat/rank metadata desensitized, README-ledger only)
+ANCHOR  C-00025  creed field verbatim  「船稳，人心才稳。」  (non-honor seat, registered field)
+POOL    axes/逍遥/market_close/8  ->  逍遥轴「交易盘了，咱就图个心宽」
+POOL    axes/烟火/market_close/12  ->  烟火轴「刚赚的这份钱，得给孩子买点糖」
+POOL    sprite/market_close/5  ->  像素灵池「喵呜一声，今日利润喜上眉梢」
+REACT   single-bucket discipline: market_close bucket, 3-axis mapping (R309 law reuse)
+
+H1 size 84 budget 10.95em | H2 size 44 budget 20.91em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 897px vs subs top 970px gap +73px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市速报 003
+15.55 em  budget 20.91 em  margin +5.36em  single=True  今日热点 · 知乎热榜 2026-09-27
+12.00 em  budget 20.91 em  margin +8.91em  single=True  财务自由的感觉是怎样的？
+17.00 em  budget 20.91 em  margin +3.91em  single=True  逍遥轴：「交易盘了，咱就图个心宽」
+20.00 em  budget 20.91 em  margin +0.91em  single=True  烟火轴：「刚赚的这份钱，得给孩子买点糖」
+20.00 em  budget 20.91 em  margin +0.91em  single=True  像素灵池：「喵呜一声，今日利润喜上眉梢」
+17.00 em  budget 20.91 em  margin +3.91em  single=True  渡轮船长信条：「船稳，人心才稳。」
+subs   23.55 em  budget 24.21 em  margin +0.66em  热点转述自知乎热榜·反应与信条皆取自虚构城市档案
+EM_CHECK: ALL OK

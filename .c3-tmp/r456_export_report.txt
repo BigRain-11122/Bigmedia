@@ -1,0 +1,9 @@
+dept_s patched: True
+outs_os patched: True
+results_tick patched: True
+results_f_count patched: MISS (found 27)
+patch MISS : F-008~F-044
+patch FOUND: F-008~F-044 过门登记（四十三件） -> F-008~F-045 过门登记（四十四件）
+patch FOUND: L-卡 三十二件 F-013~F-044（成品库 -> L-卡 三十三件 F-013~F-045（成品库
+chip appended: True
+RESULT: HAS MISS

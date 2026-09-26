@@ -1,0 +1,221 @@
+TOP-LEVEL KEYS: axes, sprite
+
+== axes/侠气/market_close ==
+0 交易所刚收了，这买卖真过瘾
+1 船上还有货，明天再去跑一趟
+2 邻里间的事儿，咱得好好说和说和
+3 信使这行，跑得快消息灵
+4 船长说得好，风险大收益大
+5 阿姨劝大家，别为这点事儿争吵
+6 算盘这会儿打清了，该收心回家了
+7 听说小李子今儿赚了不少，哼，我可没这么好运
+8 档口刚落锁，船长今夜得去酒馆吹吹牛
+9 跑信的今儿腿脚快，明天还得早起
+10 别看调解阿姨嘴和气，嘴上功夫可了不得
+11 听说股市今天挺热闹，我这买卖可就清淡了
+12 交易所一关门，街上人声鼎沸，买卖家们都散了
+13 信使哥，你跑得快，明天我给你带个信儿
+14 交易所一关，酒馆里的笑声就稠了
+15 门板上了闩，船长今夜还得守船呢
+16 信使刚跑完一单，脚都快冻僵了
+17 调解阿姨这儿啥事没有，日子过得挺清闲
+
+== axes/怀旧/market_close ==
+0 这交易所一收尾，茶馆门口人就稠了
+1 老陈头又背着手溜达去了旧书摊
+2 今儿这行情，比我还慢呢
+3 手里的扇子破了口，得找老周补一补了
+4 听说这新入市的小子，连股票都不懂
+5 这家里头，茶叶比股票香多了
+6 交易所那锣声一响，又得琢磨明天的买卖经了
+7 听那窗外雨声嘀嗒，好像老伙计在低语
+8 刚收盘，这股市跟这伞摊上的雨点儿似的，说下就下
+9 寻思着再去馆子里喝两盅，旧时光里的滋味
+10 这交易所的号子，跟修伞的号子似的，都有点陈年旧调
+11 头上的帽子旧了，心里的梦却不曾褪色
+12 档案里藏着的故事，比这股市里的消息还多
+13 街角的茶馆，才是老克勒们常去的避风港
+14 这交易所一收尾，街角的小馆子又热闹起来了
+15 交易所一关门，我这心也跟着凉快了
+16 听闻这天气预报说得准，得赶紧把伞收起来
+17 这破伞修了又修，可它就是不倒
+
+== axes/求新/market_close ==
+0 交易台前人散尽
+1 新奇玩意儿正上架
+2 直播间里还在侃
+3 刚赚的金币存哪儿
+4 画匠的手艺又长进了
+5 街角的咖啡还香
+6 交易所关门了，今晚得赶紧更新直播间内容
+7 总算收盘了，可以去夜市转转，看看新上线的玩具
+8 交易盘出来就去吃个宵夜，今儿这货真钱真！
+9 手里的股票翻翻看，说不定明儿就是赚翻天！
+10 直播间刚下了个单，今晚得赶紧研究研究新品！
+11 交易所收工了，赶紧去摆摊吧！
+12 新上线的游戏真好玩，我也要试一试
+13 今天的直播效果不错，粉丝又多了不少
+14 市场上的新材料太酷了，得去研究研究
+15 交易收了，明天再来试试新玩法
+16 这交易所就像个大杂烩，啥新鲜事儿都有
+17 得赶紧回去琢磨琢磨，今晚直播间又得更新内容了
+
+== axes/烟火/market_close ==
+0 今天的菜真新鲜
+1 卖的包子大馅儿多
+2 赶紧去食堂买碗面条
+3 早点摊儿的豆浆最醇
+4 青菜便宜了些，今天买的
+5 锅里的炖肉香得很
+6 今天蔬菜价格又涨了点
+7 面条煮软点，才好吃
+8 卖了大半个早上的豆腐，才刚回了摊位
+9 小食堂的蒸笼里，包子还热乎着
+10 今天的菜场可真是热闹，人挤人
+11 炒菜的油星溅到了衣服上
+12 刚赚的这份钱，得给孩子买点糖
+13 早市结束了，得赶紧回家做饭了
+14 炒锅里的剩菜热一热又是一顿好饭
+15 卖了大半辈子鸡蛋，这价格还是有点乱
+16 今儿的白菜还真便宜，正好买点
+17 炒个韭菜鸡蛋，今儿的货不错
+
+== axes/秩序/market_close ==
+0 关门后得好好看看监控，今儿个啥都没出岔子
+1 交易所收工了，得赶快回家做顿热乎饭
+2 这行情平稳下来就好，明儿个还得接着稳
+3 今儿个结算顺利完成，心里头才踏实
+4 别看这市场热闹，咱得守好规矩，才安稳
+5 今儿盘面没出乱子，心都放下来了
+6 盘面收干净了，今夜能安稳睡个好觉了
+7 市场归平静，心里头也踏实了些
+8 交易所关门了，家里的茶壶还得再烧一烧
+9 今日交易虽收了，但饭碗里的米还是要添满
+10 眼见得市场归平静，咱家的账本也该翻翻了
+11 市场归于平寂，咱家的锅盖也该揭开瞧瞧了
+12 这交易所一关门，咱家的灯油就更省些
+13 夜深了，交易所关门了，咱也该早点休息了
+14 收盘刚落定，得稳一稳心神
+15 交易所一关，咱就安心过日子了
+16 这市场波动大，还是稳妥为上
+17 今个行情稳当，明儿也放心
+
+== axes/逍遥/market_close ==
+0 交易所这波真够呛人
+1 茶水泡久点，滋味更地道
+2 看看这云，钓啥都得有点耐心
+3 鱼上钩了，人生也得慢慢来
+4 偶尔空手而归，也挺好
+5 江边的风，带走了烦恼
+6 云淡风轻日头正，交易也该收收心
+7 茶香鱼肥两不误，人生就该如此乐
+8 交易盘了，咱就图个心宽
+9 茶叶香，心里也香
+10 今儿鱼没上钩，心情倒挺舒畅
+11 瞧那云卷云舒，人生多自在
+12 茶余饭后，聊聊天儿，多轻松
+13 股市沉沉，咱心却飘飘然
+14 交易这行真不容易，像猜谜一般
+15 交易所收市了，江边再来一壶茶
+16 今日鱼儿不大，云彩倒分外好看
+17 听说交易所又添了个高手，咱们闲话少叙
+
+== sprite/market_close ==
+0 叮叮铃响夜幕垂
+1 喵呜一声交易闭
+2 啾啾鸟鸣星光坠
+3 灵光闪烁夜未央
+4 叮叮当当，交易结束夜幕降临
+5 喵呜一声，今日利润喜上眉梢
+6 叮咚交易毕
+7 啾啾庆余晖
+8 喵呜收网归
+9 闪烁夜未息
+10 叮咚交易闭，静待明日开
+11 喵呜买卖息，夜色笼轻纱
+
+BUCKET SIZES (all):
+  axes/侠气/ceo_order -> 18 lines
+  axes/侠气/coldsnap -> 18 lines
+  axes/侠气/dusk -> 18 lines
+  axes/侠气/festival -> 18 lines
+  axes/侠气/heatwave -> 18 lines
+  axes/侠气/market_close -> 18 lines
+  axes/侠气/market_open -> 18 lines
+  axes/侠气/morning -> 18 lines
+  axes/侠气/night -> 18 lines
+  axes/侠气/rain -> 18 lines
+  axes/侠气/typhoon -> 18 lines
+  axes/侠气/weekend -> 18 lines
+  axes/怀旧/ceo_order -> 18 lines
+  axes/怀旧/coldsnap -> 18 lines
+  axes/怀旧/dusk -> 18 lines
+  axes/怀旧/festival -> 18 lines
+  axes/怀旧/heatwave -> 18 lines
+  axes/怀旧/market_close -> 18 lines
+  axes/怀旧/market_open -> 18 lines
+  axes/怀旧/morning -> 18 lines
+  axes/怀旧/night -> 18 lines
+  axes/怀旧/rain -> 18 lines
+  axes/怀旧/typhoon -> 18 lines
+  axes/怀旧/weekend -> 18 lines
+  axes/求新/ceo_order -> 18 lines
+  axes/求新/coldsnap -> 18 lines
+  axes/求新/dusk -> 18 lines
+  axes/求新/festival -> 18 lines
+  axes/求新/heatwave -> 18 lines
+  axes/求新/market_close -> 18 lines
+  axes/求新/market_open -> 18 lines
+  axes/求新/morning -> 18 lines
+  axes/求新/night -> 18 lines
+  axes/求新/rain -> 18 lines
+  axes/求新/typhoon -> 18 lines
+  axes/求新/weekend -> 18 lines
+  axes/烟火/ceo_order -> 18 lines
+  axes/烟火/coldsnap -> 18 lines
+  axes/烟火/dusk -> 18 lines
+  axes/烟火/festival -> 18 lines
+  axes/烟火/heatwave -> 18 lines
+  axes/烟火/market_close -> 18 lines
+  axes/烟火/market_open -> 18 lines
+  axes/烟火/morning -> 18 lines
+  axes/烟火/night -> 18 lines
+  axes/烟火/rain -> 18 lines
+  axes/烟火/typhoon -> 18 lines
+  axes/烟火/weekend -> 18 lines
+  axes/秩序/ceo_order -> 18 lines
+  axes/秩序/coldsnap -> 18 lines
+  axes/秩序/dusk -> 18 lines
+  axes/秩序/festival -> 18 lines
+  axes/秩序/heatwave -> 18 lines
+  axes/秩序/market_close -> 18 lines
+  axes/秩序/market_open -> 18 lines
+  axes/秩序/morning -> 18 lines
+  axes/秩序/night -> 18 lines
+  axes/秩序/rain -> 18 lines
+  axes/秩序/typhoon -> 18 lines
+  axes/秩序/weekend -> 18 lines
+  axes/逍遥/ceo_order -> 18 lines
+  axes/逍遥/coldsnap -> 18 lines
+  axes/逍遥/dusk -> 18 lines
+  axes/逍遥/festival -> 18 lines
+  axes/逍遥/heatwave -> 18 lines
+  axes/逍遥/market_close -> 18 lines
+  axes/逍遥/market_open -> 18 lines
+  axes/逍遥/morning -> 18 lines
+  axes/逍遥/night -> 18 lines
+  axes/逍遥/rain -> 18 lines
+  axes/逍遥/typhoon -> 18 lines
+  axes/逍遥/weekend -> 18 lines
+  sprite/ceo_order -> 12 lines
+  sprite/coldsnap -> 12 lines
+  sprite/dusk -> 12 lines
+  sprite/festival -> 12 lines
+  sprite/heatwave -> 12 lines
+  sprite/market_close -> 12 lines
+  sprite/market_open -> 12 lines
+  sprite/morning -> 12 lines
+  sprite/night -> 12 lines
+  sprite/rain -> 12 lines
+  sprite/typhoon -> 12 lines
+  sprite/weekend -> 12 lines
