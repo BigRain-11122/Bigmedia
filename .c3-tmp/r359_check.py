@@ -12,7 +12,7 @@ print("git_status:", repr(g("git status --short")))
 print("head:", g("git rev-parse --short HEAD"))
 print("index_lock:", os.path.exists(".git/index.lock"))
 
-pats = ["@BigStream", "@\u4e03\u7ebf\u5168\u53f8", "@\u5168\u53f8", "@\u516d\u53f8"]
+pats = ["@BigStream", "@\u4e03\u7ebf\u5168\u53f8", "@\u5168\u53f8", "@\u516d\u53f8", "@\u516b\u7ebf\u5168\u91cf"]  # R377 +八线全量: P-20260926-01 tag variant blind-spot fix
 ledger = os.path.join(fg, "cph4", "evolution-ledger.md")
 n = 0
 with open(ledger, encoding="utf-8", errors="replace") as f:
