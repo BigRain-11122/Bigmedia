@@ -1,0 +1,8 @@
+WARN jargon-term term '门禁' first@L3 x1 (voiceover-v6.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '基线' first@L6 x2 (voiceover-v6.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '回测' first@L2 x2 (voiceover-v6.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '夏普' first@L6 x1 (voiceover-v6.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN longsentence 42 chars/0 commas: 'punch | 随机对照 / 20 条假策略 ·...'
+WARN longsentence 43 chars/4 commas: 'close | 五句清单 / 照妖镜 · 开酒 ...'
+SUMMARY terms=12 FAIL=0 WARN=6
+PASS

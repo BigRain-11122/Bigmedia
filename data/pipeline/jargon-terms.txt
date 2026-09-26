@@ -1,0 +1,16 @@
+# BigStream internal jargon term list (machine truth for copy-craft.md S2.8).
+# Canonical spec: docs/copy-craft.md section 2.8 (group order P-2026-09-26-11).
+# Adding a term requires a copy-craft.md changelog line plus a row here.
+# One term per line; lines starting with # and blank lines are skipped.
+认领
+回执
+台账
+循环
+机队
+门禁
+工牌
+离线判定
+基线
+回测
+夏普
+GATE
