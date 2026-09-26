@@ -47,6 +47,14 @@ BigStream/
 └── tests/             <- 脚本测试（按需建）
 ```
 
+## Skills（司内技能登记 · P-20260926-01）
+
+源码入仓 `tools/skills/`；安装位 workspace scope `.codely-cli/skills/`（新会话自动发现；交互会话中改版后须 `/skills reload` 生效）。清单式回执=技能名+用途+触发场景：
+
+- `bigstream-lcard-pipeline` — L-卡四形态（语录 QUOTE/盘点 DIGEST/图鉴 CENSUS/速报 REACT）全链量产工艺。触发=产/审/续任何 BigStream 静态图文卡（供给门锚核→M0 四维分→M1 verbatim 抽取→M2 --poster+em 预算+验图五检→M3 四禁→M4 四检→M4.5 七席+E4 参考仪→F 登记）。
+- `bigstream-s2-probes` — S2 机检三门+验图采样面三律执法组合（层 1.8）。触发=核验/补账/收口任何渲染件与纯音频件（ai_feel/platform_spec/edit_craft 三门+拍头/段中尾/回环边界采样；FAIL 如实入账、不自行修改在途批）。
+- 会话内置在役 3 件：`codely-guide`（平台 how-to）/ `skill-creator`（技能创建器）/ `tuanjie-cli`（团结引擎管理）。
+
 ## Run commands
 
 - M4 机审全量：`python src/draft_lint.py`
