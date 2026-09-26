@@ -370,6 +370,125 @@ class TestFcArgs(unittest.TestCase):
             shutil.rmtree(d, ignore_errors=True)
 
 
+class TestSeriesTemplateAndCyberSync(unittest.TestCase):
+    """2026-09-27 #71 remake leg-3: visual-spec v1.2 S5.5 series template
+    (T1 intro frame / T2 badge / T5 episode id) + S4.5 cyber sync dials
+    (h1 glow / scanlines / sys-status). All plan-level: no ffmpeg run.
+    Default-off = byte-identical legacy graph (zero-drift lock)."""
+
+    SERIES = {"badge": True, "id": "BS-001 EP.01", "intro": False,
+              "intro_s": 1.5}
+
+    def _plan(self, cfg=None, cues=None, **kw):
+        series = kw.pop("series", None)
+        with tempfile.TemporaryDirectory() as d:
+            plan = rcv.build_render_plan(cfg or cards_cfg(),
+                                         cues if cues is not None else [],
+                                         d, series=series, **kw)
+            bodies = {Path(p).name: Path(p).read_text(encoding="utf-8")
+                      for p in plan["textfiles"]}
+        return plan, bodies
+
+    def test_series_badge_line(self):
+        plan, bodies = self._plan(series=self.SERIES)
+        ft = plan["filter_text"]
+        # T2: top-right, gray60, constant (no enable window on badge)
+        self.assertIn("series.badge.txt", ft)
+        self.assertIn("x=w-text_w-48:y=48", ft)
+        self.assertIn("fontcolor=gray", ft)
+        self.assertEqual("BigStream | BS-001 EP.01",
+                         bodies["series.badge.txt"])
+        # plan series fields = S5.5 machine-check anchor (3)
+        self.assertTrue(plan["series"]["badge"])
+        self.assertEqual("BS-001 EP.01", plan["series"]["id"])
+        self.assertFalse(plan["series"]["intro"])
+        # badge drawtext has no enable window (persistent whole video)
+        badge_seg = ft.split("series.badge.txt")[1]
+        self.assertNotIn("enable=", badge_seg.split("drawtext")[0])
+
+    def test_defaults_off_legacy_graph_zero_drift(self):
+        cues = rcv.parse_srt(_tmp_srt(SRT_OK))
+        # same tmpdir for both builds: textfile paths embed the dir, so
+        # cross-dir comparison would diff on temp paths, not on the graph
+        with tempfile.TemporaryDirectory() as d:
+            legacy = rcv.build_render_plan(cards_cfg(), cues, d)["filter_text"]
+            plan = rcv.build_render_plan(cards_cfg(), cues, d)  # dials off
+            ft = plan["filter_text"]
+            self.assertEqual(legacy, ft)
+        self.assertNotIn("tpad=", ft)
+        self.assertNotIn("drawgrid=", ft)
+        self.assertNotIn("borderw=2:bordercolor", ft)
+        self.assertNotIn("series.", ft)
+        self.assertEqual(0.0, plan["intro_s"])
+        self.assertEqual(plan["duration"], plan["total_duration"])
+
+    def test_series_intro_head_and_duration(self):
+        cues = rcv.parse_srt(_tmp_srt(SRT_OK))
+        series = {"badge": False, "id": "BS-001 EP.01",
+                  "intro": True, "intro_s": 1.5}
+        plan, bodies = self._plan(cues=cues, series=series)
+        ft = plan["filter_text"]
+        # T1: black head pad sits directly after the head label
+        # (filtergraph shorthand: a link label feeds the next filter
+        # with NO comma - a comma there reads as an empty filter name)
+        self.assertTrue(
+            ft.startswith("[0:v]tpad=start_duration=1.500:start_mode=add:color=black"),
+            ft[:120])
+        # duration semantics: content clock unchanged, total grows
+        self.assertAlmostEqual(plan["duration"] + 1.5,
+                               plan["total_duration"], places=3)
+        self.assertTrue(plan["series"]["intro"])
+        # intro body = episode id + brand line, accent color, fades in
+        self.assertEqual("BS-001 EP.01\n" + rcv.BRAND_LINE,
+                         bodies["series.intro.txt"])
+        self.assertIn("fontcolor=0xE8E6DF", ft)
+        # post-tpad filters read the OUTPUT clock: the first card window
+        # (0-3s content in this fixture) shifts to 1.500-4.500 with the
+        # 1.5s intro head (cards/SRT data files need zero migration)
+        self.assertIn("between(t,1.500,4.500)", ft)
+        self.assertIn("between(t,0.000,1.500)", ft)  # the intro itself
+
+    def test_series_intro_clamped_to_spec_band(self):
+        for raw, want in ((5.0, 2.0), (0.5, 1.5), (1.8, 1.8)):
+            series = {"badge": False, "id": "BS-001 EP.01",
+                      "intro": True, "intro_s": raw}
+            plan, _ = self._plan(series=series)
+            self.assertAlmostEqual(want, plan["intro_s"], places=3)
+
+    def test_h1_glow_border(self):
+        cfg = cards_cfg()
+        cfg["font"].update({"h1_font": "C:/fake/h1.ttc", "h1_size": 100})
+        cfg["cards"] = [{"start": 0, "end": 3, "lines": ["head", "sub"]}]
+        plan, _ = self._plan(cfg=cfg, h1_glow=True)
+        # S4.5(1): restrained accent halo on the H1 anchor only
+        self.assertIn("borderw=2:bordercolor=0xE8E6DF@0.35",
+                      plan["filter_text"])
+        plan_off, _ = self._plan(cfg=cfg)
+        # NB: the backing box uses boxborderw=, so the glow signature is
+        # the borderw=2:bordercolor pair, not the bare "borderw=" stem
+        self.assertNotIn("borderw=2:bordercolor", plan_off["filter_text"])
+
+    def test_scanlines_ambience_under_text(self):
+        plan, _ = self._plan(scanlines=True)
+        ft = plan["filter_text"]
+        # S4.5(3): 5% (<=8% cap), 1px every 3px, before every text layer
+        self.assertIn("drawgrid=w=iw:h=3:t=1:c=0xE8E6DF@0.05", ft)
+        self.assertLess(ft.index("drawgrid="), ft.index("drawtext="))
+
+    def test_sys_status_per_cue(self):
+        cues = rcv.parse_srt(_tmp_srt(SRT_OK))
+        plan, bodies = self._plan(cues=cues, sys_status=True)
+        self.assertIn("sys.beat=01 t=00:00", bodies["sys.beat00.txt"])
+        self.assertIn("sys.beat=02 t=00:03", bodies["sys.beat01.txt"])
+        # without badge the telemetry line takes the top-right slot
+        self.assertIn("x=w-text_w-48:y=48:enable='between(t,0.000",
+                      plan["filter_text"])
+        # with badge it stacks under the badge (aigc_size 30 + 12 gap)
+        plan2, _ = self._plan(cues=cues, series=self.SERIES, sys_status=True)
+        self.assertIn("x=w-text_w-48:y=90:enable='between(t,0.000",
+                      plan2["filter_text"])
+
+
 def _tmp_srt(content):
     import tempfile as tf
     d = tf.mkdtemp(prefix="bsrcv-test-")

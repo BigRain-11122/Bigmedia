@@ -214,6 +214,9 @@ _COLORS = {
     "accent": "0xE8E6DF",  # FLUX light-point platinum
 }
 
+# S5.5 T1 series brand line (CJK per encoding rule: data via \u escapes)
+BRAND_LINE = "BigStream\u00b7\u7845\u57fa\u57ce\u5e02"
+
 
 def _visual_spec(cfg, font_path_check=True):
     """Resolve visual-spec keys from the font section (all optional;
@@ -237,7 +240,9 @@ def _q(p):
     return "'" + _fpath(p) + "'"
 
 
-def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
+def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False,
+                      series=None, h1_glow=False, scanlines=False,
+                      sys_status=False):
     """Build the drawtext filtergraph. Text bodies go through temp
     textfiles so multi-line CJK renders without escaping issues.
     Every drawtext runs expansion=none: the default expansion mode
@@ -260,6 +265,16 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
     O-20260924-1115-bm-a real-footage dial: bg_video=True swaps the
     filtergraph head from a color source to [0:v] scaled to the frame -
     input-side selection (color lavfi vs recorded mp4) happens in main().
+
+    2026-09-27 #71 remake leg-3 (visual-spec v1.2): series template
+    (S5.5) + cyber sync layer (S4.5). series={"badge","id","intro",
+    "intro_s"} wires the T2/T5 badge line and the T1 intro frame; the
+    S4.5 dials (h1_glow / scanlines / sys_status) are per-piece option
+    switches. All default-off: the legacy graph stays byte-identical.
+    Intro implementation: tpad start_mode=add:color=black pads the head;
+    every filter after tpad reads the OUTPUT clock, so card/cue enable
+    windows (and their fade alphas) are shifted by intro_s inside the
+    plan - the cards/SRT data files themselves need zero migration.
     """
     tmpdir = Path(tmpdir)
     font = cfg["font"]
@@ -306,6 +321,17 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
         chain = ["[0:v]", "scale=%d:%d,setsar=1" % (frame_w, frame_h)]
     else:
         chain = ["[0:v]"]
+    series = series or {}
+    intro_s = 0.0
+    if series.get("intro"):
+        # T1 intro frame head pad; length clamped to the 1.5-2.0s spec band
+        intro_s = min(2.0, max(1.5, float(series.get("intro_s", 1.5))))
+        chain.append("tpad=start_duration=%.3f:start_mode=add:color=black"
+                     % intro_s)
+    if scanlines:
+        # S4.5(3) ambience layer: 1px line every 3px at 5% (<=8% cap),
+        # placed before every text layer so it never covers information
+        chain.append("drawgrid=w=iw:h=3:t=1:c=0xE8E6DF@0.05")
     # 2026-09-25 #23 v14: notice contrast one notch up - gray60@0.8
     # read as near-invisible over live footage (cover-verify verdict,
     # schedule.md registration); dedicated white@0.9, decoupled from
@@ -315,7 +341,9 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
         ":alpha=0.9:x=48:y=48:line_spacing=%d"
         % (font_q, _q(aigc_p), int(font["aigc_size"]), ls))
     for i, c in enumerate(cfg["cards"]):
-        start, end = float(c["start"]), float(c["end"])
+        # post-tpad filters read the OUTPUT clock: with a T1 intro head
+        # every card window shifts by intro_s (data files stay as-is)
+        start, end = float(c["start"]) + intro_s, float(c["end"]) + intro_s
         alpha = fade_alpha(start, end)
         if spec["h1_font"] and c.get("lines"):
             h1_text = str(c["lines"][0]).strip()
@@ -330,6 +358,11 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
             h1_extra = ""
             if alpha:
                 h1_extra = ":alpha=%s" % alpha
+            # S4.5(1) restrained glow edge on the H1 anchor: 2px accent
+            # halo (light-point platinum, 35%), decoupled from text color
+            h1_glow_extra = ""
+            if h1_glow:
+                h1_glow_extra = ":borderw=2:bordercolor=0xE8E6DF@0.35"
             # 2026-09-25 #23 v14 (2): local dark backing behind the
             # title block - white-on-gray H1/H2 read poorly over busy
             # log footage. boxborderw = h1_gap/2+6 on BOTH boxes so
@@ -338,9 +371,9 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
             chain.append(
                 "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=%s"
                 ":box=1:boxcolor=0x000000@0.55:boxborderw=%d"
-                ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s"
+                ":line_spacing=%d:x=(w-text_w)/2:y=%s:enable='between(t,%.3f,%.3f)'%s%s"
                 % (h1f_q, _q(h1_body), h1_size, _COLORS.get(spec["h1_color"], "white"),
-                   bbw, ls, h1_y, start, end, h1_extra))
+                   bbw, ls, h1_y, start, end, h1_extra, h1_glow_extra))
             if h2_lines:
                 h2_body = textfile(
                     "\n".join(wrap_for_width(x, h2_size, frame_w) for x in h2_lines),
@@ -368,12 +401,55 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
                 ":enable='between(t,%.3f,%.3f)'"
                 % (font_q, _q(body), size, ls, start, end))
     for j, (s, e, t) in enumerate(cues):
+        s, e = s + intro_s, e + intro_s  # output clock (see card loop)
         body = textfile(wrap_for_width(t, int(font["subs_size"]), frame_w),
                         "cue%03d.txt" % j)
         chain.append(
             "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d:fontcolor=white"
             ":line_spacing=%d:x=(w-text_w)/2:y=h-%d:enable='between(t,%.3f,%.3f)'"
             % (font_q, _q(body), int(font["subs_size"]), ls, subs_bottom, s, e))
+    if series.get("badge"):
+        # S5.5 T2 series badge: top-right, H3 tier, gray60, constant for
+        # the whole video; the T5 episode id rides the same line. The
+        # top-left AIGC compliance band position is untouched (S3).
+        badge_text = "BigStream"
+        if series.get("id"):
+            badge_text = "BigStream | %s" % series["id"]
+        badge_p = textfile(badge_text, "series.badge.txt")
+        badge_size = int(font.get("series_size", font["aigc_size"]))
+        chain.append(
+            "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d"
+            ":fontcolor=gray:line_spacing=%d:x=w-text_w-48:y=48"
+            % (font_q, _q(badge_p), badge_size, ls))
+    else:
+        badge_size = 0
+    if sys_status:
+        # S4.5(3) machine telemetry line: one per cue (content clock),
+        # H3 tier, top-right under the badge when the badge is present
+        st_size = int(font.get("status_size", font["aigc_size"]))
+        st_y = 48 + (badge_size + 12 if badge_size else 0)
+        for j, (s, e, t) in enumerate(cues):
+            st_body = textfile(
+                "sys.beat=%02d t=%02d:%02d" % (j + 1, int(s) // 60, int(s) % 60),
+                "sys.beat%02d.txt" % j)
+            s, e = s + intro_s, e + intro_s  # output clock
+            chain.append(
+                "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d"
+                ":fontcolor=gray:line_spacing=%d:x=w-text_w-48:y=%d"
+                ":enable='between(t,%.3f,%.3f)'"
+                % (font_q, _q(st_body), st_size, ls, st_y, s, e))
+    if intro_s > 0:
+        # S5.5 T1 series intro frame: episode id + brand line, H2 tier,
+        # light-point platinum accent, 150ms fade in/out (S4)
+        intro_body = "\n".join([series.get("id", ""), BRAND_LINE])
+        intro_p = textfile(intro_body, "series.intro.txt")
+        intro_alpha = fade_alpha(0.0, intro_s)
+        chain.append(
+            "drawtext=expansion=none:fontfile=%s:textfile=%s:fontsize=%d"
+            ":fontcolor=%s:line_spacing=%d:x=(w-text_w)/2:y=(h-text_h)/2"
+            ":enable='between(t,%.3f,%.3f)'%s"
+            % (font_q, _q(intro_p), spec["h2_size"], _COLORS["accent"],
+               ls, 0.0, intro_s, ":alpha=%s" % intro_alpha if intro_alpha else ""))
     if grain and int(grain) > 0:
         chain.append("noise=alls=%d:allf=t+u" % int(grain))
         chain.append("vignette=angle=PI/6")
@@ -381,7 +457,12 @@ def build_render_plan(cfg, cues, tmpdir, grain=0, bg_video=False):
         # "[0:v]" must sit directly before the first filter: a comma after a
         # link label reads as an empty filter name to the graph parser.
         "filter_text": chain[0] + ",".join(chain[1:]) + "[v]",
-        "duration": duration,
+        "duration": duration,  # content duration (legacy semantics)
+        "total_duration": duration + intro_s,  # includes the T1 intro head
+        "intro_s": intro_s,
+        "series": {"intro": bool(intro_s), "intro_s": intro_s,
+                   "badge": bool(series.get("badge")),
+                   "id": str(series.get("id", ""))},
         "textfiles": made,
     }
 
@@ -452,7 +533,35 @@ def main(argv=None):
                     help="after a successful render, export the cover "
                          "frame to this PNG (first card at full opacity; "
                          "ignored with --dry-run) - audit O-1043 R1")
+    ap.add_argument("--series-badge", action="store_true",
+                    help="visual-spec v1.2 S5.5 T2: top-right BigStream "
+                         "series badge, constant for the whole video")
+    ap.add_argument("--series-id",
+                    help="S5.5 T5 series/episode id (e.g. 'BS-001 EP.01'); "
+                         "rides the badge line, required by --series-intro")
+    ap.add_argument("--series-intro", action="store_true",
+                    help="S5.5 T1: 1.5-2s black series intro frame "
+                         "(episode id + brand line, accent color)")
+    ap.add_argument("--intro-s", type=float, default=1.5,
+                    help="T1 intro length in seconds, clamped to 1.5-2.0")
+    ap.add_argument("--h1-glow", action="store_true",
+                    help="S4.5(1): restrained 2px accent glow edge on H1")
+    ap.add_argument("--scanlines", action="store_true",
+                    help="S4.5(3): scanline ambience layer "
+                         "(5 percent, 8 percent spec cap)")
+    ap.add_argument("--sys-status", action="store_true",
+                    help="S4.5(3): per-cue machine telemetry line "
+                         "sys.beat=NN t=MM:SS")
     args = ap.parse_args(argv)
+
+    if args.series_intro and not (args.series_id or "").strip():
+        print("FAIL --series-intro requires --series-id "
+              "(S5.5 T5: every piece carries series code + episode)")
+        return 2
+    series = {"badge": bool(args.series_badge),
+              "id": (args.series_id or "").strip(),
+              "intro": bool(args.series_intro),
+              "intro_s": args.intro_s}
 
     cards_path = Path(args.cards)
     try:
@@ -511,10 +620,14 @@ def main(argv=None):
     tmpdir = Path(tempfile.mkdtemp(prefix="bsrender-"))
     try:
         plan = build_render_plan(cfg, cues, tmpdir, grain=args.grain,
-                                 bg_video=bool(args.bgvideo))
+                                 bg_video=bool(args.bgvideo),
+                                 series=series, h1_glow=args.h1_glow,
+                                 scanlines=args.scanlines,
+                                 sys_status=args.sys_status)
         if args.dry_run:
-            print("dry-run ok: cards=%d cues=%d duration=%.3fs out=%s"
-                  % (len(cfg["cards"]), len(cues), plan["duration"], out_path))
+            print("dry-run ok: cards=%d cues=%d duration=%.3fs (intro %.1fs) out=%s"
+                  % (len(cfg["cards"]), len(cues), plan["total_duration"],
+                     plan["intro_s"], out_path))
             print("--- filtergraph ---")
             print(plan["filter_text"])
             return 0
@@ -529,7 +642,7 @@ def main(argv=None):
                    "-f", "lavfi", "-i",
                    "color=c=%s:s=%dx%d:r=%d:d=%.3f"
                    % (v.get("bg", "black"), int(v["width"]), int(v["height"]),
-                      int(v["fps"]), plan["duration"])]
+                      int(v["fps"]), plan["total_duration"])]
         if audio_path is not None:
             cmd += ["-i", str(audio_path)]
         # NB: this ffmpeg build (9.0.1 gyan full) dropped
@@ -540,8 +653,11 @@ def main(argv=None):
         cmd += fc_args(plan["filter_text"], tmpdir) + ["-map", "[v]"]
         if audio_path is not None:
             cmd += ["-map", "1:a", "-c:a", "aac", "-b:a", "192k", "-shortest"]
+            if plan["intro_s"] > 0:
+                # T1 intro shifts the video head; the audio follows it
+                cmd += ["-af", "adelay=%d:all=1" % round(plan["intro_s"] * 1000)]
         if args.bgvideo:
-            cmd += ["-t", "%.3f" % plan["duration"]]
+            cmd += ["-t", "%.3f" % plan["total_duration"]]
         cmd += ["-c:v", "libx264", "-preset", "medium", "-crf", "20",
                 "-pix_fmt", "yuv420p", "-movflags", "+faststart",
                 "-r", str(int(v["fps"])), str(out_path)]
@@ -573,7 +689,7 @@ def main(argv=None):
         if args.poster:
             poster_path = Path(args.poster)
             poster_path.parent.mkdir(parents=True, exist_ok=True)
-            t_poster = poster_time(cfg)
+            t_poster = poster_time(cfg) + plan["intro_s"]  # cover after T1 head
             cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
                    "-ss", "%.3f" % t_poster, "-i", str(out_path),
                    "-frames:v", "1", str(poster_path)]
@@ -591,7 +707,7 @@ def main(argv=None):
         size_kb = out_path.stat().st_size // 1024
         print("OK %s" % out_path)
         print("cards=%d cues=%d duration=%.3fs size=%dKB"
-              % (len(cfg["cards"]), len(cues), plan["duration"], size_kb))
+              % (len(cfg["cards"]), len(cues), plan["total_duration"], size_kb))
         print(probe.stdout.strip())
         return 0
     finally:
