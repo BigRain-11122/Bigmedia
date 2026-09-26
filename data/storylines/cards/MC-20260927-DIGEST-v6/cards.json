@@ -1,0 +1,55 @@
+{
+ "meta": {
+  "topic": "MC-20260927-DIGEST-v6",
+  "line": "L-卡 图文轻内容线（DIGEST 形态第六件·charter v1.2 §4 形态码·编年史事件候选随轮领）",
+  "form": "DIGEST 盘点图文 006（hit-chain v1.0 全链审查留痕·P0 形态 DIGEST 续件第五件·R460 指针=编年史事件候选领做·史源=D-20260927-01~05 深夜决策批）",
+  "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+  "source_facts": "深夜决策批数字盘点八条：决策批落档 2026-09-27 00:05（decisions.md D-20260927-01~05 五行新落·R444 收讫窗内回执）／五决连落=D-01 回执核销批 5+台账勘正·D-02 BigCompute 午班加轮+OrderSentinel·D-03 BigDomain OSS 台账位三选一·D-04 复审锚热票面禁令·D-05 台账可见性与写入卫生包（他司执行面=批级知悉位·细节不入卡面）／D-01 拍板十点①~⑩（⑦ 技能动员令计数修正 5/8 verbatim·余 BigStream 窗 00:35 到点→夜轮点名）／本司自证计数应 6/8=HQ-FEEDBACK F-20260927-01 更正行（P-51 双载体并集核验·commit 57dfce5/bfca664 消息含 P-20260926-01+state.json×5 处+finished.md×1 处+backlog #65 done 行=证据 9 件）／五决科学判断闸全过审零驳回（R444 回执·D-01 引证列「昨日 overruled=0·台账全扫零驳回行」）／本司份额 2/5=D-01⑦ 计数勘正回执+D-05② orders 全文件扫面自评采纳（编辑检测线落件 r444_check.py）／决策台账 45 行在册（decisions.md 非空行·r461_check.py 本轮实测）／D-03 OSS 台账位裁定采③豁免精确口径（FluxVerse/BigLife/BigStream 三司 OH-20260926-*.md 实体写盘实践在案·本司 OH 件=首窗三切片 R432/R458/R459）",
+  "source_pointer": "FluxGroup/docs/decisions.md D-20260927-01~05 五行（集团决策正典·A 级跨仓只读）+HQ-FEEDBACK.md F-20260927-01 行（本司计数更正载体·证据 9 件链）+src/os/state.json R444 log 行（五决回执·科学判断闸零驳回）+.c3-tmp/r444_check.py（D-05② orders 全文件扫面自评落件）+cph4/oss-harvest/OH-20260926-bigstream.md（D-03 证据件·三司实践在案）——编年史 A 级史源（集团决策正典+本司台账+工具件·charter §3 选题池双源①）·一料多吃（charter §3）",
+  "attribution_rule": "署名=纪实线编年史档案级（charter §2.1 纪实线·无居民名面=零虚构署名·人设权红线照守；引文=集团决策正典行 D-20260927-01⑦+本司台账行 F-20260927-01 verbatim 双源对读）",
+  "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「基于硅基城市真实事件（决策批台账档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+  "editorial_value": "叙事包装=深夜决策批数字盘点档案体（数字对照结构+时间锚 00:05 落批+盘点体裁）——选材与排序即编辑动作（5/8→6/8 计数对账故事=批内点名×台账自证的诚实对账链·公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限）",
+  "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 数字反差链：总部批内计数 5/8 vs 本仓台账核验 6/8——同一夜「点名」×「翻台账自证证据 9 件」=F-042 v2 对照数字结构同源第五证·五连母题〔v2 开闸/v3 三线/v4 技能/v5 节目重制/v6 对账夜〕+00:05 深夜落批幕后纪实/情 1 机器诚实对账温和共鸣如实非强极点〔G1 AI 效率实操党+G5 吃瓜未来党双群对位〕/时 2 事件 2026-09-27 00:05 当日+台账档案常青面如实/台 2 公众号方图承载=MC-001~046 S3 实证复用·盘点=公众号主流图文格式〔O-1327 research §2 #2 A 级通识〕）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·R379 研究件 §5 判据锚定（编年史 A 级事件+数字密度）",
+  "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·系列 S3 实证复用·平台规格窗随 M5 发布案复核）",
+  "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；脱敏律核=八条数字全为已过 M4 在册件口径（集团决策正典行/本司台账/工具件）·零仓位/密钥/token 量/未公开财务面·他司执行面细节不入卡面（D-02/D-04 仅批级知悉位）；成品只入库·发布=M5 账号物理件+M4 全绿"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1080,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 50,
+  "subs_size": 38,
+  "subs_bottom": 110,
+  "aigc_size": 30,
+  "line_spacing": 12,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 84,
+  "h1_color": "accent",
+  "h2_size": 40,
+  "h2_color": "white",
+  "h1_gap": 36,
+  "optical_center": 0.24
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 3.0,
+   "lines": [
+    "城市盘点 006",
+    "深夜决策批 2026-09-27 00:05 落档",
+    "「技能动员令计数修正 5/8」",
+    "「技能动员令计数应 6/8」",
+    "决策 5 连落 · 拍板 10 点 · 驳回 0 条",
+    "本司份额 2/5 · 扫面脚本 1 件落账",
+    "夜轮点名后翻台账 · 自证证据 9 件",
+    "开源借力台账位裁定 · 三司实践在案"
+   ]
+  }
+ ]
+}

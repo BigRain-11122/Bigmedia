@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 006
+16.75 em  budget 23.00 em  margin +6.25em  single=True  深夜决策批 2026-09-27 00:05 落档
+13.15 em  budget 23.00 em  margin +9.85em  single=True  「技能动员令计数修正 5/8」
+12.15 em  budget 23.00 em  margin +10.85em  single=True  「技能动员令计数应 6/8」
+18.30 em  budget 23.00 em  margin +4.70em  single=True  决策 5 连落 · 拍板 10 点 · 驳回 0 条
+16.25 em  budget 23.00 em  margin +6.75em  single=True  本司份额 2/5 · 扫面脚本 1 件落账
+16.10 em  budget 23.00 em  margin +6.90em  single=True  夜轮点名后翻台账 · 自证证据 9 件
+16.55 em  budget 23.00 em  margin +6.45em  single=True  开源借力台账位裁定 · 三司实践在案
+subs   19.00 em  budget 24.21 em  margin +5.21em  基于硅基城市真实事件（决策批台账档案）
+EM_CHECK: ALL OK
