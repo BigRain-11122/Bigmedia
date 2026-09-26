@@ -71,6 +71,53 @@ class SrtTests(unittest.TestCase):
         self.assertEqual(plc.srt_text(raw), "灯亮了。")
 
 
+class BeatsSpokenTests(unittest.TestCase):
+    """copy-craft 2.8 check face = spoken column (L7 card/oral split).
+
+    Anchor column = card design face (R446 ruling), not an L18-L20 face.
+    """
+
+    def setUp(self):
+        self.terms = ["机队", "工牌", "回测"]
+
+    def test_anchor_only_hit_not_flagged(self):
+        raw = ("hook | 机队花名册 · 两台电脑 | 系统日志开机：两台电脑。\n"
+               "body | 工牌一 / 32 核 | 第一台 32 核，管代码。\n")
+        f = plc.check_text(plc.beats_spoken_text(raw), self.terms, "x")
+        self.assertEqual(f, [])
+
+    def test_spoken_hit_flagged_with_line_no(self):
+        raw = ("hook | 花名册 · 两台电脑 | 系统日志开机：机队点名。\n"
+               "body | 身份牌 / 32 核 | 第一台 32 核，管代码。\n")
+        f = plc.check_text(plc.beats_spoken_text(raw), self.terms, "x")
+        self.assertEqual(len(f), 1)
+        self.assertEqual(f[0][0], "WARN")
+        self.assertIn("first@L1", f[0][2])
+
+    def test_spoken_hit_line_number_preserved(self):
+        raw = ("hook | 花名册 | 系统日志开机：两台电脑。\n"
+               "body | 身份牌 | 第二台 16 核，管回测。\n")
+        f = plc.check_text(plc.beats_spoken_text(raw), self.terms, "x")
+        self.assertEqual(len(f), 1)
+        self.assertIn("first@L2", f[0][2])
+
+    def test_longsentence_counts_spoken_only(self):
+        raw = "beat | " + "卡" * 30 + " / " + "锚" * 20 + " | 短句一。短句二。\n"
+        f = plc.check_text(plc.beats_spoken_text(raw), [], "x")
+        self.assertEqual(f, [])
+
+    def test_plain_line_fallback_scanned_whole(self):
+        raw = "这一行没有拍型分隔，机队在正文里出现。\n"
+        f = plc.check_text(plc.beats_spoken_text(raw), self.terms, "x")
+        self.assertEqual(len(f), 1)
+        self.assertIn("first@L1", f[0][2])
+
+    def test_two_field_row_falls_back_whole_line(self):
+        raw = "hook | 机队点名：两台电脑。\n"
+        f = plc.check_text(plc.beats_spoken_text(raw), self.terms, "x")
+        self.assertEqual(len(f), 1)
+
+
 class ExitCodeTests(unittest.TestCase):
     def test_no_args_is_usage_error(self):
         self.assertEqual(plc.main([]), 2)

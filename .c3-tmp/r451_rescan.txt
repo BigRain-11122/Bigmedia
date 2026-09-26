@@ -1,0 +1,17 @@
+== data/sources/bs001/voiceover-v15.beats.txt
+SUMMARY terms=12 FAIL=0 WARN=0
+PASS
+exit 0
+== data/sources/bs002/voiceover-v15.beats.txt
+SUMMARY terms=12 FAIL=0 WARN=0
+PASS
+exit 0
+== data/sources/bs003/voiceover-v5.beats.txt
+WARN jargon-term term '认领' first@L6 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '回执' first@L6 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '机队' first@L1 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '工牌' first@L2 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '回测' first@L3 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+SUMMARY terms=12 FAIL=0 WARN=5
+PASS
+exit 0

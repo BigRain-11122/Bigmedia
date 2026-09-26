@@ -1,0 +1,1 @@
+usage: emotive_tts.py --beats FILE --voice VOICE --out DIR [--cyber light|mid|full] [--human SEED] [--template CARDS_JSON] [--order STR] [--deepdive]

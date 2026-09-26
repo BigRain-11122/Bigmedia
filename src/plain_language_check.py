@@ -12,6 +12,13 @@ Machine side of the wording law from group order P-2026-09-26-11
     longsentence   sentence >40 chars (punct-stripped) or
                    >=3 commas                          [WARN]
 
+Check faces follow copy-craft 2.8 machine criteria (2)(3): the scan
+face for --beats is the SPOKEN column only (beats row = "type | card
+anchor | spoken"); card anchor text is the L7 card/oral split design
+face (visual-spec 5.5), not a wording check face (R446 ruling: header
+column is not an L18-L20 check face). Non-beats lines fall back to
+whole-line scanning (plain voiceover files). --srt scans cue text.
+
 Term list (single machine truth): data/pipeline/jargon-terms.txt
 Canonical spec: docs/copy-craft.md section 2.8 (term changes need both).
 
@@ -34,6 +41,27 @@ SENT_SPLIT_RE = re.compile(r"[。！？!?;\n]+")
 STRIP_RE = re.compile(r"[\s，。！？、；：:,.\"'“”‘’（）()\[\]【】·—…-]")
 COMMA_RE = re.compile(r"[，,]")
 SRT_NOISE_RES = (re.compile(r"^\d+\s*$"), re.compile(r"-->"))
+# Beats row = "type | card anchor | spoken". Spoken-column check face per
+# copy-craft 2.8 criteria (2)(3); anchor column is a card design face (L7).
+BEAT_TYPES = ("hook", "body", "punch", "wink", "beat", "turn",
+              "proof", "close", "cta")
+
+
+def beats_spoken_text(raw):
+    """Map a beats file to same-line-count spoken-only text.
+
+    Beats rows (first field in BEAT_TYPES, >=2 pipes) keep only the spoken
+    column; any other line is kept verbatim (plain voiceover fallback).
+    Line numbering is preserved so first-hit line refs stay honest.
+    """
+    out = []
+    for ln in raw.splitlines():
+        parts = [p for p in ln.split("|")]
+        if (len(parts) >= 3 and parts[0].strip() in BEAT_TYPES):
+            out.append("|".join(parts[2:]))
+        else:
+            out.append(ln)
+    return "\n".join(out)
 
 
 def load_terms(path=TERMS_FILE):
@@ -107,7 +135,8 @@ def main(argv=None):
         findings += check_title(args.title, terms)
     if args.beats:
         raw = Path(args.beats).read_text(encoding="utf-8")
-        findings += check_text(raw, terms, Path(args.beats).name)
+        findings += check_text(beats_spoken_text(raw), terms,
+                               Path(args.beats).name)
     if args.srt:
         raw = Path(args.srt).read_text(encoding="utf-8")
         findings += check_text(srt_text(raw), terms, Path(args.srt).name)

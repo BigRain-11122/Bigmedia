@@ -1,0 +1,11 @@
+WARN jargon-term term '认领' first@L6 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '回执' first@L6 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '机队' first@L1 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '工牌' first@L2 x2 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN jargon-term term '回测' first@L3 x1 (voiceover-v5.beats.txt) - L18: needs gloss same/next beat (human ruling)
+WARN longsentence 48 chars/1 commas: 'hook | 系统日志开机 / 机队花名册 · ...'
+WARN longsentence 43 chars/1 commas: 'body | 心跳在册 / 10 分钟必达 · ...'
+WARN longsentence 47 chars/1 commas: 'beat | 大件传输 / 7 个 GB · 五...'
+WARN longsentence 43 chars/1 commas: 'proof | 交货判据 / 不是发过去 · 是...'
+SUMMARY terms=12 FAIL=0 WARN=9
+PASS
