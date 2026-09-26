@@ -1,0 +1,7 @@
+ledger_matches=29
+ledger_last_hit_ascii=- **??? 2026-09-27??? 03:07?**????=?? 899.8GB ???????? bigmo
+ledger_modes={'全司': 6, '六司': 3, 'BigStream': 29, '七线全司': 1, '八线全量': 2}
+r461_check_encoding=utf8_ok bytes=4348
+r461_check_pattern_line_ascii=pat = re.compile(r"@(BigStream|????|??|??|????)")
+r461_check_pattern_line_repr='pat = re.compile(r"@(BigStream|七线全司|全司|六司|八线全量)")'
+r461_check_pattern_hits=29

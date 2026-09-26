@@ -1,0 +1,5 @@
+A_read_splitlines: lines=185 hits=29
+B_line_iter: hits=29
+only_in_B=0
+only_in_A=0
+sep_chars={}

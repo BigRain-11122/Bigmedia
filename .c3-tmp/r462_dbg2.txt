@@ -1,0 +1,9 @@
+ERR Illegal trailing comma before end of array: line 488 column 1879 (char 633303)
+CTX: ...（无集团层新 open 问题·双锚静）。下轮=R463 快速路径首查→#59 REACT 09-28 热点窗届日领→W40 周自审+月度统计注记（09-28 起）→#63/#70/#72 各窗随轮。收账显式列文件 commit+push。",
+ ],
+ "ts": "2026-09-27 04:08:14",
+ "task": "x"
+}...
+dq_in_logline=0
+bracket_comma_in_logline=0
+logline_len=1874
