@@ -1,0 +1,4 @@
+summary: tick=?, beats=433 (done=429 nonzero=4 skip=4 timeout=0 error=0), log=0 entries, backlog=71 items 57 done (80% burn)
+- [FAIL] state-file: state ledger not valid JSON: Illegal trailing comma before end of array: line 455 column 2637 (char 559044)
+- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+loop health: FAIL (2 fail, 8 warn)
