@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 004
+17.80 em  budget 23.00 em  margin +5.20em  single=True  技能动员日 2026-09-26 · 凌晨 00:35
+18.95 em  budget 23.00 em  margin +4.05em  single=True  「ceo 命令，全部去找适合业务的 skills
+10.00 em  budget 23.00 em  margin +13.00em  single=True  并使用，提升生产力」
+15.65 em  budget 23.00 em  margin +7.35em  single=True  盘点 3 件在役 · 自建 2 件入产线
+13.80 em  budget 23.00 em  margin +9.20em  single=True  建装 5 步 · 校验安装双 PASS
+17.75 em  budget 23.00 em  margin +5.25em  single=True  技能 1=四形态全链 · 技能 2=机检三门
+18.15 em  budget 23.00 em  margin +4.85em  single=True  快速件窗 48 小时 · 计数 09-27 00:35
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（技能动员令台账档案）
+EM_CHECK: ALL OK
