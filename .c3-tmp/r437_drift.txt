@@ -1,0 +1,4 @@
+-> 生成：2026-09-26 22:52｜探针：`src/readiness.py`（平台运营部归口·纯只读·重跑即刷新）
++> 生成：2026-09-26 23:03｜探针：`src/readiness.py`（平台运营部归口·纯只读·重跑即刷新）
+-summary: tick=435, beats=439 (done=435 nonzero=4 skip=4 timeout=0 error=0), log=447 entries, backlog=71 items 58 done (82% burn)
++summary: tick=436, beats=440 (done=436 nonzero=4 skip=4 timeout=0 error=0), log=448 entries, backlog=71 items 58 done (82% burn)

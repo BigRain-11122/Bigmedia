@@ -1,0 +1,24 @@
+now=2026-09-26 22:33:00
+orders_top=README.md
+orders_new_after_anchor=['README.md']
+inserts_after_7c23b15=0
+ledger_at_count=25 (anchor=25)
+ledger_tail=| P-2026-09-26-08 | 09-26 | **开源借力机制令·每 72h 收获轮（CEO 令 2026-09-26 ~21:40「…所有的都去寻找开源社区，或者 Gi
+ledger_new_after_anchor=False
+decisions_nz_count=40 (anchor=40)
+decisions_tail=| 2026-09-26 | D-20260926-11 回执计数判据重申（P-51 适用）+技能动员令计数修正 3/8 | FluxVerse F-20260926-05+夜班「
+anchor_C-00030=False
+anchor_C-00031=False
+anchors_tail3=C-00027.md,C-00028.md,C-00029.md
+daily_brief_0926=True
+storylines_novel_today_writes=0
+storylines_audio_today_writes=0
+storylines_comic_today_writes=0
+index_lock=False
+HEAD=7c23b15
+board_exit=0
+readiness_exit=1
+loop_health_exit=1
+probe_file=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r434_probe.txt
+oss_harvest_dir=True
+oss_harvest_files=OH-20260926-biglife.md,OH-20260926-bigstream.md,OH-20260926-fluxverse.md
