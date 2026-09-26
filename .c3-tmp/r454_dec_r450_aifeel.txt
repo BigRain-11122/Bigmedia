@@ -1,0 +1,5 @@
+[PASS] gaps: 11 gaps, 0.146-0.393s (varied)
+[PASS] pacing: cue duration CV 0.234
+[PASS] prosody: 9 distinct profiles across 12 beats
+[PASS] copy: sentence-length CV 0.207
+SUMMARY: 0 FAIL 0 WARN -> pass

@@ -1,0 +1,12 @@
+src_len=198 asr_len=198 sites=11 diff_chars=14
+replace src[6:7]='酒' asr[6:7]='久'
+replace src[8:9]='瓶' asr[8:9]='屏'
+replace src[52:53]='假' asr[52:53]='架'
+replace src[63:65]='同场' asr[63:65]='平常'
+replace src[72:73]='假' asr[72:73]='甲'
+replace src[97:98]='志' asr[97:98]='治'
+replace src[105:106]='比' asr[105:106]='笔'
+replace src[114:115]='海' asr[114:115]='排'
+replace src[124:125]='软' asr[124:125]='转'
+replace src[157:159]='场比' asr[157:159]='厂笔'
+replace src[181:183]='实录' asr[181:183]='直路'

@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "topic": "BS-004",
+    "variant": "v1 window-compliant matched cut (9:16 shipinhao 30-60s)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs004\\voiceover-v15.beats.txt",
+    "order": "BS-004-v15",
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "one beat = one card = one cut = one matched shot",
+    "red_line": "aigc_notice burns into every frame for the full duration (CONSTITUTION S2-4); publish also requires M4 gate + platform AIGC switch",
+    "probe_note": "R186 five-source probe before req: looplog/reviewsdoc/editgrid/biggame-cockpit stable full-length (no window switch); citywatch-vertical.mp4 tail (approx 5-18s) records through a Doubao chat window (privacy face, footage-matching-spec S2) - only the clean 0-4.4s watch-terminal window is usable; beat b3 (2.73s) stays entirely inside the clean window",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14,
+    "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+    "h1_size": 100,
+    "h1_color": "accent",
+    "h2_size": 50,
+    "h2_color": "gray60",
+    "h1_gap": 56,
+    "optical_center": 0.42
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 4.85,
+      "lines": [
+        "庆功酒开瓶",
+        "432 全灭 · 0 组过线"
+      ]
+    },
+    {
+      "start": 4.85,
+      "end": 10.11,
+      "lines": [
+        "全灭现场",
+        "最好一组 · 年化 3.8%"
+      ]
+    },
+    {
+      "start": 10.11,
+      "end": 16.26,
+      "lines": [
+        "门禁职责",
+        "剧本崩溃 · 日志拦假"
+      ]
+    },
+    {
+      "start": 16.26,
+      "end": 19.18,
+      "lines": [
+        "全灭证门活",
+        "门还活着"
+      ]
+    },
+    {
+      "start": 19.18,
+      "end": 23.2,
+      "lines": [
+        "随机对照",
+        "20 条假策略 · 同场跑"
+      ]
+    },
+    {
+      "start": 23.2,
+      "end": 27.8,
+      "lines": [
+        "随机基线",
+        "样本外 · 夏普 1.4"
+      ]
+    },
+    {
+      "start": 27.8,
+      "end": 31.82,
+      "lines": [
+        "神策略判定",
+        "随机对照 · 不敢比"
+      ]
+    },
+    {
+      "start": 31.82,
+      "end": 37.77,
+      "lines": [
+        "五道门",
+        "基线全灭→组合软化"
+      ]
+    },
+    {
+      "start": 37.77,
+      "end": 41.0,
+      "lines": [
+        "注册证书",
+        "首批在册交易员"
+      ]
+    },
+    {
+      "start": 41.0,
+      "end": 44.33,
+      "lines": [
+        "诚实标注",
+        "强到哪 · 死在哪"
+      ]
+    },
+    {
+      "start": 44.33,
+      "end": 52.88,
+      "lines": [
+        "五句清单",
+        "照妖镜 · 开酒"
+      ]
+    },
+    {
+      "start": 52.88,
+      "end": 58.81,
+      "lines": [
+        "合规+转发",
+        "不构成投资建议 · 想学量化"
+      ]
+    }
+  ]
+}

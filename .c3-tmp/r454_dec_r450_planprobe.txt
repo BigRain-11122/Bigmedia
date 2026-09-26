@@ -1,0 +1,20 @@
+{
+ "series": {
+  "intro": false,
+  "intro_s": 0.0,
+  "badge": true,
+  "id": "BS-001 EP.01"
+ },
+ "s45_dials": {
+  "h1_glow": true,
+  "scanlines": true,
+  "sys_status": true
+ },
+ "out": null,
+ "profile": "shipinhao",
+ "cards": null,
+ "srt": null,
+ "audio": null,
+ "duration": null,
+ "total_duration": null
+}

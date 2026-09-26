@@ -1,0 +1,4 @@
+cards=12/12
+line_diffs=0 last_end=58.81
+beats_compliance=True srt_compliance=True
+meta_order=BS-004-v15

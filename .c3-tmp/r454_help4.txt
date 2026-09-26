@@ -1,0 +1,30 @@
+usage: edit_craft.py [-h] --profile {bilibili,douyin,shipinhao} --cards CARDS
+                     --srt SRT [--bgvideo BGVIDEO] [--audio AUDIO] [--out OUT]
+                     [--grain GRAIN] [--series-badge] [--series-id SERIES_ID]
+                     [--series-intro] [--intro-s INTRO_S] [--h1-glow]
+                     [--scanlines] [--sys-status] [--plan-only]
+
+R-E platform-taste edit station
+
+options:
+  -h, --help            show this help message and exit
+  --profile {bilibili,douyin,shipinhao}
+  --cards CARDS
+  --srt SRT
+  --bgvideo BGVIDEO     legacy single-background footage; unused when cards
+                        declare per-beat visuals
+  --audio AUDIO
+  --out OUT
+  --grain GRAIN
+  --series-badge        S5.5 T2: top-right BigStream series badge, constant
+                        for the whole video
+  --series-id SERIES_ID
+                        S5.5 T5 series/episode id (e.g. 'BS-001 EP.01'); rides
+                        the badge line, required by --series-intro
+  --series-intro        S5.5 T1: 1.5-2s black series intro head (the <=60s
+                        short route uses the badge instead)
+  --intro-s INTRO_S     T1 intro head length in seconds (clamped 1.5-2.0)
+  --h1-glow             S4.5(1): H1 accent border glow (restrained tier)
+  --scanlines           S4.5(3): CRT scanline ambience (<=8% cap)
+  --sys-status          S4.5(2): per-cue sys.beat=NN t=MM:SS status line
+  --plan-only

@@ -1,0 +1,9 @@
+=== src/ai_feel_check.py ===
+usage: ai_feel_check.py --beats FILE --srt FILE [--json]
+
+=== src/platform_spec_check.py ===
+usage: platform_spec_check.py --video FILE --platform NAME
+
+=== src/edit_craft_check.py ===
+usage: edit_craft_check.py --plan FILE --srt FILE --profile NAME [--json]
+

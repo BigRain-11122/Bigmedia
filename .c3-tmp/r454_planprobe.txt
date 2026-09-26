@@ -1,0 +1,14 @@
+{
+ "profile": "shipinhao",
+ "series": {
+  "intro": false,
+  "intro_s": 0.0,
+  "badge": true,
+  "id": "BS-003 EP.03"
+ },
+ "s45_dials": {
+  "h1_glow": true,
+  "scanlines": true,
+  "sys_status": true
+ }
+}
