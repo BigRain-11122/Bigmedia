@@ -1,0 +1,10 @@
+H1 size 84 budget 10.95em | H2 size 44 budget 20.91em (ladder pick, zero-margin exclusion margin>=0.2em)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 002
+16.80 em  budget 20.91 em  margin +4.11em  single=True  量产开闸日 2026-09-24 · 晚 21:26
+20.00 em  budget 20.91 em  margin +0.91em  single=True  「要决策的自己科学决策，不要再问我了。」
+15.25 em  budget 20.91 em  margin +5.66em  single=True  老板 1 句话 · AI 当晚 7 决全落
+13.15 em  budget 20.91 em  margin +7.76em  single=True  6 件弹药解封 · 否决窗 7 天
+11.60 em  budget 20.91 em  margin +9.31em  single=True  开闸首夜 · 5 件成品入库
+16.10 em  budget 20.91 em  margin +4.81em  single=True  此后 0 问询 · 报告只报实况与已决
+subs   20.00 em  budget 24.21 em  margin +4.21em  基于硅基城市真实事件（量产开闸台账档案）
+EM_CHECK: ALL OK
