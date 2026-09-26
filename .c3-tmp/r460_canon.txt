@@ -1,0 +1,5 @@
+ledger_matches=29
+ledger_last_hit_ascii=- **??? 2026-09-27??? 03:07?**????=?? 899.8GB ???????? bigmo
+ledger_modes={'全司': 6, '六司': 3, 'BigStream': 29, '七线全司': 1, '八线全量': 2}
+decisions_nonempty=45
+last_log_tail=首窗 R432/R458/R459 三切片齐=每窗 ≥1 切片判据过·窗面提前满（窗关 09-29 21:40）·下窗 09-29 21:40 后开；④三探针复跑（本执行体）=board 0 FAIL（5 题 10 稿·5 in production）/readiness 3 阻塞皆外部 CEO 面+0 发现（46 renders 全注账）/loop_health 收账前 2 FAIL+21 WARN（FAIL①=heartbeat-outage 49min R425 同事件足迹已裁定·FAIL②=account-lag beats459>tick458=本断洞足迹·收账即平 R155/R156 先例）·21 WARN 皆在案史实；⑤例行件：global-benchmarks day3 ≤7 跳过（下期 ~10-01）·W40 周审明日开周（docs/audits/2026-W40-self-audit.md 缺任意轮补产）·月度统计注记首件 ≤09-30 挂账·T1 催办=已裁项停用口径·HQ-FEEDBACK F-20260927-03=点名核销载体非问题面·tokens:local=0（断洞恢复复核=web_fetch 2 刀+ffmpeg 本地实测·零本地模型调用·P-54⑤ 计量律）·发布锁=M5 账号物理件不变（未上线=未测量）。下轮=R460 生产轮序领（#67 DIGEST 编年史候选→#59 REACT 09-28 窗届日领→#63 图鉴 C-00030 锚轮首核 supply-gated→#72 素材消费面知悉挂账）。收账显式列文件 commit+push。

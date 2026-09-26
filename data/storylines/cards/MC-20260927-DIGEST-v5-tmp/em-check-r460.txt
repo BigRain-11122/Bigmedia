@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 005
+16.55 em  budget 23.00 em  margin +6.45em  single=True  节目重制日 2026-09-26 · 次日收官
+21.00 em  budget 23.00 em  margin +2.00em  single=True  「可视化表现要注意页面统一和措辞简单易懂，
+20.00 em  budget 23.00 em  margin +3.00em  single=True  现在媒体公司的节目做的很不好，统一优化」
+16.75 em  budget 23.00 em  margin +6.25em  single=True  直评 1 句 · 自审 4 维 · 立制 2 律
+14.10 em  budget 23.00 em  margin +8.90em  single=True  重制 4 件节目 · 全链走门收官
+17.90 em  budget 23.00 em  margin +5.10em  single=True  S1 门三连满分 · 参考线 8.0×4 持平顶
+13.70 em  budget 23.00 em  margin +9.30em  single=True  机检新引擎 · 297 项测试全绿
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（节目重制令台账档案）
+EM_CHECK: ALL OK
