@@ -1,0 +1,12 @@
+src_len=179 asr_len=180 sites=11 diff_chars=27
+replace src[25:27]='10' asr[25:26]='十'
+replace src[33:36]='读记忆' asr[32:34]='不计'
+replace src[37:40]='任务板' asr[35:38]='人物版'
+replace src[42:43]='写' asr[40:41]='血'
+replace src[46:49]='144' asr[44:49]='一百四十四'
+replace src[52:54]='19' asr[52:54]='十九'
+replace src[87:88]='零' asr[87:88]='名'
+replace src[117:119]='管钱' asr[117:119]='关键'
+replace src[127:129]='进化' asr[127:129]='计划'
+replace src[131:135]='0917' asr[131:136]='九点十七分'
+replace src[141:142]='志' asr[142:143]='制'
