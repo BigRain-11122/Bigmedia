@@ -1,0 +1,22 @@
+now=2026-09-26 20:12:32
+orders_top=README.md
+orders_new_after_anchor=['README.md']
+inserts_after_6e9d41f=0
+ledger_at_count=23 (anchor=23)
+ledger_tail=| P-2026-09-26-03 | 09-26 | **禁待命·自主运转令（法无禁止即可为）（P1·集团级常设律·CEO 令 2026-09-26 ~10:0x 原话「所有子公
+ledger_new_after_anchor=False
+decisions_nz_count=40 (anchor=40)
+decisions_tail=| 2026-09-26 | D-20260926-11 回执计数判据重申（P-51 适用）+技能动员令计数修正 3/8 | FluxVerse F-20260926-05+夜班「
+anchor_C-00030=False
+anchor_C-00031=False
+anchors_tail3=C-00027.md,C-00028.md,C-00029.md
+daily_brief_0926=True
+storylines_novel_today_writes=0
+storylines_audio_today_writes=0
+storylines_comic_today_writes=0
+index_lock=False
+HEAD=6e9d41f
+board_exit=0
+readiness_exit=1
+loop_health_exit=0
+probe_file=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r423_probe.txt
