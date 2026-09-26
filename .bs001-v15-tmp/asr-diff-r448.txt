@@ -1,0 +1,12 @@
+src_len=198 asr_len=197 sites=11 diff_chars=18
+replace src[11:13]='一名' asr[11:13]='义民'
+replace src[50:51]='8' asr[50:51]='八'
+replace src[54:55]='0' asr[54:55]='零'
+replace src[58:59]='证' asr[58:59]='正'
+replace src[61:62]='沓' asr[61:62]='达'
+replace src[76:77]='废' asr[76:77]='费'
+replace src[78:79]='废' asr[78:79]='费'
+replace src[81:83]='瓶酒' asr[81:83]='平久'
+replace src[102:103]='剪' asr[102:103]='捡'
+replace src[117:119]='10' asr[117:118]='十'
+replace src[123:128]='醒找活记账' asr[122:127]='行赵博继掌'
