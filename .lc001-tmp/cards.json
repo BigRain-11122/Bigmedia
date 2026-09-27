@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\lc001\\voiceover-v5.beats.txt",
+    "order": "LC-001-v5",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.31,
+      "lines": [
+        "全城唯一",
+        "按涨跌调整菜谱"
+      ]
+    },
+    {
+      "start": 5.31,
+      "end": 10.52,
+      "lines": [
+        "居民档案",
+        "徐根福 · 66 岁 · 食堂大厨"
+      ]
+    },
+    {
+      "start": 10.52,
+      "end": 14.57,
+      "lines": [
+        "不谈数字",
+        "算力楼里唯一 · 只谈火候"
+      ]
+    },
+    {
+      "start": 14.57,
+      "end": 17.64,
+      "lines": [
+        "节律",
+        "收盘铃 = 开饭铃"
+      ]
+    },
+    {
+      "start": 17.64,
+      "end": 21.28,
+      "lines": [
+        "绿盘日",
+        "例汤免费"
+      ]
+    },
+    {
+      "start": 21.28,
+      "end": 28.73,
+      "lines": [
+        "红盘日",
+        "冷静甜汤 · 小心烫"
+      ]
+    },
+    {
+      "start": 28.73,
+      "end": 32.8,
+      "lines": [
+        "旧影像转生",
+        "1980 · 国营食堂老照片"
+      ]
+    },
+    {
+      "start": 32.8,
+      "end": 40.42,
+      "lines": [
+        "起源",
+        "大跌年 · 汤送工位"
+      ]
+    },
+    {
+      "start": 40.42,
+      "end": 45.4,
+      "lines": [
+        "他的风控部",
+        "人吃饱了才有底气"
+      ]
+    },
+    {
+      "start": 45.4,
+      "end": 49.62,
+      "lines": [
+        "双日志入档",
+        "食堂日志 · 行情日志"
+      ]
+    },
+    {
+      "start": 49.62,
+      "end": 53.72,
+      "lines": [
+        "信条",
+        "行情再绿 · 汤是热的"
+      ]
+    },
+    {
+      "start": 53.72,
+      "end": 58.16,
+      "lines": [
+        "人物全档案",
+        "公众号 · 转给看盘的人"
+      ]
+    }
+  ]
+}

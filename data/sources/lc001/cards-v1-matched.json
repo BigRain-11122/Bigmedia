@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc001\\voiceover-v5.beats.txt",
+  "order": "LC-001-v5",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-001 拆条形态=源卡即证据：12 拍拍稿逐拍引源卡/锚卡 C-00016 字段，画面=被读档案本体（F-026 成品卡 660px 上区+zoompan 微动）+b9 台账实物；对位 12/12·同源多用逐拍注记"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.31,
+   "lines": [
+    "全城唯一",
+    "按涨跌调整菜谱"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡钩子行「全城唯一按涨跌调整菜谱的人」在帧（拆条形态=源卡即证据·F-026 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 5.31,
+   "end": 10.52,
+   "lines": [
+    "居民档案",
+    "徐根福 · 66 岁 · 食堂大厨"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡档案行 C-00016·徐根福/碳基市民·弄堂派·男·66 岁/QUANT 城·K线广场·食堂大厨在帧=居民档案面"
+   }
+  },
+  {
+   "start": 10.52,
+   "end": 14.57,
+   "lines": [
+    "不谈数字",
+    "算力楼里唯一 · 只谈火候"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00016 语言/性格字段「火候」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 14.57,
+   "end": 17.64,
+   "lines": [
+    "节律",
+    "收盘铃 = 开饭铃"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00016 行为/节律字段展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 17.64,
+   "end": 21.28,
+   "lines": [
+    "绿盘日",
+    "例汤免费"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡钩子行「按涨跌调整菜谱」前提在帧（绿盘日菜单拍=钩子行展开）"
+   }
+  },
+  {
+   "start": 21.28,
+   "end": 28.73,
+   "lines": [
+    "红盘日",
+    "冷静甜汤 · 小心烫"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡钩子行前提在帧（红盘日菜单拍=钩子行展开）"
+   }
+  },
+  {
+   "start": 28.73,
+   "end": 32.8,
+   "lines": [
+    "旧影像转生",
+    "1980 · 国营食堂老照片"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00016 经历字段·1980 老照片展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 32.8,
+   "end": 40.42,
+   "lines": [
+    "起源",
+    "大跌年 · 汤送工位"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00016 起源字段展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 40.42,
+   "end": 45.4,
+   "lines": [
+    "他的风控部",
+    "人吃饱了才有底气"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00016 思想字段展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 45.4,
+   "end": 49.62,
+   "lines": [
+    "双日志入档",
+    "食堂日志 · 行情日志"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "Station Reviews 台账在帧=双日志入档直接证据（台账=档案实物面）"
+   }
+  },
+  {
+   "start": 49.62,
+   "end": 53.72,
+   "lines": [
+    "信条",
+    "行情再绿 · 汤是热的"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡信条行「行情再绿，汤是热的。」在帧（verbatim 直引）"
+   }
+  },
+  {
+   "start": 53.72,
+   "end": 58.16,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给看盘的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v7-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00016）」在帧）"
+   }
+  }
+ ]
+}
