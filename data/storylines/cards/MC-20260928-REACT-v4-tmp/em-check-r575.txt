@@ -1,0 +1,18 @@
+DAILY   5. 钓鱼被鱼揍了  FOUND  (bilibili-popular source; UP-name/rank metadata desensitized, README-ledger only)
+ANCHOR  C-00014  creed field verbatim  「回撤教人做人，行情教人谦虚。」  (job=量化策略研究员, non-honor seat, registered field)
+POOL    axes/逍遥/weekend/2  ->  逍遥轴「云淡风轻时，鱼上钩未急」
+POOL    axes/秩序/weekend/3  ->  秩序轴「风控这事儿，得小心些，稳妥些」
+POOL    sprite/weekend/7  ->  像素灵池「喵呜一声，懒散午后」
+REACT   single-bucket discipline: weekend bucket, 3-axis mapping (R309 law reuse)
+
+H1 size 84 budget 10.95em | H2 size 32 budget 28.75em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 757px vs subs top 970px gap +213px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市速报 004
+15.10 em  budget 28.75 em  margin +13.65em  single=True  今日热点 · B站热门 2026-09-28
+6.00  em  budget 28.75 em  margin +22.75em  single=True  钓鱼被鱼揍了
+17.00 em  budget 28.75 em  margin +11.75em  single=True  逍遥轴：「云淡风轻时，鱼上钩未急」
+20.00 em  budget 28.75 em  margin +8.75em  single=True  秩序轴：「风控这事儿，得小心些，稳妥些」
+16.00 em  budget 28.75 em  margin +12.75em  single=True  像素灵池：「喵呜一声，懒散午后」
+26.00 em  budget 28.75 em  margin +2.75em  single=True  量化策略研究员信条：「回撤教人做人，行情教人谦虚。」
+subs   23.10 em  budget 24.21 em  margin +1.11em  热点转述自B站热门·反应与信条皆取自虚构城市档案
+EM_CHECK: ALL OK
