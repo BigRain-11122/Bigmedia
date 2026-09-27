@@ -1,0 +1,10 @@
+tick=598
+ts=2026-09-28 04:03:28
+task_len=60 task=R598: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 2/6=R597-R602·本窗不 co
+production=open
+log_count=621
+log_tail_head=2026-09-28 04:03 R598: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 2/6=R597-R602·本窗不 commit〔满 6 或跨日 09-29 00:0
+log_tail_is_r598=True
+focus_head=R599: 快速路径五查首行——锚=orders 35〔13:53:11〕·ledger 五模式 31〔03:14:32·行级基线=.c3-tmp/r598_lednew5.txt〕·decision
+export_ts=2026-09-28T04:03:28+08:00
+os_row_head=tick 598：R598（idle-fast 快速路径·五静+探针定谳绿——orders 35/ledger 五模式 31/decisions 63 三锚未动
