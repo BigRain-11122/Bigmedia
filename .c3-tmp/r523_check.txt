@@ -1,0 +1,27 @@
+now=2026-09-27 15:23:01
+orders md total=36 O-prefix=35 (anchor total 36 / O- 35)
+  top: O-20260927-1050-HQ-C.md mtime=09-27 13:53:11
+  top: O-20260925-1931-HQ-C.md mtime=09-25 19:47:21
+  top: O-20260925-1756-bm-a.md mtime=09-25 17:57:11
+orders_edited_since_anchor=NONE
+ledger five-pattern lines=31 (anchor=31)
+  L146: | P-2026-09-27-07 | 09-27 | **闲置司自驱动员令：BigStream+BigDomain 调
+  L200: - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmo
+decisions non-empty lines=56 (anchor=56)
+index.lock=False
+state production=open tick=522 ts=2026-09-27 15:15:35
+census anchors top=C-00029.md C-00030=False C-00031=False
+  footage: census-card-v7-vertical.mp4 mtime=09-27 12:32
+  footage: biggame-console-probe-r283.png mtime=09-25 19:46
+  footage: silicon-dashboard-top-raw.mp4 mtime=09-25 14:06
+storylines/video newest=09-27 12:49
+storylines/novel newest=09-25 17:58
+storylines/audio newest=09-25 19:35
+storylines/comic newest=09-25 09:09
+data/intel/daily/2026-09-27.md exists=True mtime=09-27 00:03:09
+data/intel/daily/2026-09-28.md exists=False mtime=-
+src/os/backlog.md exists=True mtime=09-27 14:35:46
+HQ-FEEDBACK.md exists=True mtime=09-27 12:26:44
+.sc003-tmp files=43 newest=09-27 11:48
+.sc003-v3-tmp files=31 newest=09-27 11:47
+W40 self-audit exists=False

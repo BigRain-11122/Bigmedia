@@ -1,0 +1,7 @@
+state: tick=520 ts=2026-09-27 14:54:58
+task_len=60 task=idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 2/6 不 commit）——①无新令（order
+log_tail=2026-09-27 14:54 R520: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 2/6 不 commit）——①无新令（or
+focus=R521: 快速路径首查（#78 素材实录到位核验/REACT 09-28 热点窗届日领〔daily_brief 09-28 缺则先补产〕/W40 周自审开周+
+export: ts=2026-09-27T14:54:58+08:00 results_ids=['520', '519', '518', '517', '516', '515', '35']
+eng_s_head=R520: idle-fast (fast path - f
+outs0_head=tick 520：R520（idle-fast 空转快速路径轮·五静+探针定谳绿·零生产件·并窗轮 2/6 不 comm
