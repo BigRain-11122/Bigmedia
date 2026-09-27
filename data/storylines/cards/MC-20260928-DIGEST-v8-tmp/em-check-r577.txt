@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 008
+16.50 em  budget 23.00 em  margin +6.50em  single=True  决策委员会成立 2026-09-28 节首立
+11.15 em  budget 23.00 em  margin +11.85em  single=True  「平票重议再平升 CEO」
+20.55 em  budget 23.00 em  margin +2.45em  single=True  7 席记名投票 · 普通过 ≥4/7 · 重大件 ≥5/7
+17.90 em  budget 23.00 em  margin +5.10em  single=True  C-01 定价批：4 席已收 · 议题③同向 A
+18.00 em  budget 23.00 em  margin +5.00em  single=True  C-02 瘦身案补登：规则 65 vs 预算 20
+15.65 em  budget 23.00 em  margin +7.35em  single=True  双案意见窗 48 小时 · 风控席必议
+14.70 em  budget 23.00 em  margin +8.30em  single=True  CEO 列席 · 翻案权与终审权不变
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（决策委员会台账档案）
+EM_CHECK: ALL OK
