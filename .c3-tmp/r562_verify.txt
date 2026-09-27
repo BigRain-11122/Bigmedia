@@ -1,0 +1,8 @@
+STATE_OK tick=562 ts=2026-09-27 21:53:23 log_n=581
+EXPORT_OK ts=2026-09-27T21:53:23+08:00 eng_s=1 eng_s_type=int
+TASK=idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 4/6 不 commit）——①无新令（order
+LASTLOG_HEAD=2026-09-27 21:53 R562: idle-fast（快速路径·五静
+LASTLOG_HAS_R562=True
+LASTLOG_COUNT_R562=1
+FOCUS_HEAD=R563: 快速路径首查（#78 素材实录到位核验/OH 切片 4 09-29 
+FOCUS_HAS_R563=True
