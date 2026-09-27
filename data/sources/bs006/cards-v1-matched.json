@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\bs006\\voiceover-v5.beats.txt",
+  "order": "BS-006-v5",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "BS-006 编辑诚实机制件：题材对位=台账/审计面——looplog（BS-loop.log 系统日志终端）×5+reviewsdoc（Station Reviews 站审台账）×3+editgrid（本片自产章节帧网格）×2+cards-only×2；对位 10/12=0.83·同源多用逐拍注记·素材探针先行定谳（probe-src-tile.png）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.84,
+   "lines": [
+    "0 交底",
+    "开业第一天 · 全部真实数据"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "系统日志本体在帧（BS-loop.log 终端=state+心跳台账实况·拍文「系统日志」字面直证·开业时点公司实况）"
+   }
+  },
+  {
+   "start": 5.84,
+   "end": 10.59,
+   "lines": [
+    "为什么可信",
+    "一切落库 · 每分钟能审计"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "循环日志台账在帧（一切落库·每分钟轮询审计的运行实况·同源多用注记）"
+   }
+  },
+  {
+   "start": 10.59,
+   "end": 15.97,
+   "lines": [
+    "规矩一",
+    "未上线 = 未测量"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "规矩宣示拍：上线状态判定无专属画面可证（账号面=台账非画面素材·探针证实日志无「未上线」字样），字卡即门牌"
+   }
+  },
+  {
+   "start": 15.97,
+   "end": 20.55,
+   "lines": [
+    "规矩二",
+    "无来源 = 不发布"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "Station Reviews 台账表格在帧（证据材料列=来源审查留痕·「无来源不发布」的执行记录）"
+   }
+  },
+  {
+   "start": 20.55,
+   "end": 23.92,
+   "lines": [
+    "规矩三",
+    "标题承诺 = 内容交付"
+   ],
+   "visual": {
+    "source": "data/sources/footage/editgrid-vertical.mp4",
+    "req": "剪辑验图帧网格在帧（本片同族章节帧=标题承诺的内容交付实物·自指注记）"
+   }
+  },
+  {
+   "start": 23.92,
+   "end": 28.76,
+   "lines": [
+    "规矩四",
+    "AIGC 依法打标识"
+   ],
+   "visual": {
+    "source": "data/sources/footage/editgrid-vertical.mp4",
+    "req": "自产帧网格=AI 生成内容本体在帧；成片全帧由 renderer 常驻烧录 [AIGC·AI 生成内容] 标识=依法标识在位直证（自指素材·标识位随成片验图复核）"
+   }
+  },
+  {
+   "start": 28.76,
+   "end": 34.01,
+   "lines": [
+    "同一道门",
+    "标题党检测 · 来源完备 · 脱敏审查"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "站审台账 verdict 行在帧（同一道门过站留痕=标题党/来源/脱敏审查执行面·同源多用注记）"
+   }
+  },
+  {
+   "start": 34.01,
+   "end": 39.01,
+   "lines": [
+    "周对账",
+    "后台导出 · 每周对表"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "循环日志健康对账读数在帧（Loop health 行=定期对表实况·「每周对表」节律直证·同源多用注记）"
+   }
+  },
+  {
+   "start": 39.01,
+   "end": 41.33,
+   "lines": [
+    "反愿景",
+    "不发愿景数字"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "台账实况读数在帧（只记实测数字·愿景数字不进账·「不发愿景数字」的反面证据面·同源多用注记）"
+   }
+  },
+  {
+   "start": 41.33,
+   "end": 46.19,
+   "lines": [
+    "干净起点",
+    "起点 + 机制本身"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "循环机制本体在运转（state+心跳台账=「这套机制本身」直证·同源多用注记）"
+   }
+  },
+  {
+   "start": 46.19,
+   "end": 52.38,
+   "lines": [
+    "规矩即门",
+    "门不过 · 字不出"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "门禁台账在帧（不过站不流转留痕=「门不过字不出」执行记录·同源多用注记）"
+   }
+  },
+  {
+   "start": 52.38,
+   "end": 57.32,
+   "lines": [
+    "完整实录",
+    "公众号 · 转给被吹牛伤过的人"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "CTA 常规拍（完整实录指引·F-001 v15 b11 同位惯例·字卡收尾）"
+   }
+  }
+ ]
+}
