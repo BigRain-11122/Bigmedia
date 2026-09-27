@@ -1,0 +1,32 @@
+ORDERS_COUNT=35
+ORDERS_LATEST=O-20260927-1050-HQ-C.md
+ORDERS_LATEST_MTIME=2026-09-27 13:53:11
+ORDERS_EDITED_SINCE_ANCHOR=O-20260927-1050-HQ-C.md
+LEDGER_FIVEMODE_LINES=31
+LEDGER_MTIME=2026-09-28 00:43:06
+DECISIONS_NONEMPTY=63
+DECISIONS_MTIME=2026-09-28 00:10:41
+LEDGER_ROWDIFF_NEW=0 GONE=0
+INDEX_LOCK=False
+STATE_PRODUCTION=open TICK=584
+MTIME|src/os/backlog.md|09-28 00:35:50
+MTIME|HQ-FEEDBACK.md|09-28 00:28:39
+MTIME|docs/reviews/station-reviews.md|09-28 00:45:35
+MTIME|output/renders/README.md|09-27 13:53:40
+MTIME|output/finished.md|09-28 00:45:18
+MTIME|data/storylines/video/README.md|09-27 11:38:36
+MTIME|data/storylines/cards/README.md|09-28 00:45:18
+MTIME|docs/status-export.json|09-28 01:45:11
+STORY|video|09-27 12:49|SC-003-01-v1.md
+STORY|novel|09-25 17:58|SC-001-04-v3.md
+STORY|audio|09-25 19:35|sc001-04-v3-tmp\r282_close.py
+STORY|comic|09-25 09:09|SC-002-02-v1.md
+ANCHORS_COUNT=20 TAIL3=C-00027.md,C-00028.md,C-00029.md
+ANCHOR_C30=False ANCHOR_C31=False
+FOOTAGE_TOP3=census-card-v7-vertical.mp4@09-27 12:32; biggame-console-probe-r283.png@09-25 19:46; silicon-dashboard-top-raw.mp4@09-25 14:06
+DAILY_0928=True
+DAILY_0929=False
+AUDITS=2026-09-24-company-audit.md,2026-09-26-program-quality-audit.md,2026-W39-self-audit.md,2026-W40-self-audit.md,packs
+GIT_HEAD=3679fcb R579-R584 idle-fast batch (window 6/6): five checks quiet all six rounds - orders 35 / ledger five-mode 31 row-diff zero / decisions 63 anchors unmoved; production=open self-heal held; CENSUS C-00030/31 supply-gated, SC-003-01 footage gate held, W40 audit + monthly stats + daily 09-28 in case; probes in-case green (board 0F / readiness 3 external blockers 0F / loop 2F in-case + 25W in-case); window resets R585-R590, day boundary 09-29 00:00 first [via bm-a]
+GIT_MODIFIED=0 UNTRACKED=47
+GIT_MODIFIED_LIST=
