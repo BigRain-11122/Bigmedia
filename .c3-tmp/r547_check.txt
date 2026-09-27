@@ -1,0 +1,29 @@
+ORDERS_COUNT=35
+ORDERS_LATEST=O-20260927-1050-HQ-C.md
+ORDERS_LATEST_MTIME=2026-09-27 13:53:11
+ORDERS_EDITED_SINCE_ANCHOR=O-20260927-1050-HQ-C.md
+LEDGER_FIVEMODE_LINES=31
+LEDGER_MTIME=2026-09-27 15:15:21
+DECISIONS_NONEMPTY=56
+DECISIONS_MTIME=2026-09-27 15:14:19
+INDEX_LOCK=False
+STATE_PRODUCTION=open TICK=546
+MTIME|src/os/backlog.md|09-27 14:35:46
+MTIME|HQ-FEEDBACK.md|09-27 12:26:44
+MTIME|docs/reviews/station-reviews.md|09-27 14:35:58
+MTIME|output/renders/README.md|09-27 13:53:40
+MTIME|output/finished.md|09-27 14:35:36
+MTIME|data/storylines/video/README.md|09-27 11:38:36
+MTIME|data/storylines/cards/README.md|09-27 14:35:41
+STORY|video|09-27 12:49|SC-003-01-v1.md
+STORY|novel|09-25 17:58|SC-001-04-v3.md
+STORY|audio|09-25 19:35|sc001-04-v3-tmp\r282_close.py
+STORY|comic|09-25 09:09|SC-002-02-v1.md
+ANCHORS_COUNT=20 TAIL3=C-00027.md,C-00028.md,C-00029.md
+ANCHOR_C30=False ANCHOR_C31=False
+FOOTAGE_TOP3=census-card-v7-vertical.mp4@09-27 12:32; biggame-console-probe-r283.png@09-25 19:46; silicon-dashboard-top-raw.mp4@09-25 14:06
+DAILY_0927=True
+AUDITS=2026-09-24-company-audit.md,2026-09-26-program-quality-audit.md,2026-W39-self-audit.md,packs
+GIT_HEAD=d0940b5 R541-R546 idle-fast batch: six quiet rounds (ledger 31=anchor, decisions 56=anchor, orders 35 none+unedited since O-1050 13:53 footprint, #78 FluxVerse capture not arrived stays blocked, #63 C-00030/31 supply-gated, #59 REACT 09-28 + W40 weekly-audit + monthly-stats note open 09-28, probes green in-case; account-lag +1 = in-flight done-beat transient, new-break lag>=2 not broken; op-reds all in-round closed) window 6/6 full -> batch commit, window reset 1/6 (new window R547-R552) [via bm-a]
+GIT_MODIFIED=0 UNTRACKED=43
+GIT_MODIFIED_LIST=
