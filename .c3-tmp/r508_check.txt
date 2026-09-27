@@ -1,0 +1,12 @@
+orders_count 35
+orders_latest O-20260927-1050-HQ-C.md mtime 11:38:36
+orders_edited_since_anchor ['O-20260927-1050-HQ-C.md']
+ledger_fivemode_rows 30 (anchor 30)
+ledger_recent_rows | P-2026-09-26-18 | 09-26 | **集团调研部门建制令：九司调研部成立/复用+前沿敏感学习+统计信息+落地执行闭环**（P1·CEO 令 | | P-2026-09-27-02 | 09-27 | **商业化付费点与定价包装体系设计令**（CEO 令 ~08:0x「商业化公司，全面了解现在的业务架构， | - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在
+decisions_nonblank 45 (anchor 45)
+index_lock False
+production_open True
+storyline_novel newest SC-001-04-v3.md 09-25 17:58
+storyline_audio newest r282_close.py 09-25 19:35
+storyline_comic newest SC-002-02-v1.md 09-25 09:09
+biglife_interchat_hits 0
