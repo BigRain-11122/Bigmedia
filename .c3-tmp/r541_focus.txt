@@ -1,0 +1,8 @@
+loop = BigStream-OSLoop
+mode = o-2126-production-open
+mandate = src/os/iteration_prompt.txt
+protocol = docs/os-protocol.md
+backlog = src/os/backlog.md
+focus = R541: 快速路径首查（#78 素材实录到位核验/REACT 09-28 热点窗届日领〔daily_brief 09-28 缺则先补产→REACT 轴位映射律〕/W40 周自审开周+月度统计注记首件 ≤09-30/OH 切片 4 09-29 21:40 后开/#80 benchmarks 10-01 并窗/新令/集团转办——ledger 五模式锚=31〔R534 修正定谳·探针 tag 匹配须 unicode-escape 禁中文字面量〕——全静即 idle-fast 并窗轮 1/6〔新窗 R541-R546·跨日边界 09-28 00:00 先到即收
+opened_by = O-20260924-2126-bm-a
+installed = 2026-09-23

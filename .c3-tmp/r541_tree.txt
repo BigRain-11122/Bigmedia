@@ -1,0 +1,4 @@
+MODIFIED:
+ M docs/status-export.json
+ M src/os/state.json
+HEAD: 4d8d3df R535-R540 idle-fast batch: six quiet rounds (ledger 31=anchor, decisions 56=anchor, orders 35 none+unedited since O-1050 13:53 footprint, #78 FluxVerse capture not arrived stays blocked, #63 C-00030/31 supply-gated, #59 REACT 09-28 + W40 weekly-audit + monthly-stats note open 09-28, probes green in-case; account-lag +1 = in-flight done-beat transient, new-break lag>=2 not broken; op-reds all in-round closed) window 6/6 full -> batch commit, window reset 1/6 (new window R541-R546) [via bm-a]
