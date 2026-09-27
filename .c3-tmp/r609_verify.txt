@@ -1,0 +1,14 @@
+TICK=609
+TS=2026-09-28 05:53:18
+TASK=R609: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 1/6=R609-R614 首轮·本窗不
+TASK_LEN=60
+LOG_COUNT=632
+LOG_TAIL_HEAD=2026-09-28 05:53 R609: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 1/6=R609-R614 首轮·本窗不 co
+LOG_TAIL_HAS_R608=False
+LOG_TAIL_TS_PREFIX=2026-09-28 05:53
+FOCUS_HEAD=R610: 快速路径五查首行——锚=orders 35〔13:53:11〕·ledger 五模式 31〔03:14:32·行级基线=.c3-tmp/r609_lednew5.txt〕·decisions 63〔00:10:41〕——无在飞件
+FOCUS_HAS_R609_BASE=True
+FOCUS_HAS_WINDOW_RESET=False
+EXPORT_TS=2026-09-28T05:53:18+08:00
+EXPORT_MTIME=2026-09-28 05:53:18
+EXPORT_OS_ROW=tick 609：R609（idle-fast 快速路径·五静+探针定谳绿——orders 35/ledger 五模式 31/decisions 63 三锚未动·行级 diff 零新·#63 C-00

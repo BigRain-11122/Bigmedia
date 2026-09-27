@@ -1,0 +1,16 @@
+TICK=611
+TS=2026-09-28 06:13:22
+TASK=R611: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 3/6=R609-R614·本窗不 co
+TASK_LEN=60
+LOG_COUNT=634
+LOG_TAIL_HEAD=2026-09-28 06:13 R611: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 3/6=R609-R614·本窗不 commi
+LOG_TAIL_HAS_R611=True
+LOG_TAIL_TS_PREFIX=2026-09-28 06:13
+FOCUS_HEAD=R612: 快速路径五查首行——锚=orders 35〔13:53:11〕·ledger 五模式 31〔03:14:32·行级基线=.c3-tmp/r611_lednew5.txt〕·decisions 63〔00:10:41〕——无在飞件
+FOCUS_HAS_R611_BASE=True
+FOCUS_HAS_WINDOW_4_6=True
+EXPORT_TS=2026-09-28T06:13:22+08:00
+EXPORT_MTIME=2026-09-28 06:13:22
+EXPORT_OS_ROW=tick 611：R611（idle-fast 快速路径·五静+探针定谳绿——orders 35/ledger 五模式 31/decisions 63 三锚未动·行级 diff 零新·#63 C-00
+LOOP_RC=1
+ACCOUNT_LAG_LINES=NONE
