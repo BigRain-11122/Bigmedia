@@ -1,0 +1,26 @@
+ORDERS_COUNT=35
+ORDERS_LATEST=O-20260927-1050-HQ-C.md
+ORDERS_LATEST_MTIME=2026-09-27 13:53:11
+ORDERS_EDITED_SINCE_ANCHOR=O-20260927-1050-HQ-C.md
+LEDGER_FIVEMODE_LINES=31
+DECISIONS_NONEMPTY=56
+INDEX_LOCK=False
+STATE_PRODUCTION=open TICK=535
+MTIME|src/os/backlog.md|09-27 14:35:46
+MTIME|HQ-FEEDBACK.md|09-27 12:26:44
+MTIME|docs/reviews/station-reviews.md|09-27 14:35:58
+MTIME|output/renders/README.md|09-27 13:53:40
+MTIME|output/finished.md|09-27 14:35:36
+MTIME|data/storylines/video/README.md|09-27 11:38:36
+STORY|video|09-27 12:49|SC-003-01-v1.md
+STORY|novel|09-25 17:58|SC-001-04-v3.md
+STORY|audio|09-25 19:35|sc001-04-v3-tmp\r282_close.py
+STORY|comic|09-25 09:09|SC-002-02-v1.md
+ANCHORS_COUNT=20 TAIL3=C-00027.md,C-00028.md,C-00029.md
+ANCHOR_C30=False ANCHOR_C31=False
+FOOTAGE_TOP3=census-card-v7-vertical.mp4@09-27 12:32; biggame-console-probe-r283.png@09-25 19:46; silicon-dashboard-top-raw.mp4@09-25 14:06
+DAILY_0927=True
+AUDITS=2026-09-24-company-audit.md,2026-09-26-program-quality-audit.md,2026-W39-self-audit.md,packs
+GIT_HEAD=ddec465 R531-R534 window close: idle-fast x2 (R531-R532) + R533 interrupted-attempt hole fix (double-record, tick 532->534) + ledger five-mode anchor correction 22->31 (r531/r532 probe tags corrupted to '?' = count 22 artifact; ledger mtime unchanged 15:15:21 = group never rewrote; 31 dumped rows all historical = zero new transfers; probe-script law: five-mode tags via unicode escapes) + P-61 export refresh; probes green in-case [via bm-a]
+GIT_MODIFIED=2 UNTRACKED=49
+GIT_MODIFIED_LIST=M docs/status-export.json; M src/os/state.json
