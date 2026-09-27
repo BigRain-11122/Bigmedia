@@ -73,6 +73,12 @@ FLOW_LINE_RE = re.compile(FLOW_MARKER + r"[\uff1a:]\s*([^\uff1b;\n]+)")
 
 TEST_MARK = "\u6d4b\u8bd5\u4ef6\u00b7\u975e\u6210\u54c1"  # test-piece mark
 PRODUCT_MARK = "\u6210\u54c1\u00b7\u6279\u6b21"  # production-piece mark (D-BS-06 gate-open era; covers .mp4 only rows)
+# slot-filled production piece (2026-09-27 R512 era): release-schedule
+# D-slot pre-production goods (LC-001 D15 first case) are a fifth legal
+# state - "production.slot-filled" cells. Kept as a distinct full mark so
+# prose lines that merely say "落位" without the 成品 prefix stay
+# unannotated (false-hit guard).
+PRODUCT_SLOT_MARK = "\u6210\u54c1\u00b7\u843d\u4f4d"  # slot-filled production mark
 # superseded historical piece (2026-09-25 #23 v14 batch era): rectification
 # re-renders replace registered goods but the old mp4s stay on disk as
 # historical archive rows - "superseded by <new>" cells are a third legal
@@ -188,6 +194,7 @@ def parse_renders(renders_dir, ledger_path):
             for m in MEDIA_RE.finditer(line):
                 name = m.group(0).lower()
                 ok = (TEST_MARK in line or PRODUCT_MARK in line
+                      or PRODUCT_SLOT_MARK in line
                       or (SUPERSEDED_A in line and SUPERSEDED_B in line)
                       or (DISPOSED_A in line and DISPOSED_B in line))
                 seen[name] = seen.get(name, False) or ok

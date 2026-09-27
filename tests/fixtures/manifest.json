@@ -30,5 +30,6 @@
   "readiness_renders_stale": "readiness/renders_ledger_stale.md",
   "readiness_renders_product": "readiness/renders_ledger_product.md",
   "readiness_renders_superseded": "readiness/renders_ledger_superseded.md",
-  "readiness_renders_disposed": "readiness/renders_ledger_disposed.md"
+  "readiness_renders_disposed": "readiness/renders_ledger_disposed.md",
+  "readiness_renders_product_slot": "readiness/renders_ledger_product_slot.md"
 }

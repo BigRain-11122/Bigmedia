@@ -189,6 +189,20 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(marks["gamma.mp4"], True)
         self.assertEqual(marks["delta.mp4"], False)
 
+    def test_product_slot_mark_passes_and_prose_guard(self):
+        # R512 release-schedule D-slot era: pre-production goods registered
+        # into a schedule slot (LC-001 D15 first case) are a fifth legal
+        # state ("slot-filled production" cells), while prose lines that
+        # merely say the slot was filled without the production prefix
+        # stay unannotated (false-hit guard).
+        d = make_renders(self, ["gamma.mp4", "delta.mp4"],
+                         "readiness_renders_product_slot")
+        rows, findings = readiness.parse_renders(d, d / "README.md")
+        self.assertEqual(fail_codes(findings), {"render-unannot"})
+        marks = dict(rows)
+        self.assertEqual(marks["gamma.mp4"], True)
+        self.assertEqual(marks["delta.mp4"], False)
+
     def test_missing_ledger_fails(self):
         d = make_renders(self, ["alpha.mp4"], None)
         rows, findings = readiness.parse_renders(d, d / "README.md")

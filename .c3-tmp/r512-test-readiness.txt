@@ -1,0 +1,11 @@
+﻿python : ............................
+At line:1 char:1
++ python -m unittest tests.test_readiness 2>&1 | Out-File -Encoding utf ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (............................:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+----------------------------------------------------------------------
+Ran 28 tests in 0.095s
+
+OK
