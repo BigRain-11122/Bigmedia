@@ -1,0 +1,22 @@
+now=2026-09-27 08:02:41
+orders_o_count=34 anchor=O-20260925-1931-HQ-C.md mtime=19:47:21
+orders_edited_since_anchor=NONE
+orders_top_mtime=09-25 19:47:21 O-20260925-1931-HQ-C.md
+orders_top_mtime=09-25 17:57:11 O-20260925-1756-bm-a.md
+orders_top_mtime=09-25 17:21:47 O-20260925-1720-bm-a.md
+ledger_lines=29 anchor=29
+ledger_last_hit_ascii=- **??? 2026-09-27??? 03:07?**????=?? 899.8GB ???????? bigmo
+ledger_modes={'全司': 6, '六司': 3, 'BigStream': 29, '七线全司': 1, '八线全量': 2}
+decisions_nonempty=45 anchor=45
+index_lock_exists=False
+anchors_total=20 tail3=['C-00027.md', 'C-00028.md', 'C-00029.md']
+anchor_c00030=False anchor_c00031=False
+storylines_novel_new_since_r485=0
+storylines_audio_new_since_r485=0
+storylines_comic_new_since_r485=0
+production=open tick=485
+daily_0927=True daily_0928=False
+audits_tail3=['2026-09-24-company-audit.md', '2026-09-26-program-quality-audit.md', '2026-W39-self-audit.md']
+w40_audit=False
+git_head=897fd23 R475-R480 idle-fast batch: six quiet rounds (ledger 29=anchor, decisions 45=anchor, orders none+unedited, C-00030/31 anchor absent supply-gated, REACT-0928/W40-audit/monthl
+inserts_after_897fd23=0

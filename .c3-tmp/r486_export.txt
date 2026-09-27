@@ -1,0 +1,8 @@
+state_json_valid=True tick=486 log_entries=499 ts=2026-09-27 08:04:06
+log_tail_head=2026-09-27 08:04 R486: idle-fast（快速路径·五静
+task_prefix60=idle-fast（快速路径·五静+探针
+outs0_before=['OS 循环', 'tick 485·R485（idle-fast ', 'tick 484·R484（idle-fast ']
+outs0_after=['OS 循环', 'tick 486·R486（idle-fast ', 'tick 485·R485（idle-fast ']
+export_json_valid=True export_ts=2026-09-27T08:05:08+08:00
+export_outs0_ticks=['OS 循环', 'tick 486·R48', 'tick 485·R48']
+export_results0=486
