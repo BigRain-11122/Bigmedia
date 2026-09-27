@@ -1,0 +1,14 @@
+orders: count=35 top=O-20260927-1050-HQ-C.md mtime=2026-09-27 13:53:11.395199
+orders new/edited since R511 anchor: [('O-20260927-1050-HQ-C.md', datetime.datetime(2026, 9, 27, 13, 53, 11, 395199))]
+ledger five-mode lines=31 (anchor 31) new=no
+decisions non-empty lines=56 (anchor 56) new=no
+index.lock exists=False
+production=open
+footage total=21 fresh-after-0925-1946=[('census-card-v7-vertical.mp4', datetime.datetime(2026, 9, 27, 12, 32, 37, 290265))]
+footage top3: [('census-card-v7-vertical.mp4', datetime.datetime(2026, 9, 27, 12, 32, 37, 290265)), ('biggame-console-probe-r283.png', datetime.datetime(2026, 9, 25, 19, 46, 59, 932379)), ('silicon-dashboard-top-raw.mp4', datetime.datetime(2026, 9, 25, 14, 6, 6, 706002))]
+anchors top=['C-00027.md', 'C-00028.md', 'C-00029.md'] C-00030-in=False C-00031-in=False
+daily 09-27 exists=True
+daily 09-28 exists=False
+W40 audit exists=False
+HQ-FEEDBACK 09-27 lines=5 last=| F-20260927-05 | P1 | C-20260927-01 商业化定价批·**席 6 生命内容席（BigLife+BigStream）BigStream 侧独立意见**（D-20260927-08 意见窗 ≤09-29 12:00·council.md §四.2 独立先行·席位身份出具
+global-benchmarks first-date=2026-09-24

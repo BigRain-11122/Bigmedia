@@ -1,0 +1,5 @@
+CONSTITUTION hits:
+constitution version hint: ?
+src/os/board.py: False
+src/readiness.py: True
+src/os/loop_health.py: True
