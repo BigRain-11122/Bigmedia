@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 007
+14.50 em  budget 23.00 em  margin +8.50em  single=True  商业化定价日 2026-09-27 落账
+15.00 em  budget 23.00 em  margin +8.00em  single=True  「合理的付费点，还有包装价格」
+14.65 em  budget 23.00 em  margin +8.35em  single=True  一句令 · 当日 19 付费点全对表
+17.45 em  budget 23.00 em  margin +5.55em  single=True  定价四层 · 29.9 与 49.9 二选一待裁
+14.20 em  budget 23.00 em  margin +8.80em  single=True  居民档案订阅 9.9 元/月设计值
+17.40 em  budget 23.00 em  margin +5.60em  single=True  外部锚 31 源 · 陪伴常态带 20-39 元
+16.70 em  budget 23.00 em  margin +6.30em  single=True  过会件当日落档 · 7 席 48 小时记票
+subs   22.00 em  budget 24.21 em  margin +2.21em  基于硅基城市真实事件（商业化定价令台账档案）
+EM_CHECK: ALL OK
