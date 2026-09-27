@@ -1,0 +1,10 @@
+state_json=OK tick=489 production=open
+state_ts=2026-09-27 08:36:00
+log_len=502 last_prefix_ok=True
+task_matches_log_head=True (task_len=60)
+ts_age_minutes=1.3
+log_r488_comma_ok=True
+export_json=OK export_ts=2026-09-27T08:36:00+08:00
+results0=489
+outs0_e1_head=tick 489·R489（idle-fast 
+outs0_e2_head=tick 488·R488（idle-fast 

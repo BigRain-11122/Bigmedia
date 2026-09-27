@@ -1,0 +1,13 @@
+state_json=OK tick=488 production=open
+state_ts=2026-09-27 08:26:04
+state_task_head=idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 1/6 不
+log_tail2:
+  2026-09-27 08:15 R487: 转办收讫轮（P-2026-09-27-02 商业化付费点令·本司轮办③份额交付毕·实活轮触发收账）——①轮首五查破
+  2026-09-27 08:26 R488: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 1/6 不 commit）——①无新令（or
+focus_head=R489: 快速路径首查（新令/集团转办/探针红）→#59 
+focus_tail=）；新令/集团转办/探针红出现即优先；全静即 idle-fast（并窗轮 2/6·窗 R488-R493 满 6 收账）
+export_json=OK export_ts=2026-09-27T08:26:04+08:00
+outs0_e1_head=tick 488·R488（idle-fast 空转快速路径轮·五静+探针定谳绿·零生产件·并窗轮 1/6 不 comm
+outs0_e2_head=tick 487·R487（实活轮·转办收讫：P-2026-09-27-02 商业化付费点令本司轮办④包装叙事线交付毕—
+results0=488 | R488 idle-fast 空转快速路径轮：五静（ledger 30=锚〔R487 收讫后新锚〕/decisions 45=锚/orders 零新增零编辑）+
+mojibake_left=['收謦', '收讳', '收记', '回扯', '定谴']

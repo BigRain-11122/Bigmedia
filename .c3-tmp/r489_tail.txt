@@ -1,0 +1,6 @@
+BOUNDARY-REPR='k 面对齐）。下轮快速路径首查：#59 REACT 09-28 热点窗届日领（daily_brief 09-28 缺则先补产）/W40 周自审开周+月度统计注记/C-00030 锚/新令/集团转办——全静即 idle-fast（2/6）。"\n ],\n "ts": "2026-09-27 08:26:04",\n "tas'
+TS-TASK-REPR='6）。"\n ],\n "ts": "2026-09-27 08:26:04",\n "task": "idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 1/6 不 commit）——①无新令（order"\n}\n'
+TICK-REPR='3",\n "tick": 488,\n "manda'
+FOCUS-HEAD-REPR='"focus": "R489: 快速路径首查（新令/集团转办/探针红）→#59 REACT 09-28 热点窗届日领（M'
+FOCUS-TAIL-REPR='t",\n "protocol": "docs/os-protocol.md",\n "backlog": "src/os/backlog.md",\n "focus": '
+EXPORT-TS-REPR='"export_ts": "2026-09-27T08:26:04+08:00",\n "do": "'
