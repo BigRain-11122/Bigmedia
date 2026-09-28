@@ -1,0 +1,14 @@
+VERIFY_R654 close-time=2026-09-29 04:59:33
+TICK: PASS got=654 want=654
+PRODUCTION: PASS got='open' want='open'
+LOG_COUNT: PASS got=676 want=676
+LOG_TAIL_R654: FAIL got='declared-idle（空轮' want='R654: declared-idle'
+TS: PASS got='2026-09-29 04:59:33' want='2026-09-29 04:59:33'
+TASK_60: PASS got='declared-idle（空轮判定·五静+探针绿+四查尽·P-2026-09-28-02 ②空轮判定路径④序·第二连）' want='declared-idle（空轮判定·五静+探针绿+四查尽·P-2026-09-28-02 ②空轮判定路径④序·第二连）'
+FOCUS_R655: FAIL got='R655: 空轮判定路' want='R655: 空轮判定路径'
+EXPORT_TS: PASS got='2026-09-29T04:59:33+08:00' want='2026-09-29T04:59:33+08:00'
+RESULTS_HEAD: PASS got='654' want='654'
+OUTS_OS_HEAD: FAIL got='tick 654：R65' want='tick 654：R654'
+RESULTS_COUNT: FAIL got=19 want=20
+SUMMARY: 4 FAIL
+WINDOW_NOTE: R654=window 1/6 (R654-R659) NO_COMMIT this round

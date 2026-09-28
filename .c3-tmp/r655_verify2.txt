@@ -1,0 +1,16 @@
+VERIFY2_R655 addendum-time=2026-09-29 05:06:51
+TICK: PASS got=655 want=655
+PRODUCTION: PASS got='open' want='open'
+LOG_COUNT: PASS got=678 want=678
+MAIN_R655_PREFIX: PASS got='R655:' want='R655:'
+MAIN_R655_SUBSTR: PASS got=True want=True
+ADDENDUM_TAIL: PASS got='R655' want='R655'
+ADDENDUM_SUBSTR: PASS got=True want=True
+TS: PASS got='2026-09-29 05:05:55' want='2026-09-29 05:05:55'
+TASK_60: PASS got='declared-idle（空轮判定·五静+探针绿+四查尽·P-2026-09-28-02 ②空轮判定路径④序·第三连）' want='declared-idle（空轮判定·五静+探针绿+四查尽·P-2026-09-28-02 ②空轮判定路径④序·第三连）'
+FOCUS_12: PASS got='R656: 空轮判定路径' want='R656: 空轮判定路径'
+EXPORT_TS: PASS got='2026-09-29' want='2026-09-29'
+OUTS_13: PASS got='tick 655：R655' want='tick 655：R655'
+RESULTS_COUNT: PASS got=20 want=20
+SUMMARY: 13/13 ALL_PASS
+WINDOW_NOTE: R655=window 2/6 (R654-R659) NO_COMMIT this round; addendum appended post-close per R651+R652 precedent

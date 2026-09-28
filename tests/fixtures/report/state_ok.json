@@ -7,6 +7,7 @@
     "2026-09-23 11:2x R3: fixture fuzzy-minute round",
     "2026-09-23 12:00 account-fix entry: not a round",
     "2026-09-24 09:00 R4: idle no-work round",
+    "2026-09-24 10:00 R6: production round whose prose mentions declared-idle and idle-fast (not an idle round)",
     "2026-09-28 09:00 R5: fixture round in week 40 (out of window)"
   ]
 }
