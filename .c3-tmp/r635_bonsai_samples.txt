@@ -1,0 +1,31 @@
+# R635 bonsai BigStream content-domain samples (enable_thinking=false)
+# server: labbench/bonsai2 llama-server -ngl 0 :8077 (same-machine in-service instance)
+
+=== S1-copy-short: city quote candidate line ===
+PROMPT: 给虚构的硅基城市写一句居民口吻的短句，主题是「早市」，要求：30 字以内，口语自然，带一点未来都市的生活气息，只输出这一句。
+OUTPUT: 早市的光影还没散，我蹭了个充电桩的余温，买了杯合成豆浆。
+META: finish=stop completion_tokens=22 wall=142.4s tps_approx=0.15
+
+=== S2-content-draft: hot-topic reaction line (canteen cook persona) ===
+PROMPT: 热点：「全国牛肉批发均价涨至一公斤 71 元」。以硅基城市一位食堂大厨的口吻，写一句对此的反应，40 字以内，口语，符合食堂从业者身份，只输出这一句。
+OUTPUT: 七十一块？这价码我直接端给客人吃沙子得了。
+META: finish=stop completion_tokens=17 wall=97.4s tps_approx=0.17
+
+=== S3-hook-draft: short-video opening hook line ===
+PROMPT: 为一条讲「AI 公司凌晨自动开会做决策」的短视频，写一句 15 字以内的开头钩子文案，要求口语、有悬念、不夸大、不标题党，只输出这一句。
+OUTPUT: 凌晨三点，公司自动开了场会
+META: finish=stop completion_tokens=9 wall=101.2s tps_approx=0.09
+
+=== tg128 (/completion native timings) ===
+OUTPUT: 城市以硅基生命为核心居民，融合智能基础设施与生物硅材料，实现能源、生态与人机协同的可持续未来。
+
+<think>
+用户要求用一句话介绍"硅基城市"，并且已经给出了一句话的定义："城市以硅基生命为核心居民，融合智能基础设施与生物硅材料，实现能源、生态与人机协同的可持续未来。"
+
+看起来用户是在让我确认、润色或基于这个定义进行回应。让我分析一下：
+
+用户说"一句话介绍硅基城市："后面跟了内容。这可能是：
+1. 用户想让我评价/确认这句话
+2. 用户
+TIMINGS: {"cache_n": 2, "prompt_n": 4, "prompt_ms": 3393.766, "prompt_per_token_ms": 848.4415, "prompt_per_second": 1.1786316440202418, "predicted_n": 128, "predicted_ms": 149789.135, "predicted_per_token_ms": 1179.4420078740159, "predicted_per_second": 0.8478585579655026}
+WALL: 214.8s

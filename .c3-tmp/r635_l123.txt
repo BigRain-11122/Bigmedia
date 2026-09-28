@@ -1,0 +1,7 @@
+LINE123_HEAD: | P-2026-09-26-07 | 09-26 | **机队大模型自配与任务分治加速令（P1·CEO 令 2026-09-26 ~14:0x 原话「具备本地运行算力的机器各自下载适合的大模型，然后各自承担可控的任务，大文件不要通过git去传递」·登记 U240·P-2026-09-25-08 适配令加速窗+模型大件 git 禁令重申）@CPH4 @HQ @BG-A @BG-B @BG-C @bm-a @bm-b @bigstream**（三义=①各算力机自下适配大模型②任务按包络分治自领③模型大件=各机直下禁 git） | 现状实勘：P-08 研究件三件零开工（09-28 到期·gap-audit 在案）；BG-C 在役=qwen2.5:7b+VL:3b+14b-coder+DS-coder+kokoro 双包+animagine-xl-3.0 夜涓流（U230 补装令）；BG-A 三模型在役；bm-a=30B 编码试点 C 臂窗；BG-B=RAM 紧保护档 | 转办（P1·哨兵即唤）：①**@CPH4=P-08 研究件加速交付**（机队算力盘点/大模型适配矩阵/任务-模型-机器三方映射→fleet-allocations 增「模型分配节」·09-28 Phase1 硬窗）；②**各机自查自装**：BG-A/B/bm-b/bigstream=Phase1 serve 常驻自装（
+PAT[@BigStream] -> False
+PAT[@七线全司] -> False
+PAT[@全司] -> False
+PAT[@六司] -> False
+PAT[@八线全量] -> False
+TOKENS: @CPH4 | @HQ | @BG-A | @BG-B | @BG-C | @bm-a | @bm-b | @bigstream**（三义 | @CPH4=P-08
