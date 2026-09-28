@@ -14,7 +14,7 @@
 | 工具 | **funasr**（pip） | github.com/modelscope/FunASR（阿里达摩院） | **装** | 中文 ASR 升级件——S2 门在案痛点=whisper 同音错字（13.07%→5.53% 已用模型档位调优·funasr ParaFormer 为 zh 原生更优解·S2 QC 双轨候选） |
 | 工具 | **jieba**（pip） | github.com/fxsjy/jieba | **装** | 中文分词——网文线文本分析底件（词频/句长分布/金句检测机检候选） |
 | 工具 | **yt-dlp**（pip） | github.com/yt-dlp/yt-dlp | **装** | 对标采样器——B3 池（B站热门结构拆解）需要真实样本源；用途=公司内部对标研究·合规注在案 |
-| 环境 | **ComfyUI** | github.com/comfyanonymous/ComfyUI | **装 ✓（09-28 落地）** | C-16 既定缺口（m2-local-stack）——漫画/图文卡线的本地批量图像生成位（云通道已定栈·本地位=零边际成本批量+显存分时）；uv venv 锁 Python 3.12（3.14 兼容未证） |
+| 环境 | **ComfyUI** | github.com/comfyanonymous/ComfyUI | **装 ✓（09-28 落地）** | C-11 文生图位既定缺口（m2-local-stack §1 画面后置升级·原记 C-16 为撞号误指 09-28 更正）——漫画/图文卡线的本地批量图像生成位（云通道已定栈·本地位=零边际成本批量+显存分时）；uv venv 锁 Python 3.12（3.14 兼容未证） |
 | TTS 栈 | GPT-SoVITS/CosyVoice/IndexTTS/F5-TTS | 各官方仓 | **缓装（候选台账）** | 有声线多声线本地化=真实远期需求·但多 GB 级安装+商用许可面须专项核+与 Ollama/ComfyUI 显存分时冲突须排程——盲装=坏工程；专项评估后再定（§3 台账） |
 | 工具 | whisperX/moviepy/pysubs2 等 | — | **不装** | faster-whisper+FFmpeg 既有链覆盖；无新缺口不装（禁虚荣安装） |
 
