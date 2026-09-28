@@ -1,0 +1,43 @@
+2: """BigStream emotive TTS - sentence-level prosody variation (order O-1918).
+8: voice rises and falls across the script instead of droning at one setting.
+14:     voiceover.txt  plain spoken text (renderer --strict baseline)
+16: Cyber voice dial (O-20260923-2136-bm-a: voice more cyber/robotic):
+17:     --cyber light|mid|full   post-processing texture on the final audio.
+18:     light = keep emotive prosody, add subtle machine texture;
+31:     --human SEED           micro-prosody jitter per segment (rate +-3%,
+35:     room-tone noise bed under the voice. Cue/card timeline follows the
+40:     python src/render/emotive_tts.py --beats FILE --voice VOICE --out DIR
+41:         [--cyber light|mid|full] [--human SEED]
+63: # O-20260923-2136-bm-a cyber dial: light keeps the emotive melody and only
+85:     # deep synthesis: pitch-dropped terminal voice, rate-crushed
+95: def cyberize(profiles, pitch_hz, rate_shift):
+116: # The tells of a cheap AI voice track: every sentence the exact same voice
+276: def parse_beats(path):
+285:         parts = [p.strip() for p in line.split("|")]
+292:                       "card_lines": [c.strip() for c in card.split("/") if c.strip()],
+323:     beats_path = voice = out_dir = None
+324:     cyber = template = order = None
+329:         if argv[i] == "--beats":
+332:         elif argv[i] == "--voice":
+334:             voice = argv[i]
+338:         elif argv[i] == "--cyber":
+340:             cyber = argv[i]
+353:     if not (beats_path and voice and out_dir):
+354:         print("usage: emotive_tts.py --beats FILE --voice VOICE --out DIR"
+355:               " [--cyber light|mid|full] [--human SEED]"
+358:     if cyber and cyber not in CYBER_CHAINS:
+359:         print("FAIL unknown --cyber level: %s (light|mid|full)" % cyber)
+368:     if cyber in CYBER_PITCH_HZ:
+369:         profiles = cyberize(PROFILES, CYBER_PITCH_HZ[cyber],
+370:                             CYBER_RATE_SHIFT[cyber])
+382:         cmd = ["edge-tts", "--voice", voice] + flags + \
+451:     if cyber:
+455:         run(["ffmpeg", "-y", "-i", str(raw), "-af", CYBER_CHAINS[cyber],
+459:             print("FAIL cyber chain drifted duration %.2fs -> %.2fs"
+462:         print("OK cyber=%s voice %.2fs -> %.2fs (chain preserved timeline)"
+463:               % (cyber, pre, post))
+492:     (out_dir / "voiceover.txt").write_text(
+508:         "voice": voice,
+511:             "order", "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)"),
+513:     if cyber:
+514:         meta["cyber"] = {"level": cyber, "chain": CYBER_CHAINS[cyber]}
