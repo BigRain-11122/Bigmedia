@@ -29,6 +29,9 @@
 | Node 环境 | v24.19.0 已装（C:\Program Files\nodejs·系统级 Machine PATH 在位） | ✅ 核验完成（本会话陈旧 PATH 曾误导·已排除） |
 | ComfyUI | C:\Agent\ComfyUI·uv venv py3.12·torch cu126+requirements | ⏳ 后台安装中（git clone+venv+torch 下载链·收口后验证 torch.cuda） |
 | MCP 官方七件 | Fetch/Everything/Git/Memory/SequentialThinking/Time/Filesystem | ❌ 判不装（与 Codely 内建能力全量冗余·每件对全会话征 token 税=负收益）——决策依据在 §1 |
+| **DDG 搜索 MCP**（v1.1 增采） | nickclyde/duckduckgo-mcp-server（uvx·`DDGSearch`） | ✅ 采纳自集团调研 R-20260928-gh-install-mcp（「Codely 无搜索工具的真空白」——**历次调研件「无搜索通道」卡点（U6-U8 同族）的解药**）；uvx 实跑验证过（初始化成功·限速策略自报） |
+| **Playwright 配置修正**（v1.1） | settings.json 改 `cmd /c npx` 包裹 | ✅ 采纳集团调研「Windows 须 cmd /c 包裹律」——原直配 npx 会在 stdio 启动失败；npx.cmd 实跑 0.082 验证过·node 24.19 系统 PATH 在位 |
+| **Agent-Reach CLI**（v1.1 增采） | Panniantong/Agent-Reach（uv tool·`C:\Users\sjs20\.local\bin\agent-reach.exe`·集团调研指派本司内容调研面） | ✅ CLI 装毕验证过（list/install/doctor 面）；渠道实装 **rss ✓（feedparser）+ youtube ✓（复用 yt-dlp）**；**bilibili 渠道=上游 PyPI 版未含（master 在案·发版后升级）**——B站免登录采集挂账待上游；cookie 平台（XHS/Twitter/Reddit）=专用小号原则·账号期待办 |
 
 ## §3 候选缓装台账
 
@@ -49,3 +52,4 @@
 
 ## 变更记录
 - 2026-09-28: v1.0 首版（CEO GitHub 全面安装令·bm-a 会话）——普查+选型+安装台账。
+- 2026-09-28: v1.1 集团调研对齐增补——采 DDG 搜索 MCP（真空白·历次卡点解药）+Playwright 配置修正（cmd /c 包裹律）+Agent-Reach CLI（rss/youtube 渠道实装·bilibili 待上游发版）；交叉引用=`cph4/research/R-20260928-gh-install-mcp.md`（集团 MCP 普查正典·姊妹件分工：集团=全注册表面·本件=本司决策面）；本司相关的集团他件指派照旧（unity-mcp→Biggame/comfy-mcp→bm-c/github-mcp→CPH4·非本司份额）。
