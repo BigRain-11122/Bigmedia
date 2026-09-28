@@ -1,0 +1,19 @@
+DAILY   3. 一猫哈气万狗哭！我把哈基米做成了肉鸽游戏！  FOUND  (bilibili-popular source; UP-name/rank metadata desensitized, README-ledger only)
+ANCHOR  C-00021  creed field verbatim  「放学别走，先把今天的谜想完。」  (job=像素小学学生, GAME city, non-honor seat, registered field)
+ANCHOR  C-00029  radiocat sprite in GAME city  +  relationship cross-link to C-00021 (city-annals mutual proof)
+POOL    axes/求新/weekend/6  ->  求新轴「周末了，手头正好，给新游戏添个皮肤」
+POOL    axes/秩序/weekend/7  ->  秩序轴「今日没事，正好陪孩子玩会儿」
+POOL    sprite/weekend/2  ->  像素灵池「喵呜喵，星光下的梦」
+REACT   single-bucket discipline: weekend bucket, 3-axis mapping (R309 law reuse; P-1 anti-cliche v2 applied)
+
+H1 size 84 budget 10.95em | H2 size 36 budget 25.56em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 804px vs subs top 970px gap +166px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市速报 005
+15.10 em  budget 25.56 em  margin +10.46em  single=True  今日热点 · B站热门 2026-09-29
+21.00 em  budget 25.56 em  margin +4.56em  single=True  一猫哈气万狗哭！我把哈基米做成了肉鸽游戏！
+23.00 em  budget 25.56 em  margin +2.56em  single=True  求新轴：「周末了，手头正好，给新游戏添个皮肤」
+19.00 em  budget 25.56 em  margin +6.56em  single=True  秩序轴：「今日没事，正好陪孩子玩会儿」
+16.00 em  budget 25.56 em  margin +9.56em  single=True  像素灵池：「喵呜喵，星光下的梦」
+25.00 em  budget 25.56 em  margin +0.56em  single=True  像素小学学生信条：「放学别走，先把今天的谜想完。」
+subs   23.10 em  budget 24.21 em  margin +1.11em  热点转述自B站热门·反应与信条皆取自虚构城市档案
+EM_CHECK: ALL OK
