@@ -1,0 +1,10 @@
+{
+ "turn_cue_s": 282.32,
+ "voice_dur_s": 392.01,
+ "voice_mean_db": -49.3,
+ "bed_raw_mean_db": -22.9,
+ "bed_gain_db": -44.4,
+ "bed_target_mean_db": -67.3,
+ "out_dur_s": 392.01,
+ "out_mean_db": -49.2
+}

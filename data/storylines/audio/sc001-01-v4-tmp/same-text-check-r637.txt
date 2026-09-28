@@ -1,0 +1,9 @@
+novel body paras: 37
+beats: 34 (types: hook/punch/body/body/punch/body/beat/body/body/body/punch/beat/beat/punch/body/body/punch/punch/body/body/beat/body/proof/beat/turn/body/punch/body/wink/body/punch/body/punch/close)
+paras missed: 0
+cta N/A (no preview in source) OK: True
+hook triple-label OK: True
+A1 hook-position OK: True
+x1.5 register OK: True (vulgar found: [])
+dual-strand OK: True
+content chars (spoken): 1879
