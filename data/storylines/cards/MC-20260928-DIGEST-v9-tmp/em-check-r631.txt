@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 009
+19.40 em  budget 23.00 em  margin +3.60em  single=True  自驱力生态令 2026-09-28 落账 09:20:25
+20.00 em  budget 23.00 em  margin +3.00em  single=True  「不能有任何闲置资源，还有空转浪费现象」
+21.15 em  budget 23.00 em  margin +1.85em  single=True  3 缺口：创新无定轨 · 空转无定义 · 拉满张力
+22.20 em  budget 23.00 em  margin +0.80em  single=True  闭环 4 件：提案轨·空转禁令·诚实边界·计量回访
+20.85 em  budget 23.00 em  margin +2.15em  single=True  提案轨：三句式 · 无需 CEO 令 · 试点 ≤2 周
+22.55 em  budget 23.00 em  margin +0.45em  single=True  空转 4 形态定规 · idle-fast 跳轮路径全司废止
+21.20 em  budget 23.00 em  margin +1.80em  single=True  8 线点名 · 本司 ack ≤10 分钟 · 回访 10-05
+subs   23.00 em  budget 24.21 em  margin +1.21em  基于硅基城市真实事件（集团台账与本司台账档案）
+EM_CHECK: ALL OK

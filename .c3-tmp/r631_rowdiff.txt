@@ -1,0 +1,3 @@
+OP=replace OLD[809:810]='o' NEW[809:839]='executed（09-28 收口：R-20260928-c'
+OP=replace OLD[811:814]='en ' NEW[840:982]='h4-token-alternative 判定件——令面三问 100% 由既有正典承载〔token-economy §〇.1 三令递进+P-09 云端调查+fleet §8.1/§8.4+模型分配节〕·local-first 不升版=禁法上叠法判负留痕·回访 10-07 替代率首报）'
+SAME_PREFIX_LEN=809 OLD_LEN=921 NEW_LEN=1089
