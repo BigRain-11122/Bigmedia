@@ -12,7 +12,7 @@
 | CPU | Ryzen 9 9950X（16 核 32 线程） | 就绪 |
 | LLM | Ollama 常驻：qwen2.5:14b（9.0GB）·qwen2.5:7b（4.7GB）·bge-m3（1.2GB） | 就绪 |
 | TTS | edge-tts 7.2.8 | 已装 |
-| STT 字幕 | faster-whisper 1.2.1 | 已装 |
+| STT 字幕 | faster-whisper 1.2.1（在役·R169 QC recipe）＋ whisper.cpp 备选轨（parked·R644/OH-20260929-bigstream） | 已装 |
 | 剪辑/合成 | FFmpeg（Tuanjie Hub）+ opencv-python + pillow | 已装 |
 | 框架 | torch 2.11.0+cu128 | 就绪 |
 | 文生图 | **ComfyUI 已装**（09-28·C:\Agent\ComfyUI·py3.12.14+torch 2.14.0+cu126·O-20260928-1748） | 就绪·产线启用仍后置 |
@@ -61,3 +61,4 @@
 - 2026-09-23: v1.2（OS 循环 R18·随 research v1.2 同步）——TTS 行证据更新：edge-tts 许可证更正 LGPLv3（LICENSE 直采）；403 四波风控史入案（#286 仅大陆复现）→备份线升**产线刚性依赖**；403 再发处置口径=升最新 release+波次期临时切 piper。
 - 2026-09-28: v1.3 ComfyUI 装毕收口（CEO 令 O-20260928-1748 GitHub 全面安装令）——§0 文生图行翻正（未装→已装）+§1 画面后置升级行改注（产线启用仍后置）+§2 T1 触点改「首次加载模型前」+§4 R-D 改制（安装评估已闭·余项=生产启用评估）；随行撞号更正=他件「C-16 图像生成线」系误指（capabilities 册内 C-16=全链量产生产轮·文生图正位=C-11/本册 §1 画面后置升级）。
 - 2026-09-24: A 路仪器校准（OS 循环 R169·自进清单 C2）——`whisper_to_srt.py` 参数面四配置对照+medium 探针（基准=v12 母版音轨 cyber light 57s·ref=v11-trim beats·字符级 Levenshtein CER）：small int8 基线 13.07%·beam5 零增益·`--no-context` +1 字+提速 30%·域 initial_prompt **反劣化**（一名→印明新错）·**medium int8+beam5+noctx=5.53%——模型档位=主因子**（同音位点 12→8·累/方案/废×2/活/账全修复·事实词零损维持·瓶→品新增 1）；工具落 `--beam-size/--no-context/--initial-prompt` 旋钮（默认值不动=无实测增益不改行为）·**S2 asr-check QC recipe=`--model medium --beam-size 5 --no-context`**（首载 ~1min·57s 片 ~21s）·small 默认=快道；测试 +4（207 全回归绿）。
+- 2026-09-29: v1.4 STT 备选轨登记+HF_HUB_OFFLINE 坑律正典化（OS 循环 R644·#87=P-2026-09-28-08 whisper.cpp 接线单·集团 CPH4 dogfood 五门过转办承接）——**whisper.cpp（ggml-org·MIT·53,990★·push 2026-09-24·GitHub API 实采）登记=S2 ASR 备选轨 parked**（在役 faster-whisper R169 QC recipe 无短板触发不轻换·五门+判据预注册+结论应用表全档=`cph4/oss-harvest/OH-20260929-bigstream.md` 切片 1）；增量面=ggml 本地模型零 HF hub 依赖（R638 挂起坑天然根除）+单二进制零 Python 栈；**重开条件**=HF hub 型环境阻塞再发且 HF_HUB_OFFLINE=1 缓解失效→A/B 实测腿（标准片=BS-002 v2 终轨 58.02s·判据=CER ≤5.53% 且耗时 ≤21s）过线即 adopt；**HF_HUB_OFFLINE=1=产线默认环境位**（R638 根因=faster-whisper 载模前置 HF hub 在线 etag 检查网络挂起型·360MB WS 停 20min 实证·`whisper_to_srt.py` docstring 同步落地）·模型类登记不拉取（P-17 矩阵·试验走 Bonsai 波范式禁自行占显存）。

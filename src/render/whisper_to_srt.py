@@ -24,6 +24,16 @@ S2 asr-check QC recipe: --model medium --beam-size 5 --no-context;
 small (defaults) stays the fast lane. Defaults unchanged on
 purpose: no behavior change without measured gain.
 
+HF_HUB_OFFLINE pitfall (R638, canonized R644): faster-whisper model
+load does an online HF-hub etag check by default; on this machine
+that check can hang indefinitely (360MB stalled WS, 20min zero
+progress, kill + relaunch needed). Production default env:
+    HF_HUB_OFFLINE=1
+set it in the shell (or process env) before the first model load
+when the local cache is already populated (1.53GB @ 09-24 anchor).
+whisper.cpp (ggml path, MIT, OH-20260929-bigstream parked) removes
+this class of failure entirely: local ggml model files, no hub.
+
 Usage:
     python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt
     python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt --model small
