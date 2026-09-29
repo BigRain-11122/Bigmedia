@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc010\\voiceover-v3.beats.txt",
+  "order": "LC-010-v3",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-010 拆条形态=源卡即证据（LC-001~LC-009 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00018 字段，画面=被读档案本体（F-028 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-031/F-032/F-035/F-036/F-038/F-040 同位族）；对位 12/12·同源多用逐拍注记·b9 咪喱窗台〔C-00029 跨卡双源=LC-009 b4/b8 同本事双向闭合=拆条系列第三对人物链〕=跨卡互证拍·收编三户媒体面二连·东北新市民派迁移潮叙事面首拆"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.17,
+   "lines": [
+    "门脸像的人",
+    "全城唯一 · 坚持给老城门每月画一张「门脸像」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡钩子行「全城唯一坚持给老城门每月画一张「门脸像」的人」在帧（拆条形态=源卡即证据·F-028 成品卡 verbatim 行·hook 尾缀「找到了」=系列同型 LC-003~LC-009）"
+   }
+  },
+  {
+   "start": 5.17,
+   "end": 7.83,
+   "lines": [
+    "居民档案",
+    "罗大壮 · 碳基市民 · 新市民派 · 男 · 45 岁"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡编号名称行「C-00018 · 罗大壮」+物种行「碳基市民 · 新市民派 · 男 · 45 岁」在帧=居民档案面（拍文=锚 C-00018 卡题行+物种行 verbatim 展开·新市民派/男=压缩分载由源卡承载〔LC-007 b2 同型卡口分工〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 7.83,
+   "end": 11.13,
+   "lines": [
+    "城区职业",
+    "GAME 城 · 像素匠人巷 · 像素画匠"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡城区职务行「GAME 城 · 像素匠人巷 · 像素画匠」在帧（拍文=锚 C-00018 城区行 verbatim+职业行首词·破折号展开=压缩分载由源卡承载·LC-009 b3 同型·同源多用注记）"
+   }
+  },
+  {
+   "start": 11.13,
+   "end": 16.56,
+   "lines": [
+    "手艺规矩",
+    "放大八倍还是画 · 交活前必自检一遍"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 思想字段 verbatim「他说像素这东西讲究的就是『放大八倍还是画』」+行为字段 verbatim「每幅交活前必放大八倍自检一遍」两句合述展开·放大八倍双源对位=手艺纪律故事核·同源多用注记）"
+   }
+  },
+  {
+   "start": 16.56,
+   "end": 23.25,
+   "lines": [
+    "转折",
+    "城市里程碑光碑 · 碑前站了一刻钟 · 给爹打电话谁都没说话"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 经历转折 verbatim「第一次作品被选进城市里程碑光碑，他在碑前站了一刻钟，回家给爹打了个电话，俩人谁都没说话」展开·第一次/回家/俩人=压缩分载由源卡承载·punch 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 23.25,
+   "end": 29.15,
+   "lines": [
+    "出身",
+    "数字迁移潮第一班车 · 一个包袱和一卷自学的画稿"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 经历头 verbatim「数字迁移潮第一班车——从东三省迁入，落脚那天行李只有一个包袱和一卷自学的画稿」展开·从东三省迁入=压缩分载由源卡承载·东北新市民派迁移潮叙事面首拆·同源多用注记）"
+   }
+  },
+  {
+   "start": 29.15,
+   "end": 33.91,
+   "lines": [
+    "帽檐小字",
+    "毛线帽是媳妇织的 · 帽檐发光小字「早点回家」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 服装字段 verbatim「毛线帽是媳妇织的——帽檐上她自己加了一行会发光的小字『早点回家』」展开·「她自己加」=压缩分载由源卡承载·wink 拍·帽檐发光小字=事实性赛博意象·同源多用注记）"
+   }
+  },
+  {
+   "start": 33.91,
+   "end": 38.66,
+   "lines": [
+    "现状",
+    "匠人巷小画室 · 带学徒 · 初版像素调色板"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 经历现状 verbatim「在匠人巷开了间小画室，带学徒，供着一块『初版像素调色板』」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 38.66,
+   "end": 44.43,
+   "lines": [
+    "门脸像编年史",
+    "每周画一张门脸变化 · 五十七张 = 门禁链的编年史"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 行为字段 verbatim「每周去老城门画一张『门脸变化』」+钩子后半 verbatim「五十七张连起来，就是一部门禁链的编年史」展开·**门禁链=黑话词表命中→L18 卡口分工**：口播=城门变化的编年史·卡锚列保留「门禁链的编年史」原词·LC-009 回测田同型·同源多用注记）"
+   }
+  },
+  {
+   "start": 44.43,
+   "end": 50.27,
+   "lines": [
+    "窗台的公共宠物",
+    "咪喱 · 按月画像《咪喱巷志》 · 画匠家管毛线"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00018 画匠侧×C-00029 咪喱跨卡双源〔画室窗台/全巷公共宠物/按月画像《咪喱巷志》/画匠家管毛线〕=LC-009 b4/b8 同本事两端在案=**拆条系列第三对人物链双向互证+收编三户媒体面二连**·跨卡互证拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 50.27,
+   "end": 54.66,
+   "lines": [
+    "信条",
+    "像素越小，心眼越大"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡信条行「信条：「像素越小，心眼越大。」」在帧（verbatim 直引·保护行零动）"
+   }
+  },
+  {
+   "start": 54.66,
+   "end": 58.72,
+   "lines": [
+    "门脸像全档案",
+    "公众号 · 转给干活地道的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v9-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00018）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
