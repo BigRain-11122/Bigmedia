@@ -1,4 +1,4 @@
-# 专职专家调用台账（Expert Calls Ledger）
+﻿# 专职专家调用台账（Expert Calls Ledger）
 
 > 机制=`docs/expert-roster.md`（O-20260924-1033-bm-a）。行级追加禁改写；每次 call_expert.py 真调自动落一行。
 
@@ -43,3 +43,4 @@
 | 2026-09-29 12:47 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc003\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-124753-S1-script.md / 总分：10   (1500s wrapper: LC-003 S1 v1.5+L18-L20 gate) |
 | 2026-09-29 13:32 | E4-audience | E4 直觉观众（参考仪·非名册席） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.lc003-tmp\subs.srt | 1 | full text=expert-verdicts/20260929133216-E4-audience.md / 8.0 看完+点赞+转发三意愿无条件式 (E4 reference call: LC-003 chaitiao split-video, detached 1500s window, heat-loaded fast landing, same-round backfill R681 precedent) |
 | 2026-09-29 14:21 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc004\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-142149-S1-script.md / 总分：10 (1500s wrapper: LC-004 S1 v1.5+L18-L20 gate) |
+| 2026-09-29 15:03 | E4-audience | E4 直觉观众（参考仪·非名册席） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.lc004-tmp\subs.srt | 1 | full text=expert-verdicts/20260929150358-E4-audience.md / 8.0 看完明说+文化意义正面定性 (E4 reference call: LC-004 chaitiao split-video, detached 1500s window, heat-loaded fast landing, same-round backfill R681/R685 precedent) |
