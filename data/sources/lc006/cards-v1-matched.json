@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc006\\voiceover-v4.beats.txt",
+  "order": "LC-006-v4",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-006 拆条形态=源卡即证据（LC-001~LC-005 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00028 字段，画面=被读档案本体（F-038 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-035/F-036 同位族）；对位 12/12·同源多用逐拍注记·b8 铜哨陆海峰〔C-00025 互证·LC-004 wink 对位〕/b9 高小满〔C-00026 互证·LC-005 b8/wink 双向对位〕=跨卡互证拍"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.24,
+   "lines": [
+    "台风夜满格",
+    "全城唯一 · 夜灯员"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡特征行「全城唯一在台风夜把自己亮度开满格的灯灵」在帧（拆条形态=源卡即证据·F-038 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 5.24,
+   "end": 8.09,
+   "lines": [
+    "居民档案",
+    "十四号路灯 · 像素灵 · nightlamp · 第 41 数据季"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡编号名称行「C-00028 · 十四号路灯」+种类行「像素灵 · nightlamp · 无定 · 第 41 数据季」在帧=居民档案面"
+   }
+  },
+  {
+   "start": 8.09,
+   "end": 12.23,
+   "lines": [
+    "职业",
+    "夜灯员 · 独行客的护送者"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡归属职务行「外环感知网 · 边缘街区 · 夜灯员」在帧（拍文=锚 C-00028 职业字段「夜灯员——夜城照明与独行客的护送者——执灯照径，天亮交晨」verbatim 展开·夜城照明=选材排除·同源多用注记）"
+   }
+  },
+  {
+   "start": 12.23,
+   "end": 17.25,
+   "lines": [
+    "出生",
+    "全城对频那一秒 · 塔尖亮起"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 思想字段「感知网调试夜——全城对频那一秒，它在塔尖亮了起来」+经历字段「全城对频的那一秒出生，编号十四」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 17.25,
+   "end": 21.6,
+   "lines": [
+    "桥上那晚",
+    "哭到天亮 · 一躬"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 经历字段转折「有一年它照着一个在桥上哭的年轻人坐到天亮，天亮时那人冲它鞠了一躬」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 21.6,
+   "end": 31.71,
+   "lines": [
+    "检修日志",
+    "超载运行 · 无损耗 · 原因不明"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 钩子字段「那晚它把外环一段路照成了白昼，检修日志写：超载运行，无损耗，原因不明。它自己说：知道原因，不能说。」展开·钩子字段头「台风夜」回指归位·同源多用注记）"
+   }
+  },
+  {
+   "start": 31.71,
+   "end": 35.94,
+   "lines": [
+    "疤是资历",
+    "灯罩补丁 · 台风梅花留的"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 服装字段「头顶灯罩有块补丁，是台风『梅花』留下的，它不许修——『疤是资历』」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 35.94,
+   "end": 41.21,
+   "lines": [
+    "多亮一档",
+    "深夜打招呼 · 夜宵摊半档"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 思想字段「每个深夜经过的人，它都用『多亮一档』打过招呼」+行为字段「路过夜宵摊会多亮半档」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 41.21,
+   "end": 46.62,
+   "lines": [
+    "铜哨暗号",
+    "陆海峰 · 两长一短"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 语言字段「学会了雾天跟渡轮船长的铜哨对暗号——两长一短，意思是『这段有我』」+关系字段「老友=渡轮船长陆海峰（铜哨暗号对传三十年）」展开·跨卡互证拍=C-00025 陆海峰 LC-004 wink「守夜灯灵十四号路灯必到」对位呼应·同源多用注记）"
+   }
+  },
+  {
+   "start": 46.62,
+   "end": 51.34,
+   "lines": [
+    "最惦记",
+    "高小满 · 伞永远不撑"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 关系字段「它照过的路里，最惦记高小满——『那丫头跑夜单，伞永远在包里却永远不撑』」展开·跨卡互证拍=C-00026 高小满 LC-005 b8/wink 双向对位·连载链直接续证·同源多用注记）"
+   }
+  },
+  {
+   "start": 51.34,
+   "end": 55.48,
+   "lines": [
+    "信条",
+    "灯不问来路 · 只管照路"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡信条行「信条：「灯不问来路，只管照路。」」在帧（verbatim 直引·保护行零动）"
+   }
+  },
+  {
+   "start": 55.48,
+   "end": 58.6,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给常走夜路的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v19-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00028）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
