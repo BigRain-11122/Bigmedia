@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc007\\voiceover-v3.beats.txt",
+  "order": "LC-007-v3",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-007 拆条形态=源卡即证据（LC-001~LC-006 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00027 字段，画面=被读档案本体（F-037 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-035/F-036/F-038 同位族）；对位 12/12·同源多用逐拍注记·b6 光桥钓鱼〔REACT-v4 城志互证锚 R575〕/b9 十四号路灯比仪器可靠〔C-00028 关系字段反向点名=LC-006 锚卡对位·第三人物链第四卡〕=跨卡互证拍"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.5,
+   "lines": [
+    "台风有名字",
+    "全城唯一 · 给大风起名的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡钩子行「全城唯一给每场大风起名字的值守员」在帧（拆条形态=源卡即证据·F-037 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 5.5,
+   "end": 8.19,
+   "lines": [
+    "居民档案",
+    "邓建国 · 碳基市民 · 通勤族 · 50 岁"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡编号名称行「C-00027 · 邓建国」+种类行「碳基市民 · 通勤族」+性别年龄行「男 · 50 岁」在帧=居民档案面"
+   }
+  },
+  {
+   "start": 8.19,
+   "end": 12.64,
+   "lines": [
+    "职业",
+    "感知塔站值守员 · 外环神经末梢的哨兵"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡归属职务行「外环感知网 · 感知塔站」+职业行「感知塔站值守员——外环神经末梢的哨兵」在帧（拍文=锚 C-00027 职业字段首词与破折号前段 verbatim 展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 12.64,
+   "end": 19.72,
+   "lines": [
+    "出身",
+    "修了十年气象设备 · 塔站招熟手"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00027 经历字段「半只脚进城——现实里退役后做了十年气象设备维护，进城那年塔站正好招熟手」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 19.72,
+   "end": 25.6,
+   "lines": [
+    "梅花那夜",
+    "守了一宿 · 全城灯带如常亮起"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00027 经历字段转折「台风『梅花』过境那夜他守了一宿，第二天全城灯带如常亮起」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 25.6,
+   "end": 31.98,
+   "lines": [
+    "起名",
+    "台风有台风的名字 · 他起的"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00027 行为字段「值守日志写满天气脾气（台风有台风的名字，他起的）」+钩子字段「『梅花』『烟嗓』『过云雨一号』」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 31.98,
+   "end": 37.73,
+   "lines": [
+    "钓了一辈子风",
+    "光桥看人钓鱼 · 自己从不钓"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00027 行为字段「休息日去光桥看人钓鱼，自己从不钓——『我钓了一辈子风』」展开·跨卡互证拍=REACT-v4 城志互证锚〔R575 在案〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 37.73,
+   "end": 42.04,
+   "lines": [
+    "天气提醒",
+    "真实天气一变 · 江边夜宵摊先收到"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00027 行为字段「每天真实天气一变就给江边那些夜宵摊发提醒」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 42.04,
+   "end": 46.42,
+   "lines": [
+    "搭档交接",
+    "信号中继员 · 三句话句句有用"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00027 关系字段「搭档=信号中继员（俩人交接班时只说三句话，句句有用）」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 46.42,
+   "end": 51.14,
+   "lines": [
+    "比仪器可靠",
+    "十四号路灯 · 雾天它最忙"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00028 十四号路灯关系字段「塔站的值守员说它比仪器可靠」反向点名展开·跨卡互证拍=LC-006 锚卡 C-00028 对位呼应〔第三人物链第四卡〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 51.14,
+   "end": 55.3,
+   "lines": [
+    "信条",
+    "台风天的日志最见人品"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡信条行「信条：「台风天的日志最见人品。」」在帧（verbatim 直引·保护行零动）"
+   }
+  },
+  {
+   "start": 55.3,
+   "end": 58.64,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给爱看天变的朋友"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v18-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00027）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
