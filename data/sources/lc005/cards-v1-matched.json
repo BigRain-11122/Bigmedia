@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc005\\voiceover-v3.beats.txt",
+  "order": "LC-005-v3",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-005 拆条形态=源卡即证据（LC-001/002/003/004 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00026 字段，画面=被读档案本体（F-036 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-035 同位族）；对位 12/12·同源多用逐拍注记·b6 守夜灯灵/b9 陆海峰=跨卡互证拍〔C-00028/C-00025〕"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.93,
+   "lines": [
+    "一句话交货注脚",
+    "全城唯一 · 穿城信使"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡钩子行「全城唯一给每单写「一句话交货注脚」的信使」在帧（拆条形态=源卡即证据·F-036 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 5.93,
+   "end": 9.7,
+   "lines": [
+    "居民档案",
+    "高小满 · 碳基市民 · 新市民派"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡档案行 C-00026·高小满+物种行「碳基市民·新市民派·女·22 岁」在帧=居民档案面"
+   }
+  },
+  {
+   "start": 9.7,
+   "end": 13.48,
+   "lines": [
+    "职业",
+    "穿城信使 · 全城急件的摆渡人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡职业行「江面与光桥·光桥市集·穿城信使」在帧（拍文=锚 C-00026 职业字段「穿城信使——全城急件的摆渡人——光桥和渡轮是她家走廊」verbatim 展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 13.48,
+   "end": 16.72,
+   "lines": [
+    "光桥进城",
+    "桥那头是老家 · 桥这头是生计"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 经历字段「跟着光桥修通进城的——桥那头是老家，桥这头是生计」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 16.72,
+   "end": 23.12,
+   "lines": [
+    "头一单急件",
+    "送药 · 跑丢两次 · 一碗面"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 经历字段转折「头一单加急件是给一位老人送药，跑丢了两次路，送到时天全黑，老人拉她吃了碗面」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 23.12,
+   "end": 27.33,
+   "lines": [
+    "立规矩",
+    "单可以少接 · 接了必须稳到"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 经历字段「从此她给自己立规矩：单可以少接，接了必须稳到」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 27.33,
+   "end": 32.29,
+   "lines": [
+    "口哨",
+    "全城打得最响 · 守夜灯灵都认得"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 语言字段「全城口哨打得最响的姑娘，桥上的守夜灯灵都认得她那两声」展开·跨卡互证拍=C-00028 守夜灯灵同场互指·同源多用注记）"
+   }
+  },
+  {
+   "start": 32.29,
+   "end": 37.75,
+   "lines": [
+    "包底一把伞",
+    "不是给自己的 · 桥上常有人淋着"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 服装字段「包底永远有一把伞——不是给自己的，『桥上常有人淋着』」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 37.75,
+   "end": 41.42,
+   "lines": [
+    "交货注脚",
+    "今夜风大 · 交到本人手里"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 钩子字段「『今夜风大，交到本人手里』这样的字条，档案馆的年轻人专门收藏了一沓」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 41.42,
+   "end": 47.09,
+   "lines": [
+    "忘年交",
+    "陆海峰 · 你迟早得学会慢"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00026 关系字段「忘年交=渡轮船长陆海峰（她跨江从不用渡轮，他每回都说『你迟早得学会慢』）」展开·跨卡互证拍=C-00025 双向对位·连载链直接续证·同源多用注记）"
+   }
+  },
+  {
+   "start": 47.09,
+   "end": 51.53,
+   "lines": [
+    "信条",
+    "急件不急 · 稳到才算到"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡信条行「信条：「急件不急，稳到才算到。」」在帧（verbatim 直引）"
+   }
+  },
+  {
+   "start": 51.53,
+   "end": 55.95,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给那个等着的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v17-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00026）」在帧）"
+   }
+  }
+ ]
+}
