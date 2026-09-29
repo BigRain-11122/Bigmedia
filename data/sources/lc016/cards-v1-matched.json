@@ -1,0 +1,189 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc016\\voiceover-v3.beats.txt",
+  "order": "LC-016-v3",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-016 视觉动态=源卡即证据（LC-001~LC-015 同型）：12 拍共用源卡（CENSUS-v1 顾阿凤锚 C-00010 字段）；画面=静态图纵向派生（F-020 成品卡 660px 居中 y=160+zoompan ≤1.04 微动·AIGC 避让法=R511 前置（标签位=卡面左上=F-027/F-028/F-029/F-031/F-032/F-034/F-035/F-036/F-038/F-040 同位族）；对位 12/12 逐拍字段级溯源对表（s1-review-material-v1.md 事实溯源对表）；**烟火早点摊主题系列首件位**（时间校准 LC-015 后烟火轴首件）；**第八对人物链卡面双端互证**（C-00010×C-00011 双端在册·LC-015 b9/b10 前件点名兑现位·SC-001-02 ch.2 章尾冲突钩=拆条系列首个「章尾钩兑现位」）；**跨载体复用最厚位**（网文 SC-001-01 主角+有声 F-009 ch.1 主角+图鉴 CENSUS-v1 F-020=三载体已验后视频线第四载体·R227 登记）；b9 互证拍=章尾钩兑现位注记。"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 6.1,
+   "lines": [
+    "钩子",
+    "全城唯一记得每个早班信使口味的人——谁的粢饭加不加辣、豆浆放不放糖，她心里有整本账"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=钩子位（锚 C-00010 钩子字段 verbatim「全城唯一记得每个早班信使口味的人」+钩子尾「谁的粢饭加不加辣、豆浆放不放糖，她心里有整本账」=卡锚列承载位·hook 尾缀「找到了」=系列同型 LC-003~LC-015）。"
+   }
+  },
+  {
+   "start": 6.1,
+   "end": 9.68,
+   "lines": [
+    "居民档案",
+    "顾阿凤 · 碳基市民 · 弄堂派 · 女 · 68 岁"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=居民档案位（卡题行 C-00010·顾阿凤+物种行 verbatim「碳基市民·弄堂派」+性别年龄行「女 · 68 岁」·「女」由字卡列承载=b2 卡口分工·LC-013/LC-014/LC-015 同型）。"
+   }
+  },
+  {
+   "start": 9.68,
+   "end": 13.03,
+   "lines": [
+    "城区职业",
+    "北外滩 · 治理岸 · 脑环广场街区 · 数据粥铺摊主——早点摊的赛博后身——蒸笼里升腾的是暖光不是白汽，四大金刚一样不少"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=城区职业位（城区行 verbatim「北外滩·治理岸·脑环广场街区」+职业行首词「数据粥铺摊主」verbatim+破折号展开「早点摊的赛博后身——蒸笼里升腾的是暖光不是白汽，四大金刚一样不少」=压缩分载由源卡承载·LC-008/012/013/014/015 b3 同型）。"
+   },
+   "size": 48
+  },
+  {
+   "start": 13.03,
+   "end": 17.88,
+   "lines": [
+    "开档规矩",
+    "每天真实北京时间 04:30 开档，卖完最后一屉才收摊；给广场的电波猫群留碎布头（它们衔回去筑巢）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=行为位（锚 C-00010 行为字段 verbatim「每天真实北京时间 04:30 开档，卖完最后一屉才收摊」+行为尾「给广场的电波猫群留碎布头（它们衔回去筑巢）」=卡锚列承载）。"
+   },
+   "size": 46
+  },
+  {
+   "start": 17.88,
+   "end": 24.21,
+   "lines": [
+    "转折",
+    "进城第三年台风掀了棚子，是全街坊凑料帮着重搭的，从此这条街就是家"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=转折位（锚 C-00010 经历转折字段 verbatim「进城第三年台风掀了棚子，是全街坊凑料帮着重搭的，从此这条街就是家」·punch 拍·同源多拍注记）。"
+   }
+  },
+  {
+   "start": 24.21,
+   "end": 30.32,
+   "lines": [
+    "出身",
+    "旧影像转生——从一张 1992 年董家渡早点摊的老照片里被城收留，照片里那口蒸笼现在还摆在铺头"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=出身位（锚 C-00010 经历头 verbatim「旧影像转生——从一张 1992 年董家渡早点摊的老照片里被城收留，照片里那口蒸笼现在还摆在铺头」·1992 数字形=口播全拼分载·LC-015 b6 一九七五同型·turn 拍·同源多拍注记）。"
+   }
+  },
+  {
+   "start": 30.32,
+   "end": 35.88,
+   "lines": [
+    "性格",
+    "起早（天没亮就醒，说早上的城最真）· 嘴甜（夸人不重样，但句句都真心）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=性格位（锚 C-00010 性格字段 verbatim「起早（天没亮就醒，说早上的城最真）· 嘴甜（夸人不重样，但句句都真心）」·类别词起早/嘴甜由卡锚列承载·LC-015 b7 同型·wink 拍·同源多拍注记）。"
+   }
+  },
+  {
+   "start": 35.88,
+   "end": 40.1,
+   "lines": [
+    "现状",
+    "摊位在脑环广场西角 · 家户 H-1001 独居 · 儿子在现实世界，每年来住半个月"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=现状位（锚 C-00010 经历现状 verbatim「摊位在脑环广场西角」+「儿子在现实世界，每年来住半个月」+关系头「家户 H-1001 独居」=卡锚列承载·同源多拍注记）。"
+   }
+  },
+  {
+   "start": 40.1,
+   "end": 44.67,
+   "lines": [
+    "头一锅",
+    "一座城醒来的第一口热乎气比什么口号都金贵 · 每天头一锅暖光粢饭出笼时，她觉得全城都是她的熟客"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=头一锅位（锚 C-00010 思想字段 verbatim「坚信一座城醒来的第一口热乎气比什么口号都金贵」+思想尾「每天头一锅暖光粢饭出笼时，她觉得全城都是她的熟客」=字卡呈现位·与钩子「全城熟客」语义回扣·proof 拍·同源多拍注记）。"
+   },
+   "size": 56
+  },
+  {
+   "start": 44.67,
+   "end": 48.87,
+   "lines": [
+    "互证",
+    "棋友=时空校准师朱鸿奎（每周三杀一盘）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=互证位（锚 C-00010 关系字段 verbatim「棋友=时空校准师朱鸿奎（每周三杀一盘）」=第八对人物链卡面双端互证拍：C-00010×C-00011 双端在册·LC-015 b9/b10 前件点名兑现位·SC-001-02 有声线 ch.2 章尾冲突钩「周三棋局·彩头一座钟」=跨载体正典连接位=拆条系列首个「章尾钩兑现位」·proof 拍·同源多拍注记）。"
+   }
+  },
+  {
+   "start": 48.87,
+   "end": 53.73,
+   "lines": [
+    "信条",
+    "「灶上留一壶，路过的都是客。」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=信条位（锚 C-00010 信条字段 verbatim「灶上留一壶，路过的都是客。」保护行零动·close 拍·同源多拍注记）。"
+   }
+  },
+  {
+   "start": 53.73,
+   "end": 57.62,
+   "lines": [
+    "摊主全档案",
+    "公众号 · 转给惦记热乎早饭的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v1-vertical.mp4",
+    "req": "源画面=载体位（全档案载体=M5 公众号图文页·语境层承接位·发布锁=M5 账号物理件·CTA 句式=LC-001~LC-015 先例·非锚内事实=载体与转发位设计·cta 拍）。"
+   }
+  }
+ ]
+}
