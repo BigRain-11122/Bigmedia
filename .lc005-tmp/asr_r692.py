@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# R692 LC-005 ASR detached runner (writes .lc005-tmp/asr-check.srt + asr-exit.txt)
+# R688 asr_r688.py pattern. R169 QC recipe: medium-int8 + beam5 + noctx, HF_HUB_OFFLINE=1 (R638 env law)
+import os, sys, io
+os.environ["HF_HUB_OFFLINE"] = "1"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(ROOT)
+rc = 0
+try:
+    sys.argv = ["whisper_to_srt.py",
+                "--audio", r".lc005-tmp/audio.mp3",
+                "--out", r".lc005-tmp/asr-check.srt",
+                "--model", "medium", "--beam-size", "5", "--no-context"]
+    import runpy
+    runpy.run_path(r"src/render/whisper_to_srt.py", run_name="__main__")
+except SystemExit as e:
+    rc = e.code if isinstance(e.code, int) else 0
+except Exception as ex:
+    rc = 1
+    io.open(r".lc005-tmp/asr-err.txt", "w", encoding="utf-8").write(repr(ex))
+io.open(r".lc005-tmp/asr-exit.txt", "w", encoding="utf-8").write(str(rc))
