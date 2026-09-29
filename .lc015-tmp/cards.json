@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\lc015\\voiceover-v3.beats.txt",
+    "order": "LC-015-v3",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.96,
+      "lines": [
+        "钩子",
+        "全城唯一坚持用机械钟声对时的人（每次全城齐秒老座钟跟着响一声·档案馆的人说那是城的「心跳备份」）"
+      ]
+    },
+    {
+      "start": 5.96,
+      "end": 9.51,
+      "lines": [
+        "居民档案",
+        "朱鸿奎 · 碳基市民 · 弄堂派 · 男 · 74 岁"
+      ]
+    },
+    {
+      "start": 9.51,
+      "end": 12.47,
+      "lines": [
+        "城区职业",
+        "北外滩 · 治理岸 · 档案馆区 · 时空校准师——修表匠的赛博后身——校准的是全城的钟，也是人心里的时区"
+      ]
+    },
+    {
+      "start": 12.47,
+      "end": 16.96,
+      "lines": [
+        "手艺习惯",
+        "铺里永远只开一盏暖灯（说强光看不清游丝）· 听到谁家钟声不对会绕路去敲人家的门"
+      ]
+    },
+    {
+      "start": 16.96,
+      "end": 22.31,
+      "lines": [
+        "转折",
+        "第一次给交易所时钟做全城对时 · 误差压进微秒那晚 · 在工位上坐到天亮"
+      ]
+    },
+    {
+      "start": 22.31,
+      "end": 29.28,
+      "lines": [
+        "出身",
+        "旧影像转生——从一张 1975 年钟表柜台前的合影里进城 · 怀里还揣着没修完的最后一块表"
+      ]
+    },
+    {
+      "start": 29.28,
+      "end": 34.78,
+      "lines": [
+        "性格",
+        "老派（再新的城也要按老礼数过日）· 较真（一个数据对不上，觉都睡不好）"
+      ]
+    },
+    {
+      "start": 34.78,
+      "end": 38.38,
+      "lines": [
+        "现状",
+        "铺子下午才开 · 收了两个徒弟 · 一个碳基一个硅基"
+      ]
+    },
+    {
+      "start": 38.38,
+      "end": 44.95,
+      "lines": [
+        "手稳",
+        "端三十年汤一滴没洒过 · 镊子起落比秒针还准"
+      ]
+    },
+    {
+      "start": 44.95,
+      "end": 49.55,
+      "lines": [
+        "互证",
+        "硅基徒弟=归档者-07（他说这徒弟比碳基的还像老派人）· 棋友=顾阿凤"
+      ]
+    },
+    {
+      "start": 49.55,
+      "end": 53.87,
+      "lines": [
+        "信条",
+        "「差之毫秒，谬以全城。」"
+      ]
+    },
+    {
+      "start": 53.87,
+      "end": 57.59,
+      "lines": [
+        "校准师全档案",
+        "公众号 · 转给跟时间较真的人"
+      ]
+    }
+  ]
+}
