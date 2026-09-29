@@ -1,0 +1,16 @@
+﻿b4 verbatim: PASS
+b4 trailing @54 -> 3 lines
+   [第一个署名关卡上线那晚 · ]
+   [蹲在城门口听了一夜玩家的议论 · ]
+   [第二天把最狠的差评打印出来贴在工位]
+b4 trailing @53 -> 3 lines
+   [第一个署名关卡上线那晚 · ]
+   [蹲在城门口听了一夜玩家的议论 · ]
+   [第二天把最狠的差评打印出来贴在工位]
+b8 verbatim: PASS
+b8 trailing @60 -> 3 lines
+   [她说：好关卡像好弄堂 · ]
+   [走一遍就舍不得搬走 · ]
+   [新手道永远比规程多留半步余量]
+b4@54 block: 4 lines, top=802 (clear of band 767: 35px)
+b8@60 block: 4 lines, top=788 (clear of band 767: 21px)

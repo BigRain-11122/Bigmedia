@@ -1,0 +1,45 @@
+== b9-subtitle-current (size=60) -> 4 lines
+  L1 [守门人、巡夜员、] len=8 chars
+  L2 [灯塔守望都收到过 · 谁也没找到] len=16 chars
+  L3 [全部 · 他们管这叫「梓涵的深夜] len=16 chars
+  L4 [惊喜」] len=3 chars
+
+== seg1-only-60 (size=60) -> 2 lines
+  L1 [守门人、巡夜员、] len=8 chars
+  L2 [灯塔守望都收到过] len=8 chars
+
+== three-seg-60 (size=60) -> 4 lines
+  L1 [守门人、巡夜员、] len=8 chars
+  L2 [灯塔守望都收到过] len=8 chars
+  L3 [谁也没找到全部] len=7 chars
+  L4 [他们管这叫「梓涵的深夜惊喜」] len=14 chars
+
+== three-seg-57 (size=57) -> 3 lines
+  L1 [守门人、巡夜员、灯塔守望都收到过] len=16 chars
+  L2 [谁也没找到全部] len=7 chars
+  L3 [他们管这叫「梓涵的深夜惊喜」] len=14 chars
+
+== three-seg-56 (size=56) -> 3 lines
+  L1 [守门人、巡夜员、灯塔守望都收到过] len=16 chars
+  L2 [谁也没找到全部] len=7 chars
+  L3 [他们管这叫「梓涵的深夜惊喜」] len=14 chars
+
+== three-seg-55 (size=55) -> 3 lines
+  L1 [守门人、巡夜员、灯塔守望都收到过] len=16 chars
+  L2 [谁也没找到全部] len=7 chars
+  L3 [他们管这叫「梓涵的深夜惊喜」] len=14 chars
+
+== trailing-dot-57 (size=57) -> 4 lines
+  L1 [守门人、巡夜员、] len=8 chars
+  L2 [灯塔守望都收到过 ·] len=10 chars
+  L3 [谁也没找到全部 ·] len=9 chars
+  L4 [他们管这叫「梓涵的深夜惊喜」] len=14 chars
+
+== lc012-b4-fleet-ref (size=60) -> 3 lines
+  L1 [迫于人情放过一篇查不实的稿 · ] len=16 chars
+  L2 [第二天凌晨自己把它撤了 · 立规] len=16 chars
+  L3 [矩「选题官的笔不认人情」] len=12 chars
+
+lc012-b4 longest wrapped line: 16 chars [迫于人情放过一篇查不实的稿 · ]
+
+per-card size override precedent hits: NONE (first-ever if used)

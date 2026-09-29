@@ -89,9 +89,10 @@
   {
    "start": 17.34,
    "end": 25.71,
+   "size": 54,
    "lines": [
     "转折",
-    "第一个署名关卡上线那晚 · 蹲在城门口听了一夜玩家的议论 · 第二天把最狠的差评打印出来贴在工位"
+    "第一个署名关卡上线那晚 · \n蹲在城门口听了一夜玩家的议论 · \n第二天把最狠的差评打印出来贴在工位"
    ],
    "visual": {
     "source": "data/sources/footage/census-card-v11-vertical.mp4",
@@ -139,7 +140,7 @@
    "end": 41.71,
    "lines": [
     "弄堂哲学",
-    "她说：好关卡像好弄堂 · 走一遍就舍不得搬走 · 新手道永远比规程多留半步余量"
+    "她说：好关卡像好弄堂 · \n走一遍就舍不得搬走 · \n新手道永远比规程多留半步余量"
    ],
    "visual": {
     "source": "data/sources/footage/census-card-v11-vertical.mp4",
@@ -149,9 +150,10 @@
   {
    "start": 41.71,
    "end": 49.35,
+   "size": 57,
    "lines": [
     "深夜惊喜",
-    "守门人、巡夜员、灯塔守望都收到过 · 谁也没找到全部 · 他们管这叫「梓涵的深夜惊喜」"
+    "守门人、巡夜员、灯塔守望都收到过\n · 谁也没找到全部\n · 他们管这叫「梓涵的深夜惊喜」"
    ],
    "visual": {
     "source": "data/sources/footage/census-card-v11-vertical.mp4",

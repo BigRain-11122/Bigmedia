@@ -1,0 +1,4 @@
+b9 size=57
+lines0=深夜惊喜
+lines1='守门人、巡夜员、灯塔守望都收到过\n · 谁也没找到全部\n · 他们管这叫「梓涵的深夜惊喜」'
+verbatim-strip-newline==orig: True

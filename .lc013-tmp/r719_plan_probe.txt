@@ -1,0 +1,6 @@
+plan keys: ['boundaries', 'cards_only_beats', 'duration_expected_s', 'engine', 'f_max_s', 'hard_cut_s', 'hits', 'last_beat_end_s', 'profile', 'ramp_beats', 's45_dials', 'segments', 'series', 'spec', 'tail_s', 'visual_mode', 'visual_ratio', 'visual_spec']
+key cards_only_beats: list len 0
+key boundaries: list len 11
+key segments: list len 12
+key hits: list len 2
+key ramp_beats: list len 0

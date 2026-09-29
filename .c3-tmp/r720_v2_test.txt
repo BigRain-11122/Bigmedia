@@ -1,0 +1,11 @@
+verbatim check: PASS (43 chars preserved)
+V2 @ size=57 -> 3 lines
+  L1 [守门人、巡夜员、灯塔守望都收到过] em=16.00 px=912 (budget em=16.14 px=920)
+  L2 [ · 谁也没找到全部] em=8.55 px=487 (budget em=16.14 px=920)
+  L3 [ · 他们管这叫「梓涵的深夜惊喜」] em=15.55 px=886 (budget em=16.14 px=920)
+  block: 4 lines @57px -> text_h=316 top_y=802 (band bottom 767, clear=35px)
+V2 @ size=56 -> 3 lines
+  L1 [守门人、巡夜员、灯塔守望都收到过] em=16.00 px=896 (budget em=16.43 px=920)
+  L2 [ · 谁也没找到全部] em=8.55 px=479 (budget em=16.43 px=920)
+  L3 [ · 他们管这叫「梓涵的深夜惊喜」] em=15.55 px=871 (budget em=16.43 px=920)
+  block: 4 lines @57px -> text_h=316 top_y=802 (band bottom 767, clear=35px)
