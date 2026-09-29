@@ -1,0 +1,232 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-001-02-v4.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 13.21,
+      "lines": [
+        "三重标注声明",
+        "第二章 · 数据粥铺"
+      ]
+    },
+    {
+      "start": 13.21,
+      "end": 33.65,
+      "lines": [
+        "开档",
+        "四点二十八分 · 最低档"
+      ]
+    },
+    {
+      "start": 33.65,
+      "end": 50.82,
+      "lines": [
+        "三十年的钟点",
+        "先看天"
+      ]
+    },
+    {
+      "start": 50.82,
+      "end": 73.3,
+      "lines": [
+        "第一句话",
+        "立国那天 · 热乎物要紧"
+      ]
+    },
+    {
+      "start": 73.3,
+      "end": 77.47,
+      "lines": [
+        "炉子点起来",
+        "一天里最安静的一刻"
+      ]
+    },
+    {
+      "start": 77.47,
+      "end": 103.16,
+      "lines": [
+        "数据流炉火",
+        "暖光不是白汽"
+      ]
+    },
+    {
+      "start": 103.16,
+      "end": 128.36,
+      "lines": [
+        "好认",
+        "旧银簪 · 老蜜蜡"
+      ]
+    },
+    {
+      "start": 128.36,
+      "end": 143.85,
+      "lines": [
+        "第一个客人",
+        "四点五十五分 · 小林"
+      ]
+    },
+    {
+      "start": 143.85,
+      "end": 147.41,
+      "lines": [
+        "催公务",
+        "新令牌 · 编目"
+      ]
+    },
+    {
+      "start": 147.41,
+      "end": 161.53,
+      "lines": [
+        "灵额",
+        "挥手让他上班去"
+      ]
+    },
+    {
+      "start": 161.53,
+      "end": 199.26,
+      "lines": [
+        "早市",
+        "五点半 · 广场烧开的水"
+      ]
+    },
+    {
+      "start": 199.26,
+      "end": 207.96,
+      "lines": [
+        "口味账",
+        "一九九二年的脑子"
+      ]
+    },
+    {
+      "start": 207.96,
+      "end": 227.91,
+      "lines": [
+        "老照片的来历",
+        "董家渡 · 半笼粢饭"
+      ]
+    },
+    {
+      "start": 227.91,
+      "end": 242.54,
+      "lines": [
+        "七点一刻",
+        "账上挂着名的背影"
+      ]
+    },
+    {
+      "start": 242.54,
+      "end": 251.57,
+      "lines": [
+        "追出两条街",
+        "有人回头笑"
+      ]
+    },
+    {
+      "start": 251.57,
+      "end": 276.19,
+      "lines": [
+        "剥毛豆",
+        "早上的城最真"
+      ]
+    },
+    {
+      "start": 276.19,
+      "end": 307.62,
+      "lines": [
+        "台风与麻绳",
+        "先把蒸笼绑死"
+      ]
+    },
+    {
+      "start": 307.62,
+      "end": 320.24,
+      "lines": [
+        "电波猫",
+        "碎布头筑巢"
+      ]
+    },
+    {
+      "start": 320.24,
+      "end": 332.14,
+      "lines": [
+        "收摊",
+        "门槛上坐一会儿"
+      ]
+    },
+    {
+      "start": 332.14,
+      "end": 359.71,
+      "lines": [
+        "检索不到的一样",
+        "老伴影像 · 不催"
+      ]
+    },
+    {
+      "start": 359.71,
+      "end": 366.64,
+      "lines": [
+        "信条",
+        "灶上留一壶 · 路过的都是客"
+      ]
+    },
+    {
+      "start": 366.64,
+      "end": 380.53,
+      "lines": [
+        "天擦黑",
+        "她走她的，它走它的"
+      ]
+    },
+    {
+      "start": 380.53,
+      "end": 398.95,
+      "lines": [
+        "夜里的城",
+        "提交落进黄浦江的光里"
+      ]
+    },
+    {
+      "start": 398.95,
+      "end": 406.15,
+      "lines": [
+        "章尾",
+        "周三 · 一盘棋"
+      ]
+    }
+  ]
+}

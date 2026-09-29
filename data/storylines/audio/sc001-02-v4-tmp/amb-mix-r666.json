@@ -1,0 +1,11 @@
+{
+ "ignition_cue_s": 73.3,
+ "dusk_cue_s": 366.64,
+ "voice_dur_s": 406.17,
+ "voice_mean_db": -49.2,
+ "bed_raw_mean_db": -24.1,
+ "bed_gain_db": -43.1,
+ "bed_target_mean_db": -67.2,
+ "out_dur_s": 406.17,
+ "out_mean_db": -49.1
+}
