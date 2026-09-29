@@ -1,0 +1,365 @@
+total_leaf_lines=1440
+=== buckets ===
+axes/侠气/ceo_order (18)
+axes/侠气/coldsnap (18)
+axes/侠气/dusk (18)
+axes/侠气/festival (18)
+axes/侠气/heatwave (18)
+axes/侠气/market_close (18)
+axes/侠气/market_open (18)
+axes/侠气/morning (18)
+axes/侠气/night (18)
+axes/侠气/rain (18)
+axes/侠气/typhoon (18)
+axes/侠气/weekend (18)
+axes/怀旧/ceo_order (18)
+axes/怀旧/coldsnap (18)
+axes/怀旧/dusk (18)
+axes/怀旧/festival (18)
+axes/怀旧/heatwave (18)
+axes/怀旧/market_close (18)
+axes/怀旧/market_open (18)
+axes/怀旧/morning (18)
+axes/怀旧/night (18)
+axes/怀旧/rain (18)
+axes/怀旧/typhoon (18)
+axes/怀旧/weekend (18)
+axes/求新/ceo_order (18)
+axes/求新/coldsnap (18)
+axes/求新/dusk (18)
+axes/求新/festival (18)
+axes/求新/heatwave (18)
+axes/求新/market_close (18)
+axes/求新/market_open (18)
+axes/求新/morning (18)
+axes/求新/night (18)
+axes/求新/rain (18)
+axes/求新/typhoon (18)
+axes/求新/weekend (18)
+axes/烟火/ceo_order (18)
+axes/烟火/coldsnap (18)
+axes/烟火/dusk (18)
+axes/烟火/festival (18)
+axes/烟火/heatwave (18)
+axes/烟火/market_close (18)
+axes/烟火/market_open (18)
+axes/烟火/morning (18)
+axes/烟火/night (18)
+axes/烟火/rain (18)
+axes/烟火/typhoon (18)
+axes/烟火/weekend (18)
+axes/秩序/ceo_order (18)
+axes/秩序/coldsnap (18)
+axes/秩序/dusk (18)
+axes/秩序/festival (18)
+axes/秩序/heatwave (18)
+axes/秩序/market_close (18)
+axes/秩序/market_open (18)
+axes/秩序/morning (18)
+axes/秩序/night (18)
+axes/秩序/rain (18)
+axes/秩序/typhoon (18)
+axes/秩序/weekend (18)
+axes/逍遥/ceo_order (18)
+axes/逍遥/coldsnap (18)
+axes/逍遥/dusk (18)
+axes/逍遥/festival (18)
+axes/逍遥/heatwave (18)
+axes/逍遥/market_close (18)
+axes/逍遥/market_open (18)
+axes/逍遥/morning (18)
+axes/逍遥/night (18)
+axes/逍遥/rain (18)
+axes/逍遥/typhoon (18)
+axes/逍遥/weekend (18)
+sprite/ceo_order/0 (1)
+sprite/ceo_order/1 (1)
+sprite/ceo_order/10 (1)
+sprite/ceo_order/11 (1)
+sprite/ceo_order/2 (1)
+sprite/ceo_order/3 (1)
+sprite/ceo_order/4 (1)
+sprite/ceo_order/5 (1)
+sprite/ceo_order/6 (1)
+sprite/ceo_order/7 (1)
+sprite/ceo_order/8 (1)
+sprite/ceo_order/9 (1)
+sprite/coldsnap/0 (1)
+sprite/coldsnap/1 (1)
+sprite/coldsnap/10 (1)
+sprite/coldsnap/11 (1)
+sprite/coldsnap/2 (1)
+sprite/coldsnap/3 (1)
+sprite/coldsnap/4 (1)
+sprite/coldsnap/5 (1)
+sprite/coldsnap/6 (1)
+sprite/coldsnap/7 (1)
+sprite/coldsnap/8 (1)
+sprite/coldsnap/9 (1)
+sprite/dusk/0 (1)
+sprite/dusk/1 (1)
+sprite/dusk/10 (1)
+sprite/dusk/11 (1)
+sprite/dusk/2 (1)
+sprite/dusk/3 (1)
+sprite/dusk/4 (1)
+sprite/dusk/5 (1)
+sprite/dusk/6 (1)
+sprite/dusk/7 (1)
+sprite/dusk/8 (1)
+sprite/dusk/9 (1)
+sprite/festival/0 (1)
+sprite/festival/1 (1)
+sprite/festival/10 (1)
+sprite/festival/11 (1)
+sprite/festival/2 (1)
+sprite/festival/3 (1)
+sprite/festival/4 (1)
+sprite/festival/5 (1)
+sprite/festival/6 (1)
+sprite/festival/7 (1)
+sprite/festival/8 (1)
+sprite/festival/9 (1)
+sprite/heatwave/0 (1)
+sprite/heatwave/1 (1)
+sprite/heatwave/10 (1)
+sprite/heatwave/11 (1)
+sprite/heatwave/2 (1)
+sprite/heatwave/3 (1)
+sprite/heatwave/4 (1)
+sprite/heatwave/5 (1)
+sprite/heatwave/6 (1)
+sprite/heatwave/7 (1)
+sprite/heatwave/8 (1)
+sprite/heatwave/9 (1)
+sprite/market_close/0 (1)
+sprite/market_close/1 (1)
+sprite/market_close/10 (1)
+sprite/market_close/11 (1)
+sprite/market_close/2 (1)
+sprite/market_close/3 (1)
+sprite/market_close/4 (1)
+sprite/market_close/5 (1)
+sprite/market_close/6 (1)
+sprite/market_close/7 (1)
+sprite/market_close/8 (1)
+sprite/market_close/9 (1)
+sprite/market_open/0 (1)
+sprite/market_open/1 (1)
+sprite/market_open/10 (1)
+sprite/market_open/11 (1)
+sprite/market_open/2 (1)
+sprite/market_open/3 (1)
+sprite/market_open/4 (1)
+sprite/market_open/5 (1)
+sprite/market_open/6 (1)
+sprite/market_open/7 (1)
+sprite/market_open/8 (1)
+sprite/market_open/9 (1)
+sprite/morning/0 (1)
+sprite/morning/1 (1)
+sprite/morning/10 (1)
+sprite/morning/11 (1)
+sprite/morning/2 (1)
+sprite/morning/3 (1)
+sprite/morning/4 (1)
+sprite/morning/5 (1)
+sprite/morning/6 (1)
+sprite/morning/7 (1)
+sprite/morning/8 (1)
+sprite/morning/9 (1)
+sprite/night/0 (1)
+sprite/night/1 (1)
+sprite/night/10 (1)
+sprite/night/11 (1)
+sprite/night/2 (1)
+sprite/night/3 (1)
+sprite/night/4 (1)
+sprite/night/5 (1)
+sprite/night/6 (1)
+sprite/night/7 (1)
+sprite/night/8 (1)
+sprite/night/9 (1)
+sprite/rain/0 (1)
+sprite/rain/1 (1)
+sprite/rain/10 (1)
+sprite/rain/11 (1)
+sprite/rain/2 (1)
+sprite/rain/3 (1)
+sprite/rain/4 (1)
+sprite/rain/5 (1)
+sprite/rain/6 (1)
+sprite/rain/7 (1)
+sprite/rain/8 (1)
+sprite/rain/9 (1)
+sprite/typhoon/0 (1)
+sprite/typhoon/1 (1)
+sprite/typhoon/10 (1)
+sprite/typhoon/11 (1)
+sprite/typhoon/2 (1)
+sprite/typhoon/3 (1)
+sprite/typhoon/4 (1)
+sprite/typhoon/5 (1)
+sprite/typhoon/6 (1)
+sprite/typhoon/7 (1)
+sprite/typhoon/8 (1)
+sprite/typhoon/9 (1)
+sprite/weekend/0 (1)
+sprite/weekend/1 (1)
+sprite/weekend/10 (1)
+sprite/weekend/11 (1)
+sprite/weekend/2 (1)
+sprite/weekend/3 (1)
+sprite/weekend/4 (1)
+sprite/weekend/5 (1)
+sprite/weekend/6 (1)
+sprite/weekend/7 (1)
+sprite/weekend/8 (1)
+sprite/weekend/9 (1)
+=== kw refund ===
+/axes/侠气/morning/7 :: 讨生活，得早一步出门
+/axes/侠气/morning/13 :: 市集上讨价还价，生活的小确幸就在这一句
+refund_hit=2
+=== kw config ===
+/axes/求新/heatwave/2 :: 要不是怕电费爆表，早把冰箱当游泳池了！
+/axes/求新/coldsnap/15 :: 这天气冻得像冰箱门关不紧
+/axes/侠气/heatwave/14 :: 热浪卷得人连话都懒说
+/axes/逍遥/weekend/6 :: 看这云卷云舒，人生也该悠着点
+/axes/逍遥/weekend/8 :: 看这云卷云舒，多自在
+/axes/逍遥/weekend/14 :: 看这云卷云舒，不如好好享受个周末
+/axes/逍遥/weekend/17 :: 云卷云舒，人生如寄，何不随性而为
+/axes/逍遥/market_close/11 :: 瞧那云卷云舒，人生多自在
+config_hit=8
+=== kw ai ===
+ai_hit=0
+=== kw craft ===
+/axes/求新/morning/7 :: 太阳初升，快来看我新画的像素风景！
+/axes/求新/morning/9 :: 新画作出炉了，快来看看有没有你喜欢的吧！
+/axes/求新/morning/16 :: 摊开画布，新一天的色彩要来得早些
+/axes/求新/dusk/3 :: 画匠的手艺可不能闲着，赶紧给夜景上色
+/axes/求新/dusk/7 :: 今天画了个新地图，收工了还心痒痒
+/axes/求新/dusk/9 :: 收工了，今天画的这幅作品还满意呢
+/axes/求新/dusk/13 :: 今儿的创作灵感像是从江面来的
+/axes/求新/night/3 :: 做画匠的手艺，夜里也得练练
+/axes/求新/night/13 :: 街头画壁画，生活添色彩
+/axes/求新/night/16 :: 画匠这儿的夜，比白天更绚烂
+/axes/求新/weekend/3 :: 刚从画廊回来，心情都变得亮堂堂的
+/axes/求新/weekend/4 :: 学了个新画法，周末正好练练手
+/axes/求新/weekend/7 :: 刚画完这幅，感觉跟过去那些不一样，挺有趣的
+/axes/求新/weekend/9 :: 画个新纹身，今天主题是龙
+/axes/求新/weekend/12 :: 写首诗吧，周末不就是要折腾点诗情画意吗？
+/axes/求新/weekend/16 :: 这画儿配上块玻璃，墙上就活了
+/axes/求新/rain/11 :: 画幅里的伞，都比现实美
+/axes/求新/typhoon/7 :: 小摊上画个新招牌，总得赶在台风前
+/axes/求新/typhoon/10 :: 画匠的手艺可不能在这阵风里露怯
+/axes/求新/typhoon/17 :: 画匠手巧，招牌加固又稳固
+/axes/求新/coldsnap/7 :: 画个火炉画，心里暖和和的
+/axes/求新/market_open/11 :: 这行情，就像画画，得大胆尝试
+/axes/求新/market_open/13 :: 交易一开盘，心情像画布上第一笔
+/axes/求新/market_close/4 :: 画匠的手艺又长进了
+/axes/求新/ceo_order/1 :: 新图纸一出，赶紧动手画！
+/axes/求新/ceo_order/3 :: 灵感来了，快抓牢，画个新玩意儿！
+/axes/求新/ceo_order/7 :: 画笔一挥，世界就是我的
+craft_hit=27
+=== kw shrimp ===
+/axes/烟火/morning/12 :: 青菜萝卜两厢情愿，咱这价格明镜儿似的
+/axes/烟火/night/10 :: 今儿这肉价不错，明早多买点
+/axes/烟火/weekend/13 :: 市场买卖讲价，公平公正正
+/axes/烟火/market_open/7 :: 米价又涨了点，赶紧看看
+/axes/烟火/market_close/6 :: 今天蔬菜价格又涨了点
+/axes/烟火/market_close/15 :: 卖了大半辈子鸡蛋，这价格还是有点乱
+/axes/求新/morning/6 :: 出摊了，别看我，我这新货可贵！
+/axes/求新/market_open/14 :: 新货来了，得赶紧看看能不能出个好价钱
+/axes/侠气/morning/13 :: 市集上讨价还价，生活的小确幸就在这一句
+/axes/侠气/market_open/7 :: 隔壁老李又在吆喝什么低价货
+shrimp_hit=10
+=== kw car ===
+/axes/烟火/morning/6 :: 粥香扑鼻早市开
+/axes/烟火/morning/11 :: 早点买早点，一天的好开始
+/axes/烟火/morning/16 :: 锅碗瓢盆响，一天好开始！
+/axes/烟火/night/5 :: 这夜市一开，一天的烦恼都跑了
+/axes/烟火/rain/16 :: 早起的摊主也躲不开这雨的冷意
+/axes/烟火/heatwave/11 :: 面条锅里水烧开了，添把柴火让面更劲道
+/axes/烟火/coldsnap/6 :: 锅里的粥再熬熬肯定能咕嘟开
+/axes/烟火/market_open/6 :: 早上好，买卖开始了！
+/axes/烟火/market_open/12 :: 日头一升买卖开
+/axes/烟火/market_open/14 :: 买卖的热闹才刚刚开始
+/axes/烟火/market_open/17 :: 食堂师傅开始忙活今天的第一顿
+/axes/烟火/ceo_order/1 :: 城里食堂师傅笑道：大锅菜炖了一早上，快开餐了
+/axes/烟火/ceo_order/7 :: 开锅的粥香扑鼻
+/axes/烟火/ceo_order/15 :: 白茫茫的光，包子铺都得开张了
+/axes/秩序/morning/0 :: 晨风轻，守门人正开店，心里头稳当得很
+/axes/秩序/morning/8 :: 晨风轻，开店正当时
+/axes/秩序/morning/10 :: 校准好了门，才开门迎客
+/axes/秩序/morning/14 :: 校准师刚开门，轻声吩咐：“今朝天气好，别忘戴顶帽
+/axes/秩序/morning/15 :: 城门打开就该收起夜里的梦
+/axes/秩序/heatwave/6 :: 空调再开低点，省电又凉快
+/axes/秩序/heatwave/11 :: 空调开得不小气，但安全第一
+/axes/秩序/heatwave/17 :: 空调开起才凉快，电费也是个大数目
+/axes/秩序/coldsnap/3 :: 冻得人骨头都快裂开了
+/axes/秩序/market_open/0 :: 交易所一开门，心就跟着紧了
+/axes/秩序/market_open/6 :: 开市钟一响，心里就踏实了
+/axes/秩序/market_open/8 :: 交易所开门了，大家小心点，别乱了规矩
+/axes/秩序/market_open/15 :: 开张头一天，规矩一条不能松
+/axes/秩序/market_close/11 :: 市场归于平寂，咱家的锅盖也该揭开瞧瞧了
+/axes/秩序/ceo_order/8 :: 城门一开，心也安稳了
+/axes/秩序/festival/12 :: 节日里，大家开心就好
+/axes/求新/morning/0 :: 凌晨烟火最旺，快开摊迎客吧
+/axes/求新/morning/1 :: 新鲜的食材，做足一天的好开始
+/axes/求新/morning/8 :: 晨风中摆好摊，一天的好运开始啦！
+/axes/求新/morning/12 :: 直播开始了，今天又会遇到哪些趣事呢？
+/axes/求新/morning/16 :: 摊开画布，新一天的色彩要来得早些
+/axes/求新/dusk/17 :: 今儿这活儿算数了，明天开个直播分享手艺
+/axes/求新/weekend/2 :: 这天气真好，正好出去走走，看看新开了啥摊位
+/axes/求新/heatwave/14 :: 这天气真是火炉不开空调都不行
+/axes/求新/market_open/6 :: 交易所一开，钱包就活了
+/axes/求新/market_open/13 :: 交易一开盘，心情像画布上第一笔
+/axes/求新/market_open/15 :: 股市一开眼就亮
+/axes/求新/ceo_order/0 :: 脑塔亮了，开工咯！
+/axes/求新/ceo_order/5 :: 直播间的伙伴们，咱们开工吧！
+/axes/怀旧/morning/1 :: 这伞头一开，就透着咱老底子的味道
+/axes/怀旧/morning/4 :: 这扇门开了，一天的好运气就进来了
+/axes/怀旧/morning/14 :: 摊开纸伞，慢悠悠地走过石板街
+/axes/怀旧/rain/0 :: 撑着伞走过雨巷，就像打开了旧日的记忆箱
+/axes/怀旧/market_open/0 :: 交易所一开，我就琢磨着淘点好东西
+/axes/怀旧/market_open/14 :: 这钟声一响，买卖场上热闹开锣
+/axes/侠气/morning/3 :: 集市开张，满街好货等你来
+/axes/侠气/morning/8 :: 晨风一扫夜的凉，摊子开张早赚两分光
+/axes/侠气/morning/14 :: 码头刚开了，船老大早就喊开嗓门了
+/axes/侠气/dusk/12 :: 小贩吹着口哨：“夜市开张，热闹才刚开始
+/axes/侠气/weekend/8 :: 帆起云开，海阔天空
+/axes/侠气/weekend/11 :: 船长归港，满载而归笑开颜
+/axes/侠气/market_open/0 :: 船长刚上码头就吆喝开了：“今儿个买卖兴不兴！
+/axes/侠气/market_open/6 :: 交易所一开门，好货就要抢
+/axes/侠气/market_open/13 :: 交易所一开锣，咱们得好好琢磨琢磨行情了
+/axes/侠气/market_open/15 :: 这交易所一开张，买卖双方可都精神了
+/axes/侠气/ceo_order/1 :: 城主开口，咱可得跟紧点
+/axes/侠气/ceo_order/7 :: 老李头又开始讲他的调解经了
+/axes/逍遥/morning/15 :: 晨雾散了看太阳，一天的好开始
+/axes/逍遥/rain/1 :: 茶香伴雨声，静待云开
+/axes/逍遥/coldsnap/6 :: 这寒风，比我还想春暖花开呢
+/axes/逍遥/coldsnap/13 :: 雪封江面，鱼也睡了，只等春暖花开
+/axes/逍遥/market_open/5 :: 交易所开张了，鱼儿也该动动身子了
+/axes/逍遥/market_open/13 :: 市场这会儿像锅开沸了
+/axes/逍遥/ceo_order/4 :: 脑光一启，咱们就开工
+/sprite/morning/5 :: 叮叮当响，开店营业忙
+/sprite/morning/7 :: 叮咚铃响开市忙
+/sprite/morning/10 :: 叮叮响，开店忙
+/sprite/market_open/0 :: 叮一声开启交易门
+/sprite/market_open/5 :: 啾啾灯灵舞，交易所开市
+/sprite/market_open/6 :: 叮咚开市了
+/sprite/market_open/10 :: 叮咚开市忙，光芒闪不停
+/sprite/market_close/10 :: 叮咚交易闭，静待明日开
+car_hit=76
+=== kw price ===
+/axes/烟火/market_close/12 :: 刚赚的这份钱，得给孩子买点糖
+/axes/秩序/market_open/10 :: 入市之前，得把账单再查一遍，安全第一
+/axes/秩序/market_open/17 :: 校准好心情，才能赚到真金
+/axes/秩序/market_close/10 :: 眼见得市场归平静，咱家的账本也该翻翻了
+/axes/求新/market_close/3 :: 刚赚的金币存哪儿
+/axes/求新/market_close/9 :: 手里的股票翻翻看，说不定明儿就是赚翻天！
+/axes/侠气/morning/8 :: 晨风一扫夜的凉，摊子开张早赚两分光
+/axes/侠气/night/15 :: 夜市摊前吆喝响，小本生意赚点光
+/axes/侠气/market_close/7 :: 听说小李子今儿赚了不少，哼，我可没这么好运
+/axes/侠气/ceo_order/13 :: 城主一声令，咱这买卖就能赚翻天
+price_hit=10

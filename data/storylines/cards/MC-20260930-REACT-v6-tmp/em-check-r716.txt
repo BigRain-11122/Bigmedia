@@ -1,0 +1,19 @@
+DAILY   9. 8.59 元香菜遭「仅退款」，商家驱车千里跨省讨回，如何评价？电商商家维权成本这么高，症结在哪？  FOUND  (zhihu-hot source; card face = verbatim prefix substring, full title + heat metadata desensitized, README-ledger only)
+ANCHOR  C-00015  creed field verbatim  「红灯是为所有人亮的，包括我。」  (job=风控官, QUANT city risk-control height, non-honor seat P-0, registered field)
+ANCHOR  C-00010  morning-market vendor in census (job=数据粥铺摊主, stall jargon 开档/收摊 registered) - city-annals mutual proof for morning-bucket vendor texture
+POOL    axes/烟火/morning/12  ->  烟火轴「青菜萝卜两厢情愿，咱这价格明镜儿似的」
+POOL    axes/侠气/morning/2  ->  侠气轴「邻里间，小纠纷早化解」
+POOL    axes/秩序/morning/2  ->  秩序轴「摊贩出摊了，规矩不能少，日子得按部就班」
+REACT   single-bucket discipline: morning bucket, 3-axis mapping (R309 law reuse; P-1 anti-cliche v2 applied; sprite position dropped - honest note)
+
+H1 size 84 budget 10.95em | H2 size 36 budget 25.56em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 804px vs subs top 970px gap +166px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市速报 006
+15.55 em  budget 25.56 em  margin +10.01em  single=True  今日热点 · 知乎热榜 2026-09-30
+22.70 em  budget 25.56 em  margin +2.86em  single=True  8.59 元香菜遭「仅退款」，商家驱车千里跨省讨回
+24.00 em  budget 25.56 em  margin +1.56em  single=True  烟火轴：「青菜萝卜两厢情愿，咱这价格明镜儿似的」
+16.00 em  budget 25.56 em  margin +9.56em  single=True  侠气轴：「邻里间，小纠纷早化解」
+25.00 em  budget 25.56 em  margin +0.56em  single=True  秩序轴：「摊贩出摊了，规矩不能少，日子得按部就班」
+22.00 em  budget 25.56 em  margin +3.56em  single=True  风控官信条：「红灯是为所有人亮的，包括我。」
+subs   23.55 em  budget 24.21 em  margin +0.66em  热点转述自知乎热榜·反应与信条皆取自虚构城市档案
+EM_CHECK: ALL OK
