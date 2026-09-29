@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\lc003\\voiceover-v5.beats.txt",
+    "order": "LC-003-v5",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 6.22,
+      "lines": [
+        "真实时间",
+        "全城唯一 · 直播标题钉真实时间"
+      ]
+    },
+    {
+      "start": 6.22,
+      "end": 9.92,
+      "lines": [
+        "居民档案",
+        "何雨欣 · 碳基市民 · 新市民派"
+      ]
+    },
+    {
+      "start": 9.92,
+      "end": 13.51,
+      "lines": [
+        "职业",
+        "主播 · 灯一开 整个世界让路"
+      ]
+    },
+    {
+      "start": 13.51,
+      "end": 19.32,
+      "lines": [
+        "迁徙",
+        "数字迁移潮第一班车 · 光桥代写摊"
+      ]
+    },
+    {
+      "start": 19.32,
+      "end": 24.6,
+      "lines": [
+        "转折",
+        "方言直播 · 弹幕爷青回"
+      ]
+    },
+    {
+      "start": 24.6,
+      "end": 29.05,
+      "lines": [
+        "三不规矩",
+        "不夸大 不卖惨 不恰烂钱"
+      ]
+    },
+    {
+      "start": 29.05,
+      "end": 35.03,
+      "lines": [
+        "开播钟",
+        "对齐交易所钟声 · 等开播像等开盘"
+      ]
+    },
+    {
+      "start": 35.03,
+      "end": 40.41,
+      "lines": [
+        "仪式",
+        "开播前摸温度计 · 下播绕江复盘"
+      ]
+    },
+    {
+      "start": 40.41,
+      "end": 44.53,
+      "lines": [
+        "钢笔发簪",
+        "第一次通过稿 · 编辑送的旧钢笔"
+      ]
+    },
+    {
+      "start": 44.53,
+      "end": 48.53,
+      "lines": [
+        "夜班人",
+        "筹备系列 · 上夜班的人拍给全世界"
+      ]
+    },
+    {
+      "start": 48.53,
+      "end": 54.32,
+      "lines": [
+        "信条",
+        "流量像潮水 我是灯塔不是渔船"
+      ]
+    },
+    {
+      "start": 54.32,
+      "end": 58.67,
+      "lines": [
+        "人物全档案",
+        "公众号 · 转给被流量追着跑的人"
+      ]
+    }
+  ]
+}
