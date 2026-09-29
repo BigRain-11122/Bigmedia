@@ -1,0 +1,26 @@
+[v10 ref] width=1080 | height=1920 | r_frame_rate=30/1 | duration=13.000000 |
+[v2 out] width=1080 | height=1920 | r_frame_rate=30/1 | duration=13.000000 |
+beat_durations [(0, 5.96), (1, 3.55), (2, 2.96), (3, 4.49), (4, 5.35), (5, 6.97), (6, 5.5), (7, 3.6), (8, 6.57), (9, 4.6), (10, 4.32), (11, 3.72)]
+max_dur 6.97 (src 13.0s, wrap-crossing check)
+card00 b0  baseline top=745 net=-22 -> FIX (R720 law)
+   -> fixed: size=54 dot_split=False lines=4 top=802 net=35
+      L: [全城唯一坚持用机械钟声对时的人（每]
+      L: [次全城齐秒老座钟跟着响一声·档案馆]
+      L: [的人说那是城的「心跳备份」）]
+card01 b1  [居民档案] size=60 as-is top=831 net=64 -> clean
+card02 b2  baseline top=745 net=-22 -> FIX (R720 law)
+   -> fixed: size=54 dot_split=False lines=4 top=802 net=35
+      L: [北外滩 · 治理岸 · 档案馆区 · 时空]
+      L: [校准师——修表匠的赛博后身——校准的]
+      L: [是全城的钟，也是人心里的时区]
+card03 b3  [手艺习惯] size=60 as-is top=788 net=21 -> clean
+card04 b4  [转折] size=60 as-is top=788 net=21 -> clean
+card05 b5  [出身] size=60 as-is top=788 net=21 -> clean
+card06 b6  [性格] size=60 as-is top=788 net=21 -> clean
+card07 b7  [现状] size=60 as-is top=831 net=64 -> clean
+card08 b8  [手稳] size=60 as-is top=831 net=64 -> clean
+card09 b9  [互证] size=60 as-is top=788 net=21 -> clean
+card10 b10 [信条] size=60 as-is top=874 net=107 -> clean
+card11 b11 [校准师全档案] size=60 as-is top=874 net=107 -> clean
+geometry_fixes: [(0, 54, False, 4, 802.4), (2, 54, False, 4, 802.4)]
+written -> C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc015\cards-v1-matched.json

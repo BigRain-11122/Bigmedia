@@ -1,0 +1,23 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [钩子] size=54 lines=4 pitch=78.8 block_top=802 net=35px -> clean
+      b0 L: [全城唯一坚持用机械钟声对时的人（每]
+      b0 L: [次全城齐秒老座钟跟着响一声·档案馆]
+      b0 L: [的人说那是城的「心跳备份」）]
+card01 b1  [居民档案] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card02 b2  [城区职业] size=54 lines=4 pitch=78.8 block_top=802 net=35px -> clean
+      b2 L: [北外滩 · 治理岸 · 档案馆区 · 时空]
+      b2 L: [校准师——修表匠的赛博后身——校准的]
+      b2 L: [是全城的钟，也是人心里的时区]
+card03 b3  [手艺习惯] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card04 b4  [转折] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card05 b5  [出身] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card06 b6  [性格] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card07 b7  [现状] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card08 b8  [手稳] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card09 b9  [互证] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card10 b10 [信条] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card11 b11 [校准师全档案] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+
+problems: NONE

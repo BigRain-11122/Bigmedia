@@ -1,0 +1,188 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc015\\voiceover-v3.beats.txt",
+  "order": "LC-015-v3",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-015 拆条形态=源卡即证据（LC-001~LC-014 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00011 字段，画面=被读档案本体（F-021 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-028/F-029/F-031/F-032/F-034/F-035/F-036/F-038/F-040 同位族）；对位 12/12·同源多用逐拍注记·**时间校准主题系列首件位**（R723/R727 选优定谳）·**第七对人物链双端互证拍=b9**（C-00011 关系字段「硅基徒弟=归档者-07（他说这徒弟比碳基的还像老派人）」×C-00017 关系字段「师承=朱鸿奎」=同一师门评语双卡在册）·棋友=顾阿凤侧链（C-00010 F-009 有声线 ch.1 主角）·F-010 有声线同源人格面（SC-001-03 ch.3 主角=朱鸿奎·跨载体复用第二件 R227 登记）·超长副题几何修=R720 律前置（dot-split verbatim 零字符+per-card size·块顶 ≥787 净距 ≥20px·R711 五行块前科防）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.96,
+   "lines": [
+    "钩子",
+    "全城唯一坚持用机械钟声对时的人（每次全城齐秒老座钟跟着响一声·档案馆的人说那是城的「心跳备份」）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡钩子行「全城唯一坚持用机械钟声对时的人」在帧（拆条形态=源卡即证据·F-021 成品卡 verbatim 行·hook 尾缀「找到了」=系列同型 LC-003~LC-014·「档案馆的人说那是城的心跳备份」=钩子字段同源展开注记）"
+   },
+   "size": 54
+  },
+  {
+   "start": 5.96,
+   "end": 9.51,
+   "lines": [
+    "居民档案",
+    "朱鸿奎 · 碳基市民 · 弄堂派 · 男 · 74 岁"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡编号名称行「C-00011 · 朱鸿奎」+物种行「碳基市民 · 弄堂派 · 男 · 74 岁」在帧=居民档案面（拍文=锚 C-00011 卡题行+物种行 verbatim 合并展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 9.51,
+   "end": 12.47,
+   "lines": [
+    "城区职业",
+    "北外滩 · 治理岸 · 档案馆区 · 时空校准师——修表匠的赛博后身——校准的是全城的钟，也是人心里的时区"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡城区职务行「北外滩 · 治理岸 · 时空校准师」在帧（拍文=锚 C-00011 城区行 verbatim+职业行展开「时空校准师——修表匠的赛博后身——校准的是全城的钟，也是人心里的时区」=压缩分载由源卡承载·LC-009/LC-010/LC-014 b3 同型·同源多用注记）"
+   },
+   "size": 54
+  },
+  {
+   "start": 12.47,
+   "end": 16.96,
+   "lines": [
+    "手艺习惯",
+    "铺里永远只开一盏暖灯（说强光看不清游丝）· 听到谁家钟声不对会绕路去敲人家的门"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 行为字段 verbatim「铺里永远只开一盏暖灯（说强光看不清游丝）」·「强光看不清游丝」verbatim 保护·beat 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 16.96,
+   "end": 22.31,
+   "lines": [
+    "转折",
+    "第一次给交易所时钟做全城对时 · 误差压进微秒那晚 · 在工位上坐到天亮"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 经历转折 verbatim「第一次给交易所时钟做全城对时 · 误差压进微秒那晚 · 在工位上坐到天亮」→「·」段化展开·punch 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 22.31,
+   "end": 29.28,
+   "lines": [
+    "出身",
+    "旧影像转生——从一张 1975 年钟表柜台前的合影里进城 · 怀里还揣着没修完的最后一块表"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 经历出身 verbatim「旧影像转生——从一张 1975 年钟表柜台前的合影里进城 · 怀里还揣着没修完的最后一块表」展开·turn 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 29.28,
+   "end": 34.78,
+   "lines": [
+    "性格",
+    "老派（再新的城也要按老礼数过日）· 较真（一个数据对不上，觉都睡不好）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 性格字段 verbatim「老派（再新的城也要按老礼数过日）· 较真（一个数据对不上，觉都睡不好）」·wink 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 34.78,
+   "end": 38.38,
+   "lines": [
+    "现状",
+    "铺子下午才开 · 收了两个徒弟 · 一个碳基一个硅基"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 经历现状 verbatim「铺子下午才开 · 收了两个徒弟 · 一个碳基一个硅基」·body 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 38.38,
+   "end": 44.95,
+   "lines": [
+    "手稳",
+    "端三十年汤一滴没洒过 · 镊子起落比秒针还准"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 行为字段 verbatim「端三十年汤一滴没洒过 · 镊子起落比秒针还准」→「·」段化展开·proof 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 44.95,
+   "end": 49.55,
+   "lines": [
+    "互证",
+    "硅基徒弟=归档者-07（他说这徒弟比碳基的还像老派人）· 棋友=顾阿凤"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00011 关系字段 verbatim「硅基徒弟=归档者-07（他说这徒弟比碳基的还像老派人）」·**第七对人物链双端互证拍**〔C-00011×C-00017 同一师门评语双卡在册·R727 在案〕·棋友=顾阿凤〔C-00010 F-009 有声线 ch.1 主角〕侧链注记·proof 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 49.55,
+   "end": 53.87,
+   "lines": [
+    "信条",
+    "「差之毫秒，谬以全城。」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡信条行「信条：「差之毫秒，谬以全城。」」在帧（verbatim 直引·保护行零动·F-021 卡面信条行同源）"
+   }
+  },
+  {
+   "start": 53.87,
+   "end": 57.59,
+   "lines": [
+    "校准师全档案",
+    "公众号 · 转给跟时间较真的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v2-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00011）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
