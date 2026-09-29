@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 32 budget 28.75em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 840px vs subs top 970px gap +130px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 010
+22.15 em  budget 28.75 em  margin +6.60em  single=True  云端 token 机制令 2026-09-29 落账 11:21:09
+26.75 em  budget 28.75 em  margin +2.00em  single=True  「决策委员会去梳理一下，建立顶层节省云端token的机制」
+25.45 em  budget 28.75 em  margin +3.30em  single=True  审计 5 日窗 206 计费任务 · 生成面 98% · 推理面零云
+22.10 em  budget 28.75 em  margin +6.65em  single=True  三缺口：记账无聚合 · 三径未升格 · 在册未在役
+22.65 em  budget 28.75 em  margin +6.10em  single=True  机制四款：记账律 · 三径闸 · 效率律 · 判据回访
+19.45 em  budget 28.75 em  margin +9.30em  single=True  委员会 7/7 有条件赞成 · 否决窗至 10-06
+24.15 em  budget 28.75 em  margin +4.60em  single=True  全司三径闸接线 · 本司 ack ≤10 分钟 · 回访 10-07
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（云端机制令台账档案）
+EM_CHECK: ALL OK
