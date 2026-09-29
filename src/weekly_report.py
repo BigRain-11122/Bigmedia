@@ -58,6 +58,7 @@ ORDERS = REPO / "orders"
 TEMPLATE = REPO / "src" / "os" / "report_template.md"
 OUT_DIR = REPO / "output" / "reports"
 QUEUE = REPO / "docs" / "self-improvement-queue.md"
+CLOUD_ATTR = REPO / "data" / "cloud-attribution.json"
 
 LOG_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})\s+(.*)$")
 ROUND_RE = re.compile(r"^R\d+\b")
@@ -101,7 +102,7 @@ PLACEHOLDERS = (
     "WEEK_LABEL", "GEN_TS", "SINCE", "UNTIL", "ROUNDS", "TICK", "IDLE",
     "OTHER", "COMMITS_N", "DONE_N", "OPEN_N", "ORDERS_N",
     "NOVEL_N", "NOVEL_P", "AUDIO_N", "AUDIO_P", "COMIC_N", "COMIC_P",
-    "EXT_N", "EXT_P", "GPU_MEAN", "PROPOSALS_N",
+    "EXT_N", "EXT_P", "GPU_MEAN", "PROPOSALS_N", "CLOUD_LINE",
     "ROUNDS_LOG", "COMMITS_LOG", "DONE_LOG", "OPEN_LOG", "ORDERS_LOG",
 )
 
@@ -291,6 +292,31 @@ def gpu_util_mean(samples=5, delay=1.0, query=None):
     return int(round(sum(vals) / float(len(vals))))
 
 
+def cloud_attribution(path=CLOUD_ATTR):
+    """Cloud billing-task line from the local attribution ledger share
+    (C-20260929-01 A/B dispatch item 3; L1 script, zero LLM).
+
+    data/cloud-attribution.json holds this company's share of the
+    group attribution ledger: per-entity billing task counts inside
+    the recorded window. Missing/invalid file degrades to None (the
+    report prints N/A) instead of guessing.
+    """
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        rows = []
+        for ent in data.get("entities", []):
+            name = str(ent.get("entity", "?"))
+            n = ent.get("billing_tasks_window")
+            if not isinstance(n, int):
+                continue
+            rows.append("%s %d" % (name, n))
+        if not rows:
+            return None
+        return "; ".join(rows)
+    except (OSError, ValueError):
+        return None
+
+
 def proposal_count(queue_path, week_label):
     """Self-drive proposals filed for the ISO week (section D registry).
 
@@ -319,7 +345,8 @@ def collect_selfdrive(repo, queue_path, since, until, week_label):
     Each leg degrades to None ("N/A" in the report) instead of guessing.
     """
     sd = {"total": None, "novel": None, "audio": None, "comic": None,
-          "video": None, "cards": None, "gpu": None, "proposals": None}
+          "video": None, "cards": None, "gpu": None, "proposals": None,
+          "cloud": None}
     try:
         total, counts = commits_line_touch(repo, since, until)
         sd["total"] = total
@@ -329,6 +356,7 @@ def collect_selfdrive(repo, queue_path, since, until, week_label):
         pass
     sd["gpu"] = gpu_util_mean()
     sd["proposals"] = proposal_count(queue_path, week_label)
+    sd["cloud"] = cloud_attribution()
     return sd
 
 
@@ -373,6 +401,7 @@ def build_report(template_text, week_label, since, until, state, commits,
         "GPU_MEAN": "N/A" if sd.get("gpu") is None else str(sd["gpu"]),
         "PROPOSALS_N": "N/A" if sd.get("proposals") is None
                        else str(sd["proposals"]),
+        "CLOUD_LINE": "N/A" if sd.get("cloud") is None else str(sd["cloud"]),
         "ROUNDS_LOG": bullets(state["lines"]),
         "COMMITS_LOG": bullets(["- %s %s %s" % r for r in commits]),
         "DONE_LOG": bullets(done_lines),

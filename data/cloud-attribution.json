@@ -1,0 +1,9 @@
+{
+  "_doc": "BigStream share of the group cloud attribution ledger (C-20260929-01 B 款·cloudF attribution 唯一记账面·本司份额本地镜像). Entity counts = billing tasks in the recorded window. 推理面零云 = production loop runs fully local (edge-tts TTS chain / faster-whisper ASR / Ollama expert seats / FFmpeg render); comic-line ~3 billing tasks are executed on the bm-a session face (not this loop) and stay attributed there.",
+  "window": "2026-09-23..2026-09-29",
+  "updated": "2026-09-29",
+  "entities": [
+    {"entity": "BigStream-OSLoop", "billing_tasks_window": 0, "note": "推理面零云：TTS/ASR/评审/渲染全本地栈"},
+    {"entity": "bm-a 会话·漫画线", "billing_tasks_window": 3, "note": "bm-a 会话面发射·attribution 归其会话不转移（P-20260929-01 证据包口径：全集团 1% 最小占比）"}
+  ]
+}
