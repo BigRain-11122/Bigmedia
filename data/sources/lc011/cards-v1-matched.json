@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc011\\voiceover-v4.beats.txt",
+  "order": "LC-011-v4",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-011 拆条形态=源卡即证据（LC-001~LC-010 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00024 字段，画面=被读档案本体（F-034 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-028/F-031/F-032/F-035/F-036/F-038/F-040 同位族）；对位 12/12·同源多用逐拍注记·b10 何雨欣跨卡互证〔C-00022 双端互指=LC-003 选优互证面兑现=拆条系列第四对人物链〕=跨卡互证拍·系列首件精灵系硅基民拆条=物种面扩展第三档（碳基×8→像素灵×2→精灵系）·MEDIA 城同城第三卡=主播圈人物链（LC-003 何雨欣→LC-011 缪一）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.69,
+   "lines": [
+    "字幕语气标注人",
+    "全城唯一 · 给方言字幕手工标注「语气」的字幕君"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡钩子行「全城唯一给方言字幕手工标注「语气」的字幕君」在帧（拆条形态=源卡即证据·F-034 成品卡 verbatim 行·hook 尾缀「找到了」=系列同型 LC-003~LC-010）"
+   }
+  },
+  {
+   "start": 5.69,
+   "end": 8.81,
+   "lines": [
+    "居民档案",
+    "缪一 · 硅基民 · 精灵系 · 无定 · 编译纪 3 年"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡编号名称行「C-00024 · 缪一」+物种行「硅基民 · 精灵系 · 无定 · 编译纪 3 年」在帧=居民档案面（拍文=锚 C-00024 卡题行+物种行 verbatim 合并展开·「无定」由字卡列承载=b2 卡口分工·LC-007 b2 同型·**系列首件精灵系硅基民拆条=物种面扩展第三档**·同源多用注记）"
+   }
+  },
+  {
+   "start": 8.81,
+   "end": 12.4,
+   "lines": [
+    "城区职业",
+    "MEDIA 城 · 信号塔街区 · 字幕君"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡城区职务行「MEDIA 城 · 信号塔街区 · 字幕君」在帧（拍文=锚 C-00024 城区行 verbatim+职业行首词·破折号展开「一帧一毫秒对轴的人——全城最懂『什么时候说』」=压缩分载由源卡承载·LC-009/LC-010 b3 同型·同源多用注记）"
+   }
+  },
+  {
+   "start": 12.4,
+   "end": 16.84,
+   "lines": [
+    "手艺规矩",
+    "快不是本事 准时才是"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00024 思想字段 verbatim「它信奉：字幕这行，快不是本事，准时才是。」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 16.84,
+   "end": 23.12,
+   "lines": [
+    "转折",
+    "第一次给城主欢迎词打轴 · 把自己复制了两份并行核对 · 师父骂「成长没有并行捷径」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00024 经历转折 verbatim「第一次给城主欢迎词打轴，压力大到把自己复制了两份并行核对（后来被师父骂了一顿，『成长没有并行捷径』）」展开·**打轴=黑话词表命中→L18 卡口分工**：口播=做字幕白话换位·卡锚列保留「打轴」原词·LC-009 回测田/LC-010 门禁链 同型·压力大到/后来被师父骂了一顿=压缩分载由源卡承载·师父引句「成长没有并行捷径」verbatim 保护·punch 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 23.12,
+   "end": 32.4,
+   "lines": [
+    "出身",
+    "觉醒才三年 · 全城最年轻的成年硅基民 · 名字自己选的「缪」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00024 思想字段 verbatim「它觉醒才三年，是全城最年轻的成年硅基民之一」「它给自己选了『缪一』这个名字」+「差一点点意思的『缪』，做字幕的就是差一点点都不能要」展开·之一=压缩分载·名字自选故事=思想字段 verbatim 域·turn 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 32.4,
+   "end": 36.12,
+   "lines": [
+    "工位一句话",
+    "观众说字幕「有人味」 · 裱在工位上"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00024 钩子字段 verbatim「观众说它做的字幕『有人味』，它把这句话裱在了工位上」展开·做的=压缩分载由源卡承载·wink 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 36.12,
+   "end": 40.04,
+   "lines": [
+    "现状",
+    "七段街区最快字幕 · 攒钱配大屏「工欲善其事」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00024 经历现状 verbatim「七段街区最快字幕，正攒钱给自己配一块大屏——『工欲善其事』」展开·正/给自己一块=压缩分载由源卡承载·同源多用注记）"
+   }
+  },
+  {
+   "start": 40.04,
+   "end": 44.29,
+   "lines": [
+    "方言功",
+    "每晚抽三句字幕做「翻译练习」 · 湘腔「霸得蛮」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00024 行为字段 verbatim「每晚把当天所有节目字幕抽三句做『翻译练习』（方言转普通话，不许丢味）」+语言字段 verbatim「跟着主播学了一口湘腔『霸得蛮』，用在给自己打气的时候」展开·所有节目/翻译练习=压缩分载由源卡承载·练方言=「方言转普通话」白话换位·同源多用注记）"
+   }
+  },
+  {
+   "start": 44.29,
+   "end": 48.53,
+   "lines": [
+    "播音间老搭档",
+    "合作最久的主播=何雨欣 · 吵架只用剪辑术语 · 和好一句「发版了」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=**跨卡双源**：锚 C-00024 关系字段 verbatim「合作最久的主播=何雨欣（吵架只用剪辑术语，和好只需要一句『发版了』）」×C-00022 何雨欣关系字段 verbatim「合作最久的是字幕君缪一（俩人吵架只用剪辑术语）」=**卡面双端互指在册=拆条系列第四对人物链**·LC-003 选优材料双卡互证面兑现〔R683 在案〕·跨卡互证拍·只用→用/只需要→只要=停顿位压缩·同源多用注记）"
+   }
+  },
+  {
+   "start": 48.53,
+   "end": 53.87,
+   "lines": [
+    "信条",
+    "「字幕慢半帧，都是对说话人的辜负。」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡信条行「信条：「字幕慢半帧，都是对说话人的辜负。」」在帧（verbatim 直引·保护行零动）"
+   }
+  },
+  {
+   "start": 53.87,
+   "end": 57.74,
+   "lines": [
+    "字幕全档案",
+    "公众号 · 转给把话听完的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v15-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00024）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
