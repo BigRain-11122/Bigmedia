@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc004\\voiceover-v4.beats.txt",
+  "order": "LC-004-v4",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-004 拆条形态=源卡即证据（LC-001/002/003 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00025 字段，画面=被读档案本体（F-035 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 轮内修红先例）；对位 12/12·同源多用逐拍注记·b7 铜哨/b10 高小满=跨卡互证拍〔C-00028/C-00026〕"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.48,
+   "lines": [
+    "真实水域",
+    "全城唯一 · 慢班渡轮"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡钩子行「全城唯一保留「慢班渡轮」的船长——不为生意，只为给想慢慢看江的人留一趟船」在帧（拆条形态=源卡即证据·F-035 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 5.48,
+   "end": 8.89,
+   "lines": [
+    "居民档案",
+    "陆海峰 · 碳基市民 · 弄堂派"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡档案行 C-00025·陆海峰/碳基市民·弄堂派/男·52 岁在帧=居民档案面"
+   }
+  },
+  {
+   "start": 8.89,
+   "end": 14.63,
+   "lines": [
+    "职业",
+    "渡轮船长 · 江上摆渡人 三流数据道的活船老大"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 职业行「渡轮船长——江上摆渡人——三流数据道的活船老大」verbatim 展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 14.63,
+   "end": 19.79,
+   "lines": [
+    "码头基因",
+    "他爹黄浦江轮渡船长 · 打小在码头长大"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 思想字段「他爹是现实里黄浦江上的轮渡船长，他打小在码头长大，江的脾气全在骨头里」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 19.79,
+   "end": 26.2,
+   "lines": [
+    "慢班宣言",
+    "数据道再快 · 永远留着慢班"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 思想字段「数据道再快，他这条渡轮永远留着慢班，「给想看江的人留的」」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 26.2,
+   "end": 29.95,
+   "lines": [
+    "开航规矩",
+    "绕船三圈 一步不少"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 行为字段「开航前绕船三圈（一步不少）」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 29.95,
+   "end": 36.02,
+   "lines": [
+    "铜哨暗号",
+    "雾天一响 · 守夜灯灵必到"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 服装字段「腰间挂着一只旧铜哨——他爹传的，现在用来在雾天跟守夜灯灵对暗号」+关系字段「老友=守夜灯灵十四号路灯（雾天铜哨一响，灯灵必到）」展开·跨卡互证拍=C-00028 同场互指·同源多用注记）"
+   }
+  },
+  {
+   "start": 36.02,
+   "end": 42.61,
+   "lines": [
+    "大雾夜",
+    "全船人合唱 · 减速唱完才靠泊"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 经历字段「转折：一次大雾夜全船人合唱等雾散，那首歌成了船上的保留节目，他嘴上嫌吵，每回都减速唱完才靠泊」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 42.61,
+   "end": 45.38,
+   "lines": [
+    "恒价船票",
+    "一句多谢"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 钩子字段「船票恒价：一句「多谢」」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 45.38,
+   "end": 50.53,
+   "lines": [
+    "传手艺",
+    "徒弟高小满 · 手艺不传就沉江了"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00025 经历字段「正教一个想学开船的年轻人——「手艺不传就沉江了」」+关系字段「徒弟=穿城信使高小满」展开·跨卡互证拍=C-00026 双向对位·同源多用注记）"
+   }
+  },
+  {
+   "start": 50.53,
+   "end": 54.43,
+   "lines": [
+    "信条",
+    "船稳 人心才稳"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡信条行「信条：「船稳，人心才稳。」」在帧（verbatim 直引）"
+   }
+  },
+  {
+   "start": 54.43,
+   "end": 58.65,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给想慢慢看江的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v16-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00025）」在帧）"
+   }
+  }
+ ]
+}
