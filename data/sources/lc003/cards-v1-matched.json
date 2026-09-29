@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc003\\voiceover-v5.beats.txt",
+  "order": "LC-003-v5",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-003 拆条形态=源卡即证据（LC-001/002 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00022 字段，画面=被读档案本体（F-032 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 轮内修红先例）；对位 12/12·同源多用逐拍注记"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 6.22,
+   "lines": [
+    "真实时间",
+    "全城唯一 · 直播标题钉真实时间"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡钩子行「全城唯一把「真实时间」打进直播标题的主播」在帧（拆条形态=源卡即证据·F-032 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 6.22,
+   "end": 9.92,
+   "lines": [
+    "居民档案",
+    "何雨欣 · 碳基市民 · 新市民派"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡档案行 C-00022·何雨欣/碳基市民·新市民派·女·25 岁在帧=居民档案面"
+   }
+  },
+  {
+   "start": 9.92,
+   "end": 13.51,
+   "lines": [
+    "职业",
+    "主播 · 灯一开 整个世界让路"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 职业行「主播——直播间的赛博后身——灯一开整个世界都要让路」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 13.51,
+   "end": 19.32,
+   "lines": [
+    "迁徙",
+    "数字迁移潮第一班车 · 光桥代写摊"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 经历字段「数字迁移潮第一班车…摊牌上写「代写文案，管饭就行」」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 19.32,
+   "end": 24.6,
+   "lines": [
+    "转折",
+    "方言直播 · 弹幕爷青回"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 经历转折字段「第一次用方言全程做了一场直播，弹幕全在刷「爷青回」…真话最带货」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 24.6,
+   "end": 29.05,
+   "lines": [
+    "三不规矩",
+    "不夸大 不卖惨 不恰烂钱"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 思想字段「她给自己立的规矩是直播间不夸大、不卖惨、不恰烂钱」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 29.05,
+   "end": 35.03,
+   "lines": [
+    "开播钟",
+    "对齐交易所钟声 · 等开播像等开盘"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 钩子字段「开播时间表跟交易所钟声对齐，粉丝说等她开播像等开盘」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 35.03,
+   "end": 40.41,
+   "lines": [
+    "仪式",
+    "开播前摸温度计 · 下播绕江复盘"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 行为字段「开播前必摸一摸门口的温度计…下播绕江走一圈复盘…每条粉丝来信都亲笔回」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 40.41,
+   "end": 44.53,
+   "lines": [
+    "钢笔发簪",
+    "第一次通过稿 · 编辑送的旧钢笔"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 服装字段「发间一支旧钢笔——她第一次写通过稿时编辑送的，她给别成了发簪」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 44.53,
+   "end": 48.53,
+   "lines": [
+    "夜班人",
+    "筹备系列 · 上夜班的人拍给全世界"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00022 思想字段「最想做成的一期节目，是把这座城里「上夜班的人」一个个拍给全世界看」+经历尾「正在筹备《夜班人》系列」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 48.53,
+   "end": 54.32,
+   "lines": [
+    "信条",
+    "流量像潮水 我是灯塔不是渔船"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡信条行「信条：「流量像潮水，我是灯塔不是渔船。」」在帧（verbatim 直引）"
+   }
+  },
+  {
+   "start": 54.32,
+   "end": 58.67,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给被流量追着跑的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v13-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00022）」在帧）"
+   }
+  }
+ ]
+}
