@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc008\\voiceover-v6.beats.txt",
+  "order": "LC-008-v6",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-008 拆条形态=源卡即证据（LC-001~LC-007 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00021 字段，画面=被读档案本体（F-031 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-035/F-036/F-038 同位族）；对位 12/12·同源多用逐拍注记·b6 师父高小满转正之约〔LC-005 高小满侧行为字段双向闭合=拆条系列首对人物链双向互证〕=跨卡互证拍·系列首件儿童居民拆条位"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 6.41,
+   "lines": [
+    "放学的口哨",
+    "全城唯一 · 唤来消息雀的孩子"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡钩子行「全城唯一能口哨唤来三只以上消息雀的孩子」在帧（拆条形态=源卡即证据·F-031 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 6.41,
+   "end": 9.99,
+   "lines": [
+    "居民档案",
+    "王多多 · 碳基市民 · 原生代 · 11 岁"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡编号名称行「C-00021·王多多」+物种行「碳基市民·原生代·男·11 岁」在帧=居民档案面"
+   }
+  },
+  {
+   "start": 9.99,
+   "end": 14.71,
+   "lines": [
+    "职业",
+    "像素小学学生 · 放学就往驿站跑的编外学徒"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡归属职务行「GAME 城·X026 城门区·像素小学学生」在帧（拍文=锚 C-00021 职业字段 verbatim「像素小学学生（信使小跟班）——放学就往驿站跑的编外学徒」展开·括号注=源卡承载〔R302 在案律〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 14.71,
+   "end": 20.55,
+   "lines": [
+    "出身",
+    "跟版本一起长的娃 · 爹妈都在游戏楼上班"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 经历字段「城生城长——爹妈都在游戏楼上班」「家里人说他是『跟版本一起长的娃』」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 20.55,
+   "end": 27.09,
+   "lines": [
+    "转折",
+    "第一次独立送完跨城急件 · 收为小跟班"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 经历字段转折「第一次独立送完一封跨城急件……被驿站正式收为『小跟班』，那天他失眠了，激动的」展开·收为→收他当=L18 白话换位卡锚承载原词·同源多用注记）"
+   }
+  },
+  {
+   "start": 27.09,
+   "end": 33.51,
+   "lines": [
+    "师父",
+    "穿城信使高小满 · 等长到她那么高就能转正"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 关系字段「师父=穿城信使高小满（『等长到她那么高就能转正』）」展开·师徒对双向闭合拍=LC-005 高小满侧行为字段「等他长到我这么高就转正」同一转正之约两端=拆条系列首对人物链双向互证·跨卡互证拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 33.51,
+   "end": 37.66,
+   "lines": [
+    "没名字的纸飞机",
+    "他坚持它有灵魂"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 行为字段「养了一只没名字的纸飞机（他坚持它有灵魂）」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 37.66,
+   "end": 42.09,
+   "lines": [
+    "现状",
+    "数学一般 · 方向感全班第一"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 经历现状字段「现状：四年级，数学一般，方向感全班第一」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 42.09,
+   "end": 45.66,
+   "lines": [
+    "commit 光点",
+    "放学绕路只为一眼过江"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 行为字段「放学绕路只为看一眼 commit 光点过江」展开·事实性赛博意象拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 45.66,
+   "end": 49.2,
+   "lines": [
+    "发光鞋带",
+    "格子衫帆布鞋 · 自己改装的电致发光款 · 妈妈不知道"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00021 服装字段「格子衫配帆布鞋（鞋带是自己改装的电致发光款——妈妈不知道）」展开·电致发光→发光=L18 白话换位卡锚承载原词·同源多用注记）"
+   }
+  },
+  {
+   "start": 49.2,
+   "end": 54.37,
+   "lines": [
+    "信条",
+    "放学别走，先把今天的谜想完"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡信条行「信条：「放学别走，先把今天的谜想完。」」在帧（verbatim 直引·保护行零动）"
+   }
+  },
+  {
+   "start": 54.37,
+   "end": 58.47,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给心里还有谜没想完的朋友"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v12-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00021）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
