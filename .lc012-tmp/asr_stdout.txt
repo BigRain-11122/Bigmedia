@@ -1,0 +1,2 @@
+OK .lc012-tmp\audio.mp3 -> .lc012-tmp/asr-check.srt cues=12 dropped=0 audio_dur=58.25s model=medium-int8-cpu
+exit= 0

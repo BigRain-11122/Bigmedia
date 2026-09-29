@@ -1,0 +1,256 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "shipinhao",
+ "visual_mode": "matched",
+ "visual_ratio": 1.0,
+ "cards_only_beats": [],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 5.733,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 2,
+   "time_s": 9.3,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 3,
+   "time_s": 12.867,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 4,
+   "time_s": 15.967,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 5,
+   "time_s": 23.733,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 6,
+   "time_s": 30.567,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 7,
+   "time_s": 34.0,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 38.367,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 9,
+   "time_s": 44.233,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 10,
+   "time_s": 49.3,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 11,
+   "time_s": 53.767,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 5.733,
+   "treatment": "punch",
+   "hit": true,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 3.847,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 3.847,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 3.38,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 8.047,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 7.113,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 3.713,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 4.647,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 6.147,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 5.347,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 4.747,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 5.547,
+   "treatment": "punch",
+   "hit": true,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/census-card-v14-vertical.mp4",
+   "ramp": null
+  }
+ ],
+ "hits": [
+  0,
+  11
+ ],
+ "ramp_beats": [],
+ "f_max_s": 0.28,
+ "last_beat_end_s": 58.233,
+ "tail_s": 0.8,
+ "duration_expected_s": 59.033,
+ "hard_cut_s": 0.0,
+ "series": {
+  "intro": false,
+  "intro_s": 0.0,
+  "badge": true,
+  "id": "\u62c6\u6761 012\u00b7\u6e90\u57ce\u5e02\u56fe\u9274 014"
+ },
+ "s45_dials": {
+  "h1_glow": true,
+  "scanlines": true,
+  "sys_status": true
+ }
+}
