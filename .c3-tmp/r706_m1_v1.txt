@@ -1,0 +1,4 @@
+﻿WARN longsentence 29 chars/3 commas: '��Ʒѡ��������̱��Ɱ������ǰվ��һ���ӣ�������...'
+WARN longsentence 24 chars/3 commas: '�����ⴰ̨ס��ֻè��ȫ��Ĺ���������»�����...'
+SUMMARY terms=12 FAIL=0 WARN=2
+PASS

@@ -1,0 +1,649 @@
+﻿tick=705
+ts=2026-09-29 21:22:13
+task=生产轮·LC-009 咪喱拆条收官腿毕=F-063 登记+冗余池第六件落位（queue §E 批活池 E9 件收官·R7
+production=open
+logCount=731
+---LAST3LOG---
+2026-09-29 20:43 R703: 生产轮·queue §E 补池候选选优轮评估兑现=E9 LC-009 咪喱拆条入池+起链五腿毕（R702 focus ①·P-20260929-11 lane ≥2 备货执法续·R693/R696/R699 同型·实活轮）——①轮首快速路径五查静（正典 r694_probe.py 复跑：orders 顶=O-20260928-1910 42 件锚未动/ledger 六模式 CaseSensitive 41=锚零新 CEO 令级事件〔probe 内注 anchor 38=R699 时点旧值·L189/L190=R698/R700 已收讫+L245 值守行位移非事件〕/decisions UTF8 非空行 75=锚/production=open 自愈核在位/无 index.lock·树态=bm-a codex 批未闭让位维持〔README/city-humanities mtime 04:06:09/16 实读未动=#86 c+d 判据未达·两文件零接触〕+自产 tmp 族预期态）+三探针=board 0 FAIL（5 题 10 稿 5 in production）/readiness 3 阻塞皆外部 CEO 面 0 发现（阻塞≠失败口径）
+2026-09-29 21:05 R704: 生产轮·LC-009 咪喱拆条渲染腿毕（queue §E 批活池 E9 件·冗余扩容位第六件·R703 claim 兑现·R691/R694/R697/R700 同型·产品优先律 P-2026-09-29-07 对位=本轮新实物=lc-009 成片在链）——①素材探针先行=F-040 卡多模态九行全读（AIGC 标签位=卡面左上=F-031/F-032 同位族·R511 避让法前置执行零修红）②自产源件 census-card-v20-vertical（F-040 PNG 派生·scale 660+pad y=160+zoompan ≤1.04·13.000s·1080×1920@30）③对位表 cards-v1-matched 12/12 visual-ratio 1.00（源卡即证据·b9 王多多互证拍=LC-008 同本事双向闭合=拆条系列第二对人物链互证+b4 台风梅花=LC-006/LC-007 同夜三视角互补第三证·同源多用逐拍注记）④R-E shipinhao 渲染 lc-009-v1-shipinhao-60s.mp4（12 段 11 柔 0 硬切·58.427s=音轨分毫一致 1.573s 余量·hits=[0,11]·
+2026-09-29 21:22 R705: 生产轮·LC-009 咪喱拆条收官腿毕=F-063 登记+冗余池第六件落位（queue §E 批活池 E9 件收官·R703/R704 claim 兑现·R692/R695/R698/R701 同型·实活轮·产品优先律 P-2026-09-29-07 对位=本轮实物增量 lc-009 成片全链走门+F-063）——①ASR 终轨（R169 QC recipe medium-int8+beam5+noctx·HF_HUB_OFFLINE=1·Start-Process 脱壳 21:13:23 起与 E4 并飞同窗落地 exit 0·15 cues/58.43s·asr-diff-r705.txt〔R685-R701 先例+繁转简化归计算·本 run trad 字形集（統擁貓場羅壯門訊斷類鋪葉畫燙鵰邊）扩表归一重算〕）=归一 34 sites/53 diff chars/201 字≈26.4% 字位=系列带上缘之上新峰（LC-001 7.3~LC-008 12.1 对照·城市专名密度件〔巷志 ×3/GAME 城/罗家窗台/粥铺/匠人巷〕+收编三连同音句式〔管→館 ×3〕+猫域轻声词〔咪喱/喵语/蹭饭〕+繁体漂移原始层 ≈18 字位本 run 
+---GITSTATUS---
+ M .c3-tmp/r694_health.txt
+ M .c3-tmp/r694_probe.txt
+ M .c3-tmp/r694_readiness.txt
+ M data/storylines/codex/README.md
+ M data/storylines/codex/city-humanities.md
+?? .c3-tmp/close-r687.txt
+?? .c3-tmp/close_r687.py
+?? .c3-tmp/dump_ctx.py
+?? .c3-tmp/ledger-ctx.txt
+?? .c3-tmp/probe-r693.txt
+?? .c3-tmp/probe-round.txt
+?? .c3-tmp/probe-round2.txt
+?? .c3-tmp/probe-round3.txt
+?? .c3-tmp/probe_round.py
+?? .c3-tmp/probe_round2.py
+?? .c3-tmp/probe_round3.py
+?? .c3-tmp/probes-r687.txt
+?? .c3-tmp/r644_probe.py
+?? .c3-tmp/r644_summary.txt
+?? .c3-tmp/r659_addendum.py
+?? .c3-tmp/r659_all.py
+?? .c3-tmp/r659_close.py
+?? .c3-tmp/r659_fix.py
+?? .c3-tmp/r659_fmt.py
+?? .c3-tmp/r659_fmt.txt
+?? .c3-tmp/r659_pool.py
+?? .c3-tmp/r659_pool.txt
+?? .c3-tmp/r659_probes.txt
+?? .c3-tmp/r659_verify.txt
+?? .c3-tmp/r659_verify2.txt
+?? .c3-tmp/r659_verify3.txt
+?? .c3-tmp/r660_bktail.py
+?? .c3-tmp/r660_bktail.txt
+?? .c3-tmp/r660_board.txt
+?? .c3-tmp/r660_close.py
+?? .c3-tmp/r660_close_diag.txt
+?? .c3-tmp/r660_diag2.py
+?? .c3-tmp/r660_diag2.txt
+?? .c3-tmp/r660_digest.txt
+?? .c3-tmp/r660_e4check.py
+?? .c3-tmp/r660_e4check.txt
+?? .c3-tmp/r660_fix.py
+?? .c3-tmp/r660_fix_verify.txt
+?? .c3-tmp/r660_health.txt
+?? .c3-tmp/r660_health2.txt
+?? .c3-tmp/r660_health2_dig.txt
+?? .c3-tmp/r660_health3.py
+?? .c3-tmp/r660_health3.txt
+?? .c3-tmp/r660_probes.py
+?? .c3-tmp/r660_readiness.txt
+?? .c3-tmp/r660_verify.txt
+?? .c3-tmp/r661_close.py
+?? .c3-tmp/r662_anchor2.txt
+?? .c3-tmp/r662_anchor3.txt
+?? .c3-tmp/r662_board.txt
+?? .c3-tmp/r662_close.py
+?? .c3-tmp/r662_gatecheck.txt
+?? .c3-tmp/r662_health.txt
+?? .c3-tmp/r662_probe_view.txt
+?? .c3-tmp/r662_readiness.txt
+?? .c3-tmp/r663_board.txt
+?? .c3-tmp/r663_digest.txt
+?? .c3-tmp/r663_health.txt
+?? .c3-tmp/r663_led.txt
+?? .c3-tmp/r663_probe.py
+?? .c3-tmp/r663_readiness.txt
+?? .c3-tmp/r664_close.py
+?? .c3-tmp/r665_board.txt
+?? .c3-tmp/r665_close.py
+?? .c3-tmp/r665_close2.py
+?? .c3-tmp/r665_digest.txt
+?? .c3-tmp/r665_health.txt
+?? .c3-tmp/r665_led.txt
+?? .c3-tmp/r665_probe.py
+?? .c3-tmp/r665_readiness.txt
+?? .c3-tmp/r665_verify.py
+?? .c3-tmp/r665_verify.txt
+?? .c3-tmp/r666_board.txt
+?? .c3-tmp/r666_ch1v4logs.txt
+?? .c3-tmp/r666_close.py
+?? .c3-tmp/r666_close_board.txt
+?? .c3-tmp/r666_close_health.txt
+?? .c3-tmp/r666_close_health2.txt
+?? .c3-tmp/r666_close_readiness.txt
+?? .c3-tmp/r666_digest.txt
+?? .c3-tmp/r666_health.txt
+?? .c3-tmp/r666_led.txt
+?? .c3-tmp/r666_probe.py
+?? .c3-tmp/r666_r639full.txt
+?? .c3-tmp/r666_r639tail.txt
+?? .c3-tmp/r666_readiness.txt
+?? .c3-tmp/r666_se_fix.py
+?? .c3-tmp/r666_se_probe.txt
+?? .c3-tmp/r666_v4logs.txt
+?? .c3-tmp/r668_asr_cues.txt
+?? .c3-tmp/r668_board.txt
+?? .c3-tmp/r668_close.py
+?? .c3-tmp/r668_digest.txt
+?? .c3-tmp/r668_health.txt
+?? .c3-tmp/r668_readiness.txt
+?? .c3-tmp/r669_bkitems.txt
+?? .c3-tmp/r669_board.txt
+?? .c3-tmp/r669_health.txt
+?? .c3-tmp/r669_readiness.txt
+?? .c3-tmp/r669_verify.py
+?? .c3-tmp/r669_verify.txt
+?? .c3-tmp/r669_verify2.txt
+?? .c3-tmp/r670_addendum.py
+?? .c3-tmp/r670_board.txt
+?? .c3-tmp/r670_close.py
+?? .c3-tmp/r670_digest.txt
+?? .c3-tmp/r670_health.txt
+?? .c3-tmp/r670_led.txt
+?? .c3-tmp/r670_probe.py
+?? .c3-tmp/r670_readiness.txt
+?? .c3-tmp/r670_verify.py
+?? .c3-tmp/r670_verify.txt
+?? .c3-tmp/r670_verify2.txt
+?? .c3-tmp/r671_anchors.txt
+?? .c3-tmp/r671_board.txt
+?? .c3-tmp/r671_close.py
+?? .c3-tmp/r671_digest.txt
+?? .c3-tmp/r671_health.txt
+?? .c3-tmp/r671_led.txt
+?? .c3-tmp/r671_probe.py
+?? .c3-tmp/r671_readiness.txt
+?? .c3-tmp/r671_verify.py
+?? .c3-tmp/r671_verify.txt
+?? .c3-tmp/r672_close.py
+?? .c3-tmp/r673_board.txt
+?? .c3-tmp/r673_close.py
+?? .c3-tmp/r673_close_out.txt
+?? .c3-tmp/r673_health.txt
+?? .c3-tmp/r673_readiness.txt
+?? .c3-tmp/r673_verify.py
+?? .c3-tmp/r673_verify_out.txt
+?? .c3-tmp/r674_board.txt
+?? .c3-tmp/r674_close.py
+?? .c3-tmp/r674_digest.txt
+?? .c3-tmp/r674_health.txt
+?? .c3-tmp/r674_led.txt
+?? .c3-tmp/r674_led_tail.txt
+?? .c3-tmp/r674_probe.py
+?? .c3-tmp/r674_queue.txt
+?? .c3-tmp/r674_readiness.txt
+?? .c3-tmp/r674_verify.py
+?? .c3-tmp/r675_board.txt
+?? .c3-tmp/r675_close.py
+?? .c3-tmp/r675_digest.txt
+?? .c3-tmp/r675_health.txt
+?? .c3-tmp/r675_led.txt
+?? .c3-tmp/r675_probe.py
+?? .c3-tmp/r675_queue.txt
+?? .c3-tmp/r675_readiness.txt
+?? .c3-tmp/r675_verify.py
+?? .c3-tmp/r675_verify.txt
+?? .c3-tmp/r675_verify_health.txt
+?? .c3-tmp/r676_board.txt
+?? .c3-tmp/r676_close.py
+?? .c3-tmp/r676_digest.txt
+?? .c3-tmp/r676_health.txt
+?? .c3-tmp/r676_led.txt
+?? .c3-tmp/r676_probe.py
+?? .c3-tmp/r676_queue.txt
+?? .c3-tmp/r676_readiness.txt
+?? .c3-tmp/r676_verify.py
+?? .c3-tmp/r676_verify.txt
+?? .c3-tmp/r677_board.txt
+?? .c3-tmp/r677_close.py
+?? .c3-tmp/r677_digest.txt
+?? .c3-tmp/r677_health.txt
+?? .c3-tmp/r677_led.txt
+?? .c3-tmp/r677_probe.py
+?? .c3-tmp/r677_queue.txt
+?? .c3-tmp/r677_readiness.txt
+?? .c3-tmp/r678_board.txt
+?? .c3-tmp/r678_close.py
+?? .c3-tmp/r678_digest.txt
+?? .c3-tmp/r678_health.txt
+?? .c3-tmp/r678_led.txt
+?? .c3-tmp/r678_probe.py
+?? .c3-tmp/r678_readiness.txt
+?? .c3-tmp/r679_bktail.txt
+?? .c3-tmp/r679_close.py
+?? .c3-tmp/r679_led_new.txt
+?? .c3-tmp/r679_verify.txt
+?? .c3-tmp/r680_board.txt
+?? .c3-tmp/r680_board2.txt
+?? .c3-tmp/r680_close.py
+?? .c3-tmp/r680_comt.py
+?? .c3-tmp/r680_comt.txt
+?? .c3-tmp/r680_digest.txt
+?? .c3-tmp/r680_health.txt
+?? .c3-tmp/r680_health2.txt
+?? .c3-tmp/r680_led.txt
+?? .c3-tmp/r680_ledgers.py
+?? .c3-tmp/r680_probe.py
+?? .c3-tmp/r680_r511.txt
+?? .c3-tmp/r680_readiness.txt
+?? .c3-tmp/r680_readiness2.txt
+?? .c3-tmp/r680_unlock_probe.py
+?? .c3-tmp/r680_verify.py
+?? .c3-tmp/r681_asr.py
+?? .c3-tmp/r681_bill02.txt
+?? .c3-tmp/r681_cap26.txt
+?? .c3-tmp/r681_cap_tail.txt
+?? .c3-tmp/r681_close.py
+?? .c3-tmp/r681_cloudline.txt
+?? .c3-tmp/r681_e4.txt
+?? .c3-tmp/r681_e4_sync.py
+?? .c3-tmp/r681_ec_tail.txt
+?? .c3-tmp/r681_health.txt
+?? .c3-tmp/r681_health_sum.txt
+?? .c3-tmp/r681_health_utf8.txt
+?? .c3-tmp/r681_l177_l181.txt
+?? .c3-tmp/r681_led_rows.py
+?? .c3-tmp/r681_probe.py
+?? .c3-tmp/r681_probe.txt
+?? .c3-tmp/r681_queue.txt
+?? .c3-tmp/r681_queuehead.txt
+?? .c3-tmp/r681_rb_precedent.txt
+?? .c3-tmp/r681_rd_sum.txt
+?? .c3-tmp/r681_rd_sum2.txt
+?? .c3-tmp/r681_readiness.txt
+?? .c3-tmp/r681_readiness_utf8.txt
+?? .c3-tmp/r681_row92.txt
+?? .c3-tmp/r681_rowdiff.py
+?? .c3-tmp/r681_rowdiff.txt
+?? .c3-tmp/r681_sr_tail.txt
+?? .c3-tmp/r681_stationtail.txt
+?? .c3-tmp/r681_tpl.txt
+?? .c3-tmp/r681_verify.py
+?? .c3-tmp/r681_wr_head.txt
+?? .c3-tmp/r681_wr_sd.txt
+?? .c3-tmp/r681_wtest.txt
+?? .c3-tmp/r682_addendum.py
+?? .c3-tmp/r682_bktop.txt
+?? .c3-tmp/r682_board.txt
+?? .c3-tmp/r682_cards_tail.txt
+?? .c3-tmp/r682_close.py
+?? .c3-tmp/r682_dec_tail.txt
+?? .c3-tmp/r682_e4backfill.py
+?? .c3-tmp/r682_ec_tail.txt
+?? .c3-tmp/r682_fin_tail.txt
+?? .c3-tmp/r682_health.txt
+?? .c3-tmp/r682_led175.txt
+?? .c3-tmp/r682_probe.py
+?? .c3-tmp/r682_probe.txt
+?? .c3-tmp/r682_probe_sum.txt
+?? .c3-tmp/r682_r681tail.txt
+?? .c3-tmp/r682_readiness.txt
+?? .c3-tmp/r682_readiness2.txt
+?? .c3-tmp/r682_ready2.txt
+?? .c3-tmp/r682_ready3.txt
+?? .c3-tmp/r682_rr_hits.txt
+?? .c3-tmp/r682_sr_tail.txt
+?? .c3-tmp/r682_verify.py
+?? .c3-tmp/r682_verify.txt
+?? .c3-tmp/r683_board.txt
+?? .c3-tmp/r683_check.py
+?? .c3-tmp/r683_check.txt
+?? .c3-tmp/r683_close.py
+?? .c3-tmp/r683_health.txt
+?? .c3-tmp/r683_m1.py
+?? .c3-tmp/r683_m1.txt
+?? .c3-tmp/r683_probes.py
+?? .c3-tmp/r683_probes_sum.txt
+?? .c3-tmp/r683_readiness.txt
+?? .c3-tmp/r683_tts.py
+?? .c3-tmp/r683_tts_v1.txt
+?? .c3-tmp/r683_tts_v2.txt
+?? .c3-tmp/r683_tts_v3.txt
+?? .c3-tmp/r683_tts_v4.txt
+?? .c3-tmp/r683_tts_v5.txt
+?? .c3-tmp/r683_verify.py
+?? .c3-tmp/r683_verify.txt
+?? .c3-tmp/r684_bk79.txt
+?? .c3-tmp/r684_board.txt
+?? .c3-tmp/r684_board2.txt
+?? .c3-tmp/r684_cards.txt
+?? .c3-tmp/r684_close.py
+?? .c3-tmp/r684_close_report.txt
+?? .c3-tmp/r684_dump.py
+?? .c3-tmp/r684_dump2.py
+?? .c3-tmp/r684_dump3.py
+?? .c3-tmp/r684_dump4.py
+?? .c3-tmp/r684_fin_tail.txt
+?? .c3-tmp/r684_findings.txt
+?? .c3-tmp/r684_findings2.txt
+?? .c3-tmp/r684_fix.py
+?? .c3-tmp/r684_health.txt
+?? .c3-tmp/r684_health2.txt
+?? .c3-tmp/r684_lc002.txt
+?? .c3-tmp/r684_probe.py
+?? .c3-tmp/r684_probe.txt
+?? .c3-tmp/r684_queue_e1.txt
+?? .c3-tmp/r684_readiness.txt
+?? .c3-tmp/r684_readiness2.txt
+?? .c3-tmp/r684_readiness3.txt
+?? .c3-tmp/r684_rr_lc003.txt
+?? .c3-tmp/r684_se_head.txt
+?? .c3-tmp/r684_se_tail.txt
+?? .c3-tmp/r684_sr_r680.txt
+?? .c3-tmp/r684_sr_tail.txt
+?? .c3-tmp/r684_verify.py
+?? .c3-tmp/r684_verify.txt
+?? .c3-tmp/r685_board.txt
+?? .c3-tmp/r685_board2.txt
+?? .c3-tmp/r685_close.py
+?? .c3-tmp/r685_export.py
+?? .c3-tmp/r685_health.txt
+?? .c3-tmp/r685_health2.txt
+?? .c3-tmp/r685_newrows.py
+?? .c3-tmp/r685_newrows.txt
+?? .c3-tmp/r685_probe.py
+?? .c3-tmp/r685_probe.txt
+?? .c3-tmp/r685_readiness.txt
+?? .c3-tmp/r685_readiness2.txt
+?? .c3-tmp/r686_board.txt
+?? .c3-tmp/r686_close.py
+?? .c3-tmp/r686_health.txt
+?? .c3-tmp/r686_m1.py
+?? .c3-tmp/r686_m1_v1.txt
+?? .c3-tmp/r686_m1_v4.txt
+?? .c3-tmp/r686_probe.py
+?? .c3-tmp/r686_probe.txt
+?? .c3-tmp/r686_readiness.txt
+?? .c3-tmp/r686_tts.py
+?? .c3-tmp/r686_tts_v1.txt
+?? .c3-tmp/r686_tts_v2.txt
+?? .c3-tmp/r686_tts_v3.txt
+?? .c3-tmp/r686_tts_v4.txt
+?? .c3-tmp/r687_board.txt
+?? .c3-tmp/r687_health.txt
+?? .c3-tmp/r687_probe.py
+?? .c3-tmp/r687_probe.txt
+?? .c3-tmp/r687_readiness.txt
+?? .c3-tmp/r688_board.txt
+?? .c3-tmp/r688_close.py
+?? .c3-tmp/r688_export.py
+?? .c3-tmp/r688_health.txt
+?? .c3-tmp/r688_probe.py
+?? .c3-tmp/r688_probe.txt
+?? .c3-tmp/r688_readiness.txt
+?? .c3-tmp/r688_state.py
+?? .c3-tmp/r689_board.txt
+?? .c3-tmp/r689_health.txt
+?? .c3-tmp/r689_probe.py
+?? .c3-tmp/r689_probe.txt
+?? .c3-tmp/r689_readiness.txt
+?? .c3-tmp/r690_close.py
+?? .c3-tmp/r690_gxm.txt
+?? .c3-tmp/r690_lc005_material.txt
+?? .c3-tmp/r690_led_head.txt
+?? .c3-tmp/r690_led_tail.txt
+?? .c3-tmp/r690_p09_row.txt
+?? .c3-tmp/r690_probe_src.txt
+?? .c3-tmp/r690_queue_E.txt
+?? .c3-tmp/r690_queue_tail.txt
+?? .c3-tmp/r690_renders_tail.txt
+?? .c3-tmp/r690_runbook.txt
+?? .c3-tmp/r690_s1_lc005.txt
+?? .c3-tmp/r690_tts.py
+?? .c3-tmp/r690_tts_v3.txt
+?? .c3-tmp/r691_anchor_c00026.md
+?? .c3-tmp/r691_bk.txt
+?? .c3-tmp/r691_build_leg_a.py
+?? .c3-tmp/r691_close.py
+?? .c3-tmp/r691_fix.py
+?? .c3-tmp/r691_fs_extract.py
+?? .c3-tmp/r691_lc5_tail.txt
+?? .c3-tmp/r691_locate.py
+?? .c3-tmp/r691_q_tail.txt
+?? .c3-tmp/r691_rd_sum.py
+?? .c3-tmp/r691_readiness2.txt
+?? .c3-tmp/r691_readiness3.txt
+?? .c3-tmp/r691_readiness_sum.txt
+?? .c3-tmp/r691_render_call.py
+?? .c3-tmp/r691_s2_gates.py
+?? .c3-tmp/r691_se.txt
+?? .c3-tmp/r691_se_head.txt
+?? .c3-tmp/r691_se_tail.txt
+?? .c3-tmp/r691_sr_tail.txt
+?? .c3-tmp/r691_verify.txt
+?? .c3-tmp/r692_board.txt
+?? .c3-tmp/r692_export.py
+?? .c3-tmp/r692_health.txt
+?? .c3-tmp/r692_readiness.txt
+?? .c3-tmp/r692_readiness2.txt
+?? .c3-tmp/r692_state.py
+?? .c3-tmp/r692_state_verify.txt
+?? .c3-tmp/r692_verify2.txt
+?? .c3-tmp/r693_close.py
+?? .c3-tmp/r693_tts.py
+?? .c3-tmp/r693_tts_v1.txt
+?? .c3-tmp/r693_tts_v2.txt
+?? .c3-tmp/r693_tts_v3.txt
+?? .c3-tmp/r693_tts_v4.txt
+?? .c3-tmp/r694_board2.txt
+?? .c3-tmp/r694_build_leg_a.py
+?? .c3-tmp/r694_close.py
+?? .c3-tmp/r694_fs_extract.py
+?? .c3-tmp/r694_health2.txt
+?? .c3-tmp/r694_probe.py
+?? .c3-tmp/r694_readiness2.txt
+?? .c3-tmp/r694_render_call.py
+?? .c3-tmp/r694_s2_gates.py
+?? .c3-tmp/r694_verify.txt
+?? .c3-tmp/r695_burn.txt
+?? .c3-tmp/r695_close.py
+?? .c3-tmp/r695_e4verdict.txt
+?? .c3-tmp/r695_ec_tail.txt
+?? .c3-tmp/r695_fin_last.txt
+?? .c3-tmp/r695_fin_tail.txt
+?? .c3-tmp/r695_sr_tail.txt
+?? .c3-tmp/r696_addendum.py
+?? .c3-tmp/r696_board.txt
+?? .c3-tmp/r696_board_queue.txt
+?? .c3-tmp/r696_cand.py
+?? .c3-tmp/r696_cand.txt
+?? .c3-tmp/r696_close.py
+?? .c3-tmp/r696_dump.py
+?? .c3-tmp/r696_ec_tail.txt
+?? .c3-tmp/r696_export_head.txt
+?? .c3-tmp/r696_export_tail.txt
+?? .c3-tmp/r696_fmt.txt
+?? .c3-tmp/r696_health.txt
+?? .c3-tmp/r696_m1.txt
+?? .c3-tmp/r696_m1run.py
+?? .c3-tmp/r696_osdump.py
+?? .c3-tmp/r696_osdump.txt
+?? .c3-tmp/r696_osdump2.txt
+?? .c3-tmp/r696_osdump3.txt
+?? .c3-tmp/r696_osfix.py
+?? .c3-tmp/r696_osrow.py
+?? .c3-tmp/r696_osrow.txt
+?? .c3-tmp/r696_probe.py
+?? .c3-tmp/r696_probe.txt
+?? .c3-tmp/r696_readiness.txt
+?? .c3-tmp/r696_restore684.py
+?? .c3-tmp/r696_s1result.txt
+?? .c3-tmp/r696_s1wrap.txt
+?? .c3-tmp/r696_select.py
+?? .c3-tmp/r696_select.txt
+?? .c3-tmp/r696_verify.txt
+?? .c3-tmp/r696_verify2.txt
+?? .c3-tmp/r696_verify3.txt
+?? .c3-tmp/r696_verify4.txt
+?? .c3-tmp/r697_board.txt
+?? .c3-tmp/r697_build_leg_a.py
+?? .c3-tmp/r697_close.py
+?? .c3-tmp/r697_close2.py
+?? .c3-tmp/r697_close3.py
+?? .c3-tmp/r697_dbg.py
+?? .c3-tmp/r697_dbg.txt
+?? .c3-tmp/r697_framecheck.py
+?? .c3-tmp/r697_health.txt
+?? .c3-tmp/r697_health2.txt
+?? .c3-tmp/r697_health3.txt
+?? .c3-tmp/r697_readiness.txt
+?? .c3-tmp/r697_render_call.py
+?? .c3-tmp/r697_s2_gates.py
+?? .c3-tmp/r697_tail_dump.txt
+?? .c3-tmp/r697_tts.py
+?? .c3-tmp/r697_tts_v1.txt
+?? .c3-tmp/r697_tts_v2.txt
+?? .c3-tmp/r697_tts_v3.txt
+?? .c3-tmp/r698_asr.py
+?? .c3-tmp/r698_close.py
+?? .c3-tmp/r698_close2.py
+?? .c3-tmp/r698_l188.txt
+?? .c3-tmp/r698_matches.txt
+?? .c3-tmp/r698_newrows.txt
+?? .c3-tmp/r698_probe.txt
+?? .c3-tmp/r698_queue.txt
+?? .c3-tmp/r698_readiness.txt
+?? .c3-tmp/r698_sched.txt
+?? .c3-tmp/r698_tok.txt
+?? .c3-tmp/r699_close.py
+?? .c3-tmp/r699_close_verify.txt
+?? .c3-tmp/r699_decl.txt
+?? .c3-tmp/r699_decl2.txt
+?? .c3-tmp/r699_depts.txt
+?? .c3-tmp/r699_e8.txt
+?? .c3-tmp/r699_e8b.txt
+?? .c3-tmp/r699_e8c.txt
+?? .c3-tmp/r699_ec.txt
+?? .c3-tmp/r699_exp_keys.txt
+?? .c3-tmp/r699_export_head.txt
+?? .c3-tmp/r699_export_tail.txt
+?? .c3-tmp/r699_fin.txt
+?? .c3-tmp/r699_lc007_readme.txt
+?? .c3-tmp/r699_m1.txt
+?? .c3-tmp/r699_m1v5.txt
+?? .c3-tmp/r699_m1v6.txt
+?? .c3-tmp/r699_osfind.txt
+?? .c3-tmp/r699_osrow.txt
+?? .c3-tmp/r699_queue.txt
+?? .c3-tmp/r699_rr_tail.txt
+?? .c3-tmp/r699_tickctx.txt
+?? .c3-tmp/r699_tts_run.py
+?? .c3-tmp/r699_tts_v1.txt
+?? .c3-tmp/r699_tts_v2.txt
+?? .c3-tmp/r699_tts_v3.txt
+?? .c3-tmp/r699_tts_v4.txt
+?? .c3-tmp/r699_tts_v5.txt
+?? .c3-tmp/r699_tts_v6.txt
+?? .c3-tmp/r700_build_leg_a.py
+?? .c3-tmp/r700_close.py
+?? .c3-tmp/r700_close_verify.txt
+?? .c3-tmp/r700_framecheck.py
+?? .c3-tmp/r700_l190.txt
+?? .c3-tmp/r700_l95.txt
+?? .c3-tmp/r700_render_call.py
+?? .c3-tmp/r700_s2_gates.py
+?? .c3-tmp/r700_sr_tail.txt
+?? .c3-tmp/r701_close_report.txt
+?? .c3-tmp/r702_clear.py
+?? .c3-tmp/r702_close.py
+?? .c3-tmp/r702_l190.txt
+?? .c3-tmp/r702_scan.py
+?? .c3-tmp/r702_scan2.py
+?? .c3-tmp/r702_scan3.py
+?? .c3-tmp/r703_board.txt
+?? .c3-tmp/r703_close.py
+?? .c3-tmp/r703_health.txt
+?? .c3-tmp/r703_m1.txt
+?? .c3-tmp/r703_m1run.py
+?? .c3-tmp/r703_m1v5.txt
+?? .c3-tmp/r703_m1v5run.py
+?? .c3-tmp/r703_readiness.txt
+?? .c3-tmp/r703_tts_run.py
+?? .c3-tmp/r703_tts_v1.txt
+?? .c3-tmp/r703_tts_v2.txt
+?? .c3-tmp/r703_tts_v3.txt
+?? .c3-tmp/r703_tts_v4.txt
+?? .c3-tmp/r703_tts_v5.txt
+?? .c3-tmp/r_audits.txt
+?? .c3-tmp/r_fastcheck.py
+?? .c3-tmp/r_fastcheck.txt
+?? .c3-tmp/r_research.txt
+?? .c3-tmp/r_tail.txt
+?? .c3-tmp/wr_smoke_out/
+?? .sc003-tmp/audio-pre-room.mp3
+?? .sc003-tmp/audio-raw.mp3
+?? .sc003-tmp/audio.mp3
+?? .sc003-tmp/breath00.mp3
+?? .sc003-tmp/breath02.mp3
+?? .sc003-tmp/breath05.mp3
+?? .sc003-tmp/breath09.mp3
+?? .sc003-tmp/breath10.mp3
+?? .sc003-tmp/cards.json
+?? .sc003-tmp/concat.txt
+?? .sc003-tmp/gap00.mp3
+?? .sc003-tmp/gap01.mp3
+?? .sc003-tmp/gap02.mp3
+?? .sc003-tmp/gap03.mp3
+?? .sc003-tmp/gap04.mp3
+?? .sc003-tmp/gap05.mp3
+?? .sc003-tmp/gap06.mp3
+?? .sc003-tmp/gap07.mp3
+?? .sc003-tmp/gap08.mp3
+?? .sc003-tmp/gap09.mp3
+?? .sc003-tmp/gap10.mp3
+?? .sc003-tmp/probe-dash-a.png
+?? .sc003-tmp/probe-dash-b.png
+?? .sc003-tmp/probe-dash-tile.png
+?? .sc003-tmp/r507_close.py
+?? .sc003-tmp/s1-result-v3.json
+?? .sc003-tmp/s1_call_v3.py
+?? .sc003-tmp/seg00.mp3
+?? .sc003-tmp/seg01.mp3
+?? .sc003-tmp/seg02.mp3
+?? .sc003-tmp/seg03.mp3
+?? .sc003-tmp/seg04.mp3
+?? .sc003-tmp/seg05.mp3
+?? .sc003-tmp/seg06.mp3
+?? .sc003-tmp/seg07.mp3
+?? .sc003-tmp/seg08.mp3
+?? .sc003-tmp/seg09.mp3
+?? .sc003-tmp/seg10.mp3
+?? .sc003-tmp/seg11.mp3
+?? .sc003-tmp/subs.srt
+?? .sc003-tmp/voiceover.txt
+?? .sc003-v3-tmp/
+indexlock=False
+---ORDERS---
+O-20260928-1910-bm-a.md 2026-09-28 19:12
+O-20260928-1836-bm-a.md 2026-09-28 18:57
+O-20260928-1748-bm-a.md 2026-09-28 18:12
+O-20260928-1725-bm-a.md 2026-09-28 17:33
+---LEDGER---
+ledgerMatchLines=42
+L189: | P-2026-09-29-12 | 09-29 | **机队全面并行令（P1·CEO 令 O-2026-0929-029「机队也要全面开工，不是你一台机器忙就行，能并行的任务全面并行」·@Biggame @BigMoney @BigLife @BigStream @BigCo
+L190: | P-2026-09-29-13 | 09-29 | **坚决清理司域派单（P1·CEO 令 O-2026-0929-033·resource-chain §三§11 首批执法）**：①**@Biggame**=a.`gaming/MiniGame/projects/P3D_S
+L245: - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432MB/FluxVerse +220MB（M1 建城+编年史在飞）/MiniGame
+decisionsNonEmpty=75
+---ROUTINE---
+w40audit=True
+dailyBrief0929=True
+---ANCHORS---
+anchor:C-00027.md
+anchor:C-00028.md
+anchor:C-00029.md
+---BOARDFIRST30---
+L6: 81. [done 2026-09-28] **P-2026-09-28-02 自驱力生态机制 v2.1 增补令·本司份额（ack+mandate 两步适配+首件提案）*
+L9: 75. [done 2026-09-27] **P-2026-09-27-02 商业化付费点与定价包装体系设计令·本司份额=③包装叙事线（付费点×内容选题映射）**（集团
+L12: 74. [done 2026-09-27] **P-2026-09-25-06 内容调研令行面核销回执·值守轮点名件**（集团转办 P2·值守轮 2026-09-27 0
+L14: 71. **P-2026-09-26-11 媒体节目质量整改+可视化页面统一与措辞简单律·本司份额**（集团转办 P1·CEO 令 2026-09-26 ~20:1x 原
+L30: 72. [done 2026-09-27] **P-2026-09-26-13 升华律扩展批·本司份额=素材消费面知悉**（集团转办 P1·CEO 令 2026-09-2
+L32: 73. [done 2026-09-27] **P-2026-09-26-18 集团调研部门建制令·本司份额**（集团转办 P1·CEO 令 2026-09-26 ~23
+L35: 68. [done 2026-09-26] **P-2026-09-26-04 硅基城市总体规划令·块面调研=媒体文化区块（集团转办 P1·CEO 令 2026-09-2
+L38: 69. [done 2026-09-26] **P-2026-09-26-07 机队大模型自配与任务分治加速令·bigstream 机份额（集团转办 P1·CEO 令 2
+L41: 70. **P-2026-09-26-08 开源借力机制令·每 72h 收获轮·BigStream 常设自驱面（集团转办 P1·CEO 令 2026-09-26 ~21:
+L47: 67. **L-卡 DIGEST 盘点系列量产·编年史事件随轮领留痕行**（#66 自驱单配套产线·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 D
+L66: 66. **内容研究/模板优化自驱单**（P-20260926-03 自驱开单落地·CEO 令实例面点名「BigStream 等开号→内容研究/成稿扩容/模板优化」·F1
+L69: 65. [done 2026-09-26] **P-20260926-01 集团技能动员令（找+建+用 skills 提升生产力）·本司份额**（集团转办 T1·CEO 
+L74: 64. [done 2026-09-26] **P-20260926-03 禁待命·自主运转令（法无禁止即可为）·本司份额**（集团转办 P1·CEO 令 2026-09
+L78: 63. **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#62 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS
+L82: 62. [done 2026-09-26] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#61 续·charter v1.2 §1 L-卡 图文轻内容线+
+L86: 61. [done 2026-09-26] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#60 续·charter v1.2 §1 L-卡 图文轻内容线+
+L89: 53. [done 2026-09-26] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#52 续·charter v1.2 §1 L-卡 图文轻内容线+
+L92: 54. [done 2026-09-26] **P-2026-09-25-07 本地大模型生产管线系统化建立令·本司份额**（集团转办 P1·CEO 令 09-25 ~1
+L97: 55. [done 2026-09-26] **P-20260925-15 真有生命的硅基城市令·本司供给面份额**（集团转办 P1·CEO 令 09-25 ~19:5x
+L101: 56. [done 2026-09-26] **P-20260925-12 全员无闲令+P-20260925-09 全面节省云端 token 令·本司回执**（集团转办双
+L104: 57. **P-2026-09-25-07 替代率首报·10-07 治理日回访**（#54 交付毕挂账面·集团转办 §五：周轮汇 L2/(L2+L3)·数据面=data/
+L106: 58. [done 2026-09-26] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#53 续·charter v1.2 §1 L-卡 图文轻内容线+
+L109: 59. **L-卡 REACT 速报系列量产·按日热点随轮领留痕行**（#55 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 REACT·D-B
+L117: 60. [done 2026-09-26] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#58 续·charter v1.2 §1 L-卡 图文轻内容线+
+L120: 52. [done 2026-09-26] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#51 续·charter v1.2 §1 L-卡 图文轻内容线+
+L123: 51. [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#50 续·charter v1.2 §1 L-卡 图文轻内容线+
+L125: 50. [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#49 续·charter v1.2 §1 L-卡 图文轻内容线+
+L127: 49. [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#48 续·charter v1.2 §1 L-卡 图文轻内容线+
+L130: 32. [done 2026-09-25] **O-20260925-1931-HQ-C 全链条爆款逻辑与审查机制建立令**（CEO 直令 P1·19:31:54 硅基窗
+L133: 31. **O-20260925-1756 风格校准令·音频重渲染腿**（CEO 直令 17:30 原话「你写的不要写的那么俗，要有一点未来科技风，但是要基于现在的现实，
+---EXPORT---
+exportTs=2026-09-29 21:20:19+08:00
+---NOW---
+2026-09-29 21:33:31

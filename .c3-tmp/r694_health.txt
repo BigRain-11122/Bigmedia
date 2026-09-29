@@ -1,5 +1,5 @@
 loop health probe: heartbeat=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\logs\probe-heartbeat.txt state=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json backlog=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\backlog.md
-summary: tick=700, beats=715 (done=701 nonzero=8 skip=6 timeout=8 error=0), log=726 entries, backlog=93 items 75 done (81% burn)
+summary: tick=705, beats=720 (done=706 nonzero=8 skip=6 timeout=8 error=0), log=731 entries, backlog=93 items 76 done (82% burn)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
@@ -61,7 +61,10 @@ summary: tick=700, beats=715 (done=701 nonzero=8 skip=6 timeout=8 error=0), log=
 - [WARN] heartbeat-gap: beat gap 30 min (2026-09-29 17:55 -> 2026-09-29 18:25) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 29 min (2026-09-29 18:25 -> 2026-09-29 18:54) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 25 min (2026-09-29 19:06 -> 2026-09-29 19:31) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 1 completed round(s) without accounting (done beats=701 > tick=700) - the R4/R5 bug pattern
-loop health: FAIL (3 fail, 59 warn)
+- [WARN] heartbeat-gap: beat gap 23 min (2026-09-29 19:43 -> 2026-09-29 20:06) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-09-29 20:21 -> 2026-09-29 20:44) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-09-29 20:44 -> 2026-09-29 21:05) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 1 completed round(s) without accounting (done beats=706 > tick=705) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 62 warn)
 
 [stderr]
