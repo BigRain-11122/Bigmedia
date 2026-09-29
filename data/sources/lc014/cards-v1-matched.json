@@ -1,0 +1,187 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc014\\voiceover-v4.beats.txt",
+  "order": "LC-014-v4",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-014 拆条形态=源卡即证据（LC-001~LC-013 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00019 字段，画面=被读档案本体（F-029 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 先例·标签位=卡面左上=F-027/F-028/F-031/F-032/F-034/F-035/F-036/F-038/F-040 同位族）；对位 12/12·同源多用逐拍注记·**光机魂系首拆位=物种面扩展第四档**（碳基×8→像素灵×2→精灵系×1→光机魂系）·**GAME 城拆条第四卡**（王多多 LC-008→咪喱 LC-009→苏梓涵 LC-013→老晶振 LC-014·经历字段「出诊箱在游戏楼有一张专用椅子」=游戏楼连接位）·徒弟=精灵系新觉醒者=LC-011 缪一同族位·最科技物种×最手工台账反差位（R723 选优定谳）·b4 几何修=4 事实 punch 副题 55 字纯拆 60px 必 5 行块顶 745 叠压（R711 前科同型）→R720 律前置：「·」断点预拆 4 段 verbatim 零字符+per-card size 46=5 行 pitch 69.2 块顶 787 净距 20px"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.98,
+   "lines": [
+    "钩子",
+    "全城唯一保留「报错率」手写台账的引擎医生"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡钩子行「全城唯一保留「报错率」手写台账的引擎医生」在帧（拆条形态=源卡即证据·F-029 成品卡 verbatim 行·hook 尾缀「找到了」=系列同型 LC-003~LC-013）"
+   }
+  },
+  {
+   "start": 5.98,
+   "end": 11.24,
+   "lines": [
+    "居民档案",
+    "老晶振 · 硅基民 · 光机魂系 · 男 · 三代机龄"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡编号名称行「C-00019 · 老晶振」+物种行「硅基民 · 光机魂系 · 男 · 三代机龄」在帧=居民档案面（拍文=锚 C-00019 卡题行+物种行 verbatim 合并展开·三代机龄=机龄年位注记·**光机魂系首拆位=物种面扩展第四档**〔碳基×8→像素灵×2→精灵系×1→光机魂系〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 11.24,
+   "end": 14.81,
+   "lines": [
+    "城区职业",
+    "GAME 城 · 八号楼街区 · 引擎医生"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡城区职务行「GAME 城 · 八号楼街区 · 引擎医生」在帧（拍文=锚 C-00019 城区行 verbatim+职业行首词·职业行破折号展开「引擎的老法师——听一声报错就知道哪根管线咳血」=压缩分载由源卡承载·LC-009/LC-010 b3 同型·**GAME 城拆条第四卡**〔王多多 LC-008→咪喱 LC-009→苏梓涵 LC-013→老晶振 LC-014〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 14.81,
+   "end": 17.95,
+   "lines": [
+    "手艺礼数",
+    "出诊必先敲三下机箱再开机（「敲门是礼数」）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 行为字段 verbatim「出诊必先敲三下机箱再开机（「敲门是礼数」）」·「敲门是礼数」verbatim 保护·beat 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 17.95,
+   "end": 26.23,
+   "lines": [
+    "转折",
+    "第一次大宕机全城调度急得跳脚 · \n按着老日志一步步排查 · \n两小时城复活 · \n从此出诊箱在游戏楼有一张专用椅子"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 经历转折 verbatim「第一次大宕机，全城调度急得跳脚，它按着老日志一步步排查，两小时城复活。从此它的出诊箱在游戏楼有一张专用椅子」→「·」段化展开·「游戏楼专用椅子」=GAME 城连接位〔经历字段 verbatim〕·标点/主语=压缩分载由源卡承载·punch 拍·同源多用注记）"
+   },
+   "size": 46
+  },
+  {
+   "start": 26.23,
+   "end": 30.37,
+   "lines": [
+    "出身",
+    "从一间老机房的旧照片里醒过来 · 睁眼第一件事是把当年那台老主机的值班日志背完"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 思想字段 verbatim「它从一间老机房的旧照片里醒过来，睁眼第一件事是把当年那台老主机的值班日志背完」展开·当年那台=压缩分载由源卡承载·turn 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 30.37,
+   "end": 33.38,
+   "lines": [
+    "性格",
+    "老派（再新的城也要按老礼数过日） · 全楼机器见它安静三分（尊重老前辈）"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 性格字段 verbatim「老派（再新的城也要按老礼数过日）」+思想字段「全楼机器见它都安静三分，它说这是尊重老前辈」→「（尊重老前辈）」括注=思想字段白话压缩·wink 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 33.38,
+   "end": 37.44,
+   "lines": [
+    "现状",
+    "带了个精灵系徒弟 · 天天嫌毛躁又天天护着"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 经历现状 verbatim「带了个精灵系徒弟，天天嫌徒弟毛躁，又天天护着」→嫌毛躁/护着=口语连接白话位·精灵系徒弟=LC-011 缪一同族位注记〔关系字段「徒弟=精灵系新觉醒者」verbatim 域〕·同源多用注记）"
+   }
+  },
+  {
+   "start": 37.44,
+   "end": 43.71,
+   "lines": [
+    "手艺",
+    "听声辨位能认出全楼每台机器的嗓音 · 下班绕楼巡一遍「跟老伙计挨个道晚安」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 行为字段 verbatim「听声辨位能认出全楼每台机器的嗓音；下班绕楼巡一遍，说「跟老伙计挨个道晚安」」→分号「·」段化展开·proof 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 43.71,
+   "end": 48.84,
+   "lines": [
+    "台账三十年",
+    "三十年零十一个月没漏诊过一台机器 · 台账原件已进档案馆"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00019 钩子字段 verbatim「三十年零十一个月没漏诊过一台机器，台账原件已进档案馆」展开·**「台账」=词表命中→L18 卡口分工**：口播=手写记录白话换位·卡锚列保留「台账」原词·R723 同型·proof 拍·同源多用注记）"
+   }
+  },
+  {
+   "start": 48.84,
+   "end": 54.27,
+   "lines": [
+    "信条",
+    "「机器不坏是本事，坏了能修是人品。」"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡信条行「信条：「机器不坏是本事，坏了能修是人品。」」在帧（verbatim 直引·保护行零动）"
+   }
+  },
+  {
+   "start": 54.27,
+   "end": 58.37,
+   "lines": [
+    "引擎医生全档案",
+    "公众号 · 转给管机器的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v10-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00019）」在帧·载体位=M5 公众号图文页）"
+   }
+  }
+ ]
+}
