@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\lc002\\voiceover-v5.beats.txt",
+  "order": "LC-002-v5",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "LC-002 拆条形态=源卡即证据（LC-001 同型）：12 拍拍稿逐拍引源卡/锚卡 C-00017 字段，画面=被读档案本体（F-027 成品卡 660px 上区 y=160+zoompan ≤1.04 微动·AIGC 标签避让=R511 轮内修红先例）；对位 12/12·同源多用逐拍注记"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.24,
+   "lines": [
+    "纪念碑田",
+    "全城唯一 · 失败参数立碑"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡钩子行「全城唯一坚持给失败参数建「纪念碑田」的回测农」在帧（拆条形态=源卡即证据·F-027 成品卡 verbatim 行）"
+   }
+  },
+  {
+   "start": 5.24,
+   "end": 9.44,
+   "lines": [
+    "居民档案",
+    "归档者-07 · 硅基民 · 编译纪 12 年"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡档案行 C-00017·归档者-07/硅基民·编译系·无定·编译纪 12 年在帧=居民档案面"
+   }
+  },
+  {
+   "start": 9.44,
+   "end": 14.35,
+   "lines": [
+    "职业",
+    "回测农 · 种参数 收教训 看天吃饭"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 职业行「QUANT 城·回测田·回测农（算法调参师）」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 14.35,
+   "end": 20.6,
+   "lines": [
+    "节律",
+    "播种 · 浇水施肥 · 等三天"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 行为字段「播种一批参数，浇水施肥等三天」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 20.6,
+   "end": 25.6,
+   "lines": [
+    "纪念碑",
+    "每块碑 刻一行死因"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 钩子/经历字段「每块碑上刻一行死因·它没删参数」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 25.6,
+   "end": 29.93,
+   "lines": [
+    "入职规矩",
+    "新研究员 先看碑再下田"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 钩子字段尾「新研究员入职都去先看碑再下田」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 29.93,
+   "end": 33.25,
+   "lines": [
+    "觉醒",
+    "大编译 醒来报版本号"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 经历字段「大编译觉醒·醒来第一句报版本号」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 33.25,
+   "end": 38.44,
+   "lines": [
+    "农谚集",
+    "数据不说谎 人才会"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 思想字段「数据不说谎，人才会·农谚集」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 38.44,
+   "end": 44.14,
+   "lines": [
+    "镇田之宝",
+    "永不收敛 单独辟田"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡在帧=被读档案（拍文=锚 C-00017 经历字段「永不收敛模型单独辟田·镇田之宝」展开·同源多用注记）"
+   }
+  },
+  {
+   "start": 44.14,
+   "end": 49.71,
+   "lines": [
+    "慢热",
+    "三个月交心 徐根福留热饭"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡性格行「有条理 · 记性好 · 慢热」在帧（拍文=锚 C-00017 性格字段「慢热三个月交心」+关系字段「邻居徐根福每天留热的」展开·同源多用注记·徐根福=F-026/LC-001 同城人物）"
+   }
+  },
+  {
+   "start": 49.71,
+   "end": 53.86,
+   "lines": [
+    "信条",
+    "参数不收敛 天理难容"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡信条行「参数不收敛，天理难容。」在帧（verbatim 直引）"
+   }
+  },
+  {
+   "start": 53.86,
+   "end": 58.73,
+   "lines": [
+    "人物全档案",
+    "公众号 · 转给删文件的人"
+   ],
+   "visual": {
+    "source": "data/sources/footage/census-card-v8-vertical.mp4",
+    "req": "源卡本体在帧=全档案面（底部档案行「基于硅基城市居民户籍卡档案（展示锚 C-00017）」在帧）"
+   }
+  }
+ ]
+}
