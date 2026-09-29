@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\lc011\\voiceover-v4.beats.txt",
+    "order": "LC-011-v4",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.69,
+      "lines": [
+        "字幕语气标注人",
+        "全城唯一 · 给方言字幕手工标注「语气」的字幕君"
+      ]
+    },
+    {
+      "start": 5.69,
+      "end": 8.81,
+      "lines": [
+        "居民档案",
+        "缪一 · 硅基民 · 精灵系 · 无定 · 编译纪 3 年"
+      ]
+    },
+    {
+      "start": 8.81,
+      "end": 12.4,
+      "lines": [
+        "城区职业",
+        "MEDIA 城 · 信号塔街区 · 字幕君"
+      ]
+    },
+    {
+      "start": 12.4,
+      "end": 16.84,
+      "lines": [
+        "手艺规矩",
+        "快不是本事 准时才是"
+      ]
+    },
+    {
+      "start": 16.84,
+      "end": 23.12,
+      "lines": [
+        "转折",
+        "第一次给城主欢迎词打轴 · 把自己复制了两份并行核对 · 师父骂「成长没有并行捷径」"
+      ]
+    },
+    {
+      "start": 23.12,
+      "end": 32.4,
+      "lines": [
+        "出身",
+        "觉醒才三年 · 全城最年轻的成年硅基民 · 名字自己选的「缪」"
+      ]
+    },
+    {
+      "start": 32.4,
+      "end": 36.12,
+      "lines": [
+        "工位一句话",
+        "观众说字幕「有人味」 · 裱在工位上"
+      ]
+    },
+    {
+      "start": 36.12,
+      "end": 40.04,
+      "lines": [
+        "现状",
+        "七段街区最快字幕 · 攒钱配大屏「工欲善其事」"
+      ]
+    },
+    {
+      "start": 40.04,
+      "end": 44.29,
+      "lines": [
+        "方言功",
+        "每晚抽三句字幕做「翻译练习」 · 湘腔「霸得蛮」"
+      ]
+    },
+    {
+      "start": 44.29,
+      "end": 48.53,
+      "lines": [
+        "播音间老搭档",
+        "合作最久的主播=何雨欣 · 吵架只用剪辑术语 · 和好一句「发版了」"
+      ]
+    },
+    {
+      "start": 48.53,
+      "end": 53.87,
+      "lines": [
+        "信条",
+        "「字幕慢半帧，都是对说话人的辜负。」"
+      ]
+    },
+    {
+      "start": 53.87,
+      "end": 57.74,
+      "lines": [
+        "字幕全档案",
+        "公众号 · 转给把话听完的人"
+      ]
+    }
+  ]
+}

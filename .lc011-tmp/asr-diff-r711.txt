@@ -1,0 +1,26 @@
+caliber=punctuation-stripped char-position (R685-R708 precedent) + trad_norm_set=58 chars
+ref_chars=209 asr_chars=208
+sites=22 diff_chars=73 ratio=34.9%
+
+replace ref[3:4]='志' asr[3:4]='制'
+replace ref[15:16]='气' asr[15:16]='器'
+replace ref[21:25]='缪一硅基' asr[21:25]='妙衣龟鸡'
+replace ref[30:34]='EDIA' asr[30:34]='edia'
+replace ref[35:37]='信号' asr[35:37]='西浩'
+replace ref[65:66]='它' asr[65:66]='她'
+replace ref[97:99]='硅基' asr[97:99]='龟鸡'
+replace ref[105:106]='缪' asr[105:106]='妙'
+replace ref[113:114]='要' asr[113:114]='量'
+replace ref[117:118]='它' asr[117:118]='他'
+replace ref[122:125]='味它裱' asr[122:125]='位他表'
+replace ref[126:127]='工' asr[126:127]='公'
+replace ref[129:132]='七段街' asr[129:132]='极短节'
+replace ref[137:139]='攒钱' asr[137:139]='暂前'
+replace ref[149:150]='练' asr[149:150]='劣'
+replace ref[154:157]='霸得蛮' asr[154:156]='罢了'
+replace ref[166:167]='欣' asr[165:166]='昕'
+replace ref[172:173]='版' asr[171:172]='板'
+replace ref[174:175]='它' asr[173:174]='他'
+replace ref[180:181]='慢' asr[179:180]='万'
+replace ref[182:183]='帧' asr[181:182]='真'
+replace ref[195:196]='档' asr[194:195]='大'
