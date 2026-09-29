@@ -1,0 +1,17 @@
+PRE: _trash-20260928 entries=1266 files=1266 size=1.2GB date-range=2026-09-23..2026-09-28
+CLEARED: _trash-20260928 removed (Class-A direct clear per S11: auto-saves category, client-rotated trash staging, no in-transit refs)
+POST: live repo auto-saves items=136 (untouched)
+renders: current+in-chain=37 files 499.9MB | historical-mp4=37 files 685.1MB | aux(png/json of hist)=28 files 22.9MB
+  hist 46.8MB       bs-001-live-A-edit-shipinhao.mp4
+  hist 43.6MB       bs-001-live-A-edit-bilibili.mp4
+  hist 42.3MB       bs-001-v11-match-shipinhao.mp4
+  hist 39.6MB       bs-001-v12-shipinhao-60s.mp4
+  hist 37.7MB       bs-001-v12-bilibili-16x9.mp4
+  hist 37.2MB       bs-001-v13-bilibili-16x9.mp4
+  hist 33.5MB       bs-001-v12-douyin-9x16.mp4
+  hist 33.5MB       bs-001-v13-douyin-9x16.mp4
+  hist 31.7MB       bs-003-v1-shipinhao-60s.mp4
+  hist 31.3MB       bs-002-v1-shipinhao-60s.mp4
+  hist 31.0MB       bs-001-live-A-pixelboard.mp4
+  hist 29.4MB       bs-004-v1-shipinhao-60s.mp4
+hist top12=437.5MB rest=25 small files

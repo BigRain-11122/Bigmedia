@@ -1,0 +1,64 @@
+[repo .codely-cli] total=1.4GB
+  auto-saves                               247.9MB
+  skills                                   0.0B
+  _trash-20260928                          0.0B
+[user .codely-cli] total=14.9GB
+  backups                                  82.8KB
+  crash-logs                               30.9KB
+  research                                 25.7KB
+  engine-tick                              11.6KB
+  agents                                   11.5KB
+  fleet-liveness                           5.2KB
+  policies                                 4.7KB
+  tmp                                      4.1KB
+  fleet-audit                              2.8KB
+  skills                                   1.3KB
+  cache                                    0.0B
+  mcp                                      0.0B
+-- data/sources/footage (R2 source assets):
+  7.0MB        biggame-cockpit-16x9.mp4  mtime=2026-09-24
+  5.0MB        biggame-cockpit-vertical.mp4  mtime=2026-09-24
+  4.1MB        biggame-cockpit-raw.mp4  mtime=2026-09-24
+  3.5MB        silicon-dashboard-top-raw.mp4  mtime=2026-09-25
+  1.8MB        biggame-console-raw.mp4  mtime=2026-09-25
+  1.3MB        citywatch-raw.mp4  mtime=2026-09-24
+  1.1MB        citywatch-16x9.mp4  mtime=2026-09-25
+  1.1MB        probe-frame.png  mtime=2026-09-24
+  992.8KB      citywatch-vertical.mp4  mtime=2026-09-25
+  950.0KB      biggame-console-probe-r283.png  mtime=2026-09-25
+  689.9KB      census-card-v7-vertical.mp4  mtime=2026-09-27
+  635.1KB      looplog-16x9.mp4  mtime=2026-09-24
+  621.6KB      census-card-v12-vertical.mp4  mtime=2026-09-29
+  607.7KB      census-card-v18-vertical.mp4  mtime=2026-09-29
+  606.3KB      census-card-v8-vertical.mp4  mtime=2026-09-29
+  605.8KB      census-card-v13-vertical.mp4  mtime=2026-09-29
+  604.0KB      census-card-v19-vertical.mp4  mtime=2026-09-29
+  593.6KB      census-card-v16-vertical.mp4  mtime=2026-09-29
+  586.0KB      census-card-v17-vertical.mp4  mtime=2026-09-29
+  581.2KB      looplog-16x9c.mp4  mtime=2026-09-25
+  534.6KB      reviewsdoc-16x9.mp4  mtime=2026-09-24
+  403.3KB      looplog-vertical.mp4  mtime=2026-09-24
+  383.5KB      reviewsdoc-vertical.mp4  mtime=2026-09-24
+  336.1KB      editgrid-16x9.mp4  mtime=2026-09-24
+  304.8KB      editgrid-vertical.mp4  mtime=2026-09-24
+  219.3KB      reviewsdoc-raw.mp4  mtime=2026-09-24
+  151.1KB      looplog-raw.mp4  mtime=2026-09-24
+  132.9KB      editgrid-raw.mp4  mtime=2026-09-24
+  footage total=35.2MB files=28
+[data/storylines/audio] total=249.5MB
+  sc001-02-v4-tmp                          109.9MB
+  sc001-01-v4-tmp                          76.0MB
+  sc001-01-v1-tmp                          5.8MB
+  sc001-05-v1-tmp                          5.3MB
+  sc001-02-v1-tmp                          5.2MB
+  sc001-03-v1-tmp                          4.8MB
+  sc001-04-v1-tmp                          4.8MB
+  sc001-02-v3-tmp                          4.8MB
+  sc001-01-v3-tmp                          4.6MB
+  sc001-01-v2-tmp                          4.5MB
+  sc001-04-v3-tmp                          3.8MB
+  sc001-03-v3-tmp                          3.4MB
+-- renders classification vs finished.md mention:
+  mentioned-in-finished(7): README.md, bs-001-dd-v1-bilibili-16x9.mp4, bs-001-v14b-douyin-9x16.mp4, bs-001-v15-shipinhao-60s.mp4, bs-002-v15-shipinhao-60s.mp4, bs-003-v15-shipinhao-60s.mp4, bs-004-v15-shipinhao-60s.mp4
+  NOT-mentioned(95): .edit-tmp-grid-bili.png, .edit-tmp-grid-v11.png, .edit-tmp-grid-v12.png, .edit-tmp-grid.png, .live-tmp-frame-A.png, .live-tmp-frame-B.png, bs-001-card-v2.mp4, bs-001-dd-v1-bilibili-16x9.mp4.plan.json, bs-001-live-A-edit-bilibili.mp4, bs-001-live-A-edit-bilibili.mp4.plan.json, bs-001-live-A-edit-shipinhao.mp4, bs-001-live-A-edit-shipinhao.mp4.plan.json, bs-001-live-A-pixelboard.mp4, bs-001-live-B-puredoc.mp4, bs-001-poster-v10-cover.png, bs-001-v10-humanfeel.mp4, bs-001-v11-match-shipinhao.mp4, bs-001-v11-match-shipinhao.mp4.plan.json, bs-001-v12-bilibili-16x9.mp4, bs-001-v12-bilibili-16x9.mp4.plan.json, bs-001-v12-douyin-9x16.mp4, bs-001-v12-douyin-9x16.mp4.plan.json, bs-001-v12-shipinhao-60s.mp4, bs-001-v12-shipinhao-60s.mp4.plan.json, bs-001-v12-shipinhao-cover.png, bs-001-v13-bilibili-16x9.mp4, bs-001-v13-bilibili-16x9.mp4.plan.json, bs-001-v13-douyin-9x16.mp4, bs-001-v13-douyin-9x16.mp4.plan.json, bs-001-v13-douyin-cover.png, bs-001-v14-shipinhao-60s.mp4, bs-001-v14-shipinhao-60s.mp4.plan.json, bs-001-v14-shipinhao-cover.png, bs-001-v14b-douyin-9x16.mp4.plan.json, bs-001-v14b-shipinhao-60s.mp4, bs-001-v14b-shipinhao-60s.mp4.plan.json, bs-001-v15-douyin-9x16.mp4, bs-001-v15-douyin-9x16.mp4.plan.json, bs-001-v15-shipinhao-60s.mp4.plan.json, bs-001-v3-emotive.mp4, bs-001-v4-bilibili-style.mp4, bs-001-v5-shipinhao.mp4, bs-001-v5b-bilibili.mp4, bs-001-v6-shipinhao.mp4, bs-001-v6b-bilibili.mp4, bs-001-v7-shipinhao.mp4, bs-001-v7-vis.mp4, bs-001-v8-cyber-full.mp4, bs-001-v8-cyber-light.mp4, bs-001-v8-cyber-mid.mp4, bs-001-v9-cyber-light.mp4, bs-001-voice-B-yunxi.mp4, bs-001-voice-C-yunjian.mp4, bs-001-voice-D-huayan-local.mp4, bs-002-v1-shipinhao-60s.mp4, bs-002-v1-shipinhao-60s.mp4.plan.json, bs-002-v15-shipinhao-60s.mp4.plan.json, bs-002-v2-shipinhao-60s.mp4, bs-002-v2-shipinhao-60s.mp4.plan.json, bs-002-v2b-shipinhao-60s.mp4, bs-002-v2b-shipinhao-60s.mp4.plan.json, bs-003-v1-shipinhao-60s.mp4, bs-003-v1-shipinhao-60s.mp4.plan.json, bs-003-v15-shipinhao-60s.mp4.plan.json, bs-003-v2-shipinhao-60s.mp4, bs-003-v2-shipinhao-60s.mp4.plan.json, bs-003-v2b-shipinhao-60s.mp4, bs-003-v2b-shipinhao-60s.mp4.plan.json, bs-004-v1-shipinhao-60s.mp4, bs-004-v1-shipinhao-60s.mp4.plan.json, bs-004-v15-shipinhao-60s.mp4.plan.json, bs-004-v2-shipinhao-60s.mp4, bs-004-v2-shipinhao-60s.mp4.plan.json, bs-005-v1-shipinhao-60s.mp4, bs-005-v1-shipinhao-60s.mp4.plan.json, bs-005e-v1-shipinhao-60s.mp4, bs-005e-v1-shipinhao-60s.mp4.plan.json, bs-006-v1-shipinhao-60s.mp4, bs-006-v1-shipinhao-60s.mp4.plan.json, lc-001-v1-shipinhao-60s.mp4, lc-001-v1-shipinhao-60s.mp4.plan.json, lc-002-v1-shipinhao-60s.mp4, lc-002-v1-shipinhao-60s.mp4.plan.json, lc-003-v1-shipinhao-60s.mp4, lc-003-v1-shipinhao-60s.mp4.plan.json, lc-004-v1-shipinhao-60s.mp4, lc-004-v1-shipinhao-60s.mp4.plan.json, lc-005-v1-shipinhao-60s.mp4, lc-005-v1-shipinhao-60s.mp4.plan.json, lc-006-v1-shipinhao-60s.mp4, lc-006-v1-shipinhao-60s.mp4.plan.json, lc-007-v1-shipinhao-60s.mp4, lc-007-v1-shipinhao-60s.mp4.plan.json, lc-008-v1-shipinhao-60s.mp4, lc-008-v1-shipinhao-60s.mp4.plan.json
+piper-models total=60.3MB

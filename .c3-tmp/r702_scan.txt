@@ -1,0 +1,181 @@
+git sets: tracked=5892 untracked=592 ignored=3760
+now=2026-09-29 20:14:32
+[BigStream repo] total=10.0GB files=10756
+  cat ignored    9.0GB
+  cat tracked    519.4MB
+  cat git        493.3MB
+  cat untracked  9.7MB
+  -- top dirs:
+  data                         6.5GB
+  .codely-cli                  1.4GB
+  output                       1.2GB
+  .git                         493.3MB
+  .bs001-dd-tmp                54.1MB
+  .bs005-tmp                   44.1MB
+  .bs006-tmp                   31.9MB
+  .bs004-tmp                   31.2MB
+  .bs002-v15-tmp               27.4MB
+  .bs001-dy-tmp                26.8MB
+  .bs001-v15-tmp               25.1MB
+  .bs004-v15-tmp               19.0MB
+  .c3-tmp                      16.8MB
+  .bs003-v15-tmp               16.8MB
+  -- top 30 files:
+  5.5GB        ignored  data/assets/bonsai/Ternary-Bonsai-2-27B-PTQ1_0.gguf
+  373.3MB      ignored  data/assets/bonsai/cudart.zip
+  269.6MB      git      .git/objects/pack/pack-8c45576f768f65e63cb05566d0da3bb2e3659e0e.pack
+  245.4MB      ignored  data/assets/bonsai/llama-bin.zip
+  200.3MB      ignored  output/renders/bs-001-dd-v1-bilibili-16x9.mp4
+  143.5MB      git      .git/objects/pack/pack-4c02c2350633e3daed7b0b651f6d931159bffca9.pack
+  60.3MB       ignored  data/assets/piper-models/zh_CN-huayan-medium.onnx
+  46.8MB       ignored  output/renders/bs-001-live-A-edit-shipinhao.mp4
+  43.6MB       ignored  output/renders/bs-001-live-A-edit-bilibili.mp4
+  42.3MB       ignored  output/renders/bs-001-v11-match-shipinhao.mp4
+  39.6MB       ignored  output/renders/bs-001-v12-shipinhao-60s.mp4
+  38.0MB       git      .git/objects/pack/pack-3cea3f03e8393fcc6e0e8a8835058e3aa7ef34a9.pack
+  37.7MB       ignored  output/renders/bs-001-v12-bilibili-16x9.mp4
+  37.2MB       ignored  output/renders/bs-001-v13-bilibili-16x9.mp4
+  34.5MB       ignored  output/renders/bs-006-v1-shipinhao-60s.mp4
+  34.2MB       ignored  data/storylines/audio/sc001-02-v4-tmp/amb-bed.wav
+  33.6MB       ignored  output/renders/bs-003-v15-shipinhao-60s.mp4
+  33.5MB       ignored  output/renders/bs-001-v12-douyin-9x16.mp4
+  33.5MB       ignored  output/renders/bs-001-v13-douyin-9x16.mp4
+  33.4MB       ignored  output/renders/bs-002-v15-shipinhao-60s.mp4
+  33.0MB       ignored  data/storylines/audio/sc001-01-v4-tmp/amb-bed.wav
+  32.5MB       ignored  output/renders/bs-004-v15-shipinhao-60s.mp4
+  31.7MB       ignored  output/renders/bs-003-v1-shipinhao-60s.mp4
+  31.3MB       ignored  output/renders/bs-002-v1-shipinhao-60s.mp4
+  31.0MB       ignored  data/storylines/audio/sc001-02-v4-tmp/amb-bed-AB.wav
+  31.0MB       ignored  output/renders/bs-001-live-A-pixelboard.mp4
+  29.5MB       ignored  output/renders/bs-001-v15-shipinhao-60s.mp4
+  29.4MB       ignored  output/renders/bs-004-v1-shipinhao-60s.mp4
+  29.2MB       ignored  output/renders/bs-003-v2b-shipinhao-60s.mp4
+  29.2MB       ignored  output/renders/bs-003-v2-shipinhao-60s.mp4
+[media-sibling] .codely-cli 43.0MB files=8
+[media-sibling] CODELY.md 14.8KB
+[media-sibling] README.md 1.9KB
+[media total excl BigStream] 43.0MB files=10
+-- output/renders files=102 total=1.2GB
+  200.3MB      bs-001-dd-v1-bilibili-16x9.mp4
+  46.8MB       bs-001-live-A-edit-shipinhao.mp4
+  43.6MB       bs-001-live-A-edit-bilibili.mp4
+  42.3MB       bs-001-v11-match-shipinhao.mp4
+  39.6MB       bs-001-v12-shipinhao-60s.mp4
+  37.7MB       bs-001-v12-bilibili-16x9.mp4
+  37.2MB       bs-001-v13-bilibili-16x9.mp4
+  34.5MB       bs-006-v1-shipinhao-60s.mp4
+  33.6MB       bs-003-v15-shipinhao-60s.mp4
+  33.5MB       bs-001-v12-douyin-9x16.mp4
+  33.5MB       bs-001-v13-douyin-9x16.mp4
+  33.4MB       bs-002-v15-shipinhao-60s.mp4
+  32.5MB       bs-004-v15-shipinhao-60s.mp4
+  31.7MB       bs-003-v1-shipinhao-60s.mp4
+  31.3MB       bs-002-v1-shipinhao-60s.mp4
+  31.0MB       bs-001-live-A-pixelboard.mp4
+  29.5MB       bs-001-v15-shipinhao-60s.mp4
+  29.4MB       bs-004-v1-shipinhao-60s.mp4
+  29.2MB       bs-003-v2b-shipinhao-60s.mp4
+  29.2MB       bs-003-v2-shipinhao-60s.mp4
+  28.6MB       bs-002-v2-shipinhao-60s.mp4
+  28.2MB       bs-002-v2b-shipinhao-60s.mp4
+  27.4MB       bs-004-v2-shipinhao-60s.mp4
+  24.6MB       bs-001-v14-shipinhao-60s.mp4
+  24.5MB       bs-001-v14b-shipinhao-60s.mp4
+  19.5MB       bs-001-v15-douyin-9x16.mp4
+  19.5MB       bs-001-v14b-douyin-9x16.mp4
+  18.6MB       bs-001-v10-humanfeel.mp4
+  15.5MB       bs-001-live-B-puredoc.mp4
+  11.7MB       lc-001-v1-shipinhao-60s.mp4
+  10.0MB       lc-008-v1-shipinhao-60s.mp4
+  9.7MB        lc-007-v1-shipinhao-60s.mp4
+  9.7MB        lc-003-v1-shipinhao-60s.mp4
+  9.6MB        lc-002-v1-shipinhao-60s.mp4
+  9.5MB        lc-004-v1-shipinhao-60s.mp4
+  9.4MB        lc-006-v1-shipinhao-60s.mp4
+  9.2MB        bs-005-v1-shipinhao-60s.mp4
+  9.2MB        bs-005e-v1-shipinhao-60s.mp4
+  9.0MB        lc-005-v1-shipinhao-60s.mp4
+  7.2MB        .edit-tmp-grid.png
+  4.7MB        .edit-tmp-grid-bili.png
+  2.8MB        .edit-tmp-grid-v11.png
+  1.8MB        .live-tmp-frame-A.png
+  1.7MB        bs-001-v4-bilibili-style.mp4
+  1.5MB        .live-tmp-frame-B.png
+  1.5MB        bs-001-card-v2.mp4
+  1.5MB        bs-001-v5b-bilibili.mp4
+  1.4MB        bs-001-voice-C-yunjian.mp4
+  1.4MB        bs-001-v5-shipinhao.mp4
+  1.4MB        bs-001-v8-cyber-full.mp4
+  1.4MB        bs-001-voice-B-yunxi.mp4
+  1.4MB        bs-001-v6b-bilibili.mp4
+  1.4MB        bs-001-v13-douyin-cover.png
+  1.4MB        bs-001-v7-vis.mp4
+  1.4MB        bs-001-v12-shipinhao-cover.png
+  1.4MB        bs-001-v6-shipinhao.mp4
+  1.3MB        bs-001-v8-cyber-mid.mp4
+  1.3MB        bs-001-v9-cyber-light.mp4
+  1.3MB        bs-001-v7-shipinhao.mp4
+  1.2MB        bs-001-voice-D-huayan-local.mp4
+  1.2MB        bs-001-v3-emotive.mp4
+  1.1MB        bs-001-v8-cyber-light.mp4
+  850.1KB      .edit-tmp-grid-v12.png
+  666.8KB      bs-001-v14-shipinhao-cover.png
+  485.8KB      bs-001-poster-v10-cover.png
+  107.7KB      README.md
+  26.4KB       bs-001-dd-v1-bilibili-16x9.mp4.plan.json
+  7.7KB        bs-001-v15-douyin-9x16.mp4.plan.json
+  7.0KB        bs-005-v1-shipinhao-60s.mp4.plan.json
+  6.8KB        bs-005e-v1-shipinhao-60s.mp4.plan.json
+  5.5KB        bs-004-v15-shipinhao-60s.mp4.plan.json
+  5.3KB        bs-006-v1-shipinhao-60s.mp4.plan.json
+  5.3KB        bs-003-v15-shipinhao-60s.mp4.plan.json
+  5.2KB        bs-002-v15-shipinhao-60s.mp4.plan.json
+  5.1KB        bs-004-v2-shipinhao-60s.mp4.plan.json
+  5.1KB        bs-004-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        bs-001-v15-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-005-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-004-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-006-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-003-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-007-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-008-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-002-v1-shipinhao-60s.mp4.plan.json
+  5.1KB        lc-001-v1-shipinhao-60s.mp4.plan.json
+  4.9KB        bs-003-v2b-shipinhao-60s.mp4.plan.json
+  4.9KB        bs-003-v2-shipinhao-60s.mp4.plan.json
+  4.9KB        bs-003-v1-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-002-v2b-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-002-v2-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-002-v1-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-001-v14b-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-001-v14-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-001-v12-shipinhao-60s.mp4.plan.json
+  4.7KB        bs-001-v11-match-shipinhao.mp4.plan.json
+  4.7KB        bs-001-v14b-douyin-9x16.mp4.plan.json
+  4.7KB        bs-001-v13-douyin-9x16.mp4.plan.json
+  4.7KB        bs-001-v12-douyin-9x16.mp4.plan.json
+  4.6KB        bs-001-v13-bilibili-16x9.mp4.plan.json
+  4.6KB        bs-001-v12-bilibili-16x9.mp4.plan.json
+  3.0KB        bs-001-live-A-edit-bilibili.mp4.plan.json
+  2.8KB        bs-001-live-A-edit-shipinhao.mp4.plan.json
+-- auto-saves census (water line: 30d / 500 items, S11 Class-A):
+  ABSENT C:\Users\sjs20\.codely-cli\auto-saves
+  C:\Users\sjs20\Desktop\FluxGroup\media\.codely-cli\auto-saves items=7 size=43.0MB old30d=0 oldsize=0.0B newest=2026-09-28
+    oldest 2026-09-23 chat-auto-save-2026-09-23-19-41-27-114.json
+    oldest 2026-09-24 chat-auto-save-2026-09-24-16-10-53-583.json
+    oldest 2026-09-24 chat-auto-save-2026-09-24-21-05-34-178.json
+    oldest 2026-09-25 chat-auto-save-2026-09-25-09-02-42-314-fc98d86b-bf16-4cbc-a868-7055cca0be35.json
+    oldest 2026-09-25 chat-auto-save-2026-09-25-09-07-25-416-613c8020-961c-4771-849f-fc17e50fd852.json
+  C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.codely-cli\auto-saves items=136 size=247.9MB old30d=0 oldsize=0.0B newest=2026-09-29
+    oldest 2026-09-28 chat-export-auto-save-2026-09-28-22-39-51-044.md
+    oldest 2026-09-28 chat-auto-save-2026-09-28-22-39-51-044.json
+    oldest 2026-09-28 chat-export-auto-save-2026-09-28-23-33-17-624.md
+    oldest 2026-09-28 chat-auto-save-2026-09-28-23-33-17-624.json
+    oldest 2026-09-28 chat-export-auto-save-2026-09-28-23-54-39-507.md
+  C:\Users\sjs20\Desktop\FluxGroup\.codely-cli\auto-saves items=78 size=162.6MB old30d=0 oldsize=0.0B newest=2026-09-29
+    oldest 2026-09-28 chat-auto-save-2026-09-28-20-57-04-472-71425aae-b31c-41f2-a5f2-dc2fa882fad0.json
+    oldest 2026-09-28 chat-auto-save-2026-09-28-20-57-04-686-0717c0d2-3946-423d-a0cd-ec1722c87e14.json
+    oldest 2026-09-28 chat-auto-save-2026-09-28-20-57-15-985-5ef506a5-c512-4b8c-a603-2c4a0a3967ca.json
+    oldest 2026-09-28 chat-auto-save-2026-09-28-20-58-09-820-fc442882-f73c-489d-8b66-ad7ccd18e29d.json
+    oldest 2026-09-28 chat-auto-save-2026-09-28-20-59-27-292-e1b5f7ac-234d-4c7c-9009-f59ad81a4ce7.json
+-- hf-cache hub: 1.4GB files=7 newest=2026-09-29 19:59

@@ -1,0 +1,20 @@
+-- repo .codely-cli root-level files:
+  root-files total=0.0B
+-- user .codely-cli level2 dirs:
+  user .codely-cli total=14.9GB
+  tmp                            14.8GB
+  cache                          52.8MB
+  mcp                            25.0MB
+  skills                         11.8MB
+  backups                        82.8KB
+  crash-logs                     30.9KB
+  research                       25.7KB
+  engine-tick                    11.6KB
+  agents                         11.5KB
+  fleet-liveness                 5.2KB
+  policies                       4.7KB
+  fleet-audit                    2.8KB
+-- renders README rows: current=37 hist=15 chain=0 other=5
+CURRENT: bs-001-card-v2.mp4, bs-001-voice-B-yunxi.mp4, bs-001-voice-C-yunjian.mp4, bs-001-voice-D-huayan-local.mp4, bs-001-v3-emotive.mp4, bs-001-v4-bilibili-style.mp4, bs-001-v5-shipinhao.mp4, bs-001-v5b-bilibili.mp4, bs-001-v6-shipinhao.mp4, bs-001-v6b-bilibili.mp4, bs-001-v7-shipinhao.mp4, bs-001-v7-vis.mp4, bs-001-v8-cyber-light.mp4, bs-001-v8-cyber-mid.mp4, bs-001-v8-cyber-full.mp4, bs-001-v9-cyber-light.mp4, bs-001-v10-humanfeel.mp4, bs-001-live-A-pixelboard.mp4, bs-001-live-B-puredoc.mp4, bs-001-poster-v10-cover.png, bs-001-live-A-edit-shipinhao.mp4, bs-001-live-A-edit-bilibili.mp4, bs-001-v11-match-shipinhao.mp4, bs-001-v12-bilibili-16x9.mp4, bs-001-v12-douyin-9x16.mp4, bs-001-v13-bilibili-16x9.mp4, bs-001-v13-douyin-9x16.mp4, bs-002-v1-shipinhao-60s.mp4, bs-003-v1-shipinhao-60s.mp4, bs-004-v1-shipinhao-60s.mp4, bs-001-v14`/`bs-002-v2`/`bs-003-v2`/`bs-004-v2`-shipinhao-60s·时间线零动=时长逐毫秒一致·`*.mp4, bs-005-v1-shipinhao-60s.mp4, bs-001-dd-v1-bilibili-16x9.mp4, bs-001-v14b-douyin-9x16.mp4, bs-001-v15-douyin-9x16.mp4, bs-001-v15-douyin-9x16.mp4, bs-006-v1-shipinhao-60s.mp4
+CHAIN: 
+HIST(first30): bs-001-v12-shipinhao-60s.mp4, bs-002-v1-shipinhao-60s.mp4, bs-003-v1-shipinhao-60s.mp4, bs-004-v1-shipinhao-60s.mp4, bs-001-v14-shipinhao-60s.mp4, bs-002-v2-shipinhao-60s.mp4, bs-003-v2-shipinhao-60s.mp4, bs-004-v2-shipinhao-60s.mp4, bs-001-v14b-shipinhao-60s.mp4, bs-002-v2b-shipinhao-60s.mp4, bs-002-v15-shipinhao-60s.mp4, bs-003-v2b-shipinhao-60s.mp4, bs-003-v15-shipinhao-60s.mp4, bs-004-v15-shipinhao-60s.mp4, bs-001-v15-shipinhao-60s.mp4
