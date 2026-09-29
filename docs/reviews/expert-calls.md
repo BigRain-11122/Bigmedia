@@ -40,3 +40,4 @@
 | 2026-09-29 12:02 | E4-audience | E4 直觉观众（参考仪·非名册席） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.lc002-tmp\subs.srt | 1 | full text=expert-verdicts/20260929120236-E4-audience.md / 8.0 会看完+点赞明说+转发条件式 (E4 reference call: LC-002 split-video 60s, detached PID 16116, same-round backfill) |
 
 | 2026-09-29 12:28 | E4-audience | E4 直觉观众（参考仪·非名册席） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\storylines\cards\MC-20260929-DIGEST-v10\cards.json | 1 | full text=expert-verdicts/20260929-122816-E4-audience.md / 8.0 会停+保存/转发条件式三意愿正面明说 (E4 reference call: DIGEST-v10 static card, detached 1500s window, heat-loaded fast landing, same-round backfill R643/R674 precedent) |
+| 2026-09-29 12:47 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc003\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-124753-S1-script.md / 总分：10   (1500s wrapper: LC-003 S1 v1.5+L18-L20 gate) |
