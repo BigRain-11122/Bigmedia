@@ -1,0 +1,2 @@
+Start-Process -FilePath "python" -ArgumentList "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r751_tts_run.py","v2" -WorkingDirectory "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream" -WindowStyle Hidden
+Write-Output "LAUNCHED"
