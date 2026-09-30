@@ -1,0 +1,23 @@
+--- header ---
+
+# 环节评审台账（Station Reviews Ledger）
+
+
+
+> 机制=`docs/dept-review-mechanism.md`（O-20260923-2245-bm-a）。行级追加·禁改写；每行=一次环节评审实况（环节/件/专家席/分/短板/verdict/证据指针）。
+
+> 回填纪律：仅回填**实际发生过**的检查实况（机检结果/终审在案分数），机制生效后新件按 §3 四步正式走门。
+
+
+
+| 日期 | 环节 | 件 | 专家席 | 分 | 最弱项/短板 | verdict | 证据指针 |
+
+--- REACT v6 row ctx ---
+
+--- last 3 lines ---
+
+| 2026-09-30 | M4 终审（lc-021 收官腿 R756·断洞承接收口） | lc-021-v1-shipinhao-60s（E8 终审+ASR 终轨+E4 参考仪） | E8 终审七席（E1/E2/E3/E5/E6/E7/E8）+E4 参考 | S1 10/10+S2 9.0+S3 9.0+S4 9.0+七席全 9.0（E4 8.0 参考） | b5 沪语句 12 字 span 整句缺失=系列最重单点损（字幕轨 edge-tts 12/12 零损兜底+E4 听音侧未旗=理解存活旁证） | PASS=M4 完成态→**F-075 登记**（成品库第 75 件·冗余池第十七件·E21 出池=20 卡全覆盖收官） | review-20260930-lc021-v1.md+.lc021-tmp/asr-check.srt+asr-diff-r756.txt（14 cues 整轨一次过 32.8% 字位）+expert-verdicts/20260930-151627-E4-audience.md |
+
+| 2026-09-30 | **S2 三门循环独立执法+帧验三律+全卡几何审计零修红（bs-007-v1-shipinhao=queue §E 批活池 E22 稿集件渲染腿·供给转折后首件·视频号冗余池第十八件候选·R758 起链→R759 定稿音轨→R760 渲染腿）** | ai_feel 0 FAIL 0 WARN（gaps 11 处 0.220-0.558s varied·pacing CV 0.237·prosody 9 档 12 拍·copy CV 0.229）+层 1.8 六面 PASS（beat-align 11/11·camera 12 段全动·visual-ratio 0.83=10/12〔looplog×7+biggame-cockpit×1+reviewsdoc×2+cards-only×2·素材探针先行三源三时点多模态零录穿 probe-r760〕·transition-share 1.00 无连排·transition-variety·timeline 代数过）+spec 微信视频号双 PASS（9:16+57.232s ∈30-60s 窗 2.8s 余量）| 帧验三律全过：拍头 12/12（H1 拍名逐拍对位+sys.beat 01→12 连续 t 单调+角标 12 帧全在+AIGC 帧头标识全在）+段中尾 6/6（b0/b3/b5 段中字幕净读·段尾缺席=SRT 逐 cue 显隐律 R697 判例·tile 疑点两处全分辨率证伪=b0「一」在位+b5「太密空转」净读=R189 手段问题律）+回环 crossings={}（max 拍 7.45s<源 12s 诚实计算）；全卡几何审计 r760_card_audit 12 卡 problems=NONE（2 行块顶 874 净 107px·R720 律预执行零修红=前置预防通道第八件）·在链件非成品（E8+ASR+E4+M4→F 登记=R761 收官腿）| S2 probe .c3-tmp/r760_s2.txt·plan.json 入 git |
+
+| 2026-09-30 | M4 终审（bs-007 收官腿 R761） | bs-007-v1-shipinhao-60s（E8 终审+ASR 终轨+E4 参考仪） | E8 终审七席（E1/E2/E3/E5/E6/E7/E8）+E4 参考 | S1 10/10+S2 9.0+S3 9.0+S4 9.0+七席全 9.0（E4 7.0 参考） | 进化→净化 ×2=第三颗心脏核心词双损（b3+b5·字幕轨 edge-tts 12/12 零损兜底）+日志→日制 hook 位复发+空转→空传+看门狗→看门口+无人值守→无人职守=机制哲学词域同音面如实（15.3% 字位=BS 机制件带内上位·09:17→九点十七分数字形差值存活+CTA 受众定位词「爱琢磨系统的朋友」全净读）·HF 缓存再清自愈=R701 判例复发（D-20260930-01③「冻结不清」执行面） | PASS=M4 完成态→**F-076 登记**（成品库第 76 件·冗余池第十八件·E22 出池+supply-gated 豁免面维持） | review-20260930-bs007-v1.md+.bs007-tmp/asr-check.srt+asr-diff-r761.txt（11 cues 整轨一次过）+expert-verdicts/20260930-173431-E4-audience+release-schedule v3.3 |

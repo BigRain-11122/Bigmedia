@@ -1,0 +1,11 @@
+em-check-r796 (REACT-v7 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-01
+OK 15.00em margin +10.56  如何看待江苏高考接近满分记叙文
+OK 16.65em margin +8.91  《衬衫的价格为 9 镑 15 便士》火了
+OK 21.00em margin +4.56  怀旧轴：「老街的灯光，照亮了我半辈子的梦」
+OK 18.00em margin +7.56  逍遥轴：「梦里常回，那些年的灯与影」
+OK 23.00em margin +2.56  烟火轴：「夜深了，人散了，摊位上还留着烟火味」
+OK 24.00em margin +1.56  编年史馆员信条：「城市不会忘记，除非我们偷懒。」
+VERT: est bottom=833px subs_top=932px gap=99px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS
