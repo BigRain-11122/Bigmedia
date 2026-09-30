@@ -1,0 +1,18 @@
+LEN 13992
+KW BigStream hits 15
+KW dirty hits 4
+L: > 方法：七路并行独立审计（MiniGame／BigStream／BigDomain+BigLife／BigCompute／CPH4／BigMoney〔另立 `bigmoney-credibility-audit-20260930.md`〕／FluxVerse）＋ HQ 复算；**证据一律路径+数字+commit 短 hash**；本件只立档与派工，**集团层零产品代码，禁跨仓写**（governance §6）。
+L: | **BigStream** | 独立成片 **25 件**（66 mp4/1.26GB）／已发布 **0 条** | dirty=**908**（95% 在 `.*-tmp`，512MB） | **11 平台账号全"未注册"** |
+L: | **集团治理层** | 近 48h 纯过程 commit 占比：BigMoney **81%**／BigDomain **83%**／BigStream **48%**／MiniGame **29%**／BigLife **1%**／BigCompute **9%**／FluxVerse **0%** | 组内差异 **83 倍**——同法不同效 | 无统一"能否被真人打开"指标 |
+L: BigStream 11 平台账号、BigDomain 服务器/域名/备案/商户号、BigCompute 企业主体/小店/直播账号/ICP、BigMoney 券商模拟盘与报备、FluxVerse 48 包正版采购——**五个司的"下一步"是同一件事**：CEO 开号、办资质、签字。这不是 AI 的效率问题，是**CEO 没被明确告知"你不动手，五条线全停"**。现状：`docs/orders.md` 有「CEO 待办物理件」区，但没有按"解锁价值"排序，也没有量化卡住的产出数。
+L: - BigStream 74 轮提交 ≈ 25 件成片，**全挤在 M4 渲染段**，M0 选题/M6 数据回流无产出；
+L: BigDomain 83%、BigMoney 81% 的过程 commit 里，主体是快照再生、车道冲突解算、状态回写、认领/让路。BigStream 每轮新建一个 `.*-tmp` 目录从不清理（512MB、908 项脏树）。BigMoney 全史 24.7% commit 与撞车相关，`results/` 积 540 个 resolve 脚本。**自动化产出的协调成本，已经高于它产出的业务价值。**
+L: | **XL-10** | **冲突跑步机断根**：共享派生态（快照/看板/记分卡）移出版控，改 lane 件+单一聚合提交 | BigMoney 每轮 UU 面从 ~26 降到 ≤3；BigStream dirty 从 908 压到 <50 | R3 |
+L: | **XL-11** | **临时目录纪律**：`.*-tmp` 生命周期 ≤1 轮，轮末自动清理并补 `.gitignore` | BigStream `.*-tmp` 512MB→<20MB；dirty <50 | R3 |
+L: | **XL-14** | BigStream | dirty 908→<50；**≥1 条真发布**并回写带时间戳链接；产出报表三列（件数/时长/成本），停用 md 记账 | 10-03 |
+L: | BigStream | 62 | **0** | **61** | 1 | 全部落 1 档（含 25 件真成片） |
+L: 3. **口径偏差（工具的，不是司的）**：`round_score.py` 把 `**/*.md` 一律记 0、把 `state/*.json` 一律记 2——于是 **BigDomain（0/98）与 BigStream（0/61）被系统性低估**：它们的真实交付物是 HTML/py 前端与 **25 件真成片 mp4**，都不在工具的 2 档名单里；同时研究报告类 md 产出被一刀记 0，而 BigCompute 的 `state/*.json` 一律记 2，可被"只刷新 state"套利。
+L:    **建议修法（一行级）**：2 档名单增 `**/*!(.md)` 白名单类（`.html/.mp4/.png/.jsonl/.csv/.parquet`）；把"研究报告类 md（research/·docs/ 下 R- 件）"与"心跳/日清类 md"分离计分；`state/*.json` 须含真实数字（非时间戳/心跳字段）方记 2。**修后须重跑本表**——否则任何按此计分的"空转点名"都会先冤枉 BigDomain 与 BigStream。
+L: - 🟡 部分：过程/实物 commit 比例为关键词分类量级口径（非逐条人工判读）；BigStream「约 15 分钟总时长」为按命名累积估算。
+L: | **BigLife** | XL-17 消费方接线数判据 | **✅ 承接 → ✅ 交付（29 分钟全链）** | ack：`9cb31be3` 12:30 立单 `T-20260930-01`（`tasks/TASKS.md:407` 已成条目·回执行=F-20260930-BL03）；交付：`31bbc791` 12:52「XL-17 分步①②兑现」→ `Tools/consumer_wiring.py`（6678B·扫描器）+ `cognition/CONSUMER-WIRING.md`（4030B·判据件）+ **接线数首跑=3 仓 wired**。**勘正**：外审第四轮曾判"票件实物不存在"＝**我方检索面过窄（只搜文件名模式）造成的误报**，见 §三.2 自校准第 4 条。**外审第七轮独立抽验（5 项主证逐条实测）**：✅ FluxVerse `Tools/percep
+L: | BigStream | XL-14 | ⏳ 未见回执 | 派工后 0 提交（其末次 11:52） |
