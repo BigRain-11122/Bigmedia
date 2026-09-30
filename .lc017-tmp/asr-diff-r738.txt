@@ -1,0 +1,32 @@
+caliber=punct-strip + trad_norm (r721 base 58 + r726 adds 20 = ext 78·R734 78-table reuse)
+ref_chars=215 asr_chars=214
+sites=25 diff_chars=87 ratio=40.5%
+
+replace ref[5:6]='城' asr[5:6]='程'
+replace ref[20:22]='碳基' asr[20:22]='探机'
+replace ref[24:27]='二十六' asr[24:26]='26'
+replace ref[31:32]='档' asr[30:31]='大'
+replace ref[33:34]='馆' asr[32:33]='管'
+replace ref[38:39]='馆' asr[37:38]='管'
+replace ref[40:41]='值' asr[39:40]='直'
+replace ref[66:68]='不毁' asr[65:67]='误会'
+replace ref[72:73]='城' asr[71:72]='成'
+replace ref[74:75]='城' asr[73:74]='成'
+replace ref[105:106]='心' asr[104:105]='新'
+replace ref[113:114]='编' asr[112:113]='边'
+replace ref[115:117]='述史' asr[114:116]='树时'
+replace ref[132:133]='城' asr[131:132]='场'
+replace ref[141:143]='便利' asr[140:142]='夜里'
+replace ref[148:153]='史料照例去' asr[147:152]='十辆赵立居'
+replace ref[157:158]='粢' asr[156:157]='资'
+replace ref[160:161]='她' asr[159:160]='他'
+replace ref[163:164]='新' asr[162:163]='信'
+replace ref[168:174]='今夜誊进编目' asr[167:173]='金也腾尽鞭木'
+replace ref[175:178]='处齐了' asr[174:177]='出其来'
+replace ref[182:184]='城市' asr[181:183]='诚实'
+replace ref[194:196]='馆员' asr[193:195]='管源'
+replace ref[197:198]='档' asr[196:197]='大'
+replace ref[208:209]='事' asr[207:208]='市'
+
+SURVIVE 19/36
+LOST: 全城唯一 / 碳基市民 / 二十六岁 / 档案馆区 / 编年史馆员 / 不毁一个字节 / 口述史 / 便利店小票 / 史料 / 粢饭摊 / 新令牌 / 誊进编目 / 出处齐 / 城市不会忘记 / 馆员 / 全档案在公众号 / 转给相信小事也是历史的人
