@@ -1,5 +1,5 @@
 loop health probe: heartbeat=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\logs\probe-heartbeat.txt state=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json backlog=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\backlog.md
-summary: tick=798, beats=816 (done=795 nonzero=10 skip=6 timeout=15 error=0), log=826 entries, backlog=96 items 78 done (81% burn)
+summary: tick=801, beats=819 (done=798 nonzero=10 skip=6 timeout=15 error=0), log=829 entries, backlog=96 items 78 done (81% burn)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
@@ -13,6 +13,7 @@ summary: tick=798, beats=816 (done=795 nonzero=10 skip=6 timeout=15 error=0), lo
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-25 10:4x -> 2026-09-25 10:43 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-25 23:5x -> 2026-09-25 23:59 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-27 03:1x -> 2026-09-27 03:15 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-10-01 01:1x -> 2026-10-01 01:01 (narrative hygiene; approximate minutes allowed)
 - [WARN] heartbeat-gap: beat gap 26 min (2026-09-23 16:15 -> 2026-09-23 16:41) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 26 min (2026-09-24 11:12 -> 2026-09-24 11:38) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 20 min (2026-09-24 23:14 -> 2026-09-24 23:34) over 20 min comm SLA - long rounds may breach legitimately
@@ -96,5 +97,8 @@ summary: tick=798, beats=816 (done=795 nonzero=10 skip=6 timeout=15 error=0), lo
 - [WARN] heartbeat-gap: beat gap 28 min (2026-09-30 17:26 -> 2026-09-30 17:54) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 29 min (2026-10-01 00:06 -> 2026-10-01 00:34) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 24 min (2026-10-01 00:49 -> 2026-10-01 01:14) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] account-ahead: tick=798 ahead of done beats=795 - repair bump or off-beat accounting
-loop health: FAIL (2 fail, 95 warn)
+- [WARN] heartbeat-gap: beat gap 25 min (2026-10-01 01:14 -> 2026-10-01 01:39) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-01 01:39 -> 2026-10-01 02:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-01 02:00 -> 2026-10-01 02:20) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] account-ahead: tick=801 ahead of done beats=798 - repair bump or off-beat accounting
+loop health: FAIL (2 fail, 99 warn)

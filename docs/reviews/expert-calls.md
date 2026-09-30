@@ -85,3 +85,4 @@
 
 | 2026-10-01 00:29 | E4-audience | MC-20261001-REACT-v7 静态热点反应卡（盲评面=e4_call.py tmp wrapper·qwen2.5:14b·热载快落） | 8.0（三意愿正面·REACT 带内高点回归·旗①=信条语境门槛族变体第二连） | expert-verdicts/20261001-002959-E4-audience.md | 采纳（参考线·非拦截） |
 | 2026-10-01 01:32 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs008\s1-review-material-v1.md | 0 | full text=expert-verdicts/20261001-013208-S1-script.md / 总分：10 (1500s wrapper: BS-008 S1 v1.5+L18-L20 gate) |
+| 2026-10-01 02:27 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs009\s1-review-material-v1.md | 0 | full text=expert-verdicts/20261001-022734-S1-script.md / 总分：10 (1500s wrapper: BS-009 S1 v1.5+L18-L20 gate) |
