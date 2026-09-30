@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+# R808: BS-011 cards-v1-matched.json build (base=.bs011-tmp/cards.json TTS v3
+# baseline clock x visual declarations; R806 build_cards chain-inheritance,
+# probe-first honest req)
+import json, io
+
+base = json.load(io.open(r".bs011-tmp\cards.json", encoding="utf-8"))
+LL = "data/sources/footage/looplog-vertical.mp4"
+RD = "data/sources/footage/reviewsdoc-vertical.mp4"
+EG = "data/sources/footage/editgrid-vertical.mp4"
+
+VIS = {
+    0: (LL, "系统日志本体在帧（BS-OSLoop-Log 窗口标题+轮次日志行可读=hook 口播「系统日志：记忆体检」字面直证·F-004 v15 b0 同拍位先例·同源多用注记）"),
+    1: (LL, "AI 循环日志本体在帧（AI 工作循环实况=口播主语「AI」的主体实据·醒来即日志在跑·b0 同源·同源多用注记）"),
+    2: (EG, "并列网格形态可见（2×2 字卡网格=「一遍一遍」重复意象·自产字卡网格非实盘素材·意象对位声明·BS-010 b2 同型）"),
+    3: (LL, "日志文件本体在帧（终端里的日志文件实况=「记忆进文件，不进脑子」字面直证·b0 同源·同源多用注记）"),
+    4: (RD, "评审台账在帧（Rollout Review Ledger=结构化记忆的落账形态·「机制原文」的执行证据形态·F-004 v15 b9 诚实律同拍位先例·意象对位声明）"),
+    5: (LL, "轮首核验行可见（每轮开工先读台账再干活=「先读记忆，再干活」的日志实况形态·b0 同源·同源多用注记·意象对位声明）"),
+    6: (LL, "循环日志持久在帧（跨轮日志逐行留存=「断电重启，一字不丢」的日志本体直证·全量在代码库=文件形态·b0 同源·同源多用注记）"),
+    7: (LL, "在跑循环日志实时实况可见（「记忆正在跑」字面直证·本循环在飞实况=自指拍实据·b0 同源·同源多用注记）"),
+    8: (RD, "台账追记行可见（评审台账逐轮追加行=「每轮干完，写回一行」字面直证·写回实况·同源多用注记）"),
+    9: (RD, "在册条目行可查（台账条目逐行可查=「不是存聊天，是存能查的结构」台账形态·意象对位声明·同源多用注记）"),
+    10: (LL, "系统日志窗口标题实帧可读（日志文件=「公司的脑子，长在文件里」文件本体直证·b0 同源·同源多用注记）"),
+    11: (None, "CTA 导流拍常规纯字卡（footage-matching-spec §1·F-004 v15 b11 同拍位先例）"),
+}
+
+cards = []
+# R800 BS-008 b4 same-type in-round redfix: b4 col2 wraps mid-word
+# ("...结构" / "化记忆") per full-res frame adjudication -> explicit split at
+# the second "·" separator keeps "结构化记忆" whole; anchor text verbatim,
+# line boundary only.
+SPLIT = {
+    4: ["机制原文", "每家公司 · 每条产品线", "结构化记忆"],
+}
+for i, c in enumerate(base["cards"]):
+    card = {"start": c["start"], "end": c["end"], "lines": SPLIT.get(i, c["lines"])}
+    src, req = VIS[i]
+    if src:
+        card["visual"] = {"source": src, "req": req}
+    else:
+        card["visual"] = {"cards-only": True, "reason": req}
+    cards.append(card)
+
+base["meta"]["visual_spec"] = "docs/footage-matching-spec.md"
+base["meta"]["storyboard"] = (
+    "BS-011 稿集件视觉动态=循环日志本体+台账证据（源=BS-001 公众号母稿五机制之三级记忆切面·R807 选优定谳）——"
+    "looplog（BS-OSLoop-Log 系统日志终端=记忆体检/AI 本体/记忆进文件/先读记忆/断电持久/在跑证明/长在文件里）×7"
+    "+reviewsdoc（Rollout Review Ledger 评审台账=结构化记忆/写回一行/能查的结构）×3"
+    "+editgrid（自产字卡网格=「一遍一遍」重复形态）×1+cards-only×1（CTA 拍）"
+    "·对位 11/12=0.92（层 1.8 visual-ratio ≥0.80 面·BS-009/BS-010 同位带）"
+    "·素材探针先行定谳（probe-r808 三源三时点多模态=零录穿·三源静态稳定）"
+)
+base["cards"] = cards
+
+out = r"data\sources\bs011\cards-v1-matched.json"
+json.dump(base, io.open(out, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+n_vis = sum(1 for c in cards if "source" in c["visual"])
+print("BUILT", out, "cards=%d visual=%d ratio=%.3f" % (len(cards), n_vis, n_vis / 12.0))

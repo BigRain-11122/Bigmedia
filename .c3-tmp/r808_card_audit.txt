@@ -1,0 +1,17 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [记忆体检] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card01 b1  [通病] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card02 b2  [通行解法] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card03 b3  [我们的处方] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card04 b4  [机制原文] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card05 b5  [开工第一件事] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card06 b6  [断电反转] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card07 b7  [在跑证明] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card08 b8  [手册自进化] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card09 b9  [结构边界] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card10 b10 [记住这句话] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card11 b11 [转发指令] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+
+problems: NONE

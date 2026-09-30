@@ -1,0 +1,187 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\bs011\\voiceover-v3.beats.txt",
+  "order": "BS-009-v3",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "BS-011 稿集件视觉动态=循环日志本体+台账证据（源=BS-001 公众号母稿五机制之三级记忆切面·R807 选优定谳）——looplog（BS-OSLoop-Log 系统日志终端=记忆体检/AI 本体/记忆进文件/先读记忆/断电持久/在跑证明/长在文件里）×7+reviewsdoc（Rollout Review Ledger 评审台账=结构化记忆/写回一行/能查的结构）×3+editgrid（自产字卡网格=「一遍一遍」重复形态）×1+cards-only×1（CTA 拍）·对位 11/12=0.92（层 1.8 visual-ratio ≥0.80 面·BS-009/BS-010 同位带）·素材探针先行定谳（probe-r808 三源三时点多模态=零录穿·三源静态稳定）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 5.09,
+   "lines": [
+    "记忆体检",
+    "三级结构 · 失忆点 0"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "系统日志本体在帧（BS-OSLoop-Log 窗口标题+轮次日志行可读=hook 口播「系统日志：记忆体检」字面直证·F-004 v15 b0 同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 5.09,
+   "end": 8.77,
+   "lines": [
+    "通病",
+    "AI 每次醒来 · 都是新员工"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "AI 循环日志本体在帧（AI 工作循环实况=口播主语「AI」的主体实据·醒来即日志在跑·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 8.77,
+   "end": 13.84,
+   "lines": [
+    "通行解法",
+    "靠人交接 · 一遍一遍教"
+   ],
+   "visual": {
+    "source": "data/sources/footage/editgrid-vertical.mp4",
+    "req": "并列网格形态可见（2×2 字卡网格=「一遍一遍」重复意象·自产字卡网格非实盘素材·意象对位声明·BS-010 b2 同型）"
+   }
+  },
+  {
+   "start": 13.84,
+   "end": 18.25,
+   "lines": [
+    "我们的处方",
+    "记忆进文件 · 不进脑子"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "日志文件本体在帧（终端里的日志文件实况=「记忆进文件，不进脑子」字面直证·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 18.25,
+   "end": 22.88,
+   "lines": [
+    "机制原文",
+    "每家公司 · 每条产品线",
+    "结构化记忆"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "评审台账在帧（Rollout Review Ledger=结构化记忆的落账形态·「机制原文」的执行证据形态·F-004 v15 b9 诚实律同拍位先例·意象对位声明）"
+   }
+  },
+  {
+   "start": 22.88,
+   "end": 25.54,
+   "lines": [
+    "开工第一件事",
+    "先读记忆 · 再干活"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "轮首核验行可见（每轮开工先读台账再干活=「先读记忆，再干活」的日志实况形态·b0 同源·同源多用注记·意象对位声明）"
+   }
+  },
+  {
+   "start": 25.54,
+   "end": 30.92,
+   "lines": [
+    "断电反转",
+    "重启一字不丢 · 全量在代码库"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "循环日志持久在帧（跨轮日志逐行留存=「断电重启，一字不丢」的日志本体直证·全量在代码库=文件形态·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 30.92,
+   "end": 35.77,
+   "lines": [
+    "在跑证明",
+    "本条视频 · 从记忆里长出来"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "在跑循环日志实时实况可见（「记忆正在跑」字面直证·本循环在飞实况=自指拍实据·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 35.77,
+   "end": 40.22,
+   "lines": [
+    "手册自进化",
+    "每轮干完 · 写回一行"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "台账追记行可见（评审台账逐轮追加行=「每轮干完，写回一行」字面直证·写回实况·同源多用注记）"
+   }
+  },
+  {
+   "start": 40.22,
+   "end": 43.63,
+   "lines": [
+    "结构边界",
+    "不是存聊天 · 是存能查的结构"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "在册条目行可查（台账条目逐行可查=「不是存聊天，是存能查的结构」台账形态·意象对位声明·同源多用注记）"
+   }
+  },
+  {
+   "start": 43.63,
+   "end": 48.14,
+   "lines": [
+    "记住这句话",
+    "公司的脑子 · 长在文件里"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "系统日志窗口标题实帧可读（日志文件=「公司的脑子，长在文件里」文件本体直证·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 48.14,
+   "end": 53.13,
+   "lines": [
+    "转发指令",
+    "完整机制在公众号 · 转给教 AI 教到崩溃的人"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "CTA 导流拍常规纯字卡（footage-matching-spec §1·F-004 v15 b11 同拍位先例）"
+   }
+  }
+ ]
+}

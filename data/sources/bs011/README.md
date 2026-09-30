@@ -25,3 +25,13 @@
 ## AIGC 声明
 
 本件由 BigStream AI 内容生产线生成并自审，依中国《人工智能生成合成内容标识办法》及平台规则显著标识：成片常驻 [AIGC·AI 生成内容] 机械体。非量化主题=无投资面义务句。
+
+## 渲染腿（R808）
+
+- 素材探针先行：looplog/reviewsdoc/editgrid 三源×三时点多模态定谳零录穿（probe-r808/probe-src-tile.png·looplog=BS-OSLoop-Log 终端日志/reviewsdoc=Reviews Ledger 台账/editgrid=自产字卡 2×2 网格；无聊天窗/任务管理器/真人/隐私面）。
+- 对位表 `cards-v1-matched.json` 12/12 逐拍 visual 声明·对位 11/12=0.92（looplog×7〔b0/b1/b3/b5/b6/b7/b10〕+reviewsdoc×3〔b4/b8/b9〕+editgrid×1〔b2 重复意象〕+cards-only×1〔b11 CTA〕·层 1.8 ≥0.80 面上探·BS-009/BS-010 同位带）。
+- 全卡几何审计 12 卡 problems=NONE（2-3 行块顶 831-874 净 64-107px·R720 律前置预防通道第十二件）；**轮内咬住修红 1 处**：首渲 b4 col2「结构化记忆」词内硬切（全分辨率帧验揭）→SPLIT 在「·」分隔符处显式拆行（卡锚 verbatim 零改仅行边界）→重渲复验零词内拆行（R800 BS-008 b4 同型修红）。
+- R-E shipinhao 渲染 `bs-011-v1-shipinhao-60s.mp4`（12 段 11 柔 0 硬切·53.156s ffprobe=音轨分毫一致·6.8s 余量·hits=[0]·角标 BigStream|BS-011 EP.11+§4.5 三开关·plan.json 入 git）。
+- S2 三门循环独立执法全绿：ai_feel 0F0W（gaps 11 处 0.220-0.558s·pacing CV 0.191·prosody 9 档·copy CV 0.215=R807 早门同读数）+层 1.8 六面 PASS（beat-align 11/11+camera 12 段全动+visual-ratio 0.92+transition-share 1.00 无连排+transition-variety+timeline 代数过）+spec 微信视频号双 PASS（9:16+53.16s ∈30-60s 窗）。
+- 帧验三律全过：拍头 12/12 语义全中（H1 逐拍对位+sys.beat 01→12 连续+AIGC 12/12）+tile 疑读 3 处全分辨率定谳（h07「在跑证明」/h06「全量在代码库」=缩样误读零漂移·R189 手段问题律）+段中尾 6/6 零录穿（b0/b2/b6 三最长拍·淡出带双形态合法）+回环 crossings={}（max 拍 5.38s<源 12s）。
+- 收官腿（E8+ASR 终轨+E4 参考仪→M4→F-081 登记→冗余池第二十二件→E26 出池）=R809 起随轮领。
