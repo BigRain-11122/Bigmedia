@@ -1,0 +1,11 @@
+src_len=217 asr_len=216 sites=10 diff_chars=11
+replace src[3:4]='志' asr[3:4]='制'
+replace src[20:21]='的' asr[20:21]='了'
+replace src[27:28]='轮' asr[27:28]='笼'
+replace src[47:48]='轮' asr[47:48]='笼'
+replace src[49:50]='治' asr[49:50]='制'
+replace src[60:61]='反' asr[60:61]='版'
+replace src[84:86]='退避' asr[84:86]='腿臂'
+delete src[138:139]='的' asr[138:138]=''
+replace src[152:153]='没' asr[151:152]='墨'
+replace src[161:162]='复' asr[160:161]='负'

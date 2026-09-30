@@ -1,0 +1,3 @@
+﻿OK output\renders\bs-010-v1-shipinhao-60s.mp4
+profile=shipinhao treatments=12 transitions=11 hardcuts=0 hits=[0]
+duration_expected=58.633s plan=output\renders\bs-010-v1-shipinhao-60s.mp4.plan.json

@@ -1,0 +1,186 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\bs010\\voiceover-v1.beats.txt",
+  "order": "BS-010-v1",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "BS-010 稿集件视觉动态=循环日志本体+台账证据（源=BS-002 公众号母稿设计细节之人味第三细节反重复铁律切面·R805 选优定谳）——looplog（BS-OSLoop-Log 系统日志终端=系统日志/AI 本体/同仓退避/逐轮对账/在跑证明/下轮指针）×7+reviewsdoc（Rollout Review Ledger 评审台账=铁律判定/账本/在册）×3+editgrid（自产字卡网格=「一个接一个」并列形态）×1+cards-only×1（CTA 拍）·对位 11/12=0.92（层 1.8 visual-ratio ≥0.80 面·BS-009 同位带）·素材探针先行定谳（probe-r806 三源三时点多模态=零录穿·三源静态稳定·全分辨率复核 looplog=BS-OSLoop-Log 窗口+「在途缓避让」「下轮=」字样实帧可读）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 3.6,
+   "lines": [
+    "第一条纪律",
+    "反重复 · 循环铁律"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "系统日志本体在帧（BS-OSLoop-Log 窗口标题+轮次日志行可读=hook 口播「系统日志」字面直证·拍头帧即日志名可读·F-004 v15 b0 同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 3.6,
+   "end": 7.47,
+   "lines": [
+    "职业病",
+    "最容易犯的病 · 热情重造轮子"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "AI 循环日志本体在帧（AI 工作循环实况=口播主语「AI」的主体实据·病象判定的主语位·同源多用注记·意象对位声明）"
+   }
+  },
+  {
+   "start": 7.47,
+   "end": 12.65,
+   "lines": [
+    "病理",
+    "机器不知疲倦 · 热情过头"
+   ],
+   "visual": {
+    "source": "data/sources/footage/editgrid-vertical.mp4",
+    "req": "并列网格形态可见（2×2 字卡网格=「一个接一个」并列意象·自产字卡网格非实盘素材·意象对位声明·F-004 v15 b11 同型）"
+   }
+  },
+  {
+   "start": 12.65,
+   "end": 17.48,
+   "lines": [
+    "处方",
+    "第一条纪律 · 反重复"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "纪律执行行可见（轮首核验/收账判语逐轮出现=「治法早写好了」的执行在案形态·b0 同源直证·同源多用注记）"
+   }
+  },
+  {
+   "start": 17.48,
+   "end": 23.24,
+   "lines": [
+    "铁律原文",
+    "先读后写 · 复用绝不重建 · 同仓退避"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "规则判定行可见（Rollout Review Ledger 评审台账=规则执行判定记录形态·「铁律原文」的落账证据形态·F-004 v15 b9 诚实律同拍位先例·意象对位声明）"
+   }
+  },
+  {
+   "start": 23.24,
+   "end": 29.04,
+   "lines": [
+    "机队款",
+    "两台机器 · 永不同时改一库"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "同仓退避行可见（日志行「在途缓避让」字样实帧可读=「同仓，只留一个写手」的避让实况直证·全分辨率复核 probe-r806/looplog-full.png·同源多用注记）"
+   }
+  },
+  {
+   "start": 29.04,
+   "end": 32.79,
+   "lines": [
+    "代价判定",
+    "重造轮子 · 白干一轮"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "逐轮对账行可见（tick/beats/done 对账字样=每轮产出落账的账目形态·「白干一轮」判定的账面意象·同源多用注记·意象对位声明）"
+   }
+  },
+  {
+   "start": 32.79,
+   "end": 37.86,
+   "lines": [
+    "在跑证明",
+    "本条视频 · 按纪律产出"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "循环日志实时实况可见（在跑循环的日志本体=「这条纪律正在跑」字面直证·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 37.86,
+   "end": 43.01,
+   "lines": [
+    "账本核验",
+    "每一步落账 · 日志可查"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "台账清单在帧（评审台账文档=「账本」字面直证·「每一步落账」的台账形态·F-004 v15 b9 同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 43.01,
+   "end": 47.84,
+   "lines": [
+    "纪律边界",
+    "不是不创新 · 是不重造"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "在册条目行可见（台账条目=新产出登记形态·「没造过的东西」在册意象·意象对位声明·同源多用注记）"
+   }
+  },
+  {
+   "start": 47.84,
+   "end": 52.94,
+   "lines": [
+    "记住这句话",
+    "造下一个 · 别重造这一个"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "下轮指针行可见（日志行「下轮=」字样实帧可读=「去造下一个」字面直证·全分辨率复核在案·b0 同源·同源多用注记）"
+   }
+  },
+  {
+   "start": 52.94,
+   "end": 57.82,
+   "lines": [
+    "转发指令",
+    "完整铁律在公众号 · 转给造轮大王"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "CTA 导流拍常规纯字卡（footage-matching-spec §1·F-004 v15 b11 同拍位先例）"
+   }
+  }
+ ]
+}

@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs010\\voiceover-v1.beats.txt",
+    "order": "BS-010-v1",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 3.6,
+      "lines": [
+        "第一条纪律",
+        "反重复 · 循环铁律"
+      ]
+    },
+    {
+      "start": 3.6,
+      "end": 7.47,
+      "lines": [
+        "职业病",
+        "最容易犯的病 · 热情重造轮子"
+      ]
+    },
+    {
+      "start": 7.47,
+      "end": 12.65,
+      "lines": [
+        "病理",
+        "机器不知疲倦 · 热情过头"
+      ]
+    },
+    {
+      "start": 12.65,
+      "end": 17.48,
+      "lines": [
+        "处方",
+        "第一条纪律 · 反重复"
+      ]
+    },
+    {
+      "start": 17.48,
+      "end": 23.24,
+      "lines": [
+        "铁律原文",
+        "先读后写 · 复用绝不重建 · 同仓退避"
+      ]
+    },
+    {
+      "start": 23.24,
+      "end": 29.04,
+      "lines": [
+        "机队款",
+        "两台机器 · 永不同时改一库"
+      ]
+    },
+    {
+      "start": 29.04,
+      "end": 32.79,
+      "lines": [
+        "代价判定",
+        "重造轮子 · 白干一轮"
+      ]
+    },
+    {
+      "start": 32.79,
+      "end": 37.86,
+      "lines": [
+        "在跑证明",
+        "本条视频 · 按纪律产出"
+      ]
+    },
+    {
+      "start": 37.86,
+      "end": 43.01,
+      "lines": [
+        "账本核验",
+        "每一步落账 · 日志可查"
+      ]
+    },
+    {
+      "start": 43.01,
+      "end": 47.84,
+      "lines": [
+        "纪律边界",
+        "不是不创新 · 是不重造"
+      ]
+    },
+    {
+      "start": 47.84,
+      "end": 52.94,
+      "lines": [
+        "记住这句话",
+        "造下一个 · 别重造这一个"
+      ]
+    },
+    {
+      "start": 52.94,
+      "end": 57.82,
+      "lines": [
+        "转发指令",
+        "完整铁律在公众号 · 转给造轮大王"
+      ]
+    }
+  ]
+}
