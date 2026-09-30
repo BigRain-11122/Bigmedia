@@ -1,0 +1,16 @@
+caliber=punctuation-stripped char-position (R685-R715 precedent) + trad_norm_set=58 chars
+ref_chars=203 asr_chars=202
+sites=12 diff_chars=41 ratio=20.2%
+
+replace ref[5:6]='城' asr[5:6]='程'
+replace ref[19:23]='雅雯碳基' asr[19:23]='亚文探机'
+replace ref[25:28]='四十二' asr[25:27]='42'
+replace ref[29:34]='QUANT' asr[28:33]='Kwant'
+replace ref[53:54]='常' asr[52:53]='长'
+replace ref[60:61]='拦' asr[59:60]='蓝'
+replace ref[63:64]='父' asr[62:63]='傅'
+replace ref[72:73]='父' asr[71:72]='傅'
+replace ref[113:114]='异' asr[112:113]='一'
+replace ref[157:158]='她' asr[156:157]='他'
+replace ref[167:168]='她' asr[166:167]='他'
+replace ref[184:185]='档' asr[183:184]='大'
