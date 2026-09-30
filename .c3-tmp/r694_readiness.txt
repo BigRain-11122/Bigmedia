@@ -1,6 +1,6 @@
 # BigStream 发布准备度报告（Readiness Probe）
 
-> 生成：2026-09-30 11:22｜探针：`src/readiness.py`（平台运营部归口·纯只读·重跑即刷新）
+> 生成：2026-09-30 11:51｜探针：`src/readiness.py`（平台运营部归口·纯只读·重跑即刷新）
 > 口径：距离首发＝批次①账号亮灯＋10 稿 M4 门全绿＋测试件纪律零发现；未上线＝未测量；阻塞≠失败（发布前诚实态）。
 
 ## ① 账号亮灯（11 平台·状态流：未注册→已注册→已认证→API 可用）
@@ -34,7 +34,7 @@
 | 20260923-BS-005-公众号-v1.md | PENDING |
 | 20260923-BS-005-视频号-v1.md | PENDING |
 
-## ③ 产线测试件（`output/renders/`·65 件·标注核验「测试件·非成品」）
+## ③ 产线测试件（`output/renders/`·66 件·标注核验「测试件·非成品」）
 
 | 文件 | 标注 |
 |---|---|
@@ -103,6 +103,7 @@
 | lc-016-v1-shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-017-v1-shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-019-v1-shipinhao-60s.mp4 | (missing test-piece mark) |
 
 ## ④ 待 CEO 决策与暂缓项（backlog 标记）
 
@@ -122,8 +123,8 @@
 
 ## 探针发现项（findings·机器纪律核验）
 
-- none
+- [FAIL] render-unannot: media file not annotated as test piece: lc-019-v1-shipinhao-60s.mp4
 
-readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+readiness: 3 blocker(s), 1 finding(s) -> NOT READY
 
 [stderr]
