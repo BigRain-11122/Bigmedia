@@ -1,0 +1,6 @@
+src_len=192 asr_len=192 sites=5 diff_chars=7
+replace src[3:4]='志' asr[3:4]='制'
+replace src[20:22]='条条' asr[20:22]='调调'
+replace src[100:101]='志' asr[100:101]='治'
+replace src[163:165]='拟合' asr[163:165]='你何'
+replace src[186:187]='防' asr[186:187]='房'
