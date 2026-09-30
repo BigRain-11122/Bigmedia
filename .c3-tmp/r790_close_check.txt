@@ -1,0 +1,9 @@
+R790 close check (r790_close.py run 2026-09-30 23:08):
+OK tick / OK focus / OK log-append / OK ts / OK task
+tick=790
+ts=2026-09-30 23:08:00
+focus_head='R791: \u2460GB 10-01 \u5237\u65b0\uff08\u5c4a\u65e5\u9886\xb7\u8de8'
+log_last_head='2026-09-30 23:08 R790: \u7b49\u5f85\u6001\u58f0\u660e\u6536\u8f6e\xb7\u58f0\u660e\u8f6e\u5e76\u7a97\u7b2c 3 \u8f6e\uff08\u4e94\u67e5\u5168\u9759=r771_scan.py '
+log_last_tail='793 batch commit \u533a\u95f4 R788-R793\xb7\u8de8\u65e5\u5148\u5230\u4ee5\u8de8\u65e5\u4e3a\u51c6\u3015'
+task='\u7b49\u5f85\u6001\u58f0\u660e\u6536\u8f6e\xb7\u58f0\u660e\u8f6e\u5e76\u7a97\u7b2c 3 \u8f6e\uff08\u4e94\u67e5\u5168\u9759=r771_scan.py \u5185\u5bb9\u5bfb\u5740\u590d\u8dd1 23:05\uff1aorders 42='
+log_len=817

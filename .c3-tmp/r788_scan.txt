@@ -1,0 +1,10 @@
+﻿r788 five-check scan (r771_scan.py rerun 2026-09-30 22:43):
+ledger_six_mode_hits=41 last_p=P-20260925-09 (guard-row shift non-event, R763/R771 same-judgment)
+decisions_dnum_total=102 baseline=102 new_rows=NONE (D-13 SLA not triggered)
+production=open tick=787 (pre-close read) / no index.lock
+gb_head_date_probe=2026-09-24 (7-day gate: due 10-01, today 09-30 = day6)
+orders=41 O-*.md +README=42 anchor, top=O-20260928-1910 (no new order)
+codex mtimes 09-29 04:06:16/04:06:09 unchanged = #86 c+d not met, zero-touch
+CODELY.md mtime 18:55:34 platform-memory wave R767 adjudicated, zero-touch
+probes: board 0 FAIL (5 ideas/10 drafts/5 in production); readiness 3 blockers 0 findings (accounts+M4 6/10+#17); loop_health 2 FAIL+93 WARN in-case adjudicated (outage windows 09-26/09-28, account-ahead tick787 vs beats784 declaration-legal)
+close: tick 787->788, focus R789, log R788 appended, ts 22:48:00, task refreshed; window 1/6 (batch commit at 6/6 or cross-day); export 18:22 within 24h not refreshed (zero real-state change)
