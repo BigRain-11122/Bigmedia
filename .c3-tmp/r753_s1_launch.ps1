@@ -1,0 +1,1 @@
+Start-Process -FilePath "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\python.exe" -ArgumentList '"C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.lc021-tmp\s1_call.py"' -WindowStyle Hidden
