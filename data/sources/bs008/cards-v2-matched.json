@@ -1,0 +1,189 @@
+{
+ "meta": {
+  "topic": "v3-emotive",
+  "variant": "shipinhao 60s card cut (9:16)",
+  "tool": "src/render/emotive_tts.py",
+  "voice": "zh-CN-YunyangNeural",
+  "beats": "data\\sources\\bs008\\voiceover-v2.beats.txt",
+  "order": "BS-008-v2",
+  "cyber": {
+   "level": "light",
+   "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+  },
+  "human": {
+   "seed": 42,
+   "gap_base_s": 0.3,
+   "gap_spread_s": 0.18,
+   "breath_after_s": 4.2,
+   "breath_prob": 0.5,
+   "roomtone_amp": 0.006
+  },
+  "visual_spec": "docs/footage-matching-spec.md",
+  "storyboard": "BS-008 稿集件视觉动态=档案本体+判定证据（源=BS-004 公众号母稿幸存者档案切面·R798/R799 选优定谳）——looplog（BS-OSLoop.log 系统日志终端=档案/判定行本体）×5+reviewsdoc（站审台账=PASS/在册/verdict 证据）×4+editgrid（自产字卡网格=逐笔清单形态）×1+cards-only×2（核心读数=BigMoney 判敏感禁用·CTA 合规拍）·对位 10/12=0.83（F-002/F-004 同源带·R799 预评估口径兑现·biggame-cockpit 弱对位弃用）·素材探针先行定谳（probe-r800/probe-src-tile.png 三源三时点多模态=零录穿·looplog/reviewsdoc 静态终端·editgrid 静态网格）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 44,
+  "aigc_size": 30,
+  "subs_bottom": 300,
+  "line_spacing": 14
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 6.05,
+   "lines": [
+    "幸存者档案",
+    "432 全灭 · 1 员存活"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "系统日志本体在帧（hook 口播「系统日志：432 全灭」字面直证·档案=日志文件本体·拍头帧即日志文件名可读·F-004 v15 b0 同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 6.05,
+   "end": 11.77,
+   "lines": [
+    "三场全灭",
+    "门禁链 · 基线 0",
+    "432 → G2 0 → 加压 0"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "拦截/FAIL 判定行可见（门禁链=拦截不放行的判定形态·三场全灭的日志现场·F-004 v15 b2 门禁职责同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 11.77,
+   "end": 16.06,
+   "lines": [
+    "唯一通关",
+    "组合软化 · 1 员 PASS"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "PASS/verdict 判定行可见（唯一通关=台账 PASS 判定的证据形态·「1 员 PASS」判定语义直证·意象对位声明）"
+   }
+  },
+  {
+   "start": 16.06,
+   "end": 19.03,
+   "lines": [
+    "档案第一页",
+    "注册件 · 自带成绩单"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "台账在册条目+日期行可见（注册件=台账登记的证据形态·F-004 v15 b8 注册证书同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 19.03,
+   "end": 24.21,
+   "lines": [
+    "核心读数",
+    "样本外 Sharpe 2.057",
+    "成本 ×2 存活"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "核心读数=量化实况（样本外 Sharpe 2.057·BigMoney 总控唯一源判敏感禁用·F-004 v15 b5 随机基线同拍位先例·footage-matching-spec §2 在案），纯字卡声明不造假素材"
+   }
+  },
+  {
+   "start": 24.21,
+   "end": 27.81,
+   "lines": [
+    "交易笔数",
+    "522 笔 · 一笔不漏"
+   ],
+   "visual": {
+    "source": "data/sources/footage/editgrid-vertical.mp4",
+    "req": "逐条并列网格形态可见（522 笔一笔不漏=逐笔并列的清单形态·F-004 v15 b11 五句清单同型意象对位声明·同源多用注记）"
+   }
+  },
+  {
+   "start": 27.81,
+   "end": 32.37,
+   "lines": [
+    "最差一年",
+    "-1.23% · 无崩年"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "时间戳逐年推进行可见（最差一年/无崩年=档案逐年记录的运行形态·意象对位声明·F-004 v15 b7 五道门流水线工序同型·同源多用注记）"
+   }
+  },
+  {
+   "start": 32.37,
+   "end": 37.54,
+   "lines": [
+    "死法标注",
+    "成本 ×3 不存活",
+    "厚度上限 2 倍"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "FAIL/超时判定行可见（死法标注=失败判定的日志记录形态·「连死法都标」的档案语义直证·F-004 v15 b1 全灭现场同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 37.54,
+   "end": 41.65,
+   "lines": [
+    "诚实律",
+    "强到哪 · 死在哪"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "verdict+证据链接列可见（诚实律=判定+证据链的台账形态·F-004 v15 b9 诚实标注「强到哪·死在哪」同锚行同拍位先例·同源多用注记）"
+   }
+  },
+  {
+   "start": 41.65,
+   "end": 45.6,
+   "lines": [
+    "同一道链",
+    "在册 3 名 · 无例外"
+   ],
+   "visual": {
+    "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+    "req": "台账在册条目行可见（在册 3 名=台账登记证据形态·「同一道链无例外」的台账语义·同源多用注记）"
+   }
+  },
+  {
+   "start": 45.6,
+   "end": 49.52,
+   "lines": [
+    "首月检查",
+    "2026-10-31 · 档案会说话"
+   ],
+   "visual": {
+    "source": "data/sources/footage/looplog-vertical.mp4",
+    "req": "轮次/检查挂账行可见（首月检查=轮次节律的检查语义·10-31 检查挂账行在帧·意象对位声明·同源多用注记）"
+   }
+  },
+  {
+   "start": 49.52,
+   "end": 55.23,
+   "lines": [
+    "合规+转发",
+    "不构成投资建议 · 想学验货"
+   ],
+   "visual": {
+    "cards-only": true,
+    "reason": "CTA 导流拍常规纯字卡+量化合规拍纯字卡强化「不构成投资建议」声明（footage-matching-spec §1·F-004 v15 b11 同拍位先例）"
+   }
+  }
+ ]
+}

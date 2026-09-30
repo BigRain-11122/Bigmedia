@@ -1,0 +1,17 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [幸存者档案] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card01 b1  [三场全灭] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card02 b2  [唯一通关] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card03 b3  [档案第一页] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card04 b4  [核心读数] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card05 b5  [交易笔数] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card06 b6  [最差一年] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card07 b7  [死法标注] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card08 b8  [诚实律] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card09 b9  [同一道链] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card10 b10 [首月检查] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card11 b11 [合规+转发] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+
+problems: NONE
