@@ -1,0 +1,17 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [三颗心脏] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card01 b1  [第一颗] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card02 b2  [第二颗] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card03 b3  [第三颗] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card04 b4  [频率分层] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card05 b5  [为什么是 10 分钟] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card06 b6  [一轮窗口] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card07 b7  [OS 对照] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card08 b8  [调度与看护] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card09 b9  [不是修辞] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card10 b10 [不抢电脑] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card11 b11 [完整拆解] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+
+problems: NONE

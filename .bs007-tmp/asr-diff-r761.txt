@@ -1,0 +1,17 @@
+caliber=punctuation-stripped char-position (R685-R756 precedent) + trad_norm_set=78 chars
+ref_chars=203 asr_chars=202
+sites=13 diff_chars=31 ratio=15.3%
+
+replace ref[3:4]='志' asr[3:4]='制'
+replace ref[55:56]='进' asr[55:56]='净'
+replace ref[59:63]='0917' asr[59:64]='九点十七分'
+replace ref[80:81]='进' asr[81:82]='净'
+replace ref[87:88]='不' asr[88:89]='步'
+replace ref[100:101]='转' asr[101:102]='传'
+replace ref[104:105]='夜' asr[105:106]='瘾'
+replace ref[149:150]='狗' asr[150:151]='口'
+delete ref[157:158]='「' asr[158:158]=''
+delete ref[162:163]='」' asr[162:162]=''
+replace ref[179:180]='值' asr[178:179]='职'
+replace ref[182:183]='不' asr[181:182]='物'
+replace ref[184:185]='礼' asr[183:184]='理'

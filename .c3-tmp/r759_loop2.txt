@@ -1,0 +1,4 @@
+- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+- [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+- [WARN] account-ahead: tick=758 ahead of done beats=754 - repair bump or off-beat accounting
+loop health: FAIL (2 fail, 91 warn)

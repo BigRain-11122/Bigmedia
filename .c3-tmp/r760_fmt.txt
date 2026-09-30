@@ -1,0 +1,5 @@
+﻿0 {"start": 0.0, "end": 5.84, "lines": ["0 交底", "开业第一天 · 全部真实数据"], "visual": {"source": "data/sources/footage/looplog-vertical.mp4", "req": "系统日志本体在帧（BS-loop.log 终端=state+心跳台账实况·拍文「系统日志」字面直证·开业时点公司实况）"}}
+1 {"start": 5.84, "end": 10.59, "lines": ["为什么可信", "一切落库 · 每分钟能审计"], "visual": {"source": "data/sources/footage/looplog-vertical.mp4", "req": "循环日志台账在帧（一切落库·每分钟轮询审计的运行实况·同源多用注记）"}}
+2 {"start": 10.59, "end": 15.97, "lines": ["规矩一", "未上线 = 未测量"], "visual": {"cards-only": true, "reason": "规矩宣示拍：上线状态判定无专属画面可证（账号面=台账非画面素材·探针证实日志无「未上线」字样），字卡即门牌"}}
+11 {"start": 52.38, "end": 57.32, "lines": ["完整实录", "公众号 · 转给被吹牛伤过的人"], "visual": {"cards-only": true, "reason": "CTA 常规拍（完整实录指引·F-001 v15 b11 同位惯例·字卡收尾）"}}
+META storyboard: BS-006 编辑诚实机制件：题材对位=台账/审计面——looplog（BS-loop.log 系统日志终端）×5+reviewsdoc（Station Reviews 站审台账）×3+editgrid（本片自产章节帧网格）×2+cards-only×2；对位 10/12=0.83·同源多用逐拍注记·素材探针先行定谳（probe-src-tile.png）

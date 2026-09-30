@@ -1,0 +1,1 @@
+'SUMMARY terms=12 FAIL=0 WARN=0\nPASS\n'
