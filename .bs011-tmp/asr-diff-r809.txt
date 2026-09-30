@@ -1,0 +1,12 @@
+src_len=184 asr_len=182 sites=11 diff_chars=16
+replace src[14:15]='0' asr[14:15]='零'
+replace src[29:30]='见' asr[29:30]='見'
+replace src[40:42]='教教' asr[40:42]='降交'
+replace src[44:45]='溃' asr[44:45]='潰'
+replace src[54:55]='脑' asr[54:55]='腦'
+replace src[69:70]='产' asr[69:70]='產'
+replace src[89:90]='启' asr[89:90]='啟'
+replace src[98:102]='在代码库' asr[98:101]='載腦庫'
+replace src[120:122]='的员' asr[119:120]='人'
+replace src[174:175]='教' asr[172:173]='叫'
+replace src[177:178]='教' asr[175:176]='交'
