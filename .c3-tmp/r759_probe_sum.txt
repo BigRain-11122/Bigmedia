@@ -1,0 +1,76 @@
+### src/os/board_probe.py rc=2
+python: can't open file 'C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\src\\os\\board_probe.py': [Errno 2] No such file or directory
+
+
+### src/readiness.py rc=1
+-60s.mp4 | 测试件·非成品 |
+| bs-003-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005e-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-001-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-012-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-013-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-014-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-015-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-016-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-017-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-019-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-021-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+
+**[needs-CEO]（1 项）**
+
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+
+**[suspended]（0 项）**
+
+- none
+
+## 距离首发的阻塞清单（3 项）
+
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+
+## 探针发现项（findings·机器纪律核验）
+
+- none
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+
+
+### src/os/loop_health.py rc=1
+- [WARN] heartbeat-gap: beat gap 26 min (2026-09-30 05:44 -> 2026-09-30 06:10) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 27 min (2026-09-30 06:42 -> 2026-09-30 07:09) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-09-30 07:42 -> 2026-09-30 08:07) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-09-30 08:26 -> 2026-09-30 08:49) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-09-30 09:42 -> 2026-09-30 10:04) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 27 min (2026-09-30 10:23 -> 2026-09-30 10:50) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 30 min (2026-09-30 11:23 -> 2026-09-30 11:53) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 34 min (2026-09-30 11:53 -> 2026-09-30 12:27) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-09-30 12:27 -> 2026-09-30 12:52) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 35 min (2026-09-30 14:32 -> 2026-09-30 15:07) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 30 min (2026-09-30 15:07 -> 2026-09-30 15:37) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-09-30 15:37 -> 2026-09-30 15:58) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] account-ahead: tick=758 ahead of done beats=754 - repair bump or off-beat accounting
+loop health: FAIL (2 fail, 91 warn)
+
+

@@ -1,0 +1,5 @@
+'   "D-20260930-39"\n'
+'  ],\n'
+'  "board_rows": 24,\n'
+'  "ts": "2026-09-30 15:50:48",\n'
+'  "law": "D-20260930-18/19 content-addressing; set-diff vs dnums; line-count retired R749"\n'
