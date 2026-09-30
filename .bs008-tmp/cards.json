@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs008\\voiceover-v2.beats.txt",
+    "order": "BS-008-v2",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 6.05,
+      "lines": [
+        "幸存者档案",
+        "432 全灭 · 1 员存活"
+      ]
+    },
+    {
+      "start": 6.05,
+      "end": 11.77,
+      "lines": [
+        "三场全灭",
+        "门禁链 · 基线 0",
+        "432 → G2 0 → 加压 0"
+      ]
+    },
+    {
+      "start": 11.77,
+      "end": 16.06,
+      "lines": [
+        "唯一通关",
+        "组合软化 · 1 员 PASS"
+      ]
+    },
+    {
+      "start": 16.06,
+      "end": 19.03,
+      "lines": [
+        "档案第一页",
+        "注册件 · 自带成绩单"
+      ]
+    },
+    {
+      "start": 19.03,
+      "end": 24.21,
+      "lines": [
+        "核心读数",
+        "样本外 Sharpe 2.057 · 成本 ×2 存活"
+      ]
+    },
+    {
+      "start": 24.21,
+      "end": 27.81,
+      "lines": [
+        "交易笔数",
+        "522 笔 · 一笔不漏"
+      ]
+    },
+    {
+      "start": 27.81,
+      "end": 32.37,
+      "lines": [
+        "最差一年",
+        "-1.23% · 无崩年"
+      ]
+    },
+    {
+      "start": 32.37,
+      "end": 37.54,
+      "lines": [
+        "死法标注",
+        "成本 ×3 不存活 · 厚度上限 2 倍"
+      ]
+    },
+    {
+      "start": 37.54,
+      "end": 41.65,
+      "lines": [
+        "诚实律",
+        "强到哪 · 死在哪"
+      ]
+    },
+    {
+      "start": 41.65,
+      "end": 45.6,
+      "lines": [
+        "同一道链",
+        "在册 3 名 · 无例外"
+      ]
+    },
+    {
+      "start": 45.6,
+      "end": 49.52,
+      "lines": [
+        "首月检查",
+        "2026-10-31 · 档案会说话"
+      ]
+    },
+    {
+      "start": 49.52,
+      "end": 55.23,
+      "lines": [
+        "合规+转发",
+        "不构成投资建议 · 想学验货"
+      ]
+    }
+  ]
+}
