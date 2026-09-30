@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs011\\voiceover-v3.beats.txt",
+    "order": "BS-009-v3",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.09,
+      "lines": [
+        "记忆体检",
+        "三级结构 · 失忆点 0"
+      ]
+    },
+    {
+      "start": 5.09,
+      "end": 8.77,
+      "lines": [
+        "通病",
+        "AI 每次醒来 · 都是新员工"
+      ]
+    },
+    {
+      "start": 8.77,
+      "end": 13.84,
+      "lines": [
+        "通行解法",
+        "靠人交接 · 一遍一遍教"
+      ]
+    },
+    {
+      "start": 13.84,
+      "end": 18.25,
+      "lines": [
+        "我们的处方",
+        "记忆进文件 · 不进脑子"
+      ]
+    },
+    {
+      "start": 18.25,
+      "end": 22.88,
+      "lines": [
+        "机制原文",
+        "每家公司 · 每条产品线 · 结构化记忆"
+      ]
+    },
+    {
+      "start": 22.88,
+      "end": 25.54,
+      "lines": [
+        "开工第一件事",
+        "先读记忆 · 再干活"
+      ]
+    },
+    {
+      "start": 25.54,
+      "end": 30.92,
+      "lines": [
+        "断电反转",
+        "重启一字不丢 · 全量在代码库"
+      ]
+    },
+    {
+      "start": 30.92,
+      "end": 35.77,
+      "lines": [
+        "在跑证明",
+        "本条视频 · 从记忆里长出来"
+      ]
+    },
+    {
+      "start": 35.77,
+      "end": 40.22,
+      "lines": [
+        "手册自进化",
+        "每轮干完 · 写回一行"
+      ]
+    },
+    {
+      "start": 40.22,
+      "end": 43.63,
+      "lines": [
+        "结构边界",
+        "不是存聊天 · 是存能查的结构"
+      ]
+    },
+    {
+      "start": 43.63,
+      "end": 48.14,
+      "lines": [
+        "记住这句话",
+        "公司的脑子 · 长在文件里"
+      ]
+    },
+    {
+      "start": 48.14,
+      "end": 53.13,
+      "lines": [
+        "转发指令",
+        "完整机制在公众号 · 转给教 AI 教到崩溃的人"
+      ]
+    }
+  ]
+}
