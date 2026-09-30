@@ -1,0 +1,17 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [第一条红线] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card01 b1  [行业常态] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card02 b2  [漂亮来历] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card03 b3  [拟合定义] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card04 b4  [红线原文] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card05 b5  [判定] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card06 b6  [卖假底气] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card07 b7  [管住自己] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card08 b8  [出售前自查] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card09 b9  [说真话标准] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card10 b10 [红线收束] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card11 b11 [合规+转发] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+
+problems: NONE

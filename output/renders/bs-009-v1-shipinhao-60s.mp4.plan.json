@@ -1,0 +1,257 @@
+{
+ "engine": "R-E",
+ "spec": "docs/editing-craft-spec.md",
+ "visual_spec": "docs/footage-matching-spec.md",
+ "profile": "shipinhao",
+ "visual_mode": "matched",
+ "visual_ratio": 0.917,
+ "cards_only_beats": [
+  11
+ ],
+ "boundaries": [
+  {
+   "k": 1,
+   "time_s": 3.633,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 2,
+   "time_s": 7.667,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 3,
+   "time_s": 12.733,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 4,
+   "time_s": 19.5,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 5,
+   "time_s": 23.467,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 6,
+   "time_s": 26.9,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  },
+  {
+   "k": 7,
+   "time_s": 31.2,
+   "fade_s": 0.28,
+   "type": "smoothleft"
+  },
+  {
+   "k": 8,
+   "time_s": 34.433,
+   "fade_s": 0.28,
+   "type": "smoothup"
+  },
+  {
+   "k": 9,
+   "time_s": 38.067,
+   "fade_s": 0.28,
+   "type": "distance"
+  },
+  {
+   "k": 10,
+   "time_s": 42.667,
+   "fade_s": 0.28,
+   "type": "fade"
+  },
+  {
+   "k": 11,
+   "time_s": 48.167,
+   "fade_s": 0.28,
+   "type": "dissolve"
+  }
+ ],
+ "segments": [
+  {
+   "idx": 0,
+   "src_off_s": 0.0,
+   "dur_s": 3.633,
+   "treatment": "punch",
+   "hit": true,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 1,
+   "src_off_s": 0.0,
+   "dur_s": 4.313,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/editgrid-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 2,
+   "src_off_s": 0.0,
+   "dur_s": 5.347,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 3,
+   "src_off_s": 0.0,
+   "dur_s": 7.047,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 4,
+   "src_off_s": 0.0,
+   "dur_s": 4.247,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 5,
+   "src_off_s": 0.0,
+   "dur_s": 3.713,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 6,
+   "src_off_s": 0.0,
+   "dur_s": 4.58,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 7,
+   "src_off_s": 0.0,
+   "dur_s": 3.513,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 8,
+   "src_off_s": 0.0,
+   "dur_s": 3.913,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/reviewsdoc-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 9,
+   "src_off_s": 0.0,
+   "dur_s": 4.88,
+   "treatment": "ken_in",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 10,
+   "src_off_s": 0.0,
+   "dur_s": 5.78,
+   "treatment": "ken_out",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": false,
+   "cards_only_reason": "",
+   "visual_source": "data/sources/footage/looplog-vertical.mp4",
+   "ramp": null
+  },
+  {
+   "idx": 11,
+   "src_off_s": 0.0,
+   "dur_s": 7.147,
+   "treatment": "flat",
+   "hit": false,
+   "flash": false,
+   "flash_st_s": 0.0,
+   "cards_only": true,
+   "cards_only_reason": "CTA \u5bfc\u6d41\u62cd\u5e38\u89c4\u7eaf\u5b57\u5361+\u91cf\u5316\u5408\u89c4\u62cd\u7eaf\u5b57\u5361\u5f3a\u5316\u300c\u4e0d\u6784\u6210\u6295\u8d44\u5efa\u8bae\u300d\u58f0\u660e\uff08footage-matching-spec \u00a71\u00b7F-004 v15 b11 \u540c\u62cd\u4f4d\u5148\u4f8b\uff09",
+   "visual_source": null,
+   "ramp": null
+  }
+ ],
+ "hits": [
+  0
+ ],
+ "ramp_beats": [],
+ "f_max_s": 0.28,
+ "last_beat_end_s": 54.233,
+ "tail_s": 0.8,
+ "duration_expected_s": 55.033,
+ "hard_cut_s": 0.0,
+ "series": {
+  "intro": false,
+  "intro_s": 0.0,
+  "badge": true,
+  "id": "BS-009 EP.09"
+ },
+ "s45_dials": {
+  "h1_glow": true,
+  "scanlines": true,
+  "sys_status": true
+ }
+}
