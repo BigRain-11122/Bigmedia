@@ -1,0 +1,2 @@
+- [FAIL] render-unannot: media file not annotated as test piece: lc-003-v1-shipinhao-60s.mp4
+readiness: 3 blocker(s), 1 finding(s) -> NOT READY

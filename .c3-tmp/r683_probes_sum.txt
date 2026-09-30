@@ -1,0 +1,4 @@
+board: exit=0
+readiness: exit=1
+loop_health: exit=1
+GB sec4 first date: 2026-09-24

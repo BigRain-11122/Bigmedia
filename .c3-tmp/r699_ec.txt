@@ -1,0 +1,1 @@
+ipt | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc008\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-191512-S1-script.md / 总分：10 (1500s wrapper: LC-008 S1 v1.5+L18-L20 gate) |

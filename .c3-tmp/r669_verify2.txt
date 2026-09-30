@@ -1,0 +1,6 @@
+STATE_OK tick=669 logN=692
+ts=2026-09-29 09:30:26
+lastIsAddendum=True
+r669MainInPlace=True
+taskLen=60 taskR669=True
+EXPORT_OK last=669 osRow=tick 669

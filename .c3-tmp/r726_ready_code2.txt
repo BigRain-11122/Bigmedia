@@ -1,0 +1,43 @@
+def parse_renders(renders_dir, ledger_path):
+    """Test-piece inventory -> (rows, findings). rows = [(name, annotated)]."""
+    findings = []
+    if not renders_dir.is_dir():
+        findings.append(("FAIL", "render-dir", "renders directory missing: %s" % renders_dir))
+        return [], findings
+    media = sorted(p.name for p in renders_dir.iterdir()
+                   if p.suffix.lower() in MEDIA_SUFFIXES)
+    if media and not ledger_path.is_file():
+        findings.append(("FAIL", "render-ledger",
+                         "media files exist but annotation ledger missing: %s" % ledger_path))
+        return [(name, False) for name in media], findings
+    seen = {}
+    if ledger_path.is_file():
+        text = ledger_path.read_text(encoding="utf-8", errors="replace")
+        for line in text.splitlines():
+            for m in MEDIA_RE.finditer(line):
+                name = m.group(0).lower()
+                ok = (TEST_MARK in line or PRODUCT_MARK in line
+                      or PRODUCT_SLOT_MARK in line
+                      or (SUPERSEDED_A in line and SUPERSEDED_B in line)
+                      or (DISPOSED_A in line and DISPOSED_B in line))
+                seen[name] = seen.get(name, False) or ok
+    rows = []
+    for name in media:
+        annotated = seen.get(name.lower(), False)
+        if not annotated:
+            findings.append(("FAIL", "render-unannot",
+                             "media file not annotated as test piece: %s" % name))
+        rows.append((name, annotated))
+    on_disk = {n.lower() for n in media}
+    for name in sorted(seen):
+        if name not in on_disk:
+            findings.append(("FAIL", "render-stale",
+                             "ledger row references file not on disk: %s" % name))
+    return rows, findings
+
+
+def parse_backlog_flags(path):
+    """[needs-CEO] / [suspended] items -> (needs, suspended). Each (num, clause).
+
+    Done items are excluded; unmarked open items are plain work, not
+    decision blockers. Markers are stri

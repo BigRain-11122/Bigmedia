@@ -1,0 +1,21 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [钩子] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card01 b1  [居民档案] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card02 b2  [城区职业] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card03 b3  [手艺礼数] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card04 b4  [转折] size=46 lines=5 pitch=69.2 block_top=787 net=20px -> clean
+      b4 L: [第一次大宕机全城调度急得跳脚 · ]
+      b4 L: [按着老日志一步步排查 · ]
+      b4 L: [两小时城复活 · ]
+      b4 L: [从此出诊箱在游戏楼有一张专用椅子]
+card05 b5  [出身] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card06 b6  [性格] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card07 b7  [现状] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card08 b8  [手艺] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+card09 b9  [台账三十年] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card10 b10 [信条] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card11 b11 [引擎医生全档案] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+
+problems: NONE

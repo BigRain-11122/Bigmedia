@@ -1,0 +1,2 @@
+| 2026-09-27 13:06 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\bs006\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260927-130653-S1-script.md / 总分：10 (1500s wrapper: BS-006 draft-collection piece-1 S1 gate, source=BS-001 mp-article unused cut) |
+| 2026-09-29 10:57 | S1-script | S1 编剧官（内容生产部） | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc002\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-105755-S1-script.md / 总分：10 (1500s wrapper: LC-002 S1 v1.5+L18-L20 gate) |

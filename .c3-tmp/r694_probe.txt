@@ -1,13 +1,13 @@
-now=2026-09-30 11:51:46
+now=2026-09-30 13:13:22
 orders_top=O-20260928-1910-bm-a.md count=42
 ledger_sixmode_count=41 (anchor 38)
 ledger_NEW_ROWS_BELOW_38:
 L189 | P-2026-09-29-12 | 09-29 | **机队全面并行令（P1·CEO 令 O-2026-0929-029「机队也要全面开工，不是你一台机器忙就行，能并行的任务全面并行」·@Biggame @BigMoney @BigLi
 L190 | P-2026-09-29-13 | 09-29 | **坚决清理司域派单（P1·CEO 令 O-2026-0929-033·resource-chain §三§11 首批执法）**：①**@Biggame**=a.`gaming/Min
 L245 - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432MB/FluxVerse +220MB（M
-decisions_nonempty=75 (anchor 75)
+decisions_nonempty=133 (anchor 75)
 index_lock=False
-production=open tick=745
+production=open tick=748
 codex_README.md mtime=2026-09-29 04:06:16
 codex_city-humanities.md mtime=2026-09-29 04:06:09
 round_lock=True

@@ -1,0 +1,5 @@
+os_rows_fixed=2
+os_row_tick696=True
+results_tail=696
+live_lines=3
+export_ts=2026-09-29 18:21:15+08:00

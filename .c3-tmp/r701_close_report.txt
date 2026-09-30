@@ -1,0 +1,14 @@
+OK finished append
+OK renders | lc-008-v1-shipinhao-60s.mp4 | **在链
+OK renders plan.json 入 git·收官腿 R701 随轮领（E8 终审+A
+OK sched +LC-007 拆条 F-061（R698·冗余池第四件视频·邓建国《城
+OK sched append
+OK station append
+OK lc008rm - E8/M4/F 登记：收官腿随轮领（R701·E8 终审+ASR 终
+OK lc008rm append
+OK expertcalls append
+OK queueE8 ——余腿=收官腿（E8 终审+ASR 终轨+E4+M4→F-062 登记
+OK burn append
+OK state tick=701 ts=2026-09-29 20:03:33
+OK export os row tick 701
+OK export results+live

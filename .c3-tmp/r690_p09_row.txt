@@ -1,0 +1,13 @@
+ R588 消费+status-export ceo_face 三行落地/R590-591 等待态一行声明替代重扫轮/纯记账连轮破·观测窗消费 ceo_face 字段=MiniGame 板小待办） | T1（CEO 直令·委员会工作轮） | executed（venture.md v2.0+AI.md 机制表行同窗落档·否决窗至 10-06·回访=下次开线实弹全流程+30 天融入度首报） |
+| P-2026-09-29-09 | 09-29 | **观测窗实况三行接线件（P1·P-2026-09-29-07「过程能看到」面收口腿）**：各司实况三行数据面已落地（实测 14:3x：BigDomain export `ceo_face` 三字段✓/BigCompute export `current_activity+latest_artifact+next_milestone` 三字段✓/bigmoney 心跳单行=task+最近+next✓）——观测窗（硅基生命元宇宙窗）subs 卡读侧尚未消费=CEO 看不到 | 接线=@Biggame 观测窗 subs 卡增读各司 export 三行（ceo_face/三字段/心跳单行·读侧兼容多字段名）→卡片渲染「当前活/最近实物+时间戳/下里程碑（≤48h）」；**本件=实物改动非文档**（tools/siliconwatch/generate.ps1+strings.json 消费位+模板渲染行） | 转办：@Biggame=观测窗三行消费接线（48h 窗·判据=观测窗任一司卡显示三行实况非写死文案〔F3 律〕+截帧多模态验证）；其余司=export 三行字段照 P-07 块持续维持（字段名可各司自便·BigDomain/BigCompute 范式参照） | T1（委员会工作轮·P-07 收口腿） | dispatched（哨兵即唤·回访随 P-07 首报 10-06 同窗） |
+
+## 反馈区（子公司 → 集团 · 收取与回访 · CEO 令「顶层机制务必听子公司的反馈」）
+
+> 各公司反馈面登记：BigMoney=`quant/bigmoney/HQ-FEEDBACK.md` ✓｜BigStream=`media/BigStream/HQ-FEEDBACK.md` ✓｜Biggame=待其按自治法选定落位（其根级冻结清单法优先；落位前其 CODELY.md 机制类条目为临时反馈面）。收取 SLA=周轮必扫；未处理超两周自动升级 CEO 待办（docs/orders.md）。
+
+| ID | 来源公司 | 反馈（现象/证据） | 建议方向 | 级 | 状态 |
+|---|---|---|---|---|---|
+| F-20260923-01 | BigMoney | machine/<id> 分支集成依赖 owner push，owner 通道故障时成果滞留多轮才回 main，CEO 令载体落地被拖慢 | bm-b r29 push 被拒回执 b719cb3+bm-a r5 手动 merge 9a4a300 实证 | 修订 fleet 协议：machine 分支机械并集任何节点皆可执行，owner 通道异常时他机主动集成并在轮报告回执 | P1 | resolved（09-27 回访：fleet-protocol.md v1.1 推送/集成分工面归一+D-20260925-01③ fallback 轮次后缀已执行回执 F-20260926-01） |
+| F-20260923-02 | BigMoney | 运维保险丝纯速率线机械触发误杀健康慢通道（死通道与「慢而线性」不区分） | bars 传输 220-280KiB/s 线性健康仍触 500KB/s 线 30min+；替代 B1=Tailscale 需用户动作且非续传（T-01 note 16:20 裁定段） | 保险丝模板加限定词：触发须含停滞/报错形态；切换前过「交付真优否/新增用户动作否」两问，可留裁定记录翻案 | P2 | open（09-27 回访：司域已自处裁定留痕在案；集团保险丝模板条款低急迫·随 fleet-protocol 维护窗归并——同族 TRANSFER.md 发送方收尾步已由 D-20260925-01② 增补） |
+| F-20260923-03 | BigMoney | 无头自迭代轮「截断孤儿」致跨机重复开发（exit=0 但零 commit/零账本/零 state） | bm-a 16:08 J18b 截断孤儿+bm-b r31 同任务先 commit 0fa58b7（对账 P1_RECONCILIATION） | 轮协议「验证过的子步即时 commit」+launcher 轮末三件自检（commit/账本/state 缺一注入孤儿告警）+后继轮轮首脏树 vs run log 末行孤儿探针 | P1 | resolved（09-27 回访：小步快提交=governance §6 既有正则+BigMoney launcher 轮末三件自检在役〔r8+ 实证〕·截断孤儿坑律随 P-20260923-09 在册） |
+| F-20260923-04 | BigMoney | 多机研究批测同飞无先占机制，预注册 commit 前互不可见，撞车靠运气 | GTJA191 双机同飞 c4e0bec/4874ee3（对账逐位一致=双实现交叉验证） | 批次开工先 MSG/fleet 开单认领使占位跨机可见+playbook 按机预切分工+撞车处置范式=对账合并可升格证据强度 | P1 | resolved（09-27 立法：fleet-protocol.md §一.4 批次先占律——P-20

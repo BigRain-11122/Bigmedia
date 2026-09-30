@@ -1,0 +1,16 @@
+PASS: state_parse
+PASS: tick=671 [671]
+PASS: log_count=695 [695]
+PASS: log_tail=R671 [2026-09-29 09:45 R671: d]
+PASS: log[-2]=R670_addendum [2026-09-29 09:36 R670 轮末]
+PASS: ts_fresh_ascii [2026-09-29 09:45:18]
+PASS: task_len=60_prefix_log [len=60]
+PASS: focus=R672 [R672: 快速路径]
+PASS: production=open
+PASS: se_parse
+PASS: se_export_ts_fresh [2026-09-29T09:45:18+08:00]
+PASS: se_results_len=34_tail671 [len=34 tail=671]
+PASS: se_os_tick671 [tick 671：R67]
+PASS: se_indent1_format [ "export_ts": ]
+PASS: st_indent2_format [  "company": "]
+ALL_PASS=True (15/15)

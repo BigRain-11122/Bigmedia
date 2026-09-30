@@ -1,0 +1,9 @@
+renders README: declaration tail closed + in-chain row added
+station-reviews: R687 S2 row appended
+lc004 README: R687 render-leg record appended
+queue: E4 burn line appended
+probe board exit=0
+probe readiness exit=1
+probe loop_health exit=1
+status-export: export_ts/live/outs/results refreshed
+state.json: tick 687, ts/task/log written

@@ -1,0 +1,9 @@
+2: """BigStream weekly report generator (backlog#6 + #82 self-drive line,
+14: Self-drive metrics (backlog#82, group order P-2026-09-28-02 item 4):
+83: # content-line classification for the self-drive share (#82): the three
+243:     """Windowed commit count + per-line touch counts (self-drive #82)."""
+295:     """Self-drive proposals filed for the ISO week (section D registry).
+316: def collect_selfdrive(repo, queue_path, since, until, week_label):
+317:     """Self-drive metric inputs (#82): line touches, GPU, proposals.
+409:         sd = collect_selfdrive(REPO, QUEUE, monday, sunday, label)
+429:     print("self-drive: novel=%s audio=%s comic=%s ext=%s gpu=%s idle=%d"

@@ -1,0 +1,6 @@
+ANCHOR_DIR C:\Users\sjs20\Desktop\FluxGroup\life\BigLife\census\anchors items=20
+  top3=['C-00027.md', 'C-00028.md', 'C-00029.md']
+  C00030=False
+ANCHOR_DIR C:\Users\sjs20\Desktop\FluxGroup\life\BigLife\census\anchors files=20
+  top=['C-00027.md', 'C-00028.md', 'C-00029.md']
+  C00030=False

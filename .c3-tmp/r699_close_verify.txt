@@ -1,0 +1,9 @@
+tick=699
+logN=725
+log_tail_has_R699=True
+taskLen=60
+ts=2026-09-29 19:30:44
+export_ts=2026-09-29 19:30:44+08:00
+os_row=tick 699，R699 生产轮·queue §E E8 LC-008 王多多
+results_tail=699
+liveN=3

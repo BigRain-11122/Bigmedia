@@ -1,0 +1,6 @@
+    def test_template_has_all_placeholders(self):
+        for ph in wr.PLACEHOLDERS:
+            self.assertIn("{%s}" % ph, text, "missing placeholder %s" % ph)
+        for ph in wr.PLACEHOLDERS:
+            self.assertNotIn("{%s}" % ph, text, "unfilled placeholder %s" % ph)
+        for ph in wr.PLACEHOLDERS:

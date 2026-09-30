@@ -1,0 +1,10 @@
+usage: plain_language_check.py [-h] [--beats BEATS] [--srt SRT]
+                               [--title TITLE]
+
+Plain-language wording gate (copy-craft 2.8)
+
+options:
+  -h, --help     show this help message and exit
+  --beats BEATS  beats/voiceover text file
+  --srt SRT      subtitle srt file (cue text scanned)
+  --title TITLE  title string to check (FAIL on jargon hit)

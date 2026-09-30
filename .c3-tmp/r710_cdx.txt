@@ -1,0 +1,8 @@
+warning: in the working copy of 'data/storylines/codex/README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'data/storylines/codex/city-humanities.md', LF will be replaced by CRLF the next time Git touches it
+ data/storylines/codex/README.md          |  3 ++-
+ data/storylines/codex/city-humanities.md | 14 ++++++++++++--
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+LASTCOMMIT_CDX: a548635c881d359e2b20103ff03f986586ed2623 2026-09-29 03:58:59 +0800
+data/storylines/codex/README.md mtime=2026-09-29 04:06:16
+data/storylines/codex/city-humanities.md mtime=2026-09-29 04:06:09

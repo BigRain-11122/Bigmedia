@@ -1,0 +1,13 @@
+COL0 len=0 head=
+
+COL1 len=27 head=lc-018-v1-shipinhao-60s.mp4
+
+COL2 len=193 head=**成品·落位件·冗余扩容位第十五件（F-073 登记 R742·queue §E 批活池 E19 件收官·源卡=CENSUS-v6 F-025 陈雅雯·R739 起链→R740 定稿音轨→R741 渲染腿→R742 收官全链走门毕：E8 
+
+COL3 len=170 head=**R-E shipinhao 12 段 11 柔转场 0 硬切**·9:16 1080×1920·**58.411s ffprobe 实测=音轨分毫一致·1.589s 余量**〔plan 内部预估 59.200s=tail 余量项·实测为
+
+COL4 len=1584 head=拆条 018·源城市图鉴 006+§4.5 三开关[glow/scanlines/sys.beat=NN t=MM:SS]·plan.json 入 git·**视觉动态位=源卡即证据 12/12**（census-card-v6-verti
+
+COL5 len=271 head=plan.json 入 git·mp4 gitignored·**R742 收官毕=F-073 登记**（E8 七席 ≥9+ASR 终轨整轨一次过 20.2% 字位=拆条带最低位〔信条句全净+口头禅句与 E4 旗①同句双通道·字幕轨 edg
+
+COL6 len=0 head=

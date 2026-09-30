@@ -1,0 +1,17 @@
+now=2026-09-29 15:02:57
+orders_top=O-20260928-1910-bm-a.md count=42
+ledger_sixmode_count=38 (anchor 38)
+decisions_nonempty=75 (anchor 75)
+index_lock=False
+production=open tick=687
+codex_README.md mtime=2026-09-29 04:06:16
+codex_city-humanities.md mtime=2026-09-29 04:06:09
+round_lock=True
+board: exit=0
+readiness: exit=1
+loop_health: exit=1
+lc004_output_renders_lc-004-v1-shipinhao-60s.mp4 exists=True
+lc004_.lc004-tmp_cards.json exists=True
+lc004_.lc004-tmp_subs.srt exists=True
+lc004_output_renders_lc-004-v1-shipinhao-60s.mp4.plan.json exists=True
+lc004_data_sources_lc004_voiceover-v4.beats.txt exists=True

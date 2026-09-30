@@ -31,12 +31,21 @@ try:
 except Exception as e:
     report.append("ledger_err=%s" % e)
 
-# 3. decisions UTF8 non-empty (anchor 75)
+# 3. decisions content-addressing watermark (R749 / D-20260930-18+19: line-count retired)
 DEC = r"C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md"
 try:
     with io.open(DEC, "r", encoding="utf-8") as f:
-        lines = [l for l in f if l.strip()]
-    report.append("decisions_nonempty=%d (anchor 75)" % len(lines))
+        dtext = f.read()
+    dset = sorted(set(re.findall(r"[DC]-20\d{6}-\d{2}", dtext)))
+    try:
+        st0 = json.load(io.open(p("src/os/state.json"), "r", encoding="utf-8"))
+        wm = st0.get("decisions_watermark", {}).get("dnums", [])
+    except Exception:
+        wm = []
+    new_d = [d for d in dset if d not in wm]
+    report.append("decisions_dnum_total=%d watermark=%d new=%d" % (len(dset), len(wm), len(new_d)))
+    if new_d:
+        report.append("decisions_NEW_DNUMS: " + ",".join(new_d))
 except Exception as e:
     report.append("decisions_err=%s" % e)
 

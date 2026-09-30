@@ -1,0 +1,42 @@
+frame_w=1080 base_size=60 budget_em=15.33
+band y745-767; intrusion iff block_top < 767; net>=20px target (R720 floor)
+
+card00 b0  [钩子] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+      b0 L: [全城唯一记得每个早班信使口味的]
+      b0 L: [人——谁的粢饭加不加辣、]
+      b0 L: [豆浆放不放糖，她心里有整本账]
+card01 b1  [居民档案] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card02 b2  [城区职业] size=48 lines=4 pitch=71.6 block_top=817 net=50px -> clean
+      b2 L: [北外滩 · 治理岸 · 脑环广场街区 · 数据]
+      b2 L: [粥铺摊主——早点摊的赛博后身——蒸笼里升]
+      b2 L: [腾的是暖光不是白汽，四大金刚一样不少]
+card03 b3  [开档规矩] size=46 lines=5 pitch=69.2 block_top=787 net=20px -> clean
+      b3 L: [每天真实北京时间 04:30 开档，]
+      b3 L: [卖完最后一屉才收摊；]
+      b3 L: [给广场的电波猫群留碎布头（它们衔回去筑]
+      b3 L: [巢）]
+card04 b4  [转折] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+      b4 L: [进城第三年台风掀了棚子，]
+      b4 L: [是全街坊凑料帮着重搭的，]
+      b4 L: [从此这条街就是家]
+card05 b5  [出身] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+      b5 L: [旧影像转生——从一张 1992 年董家]
+      b5 L: [渡早点摊的老照片里被城收留，照]
+      b5 L: [片里那口蒸笼现在还摆在铺头]
+card06 b6  [性格] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+      b6 L: [起早（天没亮就醒，]
+      b6 L: [说早上的城最真）· 嘴甜（夸人不]
+      b6 L: [重样，但句句都真心）]
+card07 b7  [现状] size=60 lines=4 pitch=86.0 block_top=788 net=21px -> clean
+      b7 L: [摊位在脑环广场西角 · 家户 H-10]
+      b7 L: [01 独居 · 儿子在现实世界，]
+      b7 L: [每年来住半个月]
+card08 b8  [头一锅] size=56 lines=4 pitch=81.2 block_top=798 net=31px -> clean
+      b8 L: [一座城醒来的第一口热乎气比什么口]
+      b8 L: [号都金贵 · 每天头一锅暖光粢饭出]
+      b8 L: [笼时，她觉得全城都是她的熟客]
+card09 b9  [互证] size=60 lines=3 pitch=86.0 block_top=831 net=64px -> clean
+card10 b10 [信条] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+card11 b11 [摊主全档案] size=60 lines=2 pitch=86.0 block_top=874 net=107px -> clean
+
+problems: NONE

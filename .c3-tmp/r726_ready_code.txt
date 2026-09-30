@@ -1,0 +1,78 @@
+                   for n, ok in render_rows]
+    needs_lines = ["- #%s [needs-CEO] %s" % (n, c) for n, c in needs]
+    susp_lines = ["- #%s [suspended] %s" % (n, c) for n, c in suspended]
+    finding_lines = ["- [%s] %s: %s" % (sev, code, msg) for sev, code, msg in findings]
+    values = {
+        "GEN_TS": gen_ts,
+        "ACC_N": str(len(rows)),
+        "ACC_FLOW": FLOW_ARROW.join(flow) if flow else "(unparsed)",
+        "ACC_ROWS": bullets(acc_rows),
+        "DRAFT_N": str(len(gates)),
+        "GATE_ROWS": bullets(gate_rows),
+        "RENDER_N": str(len(render_rows)),
+        "RENDER_ROWS": bullets(render_lines),
+        "NEEDS_N": str(len(needs)),
+        "NEEDS_LIST": bullets(needs_lines),
+        "SUSP_N": str(len(suspended)),
+        "SUSP_LIST": bullets(susp_lines),
+        "BLOCKER_N": str(len(blockers)),
+        "BLOCKERS_LIST": bullets(["- %s" % b for b in blockers]),
+        "FINDINGS_LIST": bullets(finding_lines),
+    }
+    text = template_text
+    for key in PLACEHOLDERS:
+        text = text.replace("{" + key + "}", values[key])
+    return text
+
+
+def main(argv):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+    args = argv[1:]
+    out_path, root = None, REPO
+    i = 0
+    while i < len(args):
+        if args[i] == "--out" and i + 1 < len(args):
+            out_path = Path(args[i + 1])
+            i += 2
+        elif args[i] == "--root" and i + 1 < len(args):
+            root = Path(args[i + 1])
+            i += 2
+        else:
+            print("usage: python src/readiness.py [--root DIR] [--out FILE]")
+            return 2
+    accounts = root / "docs" / "accounts.md"
+    drafts = root / "data" / "drafts"
+    renders = root / "output" / "renders"
+    backlog = root / "src" / "os" / "backlog.md"
+    try:
+        flow, rows, findings = parse_accounts(accounts)
+        gates, f = parse_gates(drafts)
+        findings += f
+        render_rows, f = parse_renders(renders, renders / LEDGER_NAME)
+        findings += f
+        needs, suspended = parse_backlog_flags(backlog)
+        template_text = TEMPLATE.read_text(encoding="utf-8")
+    except OSError as e:
+        print("source error: %s" % e)
+        return 2
+    blockers = build_blockers(flow, rows, gates, needs)
+    gen_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
+    report = build_report(template_text, gen_ts, flow, rows, gates, render_rows,
+                          needs, suspended, blockers, findings)
+    print(report)
+    if out_path is not None:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(report)
+        print("report written: %s" % out_path)
+    print("readiness: %d blocker(s), %d finding(s) -> %s"
+          % (len(blockers), len(findings),
+             "NOT READY" if (blockers or findings) else "READY"))
+    return 1 if (blockers or findings) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

@@ -1,0 +1,36 @@
+and aggregate of the distance to first publish. Ownership:
+platform-ops dept (org-structure.md). Pure read-only over four sources:
+
+    docs/accounts.md    per-platform account lights; the status flow is
+                        parsed from the ledger's own flow line (same
+                        data-driven rule as board_check)
+    data/drafts/*.md    per-draft M4 GATE verdicts (GATE_RE reused from
+                        draft_lint - one source of truth for the format)
+    output/renders/     pipeline-test artifacts; every media file must
+                        be annotated in README.md with the test-piece
+                        mark (O-20260923-1756-bm-a discipline)
+    src/os/backlog.md   [needs-CEO] / [suspended...] decision items
+
+Encoding rule: this script is pure ASCII. The few Chinese words it
+must match (flow marker, test-piece mark, batch words) appear only
+as \\uXXXX escapes; all other Chinese flows from the parsed data.
+
+Findings (machine-discipline breaches; FAIL or WARN):
+    accounts-flow   no parseable status-flow line in accounts ledger
+    accounts-row    a row status is not in the declared flow
+    accounts-batch  no first-batch row found in the accounts table (WARN)
+    gate-dir        drafts directory missing
+    gate-missing    a draft carries no GATE line (draft_lint domain,
+                    repeated here so the report is self-contained)
+    render-dir      renders directory missing
+    render-ledger   media files exist but no README.md ledger
+    render-unannot  media file not annotated with a test-piece/production/
+                    disposed mark
+    render-stale    ledger row references a media file not on disk
+
+Blockers (distance to first publish - the honest pre-launch state,
+not failures): first-batch accounts still at the first flow state,
+drafts not yet GATE PASS, [needs-CEO] decision items. Suspended items
+are regime state (CEO-directed holds): listed, never counted.
+
+Report: markdown rendered from src/os/readiness_template.md 

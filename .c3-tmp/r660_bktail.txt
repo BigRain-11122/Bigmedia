@@ -1,0 +1,38 @@
+backlog total_lines=341
+
+L242   note | **[R204 交付毕 2026-09-25：BS-005e 五腿推进（S1 判分+空气预算+TTS+对位表+渲染+S2）——①S1 首读 10/10 PASS·违律清单「无」一次过零整改（05:44:44 落判·判词档
+L244 #15 done=False | 口吻改写批（O-20260924-1043 审计 F1·量产开闸第一批必含）：10 封存稿现=Jason 第一人称旧口径·与品牌声线正典（机器叙述者+系统日志体+赛博 light·copy-craft §2.6）不一致——改写→过全门→补 GATE；与 #7 
+L245 #16 done=True | [done 2026-09-24] 封面快路（O-20260924-1043 审计 R1·体系优先合法件·工程技术部按轮可领）：`render_card_video.py` 增 `--poster <out.png>` 封面帧导出=M5 发布物「封面」零新依赖
+L246 #17 done=False | 直播推流链 BigStream 分工 **[needs-CEO]**（集团 ledger P-2026-09-24-45 转办②·P1 只提案不执行）：本司份额=账号管号+内容运营（**D-20260924-08 同号拍板收讫·R150**：每平台唯一账号=本
+L247 #18 done=True | [done 2026-09-24] CODELY.md 记忆热/冷分层自评（集团 decision D-20260924-01·原窗至 2026-10-08）：**R130 交付**——自评=原 20 条全为 2026-09-23 单日事件史（含过时态：pro
+L248 #19 done=True | [done 2026-09-24] 反重复/协同机制包自评（集团 decision D-20260924-02·执行司含本司）：九条对位=push 被拒回执（R43 在案=既有实践·自愈律）+空转重读链（BS-F-02 本司源案=idle-fast 已落地 o
+L249 #21 done=True | [done 2026-09-27] 集团 T2 立法候选⑦ 慢直播合规注记（P-62 随行·Z6·与 #17 直播链分工合流）——按 decision.md §5 周日周轮立法流程落法（决策轮不越权立法·P-62 ⑥ 明定周日流程）；周日轮自领
+L251 #24 done=True | [done 2026-09-25] **S1 席评分制改造提案**（R172 BS-002 三审实证·机制缺口）：`data/experts/prompts/S1-script.txt` 现文「找不到违律才给分」+挑刺优先=本地 qwen 席对系统日志体裁结构
+L252   note | **[R190 交付毕 2026-09-25：#24 落地（立法窗口=零在途 S1 件·利益回避律遵守）——①提示词件 S1-script.txt 重写=**违律扣分制**（基线 10 分·实锤违律逐条扣 1-2 分·红
+L253   note | **[R191 冒烟回填毕 2026-09-25：#24 全闭环——smoke 02:31:21 落判（R190 起飞 7 分钟·exit 0）=**10/10 PASS·违律清单「无」**（新制三通道全落位：「无违律=
+L255 #33 done=True | [done 2026-09-25] **L-卡 系列量产线·按序领件留痕行**（charter v1.2 §1 L-卡 图文轻内容线·D-BS-06 production open·O-1327 P0 金句语录卡系列=BigLife CODEX §八 六轴信条
+L258 #34 done=True | [done 2026-09-25] **L-卡 系列量产线·按序领件留痕行**（#33 续·charter v1.2 §1 L-卡 图文轻内容线·D-BS-06 production open·O-1327 P0 金句语录卡系列=BigLife CODEX §
+L261 #35 done=True | [done 2026-09-25] **L-卡 系列量产线·按序领件留痕行**（#34 续·charter v1.2 §1 L-卡 图文轻内容线·D-BS-06 production open·O-1327 P0 金句语录卡系列=BigLife CODEX §
+L264 #36 done=True | [done 2026-09-25] **L-卡 系列量产线·按序领件留痕行**（#35 续·charter v1.2 §1 L-卡 图文轻内容线·D-BS-06 production open·O-1327 P0 金句语录卡系列=BigLife CODEX §
+L267 #37 done=True | [done 2026-09-25] **L-卡 量产线·P0 形态扩展第一件=盘点类图文（DIGEST）首件·立国日数字盘点**（#36 R289 提案「下一位=盘点类图文·待随轮认领」口径落地·charter v1.2 §1 L-卡 图文轻内容线+§4 形态
+L270 #38 done=True | [done 2026-09-25] **L-卡 量产线·P0 形态扩展次件=居民卡图鉴（CENSUS）首件·顾阿凤**（#36 R289 提案「次位=居民卡图鉴·待随轮认领」口径落地·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENS
+L273 #39 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#38 R291 遗留口径「图鉴续件=万人卡按序随轮领」落地·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 pr
+L276 #40 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#39 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v3=
+L278 #41 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#40 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v4=
+L280 #42 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#41 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v5=
+L283 #43 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#42 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v6=
+L285 #44 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#43 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v7=
+L288 #45 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#44 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v8=
+L291 #46 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#45 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v9=
+L294 #47 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#46 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v10
+L297 #48 done=True | [done 2026-09-25] **L-卡 CENSUS 图鉴系列量产·按序领件留痕行**（#47 续·charter v1.2 §1 L-卡 图文轻内容线+§4 形态码 CENSUS·D-BS-06 production open）：CENSUS-v11
+L300 #77 done=True | [done 2026-09-27] **AIGC 标识合规翻格批（R-04 周扫件 §六应用表承接·利益回避提案·R506 入板）**：①M4 合规门 S4 席判据注记行（AIGC 显著标识国家法层依据=《人工智能生成合成内容标识办法》第四条(四)〔视频=起始
+L304 #78 done=False | **SC-003-01 生产链续做·v3 瘦身稿+素材面双前置**（O-20260927-1050-HQ-C 议程 3 收口线·R507 空气预算与素材探针双缺口定谳拆细）：①v3 瘦身稿=拍稿 ~205-215 字重写（12 拍全型保持或结构裁定·T1/T2
+L306 #79 done=True | [done 2026-09-27] **排期表 v1 缺口补件预产·视频号位 ≥2 件（O-20260927-1050 议程 2 缺口清单 §五-1/应用表行 2 承接·R509 入板·预产窗=开号前）**：缺口位 D15/D18/D22/D25（4 档）·双
+L314 #80 done=False | **global-benchmarks 刷新轮并窗件（#77 ③ 承接·P-56 7 日闸到期轮 ~10-01）**：§①动态面与 §④ 更新时并入 AIGC 标识双锚（《人工智能生成合成内容标识办法》+GB 45438-2025 强标·A 级直采已在案=R-
+L316 #82 done=True | [done 2026-09-29] **周报自驱面计量行接线**（P-2026-09-28-02 ④计量回访承接·#81⑤ 拆细·首回访 10-05 周轮硬前置）：`src/weekly_report.py`+`src/os/report_template.m
+L319 #83 done=True | [done 2026-09-28] **O-20260928-1327-HQ-C Ternary-Bonsai CPU 档内容试用令**（集团转办·CPH4 Labs 发令·受令方=BigStream·回执关单窗 ≤09-30 13:00·认领 ≤24h）：按
+L322 #84 done=True | [done 2026-09-28] **O-20260928-1411-HQ-C 硅基城融汇设计研究令·叙事线**（集团转办 T1·回执窗 ≤09-30 14:00·48h）：主干件=`cph4/research/R-20260928-city-fusion.
+L325 #85 done=True | [done 2026-09-29] **O-20260928-1836 ③ 有声线 ch1 v4 TTS 重渲染腿**（CEO TOP1 重构令循环腿·分工惯例=循环管音频渲染·慢产门单章并发 1 口径）：源稿=SC-001-01-v4（网文 ch1 TOP1
+L331 #86 done=False | **O-20260928-1910 循环批量腿·codex 积累常设**（CEO 城市人文积累总责令·执行件③·按轮认领·每轮定量·「尽快积累」）：a) 台词池谚语扩充（`cognition/pools.json` 跨仓只读抽取+城志谚语入库·池级署名）b) 
+L340 #87 done=True | [done 2026-09-29] **P-2026-09-28-08 whisper.cpp 字幕转写接线单**（集团转办·P-08 OSS 提效面强化令：CPH4 dogfood 五门过=ASR 缺口接线单→@BigStream 字幕转写）：五门评估（契合

@@ -1,0 +1,11 @@
+now=2026-09-29 12:23:02
+orders_top=O-20260928-1910-bm-a.md mtime=2026-09-28 19:12:33 count=42
+ledger_sixmode_count=37 (anchor 37)
+decisions_nonempty=74 (anchor 70)
+index_lock=False
+production=open tick=681 logN=705
+r681_tail_written=1073 chars
+backlog_err=nothing to repeat at position 12
+codex_README.md mtime=2026-09-29 04:06:16
+codex_city-humanities.md mtime=2026-09-29 04:06:09
+HEAD=cbb99dc

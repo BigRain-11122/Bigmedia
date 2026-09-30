@@ -1,0 +1,8 @@
+STATE_OK tick=669 logN=691
+ts=2026-09-29 09:27:29
+taskLen=60 taskIsR669=True
+lastLogR669=True
+focusR670=True
+production=open
+EXPORT_OK ts=2026-09-29T09:27:29+08:00 resultsN=32 last=669
+osRow=tick 669

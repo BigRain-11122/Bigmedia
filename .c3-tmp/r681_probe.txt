@@ -1,0 +1,17 @@
+orders_top=O-20260928-1910-bm-a.md mtime=1790593953.1227047
+ledger_sixmode_count=37 (anchor 35)
+decisions_nonempty=70 (anchor 69)
+index_lock=False
+production=open tick=680
+daily_0929=True
+w40_audit=2026-W40-self-audit.md
+backlog_top3=["# BigStream OS 循环任务板（backlog）"]
+lc002_audio.mp3=True
+lc002_subs.srt=True
+lc002_s2-results.md=True
+lc002_mp4=True
+lc002_plan=True
+finished_LC-001=True
+finished_LC-002=False
+codex_README.md mtime=1790625976.8995922
+codex_city-humanities.md mtime=1790625969.627013
