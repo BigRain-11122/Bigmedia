@@ -1,0 +1,5 @@
+tick=828
+ts=2026-10-01 09:33:16
+task=等待态声明收轮·声明轮并窗第 6 轮=窗满 6/6 batch commit（区间 R823-R828·os-proto
+log_head=2026-10-01 09:33 R828: 等待态声明收轮·声明轮并窗第 6 轮=窗满 6/6 batch commit（区间 R823-R828·os-pr
+log_len=856
