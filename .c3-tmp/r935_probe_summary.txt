@@ -1,0 +1,28 @@
+== BOARD ==
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+== READINESS ==
+| 微信公众号 | 未注册 | 订阅号 vs 服务号由 CEO 定 · 批次① |
+| 20260923-BS-001-视频号-v1.md | PASS |
+| 20260923-BS-002-视频号-v1.md | PASS |
+| 20260923-BS-003-视频号-v1.md | PASS |
+| 20260923-BS-004-视频号-v1.md | PASS |
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+**[needs-CEO]（1 项）**
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+## 探针发现项（findings·机器纪律核验）
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+== LOOP ==
+lines=232 FAIL=4 WARN=110
+- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+- [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=937 > tick=934) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 110 warn)
+-- WARN sample (last 5) --
+- [WARN] heartbeat-gap: beat gap 25 min (2026-10-01 05:14 -> 2026-10-01 05:40) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-01 05:40 -> 2026-10-01 06:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-01 16:25 -> 2026-10-01 16:47) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-01 23:50 -> 2026-10-02 00:11) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-02 00:25 -> 2026-10-02 00:49) over 20 min comm SLA - long rounds may breach legitimately
