@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 36 budget 25.56em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 895px vs subs top 970px gap +75px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 012
+23.30 em  budget 25.56 em  margin +2.26em  single=True  集团外审日 2026-09-30（CEO 直令 · 12 轮外审）
+19.10 em  budget 25.56 em  margin +6.46em  single=True  「作为外部专家逐个看业务/子公司/集团，
+17.00 em  budget 25.56 em  margin +8.56em  single=True  输入改进清单，让他们科学决策落实」
+18.75 em  budget 25.56 em  margin +6.81em  single=True  单日批 40 决（编号至 D-20260930-41）
+16.70 em  budget 25.56 em  margin +8.86em  single=True  改进清单 XL-1→21 · 修复单 RW-1→7
+20.65 em  budget 25.56 em  margin +4.91em  single=True  方法论 M1→M7 · 审计探针 Q1→Q9（P0 命中）
+21.90 em  budget 25.56 em  margin +3.66em  single=True  外审 5 次自我勘正 · 六律入章程 · 窗至 10-07
+subs   23.00 em  budget 24.21 em  margin +1.21em  基于硅基城市真实事件（集团外审决策批台账档案）
+EM_CHECK: ALL OK
