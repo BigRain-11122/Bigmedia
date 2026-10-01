@@ -1,0 +1,12 @@
+## 探针发现项（findings·机器纪律核验）
+- none
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+loop health probe: heartbeat=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\logs\probe-heartbeat.txt state=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json backlog=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\backlog.md
+summary: tick=893, beats=917 (done=896 nonzero=15 skip=6 timeout=15 error=0), log=921 entries, backlog=96 items 78 done (81% burn)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-24 21:5x -> 2026-09-24 21:46 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 01:3x -> 2026-09-25 01:37 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 05:3x -> 2026-09-25 05:1x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 05:5x -> 2026-09-25 05:4x (narrative hygiene; approximate minutes allowed)
