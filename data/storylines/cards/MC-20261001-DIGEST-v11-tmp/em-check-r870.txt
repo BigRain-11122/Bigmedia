@@ -1,0 +1,12 @@
+H1 size 84 budget 10.95em | H2 size 32 budget 28.75em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 840px vs subs top 970px gap +130px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 011
+21.65 em  budget 28.75 em  margin +7.10em  single=True  产品优先令 2026-09-29 午后落账（CEO 直令）
+28.00 em  budget 28.75 em  margin +0.75em  single=True  「产出落地很少，品质也很差，请从源头梳理和解决这个问题，
+17.00 em  budget 28.75 em  margin +11.75em  single=True  提高效率，过程能看到，结果早点出」
+24.90 em  budget 28.75 em  margin +3.85em  single=True  审计：8 仓 7 天 10,524 commit · 本司文档簿记 46%
+20.75 em  budget 28.75 em  margin +8.00em  single=True  立制：实物 2 分 · 改动 1 分 · 纯记账 0 分
+21.80 em  budget 28.75 em  margin +6.95em  single=True  回应：成品 25 件 40 小时入库 · F-057→F-081
+21.90 em  budget 28.75 em  margin +6.85em  single=True  24 小时全 0 分=空转判负 · 本卡=令后第 26 件
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（产品优先令台账档案）
+EM_CHECK: ALL OK

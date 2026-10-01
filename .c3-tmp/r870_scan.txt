@@ -1,0 +1,14 @@
+r870 five-check scan (content-addressed 2026-10-01 16:38:23):
+orders=41 O-*.md +README=42 anchor, top=O-20260928-1910-bm-a.md
+ledger_scan_hits=46 (task-modes=41 + machine-modes=5; R845 re-baseline band=46) last_p=P-2026-10-01-01 p20260930_rows=0 p20261001_max=0
+r845_regression: P-2026-10-01-01 @bm-a dash row caught=True
+decisions_dnum_total=117 baseline=117 new_rows=NONE (D-20260930-19 watermark diff, D-13 SLA check)
+dispatch_board_rows=33 bigstream_rows=38
+production=open tick=869 (pre-close read) / index.lock=False
+codex README mtime=2026-09-29 04:06:16
+codex city-humanities mtime=2026-09-29 04:06:09
+CODELY.md mtime=2026-09-30 18:55:34
+gb_head_date_probe=NONE (7-day gate due 10-08 per R798)
+daily brief: 2026-10-01.md PRESENT
+census_anchors_top=C-00029.md (C-00030 present: False) -> CENSUS-v21 supply gate CLOSED
+HQ-FEEDBACK recent bigstream/D-20261001 lines: ['| F-20260930-03 | P1 | D-20260930-36 全球头部对标·BigStream 取证回执（涉司=七线全部·状态=待取证回执校准阈值→本行=本司份额收口）——**数字校准**：审计基线「BigStream 成片 2', '| F-20260930-04 | P2 | **hf-cache 冻结令执行面复发（第二次）**：R756 15:24 BigStream ASR 产线在役引用正常读出（offline 读出 exit 0）后，至 R761 17:37 `', '| F-20261001-01 | P1 | D-20261001 集团批 BigStream ack+两执行腿交付回执（收讫回执行·decisions dnum 差集 10 新行=C-20260930-04/05/06+D-2026100']
