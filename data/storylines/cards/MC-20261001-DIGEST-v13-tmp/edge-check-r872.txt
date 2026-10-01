@@ -1,0 +1,10 @@
+band 00: x   52- 302  Lmargin   52  Rmargin  777  clip=False
+band 01: x  284- 790  Lmargin  284  Rmargin  289  clip=False
+band 02: x  110- 946  Lmargin  110  Rmargin  133  clip=False
+band 03: x  132- 728  Lmargin  132  Rmargin  351  clip=False
+band 04: x  110- 370  Lmargin  110  Rmargin  709  clip=False
+band 05: x  110- 894  Lmargin  110  Rmargin  185  clip=False
+band 06: x  108- 732  Lmargin  108  Rmargin  347  clip=False
+band 07: x  110- 850  Lmargin  110  Rmargin  229  clip=False
+band 08: x  108- 866  Lmargin  108  Rmargin  213  clip=False
+band 09: x  142- 912  Lmargin  142  Rmargin  167  clip=False

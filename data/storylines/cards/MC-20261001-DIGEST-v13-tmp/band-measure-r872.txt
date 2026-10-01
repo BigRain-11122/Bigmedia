@@ -1,0 +1,21 @@
+bucket(v//32):count
+0:679
+1:1
+2:1
+4:2
+5:1
+6:6
+7:390
+size=1080x1080 INK=200 bands=10
+band 00: y   48-  77 h= 30
+band 01: y  218- 299 h= 82
+band 02: y  494- 528 h= 35
+band 03: y  554- 588 h= 35
+band 04: y  614- 648 h= 35
+band 05: y  674- 708 h= 35
+band 06: y  734- 768 h= 35
+band 07: y  794- 828 h= 35
+band 08: y  854- 888 h= 35
+band 09: y  970-1007 h= 38
+gaps=[140, 194, 25, 25, 25, 25, 25, 25, 81]
+EM VERT est bottom 895px vs subs top 970px (build assert gap +75px)

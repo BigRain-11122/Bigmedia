@@ -1,0 +1,13 @@
+governance batch machine count (regex set) = 11 rows: C-20261001-01,C-20261001-02,C-20261001-03,D-20261001-01,D-20261001-02,D-20261001-03,D-20261001-04,D-20261001-05,D-20261001-06,D-20261001-07,D-20261001-08
+H1 size 84 budget 10.95em | H2 size 36 budget 25.56em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 895px vs subs top 970px gap +75px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 013
+24.70 em  budget 25.56 em  margin +0.86em  single=True  集团治理日 2026-10-01（CEO 一日三令 · 同窗收口）
+18.00 em  budget 25.56 em  margin +7.56em  single=True  「立了一大堆规则和机制，产出却很少，
+8.00  em  budget 25.56 em  margin +17.56em  single=True  委员会好好治理」
+24.25 em  budget 25.56 em  margin +1.31em  single=True  三案：信息同步 · 规则通胀 · 闲置根治（表决 7/7）
+18.40 em  budget 25.56 em  margin +7.16em  single=True  单日批 11 行 · 治理 6+5+4 条同日生效
+21.65 em  budget 25.56 em  margin +3.91em  single=True  规则面 70% vs 标杆 6% · 规则存量 321 件 md
+22.95 em  budget 25.56 em  margin +2.61em  single=True  47 单补录清偿 · 回访 10-08 · 否决窗一句话可翻
+subs   21.00 em  budget 24.21 em  margin +3.21em  基于硅基城市真实事件（集团治理批台账档案）
+EM_CHECK: ALL OK
