@@ -1,0 +1,15 @@
+orders_files=42 top=README.md
+ledger_mtime=2026-10-02 03:17:36 baseline=2026-10-02 03:17:36
+ledger_drift=RESCAN strict_hits=56
+decisions_mtime=2026-10-02 00:06:16 baseline=2026-10-02 00:06:16
+dnums_file=121 watermark=120 new=['D-20260930-1']
+production=open
+index_lock=False
+census_anchor_top=C-00029 c30plus=0
+pools_mtime=2026-10-02 04:06:01
+pools_raw_lines=1626
+pools_json_leaves=1440 baseline=1440
+interchat_mtime=2026-09-27 08:57:04 lines=22 baseline=22
+novel_files=['SC-001-01-v1.md', 'SC-001-01-v2.md', 'SC-001-01-v3.md', 'SC-001-01-v4.md', 'SC-001-02-v1.md', 'SC-001-02-v3.md', 'SC-001-02-v4.md', 'SC-001-03-v1.md', 'SC-001-03-v3.md', 'SC-001-04-v1.md', 'SC-001-04-v3.md', 'SC-001-05-v1.md']
+daily_2026_10_02=True
+state_tick=936 ts=2026-10-02 04:45:09
