@@ -1,0 +1,4 @@
+tick=900 ts=2026-10-01 22:25:14
+task_len=60 task_head_ok=False
+log_last_head=2026-10-01 22:25 R900: 等待态声明收轮·声明轮并窗新窗第 1 轮（R899 窗满 6/6 batc
+log_last_ts_ok=True
