@@ -1,0 +1,101 @@
+===== board =====
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+
+===== readiness =====
+# BigStream S^QY^bJTReadiness Probe	
+
+> ub2026-10-01 20:56\c`src/readiness.py`s^SЏ%R_S~S͑эsS7Re	
+> S_ݍySyb!k`$&SNop10 ?z M4 hQ~KmՋN~_Ss*g
+N~*gKmϑ;^X`"1Y%S^MRڋ[`	0
+
+## `$ &SNop11 s^Sr`Am*glQ!]lQ!]!API S(u	
+
+| s^S | r` | Yl |
+|---|---|---|
+| _OƉS | *glQ | yb!k`$ |
+| _OlQOS | *glQ | S vs gRS1u CEO [  yb!k`$ |
+| b | *glQ | yb!ka$ |
+| \~fN | *glQ | yb!kb$ |
+| _Kb | *glQ | yb!kb$ |
+| Bz | *glQ | yb!ka$ |
+| wNN | *glQ | yb!kc$ |
+| Ne4Yag | *glQ | yb!kc$ |
+| ejm_ZS | *glQ | yb!kc$ |
+| YouTube | *glQ | Google &SSO|  yb!kd$ |
+| TikTok | *glQ | wmY~  yb!kd$ |
+
+## a$ ?zN GATE `10 ?z	
+
+| ?zN | GATE |
+|---|---|
+| 20260923-BS-001-lQOS-v1.md | PENDING |
+| 20260923-BS-001-ƉS-v1.md | PASS |
+| 20260923-BS-002-lQOS-v1.md | PENDING |
+| 20260923-BS-002-ƉS-v1.md | PASS |
+| 20260923-BS-003-lQOS-v1.md | PENDING |
+| 20260923-BS-003-ƉS-v1.md | PASS |
+| 20260923-BS-004-lQOS-v1.md | PENDING |
+| 20260923-BS-004-ƉS-v1.md | PASS |
+| 20260923-BS-005-lQOS-v1.md | PENDING |
+| 20260923-BS-005-ƉS-v1.md | PENDING |
+
+## b$ N~KmՋN`output/renders/`72 Nhl8h0KmՋN^bT0	
+
+| eN | hl |
+|---|---|
+| bs-001-card-v2.mp4 | KmՋN^bT |
+| bs-001-dd-v1-bilibili-16x9.mp4 | KmՋN^bT |
+| bs-001-live-A-edit-bilibili.mp4 | KmՋN^bT |
+| bs-001-live-A-edit-shipinhao.mp4 | KmՋN^bT |
+| bs-001-live-A-pixelboard.mp4 | KmՋN^bT |
+| bs-001-live-B-puredoc.mp4 | KmՋN^bT |
+| bs-001-v10-humanfeel.mp4 | KmՋN^bT |
+| bs-001-v11-match-shipinhao.mp4 | KmՋN^bT |
+| bs-001-v12-bilibili-16x9.mp4 | KmՋN^bT |
+| bs-001-v12-douyin-9x16.mp4 | KmՋN^bT |
+| bs-001-v12-shipinhao-60s.mp4 | KmՋN^bT |
+| bs-001-v13-bilibili-16x9.mp4 | KmՋN^bT |
+| bs-001-v13-douyin-9x16.mp4 | KmՋN^bT |
+| bs-001-v14-shipinhao-60s.mp4 | KmՋN^bT |
+| bs-001-v14b-douyin-9x16.mp4 | KmՋN^bT |
+| bs-001-v14b-shipinhao-60s.mp4 | KmՋN^bT |
+| bs-001-v15-douyin-9x16.mp4 | KmՋN^bT |
+| bs-001-v15-shipinhao-60s.mp4 | KmՋN^bT |
+| bs-001-v3-emotive.mp4 | KmՋN^bT |
+| bs-001-v4-bilibili-style.mp4 | KmՋN^bT |
+| bs-001-v5-shipinhao.mp4 | KmՋN^bT |
+| bs-001-v5b-bilibili.mp4 | KmՋN^bT |
+| bs-001-v6-shipinhao.mp4 | KmՋN^bT |
+| bs-001-v6b-bilibili.mp4 | KmՋN^bT |
+| bs-001-v7-shipinhao.mp4 | KmՋN^bT |
+| bs-001-v7-vis.mp4 | KmՋN^bT |
+| bs-001-v8-cyber-full.mp4 | KmՋN^bT |
+| bs-001-v8-cyber-light.mp4 | KmՋN^bT |
+| bs-001-v8-cyber-mid.mp4 | KmՋN^bT |
+| bs-001-v9-cyber-light.mp4 | KmՋN^bT |
+| bs-001-voice-B-yunxi.mp4 | KmՋN^bT |
+| bs-001-voice-C-yunjian.mp4 | KmՋN^bT |
+| bs-001-voice-D-huayan-local.mp4 | KmՋN^bT |
+| bs-002-v1-shipinhao-60s.mp4 | KmՋN^bT |
+| bs-002-v15-shipinhao-60s.mp4 | KmՋN^bT |
+| bs
+===== loop =====
+loop health probe: heartbeat=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\logs\probe-heartbeat.txt state=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json backlog=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\backlog.md
+summary: tick=891, beats=915 (done=894 nonzero=15 skip=6 timeout=15 error=0), log=919 entries, backlog=96 items 78 done (81% burn)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-24 21:5x -> 2026-09-24 21:46 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 01:3x -> 2026-09-25 01:37 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 05:3x -> 2026-09-25 05:1x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 05:5x -> 2026-09-25 05:4x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 06:1x -> 2026-09-25 06:17 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 09:3x -> 2026-09-25 09:0x (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 10:2x -> 2026-09-25 10:17 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 10:4x -> 2026-09-25 10:43 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-25 23:5x -> 2026-09-25 23:59 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-09-27 03:1x -> 2026-09-27 03:15 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-10-01 01:1x -> 2026-10-01 01:01 (narrative hygiene; approximate minutes allowed)
+- [WARN] log-order: log entry timestamps go backwards: 2026-10-01 06:3x -> 2026-10-01 06:36 (narrative hygiene; approximate minutes allowed)
+- [

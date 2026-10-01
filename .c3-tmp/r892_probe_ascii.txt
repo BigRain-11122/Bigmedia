@@ -1,0 +1,3 @@
+=== board decoded=gbk FAILcount=0 WARNcount=0 ===
+=== readiness decoded=gbk FAILcount=0 WARNcount=0 ===
+=== loop decoded=gbk FAILcount=0 WARNcount=0 ===

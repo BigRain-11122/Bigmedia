@@ -1,0 +1,2 @@
+WARN=0 FAIL=0
+--- summary line ---
