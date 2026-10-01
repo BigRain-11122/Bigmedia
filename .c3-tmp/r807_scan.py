@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# r807 five-check content-addressed scan (r795 lineage rerun)
+# r807 five-check content-addressed scan (r795 lineage rerun; R845 scan-surface root fix of
+# R844 blind spot: machine modes @bm-a/@bm-b + @八线全量 + dashed P-number format P-2026-10-01-NN)
 import io, json, os, re, glob, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -15,23 +16,34 @@ omds = sorted(glob.glob(os.path.join(ROOT, 'orders', 'O-*.md')))
 top_order = os.path.basename(omds[-1]) if omds else 'NONE'
 w('orders=%d O-*.md +README=%d anchor, top=%s' % (len(omds), len(omds) + 1, top_order))
 
-# 2. ledger six-mode rows (strict @-prefix patterns, row count)
+# 2. ledger scan rows (R845 root fix of R844 blind spot: task-book modes + @八线全量 + machine modes @bm-a/@bm-b + dashed P format)
 ledger = io.open(r'C:\Users\sjs20\Desktop\FluxGroup\cph4\evolution-ledger.md', 'r', encoding='utf-8', errors='replace').read()
-six = [ln for ln in ledger.splitlines() if re.search(r'@BigStream|@七线全司|@全司|@六司', ln)]
-p30 = [ln for ln in six if 'P-20260930' in ln]
-p01n = sorted({int(m) for ln in six for m in re.findall(r'P-20261001-(\d{2})', ln)})
+MODE_RE = re.compile(r'@BigStream|@七线全司|@全司|@六司|@八线全量')
+BM_RE = re.compile(r'@bm-a|@bm-b')
+P_RE = re.compile(r'P-2026-?(\d{4}|\d{2}-\d{2})-(\d{2})')
+ll = ledger.splitlines()
+six = [ln for ln in ll if MODE_RE.search(ln)]
+bm = [ln for ln in ll if BM_RE.search(ln)]
+hits = [ln for ln in ll if MODE_RE.search(ln) or BM_RE.search(ln)]
+p30 = [ln for ln in hits if 'P-20260930' in ln]
+p01n = sorted({int(m) for ln in hits for m in re.findall(r'P-2026-?10-?01-(\d{2})', ln)})
 lastp = None
-for ln in six:
-    ms = re.findall(r'P-2026(09\d\d|100\d)-\d{2}', ln)
+for ln in hits:
+    ms = P_RE.findall(ln)
     if ms:
-        lastp = ms[-1]
-w('ledger_six_mode_hits=%d last_p=%s p20260930_rows=%d p20261001_max=%d (R798 baseline=40 hits, watch-band)' % (len(six), lastp, len(p30), (p01n[-1] if p01n else -1)))
+        lastp = ms[-1][0]
+dash_caught = [ln for ln in bm if 'P-2026-10-01-01' in ln]
+w('ledger_scan_hits=%d (task-modes=%d incl @八线全量 + machine-modes=%d incl @bm-a/@bm-b; R845 re-baseline, prior R798 4-mode band=40) last_p=%s p20260930_rows=%d p20261001_max=%d' % (len(hits), len(six), len(bm), lastp, len(p30), (p01n[-1] if p01n else -1)))
+w('r845_regression: P-2026-10-01-01 @bm-a dash row caught=%s (R844 blind-spot closure evidence)' % bool(dash_caught))
 
 # 3. decisions dnum set-diff vs watermark (D-20260930-19 law)
 dec = io.open(r'C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md', 'r', encoding='utf-8', errors='replace').read()
 dnums = set()
 for m in re.finditer(r'\b([DC])-(\d{8})-(\d{2})(?!\d)', dec):
     dnums.add('%s-%s-%s' % (m.group(1), m.group(2), m.group(3)))
+# R845 same-class canary: dashed D/C format (D-2026-10-01-NN) normalized to compact for the diff
+for m in re.finditer(r'\b([DC])-(\d{4})-(\d{2})-(\d{2})-(\d{2})(?!\d)', dec):
+    dnums.add('%s-%s%s%s-%s' % (m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)))
 st = json.loads(io.open(os.path.join(ROOT, 'src', 'os', 'state.json'), 'r', encoding='utf-8-sig').read())
 wm = set(st['decisions_watermark']['dnums'])
 new = sorted(dnums - wm)
