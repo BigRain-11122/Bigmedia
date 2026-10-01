@@ -1,0 +1,82 @@
+# -*- coding: utf-8 -*-
+"""R922: a-leg batch 3 probe. Fresh walk of BigLife dialogue pool (read-only),
+exclude texts already harvested in city-spirit.md (rows 1-64) and any text
+already present in the other codex files (cross-file dedupe), keep proverb-grade
+candidates, group by axis/scene, dump UTF-8 file for selection.
+Lineage: r893_pool.py (batch 2 probe) with baseline updated to r893 values."""
+import io, os, json, re
+
+CWD = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(CWD)  # BigStream repo root
+POOLS = r"C:\Users\sjs20\Desktop\FluxGroup\life\BigLife\cognition\pools.json"
+CODEX = os.path.join(ROOT, "data", "storylines", "codex")
+
+spirit = io.open(os.path.join(CODEX, "city-spirit.md"), encoding="utf-8").read()
+culture = io.open(os.path.join(CODEX, "city-culture.md"), encoding="utf-8").read()
+humans = io.open(os.path.join(CODEX, "city-humanities.md"), encoding="utf-8").read()
+resid = io.open(os.path.join(CODEX, "city-residents.md"), encoding="utf-8").read()
+others = culture + humans + resid
+
+def strip_punct(s):
+    return re.sub(r"[。，、；：？！…—·\"'\s（）()「」『』]", "", s)
+
+# harvested texts from city-spirit table rows: | n | text | source |
+used = set()
+for m in re.finditer(r"^\|\s*(\d+)\s*\|\s*(.+?)\s*\|", spirit, re.M):
+    txt = m.group(2).strip().strip("*")
+    used.add(strip_punct(txt))
+print("used_from_spirit", len(used))
+
+d = json.load(io.open(POOLS, encoding="utf-8"))
+
+def walk(node, path, acc):
+    if isinstance(node, dict):
+        for k, v in node.items():
+            walk(v, path + "/" + str(k), acc)
+    elif isinstance(node, list):
+        for idx, item in enumerate(node):
+            if isinstance(item, str):
+                acc.append((path, idx, item))
+            else:
+                walk(item, path + "/" + str(idx), acc)
+    elif isinstance(node, str):
+        acc.append((path, -1, node))
+
+acc = []
+walk(d, "", acc)
+total = len(acc)
+
+sig = re.compile(r"(是.{0,10}的|像|才是|不是.{0,8}是|越.{0,4}越|才|就当|都是|要紧|讲究|规矩|本事|底气|心|路|饭|账|稳|慢|快|真|假)")
+
+groups = {}
+seen = set()
+cand_n = 0
+for path, idx, s in acc:
+    t = s.strip()
+    if not t or len(t) < 6 or len(t) > 40:
+        continue
+    key = strip_punct(t)
+    if not key or key in seen:
+        continue
+    seen.add(key)
+    if key in used:
+        continue  # already in city-spirit (seed + batch 1 + batch 2)
+    if key in strip_punct(others) or t in others:
+        continue  # cross-file dedupe (culture/humanities/residents)
+    if not sig.search(t):
+        continue
+    cand_n += 1
+    ax_sc = path.rsplit("/", 2)
+    gkey = "/".join(ax_sc[-2:]) if len(ax_sc) >= 2 else path
+    groups.setdefault(gkey, []).append((idx, t))
+
+out = io.open(os.path.join(CWD, "r922_pool.txt"), "w", encoding="utf-8")
+out.write("TOTAL_LEAVES %d  (r893 baseline 1440 -> growth=%s)\n" % (total, ('YES +%d' % (total - 1440)) if total != 1440 else 'NONE'))
+out.write("CANDIDATES_AFTER_DEDUPE %d  (r893 read 453)\n\n" % cand_n)
+for gk in sorted(groups):
+    out.write("== %s ==\n" % gk)
+    for idx, t in groups[gk]:
+        out.write("  [%d] %s\n" % (idx, t))
+    out.write("\n")
+out.close()
+print("total", total, "cand", cand_n, "groups", len(groups))
