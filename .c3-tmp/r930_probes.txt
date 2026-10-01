@@ -1,0 +1,87 @@
+==== .c3-tmp/r930_board.txt [utf-16] ====
+python : C:\Users\sjs20\AppData\Local\Programs\Python\Python314\python.exe: can't open file 'C:\\Users\\sjs20\\Desktop\
+\FluxGroup\\media\\BigStream\\src\\os\\board.py': [Errno 2] No such file or directory
+At line:1 char:1
++ python src/os/board.py > .c3-tmp/r930_board.txt 2>&1; python src/read ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\sjs20\...le or directory:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+==== .c3-tmp/r930_rd.txt [utf-16] ====
+非成品 |
+| bs-003-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005e-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-001-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-012-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-013-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-014-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-015-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-016-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-017-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-019-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-021-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+
+**[needs-CEO]（1 项）**
+
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+
+**[suspended]（0 项）**
+
+- none
+
+## 距离首发的阻塞清单（3 项）
+
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+
+## 探针发现项（findings·机器纪律核验）
+
+- none
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+
+==== .c3-tmp/r930_loop.txt [utf-16] ====
+ - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 29 min (2026-10-01 00:06 -> 2026-10-01 00:34) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-01 00:49 -> 2026-10-01 01:14) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 25 min (2026-10-01 01:14 -> 2026-10-01 01:39) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-01 01:39 -> 2026-10-01 02:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-01 02:00 -> 2026-10-01 02:20) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-01 03:26 -> 2026-10-01 03:50) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-01 03:50 -> 2026-10-01 04:14) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 28 min (2026-10-01 04:14 -> 2026-10-01 04:41) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 25 min (2026-10-01 05:14 -> 2026-10-01 05:40) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-01 05:40 -> 2026-10-01 06:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-01 16:25 -> 2026-10-01 16:47) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-01 23:50 -> 2026-10-02 00:11) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-02 00:25 -> 2026-10-02 00:49) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=932 > tick=929) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 110 warn)
+
