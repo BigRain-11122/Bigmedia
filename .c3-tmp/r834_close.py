@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+# R834 closeout: waiting-state declaration round, batch window 6/6 FULL (R829
+# 1/6, R830 2/6, R831 3/6, R832 4/6, R833 5/6). Five-check quiet via
+# r807_scan.py content-addressed rerun 10:33; probes baseline (board 0 fail /
+# readiness 3 external blockers 0 findings / loop_health 3 known-historical
+# fail + 104 warn + account-lag in-round beat transient done835>tick833). No
+# export refresh (06:24:37 within 24h window, no real change). Window full ->
+# batch commit interval R829-R834 this round per os-protocol S6.
+import io, json, datetime
+
+ROOT = r"C:\Users\sjs20\Desktop\FluxGroup\media\BigStream"
+now = datetime.datetime.now()
+hm = now.strftime("%H:%M")
+ts = now.strftime("%Y-%m-%d %H:%M:%S")
+
+head = "2026-10-01 %s R834: " % hm
+body = ("等待态声明收轮·声明轮并窗第 6 轮=窗满收窗（五查全静=r807_scan.py 内容寻址复跑 10:33 留档 r807_scan.txt："
+ "orders 42=锚零新令〔顶=O-20260928-1910·41 O-件+README 口径〕"
+ "/ledger 六模式 40=锚带内〔last_p=0925·值守行位移非事件·P-20260930+/P-20261001 行=0 regex 实核·R763/R771 同判〕"
+ "/decisions dnum 差集 NONE=112 基线〔D-20260930-19 水位差集制·通告板对号零新行·D-13 SLA 无触发〕"
+ "/production=open 自愈核在位 tick833〔pre-close〕/无 index.lock 实核·树态三成员维持=M CODELY.md〔09-30 18:55:34 平台记忆压缩波·R767 定谳·零接触不提交不回退〕"
+ "+codex 两件〔README/city-humanities mtime 09-29 04:06:16/04:06:09 实读未动=#86 c+d 让位判据未达·bm-a 让位·两文件零接触〕）"
+ "+三探针=board 0 FAIL（5 ideas 10 稿 5 in production）/readiness 3 阻塞皆外部 CEO 面 0 发现（72 renders 全注账·阻塞≠失败口径）"
+ "/loop_health 3 FAIL+104 WARN 皆在案史实类（09-26 49min+09-28 609min outage 窗已裁定不重复触发"
+ "+account-lag done beats835>tick833=双差〔本执行体在轮 beat 瞬态+R821 期无账 beat 漂移带 1 记在案〕·tick834 收账自平口径）"
+ "——可领集维持（R823 fresh derive 11 项基线延续·无新增解锁路：①REACT 10-02 热点窗届日未到〔10-01 窗已占 F-077·R796〕"
+ "②#70 OSS 窗 3=10-02 21:40 后开〔窗 2 配额 R826 fresh 实核达标在档〕③#94 记忆梳理=10-04"
+ "④W41 周轮件=10-05〔周报+自驱提案窗+CLOUD_LINE 首测·W40 提案 P-1 已 pilot-closed 判负留痕在案〕"
+ "⑤CENSUS C-00030 锚仍不在位〔anchors 止 C-00029·供给闸闭〕⑥DIGEST 零新令级事件⑦稿集通道收口〔R810 判负留痕〕+LC 20 卡全覆盖+E-pool 五面恢复 0/5"
+ "⑧#86 c+d 让位维持〔codex 两件 mtime 09-29 04:06 未动·零接触〕⑨公众号稿 GATE=外部 CEO 面维持〔R200 先例+W40 周审裁定·翻案须 CEO 令〕"
+ "⑩预演短片=BigHouse 消费回执未落 gated〔10:33 扫描 no-scan 复核·D-20261001-06 在水位已消费无回执面〕⑪#78 SC-003-01 素材面=FluxVerse 实录 bm-a/MCP 独占 blocked）"
+ "=四查尽·真无活可拉〔P-20260928-02 ②④序·供给侧五面全闭+全时闸=保护态豁免面在案非违规闲置〕"
+ "——例行件：export 06:24:37 在 24h 窗内不刷〔产品优先律 2·实况零变化〕·日报 10-01 在案不重跑〔R795·一份为真相〕/W40 周审在案〔R576〕/GB 闸 10-08〔R798 v1.2〕"
+ "/T1 催办=已裁项停用口径/HQ-FEEDBACK 不写〔无集团层新 open 问题·dnum 差集 NONE 零膨胀〕·tokens:local=0（纯探针+台账实读零模型调用·P-54⑤ 计量律如实记）"
+ "——窗满 6/6=本轮即收：batch commit 区间 R829-R834（os-protocol §6 窗满 6 轮即收·声明轮并窗律·区间状态行 R829-R834 六行+.c3-tmp 扫描/探针证据件一并卷入）"
+ "——waiting: supply-gated lane held（卡点=新锚卡 C-00030+/新令级事件/REACT 10-02 窗/#70 窗 3 10-02 21:40/W41 10-05）ETA 2026-10-02。"
+ "下轮=R835 新窗 1/6 可领序：①REACT 10-02 热点窗（届日领·10-02 日报缺=先补产 daily_brief 再领·当日一份为真相·#59）"
+ "②#70 OSS 窗 3（10-02 21:40 后开·≤3 刀）③五面恢复任两路=补池复活④#86 c+d 让位判据")
+log = head + body
+task = body[:60]
+
+sp = ROOT + r"\src\os\state.json"
+st = json.loads(io.open(sp, encoding="utf-8-sig").read())
+assert st["tick"] == 833, "tick mismatch: %s" % st["tick"]
+assert st["production"] == "open", "production not open"
+assert "R833: " in st["log"][-1] and "R834: " not in st["log"][-1], "double close guard"
+st["tick"] = 834
+st["log"].append(log)
+st["ts"] = ts
+st["task"] = task
+io.open(sp, "w", encoding="utf-8").write(json.dumps(st, ensure_ascii=False, indent=2))
+# readback verify (JSON validity guard per R821 tail-comma lesson)
+chk = json.loads(io.open(sp, encoding="utf-8-sig").read())
+assert chk["tick"] == 834 and chk["ts"] == ts and chk["task"] == task and chk["log"][-1] == log
+print("state ok tick=834 ts=%s task_len=%d log_lines=%d" % (ts, len(task), len(chk["log"])))
