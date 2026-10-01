@@ -1,0 +1,15 @@
+orders_files=42 top=README.md dir_mtime=2026-09-28 19:12:33
+ledger_mtime=2026-10-02 03:17:36 baseline=2026-10-02 03:17:36 drift=NONE
+decisions_mtime=2026-10-02 00:06:16 baseline=2026-10-02 00:06:16 drift=NONE
+dnum_fresh_diff=NONE count_found=120 count_wm=120
+index_lock=False
+production=open tick=946 log_entries=974
+census_anchor_top=C-00029.md c30plus=0 dir_mtime=2026-09-24 00:06:50
+CENSUS_C00030_present=False
+backlog_mtime=2026-10-02 00:45:28
+daily_2026_10_02=True
+codely_mtime=2026-09-30 18:55:34 (R767 baseline 2026-09-30 18:55:34)
+export_ts=2026-10-02 00:48:07
+now=2026-10-02 06:33:23
+codely_diff_lines=+1/-1 saved=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r947_codely_diff.txt
+codely_diff_shape=mixed edit (review diff file)

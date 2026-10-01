@@ -1,0 +1,32 @@
+R943 five-check + probes evidence (waiting-state declaration round, new window 1/6)
+scan time: 2026-10-02 05:52:44 / close ts: 2026-10-02 05:53:53
+
+FIVE CHECKS (all quiet):
+1. orders anchor: 42 files, top = O-20260928-1910-bm-a (mtime 2026-09-28 19:12:33) - no new O-orders
+2. group ledger: evolution-ledger mtime 2026-10-02 03:17:36 == R928 scan-time freeze (machine duty-line adjudicated R928, zero new @BigStream dispatch rows; last_p=10-01)
+3. group decisions: mtime 2026-10-02 00:06:16 unchanged since R919 scan; dnum diff NONE = 120 baseline (R942 05:45 fresh canonical-regex run carried, D-13 SLA no trigger, board rows for BigStream all acknowledged)
+4. index.lock: False (tested); tree = M CODELY.md only (R767 platform-memory compression wave adjudicated 2026-09-30 18:55:34, zero-touch maintained); production=open self-heal core in place tick942 pre-close
+5. no bm-a active-write signs (last self commits R892/R893/R912 closed batches)
+
+TIME GATES (none reached):
+- OSS w3 slice: opens 10-02 21:40 (this round 05:52, not yet; window-2 quota OH-20260929 on file)
+- REACT 10-02 window: consumed F-085 (R909); REACT 10-03 = day-gated (10-03 daily brief to produce first)
+- #94 memory trim: 10-04 window
+- W41 weekly items: 10-05 (weekly report + self-driven proposal window + CLOUD_LINE first test; W40 proposal P-1 pilot-closed negative on file)
+- replacement-rate first report: 10-07 (due-not-urge) / GB gate: 10-08 (not due)
+
+SUPPLY GATES (zero re-scan, R937 full read + R938 re-verify + R942 close-verify on file):
+- CENSUS C-00030 anchor absent (anchors top = C-00029, c30plus=0) - supply gate CLOSED
+- pools.json leaf count 1440 static (no BigLife expansion) / interchat 22 lines static (R912 fully sieved) / novel ch3+ v4 absent + ch6 absent (c-leg gate closed)
+- E-pool empty (R810 negative-verdict on file); queue top B5 = account-period gate (protected-state exemption)
+
+PROBES (run this round):
+- board: 0 FAIL (5 ideas / 10 drafts / 5 in production)
+- readiness: 3 blockers all external CEO-side (account batch-1 + M4 GATE 6/10 + #17), 0 findings (72 renders fully ledgered; blockers != failures)
+- loop_health: 3 FAIL + 110 WARN all in-case history class (09-26 49min + 09-28 609min outages adjudicated, no re-trigger; account-lag done beats=945 > tick=942 = in-round beat transient, tick943 self-levels on close; WARN count flat vs R942)
+
+ROUTINE: export R912 00:48:07 refresh within 24h not re-run (zero live-change, product-first rule 2) / daily brief 10-02 on file (R909 00:00:26, one-per-day truth) / W40 weekly audit on file (R576) / HQ-FEEDBACK not written (no new group-level open issue, zero bloat) / tokens:local=0 (lightweight scan + probes = pure script machine checks, zero local model calls)
+
+WAITING: supply-gated lane held (blockers = new anchor card C-00030+ / OSS w3 10-02 21:40 / REACT 10-03 window / #94 10-04 / W41 10-05) ETA 2026-10-02 21:40
+Window 1/6 no commit (os-protocol S6: window-full 6 = R948 or day-cross 10-03 00:00 whichever first = batch close R943-first-trigger)
+Next R944: same adjudication carried (live-change flips to full mandate); OSS w3 slice claimable from 21:40 (>=1 slice <=3 cuts); 10-03 00:00 day-cross = day-boundary batch close + 10-03 daily brief + REACT 10-03 claim
