@@ -1,0 +1,25 @@
+batch2_rows 20
+#45 [OK] pool=True dup_old=False dup_cross=False | 校准了今天，明天才稳。 | 台词池·秩序轴（黄昏场景·池级署名）
+#46 [OK] pool=True dup_old=False dup_cross=False | 校准了时间，日子才踏实。 | 台词池·秩序轴（令件场景·池级署名）
+#47 [OK] pool=True dup_old=False dup_cross=False | 守规矩也要有情味。 | 台词池·秩序轴（节日场景·池级署名）
+#48 [OK] pool=True dup_old=False dup_cross=False | 这饺子皮得慢慢擀，皮薄馅才多。 | 台词池·烟火轴（夜市场景·池级署名）
+#49 [OK] pool=True dup_old=False dup_cross=False | 白菜炖粉条，越煮越香。 | 台词池·烟火轴（寒潮场景·池级署名）
+#50 [OK] pool=True dup_old=False dup_cross=False | 雨伞下走着走着，就忘了这天是下雨的。 | 台词池·烟火轴（雨天场景·池级署名）
+#51 [OK] pool=True dup_old=False dup_cross=False | 这行情，就像画画，得大胆尝试。 | 台词池·求新轴（开市场景·池级署名）
+#52 [OK] pool=True dup_old=False dup_cross=False | 交易一开盘，心情像画布上第一笔。 | 台词池·求新轴（开市场景·池级署名）
+#53 [OK] pool=True dup_old=False dup_cross=False | 这灯笼一挂，夜色就像织了层金丝。 | 台词池·求新轴（节日场景·池级署名）
+#54 [OK] pool=True dup_old=False dup_cross=False | 修伞匠这行，可真是慢工出细活。 | 台词池·怀旧轴（夜市场景·池级署名）
+#55 [OK] pool=True dup_old=False dup_cross=False | 下雨天修伞，天晴了补鞋，日子得慢慢过。 | 台词池·怀旧轴（周末场景·池级署名）
+#56 [OK] pool=True dup_old=False dup_cross=False | 这黄昏天色真像老照片里的旧时光。 | 台词池·怀旧轴（黄昏场景·池级署名）
+#57 [OK] pool=True dup_old=False dup_cross=False | 得有兄弟在，路才不会难走。 | 台词池·侠气轴（开市场景·池级署名）
+#58 [OK] pool=True dup_old=False dup_cross=False | 别急，慢慢走，雨有雨的韵味。 | 台词池·侠气轴（雨天场景·池级署名）
+#59 [OK] pool=True dup_old=False dup_cross=False | 灯笼一挂年味浓，快把酒烫上一壶。 | 台词池·侠气轴（节日场景·池级署名）
+#60 [OK] pool=True dup_old=False dup_cross=False | 闲云浮流水，悠然自得心。 | 台词池·逍遥轴（周末场景·池级署名）
+#61 [OK] pool=True dup_old=False dup_cross=False | 鱼上钩了，人生也得慢慢来。 | 台词池·逍遥轴（收市场景·池级署名）
+#62 [OK] pool=True dup_old=False dup_cross=False | 街边的小吃，最抚凡人心。 | 台词池·逍遥轴（夜市场景·池级署名）
+#63 [OK] pool=True dup_old=False dup_cross=False | 喵呜，炉火暖心肠。 | 台词池·像素灵（寒潮场景·池级署名）
+#64 [OK] pool=True dup_old=False dup_cross=False | 灯火辉煌照人心。 | 台词池·像素灵（节日场景·池级署名）
+
+axis_coverage {"秩序轴": 3, "烟火轴": 3, "求新轴": 3, "怀旧轴": 3, "侠气轴": 3, "逍遥轴": 3, "像素灵": 2}
+scenes 令件,周末,夜市,寒潮,开市,收市,节日,雨天,黄昏
+VERDICT PASS
