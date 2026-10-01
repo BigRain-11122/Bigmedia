@@ -1,0 +1,11 @@
+em-check-r909 (REACT-v8 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em
+OK 15.10em margin +10.46  今日热点 · B站热门 2026-10-02
+OK 14.00em margin +11.56  国庆放假百万网红猫留守家中！
+OK 20.00em margin +5.56  上门喂养师，能搞定我家猫咪的奇特怪癖吗？
+OK 18.00em margin +7.56  逍遥轴：「节日热闹，不如在家喝喝茶」
+OK 22.00em margin +3.56  烟火轴：「食堂师傅今天也得加班，做点好吃的」
+OK 21.00em margin +4.56  秩序轴：「这盏灯挂得正，夜里看家里才安心」
+OK 19.00em margin +6.56  夜灯员信条：「灯不问来路，只管照路。」
+VERT: est bottom=833px subs_top=932px gap=99px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS
