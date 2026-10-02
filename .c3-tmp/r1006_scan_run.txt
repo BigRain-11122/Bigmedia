@@ -1,0 +1,10 @@
+﻿orders: 41 files, top=O-20260928-1910-bm-a.md (zero-new-order check vs state anchor O-20260928-1910)
+group orders.md mtime=2026-10-02 16:49:45, BigStream-mention lines=25
+ledger mtime=2026-10-02 15:18:25, four-mode @hits=40 (baseline 41 = consumed face)
+decisions mtime=2026-10-02 12:09:58, tokens=127, watermark=127, NEW=NONE
+index.lock=False, production=open, tick=1005
+daily 2026-10-02 present=True
+CENSUS C-00030 anchor present=True (absent = supply gate closed)
+OH-20261002-bigstream present=False (False = OSS w3 window not open, gate 21:40)
+rotation DAILY counts post-v36: ���� 6 ���� 6 ���� 6 �̻� 6 ���� 6 ��ң 6 -> six-way tie at 6; longest-unconsumed redemption = qiuxin last picked v23 (13 pieces ago)
+pool FREE total (6 festival buckets)=67 (v36 line now USED)

@@ -1,0 +1,9 @@
+60 2026-10-02 · cost 11.05 budget 15.33 margin +4.28 single=True
+60 「煮汤圆的时候，想家人也 cost 15.00 budget 15.33 margin +0.33 single=True
+60 ——硅基城市台词池 ·  cost 12.65 budget 15.33 margin +2.68 single=True
+50 2026-10-02 · cost 11.05 budget 18.40 margin +7.35 single=True
+50 「煮汤圆的时候，想家人也 cost 15.00 budget 18.40 margin +3.40 single=True
+50 ——硅基城市台词池 ·  cost 12.65 budget 18.40 margin +5.75 single=True
+46 2026-10-02 · cost 11.05 budget 20.00 margin +8.95 single=True
+46 「煮汤圆的时候，想家人也 cost 15.00 budget 20.00 margin +5.00 single=True
+46 ——硅基城市台词池 ·  cost 12.65 budget 20.00 margin +7.35 single=True
