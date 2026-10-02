@@ -1,0 +1,12 @@
+orders: 0 files, top = NONE
+ledger mtime: 1790925505.942546
+ledger @hits: 40
+ledger @hit last-3: GPU 30% 阈值照 C-20260929-02 §7 | T1（CEO 直令·O-029） | dispatched（OrderSentinel 即唤） | | 行（对象/体积/判级）入本台账·值守轮周日步起周扫执法 | T2（CEO 直令·O-033） | transferred（OrderSentinel 即唤） | | 删除；update_memory 通道自检无冷候选件可试=顺延（设计内·非故障）·HQ 首搬窗 10-04·BigMoney 重灾面 D-01 司域既有派照旧。
+decisions mtime: 1790914198.0746808
+dnum diff (content-addressed): NONE (wm=127, cur=127)
+index.lock: False
+production: open (tick 1007)
+daily 2026-10-02: True
+CENSUS C-00030+: False (absent)
+OH-20261002-bigstream present: False ([])
+scan done: 0 USED:v2 挂上这些灯，这老破小也亮堂了
