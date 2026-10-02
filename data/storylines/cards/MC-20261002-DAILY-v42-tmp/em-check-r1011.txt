@@ -1,0 +1,9 @@
+pool assert: axes[xiaoyao][festival][13] verbatim OK; festival bucket=18 lines; fleet dedup OK (city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v41 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness thirty-ninth proof: xiaoyao line13 != DAILY-v6 line3 != DAILY-v12 line15 != DAILY-v18 line1 != DAILY-v29 line2 != DAILY-v31 line4 != DAILY-v36 line16 != REACT-v8 line17 = same-axis-different-line thirty-seventh proof; quote-face word adjacency: haoge=v18 SQFACE construct-level (documented), ruzhi/jiedeng/meng ZERO fleet source_quote hits (r1011_quote_face.txt)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 042
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+9.00  em  budget 15.33 em  margin +6.33em  single=True  「街灯如织好个梦」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 逍遥轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_STAY_60: quote line 10.40em fits 60-band budget 15.33em margin +4.93em (zero-template default band, v38/v39/v41 same-band precedent); all other QUOTE-v2 params verbatim
