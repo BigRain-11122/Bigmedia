@@ -1,0 +1,9 @@
+pool assert: axes[qiuxin][market_close][1] verbatim OK; market_close bucket=18 rows; axes=6 + sprite top-level (R982 structure); card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v56 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; prior consumption faces: night bucket v51 yanhuo/13 + v52 xiaqi/4 + v53 zhixu/7 + sprite v50 festival/0 + v54 night/8 + market_close v55 huaijiu/1 + dusk v56 xiaoyao/6; qiuxin redemption: night/festival/dusk ALL collisions (r1027_pool.txt fresh full 12-bucket scan) -> market_close line1 = ONLY clean row among priority faces; quote-face word probe: 9 words see r1027_quote_face.txt (all ZERO; zero construct-layer adjacency = FIFTH fully-zero row of series after v53/v54/v55/v56)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 057
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+10.00 em  budget 15.33 em  margin +5.33em  single=True  「新奇玩意儿正上架」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 求新轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_60: attribution-line 12.65em driver (v54/v56 short-quote band precedent); four-LINES stack; all other QUOTE-v2 params verbatim; market_close-bucket-second DAILY piece + qiuxin-redemption + 5th-fully-zero-row honest notes carried in meta.form

@@ -1,0 +1,13 @@
+﻿python : Traceback (most recent call last):
+At line:1 char:1
++ python -c "
++ ~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "<string>", line 8, in <module>
+    print(t[b:b+1500] if b>=0 else 'NO BOARD')
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'gbk' codec can't encode character '\u2705' in position 498: illegal multibyte sequence
+'I ��ѧ�Ծ�+�������Ĭ���� 2026-10-01��**�������/�����Ա����棨����/���������⡣\n\n## ̨��\n\n## �ɹ�ͨ��壨2026-09-30 �衤D-20260930-13�ڣ�\n\n> ��;��**���š�˾��Ͷ����**��˾�Ǳ��Ѷ����ļ�������˾ÿ�ֶԺű�˾�м��ɣ��������ƶȡ�\n> ���ɣ�D-13�٣�����һ�������˺��汾˾˾���� **��2 �������ڣ���20min��** �� ack �򲵻�'
+===BOARD===
