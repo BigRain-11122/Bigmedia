@@ -1,0 +1,10 @@
+r1020 quote-face word probe for candidate 铺子这个点还得守着，等早起的客人 (yanhuo/night line13)
+word [铺子] -> ZERO fleet card-face hits
+word [这个点] -> ZERO fleet card-face hits
+word [还得守着] -> ZERO fleet card-face hits
+word [等早起] -> ZERO fleet card-face hits
+word [客人] -> ZERO fleet card-face hits
+word [守着] -> ZERO fleet card-face hits
+word [早起] -> ZERO fleet card-face hits
+word [铺子这个点] -> ZERO fleet card-face hits
+honest-adjacency notes: 着，->city-spirit = particle+comma construct layer (non-content); 这个->MC-20261001-DIGEST-v11 = demonstrative pronoun (non-content); distinctive shingles 铺子/这个点/还得守着/等早起/客人/守着/早起/铺子这个点 ALL ZERO = zero-collision row per v1-v50 chain standard; supply-face switch: festival whole-face zero-clean machine-proven (r1020_pool.txt) -> night bucket first DAILY piece; yanhuo redemption honored on fresh face (R1019 suspension 'pending pool growth' = face switch is the growth); backups: yanhuo/night line15 (single punct-construct hit), zhixu/night line7 (zero-hit)
