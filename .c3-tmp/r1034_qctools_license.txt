@@ -1,0 +1,14 @@
+HEAD: ﻿ About QCTools Copyright ©: 2013-2017, BAVC. All Rights Reserved. Copyright ©: 2018-2020, RiceCapades &amp; MediaArea.net SARL . All Rights Reserved. Version 1.4 QCTools is licensed under a GPLv3 License. This program is free software: you can redistribute it and/or modify it under the terms of the
+---HITS---
+Version 1.4 QCTools is licensed under a GPLv3 License. This program is free software: you can redistr
+General Public License as published by the Free Software Foundation, either version 3 of the License, or
+mplied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General P
+General Public License along with this program. If not, see http://www.gnu.org/licenses/ . Additional ri
+BSD License. Redistribution and use in source and binary forms, with or without modification,
+mitted provided that the following conditions are met: Redistributions of source code must re
+MPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY A
+MPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GO
+GPLv3 (QCTools does not claim any ownership, partial or otherwise, of the FFmpeg code. FFmpeg
+mpliance requirements. The Qt Toolkit is Copyright (C) 2012 Digia Plc and/or its subsidiary(-
+General Public License version 2.1 Digia Qt LGPL Exception version 1.1 As an additional permission to th
+General Public License version 2.1, the object code form of a "work that uses the Library" may incorpora
