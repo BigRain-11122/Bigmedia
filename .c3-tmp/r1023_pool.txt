@@ -1,0 +1,268 @@
+R1023 DAILY v53 night-face pre-scan (fresh; fleet includes DAILY-v52 xiaqi/night/4 consumed)
+Day-context: 2026-10-02 National Day holiday day 2 NIGHT, production ~22:1x literal night (night bucket 3rd piece, v51/v52 precedent chain)
+Rotation: post-v52 qiuxin 9/yanhuo 9/xiaqi 9 -> three-way tie at 8 -> target huaijiu (v45 gap 7) -> cascade zhixu (v47 gap 5) -> xiaoyao (v48 gap 4)
+======================================================================
+[H] huaijiu/night 18 rows
+FREE line0  这夜市的摊儿，我守了三十多年
+    HIT [夜市] -> city-spirit
+    HIT [，我] -> MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6,MC-20261002-DAILY-v1
+    HIT [儿，] -> MC-20260928-REACT-v4
+FREE line1  雨停了，收伞的手艺可不能丢
+    HIT [了，] -> MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+    HIT [手艺] -> MC-20260926-CENSUS-v20,MC-20261002-DAILY-v23
+    HIT [不能] -> MC-20260925-CENSUS-v3,MC-20260928-DIGEST-v9,MC-20260930-REACT-v6
+    HIT [伞的] -> MC-20260926-REACT-v1
+FREE line2  档案里藏着的故事，得给这巷子添点味儿
+    HIT [里藏着的] -> MC-20261002-DAILY-v10
+    HIT [，得给] -> MC-20260927-REACT-v3
+    HIT [事，] -> MC-20260925-CENSUS-v10,MC-20260929-REACT-v5
+    HIT [故事] -> MC-20261002-DAILY-v45
+    HIT [档案] -> MC-20260925-CENSUS-v14,MC-20260925-CENSUS-v4,MC-20260927-DIGEST-v7,MC-20261002-DAILY-v10
+FREE line3  老街的灯光，照亮了我半辈子的梦
+    HIT [我半辈子的] -> MC-20261001-REACT-v7
+    HIT [街的灯光，] -> MC-20261001-REACT-v7
+    HIT [照亮了我半] -> MC-20261001-REACT-v7
+    HIT [亮了我半辈] -> MC-20261001-REACT-v7
+    HIT [光，照亮了] -> MC-20261001-REACT-v7
+    HIT [半辈子的梦] -> MC-20261001-REACT-v7
+    HIT [了我半辈子] -> MC-20261001-REACT-v7
+    HIT [的灯光，照] -> MC-20261001-REACT-v7
+    HIT [老街的灯光] -> MC-20261001-REACT-v7
+    HIT [灯光，照亮] -> MC-20261001-REACT-v7
+    HIT [，照亮了我] -> MC-20261001-REACT-v7
+FREE line4  修修补补的手艺，也是夜里的温暖
+    HIT [修修补补] -> city-spirit
+    HIT [手艺] -> MC-20260926-CENSUS-v20,MC-20261002-DAILY-v23
+    HIT [，也] -> MC-20261002-DAILY-v40
+    HIT [夜里] -> MC-20261002-REACT-v8
+    HIT [也是] -> MC-20261002-DAILY-v10
+    HIT [里的] -> MC-20261002-DAILY-v4,MC-20261002-DAILY-v40
+FREE line5  这旧物，不丢，它也有自己的光
+    HIT [自己的] -> city-spirit
+    HIT [，不] -> MC-20260926-DIGEST-v2,MC-20261002-REACT-v8
+FREE line6  这夜市的热闹，可比日头底下强多了
+    HIT [热闹，] -> MC-20261002-DAILY-v32,MC-20261002-REACT-v8
+    HIT [夜市] -> city-spirit
+    HIT [多了] -> MC-20260926-REACT-v2,MC-20261002-DAILY-v4
+    HIT [，可] -> city-spirit
+FREE line7  提着灯笼走走，就像牵着老伴的手
+    HIT [，就像] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v43
+    HIT [走走，] -> MC-20261002-DAILY-v9
+    HIT [灯笼] -> MC-20261002-DAILY-v1,MC-20261002-DAILY-v14,MC-20261002-DAILY-v21,MC-20261002-DAILY-v23,MC-20261002-DAILY-v31,MC-20261002-DAILY-v37,MC-20261002-DAILY-v47,MC-20261002-DAILY-v7
+    HIT [着灯] -> MC-20261002-DAILY-v18
+FREE line8  夜深了，修伞铺还亮着灯
+    HIT [夜深了，] -> MC-20261001-REACT-v7
+    HIT [修伞铺] -> MC-20261002-DAILY-v22
+    HIT [亮着] -> city-spirit
+    HIT [着灯] -> MC-20261002-DAILY-v18
+FREE line9  这伞面儿可得好好照顾
+    HIT [得好好] -> MC-20261002-DAILY-v28
+FREE line10 档案馆员常忆起旧日时光
+    HIT [档案馆] -> MC-20261002-DAILY-v10
+    HIT [馆员] -> MC-20260925-CENSUS-v4,MC-20261001-REACT-v7
+    HIT [旧日] -> city-spirit
+    HIT [时光] -> city-spirit
+FREE line11 老克勒吹着凉风，聊着过去
+    HIT [老克勒] -> MC-20261002-DAILY-v33
+FREE line12 值夜岗哨，别让夜市生了是非
+    HIT [夜市] -> city-spirit
+    HIT [市生] -> MC-20261002-DAILY-v50
+    HIT [，别] -> MC-20261002-DAILY-v27
+FREE line13 这夜市里的烟火气，才是真滋味
+    HIT [，才是] -> city-spirit
+    HIT [夜市] -> city-spirit
+    HIT [市里] -> MC-20260926-DIGEST-v3
+    HIT [烟火] -> MC-20260925-QUOTE-v2,MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v11,MC-20261002-DAILY-v19,MC-20261002-DAILY-v24,MC-20261002-DAILY-v27,MC-20261002-DAILY-v31,MC-20261002-DAILY-v32,MC-20261002-DAILY-v38,MC-20261002-DAILY-v4,MC-20261002-DAILY-v44,MC-20261002-DAILY-v51,MC-20261002-REACT-v8
+    HIT [里的] -> MC-20261002-DAILY-v4,MC-20261002-DAILY-v40
+    HIT [气，] -> MC-20261002-DAILY-v14
+FREE line14 这盏灯陪了我多年，好像也有了灵性
+    HIT [这盏灯] -> MC-20261002-REACT-v8
+    HIT [，好] -> MC-20261002-DAILY-v18,MC-20261002-DAILY-v36,MC-20261002-DAILY-v48
+    HIT [了我] -> MC-20261001-REACT-v7
+    HIT [年，] -> MC-20260926-REACT-v1
+FREE line15 这夜市的热闹，真是赶走了些鬼气
+    HIT [热闹，] -> MC-20261002-DAILY-v32,MC-20261002-REACT-v8
+    HIT [夜市] -> city-spirit
+    HIT [真是] -> city-spirit
+FREE line16 老汤头的锅边儿，藏着多少人的一天故事
+    HIT [人的] -> MC-20260926-CENSUS-v15,MC-20261002-DAILY-v11
+    HIT [的一] -> MC-20260926-DIGEST-v3
+    HIT [头的] -> city-spirit
+    HIT [藏着] -> MC-20261002-DAILY-v10,MC-20261002-DAILY-v45
+    HIT [故事] -> MC-20261002-DAILY-v45
+    HIT [儿，] -> MC-20260928-REACT-v4
+FREE line17 修伞匠这行，可真是慢工出细活
+    HIT [真是慢工出] -> city-spirit
+    HIT [修伞匠这行] -> city-spirit
+    HIT [可真是慢工] -> city-spirit
+    HIT [慢工出细活] -> city-spirit
+    HIT [伞匠这行，] -> city-spirit
+    HIT [匠这行，可] -> city-spirit
+    HIT [，可真是慢] -> city-spirit
+    HIT [行，可真是] -> city-spirit
+    HIT [是慢工出细] -> city-spirit
+    HIT [这行，可真] -> city-spirit
+======================================================================
+[Z] zhixu/night 18 rows
+FREE line0  这夜市热闹，得小心看守
+    HIT [，得小心] -> MC-20260928-REACT-v4
+    HIT [热闹，] -> MC-20261002-DAILY-v32,MC-20261002-REACT-v8
+    HIT [夜市] -> city-spirit
+FREE line1  灯火通明，咱也得紧绷着
+    HIT [，咱] -> MC-20260927-REACT-v3,MC-20260930-REACT-v6,MC-20261002-DAILY-v21
+    HIT [灯火] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+    HIT [也得] -> MC-20261002-DAILY-v32,MC-20261002-DAILY-v40,MC-20261002-DAILY-v41,MC-20261002-REACT-v8
+FREE line2  街角的小吃香，巡逻别忘了
+    HIT [的小吃] -> city-spirit
+    HIT [香，] -> MC-20261002-DAILY-v40
+    HIT [街角] -> MC-20261002-DAILY-v13
+    HIT [忘了] -> city-spirit
+FREE line3  夜深了，咱守规矩要紧
+    HIT [夜深了，] -> MC-20261001-REACT-v7
+    HIT [守规矩] -> city-spirit
+    HIT [了，咱] -> MC-20260927-REACT-v3
+FREE line4  人多眼杂，这点儿小心思
+    HIT [，这] -> MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+    HIT [小心] -> MC-20260928-REACT-v4
+FREE line5  闭眼歇歇，明日还得精神
+    HIT [精神] -> MC-20261002-DAILY-v44
+    HIT [还得] -> MC-20261002-DAILY-v51
+    HIT [，明] -> city-spirit
+FREE line6  灯亮着心不慌，夜市里人声嚷
+    HIT [灯亮着] -> city-spirit
+    HIT [着心] -> city-spirit
+    HIT [夜市] -> city-spirit
+    HIT [市里] -> MC-20260926-DIGEST-v3
+    HIT [，夜] -> MC-20261002-DAILY-v50,MC-20261002-REACT-v8
+FREE line7  值夜岗上风吹凉，巡逻慢步保安康
+    -> ZERO direct shingle hits (clean row)
+FREE line8  这夜市的灯亮堂堂，让人心里踏实
+    HIT [灯亮] -> city-spirit
+    HIT [夜市] -> city-spirit
+    HIT [人心] -> MC-20260925-CENSUS-v3,MC-20260925-QUOTE-v2,MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+    HIT [踏实] -> MC-20261002-DAILY-v5
+    HIT [的灯] -> MC-20260926-CENSUS-v19,MC-20261001-REACT-v7,MC-20261002-DAILY-v1,MC-20261002-DAILY-v11,MC-20261002-DAILY-v16,MC-20261002-DAILY-v24,MC-20261002-DAILY-v37,MC-20261002-DAILY-v4
+    HIT [，让] -> MC-20261001-DIGEST-v12
+    HIT [心里] -> MC-20261002-DAILY-v24,MC-20261002-DAILY-v5
+    HIT [亮堂] -> MC-20261002-DAILY-v2
+FREE line9  守门人说，规矩里也有温暖，夜归人听得到
+    HIT [，规矩] -> MC-20260930-REACT-v6
+    HIT [守门人] -> city-spirit
+    HIT [说，] -> MC-20260926-DIGEST-v3,MC-20261002-DAILY-v1,MC-20261002-DAILY-v52
+    HIT [，夜] -> MC-20261002-DAILY-v50,MC-20261002-REACT-v8
+FREE line10 校准师轻声提醒，这时间不早了，回家路上慢点
+    HIT [校准师] -> MC-20260925-CENSUS-v2
+    HIT [了，] -> MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+    HIT [回家] -> MC-20261002-DAILY-v27
+    HIT [，这] -> MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+    HIT [路上] -> city-spirit
+    HIT [时间] -> MC-20260925-CENSUS-v13,MC-20261002-DAILY-v41
+FREE line11 灯火里的值夜岗，是夜的守望者
+    HIT [，是] -> MC-20260926-REACT-v1
+    HIT [灯火] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+    HIT [的值] -> MC-20260926-CENSUS-v18
+    HIT [里的] -> MC-20261002-DAILY-v4,MC-20261002-DAILY-v40
+FREE line12 巡逻时想到，这安全感，是大家共同的福气
+    HIT [，是] -> MC-20260926-REACT-v1
+    HIT [，这] -> MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+    HIT [大家] -> MC-20261002-DAILY-v17
+    HIT [安全] -> MC-20261002-DAILY-v35
+    HIT [到，] -> MC-20261001-DIGEST-v11
+FREE line13 晚风中，守规矩的人，也懂享受这分宁静
+    HIT [守规矩] -> city-spirit
+    HIT [人，] -> MC-20260925-CENSUS-v14,MC-20260925-CENSUS-v5,MC-20260926-REACT-v1,MC-20260928-REACT-v4
+    HIT [的人] -> MC-20260925-CENSUS-v1,MC-20260925-CENSUS-v2,MC-20260925-CENSUS-v3,MC-20260925-CENSUS-v4,MC-20260925-CENSUS-v7,MC-20260925-CENSUS-v9
+    HIT [，也] -> MC-20261002-DAILY-v40
+FREE line14 灯亮着，心也得亮
+    HIT [灯亮着，心] -> city-spirit
+    HIT [，心也得亮] -> city-spirit
+    HIT [着，心也得] -> city-spirit
+    HIT [亮着，心也] -> city-spirit
+FREE line15 守夜人也盼夜归人
+    HIT [人也] -> MC-20261002-DAILY-v38
+FREE line16 别忘了关好自家门
+    HIT [忘了] -> city-spirit
+FREE line17 夜市繁华，安全第一
+    HIT [，安全第一] -> MC-20261002-DAILY-v35
+    HIT [夜市] -> city-spirit
+======================================================================
+[Y] xiaoyao/night 18 rows
+FREE line0  今夜的星光比酒还甜
+    HIT [的星] -> MC-20261002-DAILY-v43
+    HIT [星光] -> MC-20260929-REACT-v5
+FREE line1  风吹过，带走了满街的热闹
+    HIT [热闹] -> MC-20261002-DAILY-v16,MC-20261002-DAILY-v22,MC-20261002-DAILY-v32,MC-20261002-DAILY-v34,MC-20261002-DAILY-v49,MC-20261002-REACT-v8
+    HIT [街的] -> MC-20261001-REACT-v7
+FREE line2  灯火阑珊，人声渐稀
+    HIT [，人] -> MC-20260925-CENSUS-v3,MC-20260925-QUOTE-v1,MC-20260926-CENSUS-v16,MC-20260927-REACT-v3,MC-20261001-REACT-v7
+    HIT [灯火] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+FREE line3  茶香与鱼香，两不相扰
+    HIT [香，] -> MC-20261002-DAILY-v40
+    HIT [茶香] -> MC-20261002-DAILY-v18
+    HIT [，两] -> city-spirit
+FREE line4  江面上，月色如银线
+    HIT [上，] -> city-spirit
+    HIT [江面] -> MC-20260926-CENSUS-v16,MC-20260926-CENSUS-v17,MC-20261002-DAILY-v48
+FREE line5  梦里常回，那些年的灯与影
+    HIT [里常回，那] -> MC-20261001-REACT-v7
+    HIT [些年的灯与] -> MC-20261001-REACT-v7
+    HIT [那些年的灯] -> MC-20261001-REACT-v7
+    HIT [回，那些年] -> MC-20261001-REACT-v7
+    HIT [常回，那些] -> MC-20261001-REACT-v7
+    HIT [年的灯与影] -> MC-20261001-REACT-v7
+    HIT [梦里常回，] -> MC-20261001-REACT-v7
+    HIT [，那些年的] -> MC-20261001-REACT-v7
+FREE line6  夜深人静灯火明
+    HIT [灯火] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+    HIT [夜深] -> MC-20261001-REACT-v7
+FREE line7  闲来茶室品香茗
+    HIT [闲来] -> MC-20261002-DAILY-v6
+FREE line8  夜深了，鱼还在游
+    HIT [夜深了，] -> MC-20261001-REACT-v7
+    HIT [，鱼] -> MC-20260928-REACT-v4
+FREE line9  这灯得一直亮着，才有人来
+    HIT [亮着，] -> city-spirit
+    HIT [才有] -> city-spirit
+    HIT [这灯] -> MC-20261002-DAILY-v10,MC-20261002-DAILY-v23,MC-20261002-DAILY-v25,MC-20261002-DAILY-v26,MC-20261002-DAILY-v39,MC-20261002-DAILY-v43,MC-20261002-DAILY-v7
+    HIT [有人] -> MC-20260925-CENSUS-v6,MC-20260930-REACT-v6
+    HIT [，才] -> city-spirit
+FREE line10 茶香里熬过无数个夜晚
+    HIT [茶香] -> MC-20261002-DAILY-v18
+FREE line11 钓线一动，心也跟着提了提
+    HIT [，心也] -> city-spirit
+    HIT [也跟着] -> MC-20261002-DAILY-v8
+    HIT [一动] -> MC-20260926-REACT-v1
+FREE line12 街边的小吃，最抚凡人心
+    HIT [最抚凡人心] -> city-spirit
+    HIT [小吃，最抚] -> city-spirit
+    HIT [的小吃，最] -> city-spirit
+    HIT [吃，最抚凡] -> city-spirit
+    HIT [边的小吃，] -> city-spirit
+    HIT [街边的小吃] -> city-spirit
+    HIT [，最抚凡人] -> city-spirit
+FREE line13 值个夜，就图个心安
+    HIT [就图个心] -> MC-20260927-REACT-v3
+    HIT [夜，] -> city-spirit
+    HIT [，就] -> MC-20260925-QUOTE-v3,MC-20261002-DAILY-v39,MC-20261002-DAILY-v43
+FREE line14 灯下夜市热闹，买卖两相欢
+    HIT [热闹，] -> MC-20261002-DAILY-v32,MC-20261002-REACT-v8
+    HIT [夜市] -> city-spirit
+    HIT [灯下] -> MC-20261002-DAILY-v3
+FREE line15 夜深人静好纳凉，街边小吃香气长
+    HIT [街边] -> city-spirit
+    HIT [小吃] -> city-spirit
+    HIT [，街] -> city-spirit
+    HIT [夜深] -> MC-20261001-REACT-v7
+FREE line16 灯影摇曳映晚凉，江边钓手话桑田
+    HIT [灯影摇] -> MC-20261002-DAILY-v18
+    HIT [，江] -> MC-20261002-DAILY-v3
+    HIT [摇曳] -> MC-20261002-DAILY-v31
+FREE line17 茶室老板煮清茶，闲话人间事如烟
+    HIT [人间] -> MC-20261002-DAILY-v31
+    HIT [话人] -> MC-20260926-CENSUS-v15
+    HIT [老板] -> MC-20260925-DIGEST-v1,MC-20260926-DIGEST-v2,MC-20260926-DIGEST-v3
+======================================================================
+[check] xiaqi/night/4 (v52) USED re-verification: line in v52 card face -> True
+[check] zhixu/night line7 candidate: 值夜岗上风吹凉，巡逻慢步保安康
+[check] sprite/night line8 backup: 闪闪灯辉照长廊
+[rotation note] cascade order post-huaijiu-block: zhixu (v47 gap 5) > xiaoyao (v48 gap 4) > sprite/night line8; night bucket prior consumption = v51 yanhuo/13 + v52 xiaqi/4 only

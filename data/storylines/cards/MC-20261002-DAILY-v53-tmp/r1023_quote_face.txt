@@ -1,0 +1,11 @@
+r1023 quote-face word probe for candidate 值夜岗上风吹凉，巡逻慢步保安康 (zhixu/night line7)
+word [值夜岗] -> ZERO fleet card-face hits
+word [风吹凉] -> ZERO fleet card-face hits
+word [巡逻] -> ZERO fleet card-face hits
+word [慢步] -> ZERO fleet card-face hits
+word [保安康] -> ZERO fleet card-face hits
+word [值夜] -> ZERO fleet card-face hits
+word [夜岗] -> ZERO fleet card-face hits
+word [安康] -> ZERO fleet card-face hits
+word [风吹] -> ZERO fleet card-face hits
+honest-adjacency notes: NO construct-layer adjacency this row - all 2-5 char shingles ZERO fleet hits (r1023_pool.txt fresh), punctuation-inclusive 2-char substrings also zero (contrast v51 zhe,/zhege + v52 ,zhe/shuo, two construct-layer notes each -> this row = first FULLY-zero-adjacency row of the night series, cleanliness upper edge); rotation cascade honest note: huaijiu redemption (v45 7-piece gap) blocked AGAIN fresh - huaijiu/night all 18 rows carry content collisions (r1023_pool.txt) -> zero-collision standard NOT relaxed (v1-v52 fifty-two-link) -> cascade to zhixu (v47 5-piece gap) -> line7 = R1022 pre-registered backup note redeemed (first backup promotion); backups for v54: sprite/night line8 (R1022 second backup, fresh re-probe needed) - post-v53 rotation: huaijiu gap 8 / xiaoyao gap 5 both blocked on night face per r1023_pool.txt (xiaoyao/night 18 rows all carry hits) -> supply-face switch candidate next round; 值夜岗守望者=occupation generic title, not a registered resident name (human-set rights zero contact)
