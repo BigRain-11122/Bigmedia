@@ -1,0 +1,9 @@
+pool assert: axes[huaijiu][festival][16] verbatim OK; festival bucket=18 lines; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v44 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness forty-second proof: huaijiu line16 != DAILY-v2 line0 != DAILY-v10 line3 != DAILY-v16 line1 != DAILY-v22 line12 != DAILY-v25 line17 != DAILY-v33 line4 != DAILY-v39 line5 = same-axis-different-line fortieth proof; quote-face word probe: lao-wujian/cangzhe/gushi see r1014_quote_face.txt; strongest-exclusion rows machine-proven: line6/8/15 nian-wei seasonal (R972); line8/15 guashang-denglong 4-char v21; line13 nian-nian-you-yu nian-wei adjacency; line7 chunyu seasonal + san v22; line2 san v22 + shouyi-huor v23; line9 shouyi v23 + generational v14; line10 xinli-nuanhe v24; line11 archive v10; line14 lamp-x-tashi isomorph v21
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 045
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+10.00 em  budget 15.33 em  margin +5.33em  single=True  「老物件里藏着故事」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 怀旧轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_STAY_60: quote line 10.00em into 60-band budget 15.33em margin +5.33em (v42 10.40em +4.93em same-band precedent); all other QUOTE-v2 params verbatim

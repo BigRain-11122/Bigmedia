@@ -1,0 +1,4 @@
+r1014 quote-face word probe for candidate 老物件里藏着故事
+word [老物件] -> ZERO fleet card-face hits
+word [藏着] -> MC-20261002-DAILY-v10
+word [故事] -> ZERO fleet card-face hits

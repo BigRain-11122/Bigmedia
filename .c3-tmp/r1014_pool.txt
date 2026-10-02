@@ -1,0 +1,43 @@
+0 USED v2 挂上这些灯，这老破小也亮堂了
+1 USED v16 往年的灯节，哪有今年这般热闹？
+2 FREE 修伞的手艺活儿，如今可真是少了
+3 USED v10 档案馆里藏着的，这灯也是当年的样式
+4 USED v33 老克勒们最爱的，还是这传统的小确幸
+5 USED v39 看看这灯火，就像回到了从前
+6 FREE 灯一挂起来，年味儿就足了
+7 FREE 旧伞上哪怕有个小破洞，也遮得住春雨
+8 FREE 挂上灯笼，年味儿就足了
+9 FREE 这布灯的手艺，传了几辈子
+10 FREE 看这红彤彤的，心里也暖和
+11 FREE 记得老档案里写的挂灯习俗
+12 USED v22 修伞铺也要来凑个热闹
+13 FREE 年年挂灯，年年有余
+14 FREE 这节日灯一挂，感觉日子又踏实了几分
+15 FREE 灯笼一挂年味浓
+16 FREE 老物件里藏着故事
+17 USED v25 这灯串儿得有几十年光景了
+---card-face-level fleet dedup (lines+source_quote scan, R1010 law)---
+CLEAN  idx=2 修伞的手艺活儿，如今可真是少了
+CLEAN  idx=6 灯一挂起来，年味儿就足了
+CLEAN  idx=7 旧伞上哪怕有个小破洞，也遮得住春雨
+CLEAN  idx=8 挂上灯笼，年味儿就足了
+CLEAN  idx=9 这布灯的手艺，传了几辈子
+CLEAN  idx=10 看这红彤彤的，心里也暖和
+CLEAN  idx=11 记得老档案里写的挂灯习俗
+CLEAN  idx=13 年年挂灯，年年有余
+CLEAN  idx=14 这节日灯一挂，感觉日子又踏实了几分
+CLEAN  idx=15 灯笼一挂年味浓
+CLEAN  idx=16 老物件里藏着故事
+---FREE clean count: 11
+---quote-face word probe for clean rows (wordface vs fleet source_quote faces)---
+idx=2 words=伞,手艺 flags=伞,手艺 | 修伞的手艺活儿，如今可真是少了
+idx=6 words=年味,灯 flags=灯 | 灯一挂起来，年味儿就足了
+idx=7 words=春雨,伞 flags=伞 | 旧伞上哪怕有个小破洞，也遮得住春雨
+idx=8 words=灯笼,年味,灯 flags=灯,灯笼 | 挂上灯笼，年味儿就足了
+idx=9 words=手艺,灯 flags=手艺,灯 | 这布灯的手艺，传了几辈子
+idx=10 words=心里,暖和 flags=心里,暖和 | 看这红彤彤的，心里也暖和
+idx=11 words=档案,灯 flags=档案,灯 | 记得老档案里写的挂灯习俗
+idx=13 words=灯 flags=灯 | 年年挂灯，年年有余
+idx=14 words=日子,踏实,灯 flags=日子,灯,踏实 | 这节日灯一挂，感觉日子又踏实了几分
+idx=15 words=灯笼,年味,灯 flags=灯,灯笼 | 灯笼一挂年味浓
+idx=16 words=- flags=NONE | 老物件里藏着故事
