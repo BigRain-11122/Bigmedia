@@ -8,13 +8,14 @@ summary: 5 ideas, 10 drafts, 5 in production, 0 fail
 
 [stderr]
 
-### readiness (rc lines=270)
+### readiness (rc lines=272)
 ## 探针发现项（findings·机器纪律核验）
-readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+- [FAIL] render-unannot: media file not annotated as test piece: mc-20261002-daily-v54-card.mp4
+readiness: 3 blocker(s), 1 finding(s) -> NOT READY
 -- tail --
 
 
-readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+readiness: 3 blocker(s), 1 finding(s) -> NOT READY
 
 
 [stderr]
@@ -140,10 +141,10 @@ readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 - [WARN] heartbeat-gap: beat gap 20 min (2026-10-02 15:02 -> 2026-10-02 15:22) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 24 min (2026-10-02 19:04 -> 2026-10-02 19:28) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 30 min (2026-10-02 21:03 -> 2026-10-02 21:33) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1025 > tick=1022) - the R4/R5 bug pattern
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1026 > tick=1023) - the R4/R5 bug pattern
 loop health: FAIL (3 fail, 118 warn)
 -- tail --
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1025 > tick=1022) - the R4/R5 bug pattern
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1026 > tick=1023) - the R4/R5 bug pattern
 
 loop health: FAIL (3 fail, 118 warn)
 

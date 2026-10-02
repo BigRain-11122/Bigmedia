@@ -1,0 +1,9 @@
+pool assert: sprite[night][8] verbatim OK; sprite night bucket=12 rows; axes=6 + sprite top-level (R982 structure); card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v53 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; night bucket prior consumption = v51 yanhuo/13 + v52 xiaqi/4 + v53 zhixu/7; rotation cascade 3rd proof: huaijiu (v45 8-gap) + xiaoyao (v48 5-gap) tied at 8, BOTH night faces blocked fresh (r1023_pool.txt) -> standard NOT relaxed -> cascade to sprite/night line8 = R1022 pre-registered SECOND backup redeemed; quote-face word probe: sprite 9 words see r1024_quote_face.txt (all ZERO; zero construct-layer adjacency = second fully-zero row of night series after v53; sprite/night only clean row of 12 fresh)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 054
+13.60 em  budget 15.33 em  margin +1.73em  single=True  2026-10-02 · 国庆假期 · 夜
+9.00  em  budget 15.33 em  margin +6.33em  single=True  「闪闪灯辉照长廊」
+13.65 em  budget 15.33 em  margin +1.68em  single=True  ——硅基城市台词池 · 城市生灵
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_60: LINES[3] attribution-line driver (v50 sprite precedent); four-LINES stack; all other QUOTE-v2 params verbatim; night-bucket fourth DAILY piece + rotation-cascade-3rd-proof + backup-promotion-2nd (R1022 pre-registered sprite line8) + sprite-voice-2nd-piece honest notes carried in meta.form

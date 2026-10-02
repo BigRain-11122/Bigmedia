@@ -1,0 +1,42 @@
+R1024 DAILY v54 sprite/night pre-scan (fresh; fleet includes DAILY-v53 zhixu/night/7 consumed)
+Day-context: 2026-10-02 National Day holiday day 2 NIGHT, production ~22:2x literal night (night bucket 4th piece, v51/v52/v53 precedent chain)
+Rotation post-v53: qiuxin 9 / huaijiu 8 / xiaqi 9 / yanhuo 9 / zhixu 9 / xiaoyao 8 | sprite 1 (v50 festival/0)
+Tie at 8: huaijiu (v45, gap 8) + xiaoyao (v48, gap 5) - both night faces machine-proven zero clean rows (r1023_pool.txt fresh) -> cascade to sprite/night line8 = R1022 pre-registered second backup (fresh re-probe = this scan)
+======================================================================
+[S] sprite/night 12 rows (sprite voice 2nd piece candidate; night-bucket prior consumption = v51 yanhuo/13 + v52 xiaqi/4 + v53 zhixu/7)
+FREE line0  叮叮当响夜未央
+    HIT [叮叮当] -> MC-20261002-DAILY-v50
+FREE line1  喵呜声中梦初上
+    HIT [喵呜] -> MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20260929-REACT-v5
+FREE line2  灯火阑珊语呢喃
+    HIT [灯火] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+FREE line3  啾啾鸣唱夜未央
+    HIT [啾啾鸣] -> MC-20260926-REACT-v1,MC-20260926-REACT-v2
+FREE line4  叮叮响夜幕，灯火伴梦语
+    HIT [夜幕] -> MC-20261002-DAILY-v50
+    HIT [灯火] -> MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+    HIT [叮叮] -> MC-20261002-DAILY-v50
+    HIT [，灯] -> MC-20261002-DAILY-v29,MC-20261002-DAILY-v8
+FREE line5  喵呜回应夜，星光下的谜
+    HIT [，星光下的] -> MC-20260929-REACT-v5
+    HIT [喵呜] -> MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20260929-REACT-v5
+    HIT [的谜] -> MC-20260925-CENSUS-v12,MC-20260929-REACT-v5
+    HIT [回应] -> MC-20261001-DIGEST-v11
+    HIT [夜，] -> city-spirit
+FREE line6  叮叮铃响入梦乡
+    HIT [叮叮] -> MC-20261002-DAILY-v50
+FREE line7  啾啾鸟鸣伴星光
+    HIT [星光] -> MC-20260929-REACT-v5
+    HIT [啾啾] -> MC-20260926-REACT-v1,MC-20260926-REACT-v2
+FREE line8  闪闪灯辉照长廊
+    -> ZERO direct shingle hits (clean row)
+FREE line9  叮叮咚咚敲夜鼓
+    HIT [叮叮] -> MC-20261002-DAILY-v50
+FREE line10 喵呜声声软
+    HIT [喵呜] -> MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20260929-REACT-v5
+FREE line11 啾啾夜曲长
+    HIT [啾啾] -> MC-20260926-REACT-v1,MC-20260926-REACT-v2
+======================================================================
+[check] v53 zhixu/night/7 USED re-verification: line in v53 card face -> %s
+[check] sprite/night line8 candidate: 闪闪灯辉照长廊
+[rotation note] post-v54 (if line8 consumed): sprite night face = line8 consumed; night bucket = 4th piece; next backups TBD by fresh scan next round; supply-face switch (dusk bucket / market_close bucket = evening-adjacent faces) = structural candidates for v55 if night face exhausts clean rows

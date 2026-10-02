@@ -1,0 +1,11 @@
+r1024 quote-face word probe for candidate 闪闪灯辉照长廊 (sprite/night line8)
+word [闪闪] -> ZERO fleet card-face hits
+word [灯辉] -> ZERO fleet card-face hits
+word [长廊] -> ZERO fleet card-face hits
+word [照长廊] -> ZERO fleet card-face hits
+word [灯辉照] -> ZERO fleet card-face hits
+word [闪闪灯辉] -> ZERO fleet card-face hits
+word [辉照] -> ZERO fleet card-face hits
+word [照长] -> ZERO fleet card-face hits
+word [灯辉照长廊] -> ZERO fleet card-face hits
+honest-adjacency notes: NO construct-layer adjacency this row - all 2-5 char shingles ZERO fleet hits (r1024_pool.txt fresh), zero punctuation-inclusive 2-char substrings too (v53 = first fully-zero row of night series, this = SECOND; contrast v51/v52 which each carried two construct-layer notes); rotation cascade honest note: huaijiu (v45 8-piece gap, longest) + xiaoyao (v48 5-piece gap) tied at 8 - BOTH night faces blocked fresh (r1023_pool.txt zero clean rows both) -> zero-collision standard NOT relaxed (v1-v53 fifty-three-link) -> cascade to sprite/night line8 = R1022 pre-registered SECOND backup redeemed (backup-note second promotion, v53 line7 was first); sprite supply honest note: line8 = ONLY clean row of sprite/night 12 rows fresh (r1024_pool.txt) -> post-v54 sprite/night face zero clean rows machine-proven -> v55 candidates = supply-face switch (dusk / market_close evening-adjacent buckets) per r1024_pool.txt rotation note; 城市生灵=群像称谓面非登记居民名非登记生灵名 (human-set rights zero contact)

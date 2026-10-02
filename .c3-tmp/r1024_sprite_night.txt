@@ -1,0 +1,14 @@
+sprite buckets: ['ceo_order', 'coldsnap', 'dusk', 'festival', 'heatwave', 'market_close', 'market_open', 'morning', 'night', 'rain', 'typhoon', 'weekend']
+0 叮叮当响夜未央
+1 喵呜声中梦初上
+2 灯火阑珊语呢喃
+3 啾啾鸣唱夜未央
+4 叮叮响夜幕，灯火伴梦语
+5 喵呜回应夜，星光下的谜
+6 叮叮铃响入梦乡
+7 啾啾鸟鸣伴星光
+8 闪闪灯辉照长廊
+9 叮叮咚咚敲夜鼓
+10 喵呜声声软
+11 啾啾夜曲长
+night-bucket len=12
