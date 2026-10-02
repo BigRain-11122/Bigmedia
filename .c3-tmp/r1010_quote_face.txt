@@ -1,0 +1,6 @@
+source_quote-level word-face check:
+[心情] -> NONE
+[调好] -> NONE
+[校准了时间] -> NONE
+[也得] -> MC-20261002-DAILY-v32:「早点摊也得趁热闹，多卖点包子」; MC-20261002-DAILY-v40:「酒馆里的酒香，也得配上这些灯」
+[校准] -> MC-20261002-DAILY-v5:「校准好每盏灯，心里才踏实。」

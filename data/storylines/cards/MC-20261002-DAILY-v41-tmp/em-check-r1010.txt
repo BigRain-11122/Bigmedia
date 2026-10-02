@@ -1,0 +1,9 @@
+pool assert: axes[zhixu][festival][17] verbatim OK; festival bucket=18 lines; fleet dedup OK (city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v40 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness thirty-eighth proof: zhixu line17 != DAILY-v5 line4 != DAILY-v17 line12 != DAILY-v21 line6 != DAILY-v28 line9 != DAILY-v30 line2 != DAILY-v35 line11 != REACT-v8 line14 != city-spirit-v1.2 line16 = same-axis-different-line thirty-sixth proof; quote-face word adjacency: xinqing/diaohao NONE fleet-wide (r1010_quote_face.txt)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 041
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+13.00 em  budget 15.33 em  margin +2.33em  single=True  「校准了时间也得调好心情」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 秩序轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_STAY_60: quote line 13.00em fits 60-band budget 15.33em margin +2.33em (zero-template default band, v38/v39 same-band precedent); all other QUOTE-v2 params verbatim
