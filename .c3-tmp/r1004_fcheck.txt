@@ -1,0 +1,16 @@
+R1004 round-head five-check evidence (session direct probe, 2026-10-02 17:42-17:49):
+- orders/: 42 files, latest = O-20260928-1910-bm-a.md (2026-09-28 19:12) -> no new order
+- FluxGroup/docs/decisions.md: dnum content-addressed diff vs state decisions_watermark (127) = NONE (no new rows; D-20261002-01..09 watermark tip intact)
+- dispatch board rows touching BigStream: D-20261001-06 = delivered at R797 (group-side lagging read), D-20260930-19 = BigStream compliant (closed), D-20260930-16/18/20/21/06 = group-level/hq rows, no new dispatch for BigStream -> SLA not triggered
+- cph4/evolution-ledger.md mtime 10-02 15:18:25 == frozen baseline (41 @hits = consumed face, R999-R1003 inherited)
+- decisions.md mtime 10-02 12:09:58 == frozen baseline
+- .git/index.lock: absent; production=open (tick 1003->1004); daily brief 2026-10-02 present (R909)
+- CENSUS C-00030 handwrite anchor: absent -> supply gate closed (supply-gated maintained)
+- cph4/oss-harvest/OH-20261002-bigstream.md: absent -> OSS window 3 not yet opened (gate 10-02 21:40)
+- tree: clean + .c3-tmp r1003_* evidence leftovers (self-produced expected state; HEAD=2d877e08 R1003)
+- time gate: OSS w3 = 10-02 21:40 (not reached at 17:4x); REACT-v9 = 10-03 day gate -> claimable = E30 DAILY standby
+
+probes (saved to v35-tmp + .c3-tmp):
+- board: 5 ideas, 10 drafts, 5 in production, 0 fail
+- readiness: 3 blockers (all external CEO faces: account batch-1 + M4 GATE 6/10 + #17), 0 findings -> NOT READY (blockers != failures)
+- loop_health: 3 FAIL + 116 WARN, flat vs baseline, zero new (2 outage FAILs = 09-26/09-28 adjudicated history; account-lag done>tick residual +3 = R981-adjudicated pre-history lock-guard artifact, tick1004 advanced)

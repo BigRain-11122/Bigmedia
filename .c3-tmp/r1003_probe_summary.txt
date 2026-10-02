@@ -1,0 +1,3 @@
+board: FAIL=0 WARN=0 findings=0 blockers=0
+readiness: FAIL=0 WARN=0 findings=0 blockers=0
+loop: FAIL=0 WARN=0 findings=0 blockers=0
