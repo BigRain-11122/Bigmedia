@@ -1,0 +1,9 @@
+orders_files=42 top=O-20260928-1910 (anchor, zero new; fresh probe 10:43:47)
+ledger_mtime=2026-10-02 03:17:36 baseline drift=NONE
+decisions_mtime=2026-10-02 00:06:16 baseline drift=NONE
+dnum_fresh_diff=NONE/120 (content-addressed; newest=D-20261002-02/03 BigMoney non-BS face; D-13 SLA no trigger; board BS rows all-received)
+CENSUS_C00030_present=False (anchors top C-00029, supply gate held)
+index_lock=False production=open tick=970(pre-close)
+daily_2026_10_02=True W40_weekly_audit=held GB_gate=10-08
+claim_basis: R970 next-order #2 = E30 DAILY continuation (E4 backfill=v1 same-round done per R970 log6; E31=10-03 day-gate not reached; #70 OSS=10-02 21:40 time-gate not reached)
+pool_pick: huaijiu/festival/0 verbatim (same-bucket different-axis vs v1 qiuxin/4; festival day-match 2nd proof)

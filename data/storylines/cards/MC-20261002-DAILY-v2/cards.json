@@ -1,0 +1,53 @@
+{
+ "meta": {
+  "topic": "MC-20261002-DAILY-v2",
+  "line": "L-卡 图文轻内容线（DAILY 形态第二件·charter v1.2 §4 形态码 DAILY·日签节律续件）",
+  "form": "DAILY 城市日签 002（L-卡 图文轻内容线 DAILY 形态第二件·charter v1.2 §4 形态码 DAILY·queue §E E30 兑现 R971·日签节律续件=日期×情境桶对位判据第二证〔v1 求新轴→本件怀旧轴=同桶异轴系列异构·R442 系列同构弱点面规避〕）",
+  "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+  "source_quote": "「挂上这些灯，这老破小也亮堂了。」",
+  "source_pointer": "life/BigLife/cognition/pools.json 台词池 axes[怀旧][festival][0]（6 轴×12 情境桶×18 行=1296+sprite=1440 行·跨仓只读指针）+data/intel/daily/2026-10-02.md（当日日期语境源·国庆假期第 2 日=DAILY-v1 F-086 当日件同窗语境）",
+  "attribution_rule": "署名=池级+轴级（台词池·怀旧轴）——池行无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线）",
+  "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「引文取自硅基城市台词池（虚构城市档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+  "editorial_value": "日签形态=日期戳+当日情境+池句三件编辑选材面（festival 桶当日直配+怀旧轴质量选优=「老破小×亮堂」位）+最朴素居所〔老破小〕×节日灯暖〔亮堂〕=民生温度反差金句位（烟火气人味=CEO 内容审美线对位）+节日灯照亮寻常巷弄=合理不突兀的古今融汇（R-2026-09-28-09 融汇设计令对位）+语录卡线变体零新模板第二证（QUOTE v2 参数 verbatim 复用·charter §1「日签变体随时可续」兑现）·公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限",
+  "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差链：老破小（最朴素居所）×亮堂（节日灯暖）=民生温度反差金句位+第一人称居所自述「这老破小」=具体稀缺性/情 1 怀旧温情温和共鸣如实非强极点/时 2 当日时点=国庆假期第 2 日+festival 情境桶直配+池句常青/台 2 公众号方图承载=MC-001~086 S3 实证复用）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·charter §4 形态码 DAILY·queue §E E30 R971 兑现",
+  "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+  "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；池句=情境口气零事实宣称（台词池=虚构城市档案·REACT 系列同源先例）；无居民名=人设权红线零接触；脱敏律=池句无令牌号/无个体可识别面；成品只入库·发布=M5 账号物理件+M4 全绿",
+  "source_facts": "日签纪实抽取律：①引文=台词池 axes[怀旧][festival][0] verbatim 零改字（「」与句号=卡面排版层〔R285 QUOTE v2 先例〕·build 脚本内断言=池行逐字在位实锚）②日期行 2026-10-02=当日历法事实·国庆假期=假期第 2 天（daily brief 2026-10-02 当日窗语境）③情境=festival 情境桶当日直配（12 桶中节日情境与当日唯一对位·DAILY-v1 同桶直配第二证=日签节律判据系列化）④池级署名=台词池行无居民名〔人设权红线零接触·charter §2.4〕⑤去重断言=本行不在city-spirit.md 38 条已采面+不在全成品 cards.json 任一 source_facts（build 脚本 fleet 级扫描实锚·DAILY-v1〔求新/4〕+REACT-v8 同桶三行〔逍遥/17+烟火/12+秩序/14〕皆非本行）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1080,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 40,
+  "aigc_size": 30,
+  "subs_bottom": 110,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 96,
+  "h1_color": "accent",
+  "h2_size": 60,
+  "h2_color": "white",
+  "h1_gap": 48,
+  "optical_center": 0.3
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 2.6,
+   "lines": [
+    "城市日签 002",
+    "2026-10-02 · 国庆假期",
+    "「挂上这些灯，",
+    "这老破小也亮堂了。」",
+    "——硅基城市台词池 · 怀旧轴"
+   ]
+  }
+ ]
+}
