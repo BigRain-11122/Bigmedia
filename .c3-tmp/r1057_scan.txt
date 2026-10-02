@@ -1,0 +1,5 @@
+ORDERS top3: O-20260928-1910-bm-a.md mtime=2026-09-28 19:12:33.122705 | O-20260928-1836-bm-a.md mtime=2026-09-28 18:57:07.170543 | O-20260928-1748-bm-a.md mtime=2026-09-28 18:12:48.283995
+LEDGER @hits: 41 (last 2):
+  | P-2026-09-29-13 | 09-29 | **坚决清理司域派单（P1·CEO 令 O-2026-0929-033·resource-chain §三§11 首批执法）**：①**@Biggame**=a.`gaming/MiniGame/projects/P3D_Spike` 16.1GB 定谳（试点已收口？City3D 主体已独立=全区直清；仍被引用=留判据行回执）+b.**全工程
+  - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432MB/FluxVerse +220MB（M1 建城+编年史在飞）/MiniGame +46MB（R3 律内）——零膨胀旗标·Money02 R2-inflight 引用面禁动照旧。②抽验=selfaud
+DECISIONS dnums total=131 watermark=131 NEW=[]
