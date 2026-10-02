@@ -1,0 +1,9 @@
+r1019 quote-face word probe for candidate 叮叮当，夜幕挂新装 (sprite festival line0)
+word [叮叮当] -> ZERO fleet card-face hits
+word [夜幕] -> ZERO fleet card-face hits
+word [挂新装] -> ZERO fleet card-face hits
+word [新装] -> ZERO fleet card-face hits
+word [叮叮] -> ZERO fleet card-face hits
+word [叮当] -> ZERO fleet card-face hits
+word [夜幕挂] -> ZERO fleet card-face hits
+honest-adjacency notes: sole maximal shingle hit = '，夜' punctuation artifact vs REACT-v8 (different continuation, non-content collision); 夜幕 vs v43 夜空 = same 夜-char family different word different construction (motif-layer single adjacency); 叮叮 onomatopoeia family fleet-zero first open (喵呜 family = REACT-v3/v4/v5 consumed, 啾啾 family = REACT-v1/v2 consumed); sprite-face first DAILY piece = voice-level freshness

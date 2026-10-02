@@ -1,0 +1,9 @@
+pool assert: sprite[festival][0] verbatim OK; sprite festival bucket=12 lines; axes=6 (R982 structure); card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v49 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; sprite face = ZERO prior consumption = first piece; voice-level freshness: ding-ding onomatopoeia family fleet-zero first open (miao-wu family = REACT-v3/v4/v5, jiu-jiu family = REACT-v1/v2); quote-face word probe: ding-ding-dang/ye-mu/gua-xin-zhuang/xin-zhuang/ding-ding/ding-dang/ye-mu-gua see r1019_quote_face.txt (content shingles all ZERO; sole maximal hit = comma-artifact vs REACT-v8 non-content); supply-face switch: yanhuo redemption target FREE face all-weak zero clean rows machine-proven (line8 v12 five-char verbatim + line11 triple + line15 four-char + line16 double + line17 multi + seasonal x3), sprite face per R1018 pre-registration; six-axis counts frozen qiuxin9/huaijiu8/xiaqi8/yanhuo8/zhixu8/xiaoyao8 honest note)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 050
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+11.00 em  budget 15.33 em  margin +4.33em  single=True  「叮叮当，夜幕挂新装」
+13.65 em  budget 15.33 em  margin +1.68em  single=True  ——硅基城市台词池 · 城市生灵
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_RETURN_60: quote line 11.00em short-driver + attribution 13.65em (cheng-shi-sheng-ling four-char face) both inside 60-band budget 15.33em = v1-v28 band return; v29/v49 were 50-band 17.00em quote drivers; four-LINES stack; all other QUOTE-v2 params verbatim; non-lamp-face variation fifth proof + supply-face-switch honest notes carried in meta.form
