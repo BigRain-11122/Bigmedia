@@ -1,0 +1,3 @@
+[0] FREE 灯一挂起来，夜空都亮堂了
+[13] FREE 这灯笼可真精致，手艺活儿不一般
+== pick: axes[求新][festival][13] = 这灯笼可真精致，手艺活儿不一般 (FREE -> consumed by MC-20261002-DAILY-v23) ==
