@@ -1,0 +1,22 @@
+﻿ M data/storylines/cards/README.md
+ M docs/reviews/station-reviews.md
+ M docs/self-improvement-queue.md
+ M docs/status-export.json
+ M output/finished.md
+ M src/os/backlog.md
+ M src/os/state.json
+?? .c3-tmp/r985_bl_tail.txt
+?? .c3-tmp/r985_board.txt
+?? .c3-tmp/r985_gitstatus.txt
+?? .c3-tmp/r985_loop.txt
+?? .c3-tmp/r985_rd.json
+?? .c3-tmp/r985_scan.txt
+?? data/storylines/cards/MC-20261002-DAILY-v16-tmp/
+?? data/storylines/cards/MC-20261002-DAILY-v16/
+?? docs/reviews/review-20261002-mcdaily-v16.md
+?? r985_close.py
+?? r985_ledgers.py
+?? r985_patch.py
+?? r985_pool_scan.py
+?? r985_pool_scan.txt
+?? r985_scan.py
