@@ -19,7 +19,7 @@ readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 
 [stderr]
 
-### loop (rc lines=252)
+### loop (rc lines=254)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
@@ -141,12 +141,13 @@ readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 - [WARN] heartbeat-gap: beat gap 24 min (2026-10-02 19:04 -> 2026-10-02 19:28) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 30 min (2026-10-02 21:03 -> 2026-10-02 21:33) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 26 min (2026-10-02 22:22 -> 2026-10-02 22:47) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1032 > tick=1029) - the R4/R5 bug pattern
-loop health: FAIL (3 fail, 119 warn)
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-02 23:59 -> 2026-10-03 00:19) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1033 > tick=1030) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 120 warn)
 -- tail --
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1032 > tick=1029) - the R4/R5 bug pattern
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1033 > tick=1030) - the R4/R5 bug pattern
 
-loop health: FAIL (3 fail, 119 warn)
+loop health: FAIL (3 fail, 120 warn)
 
 
 [stderr]
