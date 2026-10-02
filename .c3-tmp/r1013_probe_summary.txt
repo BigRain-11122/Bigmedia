@@ -1,0 +1,11 @@
+RD: > 口径：距离首发＝批次①账号亮灯＋10 稿 M4 门全绿＋测试件纪律零发现；未上线＝未测量；阻塞≠失败（发布前诚实态）。
+RD: ## ② 稿件 GATE 态（10 稿）
+RD: | 稿件 | GATE |
+RD: ## 距离首发的阻塞清单（3 项）
+RD: - M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+RD: ## 探针发现项（findings·机器纪律核验）
+LOOP FAIL count: 3
+LOOP WARN count: 117
+FAIL: - [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+FAIL: - [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+FAIL: - [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1015 > tick=1012) - the R4/R5 bug pattern

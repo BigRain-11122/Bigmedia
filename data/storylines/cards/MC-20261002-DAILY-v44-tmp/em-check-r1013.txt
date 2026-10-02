@@ -1,0 +1,9 @@
+pool assert: axes[yanhuo][festival][1] verbatim OK; festival bucket=18 lines; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; v38 whole-file hit = meta weakness-note NARRATIVE false hit, zero card-face consumption; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v43 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness forty-first proof: yanhuo line1 != DAILY-v4 line4 != DAILY-v11 line13 != DAILY-v19 line3 != DAILY-v24 line2 != DAILY-v27 line7 != DAILY-v32 line10 != DAILY-v38 line5 != REACT-v8 line12 = same-axis-different-line thirty-ninth proof; quote-face word adjacency: doujiang/youtiao/reteng/yizhengtian/jingshen ZERO fleet source_quote hits (r1013_quote_face.txt); strongest-exclusion rows machine-proven: line8 deng-gua-de-zhen-gao 5-char verbatim v12; line15 guashang-denglong 4-char v21 + xiqing v19; line17 denglong-ke-zhen 4-char v23; line16 baozi v32; line9 renao v32; line11 caichang v19+ayi v13+dengchuan v25/v43
+H1 96 budget 9.58em | H2 50 budget 18.40em (ladder pick, margin>=0.2em) | VERT stack bottom 686px vs subs top 970px gap +284px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 044
+11.05 em  budget 18.40 em  margin +7.35em  single=True  2026-10-02 · 国庆假期
+18.00 em  budget 18.40 em  margin +0.40em  single=True  「热腾的豆浆配上油条，一整天都精神」
+12.65 em  budget 18.40 em  margin +5.75em  single=True  ——硅基城市台词池 · 烟火轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_DROP_50: quote line 18.00em fails 60-band (budget 15.33em) -> 50-band budget 18.40em margin +0.40em (>=0.2em floor per R293; v40 16.00em same-band precedent; v43 +0.33em thinnest precedent); all other QUOTE-v2 params verbatim
