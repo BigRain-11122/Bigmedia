@@ -1,0 +1,8 @@
+r1017 quote-face word probe for candidate 灯影交错映江面，好个逍遥自在天
+word [灯影] -> MC-20261002-DAILY-v18
+word [交错] -> ZERO fleet card-face hits
+word [映江面] -> ZERO fleet card-face hits
+word [好个] -> MC-20261002-DAILY-v18,MC-20261002-DAILY-v42
+word [逍遥自在] -> ZERO fleet card-face hits
+word [自在天] -> ZERO fleet card-face hits
+honest-adjacency notes: deng-ying 2-char MOTIF layer single hit (v18 indoor scene; collocation deng-ying-jiao-cuo itself ZERO); hao-ge construct layer (v18/v42); jiang-mian census geography-label layer (CENSUS-v16/v17)
