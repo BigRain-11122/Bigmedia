@@ -1,0 +1,9 @@
+pool assert: axes[xiaqi][festival][7] verbatim OK; festival bucket=18 lines; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v45 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness forty-third proof: xiaqi line7 != DAILY-v3 line5 != DAILY-v8 line13 != DAILY-v13 line2 != DAILY-v20 line1 != DAILY-v26 line10 != DAILY-v34 line9 != DAILY-v40 line11 = same-axis-different-line forty-first proof; quote-face word probe: da-huo-er/le-he/yi-nian-dao-tou/lei-bu-huai see r1015_quote_face.txt; strongest-exclusion rows machine-proven: line3 jie-ri-fen-wei v28 collision; line4 chuan-shang v20 + xi-qing v19; line6 nian-wei seasonal + lamp; line8 nian-wei + hong-deng-long; line12 chuan-zhang CENSUS-v16 cross-series; line14 re-nao v32 saturation + xing-xing v43 motif; line15 deng-long-yi-gua v21 family + xi-qing v19; line16 chuan-zhang CENSUS-v16 + piao-xiang v40; line17 jiang-hu-yi-qi v3 four-char
+H1 96 budget 9.58em | H2 50 budget 18.40em (ladder pick, margin>=0.2em) | VERT stack bottom 686px vs subs top 970px gap +284px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 046
+11.05 em  budget 18.40 em  margin +7.35em  single=True  2026-10-02 · 国庆假期
+17.00 em  budget 18.40 em  margin +1.40em  single=True  「大伙儿乐呵乐呵，一年到头累不坏」
+12.65 em  budget 18.40 em  margin +5.75em  single=True  ——硅基城市台词池 · 侠气轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_DROP_50: quote line 17.00em; 60-band budget 15.33em excluded (17.00>15.13); 50-band budget 18.40em margin +1.40em = v14 18.0em@50 / v16 16.10em@50 precedent band; all other QUOTE-v2 params verbatim

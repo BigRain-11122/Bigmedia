@@ -1,0 +1,5 @@
+r1015 quote-face word probe for candidate 大伙儿乐呵乐呵，一年到头累不坏
+word [大伙儿] -> ZERO fleet card-face hits
+word [乐呵] -> ZERO fleet card-face hits
+word [一年到头] -> ZERO fleet card-face hits
+word [累不坏] -> ZERO fleet card-face hits
