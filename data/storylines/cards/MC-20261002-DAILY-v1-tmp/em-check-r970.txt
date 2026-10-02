@@ -1,0 +1,9 @@
+pool assert: axes[festival][4] verbatim OK; festival bucket=18 lines; fleet dedup OK (city-spirit + all cards.json)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 880px vs subs top 970px gap +90px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 001
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+10.00 em  budget 15.33 em  margin +5.33em  single=True  「直播间的观众都说，
+10.00 em  budget 15.33 em  margin +5.33em  single=True  我家的灯笼最独特。」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 求新轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK

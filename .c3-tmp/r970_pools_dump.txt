@@ -1,0 +1,87 @@
+== TOP axes ==
+烟火 / morning : 18 lines
+烟火 / dusk : 18 lines
+烟火 / night : 18 lines
+烟火 / weekend : 18 lines
+烟火 / rain : 18 lines
+烟火 / typhoon : 18 lines
+烟火 / heatwave : 18 lines
+烟火 / coldsnap : 18 lines
+烟火 / market_open : 18 lines
+烟火 / market_close : 18 lines
+烟火 / ceo_order : 18 lines
+烟火 / festival : 18 lines
+秩序 / morning : 18 lines
+秩序 / dusk : 18 lines
+秩序 / night : 18 lines
+秩序 / weekend : 18 lines
+秩序 / rain : 18 lines
+秩序 / typhoon : 18 lines
+秩序 / heatwave : 18 lines
+秩序 / coldsnap : 18 lines
+秩序 / market_open : 18 lines
+秩序 / market_close : 18 lines
+秩序 / ceo_order : 18 lines
+秩序 / festival : 18 lines
+求新 / morning : 18 lines
+求新 / dusk : 18 lines
+求新 / night : 18 lines
+求新 / weekend : 18 lines
+求新 / rain : 18 lines
+求新 / typhoon : 18 lines
+求新 / heatwave : 18 lines
+求新 / coldsnap : 18 lines
+求新 / market_open : 18 lines
+求新 / market_close : 18 lines
+求新 / ceo_order : 18 lines
+求新 / festival : 18 lines
+怀旧 / morning : 18 lines
+怀旧 / dusk : 18 lines
+怀旧 / night : 18 lines
+怀旧 / weekend : 18 lines
+怀旧 / rain : 18 lines
+怀旧 / typhoon : 18 lines
+怀旧 / heatwave : 18 lines
+怀旧 / coldsnap : 18 lines
+怀旧 / market_open : 18 lines
+怀旧 / market_close : 18 lines
+怀旧 / ceo_order : 18 lines
+怀旧 / festival : 18 lines
+侠气 / morning : 18 lines
+侠气 / dusk : 18 lines
+侠气 / night : 18 lines
+侠气 / weekend : 18 lines
+侠气 / rain : 18 lines
+侠气 / typhoon : 18 lines
+侠气 / heatwave : 18 lines
+侠气 / coldsnap : 18 lines
+侠气 / market_open : 18 lines
+侠气 / market_close : 18 lines
+侠气 / ceo_order : 18 lines
+侠气 / festival : 18 lines
+逍遥 / morning : 18 lines
+逍遥 / dusk : 18 lines
+逍遥 / night : 18 lines
+逍遥 / weekend : 18 lines
+逍遥 / rain : 18 lines
+逍遥 / typhoon : 18 lines
+逍遥 / heatwave : 18 lines
+逍遥 / coldsnap : 18 lines
+逍遥 / market_open : 18 lines
+逍遥 / market_close : 18 lines
+逍遥 / ceo_order : 18 lines
+逍遥 / festival : 18 lines
+== TOP sprite ==
+morning : (non-dict) list
+dusk : (non-dict) list
+night : (non-dict) list
+weekend : (non-dict) list
+rain : (non-dict) list
+typhoon : (non-dict) list
+heatwave : (non-dict) list
+coldsnap : (non-dict) list
+market_open : (non-dict) list
+market_close : (non-dict) list
+ceo_order : (non-dict) list
+festival : (non-dict) list
+TOTAL=1296

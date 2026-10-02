@@ -1,0 +1,53 @@
+{
+ "meta": {
+  "topic": "MC-20261002-DAILY-v1",
+  "line": "L-卡 图文轻内容线（DAILY 形态首件·charter v1.2 §4 形态码 DAILY·台词池日签节律首件）",
+  "form": "DAILY 城市日签 001（L-卡 图文轻内容线 DAILY 形态立线首件·charter v1.2 §4 形态码 DAILY·#97 新线 claim R970·供给盲区修正轮=R810 五面盘点遗漏 DAILY 通道重开首件〔R870 DIGEST 通道重开同型：R289 提案在案「日签变体=语录卡线随时可续」+charter §1 素材法=台词池+池级署名在册·零件产出=未消费存量面·非造活凑数〕）",
+  "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+  "source_quote": "「直播间的观众都说，我家的灯笼最独特。」",
+  "source_pointer": "life/BigLife/cognition/pools.json 台词池 axes[求新][festival][4]（6 轴×12 情境桶×18 行=1296+sprite=1440 行·跨仓只读指针）+data/intel/daily/2026-10-02.md（当日日期语境源·国庆假期=REACT-v8 F-085 当日件同窗国庆语境）",
+  "attribution_rule": "署名=池级+轴级（台词池·求新轴）——池行无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线）",
+  "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「引文取自硅基城市台词池（虚构城市档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+  "editorial_value": "日签形态=日期戳+当日情境+池句三件编辑选材面（festival 桶当日直配=日期×情境对位判据·求新轴候选质量选优=「直播间×灯笼」金句位·R909 REACT-v8 桶对位判据同型）+最老手艺×最新媒介=城市古今融汇叙事位（R-2026-09-28-09 融汇设计令「合理不突兀」对位=直播间晒灯笼=合理不突兀的融汇示范·M1 入城因果律）+语录卡线变体=零新模板（QUOTE v2 参数 verbatim 复用·charter §1「日签变体随时可续」兑现）·公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限",
+  "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差链：最老手艺（灯笼）×最新媒介（直播间）=古今融汇反差金句位+「我家的灯笼最独特」=第一人称匠人自豪=具体稀缺性/情 1 求新乐观与匠人自豪温和共鸣如实非强极点/时 2 当日时点=国庆假期第 2 日+festival 情境桶直配+池句常青/台 2 公众号方图承载=MC-001~085 S3 实证复用）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·charter §4 形态码 DAILY·#97 新线 R970 claim",
+  "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+  "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；池句=情境口气零事实宣称（台词池=虚构城市档案·REACT 系列同源先例）；无居民名=人设权红线零接触；脱敏律=池句无令牌号/无个体可识别面；成品只入库·发布=M5 账号物理件+M4 全绿",
+  "source_facts": "日签纪实抽取律：①引文=台词池 axes[求新][festival][4] verbatim 零改字（「」与句号=卡面排版层〔R285 QUOTE v2 先例〕·build 脚本内断言=池行逐字在位实锚）②日期行 2026-10-02=当日历法事实·国庆假期=国庆节次日假期第 2 天（daily brief 2026-10-02 当日窗语境=REACT-v8 F-085 国庆网红猫同窗印证）③情境=festival 情境桶当日直配（12 桶中节日情境与当日唯一对位·R909 REACT-v8 festival 首用同窗第二消费）④池级署名=台词池行无居民名〔人设权红线零接触·charter §2.4〕⑤去重断言=本行不在 city-spirit.md 38 条已采面+不在全成品 cards.json 任一 source_facts（build 脚本 fleet 级扫描实锚·REACT-v8 同桶三行〔逍遥/17+烟火/12+秩序/14〕皆非本行）"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1080,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 40,
+  "aigc_size": 30,
+  "subs_bottom": 110,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 96,
+  "h1_color": "accent",
+  "h2_size": 60,
+  "h2_color": "white",
+  "h1_gap": 48,
+  "optical_center": 0.3
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 2.6,
+   "lines": [
+    "城市日签 001",
+    "2026-10-02 · 国庆假期",
+    "「直播间的观众都说，",
+    "我家的灯笼最独特。」",
+    "——硅基城市台词池 · 求新轴"
+   ]
+  }
+ ]
+}
