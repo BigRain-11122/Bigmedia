@@ -1,0 +1,10 @@
+r1018 quote-face word probe for candidate 看这色彩斑斓，比平时还热闹几分
+word [色彩斑斓] -> ZERO fleet card-face hits
+word [比平时] -> ZERO fleet card-face hits
+word [热闹几分] -> ZERO fleet card-face hits
+word [斑斓] -> ZERO fleet card-face hits
+word [几分] -> ZERO fleet card-face hits
+word [平时] -> ZERO fleet card-face hits
+word [看这] -> MC-20261002-DAILY-v15,MC-20261002-DAILY-v39
+word [热闹] -> MC-20261002-DAILY-v16,MC-20261002-DAILY-v22,MC-20261002-DAILY-v32,MC-20261002-DAILY-v34,MC-20261002-REACT-v8
+honest-adjacency notes: se-cai-ban-lan 4-char = book-ish pool wording honest note (R1012 carried; verbatim zero-edit = E4/M6 calibration); re-nao 2-char construct layer v16/v22/v34 three uses each different construction vs this comparative = isomeric; kan-zhe opener construct layer (v15/v39 kan-kan-zhe doubled vs this single kan)

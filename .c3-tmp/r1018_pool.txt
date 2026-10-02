@@ -1,0 +1,39 @@
+=== qiuxin/festival bucket (18 lines) ===
+ 0 [FREE] 灯一挂起来，夜空都亮堂了 | full-line hits: NONE | spirit: no
+ 1 [FREE] 这节日的气氛，得用灯笼烘托出来 | full-line hits: NONE | spirit: no
+ 2 [FREE] 看这色彩斑斓，比平时还热闹几分 | full-line hits: NONE | spirit: no
+ 3 [DAILY-v14] 得趁这节气，做几副新灯笼给小孙子看 | full-line hits: MC-20261002-DAILY-v14 | spirit: no
+ 4 [DAILY-v1] 直播间的观众都说，我家的灯笼最独特 | full-line hits: MC-20261002-DAILY-v1 | spirit: no
+ 5 [DAILY-v37] 今年的灯笼花样，肯定又要多出几招来 | full-line hits: MC-20261002-DAILY-v37 | spirit: no
+ 6 [FREE] 灯一挂起来，年味儿浓了半截 | full-line hits: NONE | spirit: no
+ 7 [DAILY-v7] 这灯笼真好看，像极了小时候的记忆 | full-line hits: MC-20261002-DAILY-v7 | spirit: no
+ 8 [FREE] 灯笼一挂，年味儿足了！ | full-line hits: NONE | spirit: no
+ 9 [DAILY-v43] 这灯串串的，就像夜空的星星 | full-line hits: MC-20261002-DAILY-v43 | spirit: no
+10 [FREE] 节日里，得有点儿热闹的气氛 | full-line hits: NONE | spirit: no
+11 [DAILY-v15] 看看这彩灯，比屏幕上的还好看 | full-line hits: MC-20261002-DAILY-v15 | spirit: no
+12 [DAILY-v9] 晚上出来走走，满眼都是光啊 | full-line hits: MC-20261002-DAILY-v9 | spirit: no
+13 [DAILY-v23] 这灯笼可真精致，手艺活儿不一般 | full-line hits: MC-20261002-DAILY-v23 | spirit: no
+14 [city-spirit-v1.2] 这灯笼一挂，夜色就像织了层金丝 | full-line hits: NONE | spirit: HIT
+15 [FREE] 灯笼一挂，年味儿就来了！ | full-line hits: NONE | spirit: no
+16 [FREE] 这灯可真亮，跟白昼似的 | full-line hits: NONE | spirit: no
+17 [FREE] 节日里得有点新意，咱们再加点彩灯 | full-line hits: NONE | spirit: no
+=== FREE rows shingle probe (3-5 char shingles vs fleet faces) ===
+--- line0: 灯一挂起来，夜空都亮堂了
+    shingle [亮堂了] -> MC-20261002-DAILY-v2
+--- line1: 这节日的气氛，得用灯笼烘托出来
+    shingle [节日的] -> MC-20261002-DAILY-v4
+    shingle [这节日] -> MC-20261002-DAILY-v28,MC-20261002-DAILY-v30
+--- line2: 看这色彩斑斓，比平时还热闹几分
+    all shingles ZERO fleet hits
+--- line6: 灯一挂起来，年味儿浓了半截
+    all shingles ZERO fleet hits
+--- line8: 灯笼一挂，年味儿足了！
+    all shingles ZERO fleet hits
+--- line10: 节日里，得有点儿热闹的气氛
+    shingle [节日里] -> MC-20261002-DAILY-v17
+--- line15: 灯笼一挂，年味儿就来了！
+    all shingles ZERO fleet hits
+--- line16: 这灯可真亮，跟白昼似的
+    shingle [灯可真] -> MC-20261002-DAILY-v11
+--- line17: 节日里得有点新意，咱们再加点彩灯
+    shingle [节日里] -> MC-20261002-DAILY-v17
