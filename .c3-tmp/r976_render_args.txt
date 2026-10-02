@@ -1,0 +1,47 @@
+]), float(first["end"])
+    t = s + 0.15
+    if e <= t:
+        t = (s + e) / 2.0
+    return t
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="R-A card timeline renderer")
+    ap.add_argument("--cards", required=True)
+    ap.add_argument("--srt")
+    ap.add_argument("--voiceover")
+    ap.add_argument("--out")
+    ap.add_argument("--audio")
+    ap.add_argument("--strict", action="store_true")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--grain", type=int, default=0,
+                    help="film grain + vignette intensity 0-20 (O-2210)")
+    ap.add_argument("--bg",
+                    help="override video bg color (e.g. 0x0a0a0d)")
+    ap.add_argument("--bgvideo",
+                    help="real-footage background video (O-20260924-1115); "
+                         "looped, scaled to frame, replaces the color source")
+    ap.add_argument("--no-cards", action="store_true",
+                    help="pure-documentary cut: AIGC notice + subs only")
+    ap.add_argument("--poster",
+                    help="after a successful render, export the cover "
+                         "frame to this PNG (first card at full opacity; "
+                         "ignored with --dry-run) - audit O-1043 R1")
+    ap.add_argument("--series-badge", action="store_true",
+                    help="visual-spec v1.2 S5.5 T2: top-right BigStream "
+                         "series badge, constant for the whole video")
+    ap.add_argument("--series-id",
+                    help="S5.5 T5 series/episode id (e.g. 'BS-001 EP.01'); "
+                         "rides the badge line, required by --series-intro")
+    ap.add_argument("--series-intro", action="store_true",
+                    help="S5.5 T1: 1.5-2s black series intro frame "
+                         "(episode id + brand line, accent color)")
+    ap.add_argument("--intro-s", type=float, default=1.5,
+                    help="T1 intro length in seconds, clamped to 1.5-2.0")
+    ap.add_argument("--h1-glow", action="store_true",
+                    help="S4.5(1): restrained 2px accent glow edge on H1")
+    ap.add_argument("--scanlines", action="store_true",
+                    help="S4.5(3): scanline ambience layer "
+                         "(5 percent, 8 percent spec cap)")
+    ap.add_argument("--sys-status", action="store_true",
+                    help="S4.5(3): per-cue machine telem
