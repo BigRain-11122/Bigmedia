@@ -1,0 +1,9 @@
+pool assert: axes[xiaoyao][morning][1] verbatim OK; morning bucket=18 rows; axes=6 + sprite 12-bucket top-level (R982 structure); card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v61 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; rotation cascade: zhixu rain/coldsnap blocked -> huaijiu market_open/ceo_order/season blocked -> qiuxin heatwave blocked -> yanhuo morning market-stall 3-link blocked -> xiaqi morning business 3-link+twin blocked -> xiaoyao morning/1 = UNIQUE honestly-pairable clean row at DAYTIME morning production (r1032_pool.txt fresh, fleet includes v61; R1031 pre-registered daytime-window candidate); quote-face word probe: 9 words see r1062_quote_face.txt (all ZERO; tenth fully-zero row of series after v53-v61; angling-action 3-link chain-forms registration + aquatic-family heterogeneous facets + meng-band heterogeneous construct + R1025 precedent honest note)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 062
+13.60 em  budget 15.33 em  margin +1.73em  single=True  2026-10-03 · 国庆假期 · 晨
+11.00 em  budget 15.33 em  margin +4.33em  single=True  「鱼竿一甩，梦醒时分」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 逍遥轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_60: 13em quote line + morning-marker date line fits 60-band (v60 xiaoyao same-band precedent); four-LINES stack; all other QUOTE-v2 params verbatim; morning-window-unlock + rotation-cascade + tenth-fully-zero-row + angling-3-link-chain-forms registration honest notes carried in meta.form
