@@ -1,5 +1,5 @@
 loop health probe: heartbeat=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\logs\probe-heartbeat.txt state=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json backlog=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\backlog.md
-summary: tick=1030, beats=1054 (done=1033 nonzero=16 skip=6 timeout=15 error=0), log=1058 entries, backlog=97 items 82 done (85% burn)
+summary: tick=1031, beats=1055 (done=1034 nonzero=16 skip=6 timeout=15 error=0), log=1059 entries, backlog=97 items 82 done (85% burn)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
@@ -122,7 +122,8 @@ summary: tick=1030, beats=1054 (done=1033 nonzero=16 skip=6 timeout=15 error=0),
 - [WARN] heartbeat-gap: beat gap 30 min (2026-10-02 21:03 -> 2026-10-02 21:33) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 26 min (2026-10-02 22:22 -> 2026-10-02 22:47) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 21 min (2026-10-02 23:59 -> 2026-10-03 00:19) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1033 > tick=1030) - the R4/R5 bug pattern
-loop health: FAIL (3 fail, 120 warn)
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 00:19 -> 2026-10-03 00:40) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1034 > tick=1031) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 121 warn)
 
 [stderr]

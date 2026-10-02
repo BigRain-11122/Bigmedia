@@ -1,0 +1,13 @@
+== 求新 clean rows (fresh vs fleet-v61): 2 ==
+== 怀旧 clean rows (fresh vs fleet-v61): 7 ==
+== 侠气 clean rows (fresh vs fleet-v61): 10 ==
+== 烟火 clean rows (fresh vs fleet-v61): 8 ==
+== 秩序 clean rows (fresh vs fleet-v61): 3 ==
+== 逍遥 clean rows (fresh vs fleet-v61): 10 ==
+== sprite clean rows (fresh vs fleet-v61): 10 ==
+VERDICT: rows passing zero-collision + all context gates = 0
+  * rain-event day      -> rain clean rows fire (zhixu/rain2, xiaqi/rain5+6+7, xiaoyao/rain17 + sprite/typhoon3 on typhoon)
+  * CEO-order day       -> ceo_order clean rows fire (huaijiu/3+10, yanhuo/7, xiaqi/2, xiaoyao/5+13, sprite/0+3+4+9+11)
+  * 2026-10-08+ (post-holiday market reopen) -> market_open clean rows fire (huaijiu/6+7+9, yanhuo/8+11+12, sprite/3)
+  * Nov+ (coldsnap season) -> coldsnap clean rows fire (zhixu/2+9, huaijiu/7, xiaqi/10, xiaoyao/1+5)
+  * summer (heatwave season) -> heatwave clean rows fire (qiuxin/0+9, huaijiu/8, yanhuo/3+12, xiaqi/6+14, xiaoyao/3+5+6, sprite/3+11)

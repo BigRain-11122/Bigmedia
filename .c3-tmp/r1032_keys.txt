@@ -1,0 +1,2 @@
+axes: 6 sub-keys: ['烟火', '秩序', '求新', '怀旧', '侠气', '逍遥']
+sprite: 12 sub-keys: ['morning', 'dusk', 'night', 'weekend', 'rain', 'typhoon', 'heatwave', 'coldsnap', 'market_open', 'market_close', 'ceo_order', 'festival']
