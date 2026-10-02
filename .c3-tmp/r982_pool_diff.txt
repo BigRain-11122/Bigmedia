@@ -1,0 +1,10 @@
+axis 侠气: 216  [ceo_order=18, coldsnap=18, dusk=18, festival=18, heatwave=18, market_close=18, market_open=18, morning=18, night=18, rain=18, typhoon=18, weekend=18]
+axis 怀旧: 216  [ceo_order=18, coldsnap=18, dusk=18, festival=18, heatwave=18, market_close=18, market_open=18, morning=18, night=18, rain=18, typhoon=18, weekend=18]
+axis 求新: 216  [ceo_order=18, coldsnap=18, dusk=18, festival=18, heatwave=18, market_close=18, market_open=18, morning=18, night=18, rain=18, typhoon=18, weekend=18]
+axis 烟火: 216  [ceo_order=18, coldsnap=18, dusk=18, festival=18, heatwave=18, market_close=18, market_open=18, morning=18, night=18, rain=18, typhoon=18, weekend=18]
+axis 秩序: 216  [ceo_order=18, coldsnap=18, dusk=18, festival=18, heatwave=18, market_close=18, market_open=18, morning=18, night=18, rain=18, typhoon=18, weekend=18]
+axis 逍遥: 216  [ceo_order=18, coldsnap=18, dusk=18, festival=18, heatwave=18, market_close=18, market_open=18, morning=18, night=18, rain=18, typhoon=18, weekend=18]
+TOTAL leaf=1296 (baseline 1440, delta -144)
+festival buckets: 
+DAILY v1-v12 used-line presence: missing=NONE all in pool
+top-level keys: axes, sprite

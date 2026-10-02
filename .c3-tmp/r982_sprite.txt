@@ -1,0 +1,17 @@
+sprite type=dict
+sprite.ceo_order list=12
+sprite.coldsnap list=12
+sprite.dusk list=12
+sprite.festival list=12
+sprite.heatwave list=12
+sprite.market_close list=12
+sprite.market_open list=12
+sprite.morning list=12
+sprite.night list=12
+sprite.rain list=12
+sprite.typhoon list=12
+sprite.weekend list=12
+sprite total leaves=144
+grand total = 1296 + 144 = 1440 (baseline 1440)
+axes names: 侠气, 怀旧, 求新, 烟火, 秩序, 逍遥
+sprite keys: ceo_order, coldsnap, dusk, festival, heatwave, market_close, market_open, morning, night, rain, typhoon, weekend

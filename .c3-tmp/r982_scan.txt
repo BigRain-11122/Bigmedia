@@ -1,0 +1,11 @@
+scan ts: 2026-10-02 13:13:03
+orders files=42 top=O-20260928-1910-bm-a.md
+ledger mtime=2026-10-02 12:09:31 hits=0 task_modes=0
+decisions mtime=2026-10-02 12:09:58 dnums=127 NEW=[]
+index.lock=False
+production=open tick=981
+CENSUS anchors top=C-00029.md c30plus=0
+daily 2026-10-02 present=True
+daily 2026-10-03 present=False
+OH-20261002-bigstream present=False
+pools leaf count=1296 (1440 baseline)
