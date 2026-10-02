@@ -1,0 +1,9 @@
+pool assert: axes[huaijiu][festival][1] verbatim OK; festival bucket=18 lines; fleet dedup OK (city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v15 + REACT-v8 same-bucket trio; line-level freshness thirteenth proof: huaijiu line1 != DAILY-v2 line0 != DAILY-v10 line3 = same-axis-different-line eleventh proof
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 880px vs subs top 970px gap +90px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 016
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+7.00  em  budget 15.33 em  margin +8.33em  single=True  「往年的灯节，
+10.00 em  budget 15.33 em  margin +5.33em  single=True  哪有今年这般热闹？」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 怀旧轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
