@@ -1,0 +1,11 @@
+r1025 quote-face word probe for candidate 老陈头又背着手溜达去了旧书摊 (huaijiu/market_close line1)
+word [老陈头] -> ZERO fleet card-face hits
+word [背着手] -> ZERO fleet card-face hits
+word [溜达] -> ZERO fleet card-face hits
+word [旧书摊] -> ZERO fleet card-face hits
+word [旧书] -> ZERO fleet card-face hits
+word [书摊] -> ZERO fleet card-face hits
+word [老陈] -> ZERO fleet card-face hits
+word [溜达去] -> ZERO fleet card-face hits
+word [背着] -> ZERO fleet card-face hits
+honest-adjacency notes: NO construct-layer adjacency this row - all 2-5 char shingles including punctuation-inclusive 2-grams ZERO fleet hits (r1025_pool.txt fresh) = THIRD fully-zero row of the series (v53 first / v54 second / this third); supply-face-switch honest note: huaijiu/night zero clean rows (r1023 fresh, r1024 cascade re-confirmed) + huaijiu/festival 18 rows ALL content collisions + huaijiu/dusk 18 rows ALL carry hits (r1025_pool.txt fresh) -> market_close evening-adjacent bucket = ONLY clean supply face for the redemption-target axis; bucket honesty: production ~22:3x literal night vs market_close scene = time-adjacent NOT time-exact (R1024 pre-registered switch candidate honestly noted); holiday-rest note: National Day holiday day 2 = exchange closed all day = market_close state is the all-day holiday state (scene-context fit); 老陈头 = pool-line verbatim archetype address (老+姓氏+头 market-elder address form) NOT a registered resident name (human-set rights zero contact, v52 船老大 same-type precedent); post-v55 rotation note: qiuxin 9 / huaijiu 9 / xiaqi 9 / yanhuo 9 / zhixu 9 / xiaoyao 8 -> xiaoyao unique minimum (v48, gap 7) = v56 redemption target + xiaoyao/dusk line6 「夕阳西下鱼也归巢了」 pre-registered backup (fresh re-probe next round; supply faces for xiaoyao: festival/dusk/market_close all scanned r1025_pool.txt - only dusk line6 clean)

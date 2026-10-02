@@ -1,0 +1,11 @@
+LINES = [
+    u"城市日签 053",
+    u"2026-10-02 · 国庆假期 · 夜",
+    u"「值夜岗上风吹凉，巡逻慢步保安康」",
+    u"——硅基城市台词池 · 秩序轴",
+]
+
+assert H2_SIZE == 50, "em ladder expected 50-band (quote 17.00em driver margin +1.40em; 60-band budget 15.33em excluded), got %d" % H2_SIZE
+
+meta = cfg["meta"]
+meta["topic"] = "MC-20261002-DAILY-v53"

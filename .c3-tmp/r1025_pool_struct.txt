@@ -1,0 +1,3 @@
+axes: 烟火,秩序,求新,怀旧,侠气,逍遥
+huaijiu buckets: morning=18,dusk=18,night=18,weekend=18,rain=18,typhoon=18,heatwave=18,coldsnap=18,market_open=18,market_close=18,ceo_order=18,festival=18
+sprite buckets: morning=12,dusk=12,night=12,weekend=12,rain=12,typhoon=12,heatwave=12,coldsnap=12,market_open=12,market_close=12,ceo_order=12,festival=12
