@@ -1,0 +1,9 @@
+pool assert: axes[xiaqi][night][4] verbatim OK; night bucket=18 rows; axes=6 + sprite top-level (R982 structure); card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v51 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; night bucket prior consumption = v51 yanhuo/13 only; rotation cascade: huaijiu redemption (v45 6-gap) blocked by zero clean rows on night face (r1022_pool.txt) -> standard NOT relaxed -> cascade to xiaqi (v46 5-gap); quote-face word probe: 船老大/河上/夜行/最是/畅快/河上夜行/最是畅快/老大 see r1022_quote_face.txt (content shingles all ZERO; sole adjacency ，这->v10/v2 demonstrative + 说，->DIGEST-v3/v1 speech-verb-comma = construct-layer honest notes, v51 two-construct-hit precedent)
+H1 96 budget 9.58em | H2 50 budget 18.40em (ladder pick, margin>=0.2em) | VERT stack bottom 686px vs subs top 970px gap +284px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 052
+13.60 em  budget 18.40 em  margin +4.80em  single=True  2026-10-02 · 国庆假期 · 夜
+16.00 em  budget 18.40 em  margin +2.40em  single=True  「船老大说，这河上夜行最是畅快」
+12.65 em  budget 18.40 em  margin +5.75em  single=True  ——硅基城市台词池 · 侠气轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_50: quote line 16.00em driver margin +2.40em (v40 exact-band precedent; 60-band budget 15.33em excluded); four-LINES stack; all other QUOTE-v2 params verbatim; night-bucket second DAILY piece + rotation-cascade (huaijiu blocked -> xiaqi) honest notes carried in meta.form

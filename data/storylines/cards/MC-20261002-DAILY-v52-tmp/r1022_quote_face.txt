@@ -1,0 +1,10 @@
+r1022 quote-face word probe for candidate 船老大说，这河上夜行最是畅快 (xiaqi/night line4)
+word [船老大] -> ZERO fleet card-face hits
+word [河上] -> ZERO fleet card-face hits
+word [夜行] -> ZERO fleet card-face hits
+word [最是] -> ZERO fleet card-face hits
+word [畅快] -> ZERO fleet card-face hits
+word [河上夜行] -> ZERO fleet card-face hits
+word [最是畅快] -> ZERO fleet card-face hits
+word [老大] -> ZERO fleet card-face hits
+honest-adjacency notes: ，这->DAILY-v10/v2 = demonstrative+comma construct layer (v51 这个->DIGEST-v11 same law, non-content); 说，->DIGEST-v3/DAILY-v1 = speech-attribution verb+comma construct layer (non-content); distinctive shingles 船老大/河上/夜行/最是/畅快/河上夜行/最是畅快/老大 ALL ZERO = zero-collision row per v1-v51 chain standard (v51 two-construct-hit accepted-row precedent); rotation cascade honest note: huaijiu redemption (v45 6-piece gap) blocked - huaijiu/night all 18 rows carry content collisions (r1022_pool.txt) -> zero-collision standard NOT relaxed -> cascade to xiaqi (v46 5-piece gap); backups: zhixu/night line7 (zero-hit, v53 redemption candidate), sprite/night line8 (zero-hit); 船老大=occupation generic title, not a registered resident name (船长 2-char collides CENSUS-v16 card face while 船老大 3-char=fleet ZERO=word-form distinctness positive case)
