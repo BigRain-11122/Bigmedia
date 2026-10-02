@@ -1,0 +1,9 @@
+pool assert: axes[zhixu][festival][15] verbatim OK; festival bucket=18 lines; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v46 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness forty-fourth proof: zhixu line15 != DAILY-v5 line4 != DAILY-v17 line12 != DAILY-v21 line6 != DAILY-v28 line9 != DAILY-v30 line2 != DAILY-v35 line11 != DAILY-v41 line17 != REACT-v8 line14 != city-spirit#47 line16 = same-axis-different-line forty-second proof; quote-face word probe: deng-long/gao-gua/zhen-xi-qi/xi-qi see r1016_quote_face.txt (distinctive collocation words gao-gua/zhen-xi-qi/xi-qi all ZERO fleet hits; deng-long 2-char construct-layer saturation honest note per R1012 two-char law); strongest-exclusion rows machine-proven: line0 nian-wei seasonal SPIRIT + lamp; line1+10 shou-gui-ju city-spirit#47 collision; line3 an-quan-di-yi v35 four-char; line5 jie-ri-li v17 opening; line7 jiao-zhun v5/v41/CENSUS-v2 triple + an-xin REACT-v8; line8 nian-wei-r seasonal + xi-qing v19; line13 re-nao five-piece saturation + nian-cai-re-nao R1004 seasonal avoidance
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 047
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+9.00  em  budget 15.33 em  margin +6.33em  single=True  「灯笼高挂真喜气」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 秩序轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_STAY_60: quote line 9.00em; 60-band budget 15.33em margin +6.33em = v21/v30 short-quote single-line band; four-LINES stack; all other QUOTE-v2 params verbatim; lamp-face return honest note carried in meta.form

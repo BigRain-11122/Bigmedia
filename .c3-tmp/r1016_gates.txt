@@ -1,0 +1,5 @@
+index.lock=False
+anchors dir NOT FOUND
+OH-20261002-bigstream present=False | oss-harvest files=-1
+daily_1002=True | daily_1003=False
+pool_path=None

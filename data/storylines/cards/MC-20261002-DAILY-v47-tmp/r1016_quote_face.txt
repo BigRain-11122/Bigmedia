@@ -1,0 +1,5 @@
+r1016 quote-face word probe for candidate 灯笼高挂真喜气
+word [灯笼] -> MC-20261002-DAILY-v1,MC-20261002-DAILY-v14,MC-20261002-DAILY-v21,MC-20261002-DAILY-v23,MC-20261002-DAILY-v31,MC-20261002-DAILY-v37,MC-20261002-DAILY-v7
+word [高挂] -> ZERO fleet card-face hits
+word [真喜气] -> ZERO fleet card-face hits
+word [喜气] -> ZERO fleet card-face hits
