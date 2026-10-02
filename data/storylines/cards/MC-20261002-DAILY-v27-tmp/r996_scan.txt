@@ -1,0 +1,14 @@
+tick 995 | production open | ts 2026-10-02 16:17:59
+decisions mtime 10-02 12:09:58
+NEW DNUMS: NONE | held: 127 cur: 127
+ledger mtime 10-02 15:18:25
+BS-relevant lines total: 41
+LED: | P-2026-09-29-12 | 09-29 | **机队全面并行令（P1·CEO 令 O-2026-0929-029「机队也要全面开工，不是你一台机器忙就行，能并行的任务全面并行」·@Biggame @BigMoney @BigLife @BigStream @BigCompute @Flu
+LED: | P-2026-09-29-13 | 09-29 | **坚决清理司域派单（P1·CEO 令 O-2026-0929-033·resource-chain §三§11 首批执法）**：①**@Biggame**=a.`gaming/MiniGame/projects/P3D_Spike` 16.1
+LED: - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432MB/FluxVerse +220MB（M1 建城+编年史在飞）/MiniGame +46MB（R3 
+orders top: O-20260928-1910-bm-a.md | count: 42
+index.lock: False
+CENSUS C-00030: False
+10-03 brief: False
+10-02 brief: True
+OH bigstream files: ['OH-20260926-bigstream.md', 'OH-20260929-bigstream.md']
