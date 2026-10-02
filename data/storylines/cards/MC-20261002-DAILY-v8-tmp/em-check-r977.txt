@@ -1,0 +1,9 @@
+pool assert: axes[xiaqi][festival][13] verbatim OK; festival bucket=18 lines; fleet dedup OK (city-spirit + all cards.json incl DAILY-v1..v7, line-level freshness fifth proof: xiaqi line13 != DAILY-v3 line5
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 880px vs subs top 970px gap +90px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 008
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+10.00 em  budget 15.33 em  margin +5.33em  single=True  「快把那笑声再大些，
+7.00  em  budget 15.33 em  margin +8.33em  single=True  灯也跟着亮。」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 侠气轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
