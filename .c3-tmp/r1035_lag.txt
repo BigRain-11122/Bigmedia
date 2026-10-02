@@ -1,0 +1,25 @@
+total beats=1078 done beats=1057
+== tail 18 raw beats ==
+2026-10-03 02:07:48  round done exit=0
+2026-10-03 02:14:38  round done exit=0
+2026-10-03 02:24:42  round done exit=0
+2026-10-03 02:35:57  round done exit=0
+2026-10-03 02:45:22  round done exit=0
+2026-10-03 02:54:43  round done exit=0
+2026-10-03 03:06:23  round done exit=0
+2026-10-03 03:15:17  round done exit=0
+2026-10-03 03:25:13  round done exit=0
+2026-10-03 03:34:25  round done exit=0
+2026-10-03 03:45:26  round done exit=0
+2026-10-03 03:58:28  round done exit=0
+2026-10-03 04:05:36  round done exit=0
+2026-10-03 04:27:33  round done exit=0
+2026-10-03 04:37:36  round done exit=0
+2026-10-03 04:52:10  round done exit=0
+2026-10-03 05:06:13  round done exit=0
+2026-10-03 05:13:35  round done exit=0
+== done beats since 2026-10-03 05:00 ==
+2026-10-03 05:06:13  round done exit=0
+2026-10-03 05:13:35  round done exit=0
+== done beats 2026-10-03 00:00..05:00 count + tail ==
+count=23

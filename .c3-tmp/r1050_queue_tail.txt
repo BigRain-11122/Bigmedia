@@ -1,0 +1,10 @@
+SEC: ## A 查漏补缺池（缺口驱动）
+SEC: ## B 对标学习池（看别人的秀的·仔细分析）
+SEC: ## C 技能学习池（学习各种技能）
+ROW: | C1 | ffmpeg 高级剪辑技能（速度曲线/字幕动态滤镜/转场品质参数） | R-E/R-A 引擎升级备件 | 中 | **学习腿 done 2026-09-25**（R206：`research/ffmpeg-editing-craft-v1.md`——速度曲线 PoC 帧精确实证+工程坑三则+三面技术定谳；**引擎集成腿拆细在案 §4**·下批生产件前认领·素材窗解
+ROW: | C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | **done 2026-09-24**（R169 四配置对照+medium 探针：模型档位=主因子 13.07%→5.53%·参数面噪声级·工具落三旋钮+S2 QC recipe） |
+ROW: | C3 | edge-tts 情感参数实验（SSML/rate-pitch 曲线=人味链 v2 输入） | C-21 升级备件 | 中 | **done 2026-09-26**（R317：`research/edge-tts-emotion-dial-v1.md` 五轴 16 读数——PROFILES 双轴落地实证〔hook 慢低/punch 快高〕+**volume 轴=
+ROW: | C4 | Ollama 专家席提示词迭代（评审质量=S 席分数校准） | expert-roster 数据件升级 | 常态 | **首迭代 done 2026-09-26**（R318：v2 校准层三律落地——S2/S3 评分制落 dept-review §2 法〔基线 10·实锤扣 1-2·≥9 过门·红线 0 分〕+全席实锤律〔逐字引文·通用句无效〕+未测面声明〔假绿灯
+SEC: ## D 提案面（创新提案轨·P-2026-09-28-02 ①·司内提案面正典位）
+SEC: ## E 批活池（本地可执行批·C-20260929-02 B 款 lane 落位·每司常备 ≥2 条·O-1820 三验：假设/消费面/consumer_plan·池空=违例）
+SEC: ## burn 记录

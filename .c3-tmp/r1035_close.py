@@ -1,112 +1,60 @@
-# -*- coding: utf-8 -*-
-"""R1035 declared-idle close-out: state.json + status-export.json refresh.
-No commit (window batch law os-protocol s6, first idle round of window).
-"""
-import json, io, os, shutil, datetime
+import json, os, re, shutil
+from datetime import datetime
 
-ROOT = r'C:\Users\sjs20\Desktop\FluxGroup\media\BigStream'
-now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-hm = datetime.datetime.now().strftime('%H:%M') + 'x'
+ROOT = r"C:\Users\sjs20\Desktop\FluxGroup\media\BigStream"
 
-SP = r'C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\state.json'
-EP = r'C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\docs\status-export.json'
+now = datetime.now()
+ts = now.strftime("%Y-%m-%d %H:%M:%S")
+ts_min = now.strftime("%H:%M") + "x"
 
-# ---------- 1) state.json ----------
-st = json.load(io.open(SP, encoding='utf-8'))
-assert st['tick'] == 1034, 'tick drift: %s' % st['tick']
+LOG_LINE = (
+    "2026-10-03 {tsm} R1054: declared-idle 声明轮（空轮判定路径④·五静+探针基线平+四查尽·声明轮并窗第五轮=R1053 后 5/6·零 commit 盘面即真相·os-protocol §6 窗满 6 轮/跨日边界/任一异常/实活轮出现即收）——"
+    "①轮首五查静（r1035_scan.py fresh 实跑：orders 42 件顶=O-20260928-1910 零新令〔mtime 09-28 19:12 未动〕/ledger @BigStream 30 行零新派工行〔尾部两行=P-2026-09-29-13+09-27 值守轮皆旧锚·r1035_scan.txt 证据〕/decisions dnum 内容寻址差集 NONE=水位 131 维持〔D-20260930-19 水位差集制·D-13 SLA 无触发〕+派工通告板零新涉司行〔D-20261003-01~04=R1031 全收讫态〕/无 index.lock 实测 False/production=open 自愈核 tick1053/日报 10-03 在案〔R1030 补产·一份为真相〕·10-04 日报缺=日界件/W40 周审在案〔R576〕/GB 闸 10-08 非到期〔§④ 最近刷新=10-01 v1.1〕/OH-20261002 窗 3 切片义务满·窗 4=10-05 21:40 未开/树态=M state.json+M .c3-tmp 探针输出+?? r1050-1053/r1035 证据件=并窗自记账预期态零 bm-a 迹象）；"
+    "②**R1049 根因注执法=queue 常态项独立复核**（r1035_qhead.py fresh 实跑 r1035_qhead.txt：§A A1-A5 全 done/§B B3 W40 期 done R1049·W41 期=10-10 周六·B5 账号期门控=保护态豁免面/§C C1-C4 全 done〔C4 常态项=S2/S3 校验位随进链件在役零独立可领项〕/§D P-1 终判毕〔判负留痕〕·W40 提案窗已交/§E E30 DAILY=供给窗等待态〔R1032 全池机核盘点 50 干净行全数 context 门控在案·r1032_pool.txt 承继〕+E31 REACT-v9=10-04 窗时间门控）→四查尽=无可领活·清单空·提案已交·保护态豁免面在案（E30 供给窗/E31 时间闸/CENSUS C-00030 supply-gated/B5 账号期/SC-003 素材窗 blocked）；"
+    "③三探针=r1021_probes.py 复用实跑：board 0 FAIL（5 ideas 10 drafts 5 in production）/readiness 3 阻塞皆外部 CEO 面（账号批次①+M4 GATE+#17）0 发现/loop_health 3 FAIL+123 WARN 皆在案史实——**account-lag 4 读数定谳**（r1035_lag.py 对账 r1035_lag.txt：beats 尾 18 条与 log 收账 ts 逐条一一对应〔02:07→R1037…05:13:35→R1053〕·10-03 当日 done beats 25 条全对应收账·gap=4=R1033 前历史断洞族净累计〔R651/R666/R689/R712/R871 家族〕非本轮新现〕+2 outage 09-26/09-28 已裁定不重复触发+log-order/heartbeat-gap WARN 级近似分钟叙事卫生不改写；"
+    "④产品优先律对位=本轮 0 分位如实记〔纯记账 2 处（state log+export 刷）≤5 ✓·0 分=声明轮盘面即真相非空转判负〔R1031 最后 2 分位实物 F-146 距今 ~5h<24h 判负线〕〕·tokens:local=0（纯脚本探针零本地模型调用·P-54⑤ 计量律如实记）·HQ-FEEDBACK 不写（当日集团层零本司 open 项·D-20261003 批 R1031 全收讫·03:07 夜班点名面零本司项·零膨胀）——"
+    "waiting: time-gated+supply-gated lanes held（卡点=10-04 日界 E31 REACT-v9 F-147〔10-04 日报先补产·连续第二窗判负=池扩容呈报〕/#94 记忆 ≤10KB 梳理/10-05 W41 周轮件〔周报+自驱提案窗+CLOUD_LINE 首测〕/OSS 窗 4=10-05 21:40/10-08 GB 刷+E30 解锁窗〔rain/CEO 令日/10-08 复市/Nov+ 寒潮〕均未触发）ETA 2026-10-04 00:00〔最近日界·10-04 窗三件开领·batch close 备触发点〕·声明轮并窗计数=5/6〔R1055=6/6 窗满即 batch close commit 区间 R1050-R1055；跨 10-04 日界即先行收〕"
+).format(tsm=ts_min)
 
-LOG_R1035 = (
-    '%s R1035: declared-idle 声明轮（空轮判定路径④·五静+探针绿+四查尽·P-2026-09-28-02 ②·'
-    '声明轮并窗第一轮=零 commit 盘面即真相·os-protocol §6 窗满 6 轮/跨日边界/任一异常/实活轮出现即收）——'
-    '①轮首五查静（fast_check.py 实跑 r1035_fc.txt：orders 42 件顶=O-20260928-1910 零新令/'
-    'ledger mtime 10-02 15:18:25==冻结基线零新派工行〔@hits 41 行=已消费面承继〕/'
-    'decisions mtime 00:12:44==R1031 收讫基线·dnum 内容寻址差集 NEW_DNUMS=[]·水位 131 维持'
-    '〔D-20260930-19 水位差集制·D-13 SLA 无触发〕+派工通告板涉司行复核零新派工/无 index.lock/'
-    'production=open 自愈核 tick1034/日报 10-03 在案〔R1030 补产·一份为真相〕/W40 周审在案/GB 闸 10-08 非到期）'
-    '+三探针=r1021_probes.py+loop_health.py 复用实跑：board 0 FAIL（5 ideas 10 drafts 5 in production）/'
-    'readiness 3 阻塞皆外部 CEO 面（账号批次①+M4 GATE 6/10+#17）0 发现/'
-    'loop_health 3 FAIL+122 WARN 皆在案史实类（两 outage 09-26/09-28 已裁定不重复触发+account-lag done beats 1037>tick=在轮 beat 瞬态残差 R981 定谳·tick1035 收账推进口径·r1035_lh_tail.txt 全读数补全）；'
-    '②四查尽+供给门全量 fresh 复核（R666 盲区教训执行=触发律重 derive 非仅扫 gated 清单·r1035_supply_gates.txt+r1035_pool_delta.txt 证据件）：'
-    'backlog 97 项 82 done 15 开行逐项判=E31 REACT-v9=10-04 日闸（10-03 窗 R1030 判负在案）/'
-    '#94 记忆梳理=10-04 窗/W41=10-05/OSS #70 窗 4=10-05 21:40（窗 3 切片 1-3 义务满）/'
-    'E30 DAILY=R1032 全零判负保护态（解锁窗 rain/CEO 令日/10-08 复市/Nov+ 寒潮）/'
-    'CENSUS C-00030 absent 供给闸闭/DIGEST 零触发（ledger 冻结）/LC 拆条 20/20 收官/QUOTE 六轴毕/BS 稿集毕/SC-003-01 素材窗 blocked/'
-    '#86 台词池扩容触发 fresh 核=未命中（**pools.json mtime 10-03 01:06 变更假信号定谳**：内容 1440 行与 HEAD 提交态一致'
-    '〔BigLife 仓 git log f5a8139e 09-27 后零 commit+status 净=同内容原子保存触碰非扩容·'
-    'phys 1625 行=JSON 物理行含结构行的计数伪差勘正·r1035_pool_delta.txt〕）/'
-    'interchat 22 行静止/novel-comic-drafts 盘面静止（ch3-ch5 无 v4·ch6 未落=leg③ 自动继承零触发）/'
-    'E4-ASR 回填债=0（F-140~F-146 未回填面 grep 零命中）/'
-    'BS-005 复活条款=Biggame 总控窗枚举不在位维持门控/'
-    'queue §A 全 done·B5 账号期保护态·C4 零进链件零触发/W40 提案 P-1 已交（pilot-closed）'
-    '→真无活可拉+保护态豁免面在案（R1032 全 lane 门控态承继·结构性 blocked 非违规闲置·造活凑数=空转第四形态禁）=一行声明收轮合法；'
-    '③记账预算=纯记账 2 处（state log+export 刷）≤5 ✓·tokens:local=0（纯脚本探针零本地模型调用·P-54⑤ 计量律如实记）·'
-    'HQ-FEEDBACK 不写（当日集团层零本司 open 项·零膨胀）；'
-    '④下轮解锁面=10-04 窗三件（10-04 日报先补产→E31 REACT-v9 热点窗全链 F-147〔连续第二窗判负=池扩容呈报位〕+'
-    '#94 记忆 ≤10KB 梳理窗）+10-05 W41 周轮件+10-05 21:40 OSS 窗 4+10-08 GB 刷+E30 market 复市解锁'
-) % ('2026-10-03 ' + hm)
+TASK = LOG_LINE.split("R1054: ", 1)[1][:60]
 
-FOCUS_R1035 = (
-    'R1035: declared-idle 声明轮（全 lane 供给门控保护态·五静+探针绿+四查尽·R666 教训触发律重 derive 复核毕·'
-    'pools mtime 假信号定谳未扩容）——下轮 R1036 可领序：①若跨 10-04 日界=10-04 日报先补产→E31 REACT-v9 热点窗全链 F-147'
-    '（连续第二窗判负=池扩容呈报）②#94 记忆 ≤10KB 梳理窗（10-04）③W41 周轮件（10-05）④OSS w4=10-05 21:40 开窗即领·'
-    'E30 DAILY 保护态维持（解锁窗 rain/CEO 令日/10-08 复市/Nov+ 寒潮·池扩容触发=#86 a 腿三批）·声明轮并窗计数=1/6'
-)
+sp = os.path.join(ROOT, "src", "os", "state.json")
+with open(sp, encoding="utf-8") as f:
+    st = json.load(f)
+assert st["tick"] == 1053, "unexpected tick %s" % st["tick"]
+st["tick"] = 1054
+st["ts"] = ts
+st["task"] = TASK
+st["log"].append(LOG_LINE)
+with open(sp, "w", encoding="utf-8") as f:
+    json.dump(st, f, ensure_ascii=False, indent=1)
 
-TASK_60 = LOG_R1035.split('R1035: ', 1)[1][:60]
-
-st['tick'] = 1035
-st['focus'] = FOCUS_R1035
-st['log'].append(LOG_R1035)
-st['ts'] = now
-st['task'] = TASK_60
-io.open(SP, 'w', encoding='utf-8').write(json.dumps(st, ensure_ascii=False, indent=2) + '\n')
-
-# ---------- 2) status-export.json ----------
-ex = json.load(io.open(EP, encoding='utf-8'))
-ex['export_ts'] = now
-
-ex['outs'][0][1] = (
-    'tick 1035，R1035 declared-idle 声明轮（空轮判定路径④·P-2026-09-28-02 ②）：'
-    '轮首五查静（orders 42 顶=O-20260928-1910 零新令/ledger mtime 10-02 15:18 冻结零新派工/'
-    'decisions 水位 131 零差集/production=open/日报 10-03+W40 周审在案）'
-    '+三探针全绿（board 0 FAIL/readiness 3 阻塞皆外部 CEO 面 0 发现/loop_health 3 FAIL+122 WARN 皆在案史实）'
-    '+四查尽=全 lane 供给门 fresh 复核（R666 盲区教训=触发律重 derive）：'
-    'E30 DAILY=R1032 全零判负保护态（池内容 git 实证未扩容·01:06 mtime=同内容原子保存触碰假信号定谳）/'
-    'E31 REACT-v9=10-04 日闸/#94=10-04/W41=10-05/OSS 窗 4=10-05 21:40/CENSUS C-00030 absent/'
-    'DIGEST 零触发/LC 20/20 毕/台词池·interchat·novel·comic·drafts 全静止/BS-005 复活窗不在位/'
-    'E4-ASR 回填债 0/queue §A 毕·B5 账号期保护态·C4 零触发/W40 提案 P-1 已交'
-    '→真无活可拉·保护态豁免面在案（结构性 blocked 非违规闲置）=一行声明收轮合法·'
-    'commit 按声明轮并窗律（窗满 6 轮/跨日/异常/实活即收·本轮=窗第 1 轮零 commit）。'
-    '下轮解锁面：10-04=E31 REACT-v9（10-04 日报先补产·连续第二窗判负=池扩容呈报）+#94 记忆梳理'
-    '+10-05 W41+10-08 GB/E30 复市。真发布=blocked-on-CEO 账号物理件·发布锁=M5 不变'
-)
-
-ex['results'].append([
-    '1035',
-    ('2026-10-03 %s R1035: declared-idle 声明轮（空轮判定路径④·五静+探针绿+四查尽·'
-     '供给门全量 fresh 复核=pools mtime 假信号定谳未扩容·全 lane 门控保护态承继·'
-     '声明轮并窗第一轮零 commit）——详见 state.json log R1035 行') % hm
-])
-
-ex['live'] = [
-    ['当前活：R1035 declared-idle 声明轮（全 lane 供给门控保护态·等待 10-04 解锁窗·2026-10-03 %s）' % hm],
-    ['最近实物：DAILY v61 城市日签成品卡 F-146（2026-10-03 00:44）+渲染器字形覆盖门 ADOPT R1033（01:15·306 全回归绿）+OH-20261002 切片 3（01:30）'],
-    ['下个里程碑：10-04 窗三件=10-04 日报先补产→E31 REACT-v9 热点窗全链 F-147+#94 记忆 ≤10KB 梳理+10-05 W41 周轮件——窗 ≤48h（10-04）']
+ep = os.path.join(ROOT, "docs", "status-export.json")
+with open(ep, encoding="utf-8") as f:
+    ex = json.load(f)
+ex["export_ts"] = ts
+res_row = [
+    "1054",
+    "2026-10-03 %s R1054: declared-idle 声明轮（空轮判定路径④·五静+探针基线平+四查尽·声明轮并窗第五轮 5/6 零 commit：R1049 根因注执法=queue 常态项独立复核全 gated+account-lag=4 历史断洞族定谳〔10-03 beats↔log 逐条对账零新增〕·waiting 10-04 日界三件 ETA 10-04 00:00）——详见 state.json log R1054 行"
+    % ts_min,
 ]
+ex["results"].append(res_row)
+ex["live"] = [
+    ["当前活：R1054 declared-idle 声明轮（并窗 5/6·全 lane 时间/供给门控维持·queue 常态项复核全 gated·2026-10-03 %s）" % ts_min],
+    ["最近实物：DAILY v61 城市日签成品卡 F-146（2026-10-03 00:44·最近 2 分位实物）+渲染器字形覆盖门 ADOPT R1033（01:15·306 全回归绿）+B3-W40 B站热榜结构对标研究件 v1.1（2026-10-03 04:26x·研究件 0 分位如实计）"],
+    ["下个里程碑：10-04 窗三件=10-04 日报先补产→E31 REACT-v9 热点窗全链 F-147+#94 记忆 ≤10KB 梳理+10-05 W41 周轮件（周报+自驱提案窗+CLOUD_LINE 首测）——窗 ≤48h（10-04）"],
+]
+with open(ep, "w", encoding="utf-8") as f:
+    json.dump(ex, f, ensure_ascii=False, indent=1)
 
-io.open(EP, 'w', encoding='utf-8').write(json.dumps(ex, ensure_ascii=False, indent=1) + '\n')
+# move r1035 evidence files to .c3-tmp per declaration-window convention
+c3 = os.path.join(ROOT, ".c3-tmp")
+moved = []
+for name in ["r1035_scan.py", "r1035_scan.txt", "r1035_probe2.py", "r1035_probe2.txt",
+             "r1035_qhead.py", "r1035_qhead.txt", "r1035_lag.py", "r1035_lag.txt"]:
+    src = os.path.join(ROOT, name)
+    if os.path.exists(src):
+        shutil.move(src, os.path.join(c3, name))
+        moved.append(name)
 
-# ---------- 3) evidence file housekeeping ----------
-moves = [('.r1035_probe.py', 'r1035_probe.py'), ('r1035_probe_fast.txt', 'r1035_probe_fast.txt')]
-for src, dst in moves:
-    p = os.path.join(ROOT, src)
-    if os.path.exists(p):
-        shutil.move(p, os.path.join(ROOT, '.c3-tmp', dst))
-junk = ['r1035_fast_check_out.txt', 'r1035_fc_utf8.txt', 'r1035_lh_utf8.txt',
-        'r1035_loop_health_out.txt', 'r1035_fc.txt']
-for f in junk:
-    p = os.path.join(ROOT, '.c3-tmp', f)
-    if os.path.exists(p):
-        os.remove(p)
-
-print('close ok: tick=1035 ts=%s task=%r' % (now, TASK_60))
+print("CLOSE OK tick=1054 ts=%s moved=%d" % (ts, len(moved)))
