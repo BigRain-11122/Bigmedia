@@ -1,0 +1,53 @@
+scan_ts: 2026-10-02 16:44:29
+orders_count: 42 | top: O-20260928-1910-bm-a.md (mtime 09-28 19:12:33)
+ledger_mtime: 2026-10-02 15:18:25
+  ledger @BigStream rows: 30
+  ledger @七线全司 rows: 1
+  ledger @全司 rows: 9
+  ledger @六司 rows: 3
+  ledger @八线全量 rows: 2
+ledger_total_at_rows: 45
+decisions_mtime: 2026-10-02 12:09:58
+decisions_dnum_set: 127 | watermark: 127
+NEW_DNUMS: NONE
+--- 派工通告板 head ---
+  ## 派工通告板（2026-09-30 设·D-20260930-13②）
+  
+  > 用途：**集团→司的投递面**（司们本已读本文件）。各司每轮对号本司行即可，零新增制度。
+  > 纪律（D-13①）：任一新行落账后，涉本司司须在 **≤2 个轮周期（≤20min）** 内 ack 或驳回；明定"只在 00:00 查"的司（BigLife）须增班间插队行检查。
+  > 复投律：12:00 班之后派工的行，司若当班未见＝正常，须在**下一班（00:00）首轮**处理并回执。
+  
+  | 行号 | 涉司 | 一句话 | 验收窗 | 状态 |
+  |---|---|---|---|---|
+index_lock: False
+daily_brief_1002: True
+census_C00030: False
+oh_20261002: False
+production: open | tick: 997
+--- probe board (rc=0) ---
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+--- probe readiness (rc=1) ---
+> 口径：距离首发＝批次①账号亮灯＋10 稿 M4 门全绿＋测试件纪律零发现；未上线＝未测量；阻塞≠失败（发布前诚实态）。
+| 20260923-BS-001-视频号-v1.md | PASS |
+| 20260923-BS-002-视频号-v1.md | PASS |
+| 20260923-BS-003-视频号-v1.md | PASS |
+| 20260923-BS-004-视频号-v1.md | PASS |
+## 距离首发的阻塞清单（3 项）
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+## 探针发现项（findings·机器纪律核验）
+--- probe loop_health (rc=1) ---
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-01 03:26 -> 2026-10-01 03:50) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-01 03:50 -> 2026-10-01 04:14) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 28 min (2026-10-01 04:14 -> 2026-10-01 04:41) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 25 min (2026-10-01 05:14 -> 2026-10-01 05:40) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-01 05:40 -> 2026-10-01 06:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-01 16:25 -> 2026-10-01 16:47) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-01 23:50 -> 2026-10-02 00:11) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-02 00:25 -> 2026-10-02 00:49) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-02 10:13 -> 2026-10-02 10:35) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-02 12:13 -> 2026-10-02 12:33) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 28 min (2026-10-02 13:52 -> 2026-10-02 14:19) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-02 15:02 -> 2026-10-02 15:22) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1000 > tick=997) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 116 warn)
