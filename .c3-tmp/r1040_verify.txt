@@ -1,0 +1,6 @@
+tick=1040
+ts=2026-10-03 02:35:11
+task=declared-idle 声明轮（空轮判定路径④·五静+探针绿+四查尽·声明轮并窗第六轮=6/6 窗满→batch c
+logline=2026-10-03 02:35x R1040: declared-idle 声明轮（空轮判定路径④·五静+探针绿+四查尽·声明轮并窗第六轮=6/6 窗满→batch close commit 区间 R1035-R1040·os-protocol §6 并窗律）——①轮首五查静（fast_check.py+r1021_probes.py 复用实跑：orders 42 件顶=O-20260928-1...
+export_ts=2026-10-03 02:35:11
+live0=当前活：R1040 declared-idle 声明轮并窗 6/6=batch close R1035-R1040（全 lane 供给门控保护态·等待 10-04 解锁窗·2026-10-03 02:35x）
