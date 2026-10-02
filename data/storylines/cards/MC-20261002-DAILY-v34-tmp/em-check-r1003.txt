@@ -1,0 +1,9 @@
+pool assert: axes[xiaqi][festival][9] verbatim OK; festival bucket=18 lines; fleet dedup OK (city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v33 + REACT-v8 same-bucket trio + city-spirit v1.2 festival trio; line-level freshness thirty-first proof: xiaqi line9 != DAILY-v3 line5 != DAILY-v8 line13 != DAILY-v13 line2 != DAILY-v20 line1 != DAILY-v26 line10 != city-spirit v1.2 line0 = same-axis-different-line twenty-ninth proof
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 034
+11.05 em  budget 15.33 em  margin +4.28em  single=True  2026-10-02 · 国庆假期
+14.00 em  budget 15.33 em  margin +1.33em  single=True  「街坊邻里都来串串门，热闹」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 侠气轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_STEP_UP: quote line 14.00em fits 15.33em budget at 60 with margin +1.33em -> returns to notch 60 (four-line stack VERT +229px = v17/v22 same-structure band; step-up from v33 46-notch short-line step-down, ladder length-driven law); zero-new-template law maintained on all other QUOTE-v2 params

@@ -1,0 +1,16 @@
+line0 cost=6.15em | 城市日签 034
+line1 cost=11.05em | 2026-10-02 · 国庆假期
+line2 cost=14.00em | 「街坊邻里都来串串门，热闹」
+line3 cost=12.65em | ——硅基城市台词池 · 侠气轴
+subs cost=19.00em budget at 40 = 23.00em
+notch 60: all_fit=True | budget=15.33em | VERT bottom=741 gap=+229
+notch 50: all_fit=True | budget=18.40em | VERT bottom=686 gap=+284
+notch 46: all_fit=True | budget=20.00em | VERT bottom=663 gap=+307
+notch 44: all_fit=True | budget=20.91em | VERT bottom=652 gap=+318
+notch 40: all_fit=True | budget=23.00em | VERT bottom=630 gap=+340
+notch 36: all_fit=True | budget=25.56em | VERT bottom=608 gap=+362
+notch 32: all_fit=True | budget=28.75em | VERT bottom=586 gap=+384
+notch 28: all_fit=True | budget=32.86em | VERT bottom=563 gap=+407
+notch 26: all_fit=True | budget=35.38em | VERT bottom=552 gap=+418
+notch 24: all_fit=True | budget=38.33em | VERT bottom=541 gap=+429
+PICK=60
