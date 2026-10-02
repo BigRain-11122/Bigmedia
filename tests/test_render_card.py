@@ -20,6 +20,14 @@ sys.path.insert(0, str(REPO / "src" / "render"))
 import render_card_video as rcv  # noqa: E402
 
 
+def _fonttools_available():
+    try:
+        import fontTools  # noqa: F401
+        return True
+    except ImportError:
+        return False
+
+
 def cards_cfg(notice="AI generated content", cards=None):
     return {
         "video": {"width": 1080, "height": 1920, "fps": 30, "bg": "black"},
@@ -138,6 +146,50 @@ class TestLoadCards(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             with self.assertRaises(ValueError):
                 rcv.load_cards(self._write(d, cfg))
+
+    # --- glyph coverage gate (R1033 OSS w3 slice-2 adopt) ---
+    MSYH = "C:/Windows/Fonts/msyh.ttc"
+
+    def _msyh_cfg(self, cards):
+        cfg = cards_cfg(cards=cards)
+        cfg["font"]["file"] = self.MSYH
+        return cfg
+
+    def test_glyph_gate_fake_font_skips(self):
+        # fake font paths (unit fixtures) leave the gate silently off;
+        # main() refuses missing font files before any real render runs
+        with tempfile.TemporaryDirectory() as d:
+            cfg = rcv.load_cards(self._write(d, cards_cfg()))
+        self.assertEqual(2, len(cfg["cards"]))
+
+    @unittest.skipUnless(Path("C:/Windows/Fonts/msyh.ttc").exists()
+                         and _fonttools_available(),
+                         "needs msyh system font + fontTools")
+    def test_glyph_gate_passes_common_cjk(self):
+        # production corpus audit (R1033): rendered faces hold
+        # 0 chars missing from msyh - a normal quote line must pass
+        cfg = self._msyh_cfg([
+            {"start": 0, "end": 5,
+             "lines": ["\u884c\u60c5\u518d\u7eff\uff0c\u6c64\u662f\u70ed\u7684\u3002",
+                       "[AIGC\u00b7AI \u751f\u6210\u5185\u5bb9]"]},
+        ])
+        with tempfile.TemporaryDirectory() as d:
+            rcv.load_cards(self._write(d, cfg))  # must not raise
+
+    @unittest.skipUnless(Path("C:/Windows/Fonts/msyh.ttc").exists()
+                         and _fonttools_available(),
+                         "needs msyh system font + fontTools")
+    def test_glyph_gate_rejects_emoji(self):
+        # U+1F914 confirmed missing from msyh cmap (R1033 audit);
+        # REACT hot titles land verbatim -> gate must fail before render
+        cfg = self._msyh_cfg([
+            {"start": 0, "end": 5, "lines": ["\U0001F914 \u70ed\u70b9"]},
+        ])
+        with tempfile.TemporaryDirectory() as d:
+            with self.assertRaises(ValueError) as cm:
+                rcv.load_cards(self._write(d, cfg))
+        self.assertIn("glyph coverage FAIL", str(cm.exception))
+        self.assertIn("1F914", str(cm.exception))
 
 
 class TestWrap(unittest.TestCase):

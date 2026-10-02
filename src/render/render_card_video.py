@@ -88,6 +88,72 @@ def parse_srt(path):
     return cues
 
 
+def _glyph_cmap(path):
+    """Best unicode cmap of a font file (face 0 for .ttc collections).
+
+    None = file absent/unreadable. main() refuses missing font files
+    before rendering, so a None here only means the gate has nothing
+    real to check (unit-test fixtures use fake font paths)."""
+    p = Path(path)
+    if not p.exists():
+        return None
+    try:
+        from fontTools.ttLib import TTCollection, TTFont
+        if p.suffix.lower() == ".ttc":
+            return TTCollection(str(p)).fonts[0].getBestCmap()
+        return TTFont(str(p)).getBestCmap()
+    except Exception:
+        return None
+
+
+def _check_glyph_coverage(cfg):
+    """Refuse to render card-face text the declared fonts cannot draw.
+
+    A codepoint missing from the font cmap burns a tofu box into the
+    frame. The only externally-sourced rendered face is the REACT
+    hot-title verbatim line, and its selectable pool has been
+    machine-audited to contain emoji (U+26A1/U+1F914 in a daily brief)
+    that the msyh family lacks (R1033 OSS w3 slice-2 evidence; rendered
+    faces so far: 0 missing across 85+ pieces). Failing here is cheaper
+    than relying on the post-render M2 frame check to catch tofu.
+    lines[0] renders in font.h1_font when set (build_render_plan),
+    lines[1:] and the AIGC notice render in font.file."""
+    try:
+        import fontTools  # noqa: F401
+    except ImportError:
+        print("WARN glyph coverage gate skipped: fontTools not installed",
+              file=sys.stderr)
+        return
+    fonts = cfg["font"]
+    regular = _glyph_cmap(fonts["file"])
+    h1_path = str(fonts.get("h1_font", "") or "")
+    bold = _glyph_cmap(h1_path) if h1_path else regular
+    if regular is None and bold is None:
+        return
+    faces = []
+    for i, c in enumerate(cfg["cards"], 1):
+        lines = [str(x).strip() for x in c.get("lines", []) if str(x).strip()]
+        if not lines:
+            continue
+        faces.append(("card %d line 1" % i, lines[0], bold))
+        faces.append(("card %d body" % i, "\n".join(lines[1:]), regular))
+    faces.append(("aigc_notice", str(cfg.get("aigc_notice", "")), regular))
+    problems = []
+    for where, text, cmap_ in faces:
+        if cmap_ is None:
+            continue
+        miss = sorted({ch for ch in text
+                       if not ch.isspace() and ord(ch) not in cmap_})
+        if miss:
+            problems.append("%s missing U+%s" % (
+                where, ",".join("%04X" % ord(ch) for ch in miss)))
+    if problems:
+        raise ValueError(
+            "glyph coverage FAIL - declared font(s) cannot render these "
+            "codepoints (tofu risk); fix source text or add covering "
+            "font: %s" % "; ".join(problems))
+
+
 def load_cards(path):
     """Load + validate the card timeline template. Red-line gate inside."""
     cfg = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -121,6 +187,7 @@ def load_cards(path):
         if not isinstance(c["lines"], list) or not any(str(x).strip() for x in c["lines"]):
             raise ValueError("card %d: lines must be a non-empty list" % i)
         prev_end = e
+    _check_glyph_coverage(cfg)
     return cfg
 
 

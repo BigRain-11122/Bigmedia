@@ -1,0 +1,7 @@
+K1 fonttools/fonttools: license=MIT stars=5272 forks=545 open_issues=398 pushed_at=2026-10-02T12:43:29Z archived=False lang=Python desc='A library to manipulate font files from Python.'
+K2 search 'font glyph coverage check': total=4
+  - jettbrains/-L- | GPL-3.0 | stars=160 | push=2021-08-18T13:41:54Z | 'W3C Strategic Highlights  September 2019  This report was prepared for the September 2019 '
+  - blueset/font-coverage | None | stars=0 | push=2026-01-12T05:01:04Z | 'A web tool to check codepoint / glyph coverages of a font'
+  - danieldreke/pdf-font-inspector | MIT | stars=0 | push=2026-06-21T13:22:53Z | 'Inspect embedded fonts in PDF files — browse font subsets, view glyphs, check character co'
+  - grokify/fontscan | MIT | stars=0 | push=2026-09-11T22:23:38Z | 'A Go library and CLI for checking font glyph coverage to prevent Pandoc/LaTeX missing char'
+K2b search 'subtitle missing glyph tofu': total=0
