@@ -1,0 +1,11 @@
+r1026 quote-face word probe for candidate 夕阳西下鱼也归巢了 (xiaoyao/dusk line6)
+word [夕阳] -> ZERO fleet card-face hits
+word [西下] -> ZERO fleet card-face hits
+word [归巢] -> ZERO fleet card-face hits
+word [鱼也] -> ZERO fleet card-face hits
+word [夕阳西] -> ZERO fleet card-face hits
+word [阳西下] -> ZERO fleet card-face hits
+word [西下鱼] -> ZERO fleet card-face hits
+word [下鱼也] -> ZERO fleet card-face hits
+word [鱼也归巢] -> ZERO fleet card-face hits
+honest-adjacency notes: NO construct-layer adjacency this row - all 2-5 char shingles including punctuation-inclusive 2-grams ZERO fleet hits (r1026_pool.txt fresh, fleet includes v55) = FOURTH fully-zero row of the series (v53 first / v54 second / v55 third / this fourth); supply-face honest note: xiaoyao/night machine-proven zero clean rows (r1023 fresh + r1024 cascade re-confirmed, blocked stable) + xiaoyao/festival 18 rows ALL content collisions + xiaoyao/market_close 18 rows ALL carry hits (r1026_pool.txt fresh re-probe) -> dusk line6 = ONLY clean supply face for the redemption-target axis; R1025 pre-registered backup redeemed = THIRD backup-promotion of the series (v53/v54/this); bucket honesty: production ~23:0x deep night vs dusk scene = time-adjacent NOT time-exact (evening-adjacent supply face, dusk-bucket FIRST piece of DAILY series after v55 market_close first piece); holiday-day-2 note: National Day holiday day 2 dusk = the angler's holiday is spent by the water, packing up when the sun goes down (scene-context fit); 鱼也归巢了 = pool-line verbatim fish personification (fish returning home like people - living-city co-dwelling imagery, P-20260926-13 sublimation-law media-face air, NOT a sprite-voice harvest); post-v56 rotation note: xiaoyao becomes 9 -> ALL SIX AXES AT 9 -> next minimum by gap = qiuxin (last v49, gap 7 LONGEST) = v57 redemption target; qiuxin supply faces fresh full scan deferred to next round (honest deferral note, r1026 scan focused on xiaoyao redemption)

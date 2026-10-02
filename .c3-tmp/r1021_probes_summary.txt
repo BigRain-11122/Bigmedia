@@ -8,20 +8,18 @@ summary: 5 ideas, 10 drafts, 5 in production, 0 fail
 
 [stderr]
 
-### readiness (rc lines=276)
+### readiness (rc lines=270)
 ## 探针发现项（findings·机器纪律核验）
-- [FAIL] render-unannot: media file not annotated as test piece: mc-20261002-daily-v54-card.mp4
-- [FAIL] render-unannot: media file not annotated as test piece: mc-20261002-daily-v55-card.mp4
-readiness: 3 blocker(s), 2 finding(s) -> NOT READY
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 -- tail --
 
 
-readiness: 3 blocker(s), 2 finding(s) -> NOT READY
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 
 
 [stderr]
 
-### loop (rc lines=250)
+### loop (rc lines=252)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:45 -> 2026-09-23 17:25 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-23 17:5x -> 2026-09-23 17:47 (narrative hygiene; approximate minutes allowed)
 - [WARN] log-order: log entry timestamps go backwards: 2026-09-24 02:5x -> 2026-09-24 02:52 (narrative hygiene; approximate minutes allowed)
@@ -142,12 +140,13 @@ readiness: 3 blocker(s), 2 finding(s) -> NOT READY
 - [WARN] heartbeat-gap: beat gap 20 min (2026-10-02 15:02 -> 2026-10-02 15:22) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 24 min (2026-10-02 19:04 -> 2026-10-02 19:28) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 30 min (2026-10-02 21:03 -> 2026-10-02 21:33) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1027 > tick=1024) - the R4/R5 bug pattern
-loop health: FAIL (3 fail, 118 warn)
+- [WARN] heartbeat-gap: beat gap 26 min (2026-10-02 22:22 -> 2026-10-02 22:47) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1028 > tick=1025) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 119 warn)
 -- tail --
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1027 > tick=1024) - the R4/R5 bug pattern
+- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=1028 > tick=1025) - the R4/R5 bug pattern
 
-loop health: FAIL (3 fail, 118 warn)
+loop health: FAIL (3 fail, 119 warn)
 
 
 [stderr]
