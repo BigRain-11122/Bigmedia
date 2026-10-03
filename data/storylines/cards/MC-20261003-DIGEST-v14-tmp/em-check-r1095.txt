@@ -1,0 +1,15 @@
+orders.md 2026-10-02 CEO decision/urge rows (machine count) = 5
+ledger P-2026-10-02 rows (set) = P-2026-10-02-01,P-2026-10-02-02,P-2026-10-02-03,P-2026-10-02-04
+CEO quote verbatim substring present in ledger P-01 row: OK
+H1 size 84 budget 10.95em | H2 size 36 budget 25.56em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 895px vs subs top 970px gap +75px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 014
+23.60 em  budget 25.56 em  margin +1.96em  single=True  集团令批 2026-10-02（两审计令 · 5 行决策催办）
+16.75 em  budget 25.56 em  margin +8.81em  single=True  「检查到底是什么在大量耗费token？
+23.75 em  budget 25.56 em  margin +1.81em  single=True  委员会继续开展节省云端token，加强本地算力工作」
+24.25 em  budget 25.56 em  margin +1.31em  single=True  token 三面审计 7/7 通过 · 六款续执 · 回访 10-08
+23.35 em  budget 25.56 em  margin +2.21em  single=True  硅基城审计三厚三薄 · 问题分级 3+4+3 · 对标七作
+24.10 em  budget 25.56 em  margin +1.46em  single=True  一线十定律 · 里程碑 10-09 可逛切片 · 12-31 预研
+22.45 em  budget 25.56 em  margin +3.11em  single=True  巡检双单 34h 静默回执窗 10-05 · 假读治本标记
+subs   20.00 em  budget 24.21 em  margin +4.21em  基于硅基城市真实事件（集团令批台账档案）
+EM_CHECK: ALL OK
