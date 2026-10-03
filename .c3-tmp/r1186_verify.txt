@@ -1,0 +1,5 @@
+tick=1186
+ts=2026-10-04 04:45:07
+task=declared-idle 一行声明收轮（等待态·五查静+探针基线平·声明并窗 1/6 起窗——10-05 日界批 ETA 2026-10-05）
+len=1900 chars
+logline_ok=False
