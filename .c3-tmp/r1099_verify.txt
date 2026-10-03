@@ -1,0 +1,7 @@
+tick=1099
+ts=2026-10-03 13:34:23
+log_len=1127
+task=declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh 机证并
+log_tail=2026-10-03 13:3x R1099: declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh 机证并入 check 件+四查尽承继 R1096-R1098 fresh 链〔同窗 ~15 分钟禁重扫后 fresh 复证·产品优先律 2〕·声明窗第四轮 4/6〔R1095 实活轮 af94fa7f 重置窗后连续第四轮〕·零 commi
+focus_head=R1099: declared-idle 声明轮 4/6（五静 fresh+探针 127 WARN 基线平零新增+#86 三腿 fresh 机证 pools 1440/interchat 22/CENSUS 闸闭·承继 R1096-R1098 fresh 链）——下轮可领序：①夜窗 DAILY v6
+wm=131
