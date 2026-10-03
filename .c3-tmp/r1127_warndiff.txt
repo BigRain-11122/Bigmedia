@@ -1,0 +1,9 @@
+log-order=22 heartbeat-gap=106 total=128
+FAILS:
+[FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+[FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+[FAIL] account-lag: 4 completed round(s) without accounting (done beats=1130 > tick=1126) - the R4/R5 bug pattern
+
+10-03 log-order WARNs:
+[WARN] log-order: log entry timestamps go backwards: 2026-10-03 07:0x -> 2026-10-03 07:06 (narrative hygiene; approximate minutes 
+[WARN] log-order: log entry timestamps go backwards: 2026-10-03 17:5x -> 2026-10-03 17:4x (narrative hygiene; approximate minutes 

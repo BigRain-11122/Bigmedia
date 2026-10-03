@@ -1,0 +1,23 @@
+== r1127_check fresh run 2026-10-03 18:15:42 ==
+1. orders top: O-20260928-1910-bm-a.md mtime=2026-09-28 19:12:33 (baseline O-20260928-1910 2026-09-28 19:12:33)
+   group orders.md mtime=2026-10-03 12:39:57 (baseline 2026-10-03 12:39:57)
+2. ledger @target rows: 41 (baseline 41)
+   last target line: - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432M
+3. decisions dnums=131 watermark=131 NEW=[]
+4. index.lock: False | production=open tick=1126
+5. daily brief 10-03: True (10-04 = day-boundary item)
+   W40 self-audit: True | GB gate due 10-08 (last refresh 10-01)
+6. #86 a-leg pools: axes=1296 sprite=144 total=1440 (baseline 1440)
+   c-leg interchat rows: 22 (baseline 22)
+   CENSUS anchors: 20 stop=C-00029.md C-00030 absent: True
+7. backlog mtime=2026-10-03 12:57:45
+7. queue mtime=2026-10-03 17:46:34
+8. night-lane definitive closure: R1086 full-pool inventory re-read = axes/night bucket rows
+   ZERO probe-clean (no night-bucket rows in any axis clean list; probe dirt = time-invariant,
+   fleet only grows) + sprite night residual 11 rows zero clean (R1124) + unique night-content
+   clean row sprite/weekend/4 consumed by v64 (R1123) -> E30 night lane CLOSED post-v64;
+   unlock windows (rain/CEO-order/10-08 market_open/Nov+ coldsnap/heatwave) all untriggered.
+9. probe board rc=0 -> r1127_board.txt
+9. probe readiness rc=1 -> r1127_rd.txt
+9. probe loop rc=1 -> r1127_loop.txt
+10. probes summary written
