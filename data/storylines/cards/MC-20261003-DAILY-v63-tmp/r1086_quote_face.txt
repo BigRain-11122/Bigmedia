@@ -1,0 +1,13 @@
+r1086 quote-face word probe for candidate 嗡嗡嗡，晨风中的舞 (sprite/weekend line3)
+word [嗡嗡] -> ZERO fleet card-face hits
+word [嗡嗡嗡] -> ZERO fleet card-face hits
+word [晨风] -> ZERO fleet card-face hits
+word [风中] -> ZERO fleet card-face hits
+word [的舞] -> ZERO fleet card-face hits
+word [中的舞] -> ZERO fleet card-face hits
+word [风中的舞] -> ZERO fleet card-face hits
+word [晨风中的舞] -> ZERO fleet card-face hits
+word [嗡嗡嗡，晨风中的舞] -> ZERO fleet card-face hits
+honest-adjacency notes: all 2-5 char punctuation-inclusive shingles ZERO fleet hits (r1086_pool_scan.txt fresh scan, fleet includes v62; zero new cards since) = ELEVENTH fully-zero row of the series (v53-v62 ten precedents). Facet-band honest registrations (single-char/family layer, NOT card-face collisions; machine scan 2+ char ZERO verified): (1) SPRITE VOICE 4th piece - 4 DISTINCT buckets zero-repeat (v50 festival / v54 night / v61 market_close / THIS weekend) = voice-level anti-isomorphism strongest form; (2) ONOMATOPOEIA band - v50 叮叮当 [1st] + THIS 嗡嗡嗡 [2nd] = 2-link, no chain, 3rd use would form; (3) MORNING-SCENE band - v62 晨钓 facet + THIS 晨舞 facet = 2-link -> POST-v63 REGISTRATION: morning-scene rows future-blocked on a 3rd (chain-forms law); (4) v62-consumed row 逍遥/morning/1 + angling rows post-v62-blocked carried (R1062 registration).
+weekend-reset unlock note: R1032 unlock-window line 'weekend/3+4 (sprite) blocked until >=1 non-weekend piece intervenes (four-peat reset)' - v61 (market_close) + v62 (morning) = DOUBLE intervention after v58/v59/v60 three-run -> reset achieved, THIS piece = weekend bucket 1st of new run. 晨风 content + ~11:0x literal morning production + weekend holiday bucket = TRIPLE literal alignment (R1031 daytime-window family, v62 fired first; adjacency ladder: v55/v57 时点邻接 -> v62/v63 literal).
+supply-face honest note post-v63: sprite weekend face remainder = weekend/4 夜晚 content (night-window only); six axes remain R1032-depletion state; morning-scene band 2-link formed -> 3rd use future-blocked; unlock windows unchanged: rain-event day / CEO-order day / 2026-10-08+ market reopen / Nov+ coldsnap / summer heatwave / night-window rows (sprite/weekend/4 + night-bucket residue). Pool-expansion report position maintained (status-line not chase).

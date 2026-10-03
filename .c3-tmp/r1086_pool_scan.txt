@@ -1,0 +1,72 @@
+R1086 E30 DAILY v63 attempt -> fresh supply-face scan (fleet includes DAILY-v62 xiaoyao/morning/1)
+Day-context: 2026-10-03 Saturday National Day holiday day 3, production ~11:0x LITERAL MORNING (late-morning window)
+Gate deltas vs R1032: MORNING literal-window OPEN (R1031 pre-registration fired v62; ~11:0x same window) / WEEKEND four-peat RESET achieved (v61+v62 double intervention) / per-row residue gates stay (market-stall-business 3-link-iso any hour, angling post-v62 future-block, v62 line consumed)
+Rotation post-v62: qiuxin 10 / huaijiu 9 / xiaqi 10 / yanhuo 10 / zhixu 9 / xiaoyao 11 -> minimum pair huaijiu+zhixu 9 -> longest gap = zhixu (v53..v62 = 9)
+======================================================================
+== 求新 clean rows (fresh vs fleet-v62): 2 ==
+   heatwave/0 真他喵的热，空调都快化了冰棒了！ -> SEASON(Oct, R972-adjacent)
+   heatwave/9 这太阳晒得人都快变成烤红薯了 -> SEASON(Oct, R972-adjacent)
+======================================================================
+== 怀旧 clean rows (fresh vs fleet-v62): 7 ==
+   heatwave/8 天热得连风都懒得起 -> SEASON(Oct, R972-adjacent)
+   coldsnap/7 缝衣针冻得直打颤，线缝得密点儿 -> SEASON(Oct, R972-adjacent)
+   market_open/6 敲门声脆响，买卖声不息 -> HOLIDAY-CLOSURE(v57)
+   market_open/7 旧衫破了洞，换件新衫轻 -> HOLIDAY-CLOSURE(v57)
+   market_open/9 头茬茶叶还没喝完，又惦记着炒货 -> HOLIDAY-CLOSURE(v57)
+   ceo_order/3 这白光怕是城主又在藏私货 -> NO-EVENT-TODAY
+   ceo_order/10 旧物摊上寻宝去，古董新客两相迎 -> NO-EVENT-TODAY
+======================================================================
+== 侠气 clean rows (fresh vs fleet-v62): 10 ==
+   morning/0 晨雾散，生意兴 -> MARKET-STALL/BIZ-3LINK-ISO(any-hour,R1032)
+   morning/15 晨风一吹，生意就来 -> MARKET-STALL/BIZ-3LINK-ISO(any-hour,R1032)
+   rain/5 雨水洗净尘，顺便洗去烦恼 -> NO-EVENT-TODAY
+   rain/6 撑把花伞多浪漫啊 -> NO-EVENT-TODAY
+   rain/7 巷口茶馆正炖着香 -> NO-EVENT-TODAY
+   typhoon/11 隔壁王叔在忙着收晒的衣裳 -> NO-EVENT-TODAY
+   heatwave/6 热天里喝杯凉茶最解渴 -> SEASON(Oct, R972-adjacent)
+   heatwave/14 热浪卷得人连话都懒说 -> SEASON(Oct, R972-adjacent)
+   coldsnap/10 冻得我这棉袄都不够穿，真后悔没多买件 -> SEASON(Oct, R972-adjacent)
+   ceo_order/2 有难处，找我准没错 -> NO-EVENT-TODAY
+======================================================================
+== 烟火 clean rows (fresh vs fleet-v62): 8 ==
+   morning/6 粥香扑鼻早市开 -> MARKET-STALL/BIZ-3LINK-ISO(any-hour,R1032)
+   morning/7 菜新鲜了人更嗨 -> MORNING-WINDOW-OPEN
+   heatwave/3 卖西瓜嘞，又甜又解渴，来一斤？ -> SEASON(Oct, R972-adjacent)
+   heatwave/12 这阵子黄瓜多得吃不完，腌点酱菜给凉拌 -> SEASON(Oct, R972-adjacent)
+   market_open/8 粮油买卖两兴旺 -> HOLIDAY-CLOSURE(v57)
+   market_open/11 粥小菜少也欢喜 -> HOLIDAY-CLOSURE(v57)
+   market_open/12 日头一升买卖开 -> HOLIDAY-CLOSURE(v57)
+   ceo_order/7 开锅的粥香扑鼻 -> NO-EVENT-TODAY
+======================================================================
+== 秩序 clean rows (fresh vs fleet-v62): 3 ==
+   rain/2 这雨不大，刚好添点清凉 -> NO-EVENT-TODAY
+   coldsnap/2 穿上厚厚的棉衣，出门别受冻 -> SEASON(Oct, R972-adjacent)
+   coldsnap/9 防火防盗防寒风，门窗别大意 -> SEASON(Oct, R972-adjacent)
+======================================================================
+== 逍遥 clean rows (fresh vs fleet-v62): 9 ==
+   morning/0 晨雾散，生意来 -> MARKET-STALL/BIZ-3LINK-ISO(any-hour,R1032)
+   rain/17 云层低垂似织锦， -> NO-EVENT-TODAY
+   heatwave/3 太阳大得能烤熟鸡蛋，怎么办？ -> SEASON(Oct, R972-adjacent)
+   heatwave/5 河边乘凉也难寻一丝凉风 -> SEASON(Oct, R972-adjacent)
+   heatwave/6 树荫下喝口凉茶真爽 -> SEASON(Oct, R972-adjacent)
+   coldsnap/1 茶汤里加点姜，暖暖身子 -> SEASON(Oct, R972-adjacent)
+   coldsnap/5 脚底得常擦擦，防滑跌跤 -> SEASON(Oct, R972-adjacent)
+   ceo_order/5 江边雾散，竿头定见鱼 -> NO-EVENT-TODAY
+   ceo_order/13 这白光一照，仿佛连鱼儿都乐了 -> NO-EVENT-TODAY
+======================================================================
+== sprite clean rows (fresh vs fleet-v62): 10 ==
+   sprite/weekend/3 嗡嗡嗡，晨风中的舞 -> WEEKEND-RESET-OPEN(R1032 unlock window: >=1 non-weekend piece intervenes -> v61+v62 DOUBLE) + MORNING-CONTENT-LITERAL-11AM
+   sprite/weekend/4 叮咚响夜晚 -> NIGHT-CONTENT-AT-DAY-WEAK(R1020-literal-law) + WEEKEND-RESET-OPEN(R1032 unlock window: >=1 non-weekend piece intervenes -> v61+v62 DOUBLE) + NIGHT-CONTENT-AT-DAY-WEAK
+   sprite/typhoon/3 风雨交加/光猫共坚守 -> NO-EVENT-TODAY
+   sprite/heatwave/3 丝丝轻风，带来片刻清凉好梦 -> SEASON(Oct)
+   sprite/heatwave/11 丝丝凉风 -> SEASON(Oct)
+   sprite/ceo_order/0 铃铃作响心欢喜 -> NO-EVENT-TODAY
+   sprite/ceo_order/3 叮咚欢歌唤新晴 -> NO-EVENT-TODAY
+   sprite/ceo_order/4 叮咚鸣响起 -> NO-EVENT-TODAY
+   sprite/ceo_order/9 咻光鸟划破空 -> NO-EVENT-TODAY
+   sprite/ceo_order/11 城上白光倾 -> NO-EVENT-TODAY
+======================================================================
+VERDICT: rows passing zero-collision + all context gates (excl. weak-adjacency night-content rows) = 1
+   !! sprite/weekend/3 嗡嗡嗡，晨风中的舞
+
+CORRECTION NOTE (R1086 honest-trail): yanhuo/morning/7 「菜新鲜了人更嗨」 printed MORNING-WINDOW-OPEN due to keyword-list miss (菜 not in ISO_MARKET shingle list). STANDING RULING GOVERNS: R1032 close-out note + R1062 build cascade trail BOTH register morning/6+7 = zhou-xiang-morning-market + CAI-XIAN market-stall 3-link-iso (v44+v57+v58) BLOCKED AT ANY HOUR -> excluded. VERDICT unchanged: sprite/weekend/3 = unique honestly-pairable row at this context (also = the R1032-registered unlock-window target line for this exact window).

@@ -1,0 +1,9 @@
+pool assert: sprite[weekend][3] verbatim OK; weekend bucket=12 rows; sprite top-level 12 buckets (R982 structure); card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v62; rotation cascade: zhixu rain/coldsnap blocked -> huaijiu market_open/ceo_order/season blocked -> qiuxin heatwave blocked -> yanhuo morning market-stall 3-link blocked (cai-xian keyword miss honestly corrected) -> xiaqi morning business 3-link+twin blocked -> xiaoyao just-consumed remainder blocked -> SIX AXES ALL BLOCKED -> sprite-voice cascade fallback (R1024 precedent): sprite/weekend/3 = UNIQUE honestly-pairable clean row at DAYTIME morning production (r1086_pool_scan.txt fresh, fleet includes v62); quote-face word probe: 9 words see r1086_quote_face.txt (all ZERO; eleventh fully-zero row of series after v53-v62; sprite-voice 4-piece 4-bucket zero-repeat + onomatopoeia 2-link + morning-scene 2-link chain-forms registration + weekend/4 night-window note)
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 063
+13.60 em  budget 15.33 em  margin +1.73em  single=True  2026-10-03 · 国庆假期 · 晨
+11.00 em  budget 15.33 em  margin +4.33em  single=True  「嗡嗡嗡，晨风中的舞」
+13.65 em  budget 15.33 em  margin +1.68em  single=True  ——硅基城市台词池 · 城市生灵
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_60: 11em quote line + 城市生灵 attribution line fits 60-band (v61 same-band precedent); four-LINES stack; all other QUOTE-v2 params verbatim; weekend-reset-unlock + rotation-cascade + eleventh-fully-zero-row + sprite-voice-4-piece + morning-scene-2-link registration honest notes carried in meta.form
