@@ -1,0 +1,52 @@
+{
+ "meta": {
+  "topic": "MC-20261003-DAILY-v64",
+  "line": "L-卡 图文轻内容线（DAILY 形态第六十四件·charter v1.2 §4 形态码 DAILY·日签节律续件·sprite 声部第五件·weekend 桶新跑第二件·夜窗 literal 对位件·拟声族带第三用注册件）",
+  "form": "DAILY 城市日签 064（L-卡 图文轻内容线 DAILY 形态第六十四件·charter v1.2 §4 形态码 DAILY·queue §E E30 夜窗解锁兑现 R1123·日签节律续件=日期×情境桶对位判据第六十四证〔**sprite 声部第五件+weekend 桶新跑第二件**〔声部五件内 weekend 二采=四件四桶零重复最强形（v50/v54/v61/v63）终结·诚实弱形注册·四连律远（v63+v64=新跑二连）〕+**夜窗 literal 对位**：literal night 生产〔日落 ~17:37 后·R1020 night literal 律〕×夜晚内容×weekend 假日桶（周六+国庆假期第 3 日夜）三重 literal〔v51-v54 夜件带先例·邻接升档带 v55/v57 时点邻接→v62/v63 literal→本件 literal night〕+**夜窗预登记链兑现**：R1032 解锁窗「night-window rows（sprite/weekend/4+night-bucket residue）」→R1086 post-v63 供给注「sprite weekend face remainder=weekend/4 夜内容（night-window only）」→R1122 夜窗候选注册=三重链兑现件〕+**拟声族带第三用定谳（R1122 注册裁量位·本轮 fresh 判）**：v50 叮叮当〔铃铛·festival 夜换装〕+v63 嗡嗡嗡〔蜂鸣·晨舞〕+本件 叮咚〔门铃·假日夜访〕=三声各异×三景各异×三桶各异=**第三用合法判例=R1062 垂钓族带同律**〔三连同构律字面第四用起阻〕→post-v64 拟声族带第四用起阻注册+叮单字族带层邻接诚实注〔叮叮≠叮咚=非 2+ 字 shingle 撞·族带层注〕〕+六轴日间枯竭态承继〔R1032/R1086·夜面残行=六轴 night R1023-R1029 扫描零干净行承继+sprite night 残行夜窗位〕+门铃〔一家一户的最小问候〕×满城之夜〔最大的安静回响舞台〕=**最小问候×最大夜幕反差金句位**〔族五十连·门铃位语感独占注=假期夜里串门的脚步声都藏在门铃里〕〕）",
+  "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+  "source_quote": "「叮咚响夜晚」",
+  "source_pointer": "life/BigLife/cognition/pools.json 台词池 sprite[weekend][4]（axes 6 轴×12 情境桶×18 行=1296+sprite 顶层 12 桶×12 行=144=1440 行·BigLife R982 窗结构·跨仓只读指针）+data/intel/daily/2026-10-03.md（当日日期语境源·国庆假期第 3 日+周六·夜窗生产语境）",
+  "attribution_rule": "署名=池级+声部级（台词池·城市生灵声部）——池行无逐民署名·禁虚构居民名/生灵名（charter v1.2 署名律+人设权红线·本行无称谓面=纯景句·泛称零涉及〔v50/v54/v61/v63 先例族对照注〕）",
+  "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「引文取自硅基城市台词池（虚构城市档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+  "editorial_value": "日签形态=日期戳+当日情境+池句三件编辑选材面（sprite 声部第五件+夜窗解锁件双位〔**夜窗预登记链兑现+拟声族带第三用定谳+零直撞三律并轨诚实执行**：六轴日间枯竭承继→夜窗解锁→sprite/weekend/4 唯一预登记夜行兑现〕+最小问候×最大夜幕反差金句位〔族五十连·门铃位语感独占注〕+拟声开场人味=语录卡线变体零新模板第六十四证（QUOTE-v2 参数 verbatim 复用·h2_size 60 档〔v63 同带先例·日期行驱动〕·charter §1「日签变体随时可续」兑现）·公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限+城市人文积累令 O-2026-09-28-1910 对位〔假期夜里串门声此起彼伏=城市夜里活着的邻里往来·城市生灵令 P-2026-09-26-13 媒体面第五采〕+**供给面诚实注**：本件后 sprite weekend 面零干净行〔weekend/3+4 双耗尽·余 10 行撞/门控〕+六轴维持 R1032 枯竭注+拟声族带三连成形→第四用起阻注册=DAILY 可诚实配对面维持结构性近枯竭注〔R1030 REACT 判负+R1032 零判负+R1086 唯一行解锁窗兑现+本件夜窗兑现四信号族·池扩容呈报位维持呈现状行不催办〕·post-v64 指针：解锁窗维持=雨事件日/CEO 令日/10-08 market_open 复市/Nov+ 寒潮/夏季 heatwave/夜窗行（sprite night 残面）·REACT-v9 10-04 窗·F 序号诚实注=本件先落 F-150·REACT-v9 10-04 预指位顺延 F-151〔R978 判例 finished 顺序号=单一真相〕",
+  "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差链：叮咚〔一记门铃·一家一户的最小问候·全城最小的一声问候〕×响夜晚〔满城之夜=最大的安静回响舞台〕=最小问候×最大夜幕反差+门铃声〔动的问候〕×夜〔静的背景〕=动静反差〔族五十连〕/情 1 假日夜里街坊串门的烟火温情共鸣温和如实非强极点〔G5 生灵/宠物群+G1 城市生活群〕/时 2 当日=2026-10-03 周六国庆假期第 3 日·literal night 生产〔日落 ~17:37 后〕×夜晚内容×weekend 假日桶三重 literal 直配=夜窗解锁件〔R1032→R1086→R1122 三重预登记链兑现〕/台 2 公众号方图承载=MC-001~149 S3 实证复用）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·charter §4 形态码 DAILY·queue §E E30 R1123 夜窗兑现",
+  "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+  "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；池句=情境口气零事实宣称（台词池=虚构城市档案·DAILY 系列同源先例）；无登记居民名无登记生灵名=人设权红线零接触（本行无称谓面=纯景句·泛称零涉及〔v50/v54/v61/v63 先例族对照注〕）；脱敏律=池句无令牌号/无个体可识别面/零金钱数额（叮咚响夜晚=假日夜访门铃意象非商业面·无品牌无价格=零消费宣称）；成品只入库·发布=M5 账号物理件+M4 全绿",
+  "source_facts": "日签纪实抽取律：①引文=台词池 sprite[weekend][4] verbatim 零改字（「」=卡面排版层〔R285 QUOTE v2 先例〕·build 脚本内断言=池行逐字在位+weekend 桶 12 行计数+sprite 顶层 12 桶结构断言〔R982〕+v63 已耗行 weekend/3 结构锚+v54 已耗行 night/8 结构锚）②日期行 2026-10-03=当日历法事实·周六+国庆假期第 3 天〔daily brief 2026-10-03 当日窗语境〕+夜标记〔v51/v54 夜标记先例带·literal night 生产〕③情境=夜窗解锁件〔三重 literal 对位=literal night 生产时刻×夜晚内容×weekend 假日桶·R1032→R1086→R1122 三重预登记链〕④声部署名=台词池城市生灵声部行·本行无称谓面=纯景句·泛称零涉及〔人设权红线零接触·charter §2.4·v50/v54/v61/v63 先例族〕⑤去重断言=本行不在 city-spirit.md 已采面+不在全成品卡面 lines/source_quote 任一（卡面级实扫=R1010 修正律·DAILY-v1~v63 全 64 行+REACT-v8 同桶三行+city-spirit 节日场景三行皆非本行）+「叮咚」「响夜」「夜晚」「叮咚响」「响夜晚」全句 probe 六词机核〔r1123_quote_face.txt〕+**叮单字族带层邻接=v50 叮叮当族带注**〔非 2+ 字 shingle 卡面撞·拟声族带三连注册内〕⑥季相核=本行无年味/春联/春雨/寒潮类季相错位词〔R972 制·夜晚=四季通用夜面·十月秋夜兼容〕⑦品牌语感注=「叮咚响夜晚」拟声开场+假日夜访场景=去 AI 感对位·人味命中·零书面套语·零消费宣称无品牌无价格"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1080,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 40,
+  "aigc_size": 30,
+  "subs_bottom": 110,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 96,
+  "h1_color": "accent",
+  "h2_size": 60,
+  "h2_color": "white",
+  "h1_gap": 48,
+  "optical_center": 0.3
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 2.6,
+   "lines": [
+    "城市日签 064",
+    "2026-10-03 · 国庆假期 · 夜",
+    "「叮咚响夜晚」",
+    "——硅基城市台词池 · 城市生灵"
+   ]
+  }
+ ]
+}
