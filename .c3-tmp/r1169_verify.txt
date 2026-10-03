@@ -1,0 +1,6 @@
+tick 1169
+ts 2026-10-04 01:43:33
+task declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1169_all.py 01:43——or
+focus R1169: declared-idle 声明窗 3/6（五查静 fresh 实证 r1169_all.py 01:43·三探针持平·全 lane 时序闸·waiting: 10-05 milestone batch ETA 2026-10-05）
+log_last 2026-10-04 01:43 R1169: declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1169_all.py 01:43——orders 顶=O-2026092
+log_len 1197

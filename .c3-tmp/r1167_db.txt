@@ -1,0 +1,12 @@
+LEN=1103
+KW[雨] hits=0
+KW[台风] hits=0
+KW[降温] hits=0
+KW[寒潮] hits=0
+KW[高温] hits=0
+KW[天气] hits=0
+KW[暴雨] hits=0
+KW[大风] hits=0
+KW[事件] hits=0
+KW[城市] hits=0
+KW[令] hits=0
