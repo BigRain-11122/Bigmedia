@@ -1,0 +1,8 @@
+tick=1194
+ts=2026-10-04 06:09:38
+task=declared-idle 一行声明收轮（等待态·五查静 fresh 实证 .c3-tmp/r1194_check.tx
+production=open
+LASTLOG_LEN=1795
+LASTLOG_HEAD=2026-10-04 06:09 R1194: declared-idle 一行声明收轮（等待态·五查静 fresh 实证 .c3-tmp/r1194_chec
+LASTLOG_TAIL=轮件→#70 OSS 窗 4 21:40）ETA 2026-10-05——本轮 3/6 续窗（R1192 1/6+R1193 2/6+本行 3/6·零 commit 盘面即真相）·commit 收账=窗满 6 轮批收官或实活轮/日界/任一异常即收（os-protocol §6）·r1192~r1194 证据件随窗站卷入
+LOG_LEN=1222
