@@ -1,0 +1,39 @@
+# R1065 round evidence (fresh independent verification, executed 07:24-07:3x 2026-10-03)
+# Five checks + routine gates + three probes + #86 supply-trigger machine checks.
+
+[scan time] 2026-10-03 07:24:16 (round open) / close ~07:3x
+
+[five checks]
+1. orders/ top = O-20260928-1910-bm-a.md (mtime 09-28 19:12:33) -> zero new order vs state last-accounted order
+2. group ledger @BigStream/@七线全司/@全司/@六司/@八线 lines = 41 == frozen baseline (zero new dispatch rows; ledger mtime 10-03 03:13:47 = R1045 night-shift routine entry, adjudicated)
+3. group decisions.md dnum content-addressed diff vs watermark: NEW_DNUMS=[] (watermark 131 == file 131, D-20260930-19 diff-regime; D-13 SLA no trigger; dispatch board zero new BigStream rows)
+4. tree: no .git/index.lock (False); production=open self-check OK; tree state = M state.json + M .c3-tmp probe outputs + ?? r1063/r1064_close.py = declaration-window self-accounting expected state, zero bm-a active-write sign
+5. group orders.md CEO physical-items area: unchanged (accounts batch-1 etc., status-present-no-pressing per standing order)
+
+[routine gates]
+- intel daily 2026-10-03: exists (R1030 produced; one-per-day truth) / 10-04 brief absent = day-boundary item
+- weekly self-audit 2026-W40: exists / W39 exists
+- global-benchmarks gate: last refresh 10-01 (v1.1) -> next due 10-08, not stale
+- OH-20261002 window 3 slices 1-3 obligation met; window 4 opens 10-05 21:40
+- CENSUS C-00030/C-00031 anchors: absent (R1064 07:13 fresh Test-Path, inherited this round - same-window no-rescan rule)
+- export_ts = 2026-10-03 06:54:23 (R1062 production close) < 24h -> no refresh this round (zero live change)
+
+[#86 codex leg supply triggers - machine check upgrade (R1064 was judgment-inheritance; R1065 = fresh machine evidence)]
+- a leg: life/BigLife/cognition/pools.json quote strings total = 1440 == R893 baseline (r1065_poolcount.py) -> pool-expansion gate CLOSED (TOTAL_LINES increment trigger not fired)
+- c leg: life/BigLife/cognition/interchat-ledger.jsonl lines = 22 == R912 baseline (10-02) -> zero new interchat entries, gate CLOSED
+- b leg: 20/20 anchor cards covered (LC-001~019+LC-021, F-048..F-075; R748/R756 close) -> gated on C-00030+ (absent)
+
+[three probes fresh run 07:2x (r1021_probes.py, all three run)]
+- board: 0 FAIL (5 ideas, 10 drafts, 5 in production)
+- readiness: 3 blockers, 0 findings -> NOT READY (blockers all external CEO-face: accounts batch-1 / M4 GATE 6/10 / #17; blocker != failure per charter)
+- loop_health: 3 FAIL + 125 WARN == R1064 baseline FLAT, zero new
+  (2 outage FAILs = 09-26/09-28 adjudicated history; account-lag done beats=1068 > tick=1064 = +4 constant offset, R981 in-round-beat transient, self-flattens at tick close;
+   composition recount log-order 21 + heartbeat-gap 104 = 125)
+
+[E30 DAILY lane] protected state held (R1032 unlock-window ledger inherited: rain event day / CEO-order day / 10-08 market reopen / Nov+ coldsnap / summer heatwave - none fired;
+morning-bucket opener consumed by v62 F-147; angling-family rows future-blocked post-v62 per R1062; same-window no-rescan of R1032/R1062 machine evidence)
+
+[verdict] All lanes time-gated or supply-gated; genuine no-work-available state; protected-exemption in case
+(R1032/R810 supply-side inventories + R1062 post-v62 inheritance; structural blocked != idling violation;
+fabricating work = forbidden 4th idle-form). Declared-idle round 3/6 of window opened at R1063.
+Next calendar unlock: 10-04 day boundary (10-04 brief first, then E31 REACT-v9 hot-window full chain F-148 + #94 memory <=10KB sorting).
