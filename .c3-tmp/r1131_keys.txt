@@ -1,0 +1,18 @@
+company
+loop
+mode
+production
+opened_by
+installed
+tick
+mandate
+protocol
+backlog
+focus
+decisions_watermark
+log
+ts
+task
+
+FOCUS=
+R1130: 声明窗 1/6（R1129 batch close 后并窗重置·五静+探针基线平）——下轮可领序：①10-04 日界三件组（跨日边界 00:00 后 10-04 日报先补产→E31 REACT-v9 热点窗全链 F-151〔连续第二窗判负=池扩容呈报位〕→#94① 记忆 ≤10KB 梳理）②W41 周轮件 10-05（周报+提案窗+CLOUD_LINE 首测+#94② 席 6 确认）③OSS 窗 4=10-05 21:40 开（候选面预判=音频轴响度类零旗预判/发布链平台 API 客户端类〔M5 账号物理件 blocked 前不评估〕/或如实零发现）④10-08 GB 闸 7 日刷——五查锚=orders 顶 O-20260928-1910·ledger @41 冻结基线·decisions 131 真差集 EMPTY·E30 post-v64 全关（R1127 全池证据级）·声明窗 1/6
