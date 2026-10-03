@@ -1,0 +1,30 @@
+BOARD_FAIL_count=0
+BOARD_tail:
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+
+
+[stderr]
+RD_BLOCKER_count=0 RD_FINDING_count=0
+RD_tail:
+- none
+
+
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+
+
+[stderr]
+LOOP_FAIL_lines=4 LOOP_WARN_lines=128
+LOOP_fail_rows:
+  - [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+  - [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+  - [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1159 > tick=1155) - the R4/R5 bug pattern
+  loop health: FAIL (3 fail, 128 warn)
+LOOP_tail:
+
+loop health: FAIL (3 fail, 128 warn)
+
+
+[stderr]

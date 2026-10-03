@@ -1,0 +1,19 @@
+decisions dnums: file=131 watermark=131 NEW=[]
+evolution-ledger mtime: 10-03 15:15:33
+group decisions mtime: 10-03 00:12:44
+group orders mtime: 10-03 12:39:57
+orders top: O-20260928-1910-bm-a.md mtime=09-28 19:12:33
+index.lock present: False
+production=open tick=1154
+daily 2026-10-03 exists: True
+daily 2026-10-04 exists (day-boundary item, expected absent): False
+W40 self-audit exists: True
+ledger @target rows: 41 (frozen baseline 41)
+board BigStream/七司 rows: 8 (baseline 8, collected set per R1031)
+#86 leg-a pools content count: 1440 (baseline 1440)
+#86 leg-c interchat entries: 22 (baseline 22)
+#86 CENSUS C-00030 present: False (gate closed expected False)
+export_ts=2026-10-03 21:34:16
+backlog mtime: 10-03 12:57:45
+queue mtime: 10-03 17:46:34
+check_ts=2026-10-03 22:52:58
