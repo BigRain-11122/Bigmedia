@@ -1,0 +1,12 @@
+tick=True
+ts=True
+task60=True
+log_tail=True
+log_len=True
+focus_R1145=True
+wm_ts=True
+wm_dnums=True
+production=True
+task=R1145: declared-idle 声明轮（空轮判定路径④·五静 fresh 实测+探针基线平零新增+四查尽承继 
+log_tail_400=2026-10-03 21:14 R1145: declared-idle 声明轮（空轮判定路径④·五静 fresh 实测+探针基线平零新增+四查尽承继 R1096-R1144 fresh 链〔同窗 ~6 分钟禁重扫·产品优先律 2〕·声明窗第四轮 4/6〔R1142 1/6+R1143 2/6+R1144 3/6 已收账盘面 tick=1144 ts=21:07:43·零 commit 盘面即真相〕·os-protocol §6 窗满 6 轮/跨日边界/任一异常/实活轮出现即收·export ≤24h 闸=20:34:44 承继不重刷〔产品优先律 2·实况零变化〕）——①轮首五查静（fresh r1145_all.py 实跑 21:13·证据件 .c3-tmp/r1145_check.txt+r1145_probes_summary.txt 族：orders 顶=O-20260928-1
+focus_head=R1145: 声明窗 4/6（五静 fresh r1145_all.py 21:13+探针基线平零新增·#86 三腿 supply-gated 1440/22/C-00030 absent·decisions NN 131==131 真差集 EMPTY·集团 orders 12:39:57 冻结·DAILY 三面枯竭保护态 R1032/R1123/R1124 在案·export ≤24h 闸承继 
