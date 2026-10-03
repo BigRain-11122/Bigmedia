@@ -1,0 +1,11 @@
+tick=1074
+ts=2026-10-03 09:05:47
+task=declared-idle 声明轮并窗第六轮 6/6=窗满→batch close commit 区间 R1069-R1
+focus_head=R1074: declared-idle 声明轮 6/6 → batch close R1069-R1074 收账毕（并窗重置 1/6·六轮声明窗一盘 commit·五静 fresh+探针基线平·decisions 水位 131 静·#86
+log_tail=2026-10-03 09:05x R1074: declared-idle 声明轮并窗第六轮 6/6=窗满→batch close commit 区间 R1069-R1074（os-protocol §6 并窗律·六轮声明窗一盘收账·co
+log_entries=1102
+export_ts=2026-10-03 09:05:47
+results_last=1074
+live1=当前活：R1074 declared-idle 6/6 batch close R1069-R1074 收账毕（全 lane 时间/供给门控维持·2026-10-03 09:05x）
+verified_at=2026-10-03 09:06:39
+batch_close=500873f2 pushed d634bc7d..500873f2 main->main

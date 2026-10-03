@@ -1,0 +1,4 @@
+TOTAL_LINES=1440
+DETAIL={"烟火": 216, "秩序": 216, "求新": 216, "怀旧": 216, "侠气": 216, "逍遥": 216, "sprite.morning": 12, "sprite.dusk": 12, "sprite.night": 12, "sprite.weekend": 12, "sprite.rain": 12, "sprite.typhoon": 12, "sprite.heatwave": 12, "sprite.coldsnap": 12, "sprite.market_open": 12, "sprite.market_close": 12, "sprite.ceo_order": 12, "sprite.festival": 12}
+BUCKETS_PER_AXIS={"烟火": ["morning", "dusk", "night", "weekend", "rain", "typhoon", "heatwave", "coldsnap", "market_open", "market_close", "ceo_order", "festival"]}
+AXES=["烟火", "秩序", "求新", "怀旧", "侠气", "逍遥"]
