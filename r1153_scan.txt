@@ -1,0 +1,10 @@
+﻿ledger target lines: 40
+last3:
+   | P-2026-09-29-12 | 09-29 | **����ȫ�沢���P1��CEO �� O-2026-0929-029������ҲҪȫ�濪����������һ̨����æ���У��ܲ��е�����ȫ�沢�С���@Biggame @BigMoney @BigLife @BigStream @BigCompute @Flu
+   | P-2026-09-29-13 | 09-29 | **�������˾���ɵ���P1��CEO �� O-2026-0929-033��resource-chain ������11 ����ִ����**����**@Biggame**=a.`gaming/MiniGame/projects/P3D_Spike` 16.1
+   - **ֵ���� 2026-09-27��ҹ�� 03:07��**����ˮλ=���� 899.8GB ���ȫ�գ������� bigmoney +404MB��Money02 ��;+�ز������/media +432MB/FluxVerse +220MB��M1 ����+����ʷ�ڷɣ�/MiniGame +46MB��R3 
+decisions dnums: 131 watermark: 131 NEW: []
+orders.md total lines: 276
+last2:
+   2026-10-03 08:37 | [CEO����] FluxVerse�ⶳ����ִ��(R1�þ�B���)��8h��commit���´�(12:37ǰ)����CitySim v0.2����������(R1��������)��д��ͣ�㣬�������Ч�۲���P2 | dispatched
+   2026-10-03 12:39 | [CEO����] BigDomain 12:00������ӳ�(ĩcommit��03:13ҹ�ࡤ8h����)���´�(15:00��)ǰ��12:00���ִ��˵���־���λ��������P2���������۲� | dispatched
