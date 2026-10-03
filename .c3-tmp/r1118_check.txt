@@ -1,0 +1,14 @@
+tick=1117 ts=2026-10-03 16:37:04 production=open
+last log head: 2026-10-03 16:3x R1117: declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh 机证+四查尽承继 R1096-R1116 fresh 链〔同窗 ~10 分钟禁
+orders top: O-20260928-1910-bm-a.md (09-28 19:12:33)
+group orders.md mtime: 10-03 12:39:57 lines=276
+decisions mtime=10-03 00:12:44 file=131 wm=131 NEW=[]
+ledger mtime=10-03 15:15:33 lines=273 target-hits=41 last-tag-L246
+index.lock: False
+export_ts=2026-10-03 15:53:42 age=0.8h (<24h gate)
+daily 10-03: True | W40 audit: True
+#86 a pools count=1440 (mtime 10-03 16:06:02)
+#86 c interchat rows=22
+#86 anchors tail=['C-00028.md', 'C-00029.md'] C-00030:False
+src/os/backlog.md mtime=10-03 12:57:45
+docs/self-improvement-queue.md mtime=10-03 12:57:45

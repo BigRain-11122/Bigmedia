@@ -1,0 +1,12 @@
+=== board ===
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+=== readiness ===
+## 探针发现项（findings·机器纪律核验）
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+=== loop_health fails (3) ===
+- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+- [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1117 > tick=1113) - the R4/R5 bug pattern
+=== loop_health warn count: 127 ===
+=== loop_health summary ===
+loop health: FAIL (3 fail, 127 warn)
