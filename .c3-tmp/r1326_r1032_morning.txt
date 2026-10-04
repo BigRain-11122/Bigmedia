@@ -1,0 +1,8 @@
+Context gates (precedent laws): R972 season / event-bucket-needs-anchor / market_open holiday-closure (v57) / morning deep-night weak adjacency (R1029) / weekend four-peat (v58+v59+v60) / twin-block (R1031: sprite market_close/9) / 3-link isomorphism (market-stall v44+v57+v58 / business)
+   morning/0 晨雾散，生意兴 -> DEEP-NIGHT-WEAK(R1029)+3-LINK-ISO
+   morning/15 晨风一吹，生意就来 -> DEEP-NIGHT-WEAK(R1029)+3-LINK-ISO
+   morning/6 粥香扑鼻早市开 -> DEEP-NIGHT-WEAK(R1029)+3-LINK-ISO
+   morning/7 菜新鲜了人更嗨 -> DEEP-NIGHT-WEAK(R1029)+3-LINK-ISO
+   morning/0 晨雾散，生意来 -> DEEP-NIGHT-WEAK(R1029)+3-LINK-ISO
+   morning/1 鱼竿一甩，梦醒时分 -> DEEP-NIGHT-WEAK(R1029)+3-LINK-ISO
+  * morning rows remain 3-link-iso blocked (market-stall v44+v57+v58 / business twins) even at morning hours
