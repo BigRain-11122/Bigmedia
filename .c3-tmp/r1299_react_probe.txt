@@ -1,0 +1,29 @@
+R1299 REACT-v9 M0 pool probe (10-05 brief; fleet includes DAILY-v64 F-150 + all F-149x/150x faces)
+======================================================================
+== GROUP A_univ_rank keywords=排名/大学/高校/超越/第一/成绩/名校/考试/文凭 ==
+烟火/market_open/17 食堂师傅开始忙活今天的第一顿 -> HIT: [食堂师傅]->MC-20261002-REACT-v8 ; [今天的]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5 ; [的第一]->city-spirit ; [开始]->MC-20260926-DIGEST-v3
+秩序/dusk/3 干活儿别急，安全第一，咱得守好这城 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [别急，]->city-spirit ; [干活]->city-spirit ; [得守]->MC-20261002-DAILY-v51
+秩序/night/17 夜市繁华，安全第一 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [夜市]->city-spirit
+秩序/rain/10 雨天出门少，安全第一要紧 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [少，]->MC-20260930-REACT-v6,MC-20261001-DIGEST-v11,MC-20261001-DIGEST-v13 ; [雨天]->MC-20260926-REACT-v1
+秩序/typhoon/10 加固招牌防台风，安全第一莫等闲 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [加固招牌]->city-spirit ; [台风]->MC-20260926-CENSUS-v18,MC-20260926-CENSUS-v19
+秩序/heatwave/11 空调开得不小气，但安全第一 -> HIT: [安全第一]->MC-20261002-DAILY-v35 ; [气，]->MC-20261002-DAILY-v14
+秩序/market_open/10 入市之前，得把账单再查一遍，安全第一 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28
+秩序/festival/3 安全第一，节日也得严谨 -> HIT: [安全第一]->MC-20261002-DAILY-v35 ; [也得]->MC-20261002-DAILY-v32,MC-20261002-DAILY-v40,MC-20261002-DAILY-v41,MC-20261002-REACT-v8 ; [节日]->MC-20261002-DAILY-v17,MC-20261002-DAILY-v28,MC-20261002-DAILY-v30,MC-20261002-DAILY-v4,MC-20261002-REACT-v8
+秩序/festival/11 灯盏盏都得检查，安全第一 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [盏盏都得检]->MC-20261002-DAILY-v35 ; [检查，安全]->MC-20261002-DAILY-v35 ; [都得检查，]->MC-20261002-DAILY-v35
+求新/market_open/13 交易一开盘，心情像画布上第一笔 -> HIT: [像画布上第]->city-spirit ; [交易一开盘]->city-spirit ; [，心情像画]->city-spirit ; [易一开盘，]->city-spirit
+逍遥/typhoon/3 台风来了别乱跑，安全第一莫要忘 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [台风]->MC-20260926-CENSUS-v18,MC-20260926-CENSUS-v19 ; [来了]->MC-20261002-DAILY-v19
+逍遥/typhoon/11 云多风大，加固招牌，安全第一 -> HIT: [，安全第一]->MC-20261002-DAILY-v35 ; [加固招牌]->city-spirit ; [风大]->MC-20260926-REACT-v2 ; [，加]->MC-20261003-DIGEST-v14
+======================================================================
+== GROUP B_dianchi_swim keywords=游泳/湖/开放/试点/公园/市民/水域/锻炼/体育 ==
+求新/heatwave/2 要不是怕电费爆表，早把冰箱当游泳池了！ -> HIT: [不是怕]->city-spirit ; [表，]->city-spirit
+侠气/night/13 江湖义气在，街头结伴行 -> HIT: [江湖义气]->MC-20261002-DAILY-v3 ; [在，]->city-spirit ; [，街]->city-spirit
+侠气/rain/4 撑伞慢慢走，江湖上的路更宽 -> HIT: [慢慢走，]->city-spirit ; [，江湖]->MC-20261002-DAILY-v3 ; [上的]->MC-20261002-DAILY-v11,MC-20261002-DAILY-v15,MC-20261002-DAILY-v24
+侠气/market_open/2 江湖大侠挥了挥手：“来往皆是客，买卖公平点！ -> HIT: [江湖]->MC-20261002-DAILY-v3 ; [是客]->MC-20260925-CENSUS-v1
+侠气/ceo_order/4 风一吹，江湖义气更浓了 -> HIT: [，江湖义气]->MC-20261002-DAILY-v3
+侠气/festival/5 灯下兄弟把酒言，江湖义气不言钱 -> HIT: [义气不言钱]->MC-20261002-DAILY-v3 ; [，江湖义气]->MC-20261002-DAILY-v3 ; [灯下兄弟把]->MC-20261002-DAILY-v3 ; [江湖义气不]->MC-20261002-DAILY-v3
+侠气/festival/17 节日里咱们多走动，江湖义气最讲信用 -> HIT: [，江湖义气]->MC-20261002-DAILY-v3 ; [节日里]->MC-20261002-DAILY-v17
+逍遥/typhoon/12 风急雨骤，招牌需牢，咱们市民有见识 -> HIT: [市民]->MC-20260925-CENSUS-v1,MC-20260925-CENSUS-v11,MC-20260925-CENSUS-v12,MC-20260925-CENSUS-v13,MC-20260925-CENSUS-v14,MC-20260925-CENSUS-v2,MC-20260925-CENSUS-v3,MC-20260925-CENSUS-v4,MC-20260925-CENSUS-v5,MC-20260925-CENSUS-v6,MC-20260925-CENSUS-v7,MC-20260925-CENSUS-v9,MC-20260926-CENSUS-v16,MC-20260926-CENSUS-v17,MC-20260926-CENSUS-v18 ; [，咱]->MC-20260927-REACT-v3,MC-20260930-REACT-v6,MC-20261002-DAILY-v21 ; [招牌]->city-spirit
+逍遥/market_open/9 江湖多变，买卖从容 -> HIT: [江湖]->MC-20261002-DAILY-v3
+======================================================================
+== GROUP C_asian_games keywords=比赛/运动/夺冠/金牌/热血/赛场/冠军/竞技 ==
+======================================================================
