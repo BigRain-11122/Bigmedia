@@ -1,11 +1,10 @@
-now=2026-10-05 02:22:51
+now=2026-10-05 01:36:23
 GIT_STATUS_START
 ?? .c3-tmp/r1304_check.py
 ?? .c3-tmp/r1304_check.txt
 ?? .c3-tmp/r1304_e4_clean.txt
 ?? .c3-tmp/r1304_e4_extract.py
 ?? data/storylines/cards/MC-20261005-DIGEST-v15-tmp/e4-result.json
-?? docs/reviews/expert-verdicts/20261005-011831-E4-audience.md
 GIT_STATUS_END
 index.lock exists: False
 LAST_COMMIT: 874ea2f1 10-05 01:24 R1303 production: DIGEST v15 radar-batch digest card F-151 registered (#67 trigger-law claim, E33 restock+consume same round); 10-04 night radar orders P-2026-10-04-01/02 acknowledged (next: OSS window 4 slice after 21:40 with revenue lens 3-type benefit), 3 build assertions (filter face 2-fix bit in-round), em40 ladder, 5/5 verify incl. pixel-band scan + 128px right-edge measure overruling multimodal read-diff, 7-seat 6x9.0, E4 in-flight backfill next round; REACT 10-05 cross-check confirms R1299 3rd no-go [via bm-a]
@@ -25,7 +24,7 @@ CENSUS_ANCHOR_C-00030: False
 W40_AUDIT: EXISTS
 AUDIO_CH6_V4: MISSING (bm-a gate)
 GB_LAST_REFRESH: 10-01 01:02
-POOLS_LEAF_STRINGS: 1440 (baseline 1440; mtime 10-05 02:06)
+POOLS_LEAF_STRINGS: 1440 (baseline 1440; mtime 10-05 01:06)
 POOLS_GATE: QUIET 1440==1440
 INTERCHAT_ROWS: 22 (baseline 22; mtime 09-27 08:57)
 INTERCHAT_GATE: QUIET 22==22
@@ -53,10 +52,7 @@ BACKLOG_TOP_END
 board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
 summary: 5 ideas, 10 drafts, 5 in production, 0 fail
 === READINESS (rc=1) ===
-shipinhao-60s.mp4 | 测试件·非成品 |
-| bs-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
-| bs-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
-| bs-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+|
 | lc-001-v1-shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
@@ -77,6 +73,7 @@ shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-019-v1-shipinhao-60s.mp4 | 测试件·非成品 |
 | lc-021-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| mc-20261005-digest-v15-card.mp4 | (missing test-piece mark) |
 
 ## ④ 待 CEO 决策与暂缓项（backlog 标记）
 
@@ -96,11 +93,12 @@ shipinhao-60s.mp4 | 测试件·非成品 |
 
 ## 探针发现项（findings·机器纪律核验）
 
-- none
+- [FAIL] render-unannot: media file not annotated as test piece: mc-20261005-digest-v15-card.mp4
 
-readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+readiness: 3 blocker(s), 1 finding(s) -> NOT READY
 === LOOP_HEALTH (rc=1) ===
-ach legitimately
+ 22 min (2026-10-03 04:05 -> 2026-10-03 04:27) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-03 06:34 -> 2026-10-03 06:55) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 10:54 -> 2026-10-03 11:15) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 26 min (2026-10-03 12:34 -> 2026-10-03 13:00) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 29 min (2026-10-03 23:37 -> 2026-10-04 00:07) over 20 min comm SLA - long rounds may breach legitimately
@@ -109,7 +107,5 @@ ach legitimately
 - [WARN] heartbeat-gap: beat gap 20 min (2026-10-05 00:04 -> 2026-10-05 00:25) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 22 min (2026-10-05 00:37 -> 2026-10-05 00:59) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 26 min (2026-10-05 00:59 -> 2026-10-05 01:25) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] heartbeat-gap: beat gap 30 min (2026-10-05 01:25 -> 2026-10-05 01:55) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 6 completed round(s) without accounting (done beats=1309 > tick=1303) - the R4/R5 bug pattern
-- [WARN] state-ts-stale: state ts 59 min old (> 40 min) - closing step not refreshing ts
-loop health: FAIL (3 fail, 136 warn)
+- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1307 > tick=1303) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 134 warn)
