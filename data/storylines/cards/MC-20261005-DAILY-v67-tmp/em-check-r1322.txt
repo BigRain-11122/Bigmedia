@@ -1,0 +1,9 @@
+pool assert: axes[侠气][weekend][5] verbatim OK; weekend bucket=18 rows; axes 6 structure (R982); v58 weekend/7 + v59 weekend/8 + v60 weekend/4 + v63/v64 sprite weekend/3,4 + v65 night/16 + v66 weekend/17 consumed-row structural anchors; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v66; daytime-window second-seat: R1321 post-v66 registration (侠气/5 = only remaining weekend-face clean daytime row) -> this round redemption; quote-face word probe: 6 words see r1322_quote_face.txt; production time 2026-10-05 06:19:26 (post-sunrise literal daytime)
+H1 96 budget 9.58em | H2 50 budget 18.40em (ladder pick, margin>=0.2em) | VERT stack bottom 686px vs subs top 970px gap +284px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 067
+13.60 em  budget 18.40 em  margin +4.80em  single=True  2026-10-05 · 国庆假期 · 晨
+14.00 em  budget 18.40 em  margin +4.40em  single=True  「茶余饭后讲讲闲话，才不闷」
+12.65 em  budget 18.40 em  margin +5.75em  single=True  ——硅基城市台词池 · 侠气轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_50: quote line 14.00em driver (canonical band library em-budget-ladder.md 50->46->44->40->36->32->28 max-feasible pick; 50-band budget 18.40em margins +4.80/+4.40/+5.75em; four-LINES stack VERT +284px); all other QUOTE-v2 params verbatim; daytime-window second-seat + supply-determined + scene-heterogeneity honest notes carried in meta.form
