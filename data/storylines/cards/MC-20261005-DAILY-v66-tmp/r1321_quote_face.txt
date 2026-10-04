@@ -1,0 +1,11 @@
+r1321 quote-face word probe for candidate 听老唱片，忆往昔岁月，时光倒流一二里 (怀旧/weekend/17, daytime-window unlock piece)
+word [听老唱片] -> MC-20261005-DAILY-v66
+word [老唱片] -> MC-20261005-DAILY-v66
+word [唱片] -> MC-20261005-DAILY-v66
+word [忆往昔] -> MC-20261005-DAILY-v66
+word [往昔] -> MC-20261005-DAILY-v66
+word [时光倒流] -> MC-20261005-DAILY-v66
+word [倒流] -> MC-20261005-DAILY-v66
+word [一二里] -> MC-20261005-DAILY-v66
+honest-adjacency notes: NOTE: some probe hits above - honest adjacency adjudication required. Daytime-window adjudication (R1320 window verdict + this round machine regen): (1) weekend face = the registered supply after night-face double-zero (R1124/R1305): TWO clean daytime-home rows (怀旧/17 + 侠气/5), pre-dawn window time-point mismatch -> sunrise ~05:52 unlock fired THIS round; (2) rotation law machine count: 怀旧 9 = unique least-consumed axis + longest gap 10 (v55->v65) -> 怀旧/17 selected over 侠气/5 (侠气 10 counts, gap 6); 侠气/5 = remaining daytime standby row for next daytime window; 烟火/13 = 10-08 market-reopen gate; (3) zero card-face shingle collision = series 14th fully-zero row; spirit-layer 1 (common word 时光) = harvest-file layer, NOT the R1010 card-face dedup face, honest note carried; (4) anti-homogenization R442: v55 怀旧 = 溜达旧书摊 outdoor-street face -> THIS = 居家听唱片 indoor-audio face = scene-heterogeneous; (5) weekend bucket on Monday holiday = 假日态 adjacency (v58/v59/v60 direct precedent), honest note; (6) LITERAL daytime: post-sunrise morning production (~05:5x) x holiday-home content x 怀旧轴.
+post-v66 supply honest note: weekend face remaining = 侠气/weekend/5 (daytime standby, next daytime window) + 烟火/weekend/13 (10-08 market-reopen gate); all other weekend rows = 3-17 card-face shingle collisions (r1321_weekend_scan.txt); night face double-zero (R1124/R1305) unchanged; unlock windows unchanged: rain-event day / CEO-order day / 10-08 market reopen / Nov+ coldsnap / summer heatwave. Pool-expansion report position maintained (status-line not chase).

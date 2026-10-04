@@ -1,0 +1,9 @@
+pool assert: axes[怀旧][weekend][17] verbatim OK; weekend bucket=18 rows; axes 6 structure (R982); v58 weekend/7 + v59 weekend/8 + v60 weekend/4 + v63/v64 sprite weekend/3,4 + v65 night/16 consumed-row structural anchors; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v65; daytime-window unlock: R1320 registered 2 clean weekend rows -> sunrise hard gate 05:52 -> rotation law 怀旧 least+longest-gap selected; quote-face word probe: 8 words see r1321_quote_face.txt; production time 2026-10-05 05:53:39 (post-sunrise literal daytime)
+H1 96 budget 9.58em | H2 44 budget 20.91em (ladder pick, margin>=0.2em) | VERT stack bottom 652px vs subs top 970px gap +318px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 066
+13.60 em  budget 20.91 em  margin +7.31em  single=True  2026-10-05 · 国庆假期 · 晨
+20.00 em  budget 20.91 em  margin +0.91em  single=True  「听老唱片，忆往昔岁月，时光倒流一二里」
+12.65 em  budget 20.91 em  margin +8.26em  single=True  ——硅基城市台词池 · 怀旧轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_44: quote line 20.0em driver (46-band == 20.0 zero-margin excluded per R293; 44-band margin 0.91em = v13/v17/v18 precedent band); four-LINES stack; all other QUOTE-v2 params verbatim; daytime-window + rotation + scene-heterogeneity honest notes carried in meta.form

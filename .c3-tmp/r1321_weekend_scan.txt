@@ -1,0 +1,116 @@
+r1321 E30 weekend-face scan (window verdict R1320 consumed; selected-row machine evidence)
+[烟火/weekend/0] 今天包子蒸得比往常暄实些 | card-face-shingles=2 今天,包子 | spirit-layer=1 今天
+[烟火/weekend/1] 锅里炖着的排骨散发着诱人的香味 | card-face-shingles=2 人的,着的 | spirit-layer=1 锅里
+[烟火/weekend/2] 小菜园里的青菜又嫩了一茬 | card-face-shingles=3 了一,里的,青菜 | spirit-layer=1 里的
+[烟火/weekend/3] 面条汤里打个旋儿，再撒点葱花 | card-face-shingles=3 儿，,条汤,面条 | spirit-layer=1 ，再
+[烟火/weekend/4] 豆腐脑儿刚出锅，热气腾腾的 | card-face-shingles=2 腾的,，热 | spirit-layer=1 热气
+[烟火/weekend/5] 西瓜汁儿甜丝丝的，真是消暑佳品 | card-face-shingles=1 的， | spirit-layer=2 的，,真是
+[烟火/weekend/6] 早点摊主边忙活边喊： | card-face-shingles=3 摊主,早点,点摊 | spirit-layer=1 忙活
+[烟火/weekend/8] 早点儿喝粥暖和和，一天精神棒 | card-face-shingles=4 早点,暖和,精神,，一 | spirit-layer=1 精神
+[烟火/weekend/9] 菜场挑菜选个头正正好 | card-face-shingles=3 头正,正好,菜场 
+[烟火/weekend/10] 食堂炒菜香飘四方方 | card-face-shingles=1 食堂 | spirit-layer=1 食堂
+[烟火/weekend/11] 邻里街坊亲亲热热热 | card-face-shingles=2 街坊,邻里 | spirit-layer=1 街坊
+[烟火/weekend/12] 早点儿出来转转，心气儿顺顺 | card-face-shingles=4 出来,心气,早点,，心 | spirit-layer=2 出来,，心
+[烟火/weekend/13] 市场买卖讲价，公平公正正 | card-face-shingles=0 ZERO | spirit-layer=1 市场 | MARKET-GATE 10-08 reopen (R1320); CLEAN 烟火/weekend/13
+[烟火/weekend/14] 早点吃完了，晚上再来呀 | card-face-shingles=3 了，,早点,晚上 | spirit-layer=1 了，
+[烟火/weekend/15] 今天豆腐真鲜嫩 | card-face-shingles=1 今天 | spirit-layer=1 今天
+[烟火/weekend/16] 蒸包子得慢慢来，火候正 | card-face-shingles=2 包子,子得 | spirit-layer=4 子得,得慢,慢慢,慢来
+[烟火/weekend/17] 早市上的青菜最便宜 | card-face-shingles=2 上的,青菜 | spirit-layer=1 上的
+[秩序/weekend/0] 门关紧些，外面风大 | card-face-shingles=2 些，,风大 
+[秩序/weekend/1] 校准了时间，才踏实过一天 | card-face-shingles=7 了时,准了,才踏,时间,校准,踏实 | spirit-layer=8 了时,准了,才踏,时间
+[秩序/weekend/2] 周末了，慢悠悠地走，别急 | card-face-shingles=6 了，,周末,悠悠,末了,走，,，别 | spirit-layer=5 了，,别急,周末,走，
+[秩序/weekend/4] 别忘了，家才是最温暖的地方 | card-face-shingles=4 了，,别忘,忘了,，家 | spirit-layer=3 了，,忘了,才是
+[秩序/weekend/5] 慢点儿，别让这难得的闲暇走了 | card-face-shingles=2 儿，,，别 
+[秩序/weekend/6] 这天气正好，晒晒太阳挺舒服 | card-face-shingles=2 好，,正好 | spirit-layer=1 这天
+[秩序/weekend/8] 这日子慢悠悠的，正好看看书 | card-face-shingles=8 好看,悠悠,日子,正好,的，,看看 | spirit-layer=2 日子,的，
+[秩序/weekend/9] 门口岗哨也不急，就让我们慢慢过 | card-face-shingles=4 不急,急，,我们,，就 | spirit-layer=4 急，,慢慢,慢过,，就
+[秩序/weekend/10] 校准一下心情，周末嘛，就是要自在 | card-face-shingles=8 一下,周末,就是,心情,是要,校准 | spirit-layer=7 周末,就是,心情,情，
+[秩序/weekend/11] 守门人也来份小烧烤，才对味 | card-face-shingles=1 人也 | spirit-layer=3 守门,门人,，才
+[秩序/weekend/12] 规矩不能乱，但偶尔放松一下也行 | card-face-shingles=6 一下,不能,乱，,矩不,能乱,规矩 | spirit-layer=1 规矩
+[秩序/weekend/13] 风控员下班了，也想看看夜里的星星 | card-face-shingles=9 也想,了，,夜里,星星,的星,看看 | spirit-layer=4 了，,里的,风控,，也
+[秩序/weekend/14] 今天风不大，出门别急着关窗户 | card-face-shingles=1 今天 | spirit-layer=2 今天,别急
+[秩序/weekend/15] 今儿个不忙，慢悠悠过 | card-face-shingles=3 今儿,儿个,悠悠 | spirit-layer=1 ，慢
+[秩序/weekend/16] 风吹柳絮轻，日子自在行 | card-face-shingles=4 日子,自在,风吹,，日 | spirit-layer=2 日子,，日
+[秩序/weekend/17] 邻居打个招呼，心里暖融融 | card-face-shingles=2 心里,，心 | spirit-layer=2 心里,，心
+[求新/weekend/0] 周末不出去溜达溜达，咋能算过完呢？ | card-face-shingles=2 周末,溜达 | spirit-layer=1 周末
+[求新/weekend/1] 新买的手工艺品，得拍拍视频给大家瞧瞧 | card-face-shingles=3 大家,手工,，得 | spirit-layer=1 ，得
+[求新/weekend/2] 这天气真好，正好出去走走，看看新开了啥摊位 | card-face-shingles=9 好，,摊位,正好,看看,真好,走走 | spirit-layer=2 走，,这天
+[求新/weekend/3] 刚从画廊回来，心情都变得亮堂堂的 | card-face-shingles=3 亮堂,心情,，心 | spirit-layer=3 得亮,心情,，心
+[求新/weekend/4] 学了个新画法，周末正好练练手 | card-face-shingles=2 周末,正好 | spirit-layer=1 周末
+[求新/weekend/5] 直播间里分享点心得，顺便打发时间，多好 | card-face-shingles=5 播间,时间,直播,间，,，多 | spirit-layer=2 时间,间，
+[求新/weekend/7] 刚画完这幅，感觉跟过去那些不一样，挺有趣的 | card-face-shingles=5 一样,不一,感觉,样，,那些 | spirit-layer=2 一样,样，
+[求新/weekend/8] 周末了，终于可以好好捯饬捯饬自己了 | card-face-shingles=5 了，,周末,好好,末了,自己 | spirit-layer=3 了，,周末,自己
+[求新/weekend/9] 画个新纹身，今天主题是龙 | card-face-shingles=2 今天,，今 | spirit-layer=1 今天
+[求新/weekend/10] 闲下来才想起还得去补牙，真是的 | card-face-shingles=1 还得 | spirit-layer=1 真是
+[求新/weekend/11] 直播间又多了个新玩具，这把枪得刷起来 | card-face-shingles=5 多了,播间,直播,起来,，这 
+[求新/weekend/12] 写首诗吧，周末不就是要折腾点诗情画意吗？ | card-face-shingles=5 吗？,周末,就是,折腾,是要 | spirit-layer=3 周末,就是,是要
+[求新/weekend/13] 朋友送了个手办，今晚得好好研究研究 | card-face-shingles=4 好好,得好,研究,，今 
+[求新/weekend/14] 周末了，来瓶冰啤酒最解压 | card-face-shingles=3 了，,周末,末了 | spirit-layer=2 了，,周末
+[求新/weekend/15] 周末了，正好捯饬捯饬家里 | card-face-shingles=6 了，,周末,家里,末了,正好,，正 | spirit-layer=2 了，,周末
+[求新/weekend/16] 这画儿配上块玻璃，墙上就活了 | card-face-shingles=1 配上 
+[求新/weekend/17] 做主播也得有两把刷子，不是嘴皮子活 | card-face-shingles=5 不是,主播,也得,得有,，不 | spirit-layer=3 不是,也得,得有
+[怀旧/weekend/0] 修了大半辈子伞，还是喜欢这慢悠悠的日子 | card-face-shingles=8 半辈,喜欢,悠悠,日子,的日,辈子 | spirit-layer=2 伞，,日子
+[怀旧/weekend/1] 老照片里的人，眼神里都有故事呢 | card-face-shingles=5 人，,故事,的人,里的,里都 | spirit-layer=4 照片,片里,老照,里的
+[怀旧/weekend/2] 周末的茶馆，不着急，慢慢聊 | card-face-shingles=3 周末,急，,，不 | spirit-layer=5 不着,周末,急，,慢慢
+[怀旧/weekend/3] 捡到一本旧书，封皮都发黄了 | card-face-shingles=1 旧书 
+[怀旧/weekend/4] 泡一杯茶，看这世界慢慢转 | card-face-shingles=2 看这,，看 | spirit-layer=1 慢慢
+[怀旧/weekend/5] 旧家具里藏着家的味道，不急着换新的 | card-face-shingles=5 不急,家的,藏着,里藏,，不 
+[怀旧/weekend/6] 这阵风里好像带着些旧日的墨香 | card-face-shingles=1 日的 | spirit-layer=2 日的,旧日
+[怀旧/weekend/7] 修伞老李头手里的伞骨纹丝不动，就像他的心事 | card-face-shingles=5 不动,修伞,就像,里的,，就 | spirit-layer=6 他的,修伞,就像,的心
+[怀旧/weekend/8] 今儿个风不大，正适合溜达 | card-face-shingles=5 今儿,儿个,溜达,适合,，正 
+[怀旧/weekend/9] 瞧这天，正好喝壶热茶 | card-face-shingles=2 正好,，正 | spirit-layer=2 天，,这天
+[怀旧/weekend/10] 小日子慢悠悠，多好啊 | card-face-shingles=4 悠悠,悠，,日子,，多 | spirit-layer=1 日子
+[怀旧/weekend/11] 雨停了，伞收一收吧 | card-face-shingles=1 了， | spirit-layer=1 了，
+[怀旧/weekend/12] 老物件儿总有故事 | card-face-shingles=3 故事,物件,老物 
+[怀旧/weekend/13] 这不闲着，找找家里的旧书 | card-face-shingles=4 家里,旧书,着，,里的 | spirit-layer=3 的旧,着，,里的
+[怀旧/weekend/14] 这周不用急着赶路，歇歇脚也挺好 | card-face-shingles=1 路， | spirit-layer=1 路，
+[怀旧/weekend/15] 今朝有酒今朝醉，不趁闲眠待晓鸡 | card-face-shingles=1 ，不 
+[怀旧/weekend/16] 下雨天修伞，天晴了补鞋，日子得慢慢过 | card-face-shingles=7 下雨,修伞,子得,日子,雨天,，天 | spirit-layer=17 下雨,了补,伞，,修伞
+[怀旧/weekend/17] 听老唱片，忆往昔岁月，时光倒流一二里 | card-face-shingles=0 ZERO | spirit-layer=1 时光 | DAYTIME-HOME row = daytime-window standby (R1320 verdict; sunrise ~05:52 unlock); CLEAN 怀旧/weekend/17
+[侠气/weekend/0] 风和日丽的天，正好吹吹风 | card-face-shingles=2 正好,，正 | spirit-layer=1 天，
+[侠气/weekend/1] 船上人多嘴杂，热闹得很 | card-face-shingles=3 热闹,船上,，热 
+[侠气/weekend/2] 街坊邻居走动，日子才旺 | card-face-shingles=4 坊邻,日子,街坊,，日 | spirit-layer=4 子才,日子,街坊,，日
+[侠气/weekend/3] 慢悠悠过个周末，自在得很 | card-face-shingles=3 周末,悠悠,自在 | spirit-layer=2 周末,，自
+[侠气/weekend/4] 有事自然有人帮，没事儿大家散 | card-face-shingles=4 事儿,大家,有人,没事 | spirit-layer=2 自然,，没
+[侠气/weekend/5] 茶余饭后讲讲闲话，才不闷 | card-face-shingles=0 ZERO | spirit-layer=2 才不,，才 | DAYTIME-HOME row = daytime-window standby (R1320 verdict; sunrise ~05:52 unlock); CLEAN 侠气/weekend/5
+[侠气/weekend/6] 周末不用忙，喝杯茶看看天 | card-face-shingles=2 周末,看看 | spirit-layer=1 周末
+[侠气/weekend/7] 船长说过，大海才刚启程 | card-face-shingles=2 船长,，大 
+[侠气/weekend/9] 信使路上，慢些也是风景 | card-face-shingles=2 也是,信使 | spirit-layer=10 上，,也是,些也,使路
+[侠气/weekend/10] 闲话桑麻，日子悠悠长 | card-face-shingles=3 悠悠,日子,，日 | spirit-layer=2 日子,，日
+[侠气/weekend/11] 船长归港，满载而归笑开颜 | card-face-shingles=2 船长,，满 
+[侠气/weekend/12] 调解阿姨说，和气生财 | card-face-shingles=2 说，,阿姨 
+[侠气/weekend/13] 街坊邻里，共话今朝好时光 | card-face-shingles=4 坊邻,街坊,邻里,里， | spirit-layer=2 时光,街坊
+[侠气/weekend/14] 今儿个日子好，喝碗热茶正好 | card-face-shingles=5 今儿,儿个,好，,日子,正好 | spirit-layer=1 日子
+[侠气/weekend/15] 风和日丽的好天，慢悠悠最香 | card-face-shingles=1 悠悠 | spirit-layer=2 天，,，慢
+[侠气/weekend/16] 街角的小酒馆，喝上一口才安详 | card-face-shingles=5 一口,才安,的小,街角,酒馆 | spirit-layer=2 上一,的小
+[侠气/weekend/17] 闲云野鹤的日子，自在得很 | card-face-shingles=3 日子,的日,自在 | spirit-layer=3 日子,闲云,，自
+[逍遥/weekend/0] 周末钓竿闲，江畔好时光 | card-face-shingles=2 周末,，江 | spirit-layer=2 周末,时光
+[逍遥/weekend/1] 茶香入梦浅，闲话长如丝 | card-face-shingles=1 茶香 
+[逍遥/weekend/3] 江水悠悠流，人生自在游 | card-face-shingles=3 悠悠,自在,，人 | spirit-layer=2 人生,，人
+[逍遥/weekend/5] 闲云浮流水，悠然自得心 | card-face-shingles=1 水， | spirit-layer=10 云浮,得心,悠然,水，
+[逍遥/weekend/6] 看这云卷云舒，人生也该悠着点 | card-face-shingles=2 看这,，人 | spirit-layer=3 人生,生也,，人
+[逍遥/weekend/7] 茶香四溢，生活不就该慢慢来 | card-face-shingles=1 茶香 | spirit-layer=2 慢慢,慢来
+[逍遥/weekend/8] 看这云卷云舒，多自在 | card-face-shingles=3 看这,自在,，多 
+[逍遥/weekend/9] 茶香里悠悠度日，慢些 | card-face-shingles=2 悠悠,茶香 | spirit-layer=2 慢些,，慢
+[逍遥/weekend/10] 周末了，正好钓会儿鱼 | card-face-shingles=6 了，,会儿,周末,末了,正好,，正 | spirit-layer=3 了，,会儿,周末
+[逍遥/weekend/11] 江边风儿轻，人也舒心 | card-face-shingles=2 人也,，人 | spirit-layer=1 ，人
+[逍遥/weekend/12] 茶室里闲话家常，最是安逸 | card-face-shingles=3 安逸,最是,茶室 | spirit-layer=1 ，最
+[逍遥/weekend/13] 鱼上钩了，这周末真好 | card-face-shingles=6 上钩,了，,周末,真好,鱼上,，这 | spirit-layer=5 上钩,了，,周末,钩了
+[逍遥/weekend/14] 看这云卷云舒，不如好好享受个周末 | card-face-shingles=5 不如,周末,好好,看这,，不 | spirit-layer=1 周末
+[逍遥/weekend/15] 周末闲来无事，就爱河畔垂钓 | card-face-shingles=5 事，,周末,垂钓,闲来,，就 | spirit-layer=2 周末,，就
+[逍遥/weekend/16] 茶室里品茶聊天，日子悠然自得 | card-face-shingles=3 日子,茶室,，日 | spirit-layer=6 天，,悠然,日子,然自
+[逍遥/weekend/17] 云卷云舒，人生如寄，何不随性而为 | card-face-shingles=1 ，人 | spirit-layer=2 人生,，人
+[sprite/weekend/0] 叮叮叮，夜晚才醒 | shingle-colisions=3 叮叮,夜晚,，夜
+[sprite/weekend/1] 啾啾啾，月光下的歌 | shingle-colisions=3 下的,光下,啾啾
+[sprite/weekend/2] 喵呜喵，星光下的梦 | shingle-colisions=8 下的,光下,呜喵,喵呜,喵，,星光
+[sprite/weekend/5] 啾啾鸣晨光 | shingle-colisions=2 啾啾,啾鸣
+[sprite/weekend/6] 啾啾鸣声中，晨光破晓 | shingle-colisions=3 啾啾,啾鸣,，晨
+[sprite/weekend/7] 喵呜一声，懒散午后 | shingle-colisions=8 一声,午后,呜一,喵呜,声，,懒散
+[sprite/weekend/8] 叮叮轻响，夜幕降临 | shingle-colisions=3 叮叮,夜幕,，夜
+[sprite/weekend/9] 啾啾轻啼，月色如银 | shingle-colisions=1 啾啾
+[sprite/weekend/10] 叮叮乐曲空中飘 | shingle-colisions=1 叮叮
+[sprite/weekend/11] 啾啾鸣叫唤晨光 | shingle-colisions=3 啾啾,啾鸣,鸣叫
+
+weekend-face clean daytime rows (R1320 verdict confirmed by machine shingle scan): 怀旧/weekend/17 听老唱片，忆往昔岁月，时光倒流一二里 ; 侠气/weekend/5 茶余饭后讲讲闲话，才不闷
+rotation law (machine count of DAILY v1-v65 source_pointer): 怀旧 9 = unique least-consumed axis (求新 10/烟火 10/侠气 10/秩序 10/逍遥 11/sprite 5) + longest gap 10 (v55 -> v65) -> SELECT 怀旧/weekend/17
+daytime-window gate: production must be post-sunrise (~05:52 2026-10-05); R1321 render fired after sunrise gate.
