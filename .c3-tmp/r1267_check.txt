@@ -1,4 +1,4 @@
-now=2026-10-04 18:53:03
+now=2026-10-04 18:33:37
 GIT_STATUS_START
 M .c3-tmp/r1021_loop.txt
  M .c3-tmp/r1021_probes_summary.txt
@@ -8,13 +8,6 @@ M .c3-tmp/r1021_loop.txt
 ?? .c3-tmp/r1266_check.txt
 ?? .c3-tmp/r1266_diff.txt
 ?? .c3-tmp/r1266_state.py
-?? .c3-tmp/r1267_check.txt
-?? .c3-tmp/r1267_state.py
-?? .c3-tmp/r1267_verify.txt
-?? .c3-tmp/r1268_check.txt
-?? .c3-tmp/r1268_state.py
-?? .c3-tmp/r1268_verify.txt
-?? .c4-tmp/
 GIT_STATUS_END
 index.lock exists: False
 LAST_COMMIT: 3ddfc2f0 10-04 18:13 R1265 declared-idle window 6/6 batch close R1260-R1265: five-checks fresh (no new orders; ledger 43==43; dnums 137==137 NEW=[]; BS rows 46==46; no lock; tree self-ledger expected); probes flat (board 0 FAIL, readiness 3 external 0 findings, loop 3 FAIL+131 WARN, account-lag +4 constant); supply gates quiet (pools 1440, interchat 22, novel 0, daily 10-04 in-case); all lanes time-gated to 10-05 day-boundary batch (daily brief, REACT F-151, W41 set, OSS w4 21:40; #57=10-07, GB=10-08); export not refreshed (03:37 <24h per F3); r1260-r1265 evidence rolled in [via bm-a]
@@ -24,7 +17,7 @@ LEDGER_LAST_HIT: - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余
 DECISIONS mtime 10-04 12:05
 DECISIONS_SET: now=137 wm=137 NEW=[]
 DECISIONS_BS_ROWS: 46 (baseline 46 post-R1229)
-STATE tick=1268 ts=2026-10-04 18:44:04
+STATE tick=1266 ts=2026-10-04 18:24:41
 PRODUCTION: open
 DAILY 10-04: EXISTS
 DAILY 10-05: MISSING
@@ -121,5 +114,5 @@ readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 - [WARN] heartbeat-gap: beat gap 29 min (2026-10-03 23:37 -> 2026-10-04 00:07) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 24 min (2026-10-04 03:14 -> 2026-10-04 03:38) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 21 min (2026-10-04 07:44 -> 2026-10-04 08:05) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1272 > tick=1268) - the R4/R5 bug pattern
+- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1270 > tick=1266) - the R4/R5 bug pattern
 loop health: FAIL (3 fail, 131 warn)
