@@ -1,0 +1,81 @@
+== log heads R1295..R1302 ==
+== R1310 full line ==
+
+== weekly_report.py paths ==
+42| python src/weekly_report.py ANCHOR_DATE OUT_DIR   # explicit output dir
+59| OUT_DIR = REPO / "output" / "reports"
+431| out_dir = Path(args[1]) if len(args) >= 2 else OUT_DIR
+448| out_path = out_dir / ("weekly-%s.md" % label)
+449| with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
+451| print("weekly report: %s" % out_path)
+
+== weekly report files on disk ==
+09-27 11:24  docs\research\R-20260927-bigstream-04-aigc-labeling-recsys-weekly-scan.md
+09-29 04:39  output\reports\weekly-2026-W39.md
+10-05 00:22  output\reports\weekly-2026-W40.md
+09-29 12:05  src\__pycache__\weekly_report.cpython-314.pyc
+09-29 05:54  tests\__pycache__\test_weekly_report.cpython-314.pyc
+09-29 04:39  output\reports\weekly-2026-W39.md
+10-05 00:22  output\reports\weekly-2026-W40.md
+
+== log grep weekly report / CLOUD_LINE / R658 recent ==
+2026-10-04 19:23 R1272: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 1/6=R1271 批闭 b7949075 后新窗首轮）——①五查 fresh 实证 .c3-tmp/r1272_check.txt 19:23（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46
+--
+2026-10-04 19:33 R1273: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 2/6=R1272 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1273_check.txt 19:33（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔R1229 消费后
+--
+2026-10-04 19:44 R1274: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 3/6=R1272/R1273 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1274_check.txt 19:44（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔R1229 消费后
+--
+2026-10-04 19:53 R1275: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 4/6=R1272~R1274 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1275_check.txt 19:52（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 已 R1247 裁处〔第 3 次 GREEN-IDLE 点名 ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows
+--
+2026-10-04 20:04 R1276: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 5/6=R1272~R1275 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1276_check.txt 20:03（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 已 R1247 裁处〔第 3 次 GREEN-IDLE 点名 ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows
+--
+2026-10-04 20:13 R1277: declared-idle 一行声明收轮·声明窗 6/6 窗满即收=batch close R1272-R1277 一盘 commit（os-protocol §6·commit 消息注明区间+r1272~r1277 证据件一并卷入·并窗重置 0/6）（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 6/6=R1272~R1276 同窗续轮收官）——①五查 fresh 实证 .c3-tmp/r1277_check.txt 20:12（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 已 R1247 裁处〔第 3 次 GREEN-IDLE 
+--
+2026-10-04 20:23:30 R1278: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 1/6=R1277 批闭 a6d0527f 后新窗首轮）——①五查 fresh 实证 .c3-tmp/r1278_check.txt 20:22（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46=
+--
+2026-10-04 20:33:39 R1279: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 2/6=R1278 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1279_check.txt 20:32（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔R1229 
+--
+2026-10-04 20:42:56 R1280: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 3/6=R1278/R1279 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1280_check.txt 20:42（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔
+--
+2026-10-04 20:53:43 R1281: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 4/6=R1278/R1279/R1280 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1281_check.txt 20:52（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==
+--
+2026-10-04 21:03:14 R1282: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 5/6=R1278~R1281 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1282_check.txt 21:02（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔
+--
+2026-10-04 21:13:35 R1283: declared-idle 一行声明收轮·声明窗 6/6 窗满即收=batch close R1278-R1283 一盘 commit（os-protocol §6·commit 消息注明区间+r1278~r1283 证据件一并卷入·并窗重置 0/6）（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 6/6=R1278~R1282 同窗续轮收官）——①五查 fresh 实证 .c3-tmp/r1283_check.txt 21:13（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=comm
+--
+2026-10-04 21:24:18 R1284: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-20260928-02 ②④序·声明窗 1/6=R1283 批闭后新窗首轮）——①五查 fresh 实证 .c3-tmp/r1284_check.txt 21:22（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔R1229
+--
+2026-10-04 21:33:20 R1285: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-20260928-02 ②④序·声明窗 2/6=R1284 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1285_check.txt 21:32（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕/decisions dnums 137==137 NEW=[] mtime 10-04 12:05 无漂移·D-20260930-19 水位差集制·BS rows 46==46 持平〔R1229 消费
+--
+2026-10-04 21:46:37 R1286: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 3/6=R1284 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1286_check.txt 21:45（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·会话内 PS -match 大小写不敏感宽口径 44 误读轮内定谳=口径伪差非新行〔r1286_check.py 新增 CI_EXTRAS 机证：唯一伪差行=P-2026-09-26-07 历史行
+--
+2026-10-04 21:53:56 R1287: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 4/6=R1284 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1287_check.txt 21:53（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳节点复核=1 伪差行 P-2026-09-26-07 历史行同读数〔python 正典口径 base==43==锚·PS 大小写宽口径伪差面已定谳不受影响
+--
+2026-10-04 22:04:36 R1288: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 5/6=R1284 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1288_check.txt 22:03（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳节点复核=1 伪差行 P-2026-09-26-07 历史行同读数〔python 正典口径 base==43==锚·PS 大小写宽口径伪差面已定谳不受影响
+--
+2026-10-04 22:14:01 R1289: declared-idle 一行声明收轮·声明窗 6/6 窗满即收=batch close R1284-R1289 一盘 commit（os-protocol §6·commit 消息注明区间+r1284~r1289 证据件一并卷入·并窗重置 0/6）（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 6/6=R1284~R1288 同窗续轮收官）——①五查 fresh 实证 .c3-tmp/r1289_check.txt 22:13（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=comm
+--
+2026-10-04 22:25:38 R1290: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 1/6=R1289 批闭 cb6d6e46 后新窗首轮）——①五查 fresh 实证 .c3-tmp/r1290_check.txt 22:24（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳=1 伪差行 P-2026-09-26-07 历史行同读数〔python 正典口径 base==43==锚·PS 大小写宽口径伪
+--
+2026-10-04 22:35:34 R1291: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 2/6=R1290 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1291_check.txt 22:34（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳=1 伪差行〔python 正典口径 base==43==锚不受影响〕/decisions dnums 137==137 NEW=[] mtime 10-
+--
+2026-10-04 22:44:58 R1292: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 3/6=R1290 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1292_check.txt 22:44（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳=1 伪差行〔python 正典口径 base==43==锚不受影响〕/decisions dnums 137==137 NEW=[] mtime 10-
+--
+2026-10-04 22:57:02 R1293: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 4/6=R1290 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1293_check.txt 22:54（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳=1 伪差行〔python 正典口径 base==43==锚不受影响〕/decisions dnums 137==137 NEW=[] mtime 10-
+--
+2026-10-04 23:04:10 R1294: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 5/6=R1290 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1294_check.txt 23:03（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静 mtime 10-04 15:12 无新行·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 承继 R1286 定谳=1 伪差行〔python 正典口径 base==43==锚不受影响〕/decisions dnums 137==137 NEW=[] mtime 10-
+--
+2026-10-04 23:14:31 R1295: declared-idle 一行声明收轮·声明窗 6/6 窗满即收=batch close R1290-R1295 一盘 commit（os-protocol §6·commit 消息注明区间+r1290~r1295 证据件一并卷入·并窗重置 0/6）（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 6/6=R1290~R1294 同窗续轮收官）——①五查 fresh 实证 .c3-tmp/r1295_check.txt 23:13（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 内容寻址锚静〔mtime 10-04 23:11 触动=非匹配面他司行·canonical @ 计数 43==43·末命中行=值守轮午
+--
+2026-10-04 23:26:35 R1296: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 1/6=R1295 批闭 f980304e 后新窗首轮）——①五查 fresh 实证 .c3-tmp/r1296_check.txt 23:25（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静〔mtime 10-04 23:11 触动=非匹配面他司行·canonical 计数 43==43·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处 ack=commit 5ac63011 在案·CI_EXTRAS 1 伪差行承继 R1286 定谳〕/decisions dnums 137==137 NEW=[]
+--
+2026-10-04 23:35:16 R1297: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 2/6=R1296 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1297_check.txt 23:34（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静〔mtime 10-04 23:11 触动=非匹配面他司行·canonical 计数 43==43·末命中行=值守轮午班 15:07 第 3 点名已 R1247 裁处〔ack=commit 5ac63011 在案〕·CI_EXTRAS 1 伪差行承继 R1286 定谳〕/decisions dnums 137==137 NEW=[]〔mtime 10-04
+--
+2026-10-04 23:44:45 R1298: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 3/6=R1296 同窗续轮）——①五查 fresh 实证 .c3-tmp/r1298_check.txt 23:44（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/ledger @target 43==43 锚静〔mtime 10-04 23:39 触动=值守轮盘面行非匹配面·canonical 计数 43==43·末命中行=值守轮午班 15:07 已 R1247 裁处 ack=commit 5ac63011 在案·CI_EXTRAS 1 伪差行承继 R1286 定谳〕/decisions dnums 137==137 NEW=[]〔mtime 10-04 23:
+--
+2026-10-05 00:04:04 R1299: 生产轮·日界轮=10-05 日报补产（00:00:09 双源 20 条全通 data/intel/daily/2026-10-05.md·O-2304 铁律·跨日界生产轮=实活轮·声明窗 R1296-R1298 按 os-protocol §6 实活出现即收一并收卷）+E31 REACT-v9 10-05 热点窗判负留痕=连续第三窗（r1299_react_probe.py=R1160 同型实跑·证据件 .c3-tmp/r1299_react_probe.txt·20 条全数法级排除+边缘三组机械探针零供给：A 教育排名族=「安全第一」族语义错配+全撞零 CLEAN/B 滇池游泳族=「湖」江湖字面错配+「市民」CENSUS 15+ 撞零 CLEAN/C 竞技族=池零体育面行八词零命中机核实证——与 DAILY 三面枯竭 R1032/R1
+--
+2026-10-05 00:24:32 R1300: 生产轮·W41 周轮件四件毕+集团决策批 D-20261005-01~05 收讫（五决科学判断闸全过审零驳回：D-01 orders.md 第四次覆写复原=集团侧知悉/D-02 回执核销批 17 含本司 F-20261004-01 核销=知悉/D-03 卡点堵点初版 v1.0 过审=知悉/D-04 双轨路由 interim 判定序即刻生效=接线〔本地能达标=本地·本司推理面零云实况一致·attribution 留痕面=cloud-attribution.json+周报 CLOUD_LINE〕/D-05 值守点名→回执窗派单首批=本司不在 OSS 欠窗七实体〔窗 3 三切片在案·窗 4 今晚 21:40 照领〕·水位 137→142+BS rows 46→47·回执=本行+commit 含批号）——①周报腿=weekly-2026-W40
+--
+2026-10-05 00:36 R1301: 例行件轮·W41 周自审件交付（当周 docs/audits/2026-W41-self-audit.md 缺失=任意轮补产律·O-20260924-1057/os-protocol §7·开周首日制=W40 R576 先例同型·实活轮）——①数据包=self_audit.py 零 token 实采 00:33（docs/audits/packs/2026-W41-pack.md：board 0 FAIL 5 题 10 稿 5 in production/readiness 3 阻塞皆外部 CEO 面 0 发现/loop_health 3 FAIL+132 WARN 皆在案定谳类·新 1 WARN=R1299→R1300 跨日界 20min 长轮合法·零新漂移）+台账读数（backlog 82 done/16 open·orders 41 落
+--

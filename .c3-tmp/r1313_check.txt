@@ -1,0 +1,138 @@
+now=2026-10-05 04:23:28
+GIT_STATUS_START
+M src/os/state.json
+?? .c3-tmp/r1307_state_update.py
+?? .c3-tmp/r1308_check.py
+?? .c3-tmp/r1308_check.txt
+?? .c3-tmp/r1308_mkcheck.py
+?? .c3-tmp/r1308_probe.py
+?? .c3-tmp/r1308_probe.txt
+?? .c3-tmp/r1308_state_update.py
+?? .c3-tmp/r1308_verify.py
+?? .c3-tmp/r1308_verify.txt
+?? .c3-tmp/r1309_check.py
+?? .c3-tmp/r1309_check.txt
+?? .c3-tmp/r1309_mkcheck.py
+?? .c3-tmp/r1309_state_update.py
+?? .c3-tmp/r1309_verify.txt
+?? .c3-tmp/r1310_backlog_items.txt
+?? .c3-tmp/r1310_check.txt
+?? .c3-tmp/r1310_state_update.py
+?? .c3-tmp/r1311_check.py
+?? .c3-tmp/r1311_check.txt
+?? .c3-tmp/r1311_state_update.py
+?? .c3-tmp/r1312_check.py
+?? .c3-tmp/r1312_check.txt
+?? .c3-tmp/r1312_facts.py
+?? .c3-tmp/r1312_facts.txt
+?? .c3-tmp/r1312_state_update.py
+?? .c3-tmp/r1312_verify.txt
+?? .c3-tmp/r1312_weekly.py
+?? .c3-tmp/r1312_weekly.txt
+?? .c3-tmp/r1313_check.py
+GIT_STATUS_END
+index.lock exists: False
+LAST_COMMIT: 03d30eb8 10-05 03:12 R1307 production-prep: backlog #57 local substitution rate first-report data face - src/os/local_rate_report.py aggregator (tokens:local per-round lines + p4-ledger dual-source, weekly L2/(L2+L3), first-match-per-line anti-recap double-count, 4 honest boundary notes verbatim) + 10 new tests (323 all-green rc=0) + real-data run r1307_local_rate.txt/json (1128 metered rounds, L2 263 local calls, L3 0, weekly W39 106/W40 154/W41 3, production inference rate 1.0000, 81.1 pct pure-script L1 rounds) + draft R-20261005-bigstream-01 prep v0.9 + capabilities v1.40 C-31 tool face + backlog #57 prep note; final report = 10-07 governance-day one-command refresh [via bm-a]
+ORDERS_TOP: O-20260928-1910-bm-a.md (mtime 09-28 19:12)
+LEDGER @LINES: 43 (baseline 43 post-R1247; mtime 10-05 03:15)
+LEDGER_LAST_HIT: - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame
+LEDGER_CI_EXTRAS: 1 (PS case-insensitive artifact face; canonical base=43 unaffected)
+  CI_EXTRA: | P-2026-09-26-07 | 09-26 | **机队大模型自配与任务分治加速令（P1·CEO 令 2026-09-26 ~14:0x 原话「具备本地运行算力的机器各自下载适合的大模型，然后各自承担可控的任务，大文件不要通过git去传递」·登记 U240·P-2026-09-25-08 适配令加速窗+模型大件
+DECISIONS mtime 10-05 00:16
+DECISIONS_SET: now=142 wm=142 NEW=[]
+DECISIONS_BS_ROWS: 47 (baseline 47 post-R1300)
+STATE tick=1312 ts=2026-10-05 04:11:36
+PRODUCTION: open
+DAILY 10-04: EXISTS
+DAILY 10-05: EXISTS
+CENSUS_ANCHOR_C-00030: False
+W40_AUDIT: EXISTS
+AUDIO_CH6_V4: MISSING (bm-a gate)
+GB_LAST_REFRESH: 10-01 01:02
+POOLS_LEAF_STRINGS: 1440 (baseline 1440; mtime 10-05 04:06)
+POOLS_GATE: QUIET 1440==1440
+INTERCHAT_ROWS: 22 (baseline 22; mtime 09-27 08:57)
+INTERCHAT_GATE: QUIET 22==22
+NOVEL_CH3_V4_TEXTS: 0 (audio lane bm-a source gate; 0 = supply-gated)
+HQ_ACK_F-20261004-01: EXISTS
+OSS_W4_LEDGER_FILE: EXISTS (window 4 opens 10-05 21:40)
+QUEUE mtime 10-05 02:45
+QUEUE_EPOOL_LANES (last 4):
+  - 2026-10-04: **R1160 E31 REACT-v9 10-04 热点窗判负留痕=连续第二窗判负（P-2026-09-28-02 判负留痕合法·当窗零产件·R1030 预登记「连续第二窗判负=池扩容呈报位」触发）**——10-04 日报（R1160 日界轮 00:01 补产·bilibili-popular+zhihu-hot 双源 20 条
+  - 2026-10-05: **R1299 E31 REACT-v9 10-05 热点窗判负留痕=连续第三窗判负（P-2026-09-28-02 判负留痕合法·当窗零产件·池扩容呈报位维持=R1160 呈报第三窗实证·零催办）**——10-05 日报（R1299 日界轮 00:00:09 补产·bilibili-popular+zhihu-hot 双源 20
+  - 2026-10-05: **R1303 E33 DIGEST v15 雷达令批夜盘点=F-151 登记（#67 触发律直领·入池+出池同轮=当轮闭环·R1095 E32/R970 三合一先例·产品优先律对位=2 分位实物）**：史源=orders.md 10-04 四行 CEO 直令+ledger P-2026-10-04-01/02（雷达双令：路由闭环
+  - 2026-10-05: **R1305 E30 夜窗级联 DAILY 城市日签 v65=F-152 登记（R1304 next 时间闸核〔OSS w4=21:40 未至·REACT-v9=10-06〕→standby 位首位兑现·产品优先律对位=2 分位实物）**：供给三段定谳=注册 sprite night 残面 fresh 判零干净行（拟声族带第四用
+QUEUE_P1_W40_CLOSED: EXISTS
+export_ts=2026-10-05 03:12:12
+BACKLOG mtime 10-05 03:11
+BACKLOG_TOP_START
+# BigStream OS 循环任务板（backlog）
+> 一行一任务，循环从上往下取第一条未完成项；完成=标 `[done YYYY-MM-DD]` 并 commit。新任务=追加到末尾；P1 级提案入板须标 `[needs-CEO]`。
+> 2026-09-23 重排：CEO 令 O-20260923-1602-bm-a 复工主线置顶（生产暂停已解除）；原 #4/#5/#6 顺延为 #8/#7/#6。
+98. [done 2026-10-04] **值守轮 2026-10-04（夜班 03:07）GREEN-IDLE 连续第二夜点名·@BigStream 派活或进借池促配·本司响应件**（集团转办 T2·点名行=ledger L274 值守轮 2026-10-04 03:07〔03:23 落盘距本
+81. [done 2026-09-28] **P-2026-09-28-02 自驱力生态机制 v2.1 增补令·本司份额（ack+mandate 两步适配+首件提案）**（集团转办 T1·CEO 直令 2026-09-28 ~10:1x 原话「ceo 命令，全面建立自驱力生态机制，全面激发创新和主
+   **[R630 交付毕 2026-09-28：轮内闭环（实活轮·轮首快速路径五查破静=ledger 31→32 新行=P-2026-09-28-02〔09:20:25 落账距开轮检出 ≤10 分钟鲜令〕→转全任务书收令·R487 同型）——①ack 判读=检出距落账 ≤10 分钟〔09:20:
+BACKLOG_TOP_END
+=== BOARD (rc=0) ===
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+=== READINESS (rc=1) ===
+shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-001-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-012-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-013-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-014-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-015-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-016-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-017-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-019-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-021-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+
+**[needs-CEO]（1 项）**
+
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+
+**[suspended]（0 项）**
+
+- none
+
+## 距离首发的阻塞清单（3 项）
+
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+
+## 探针发现项（findings·机器纪律核验）
+
+- none
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+=== LOOP_HEALTH (rc=1) ===
+ 20 min (2026-10-03 06:34 -> 2026-10-03 06:55) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 10:54 -> 2026-10-03 11:15) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-10-03 12:34 -> 2026-10-03 13:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 29 min (2026-10-03 23:37 -> 2026-10-04 00:07) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-04 03:14 -> 2026-10-04 03:38) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-04 07:44 -> 2026-10-04 08:05) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-05 00:04 -> 2026-10-05 00:25) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-05 00:37 -> 2026-10-05 00:59) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-10-05 00:59 -> 2026-10-05 01:25) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 30 min (2026-10-05 01:25 -> 2026-10-05 01:55) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 6 completed round(s) without accounting (done beats=1318 > tick=1312) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 136 warn)

@@ -1,0 +1,7 @@
+tick1312=True
+ ts=2026-10-05 04:11:36
+ task_head=declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽+盲区再derive 双假设检证皆驳·P-
+ log_tail_head=2026-10-05 04:11 R1312: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽+盲区再derive 双假设检证皆
+ log_len=1340
+ all_ok=True
+ focus_head=R1312 盲区再derive 双假设检证皆驳（#86 a 腿=R893 全量筛毕收口·W41 周轮件=R1300 已毕）·声明窗 5/6·时间闸内活=日间窗 
