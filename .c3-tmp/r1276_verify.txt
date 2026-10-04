@@ -1,0 +1,4 @@
+tick=1276 ts=2026-10-04 20:04:01
+focus=R1276: declared-idle 声明窗 5/6（R1272~R1275 同窗续轮）·五查静+探针平+供给闸全 QUIET·全 lane 时序闸至 10-05 日界批（10-05 日报→E31 REACT-v9 F-151→W41 
+log_last_100=2026-10-04 20:04 R1276: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·声明窗 5/6=R1272~R1
+task_len=60 task_prefix_ok=True
