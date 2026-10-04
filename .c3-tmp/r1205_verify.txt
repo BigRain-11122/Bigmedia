@@ -1,0 +1,11 @@
+tick=1205 ts=2026-10-04 08:05:11
+task=declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽+新窗增值核·声明窗 2/6·P-2026
+focus=R1205: declared-idle 声明窗 2/6——新窗增值核毕：DAILY morning 面 r1032_pool 一手证据复核=残 5 行全生意/市集主题三连 iso 阻不衰减（R1124 枯竭确认·morning/1 已耗 R1062）；DIGEST 触发 D-20261003/04 常务批不燃；queue §A/§C 全 done；F-148/149/150 零未测面；全 lane 时间闸 10-05 日界批（日报+REACT-v9 F-151+W41 周轮件+OSS 窗 4）；探针基线平；exp
+LOG_LAST_LEN=2415
+LOG_LAST_HEAD=2026-10-04 08:05 R1205: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽+新窗增值核·声明窗 2/6·P-2026-09-28-02 ②④序）——①五查 fresh 实证 .c3-tmp/r1205_check.txt 07:56（orders 
+typo_token_present=False
+has_R1205=True
+morning_rows_claim=True
+wm_count=133
+GIT=M src/os/state.json | ?? .c3-tmp/r1204_all.py | ?? .c3-tmp/r1204_check.txt | ?? .c3-tmp/r1204_close.py | ?? .c3-tmp/r1205_adj.txt | ?? .c3-tmp/r1205_all.py | ?? .c3-tmp/r1205_check.txt | ?? .c3-tmp/r1205_close.py | ?? .c3-tmp/r1205_daily.txt | ?? .c3-tmp/r1205_f150.txt | ?? .c3-tmp/r1205_fblocks.txt | ?? .c3-tmp/r1205_morn.txt | ?? .c3-tmp/r1205_mornpool.txt | ?? .c3-tmp/r1205_mornscan.py | ?? .c3-tmp/r1205_ptok.txt | ?? .c3-tmp/r1205_queuesec.py | ?? .c3-tmp/r1205_queuesec.txt | ?? .c3-tmp/r1205_r1062.txt | ?? .c3-tmp/r1205_verify.py
+r1180_residue=NONE
