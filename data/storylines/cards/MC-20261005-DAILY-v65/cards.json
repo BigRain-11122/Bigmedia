@@ -1,0 +1,52 @@
+{
+ "meta": {
+  "topic": "MC-20261005-DAILY-v65",
+  "line": "L-卡 图文轻内容线（DAILY 形态第六十五件·charter v1.2 §4 形态码 DAILY·日签节律续件·夜窗级联件·秩序轴 night 桶同桶异行件·线级新鲜度证新证）",
+  "form": "DAILY 城市日签 065（L-卡 图文轻内容线 DAILY 形态第六十五件·charter v1.2 §4 形态码 DAILY·queue §E E30 standby 级联续领 R1305·日签节律续件=日期×情境桶对位判据第六十五证〔**夜窗级联件**：注册夜窗位 sprite night 残面 fresh 判=零干净行〔拟声族带第四用起阻=R1123 注册+双字撞·r1305_pool_scan.txt 机证〕→级联六轴 night fresh 复扫=**唯一干净行 秩序/night/16 兑现**〔R1023-R1029「六轴 night 零干净行」承继注被 fresh 机械复扫推翻=供给面 derive 盲区修正〔R870/R970/R1095 同型·零直撞零季相门控零已采面全机核〕〕+**literal night 三重对位**：literal 深夜生产〔~02:4x·R1020 night literal 律·v51-v54/v64 夜件带先例〕×夜晚内容×秩序轴〔假期第 5 夜出门看灯的人×替你看家的门〕+**同桶异行=线级新鲜度证**：v53秩序/night/7〔岗哨巡逻·公共面〕→本件秩序/night/16〔门户关门·私人面〕=同轴同桶异行〔场景异质=反同构 R442 主线维持·轴内守望母题带诚实注：巡逻×查灯×关门=守望三变奏〕〕+最轻的一句叮嘱〔别忘了〕×最实的门户安全〔关好自家门〕=**轻叮嘱×实守夜反差金句位**〔族五十一连·门锁位语感独占注=假期夜里出门看灯的人身后有座替你看门的城〕〕）",
+  "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+  "source_quote": "「别忘了关好自家门」",
+  "source_pointer": "life/BigLife/cognition/pools.json 台词池 axes[秩序][night][16]（axes 6 轴×12 情境桶×18 行=1296+sprite 顶层 12 桶×12 行=144=1440 行·BigLife R982 窗结构·跨仓只读指针）+data/intel/daily/2026-10-05.md（当日日期语境源·国庆假期第 5 天·周一·深夜生产语境）",
+  "attribution_rule": "署名=池级+轴级（台词池·秩序轴）——池行无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线·本行无称谓面=纯叮嘱句·泛称零涉及〔v5/v17/v21/v53 先例族对照注〕）",
+  "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「引文取自硅基城市台词池（虚构城市档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+  "editorial_value": "日签形态=日期戳+当日情境+池句三件编辑选材面（夜窗级联件+同桶异行线级新鲜度双位〔**夜窗供给三段定谳诚实执行**：注册 sprite 夜面 fresh 判零干净→级联六轴 night 复扫→唯一干净行兑现〕+轻叮嘱×实守夜反差金句位〔族五十一连·门锁位语感独占注〕+口语叮嘱人味=语录卡线变体零新模板第六十五证（QUOTE-v2 参数 verbatim 复用·h2_size 60 档〔v64 同带先例·日期行驱动〕·charter §1「日签变体随时可续」兑现）·公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限+城市人文积累令 O-20260928-1910 对位〔假期夜里替全城说一句最实在的叮嘱=城市夜里活着的守望秩序〕+**供给面诚实注**：本件后六轴 night 面零干净行〔night/16 本件耗尽·fresh 复扫基线归零〕+sprite night 面零干净行〔拟声族带第四用起阻〕=夜窗位双面归零注·axes weekend 3 干净行=日间窗 standby〔时点错位不入选·市场行 10-08 复市窗门控〕·DAILY 可诚实配对面维持结构性近枯竭注〔池扩容呈报位维持呈现状行不催办〕·post-v65 指针：解锁窗维持=雨事件日/CEO 令日/10-08 market_open 复市/Nov+ 寒潮/夏季 heatwave/axes weekend 日间窗行·REACT-v9 10-06 窗·F 序号诚实注=本件先落 F-152·REACT-v9 预指位顺延 F-153〔R978 判例 finished 顺序号=单一真相〕",
+  "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差链：别忘了〔最轻的一句叮嘱·口吻最轻〕×关好自家门〔夜晚安全的最小动作·分量最实〕=轻叮嘱×实守夜反差+出门看灯的人〔假期夜的动〕×替你看家的门〔留守的静〕=动静反差〔族五十一连·门锁位语感独占注〕/情 1 假日深夜守望式叮嘱的温和共鸣如实非强极点〔G1 城市生活群〕/时 2 当日=2026-10-05 周一国庆假期第 5 天·literal deep night 生产〔~02:4x〕×夜晚内容×秩序轴三重 literal 直配=夜窗级联件〔注册sprite 夜面零干净 fresh 判→级联六轴 night 复扫唯一干净行〕/台 2 公众号方图承载=MC-001~151 S3 实证复用）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·charter §4 形态码 DAILY·queue §E E30 R1305 夜窗级联兑现",
+  "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+  "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；池句=情境口气零事实宣称（台词池=虚构城市档案·DAILY 系列同源先例）；无登记居民名=人设权红线零接触（本行无称谓面=纯叮嘱句·泛称零涉及〔v5/v17/v21/v53 先例族对照注〕）；脱敏律=池句无令牌号/无个体可识别面/零金钱数额（关门叮嘱=门户安全意象非安防消费面·无品牌无价格=零消费宣称）；成品只入库·发布=M5 账号物理件+M4 全绿",
+  "source_facts": "日签纪实抽取律：①引文=台词池 axes[秩序][night][16] verbatim 零改字（「」=卡面排版层〔R285 QUOTE v2 先例〕·build 脚本内断言=池行逐字在位+night 桶 18 行计数+axes 6 轴结构断言〔R982〕+v53 已耗行 night/7+v63/v64 已耗行 sprite weekend/3·4+v54 已耗行sprite night/8 四结构锚）②日期行 2026-10-05=当日历法事实·周一+国庆假期第 5 天〔daily brief 2026-10-05 当日窗语境〕+夜标记〔v51/v54/v64 夜标记先例带·literal deep night 生产〕③情境=夜窗级联件〔注册 sprite 夜面 fresh 判零干净→级联六轴 night 复扫唯一干净行·r1305_pool_scan.txt 机证〕④轴部署名=台词池秩序轴行·本行无称谓面=纯叮嘱句·泛称零涉及〔人设权红线零接触·charter §2.4·v5/v17/v21/v53 先例族〕⑤去重断言=本行不在 city-spirit.md 已采面+不在全成品卡面 lines/source_quote 任一（卡面级实扫=R1010 修正律·DAILY-v1~v64 全 65 行+REACT 八件+CENSUS 20+DIGEST 15+QUOTE 6 皆非本行）+「别忘了」「关好」「自家」「家门」「别忘」「忘了」全句 probe 七词机核〔r1305_quote_face.txt〕⑥季相核=本行无年味/春联/寒潮类季相错位词〔R972 制·关门叮嘱=四季通用夜面·十月秋夜兼容〕⑦品牌语感注=「别忘了」口语叮嘱开场+门锁意象=去 AI 感对位·人味命中·零书面套语·零消费宣称无品牌无价格"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1080,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 40,
+  "aigc_size": 30,
+  "subs_bottom": 110,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 96,
+  "h1_color": "accent",
+  "h2_size": 60,
+  "h2_color": "white",
+  "h1_gap": 48,
+  "optical_center": 0.3
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 2.6,
+   "lines": [
+    "城市日签 065",
+    "2026-10-05 · 国庆假期 · 夜",
+    "「别忘了关好自家门」",
+    "——硅基城市台词池 · 秩序轴"
+   ]
+  }
+ ]
+}

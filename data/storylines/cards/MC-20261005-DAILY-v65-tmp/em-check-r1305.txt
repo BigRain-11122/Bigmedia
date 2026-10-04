@@ -1,0 +1,9 @@
+pool assert: axes[order][night][16] verbatim OK; night bucket=18 rows; axes 6 structure (R982); v53 consumed-row order/night/7 + v63/v64 sprite weekend/3,4 + v54 sprite night/8 structural anchors; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v64; night-window cascade: registered sprite-night face ZERO-CLEAN fresh verdict -> six-axes night fresh re-scan 1 clean row (derive-blindspot-fix R870/R970/R1095-type); quote-face word probe: 7 words see r1305_quote_face.txt
+H1 96 budget 9.58em | H2 60 budget 15.33em (ladder pick, margin>=0.2em) | VERT stack bottom 741px vs subs top 970px gap +229px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 065
+13.60 em  budget 15.33 em  margin +1.73em  single=True  2026-10-05 · 国庆假期 · 夜
+10.00 em  budget 15.33 em  margin +5.33em  single=True  「别忘了关好自家门」
+12.65 em  budget 15.33 em  margin +2.68em  single=True  ——硅基城市台词池 · 秩序轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_60: date line + attribution line fit 60-band (v64 same-band precedent); four-LINES stack; all other QUOTE-v2 params verbatim; night-window cascade + same-bucket-different-row + motif-band honest notes carried in meta.form

@@ -1,0 +1,27 @@
+pool structure: axes=6 sprite_buckets=12
+
+== sprite[night] 12 rows ==
+night/0 '叮叮当响夜未央' consumed=False spirit=False gate=None shingles=[('叮叮', 'MC-20261002-DAILY-v50'), ('叮当', 'MC-20261002-DAILY-v50'), ('响夜', 'MC-20261003-DAILY-v64'), ('夜未', 'MC-20261003-DAILY-v61'), ('未央', 'MC-20261003-DAILY-v61')]
+night/1 '喵呜声中梦初上' consumed=False spirit=False gate=None shingles=[('喵呜', 'MC-20260927-REACT-v3')]
+night/2 '灯火阑珊语呢喃' consumed=False spirit=False gate=None shingles=[('灯火', 'MC-20261002-DAILY-v39')]
+night/3 '啾啾鸣唱夜未央' consumed=False spirit=False gate=None shingles=[('啾啾', 'MC-20260926-REACT-v1'), ('啾鸣', 'MC-20260926-REACT-v1'), ('夜未', 'MC-20261003-DAILY-v61'), ('未央', 'MC-20261003-DAILY-v61')]
+night/4 '叮叮响夜幕，灯火伴梦语' consumed=False spirit=False gate=None shingles=[('叮叮', 'MC-20261002-DAILY-v50'), ('响夜', 'MC-20261003-DAILY-v64'), ('夜幕', 'MC-20261002-DAILY-v50'), ('，灯', 'MC-20261002-DAILY-v29'), ('灯火', 'MC-20261002-DAILY-v39')]
+night/5 '喵呜回应夜，星光下的谜' consumed=False spirit=False gate=None shingles=[('喵呜', 'MC-20260927-REACT-v3'), ('回应', 'MC-20261001-DIGEST-v11'), ('，星', 'MC-20260929-REACT-v5'), ('星光', 'MC-20260929-REACT-v5'), ('光下', 'MC-20260929-REACT-v5'), ('下的', 'MC-20260929-REACT-v5'), ('的谜', 'MC-20260925-CENSUS-v12')]
+night/6 '叮叮铃响入梦乡' consumed=False spirit=False gate=None shingles=[('叮叮', 'MC-20261002-DAILY-v50')]
+night/7 '啾啾鸟鸣伴星光' consumed=False spirit=False gate=None shingles=[('啾啾', 'MC-20260926-REACT-v1'), ('星光', 'MC-20260929-REACT-v5')]
+night/8 '闪闪灯辉照长廊' consumed=True spirit=False gate=None shingles=[('闪闪', 'MC-20261002-DAILY-v54'), ('闪灯', 'MC-20261002-DAILY-v54'), ('灯辉', 'MC-20261002-DAILY-v54'), ('辉照', 'MC-20261002-DAILY-v54'), ('照长', 'MC-20261002-DAILY-v54'), ('长廊', 'MC-20261002-DAILY-v54')]
+night/9 '叮叮咚咚敲夜鼓' consumed=False spirit=False gate=None shingles=[('叮叮', 'MC-20261002-DAILY-v50'), ('叮咚', 'MC-20261003-DAILY-v64')]
+night/10 '喵呜声声软' consumed=False spirit=False gate=None shingles=[('喵呜', 'MC-20260927-REACT-v3')]
+night/11 '啾啾夜曲长' consumed=False spirit=False gate=None shingles=[('啾啾', 'MC-20260926-REACT-v1')]
+
+== axes[*][night] fresh re-scan (six axes x 18 rows, R1023-R1029 zero-clean carried) ==
+clean rows:
+CLEAN 秩序/night/16 '别忘了关好自家门'
+six-axes night clean rows: 1
+
+== axes[*][weekend] fresh scan (holiday-day adjacency) ==
+clean rows:
+CLEAN 烟火/weekend/13 '市场买卖讲价，公平公正正'
+CLEAN 怀旧/weekend/17 '听老唱片，忆往昔岁月，时光倒流一二里'
+CLEAN 侠气/weekend/5 '茶余饭后讲讲闲话，才不闷'
+six-axes weekend clean rows: 3

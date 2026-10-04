@@ -1,0 +1,10 @@
+r1305 quote-face word probe for candidate 别忘了关好自家门 (order/night/line16, night-window cascade)
+word [别忘了] -> ZERO fleet card-face hits
+word [关好] -> ZERO fleet card-face hits
+word [自家] -> ZERO fleet card-face hits
+word [家门] -> ZERO fleet card-face hits
+word [别忘] -> ZERO fleet card-face hits
+word [忘了] -> ZERO fleet card-face hits
+word [别忘了关好自家门] -> ZERO fleet card-face hits
+honest-adjacency notes: all 2+ char shingles ZERO fleet hits = fully-zero row (v53-v64 twelve-precedent chain). Night-window cascade adjudication (this round fresh verdict): (1) registered sprite-night residue face resolves ZERO-CLEAN - all 11 unconsumed rows are onomatopoeia-band gated (ding/miao/jiu families; 4th onomatopoeia use blocked per R1123 registration; 2-char shingle collisions with v50/v64/REACT-v1/v3/v61) -> cascade lawful; (2) six-axes night fresh re-scan finds ONE clean row (order/night/16) = fresh-scan overturn of R1023-R1029 zero-clean carried note = supply derive-blindspot-fix (R870/R970/R1095 same-type), machine-verified zero collision; (3) SAME-BUCKET-DIFFERENT-ROW: v53 order/night/7 (public patrol) -> THIS order/night/16 (private household door) = line-level freshness law; motif-band honest note: order-axis watchcare motif (v53 patrol / v31 lantern-check family) x household-door variant = scene-heterogeneous, anti-homogenization spine held; (4) NIGHT-SCENE literal law (R1020): production moment ~02:4x = literal deep night, night content honestly paired (v51-v54/v64 night-piece precedent band).
+post-v65 supply honest note: sprite night face = zero clean rows (onomatopoeia band 4th-use blocked + shingle collisions, r1305_pool_scan.txt); six-axes night = one row consumed THIS piece -> zero clean left; axes weekend fresh scan = 3 clean rows but ALL daytime/after-meal flavored (time-point mismatch at deep-night production; market-themed row gated by 10-08 market-reopen window) -> not selected this round, registered standby for daytime windows; unlock windows unchanged: rain-event day / CEO-order day / 2026-10-08+ market reopen / Nov+ coldsnap / summer heatwave. Pool-expansion report position maintained (status-line not chase).
