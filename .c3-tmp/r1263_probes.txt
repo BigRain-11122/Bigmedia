@@ -153,10 +153,10 @@ readiness: 3 blocker(s), 0 finding(s) -> NOT READY
 - [WARN] heartbeat-gap: beat gap 29 min (2026-10-03 23:37 -> 2026-10-04 00:07) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 24 min (2026-10-04 03:14 -> 2026-10-04 03:38) over 20 min comm SLA - long rounds may breach legitimately
 - [WARN] heartbeat-gap: beat gap 21 min (2026-10-04 07:44 -> 2026-10-04 08:05) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1268 > tick=1264) - the R4/R5 bug pattern
+- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1266 > tick=1262) - the R4/R5 bug pattern
 loop health: FAIL (3 fail, 131 warn)
 -- tail --
-- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1268 > tick=1264) - the R4/R5 bug pattern
+- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1266 > tick=1262) - the R4/R5 bug pattern
 
 loop health: FAIL (3 fail, 131 warn)
 
