@@ -34,6 +34,18 @@ when the local cache is already populated (1.53GB @ 09-24 anchor).
 whisper.cpp (ggml path, MIT, OH-20260929-bigstream parked) removes
 this class of failure entirely: local ggml model files, no hub.
 
+P-2 pinned-model law (queue R1300 proposal, R1302 pilot): the S2 QC
+medium model is pinned at data/assets/models/faster-whisper-medium
+(real files, gitignored per the model-file law, outside the group
+disk-sweep Class-A list). resolve_model() prefers the pinned copy and
+falls back to the hub name when absent. Five-incident chain anchor:
+R701/R761/R801/R806/R809 (+ R1302 open = sixth) - HF cache swept
+while the ASR lane depends on it, 1.46GB re-download each time.
+Pinned loads read the local dir directly: no hub contact, no etag
+check, so the R638 offline-hang class does not apply either. Pin
+record + integrity observation face: data/pipeline/asr-pin.json
+(readiness probe asr-pin check).
+
 Usage:
     python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt
     python src/render/whisper_to_srt.py --audio a.mp3 --out a.srt --model small
@@ -53,6 +65,21 @@ from srt_fix import clamp_overlaps, write_srt  # noqa: E402
 
 # clause/sentence enders; kept as escapes per the ASCII code rule
 BREAK_PUNCT = set(",.!?;..." + "\uff0c\u3002\uff01\uff1f\uff1b\u3001\u2026")
+
+# P-2 pinned-model store: data/assets/models/ (gitignored, sweep-safe)
+PINNED_MODELS_DIR = Path(__file__).resolve().parents[2] / "data" / "assets" / "models"
+
+
+def resolve_model(model_size):
+    """P-2 pinned-model law: return the pinned local dir for model_size
+    when the pinned copy exists, else the value unchanged (hub name or
+    explicit caller path). Pinned loads skip the HF hub entirely."""
+    if "\\" in model_size or "/" in model_size or Path(model_size).exists():
+        return model_size  # explicit path from caller: respect as-is
+    pinned = PINNED_MODELS_DIR / ("faster-whisper-%s" % model_size)
+    if (pinned / "model.bin").is_file():
+        return str(pinned)
+    return model_size
 
 
 def build_cues(words, max_chars=20):
@@ -106,7 +133,7 @@ def transcribe_to_cues(audio, model_size="small", language="zh",
     (cues, dropped, info_duration). C2 param face exposed here;
     see module docstring for measured calibration values."""
     from faster_whisper import WhisperModel
-    model = WhisperModel(model_size, device="cpu", compute_type="int8")
+    model = WhisperModel(resolve_model(model_size), device="cpu", compute_type="int8")
     segments, info = model.transcribe(
         str(audio), language=language, word_timestamps=True, vad_filter=True,
         beam_size=beam_size,

@@ -175,7 +175,8 @@ class TestParamFace(unittest.TestCase):
         self.assertEqual(kw["beam_size"], 1)
         self.assertTrue(kw["condition_on_previous_text"])
         self.assertIsNone(kw["initial_prompt"])
-        self.assertEqual(rec["model_size"], "small")
+        # P-2 invariant: what reaches WhisperModel is resolve_model(size)
+        self.assertEqual(rec["model_size"], w2s.resolve_model("small"))
 
     def test_tuned_params_reach_transcribe(self):
         rec = self._with_fake_model(
@@ -186,7 +187,8 @@ class TestParamFace(unittest.TestCase):
         self.assertEqual(kw["beam_size"], 5)
         self.assertFalse(kw["condition_on_previous_text"])
         self.assertEqual(kw["initial_prompt"], "domain register")
-        self.assertEqual(rec["model_size"], "medium")
+        # P-2 invariant: pinned copy wins when present, name otherwise
+        self.assertEqual(rec["model_size"], w2s.resolve_model("medium"))
 
     def test_cli_defaults_preserve_current_behavior(self):
         a = w2s.build_parser().parse_args(
@@ -206,6 +208,41 @@ class TestParamFace(unittest.TestCase):
         self.assertEqual(a.beam_size, 5)
         self.assertTrue(a.no_context)
         self.assertEqual(a.initial_prompt, "p")
+
+
+class TestPinnedModelResolver(unittest.TestCase):
+    """P-2 pinned-model law (R1302 pilot): pinned dir wins, hub name
+    stays the fallback, explicit caller paths pass through untouched."""
+
+    def setUp(self):
+        self._orig = w2s.PINNED_MODELS_DIR
+        self.base = Path(tempfile.mkdtemp(prefix="bspin-"))
+        w2s.PINNED_MODELS_DIR = self.base
+
+    def tearDown(self):
+        w2s.PINNED_MODELS_DIR = self._orig
+
+    def test_pinned_copy_wins_when_present(self):
+        pinned = self.base / "faster-whisper-medium"
+        pinned.mkdir(parents=True)
+        (pinned / "model.bin").write_bytes(b"x")
+        self.assertEqual(w2s.resolve_model("medium"), str(pinned))
+
+    def test_hub_name_fallback_when_pinned_absent(self):
+        self.assertEqual(w2s.resolve_model("medium"), "medium")
+        self.assertEqual(w2s.resolve_model("small"), "small")
+
+    def test_dir_without_model_bin_falls_back(self):
+        pinned = self.base / "faster-whisper-medium"
+        pinned.mkdir(parents=True)
+        (pinned / "config.json").write_text("{}")  # partial damage
+        self.assertEqual(w2s.resolve_model("medium"), "medium")
+
+    def test_explicit_path_passes_through(self):
+        real = self.base / "local-model-dir"
+        real.mkdir()
+        self.assertEqual(w2s.resolve_model(str(real)), str(real))
+        self.assertEqual(w2s.resolve_model("some/repo-id"), "some/repo-id")
 
 
 class TestRenderRegressions(unittest.TestCase):

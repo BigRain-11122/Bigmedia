@@ -1,0 +1,10 @@
+{
+  "model": "medium",
+  "repo": "Systran/faster-whisper-medium",
+  "dir": "data/assets/models/faster-whisper-medium",
+  "files": ["config.json", "model.bin", "tokenizer.json", "vocabulary.txt"],
+  "bytes_total": 1530571735,
+  "pinned_at": "2026-10-05",
+  "law": "P-2 pinned-model law (queue R1300 proposal, R1302 pilot): weights live in the sweep-safe store outside the disk-sweep Class-A list; src/render/whisper_to_srt.py resolve_model() prefers this copy; readiness asr-pin check alarms when declared files go missing",
+  "review_anchor": "2026-11-04"
+}

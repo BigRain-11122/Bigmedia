@@ -271,6 +271,42 @@ class ReportTests(unittest.TestCase):
         self.assertIn("- none", report)  # empty suspended/findings lists
 
 
+class AsrPinTests(unittest.TestCase):
+    """P-2 pinned-model observation (R1302): WARN only when the pin
+    record declares weights that are no longer on disk (sweep damage)."""
+
+    def _make_record(self, root, files):
+        (root / "data" / "pipeline").mkdir(parents=True, exist_ok=True)
+        (root / "data" / "pipeline" / "asr-pin.json").write_text(
+            json.dumps({"model": "medium",
+                        "dir": "data/assets/models/faster-whisper-medium",
+                        "files": files}), encoding="utf-8")
+
+    def test_missing_record_is_silent(self):
+        root = make_dir(self, "bs-rdy-pin-")
+        self.assertEqual(
+            readiness.parse_asr_pin(root / "data" / "pipeline" / "asr-pin.json"), [])
+
+    def test_intact_pin_has_no_findings(self):
+        root = make_dir(self, "bs-rdy-pin-")
+        base = root / "data" / "assets" / "models" / "faster-whisper-medium"
+        base.mkdir(parents=True)
+        for f in ("model.bin", "config.json"):
+            (base / f).write_bytes(b"x")
+        self._make_record(root, ["model.bin", "config.json"])
+        self.assertEqual(
+            readiness.parse_asr_pin(root / "data" / "pipeline" / "asr-pin.json"), [])
+
+    def test_swept_weights_warn(self):
+        root = make_dir(self, "bs-rdy-pin-")
+        self._make_record(root, ["model.bin", "config.json"])
+        findings = readiness.parse_asr_pin(root / "data" / "pipeline" / "asr-pin.json")
+        codes = {code for _, code, _ in findings}
+        sevs = {sev for sev, _, _ in findings}
+        self.assertEqual(codes, {"asr-pin"})
+        self.assertEqual(sevs, {"WARN"})
+
+
 class CliTests(unittest.TestCase):
     def test_ready_tree_exits_zero(self):
         root = make_root(self, "readiness_accounts_ready", [("d1.md", "PASS")],

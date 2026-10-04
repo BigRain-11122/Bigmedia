@@ -48,6 +48,7 @@ Exit codes: 0 = publish-ready (no blockers, no findings),
             1 = blockers and/or findings (normal pre-launch state),
             2 = usage/source error.
 """
+import json
 import re
 import sys
 from collections import OrderedDict
@@ -255,6 +256,31 @@ def build_blockers(flow, rows, gates, needs):
     return blockers
 
 
+def parse_asr_pin(record_path):
+    """P-2 pinned-model observation face (R1302): the git-tracked pin
+    record (data/pipeline/asr-pin.json) declares which ASR model weights
+    live in the sweep-safe store (data/assets/models/...). Missing
+    record = pin not installed (silent: fresh trees, pre-pilot state).
+    Record present but any declared weight file gone = disk-sweep
+    damage -> WARN (judgment-3 zero-clear alarm)."""
+    findings = []
+    if not record_path.is_file():
+        return findings
+    try:
+        pin = json.loads(record_path.read_text(encoding="utf-8"))
+        base = record_path.parents[2] / pin.get("dir", "")
+    except (OSError, ValueError):
+        findings.append(("WARN", "asr-pin",
+                         "pin record unreadable: %s" % record_path))
+        return findings
+    for f in pin.get("files", []):
+        if not (base / f).is_file():
+            findings.append(("WARN", "asr-pin",
+                             "pinned ASR model file missing: %s "
+                             "(disk-sweep damage? P-2 observation)" % (base / f)))
+    return findings
+
+
 def build_report(template_text, gen_ts, flow, rows, gates, render_rows,
                  needs, suspended, blockers, findings):
     """Fill the template -> report text (data file, Chinese content)."""
@@ -319,6 +345,7 @@ def main(argv):
         render_rows, f = parse_renders(renders, renders / LEDGER_NAME)
         findings += f
         needs, suspended = parse_backlog_flags(backlog)
+        findings += parse_asr_pin(root / "data" / "pipeline" / "asr-pin.json")
         template_text = TEMPLATE.read_text(encoding="utf-8")
     except OSError as e:
         print("source error: %s" % e)
