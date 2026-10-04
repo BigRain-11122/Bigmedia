@@ -1,0 +1,4 @@
+results_n=69 first=993 last_key=1302
+LIVE0: ['当前活：R1302 P-2 试点交付毕=faster-whisper 模型固化位律落地（queue §D W41 首件提案当窗兑现·固化位 1.43GB+resolver+readiness asr-pin 观察位+313 全回归绿·判据①②✓③观察窗至 11-04）（2026-10-05 00:59:00）']
+LIVE1: ['最近实物：P-2 固化位三件套（src/render/whisper_to_srt.py resolver+src/readiness.py parse_asr_pin+data/pipeline/asr-pin.json·2026-10-05 00:59）；最近成品卡=F-150 DAILY v64（2026-10-03 17:37）']
+LIVE2: ['下个里程碑：OSS 窗 4 首切片（10-05 21:40 后开·今晚）+REACT-v9 10-06 窗择优（10-06 日报先补产）+10-07 #57 替代率首报——窗 ≤48h']

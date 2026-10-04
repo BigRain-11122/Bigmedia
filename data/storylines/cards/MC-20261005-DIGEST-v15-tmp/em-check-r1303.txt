@@ -1,0 +1,15 @@
+orders.md 2026-10-04 CEO direct-order rows (machine count) = 4
+ledger P-2026-10-04 rows (set) = P-2026-10-04-01,P-2026-10-04-02
+CEO quote verbatim substring present in orders.md radar row: OK
+H1 size 84 budget 10.95em | H2 size 40 budget 23.00em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 949px vs subs top 970px gap +21px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 015
+22.10 em  budget 23.00 em  margin +0.90em  single=True  集团令批 2026-10-04（深夜 4 行 · 雷达双令）
+22.00 em  budget 23.00 em  margin +1.00em  single=True  「不仅仅是游戏的，那些其他方面的都要去抓取，
+14.00 em  budget 23.00 em  margin +9.00em  single=True  然后去学习调研。深入调研。」
+21.35 em  budget 23.00 em  margin +1.65em  single=True  雷达路由闭环 · 扫描七司业务域 · 深研 L1-L3
+18.10 em  budget 23.00 em  margin +4.90em  single=True  过目双通道 · 候选认领制 · 两率入周报
+17.10 em  budget 23.00 em  margin +5.90em  single=True  收益导向 · 可变现升权 · 四段闭环链
+19.90 em  budget 23.00 em  margin +3.10em  single=True  收益 3 型：省 token · 省工时 · 直接营收
+subs   20.00 em  budget 24.21 em  margin +4.21em  基于硅基城市真实事件（集团令批台账档案）
+EM_CHECK: ALL OK

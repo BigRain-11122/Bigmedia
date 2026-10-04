@@ -1,0 +1,4 @@
+575-615 x=125..951 right_gap=128px
+511-550 x=100..908 right_gap=171px
+970-1008 x=161..894 right_gap=185px
+48-78 x=51..302 right_gap=777px

@@ -1,0 +1,14 @@
+company="BigStream"
+loop="BigStream-OSLoop"
+mode="o-2126-production-open"
+production="open"
+opened_by="O-20260924-2126-bm-a"
+installed="2026-09-23"
+tick=1302
+mandate="src/os/iteration_prompt.txt"
+protocol="docs/os-protocol.md"
+backlog="src/os/backlog.md"
+focus="R1303 快速路径五查→时间闸内活：OSS 窗 4 21:40 后首切片（OH 台账件）+REACT-v9 10-06 窗（10-06 日报先补产）·#57 替代率首报=10-07 备产·P-2 判据③观察窗至 11-04（readiness asr-pin 报警面在役）·异常即转全任务书"
+decisions_watermark={"dnums": ["C-20260101-01", "C-20260927-01", "C-20260927-02", "C-20260928-02", "C-20260929-01", "C-20260929-02", "C-20260929-03", "C-20260930-04", "C-20260930-05", "C-20260930-06", "C-20261001-01", "C
+ts="2026-10-05 00:59:00"
+task="R1302: 实活轮·queue §D P-2 试点兑现=faster-whisper 模型固化位律落地（W41 首件提"
