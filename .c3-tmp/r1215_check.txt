@@ -1,0 +1,19 @@
+R1215 five-checks fresh: 2026-10-04 09:52-09:55 (window 6/6 = batch-close round)
+1. orders top: O-20260928-1910-bm-a.md mtime=09-28 19:12 UNCHANGED (last accounted)
+2. ledger (FluxGroup/cph4/evolution-ledger.md) mtime=10-04 03:23 UNCHANGED
+   -> zero new lines vs R1209/R1210-R1214 anchor (42 strict @-target lines; loose alternation count 43 = pattern-scope artifact, file mtime unchanged since 03:23 = no writes)
+   last ledger line = night-watch callout, already responded R1179 (three carriers)
+3. decisions (FluxGroup/docs/decisions.md) mtime=10-04 00:09 UNCHANGED
+   -> dnums watermark 133==133 NEW=[] (D-20260930-19 content-addressed diff; canonical 2-digit regex)
+4. index.lock: absent
+5. tree: M src/os/state.json + untracked self-window evidence files only (r1210~r1214 .c3-tmp + r1212_check.py/r1212_scan.txt root strays) = self-ledger expected state; LAST_COMMIT=28179180 R1209 batch close; production=open
+
+Probes (run fresh this round, 09:52-09:54):
+- board: 0 FAIL (5 ideas, 10 drafts, 5 in production)
+- readiness: 3 blockers all external CEO-side (account batch-1 + M4 GATE 6/10 + #17 live-chain sign-off), 0 findings
+- loop_health: 3 FAIL + 131 WARN == R1209/R1214 baseline flat
+  * account-lag done beats=1218 > tick=1214 = +4 constant historical offset (R4/R5-era bug, R981/R1054 adjudication family; batch-close accounting tick 1215 keeps +4)
+  * 2 heartbeat-outage FAILs = adjudicated in-case history (09-26 49min / 09-28 609min)
+
+Four-claimable-lane check: inherited fresh from R1214 09:44 same-window no-rescan law
+(queue §D/§E read: all lanes time/supply-gated; next physical window = 10-05 day-boundary batch)

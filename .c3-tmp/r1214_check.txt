@@ -1,0 +1,147 @@
+now=2026-10-04 09:43:42
+GIT_STATUS_START
+M src/os/state.json
+?? .c3-tmp/d1_probe.txt
+?? .c3-tmp/r1210_all.py
+?? .c3-tmp/r1210_check.txt
+?? .c3-tmp/r1210_close.py
+?? .c3-tmp/r1210_pool.py
+?? .c3-tmp/r1210_pool.txt
+?? .c3-tmp/r1211_all.py
+?? .c3-tmp/r1211_check.txt
+?? .c3-tmp/r1211_close.py
+?? .c3-tmp/r1212_all.py
+?? .c3-tmp/r1212_check.txt
+?? .c3-tmp/r1212_close.py
+?? .c3-tmp/r1213_all.py
+?? .c3-tmp/r1213_check.txt
+?? .c3-tmp/r1213_close.py
+?? .c3-tmp/r1214_all.py
+?? .c3-tmp/round_probe.py
+?? .c3-tmp/round_probe.txt
+?? r1212_check.py
+?? r1212_scan.txt
+GIT_STATUS_END
+index.lock exists: False
+LAST_COMMIT: 28179180 10-04 08:43 R1209 declared-idle window 6/6 batch close R1204-R1209: five-checks quiet (no new orders, ledger 42==42, dnums 133==133 NEW=[], no lock, tree self-ledger expected state), probes baseline flat (board 0 FAIL, readiness 3 external blockers 0 findings, loop 3 FAIL+131 WARN adjudicated), all lanes time-gated to 10-05 batch (daily brief, REACT v9 F-151, W41 weekly set, OSS w4 21:40); state tick 1209, export not refreshed (03:37 <24h flat per F3), r1204-r1209 evidence rolled in [via bm-a]
+ORDERS_TOP: O-20260928-1910-bm-a.md (mtime 09-28 19:12)
+LEDGER @LINES: 42 (mtime 10-04 03:23)
+LEDGER_LAST_HIT: - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 d
+DECISIONS mtime 10-04 00:09
+DECISIONS_SET: now=133 wm=133 NEW=[]
+STATE tick=1213 ts=2026-10-04 09:34:41
+PRODUCTION: open
+DAILY 10-04: EXISTS
+DAILY 10-05: MISSING
+NOVEL_LATEST: SC-001-05-v1.md (mtime 09-25 09:10)
+CENSUS_ANCHOR_C-00030: False
+W40_AUDIT: EXISTS
+QUEUE mtime 10-04 00:05
+GB mtime 10-01 01:02
+GB_NEXT_DUE: 2026-10-08 (skip today, in-case adjudication stands)
+E30_UNLOCK_WINDOWS: none fired today (R1124 no-rescan note stands, R1212 re-derivation ~1h delta zero new facts)
+export_ts=2026-10-04 03:37:43
+=== QUEUE TOP 40 LINES ===
+# 闲时自进清单（Self-Improvement Queue）
+
+> CEO 常态令 2026-09-24「在我没有给你指令的时候，你要自己去迭代你的工作流，去查漏补缺，去看看别人的秀的，仔细分析，而且去学习各种技能」。
+> **扩面令 2026-09-24 21:18（O-20260924-2118-bm-a）**：「你要不断迭代自己的剪辑能力和审美啊，还有一些段子啊之类的」——迭代面显式点名**剪辑能力+审美+段子**；剪辑审美既有项（C1/B2/B3）与新增 B5（段子）一并继承本锚。
+> 定位：**无令时的默认工作面**——会话与 OS 循环共用。空转轮默认取本清单顶项执行（任务书空转规则 2026-09-24 版）。
+> 纪律：①池项须有**真实缺口/收益锚**（评审弱项/审计缺口/机检 FAIL 案/选型证据需求）——「不为凑工作量造活」原话锚定不变；②执行走 `docs/research-protocol.md`（源分级/零断言/限时律）；产出=研究件增版或工具+测试 commit；③**done 标日期·burn 记录**=周自审（os-protocol §7）增查项「自进池燃尽率」；④P1 级事项仍只提案标 [needs-CEO]。
+
+## A 查漏补缺池（缺口驱动）
+
+| # | 项 | 缺口锚 | 优先 | 状态 |
+|---|---|---|---|---|
+| A1 | B站深潜稿结构研究（3-15min 叙事框架调研→拍稿骨架·#14 前置件） | O-1043 审计+#14+规格前置律（B站时长窗） | **高**（开闸后即用） | **done 2026-09-24**（`research/bilibili-deepdive-structure-v1.md`：六段式+BS-001 深纵骨架 v0.1+三卡点） |
+| A2 | douyin profile 首件实渲+验图（三 profile 唯一无实证件） | editing-craft-spec §4 已定义无实证 | 中 | **done 2026-09-24**（`bs-001-v12-douyin-9x16.mp4`：层 1.8 全 PASS+抖音窗双 PASS+五拍头白闪 YAVG 196 全中——三 profile 实证收官） |
+| A3 | 真直切渲染路（硬切=2 帧淡入近似→concat 直切·E8 弱项在案） | review-v12 E8 弱项 | 低 | **done 2026-09-24**（OS 循环 R167 认领 d7b24ed→R168 四步全落：cut fade_s=0+run 分组 concat+帧量化 per-run trim+check 新代数 cut-blended 断言+4 新单测+bs-001-v13 双件重渲三层门执法+MAD 验图·E8 弱项闭环） |
+| A4 | 标题工业化：平台标题 A/B 模板（对表公众号 5.3.3 误导标题红线） | user-research §3.5+M5 发布物清单 | 中 | **done 2026-09-24**（`docs/title-craft.md` v1.0：负面四禁对表+批次①②四槽位模板+A/B 六步+登记制式·A3 顺延注记在案=claim 时 A2 在飞碰撞·A2 已于 e54cbad 闭批碰撞解除） |
+| A5 | prep 批处理（--batch 目录模式·对位批手工 ×6 次的效率缺口） | C-29 执行实况 | 低 | **done 2026-09-25**（OS 循环 R205：`prep_vertical.py --batch` 目录批处理=幂等 skip+后缀护栏（已带后缀件永不作输入）+汇总退出码 0/2/3+`build_chain` 单源化·单文件模式零变更·12 新单测 244 全回归绿——BS-005/bs005e 素材窗一开新源批直达） |
+
+## B 对标学习池（看别人的秀的·仔细分析）
+
+| # | 项 | 产出 | 优先 | 状态 |
+|---|---|---|---|---|
+| B1 | **可灵官方 quickstart/docs 深读**（运镜控制/故事板/声线双绑定参数面） | → 素材生成线选型证据（viral-workflows v1.2 增版） | **首实证·今日** | **done 2026-09-24**（提示词结构级发现+参数面 JS 卡点在案） |
+| B2 | Runway Academy 官方课程面扫描（AI 视频工作流正统教学） | 研究件增版 | 中 | **done 2026-09-25**（R283：`research/runway-academy-scan-v1.md`——5 课程面+教学结构+教程流 3 篇·云兜底候选带证据位·内页未采如实注记） |
+| B3 | B站热门结构拆解（周一件：情报日报 top10 标题/分区→H1-H8+八模式透镜） | 结构拆解笔记入 research/ | 常态（周更） | **常态周更·W40 期 done 2026-10-03**（R1049·v1.1 增版=10-03 top10 拆解+**跨周漂移检测首跑**〔v1.0 §6 预注册判据兑现：复现 5 项升格候选=栏位化稳态/**同系列周间连榜实证**（W39 #4 生命奇观2 02×W40 #4 生命奇观2 03 同 UP 编号递进·本司系列编号策略生态位最强型佐证）/悬念问句钩系/官方体裁位/具名锚带〕+不复现 3 项维持观察级〔**【非AI】单周信号未复现=观察级降级执法**·「但是」反转式·情绪感叹受害叙事〕+数值型数字锚新读数〔#6 24 位×30 万〕·≥3 期复现再定谳通识级判据前移·**W41 期=10-10 周六·节律先例=周六产当周件**）·**W39 期 done 2026-09-26**（W39 首期：`research/bilibili-hot-dissect-v1.md` v1.0——栏位化【】6/10+系列编号 4/10=B站生态语法·本司编号连载同构验证·**【非AI】当卖点=AIGC 语境反向筛选信号→对冲位=H8 真实感实录取证密度**·「但是」反转式与 hit-chain 反差链同构·增版制周更立账·分区未采/片内面待账号期 K3 如实注记） |
+| B4 | 即梦智能画布操作逻辑研究（多图层/AI 融合=未来 B-roll 工作流） | 研究件增版 | 低 | **done 2026-09-26**（R319：`research/jimeng-smart-canvas-scan-v1.md` v1.0——官方首页 A 级单页=功能定义 verbatim〔AI 拼图+局部重绘/一键扩图/图像消除/抠图五操作+多图层编辑/精细化控制〕+云图像选型证据第三柱〔B1 可灵+B2 Runway+本件=三平台能力带并立·均逐单报批〕+操作逻辑层内页登录态未采=账号期后复扫项如实注记） |
+| B5 | **段子·幽默工艺对标**（top 创作者段子密度/梗位结构/节奏拆解→趣律 L9-L14 分群校准+段子库提案）——缺口锚=趣律在案但零对标拆解；CEO 扩面令点名「段子」 | user-research §9 谱系增版+趣律校准 | 中（账号期站内采样） | open |
+
+## C 技能学习池（学习各种技能）
+
+| # | 项 | 落点 | 优先 | 状态 |
+|---|---|---|---|---|
+| C1 | ffmpeg 高级剪辑技能（速度曲线/字幕动态滤镜/转场品质参数） | R-E/R-A 引擎升级备件 | 中 | **学习腿 done 2026-09-25**（R206：`research/ffmpeg-editing-craft-v1.md`——速度曲线 PoC 帧精确实证+工程坑三则+三面技术定谳；**引擎集成腿拆细在案 §4**·下批生产件前认领·素材窗解锁优先序不变）；**集成腿 R315 腿 1+2 毕**（引擎+单测+真渲染冒烟）·**腿 3-4 done 2026-09-26（R316）=C1 全腿闭环**（bs-001-v15-douyin 试点=S2 三门全绿+ffprobe 57.388s 逐毫秒同 v14b=时间线代数零动+ramp 代数 6/6+窗连续性验图 54/54+台账四件毕·备件位=F-006 v14b 维持现行·换档待评审席） |
+| C2 | faster-whisper 参数面（beam/语言初值=ASR 同音噪声级改善） | S2 席仪器校准（v12 asr-check 弱项） | 中 | **done 2026-09-24**（R169 四配置对照+medium 探针：模型档位=主因子 13.07%→5.53%·参数面噪声级·工具落三旋钮+S2 QC recipe） |
+| C3 | edge-tts 情感参数实验（SSML/rate-pitch 曲线=人味链 v2 输入） | C-21 升级备件 | 中 | **done 2026-09-26**（R317：`research/edge-tts-emotion-dial-v1.md` 五轴 16 读数——PROFILES 双轴落地实证〔hook 慢低/punch 快高〕+**volume 轴=产线零使用的可用新轴**+**light 链旋律存活率 42%**〔336.6→140.1Hz 压缩不改零〕+拍内阶梯 pitch 机械可行〔concat padding 0.000s〕+SSML 维持 R10 定谳〔单 voice 单 prosody〕；人味链 v2 备件三候选立位〔volume 强调轴/PROFILES 音高档加宽对冲 42%/句内阶梯 pitch〕——启用前置=同稿 A/B 干净样片呈 CEO 听感〔#8 先例〕+ai_feel 门+E8 席·**只立备件不立法**） |
+| C4 | Ollama 专家席提示词迭代（评审质量=S 席分数校准） | expert-roster 数据件升级 | 常态 | **首迭代 done 2026-09-26**（R318：v2 校准层三律落地——S2/S3 评分制落 dept-review §2 法〔基线 10·实锤扣 1-2·≥9 过门·红线 0 分〕+全席实锤律〔逐字引文·通用句无效〕+未测面声明〔假绿灯律执法位〕+S1 刻度锚〔10 分帽+旗分对账〕·S1 fixture 验证 2/2 命中对账平；**常态项留池续迭代**·S2/S3 首读校验位=首个进链件调用时执行） |
+
+## D 提案面（创新提案轨·P-2026-09-28-02 ①·司内提案面正典位）
+
+> 集团 P-2026-09-28-02 自驱力生态机制 v2.1 增补令 ①创新提案轨：**周轮节律每窗 ≥1 条自驱提案**（现象+建议+判据三句式·无需 CEO 令=P-2026-09-26-03 法无禁止即可为承接·判据先立 ≤3 问·试点窗 ≤2 周·**判负留痕合法**=负面结论也是产出）；P3 explore 产出必须回流本面（落点强制律）；连续两周零提案=值守轮点名催供。集团台账提案区=跨仓写禁令不直写，本面=司内正典位+HQ-FEEDBACK 呈报指针。
+
+=== BOARD (rc=0) ===
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+=== READINESS (rc=1) ===
+shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-001-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-012-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-013-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-014-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-015-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-016-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-017-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-019-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-021-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+
+**[needs-CEO]（1 项）**
+
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+
+**[suspended]（0 项）**
+
+- none
+
+## 距离首发的阻塞清单（3 项）
+
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+
+## 探针发现项（findings·机器纪律核验）
+
+- none
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+=== LOOP_HEALTH (rc=1) ===
+ 21 min (2026-10-02 23:59 -> 2026-10-03 00:19) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 00:19 -> 2026-10-03 00:40) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-03 00:53 -> 2026-10-03 01:16) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-03 04:05 -> 2026-10-03 04:27) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-03 06:34 -> 2026-10-03 06:55) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 10:54 -> 2026-10-03 11:15) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-10-03 12:34 -> 2026-10-03 13:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 29 min (2026-10-03 23:37 -> 2026-10-04 00:07) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-04 03:14 -> 2026-10-04 03:38) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-04 07:44 -> 2026-10-04 08:05) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1217 > tick=1213) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 131 warn)

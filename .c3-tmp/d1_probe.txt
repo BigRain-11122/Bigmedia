@@ -1,0 +1,1 @@
+L154: | 2026-09-30 | D-20260930-18 水位机制可靠性：行数比对 → **内容寻址**（派工被"读到却无 ack"的实证） | 外审第七轮：D-13/D-16 结论的**第三阶修正**（对 BigDomain 读法的实测推翻） | **实证链**：①BigDomain `src/os/state.json last_decision_rows=110`，而集团 `docs/decisions.md` 现 118 物理行
