@@ -1,0 +1,4 @@
+1295
+2026-10-04 23:14:31
+R1295: declared-idle 一行声明收轮·声明窗 6/6 窗满即收=batch close R1290-R
+2026-10-04 23:14:31 R1295: declared-idle 一行声明收轮·声明窗 6/6 窗满即收=batch close R1290-R1295 一盘 commit（os-protocol §6·commit 消息注
