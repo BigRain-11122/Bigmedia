@@ -1,0 +1,24 @@
+batch3_rows 19
+#65 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 校准好了门，才开门迎客。 | 台词池·秩序轴（晨间场景·池级署名）
+#66 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 今儿个结算顺利完成，心里头才踏实。 | 台词池·秩序轴（收市场景·池级署名）
+#67 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 晚风中，守规矩的人，也懂享受这分宁静。 | 台词池·秩序轴（夜市场景·池级署名）
+#68 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 这炊烟一飘，一天就快收工了。 | 台词池·烟火轴（黄昏场景·池级署名）
+#69 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 食堂师傅感叹，熬汤得慢火炖。 | 台词池·烟火轴（开市场景·池级署名）
+#70 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 这天热得连锅里的粥都咕嘟得快着火了。 | 台词池·烟火轴（高温场景·池级署名）
+#71 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 画个火炉画，心里暖和和的。 | 台词池·求新轴（寒潮场景·池级署名）
+#72 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 画笔一挥，世界就是我的。 | 台词池·求新轴（令件场景·池级署名）
+#73 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 今儿的创作灵感像是从江面来的。 | 台词池·求新轴（黄昏场景·池级署名）
+#74 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 缝补匠的手艺，真像这日子，慢而实诚。 | 台词池·怀旧轴（寒潮场景·池级署名）
+#75 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 熬过这把年纪的清早，才算是见了世面。 | 台词池·怀旧轴（晨间场景·池级署名）
+#76 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 这盏灯陪了我多年，好像也有了灵性。 | 台词池·怀旧轴（夜市场景·池级署名）
+#77 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 船长说过，风雨中才能见英雄。 | 台词池·侠气轴（雨天场景·池级署名）
+#78 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 街坊邻居得互相照应，这日子才过得多舒心。 | 台词池·侠气轴（寒潮场景·池级署名）
+#79 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 今日收工早，快去吃碗热乎面。 | 台词池·侠气轴（黄昏场景·池级署名）
+#80 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 鱼儿不咬钩，我也心平气和。 | 台词池·逍遥轴（高温场景·池级署名）
+#81 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 值个夜，就图个心安。 | 台词池·逍遥轴（夜市场景·池级署名）
+#82 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 江面反光像银子洒了一地。 | 台词池·逍遥轴（黄昏场景·池级署名）
+#83 [OK] pool=True dup_old=False dup_cross=False dup_fleet=False | 叮叮叮，夜晚才醒。 | 台词池·像素灵（周末场景·池级署名）
+
+axis_coverage {"秩序轴": 3, "烟火轴": 3, "求新轴": 3, "怀旧轴": 3, "侠气轴": 3, "逍遥轴": 3, "像素灵": 1}
+scenes 令件,周末,夜市,寒潮,开市,收市,晨间,雨天,高温,黄昏
+VERDICT PASS
