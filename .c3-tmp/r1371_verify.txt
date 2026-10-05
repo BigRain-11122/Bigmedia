@@ -1,0 +1,7 @@
+tick=1371
+ts=2026-10-05 15:05:27
+task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
+production=open
+log[-1] HEAD: 2026-10-05 15:1x R1371: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 4/6=R1368/R1369/R1370 同窗
+log[-1] TAIL: CT-v9 择优〕→10-07 #57 替代率首报终报。轮内操作红如实入账=探针首跑用 PS > 重定向捕获=GBK/UTF-16 乱读不可判〔R1311 OUT 卫生律复发首跑坑〕→即改 Python subprocess 单件捕获复跑全绿（r1371_probe_run.py·r1371_probe_out.txt 正源）·乱件四件已清·教训=R1311 律例行面仍须脚本模板复制不走临时手搓。
+log_len=1399
