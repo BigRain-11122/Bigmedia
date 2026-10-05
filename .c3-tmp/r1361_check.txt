@@ -1,0 +1,53 @@
+== state.json ==
+tick=1360
+ts=2026-10-05 13:03:46
+task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
+production=open
+watermark.dnums_count=149
+log_len=1388
+== decisions.md ==
+dnum_count=148
+NEW=[]
+GONE=["D-20260930-1"]
+mtime=2026-10-05 12:04:20
+-- head 12 lines (dispatch board zone) --
+D00| # Decisions — 集团决策台账（决策轮唯一拍板面）
+D01| 
+D02| > 集团决策轮（每日 00:00·`cph4/decision-chain.md` §一 章程）产出的唯一决策面。子公司审核循环的锚：各司循环读新行→合理执行回执 / 不合理写理由（HQ-FEEDBACK）→次日再报请；第三次冲突升级 CEO 终裁。
+D03| > 纪律：行级追加；决策必带依据列（调研要点/数据/先例指针，无依据=无效）；详情超 200 字落 cph4/research/ 只留指针；**T0 域=ceo-pending 呈 CEO；T1 域=按 CEO 委托决策令 v2（2026-09-24 午后「等我ceo拍板的事，我要求自行科学决策，除非是现实世界非要我个人去做的」）AI 科学自决+否决窗（默认至 2026-10-01）**；物理件/创造性保留面（人设/命名）除外。
+D04| 
+D05| ## 台账
+D06| 
+D07| ## 派工通告板（2026-09-30 设·D-20260930-13②）
+D08| 
+D09| > 用途：**集团→司的投递面**（司们本已读本文件）。各司每轮对号本司行即可，零新增制度。
+D10| > 纪律（D-13①）：任一新行落账后，涉本司司须在 **≤2 个轮周期（≤20min）** 内 ack 或驳回；明定"只在 00:00 查"的司（BigLife）须增班间插队行检查。
+D11| > 复投律：12:00 班之后派工的行，司若当班未见＝正常，须在**下一班（00:00）首轮**处理并回执。
+== evolution-ledger ==
+total_lines=289
+raw_hits=43
+L190| | P-2026-09-29-13 | 09-29 | **坚决清理司域派单（P1·CEO 令 O-2026-0929-033·resource-chain §三§11 首批执法）**：①**@Biggame**=a.`gaming/MiniGame/projects/P3D_Spike` 16.1GB 定谳（试点已收口？City3D 主体已独立=全区直清；仍被引用=留判据行回执）+b.**全工程
+L248| - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432MB/FluxVerse +220MB（M1 建城+编年史在飞）/MiniGame +46MB（R3 律内）——零膨胀旗标·Money02 R2-inflight 引用面禁动照旧。②抽验=selfaud
+L283| - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 disk-sweep -Sweep 实跑**：Class-A 直清=win-tem
+L284| - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame .git 2965MB 第十晚 >2GB 旗标维持（较夜班 3230MB 回落
+== orders/ top ==
+O-20260928-1910-bm-a.md mtime=09-28 19:12
+O-20260928-1836-bm-a.md mtime=09-28 18:57
+O-20260928-1748-bm-a.md mtime=09-28 18:12
+O-20260928-1725-bm-a.md mtime=09-28 17:33
+index.lock exists=False
+== git status ==
+M src/os/state.json
+?? .c3-tmp/r1359_check.txt
+?? .c3-tmp/r1359_check2.txt
+?? .c3-tmp/r1359_close_verify.txt
+?? .c3-tmp/r1359_probes.txt
+?? .c3-tmp/r1360_check.py
+?? .c3-tmp/r1360_check.txt
+?? .c3-tmp/r1360_probe.py
+?? .c3-tmp/r1360_probe.txt
+?? .c3-tmp/r1360_state_update.py
+?? .c3-tmp/r1360_verify.txt
+?? .c3-tmp/r1361_check.py
+?? .c3-tmp/r1361_probe.py
+LAST_COMMIT| 73600761 R1358: queue B5 humor benchmark slice2 sampling leg (user-research v1.9 s9.1: fleet baseline ~0 designed gags machine-verified 133f/1648l, v4-v9 3-4 gags/piece convergence-decline finding + bs001-dd 5-gag counter-evidence; A-face 13d scan bili 6.9%/zhihu 0.8%; top density=C-face pending, gap deferred, gag-library not triggered; setup-twist-callback x 12-beat table; L13+L10 dual-axis); checks fresh NEW=[], probes flat; next dusk v68 18:00, OSS w4 21:40, REACT 10-06, #57 10-07 [via bm-a]

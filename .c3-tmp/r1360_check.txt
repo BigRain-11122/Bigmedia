@@ -1,0 +1,49 @@
+== state.json ==
+tick=1359
+ts=2026-10-05 12:54:02
+task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
+production=open
+watermark.dnums_count=149
+log_len=1387
+LOG| "2026-10-05 12:41 R1358: \u81ea\u8fdb\u8f6e\u00b7queue \u00a7B B5 \u6bb5\u5b50\u5bf9\u6807 slice2 \u91c7\u6837\u817f\u6bd5\uff08\u5168\u9884\u7b97\u8f6e\u9886\u5151\u73b0 R1357 \u6307\u9488\u2464\u00b7\u226415 \u5206\u949f\u9650\u65f6\u7a97\u5185\u6536\u53e3\u00b7\u7a7a\u8f6c\u89c4\u5219\u2461\u8def=\u6e05\u5355\u552f\u4e00 open \u9876\u9879\u00b7\u4ea7\u54c1\u4f18\u5148\u5f8b\u5bf9\u4f4d=0 \u5206\u4f4d\u7814\u7a76\u4ef6\u5982\u5b9e\u8bb0\u00b7CEO \u6269\u9762\u4ee4\u70b9\u540d\u300c\u6bb5\u5b50\u300d\u627f\u63a5\uff09\u2014\u2014\u2460\u8f6e\u9996\u5feb\u901f\u8def\u5f84\u4e94\u67e5 fresh\uff08r1358_probe.txt\uff1aorders \u9876=O-20260928-1910 \u672a\u53d8 mtime 09-28/decisions dnum \u5185\u5bb9\u5bfb\u5740\u5dee\u96c6 NEW=[]\u3014total D/C 149==\u6c34\u4f4d 149 \u542b D-20260930-1=R1357 \u6c34\u4f4d\u4fee\u8865\u4ef6\u96f6\u590d\u53d1\u6027\u4f2a\u5dee\u5b9e\u8bc1\u3015\u00b7ledger @hits 42==42 \u5c3e=\u5df2\u6d88\u8d39\u9762\u951a\u9759/\u6d3e\u5de5\u677f\u96f6 BigStream \u6d89\u53f8\u65b0\u884c/\u96f6 index.lock/production=open/\u6811\u51c0 HEAD=346ece68 R1357\uff09+\u4e09\u63a2\u9488\u7167\u8dd1\u4e0d\u7701\uff08r1358_probe_board/readiness/loop.txt\u3014python io \u901a\u9053 r1358_run_probes.py=R1244/R1288 \u7f16\u7801\u5f8b\u00b7PS5.1 `>` UTF-16 \u91cd\u5b9a\u5411\u5751\u8f6e\u5185\u5b9a\u8c33\u540e\u7ed5\u5f00\u3015\uff1aboard 0 FAIL\u30145 ideas 10 drafts 5 in production 0 fail\u3015/readiness 3 \u963b\u585e\u7686\u5916\u90e8 CEO \u9762\u3014\u8d26\u53f7\u6279\u6b21\
+LOG| "2026-10-05 12:5x R1359: declared-idle \u4e00\u884c\u58f0\u660e\u6536\u8f6e\uff08\u7a7a\u8f6e\u5224\u5b9a\u00b7\u4e94\u9759 fresh+\u63a2\u9488\u57fa\u7ebf\u5e26\u5e73+\u56db\u67e5\u5c3d\u00b7P-2026-09-28-02 \u2461\u2463\u5e8f\u00b7\u58f0\u660e\u8f6e\u5e76\u7a97 1/6=R1358 \u5b9e\u6d3b\u8f6e 73600761 \u6536\u540e\u65b0\u7a97\u9996\u8f6e\u00b7\u96f6 commit \u76d8\u9762\u5373\u771f\u76f8 os-protocol \u00a76\uff09\u2014\u2014\u2460\u4e94\u67e5 fresh \u5b9e\u8bc1 .c3-tmp/r1359_check.txt+check2\uff08orders \u9876=O-20260928-1910 \u672a\u53d8 mtime 09-28 19:12/ledger @BigStream 42==42 \u951a\u9759\u5c3e=L284 10-04 \u5348\u73ed\u503c\u5b88\u884c\u5df2\u6d88\u8d39\u9762/decisions dnum \u5185\u5bb9\u5bfb\u5740\u5dee\u96c6 NEW=[] \u6c34\u4f4d 149==149\u3014\u542b D-20260930-1 \u4fee\u8865\u4ef6\u96f6\u590d\u53d1\u6027\u4f2a\u5dee=R1357 \u6c34\u4f4d\u4fee\u8865\u627f\u7ee7\u3015/\u6d3e\u5de5\u677f\u96f6 BigStream \u6d89\u53f8\u65b0\u884c\u3014D-20261005-06~11 \u6279 R1356 \u5df2\u6d88\u8d39\u3015/\u96f6 index.lock/production=open/\u6811\u6001=M state.json+?? r1359* \u8bc1\u636e\u4ef6=\u58f0\u660e\u7a97\u81ea\u8bb0\u8d26\u9884\u671f\u6001\u96f6 bm-a \u6d3b\u8dc3\u5199\u76d8\u8ff9\u8c61\uff09\uff1b\u2461\u4e09\u63a2\u9488\u7167\u8dd1\u4e0d\u7701\uff08.c3-tmp/r1359_probes.txt\uff1aboard 0 FAIL\u30145 ideas/10 drafts/5 in production\u3015/readiness 3 \u963b\u585e\u7686\u5916\u90e8 CEO \u9762\u3014\u8d26\u53f7\u6279\u6b21\u2460+M4 GATE 6/10+#17 needs-CEO\u30150 \u53d1\u73b0\u3014\u963b\u585e\u
+== decisions.md ==
+dnum_count=148
+NEW=[]
+GONE=["D-20260930-1"]
+mtime=2026-10-05 12:04:20
+-- head 12 lines (dispatch board zone) --
+D00| # Decisions — 集团决策台账（决策轮唯一拍板面）
+D01| 
+D02| > 集团决策轮（每日 00:00·`cph4/decision-chain.md` §一 章程）产出的唯一决策面。子公司审核循环的锚：各司循环读新行→合理执行回执 / 不合理写理由（HQ-FEEDBACK）→次日再报请；第三次冲突升级 CEO 终裁。
+D03| > 纪律：行级追加；决策必带依据列（调研要点/数据/先例指针，无依据=无效）；详情超 200 字落 cph4/research/ 只留指针；**T0 域=ceo-pending 呈 CEO；T1 域=按 CEO 委托决策令 v2（2026-09-24 午后「等我ceo拍板的事，我要求自行科学决策，除非是现实世界非要我个人去做的」）AI 科学自决+否决窗（默认至 2026-10-01）**；物理件/创造性保留面（人设/命名）除外。
+D04| 
+D05| ## 台账
+D06| 
+D07| ## 派工通告板（2026-09-30 设·D-20260930-13②）
+D08| 
+D09| > 用途：**集团→司的投递面**（司们本已读本文件）。各司每轮对号本司行即可，零新增制度。
+D10| > 纪律（D-13①）：任一新行落账后，涉本司司须在 **≤2 个轮周期（≤20min）** 内 ack 或驳回；明定"只在 00:00 查"的司（BigLife）须增班间插队行检查。
+D11| > 复投律：12:00 班之后派工的行，司若当班未见＝正常，须在**下一班（00:00）首轮**处理并回执。
+== evolution-ledger ==
+total_lines=289
+raw_hits=43
+L190| | P-2026-09-29-13 | 09-29 | **坚决清理司域派单（P1·CEO 令 O-2026-0929-033·resource-chain §三§11 首批执法）**：①**@Biggame**=a.`gaming/MiniGame/projects/P3D_Spike` 16.1GB 定谳（试点已收口？City3D 主体已独立=全区直清；仍被引用=留判据行回执）+b.**全工程
+L248| - **值守轮 2026-09-27（夜班 03:07）**：①水位=盘余 899.8GB 旗标全空；增量面 bigmoney +404MB（Money02 在途+回测批产物）/media +432MB/FluxVerse +220MB（M1 建城+编年史在飞）/MiniGame +46MB（R3 律内）——零膨胀旗标·Money02 R2-inflight 引用面禁动照旧。②抽验=selfaud
+L283| - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 disk-sweep -Sweep 实跑**：Class-A 直清=win-tem
+L284| - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame .git 2965MB 第十晚 >2GB 旗标维持（较夜班 3230MB 回落
+== orders/ top ==
+O-20260928-1910-bm-a.md mtime=09-28 19:12
+O-20260928-1836-bm-a.md mtime=09-28 18:57
+O-20260928-1748-bm-a.md mtime=09-28 18:12
+O-20260928-1725-bm-a.md mtime=09-28 17:33
+index.lock exists=False
+== git status ==
+M src/os/state.json
+?? .c3-tmp/r1359_check.txt
+?? .c3-tmp/r1359_check2.txt
+?? .c3-tmp/r1359_close_verify.txt
+?? .c3-tmp/r1359_probes.txt
+?? .c3-tmp/r1360_check.py
+?? .c3-tmp/r1360_probe.py
+LAST_COMMIT| 73600761 R1358: queue B5 humor benchmark slice2 sampling leg (user-research v1.9 s9.1: fleet baseline ~0 designed gags machine-verified 133f/1648l, v4-v9 3-4 gags/piece convergence-decline finding + bs001-dd 5-gag counter-evidence; A-face 13d scan bili 6.9%/zhihu 0.8%; top density=C-face pending, gap deferred, gag-library not triggered; setup-twist-callback x 12-beat table; L13+L10 dual-axis); checks fresh NEW=[], probes flat; next dusk v68 18:00, OSS w4 21:40, REACT 10-06, #57 10-07 [via bm-a]

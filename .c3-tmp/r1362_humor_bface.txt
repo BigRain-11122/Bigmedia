@@ -1,0 +1,9 @@
+B-face humor vertical structure scan (B5 slice3) 2026-10-05 13:28:32
+source-grade: B (platform public ranking pages, zero key)
+
+BLADE1 all-site ranking: code=-352 items=0
+humor-tname-hits: {}
+
+BLADE2 rid=5: code=-352 items=0 tnames=[]
+
+BLADE2 rid=24: code=-352 items=0 tnames=[]
