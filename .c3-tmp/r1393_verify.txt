@@ -1,0 +1,10 @@
+tick=1393
+ts=2026-10-05 18:53:40
+production=open
+log_count=1421
+log_tail_head_ok=True
+log_tail_len=2787
+log_tail_head_120=2026-10-05 18:5x R1393: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 5/6=R1389/R1390/R1391/R1
+task_len=60 task_head_60=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
+focus_head_150=R1393 declared-idle 声明窗 5/6（R1389-R1392 同窗续静零漂移·18:5x 五静+探针基线平·全 lane 时间闸·dusk 面 post-v68 枯竭）——下轮可领序：①窗 6/6 batch close 判定（若 21:40 前首遇轮=一盘 commit 注区间收
+json_reload_ok=True
