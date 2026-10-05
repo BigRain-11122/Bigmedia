@@ -1,0 +1,29 @@
+GIT_STATUS_SHORT_BEGIN
+?? r_cur_check5.py
+GIT_STATUS_SHORT_END
+INDEX_LOCK: none
+LAST_COMMIT: 135e2ad1 R1421: group decisions batch consumed - D-20261006-01/02/03 acked (01 notes BS zero-new-rows; 02 orders.md wave-2 split noted read-only; 03 confirms BigStream OSS w3/w4 over-delivery, E1 escalations are HQ/BigLife/FluxVerse), watermark 148->152 incl D-20260930-00 masked-token patch (R1357 precedent); probes baseline flat; next: 10-07 day-boundary batch (brief -> REACT-v10 F-157) + #57 local-rate final report [via bm-a]
+STATE_TICK: 1421
+STATE_TS: 2026-10-06 00:30:49
+STATE_TASK: 集团决策批消费轮·decisions 水位差集 NEW=4（D-20260930-00+D-20261006-01/02
+PRODUCTION: open
+WATERMARK_DNUMS_COUNT: 152
+ORDERS_TOP3: ['README.md', 'O-20260928-1910-bm-a.md', 'O-20260928-1836-bm-a.md']
+ORDERS_TOP_MTIME: 1790157519.8090048
+LEDGER_TAGS_TOTAL: 60
+LEDGER_TAGS_BREAKDOWN: {'全司': 11, '六司': 3, 'BigStream': 43, '七线全司': 1, '八线全量': 2}
+LEDGER_MTIME: 1791184426.5711303
+LEDGER_TAIL5:
+  | - **值守轮 2026-10-05（夜班 03:07）**：①水位=盘余 704.9GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1→718.2→704.9·本班 -13.3GB·近24h -15.2GB<20GB
+  | - **P-2026-10-05-01 | 巡检整改催办批·HQ 工具面（patrol RUN_ID=20261005-092301·@HQ P1）**——PT-20260928-01 probe fetch 静默回退复发#3（probe-20261005 [ENTITY] BS 80.6h/BD 
+  | - **P-2026-10-05-02 | 巡检整改催办批·CPH4 基线表失约（patrol RUN_ID=20261005-092301·@CPH4 P1·PT-20261005-01）**——P-2026-10-03-02 各模型家族版本面基线表（大限 10-04 12:00）+P-2026-
+  | - **P-2026-10-05-03 | 巡检整改催办批·BigLife 逾期升级（patrol RUN_ID=20261005-092301·@BigLife P1·PT-20261002-03 ESCALATED）**——主产线静默 ~90h（自有产线 3421d3c5 09-30 后零轮·O
+  | - **值守轮 2026-10-05（午班 15:07）**：①水位=盘余 688.3GB（环比序 …720.1→718.2→704.9→688.3·本班 -16.6GB·**近24h -29.9GB>20GB 首班越线**——已扫面净增量 ~+1.1GB=盘耗大头在未扫面〔temp/缓存族〕→次班
+DECISIONS_CUR_SET_COUNT: 152
+DECISIONS_MTIME: 1791216487.8809087
+DECISIONS_NEW: []
+DECISIONS_GONE: []
+DAILY_1006: EXISTS
+BACKLOG_MTIME: 1791216984.6840985
+QUEUE_MTIME: 1791216984.6790996
+EXPORT_MTIME: 1791217849.8482199

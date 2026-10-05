@@ -1,0 +1,99 @@
+== board rc=0 ==
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+
+== readiness rc=1 ==
+b-bilibili.mp4 | 测试件·非成品 |
+| bs-001-v7-shipinhao.mp4 | 测试件·非成品 |
+| bs-001-v7-vis.mp4 | 测试件·非成品 |
+| bs-001-v8-cyber-full.mp4 | 测试件·非成品 |
+| bs-001-v8-cyber-light.mp4 | 测试件·非成品 |
+| bs-001-v8-cyber-mid.mp4 | 测试件·非成品 |
+| bs-001-v9-cyber-light.mp4 | 测试件·非成品 |
+| bs-001-voice-B-yunxi.mp4 | 测试件·非成品 |
+| bs-001-voice-C-yunjian.mp4 | 测试件·非成品 |
+| bs-001-voice-D-huayan-local.mp4 | 测试件·非成品 |
+| bs-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-002-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-002-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-002-v2b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-003-v2b-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v15-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-004-v2-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-005e-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| bs-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-001-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-002-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-003-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-004-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-005-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-006-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-007-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-008-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-009-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-010-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-011-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-012-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-013-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-014-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-015-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-016-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-017-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-018-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-019-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+| lc-021-v1-shipinhao-60s.mp4 | 测试件·非成品 |
+
+## ④ 待 CEO 决策与暂缓项（backlog 标记）
+
+**[needs-CEO]（1 项）**
+
+- #17 [needs-CEO] 直播推流链 BigStream 分工
+
+**[suspended]（0 项）**
+
+- none
+
+## 距离首发的阻塞清单（3 项）
+
+- first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+
+## 探针发现项（findings·机器纪律核验）
+
+- none
+
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+
+== loop_health rc=1 ==
+ -> 2026-10-03 00:40) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-03 00:53 -> 2026-10-03 01:16) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-03 04:05 -> 2026-10-03 04:27) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-03 06:34 -> 2026-10-03 06:55) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 10:54 -> 2026-10-03 11:15) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-10-03 12:34 -> 2026-10-03 13:00) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 29 min (2026-10-03 23:37 -> 2026-10-04 00:07) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-04 03:14 -> 2026-10-04 03:38) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-04 07:44 -> 2026-10-04 08:05) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-05 00:04 -> 2026-10-05 00:25) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-05 00:37 -> 2026-10-05 00:59) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 26 min (2026-10-05 00:59 -> 2026-10-05 01:25) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 30 min (2026-10-05 01:25 -> 2026-10-05 01:55) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 24 min (2026-10-05 05:39 -> 2026-10-05 06:03) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-05 06:03 -> 2026-10-05 06:24) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-05 17:44 -> 2026-10-05 18:05) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-05 21:42 -> 2026-10-05 22:05) over 20 min comm SLA - long rounds may breach legitimately
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-05 23:54 -> 2026-10-06 00:17) over 20 min comm SLA - long rounds may breach legitimately
+- [FAIL] account-lag: 6 completed round(s) without accounting (done beats=1427 > tick=1421) - the R4/R5 bug pattern
+loop health: FAIL (4 fail, 142 warn)
+
