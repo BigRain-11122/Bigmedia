@@ -1,0 +1,22 @@
+company
+loop
+mode
+production
+opened_by
+installed
+tick
+mandate
+protocol
+backlog
+focus
+decisions_watermark
+log
+ts
+task
+account_drift_adjudicated
+account_drift_note
+
+ts=2026-10-06 07:04:38
+task=R1455: waiting-idle 一行声明收轮（空轮判定路径④·五静 fresh+探针绿+四查尽·P-2026-0
+account_drift_adjudicated=7
+account_drift_note=R1452 2026-10-06 caliber fix: heartbeat done-beats count body completions, tick counts accounted rounds; a killed body retried under the same round number (broken-round absorb convention, R1429/R1433/
