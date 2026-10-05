@@ -1,0 +1,34 @@
+NOW: 2026-10-05 14:02:43
+
+tick=1364 ts=2026-10-05 13:55:51 production=open
+task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
+dnums_count=149 last6=['D-20261005-07', 'D-20261005-08', 'D-20261005-09', 'D-20261005-10', 'D-20261005-11', 'D-20260930-1']
+dw.board_rows=51
+dw.ts=2026-10-05 12:15:52
+dw.law=D-20260930-18/19 content-addressing; set-diff vs dnums; line-count retired R749
+log_count=1392
+
+== LOG TAIL 1 ==
+LOG| 2026-10-05 13:5x R1364: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 2/6=R1363 同窗续静零漂移）——①五查 fresh 实证 .c3-tmp/r1364_check.txt 13:55（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/decisions dnum 内容寻址差集 NEW=[] 水位 149==149〔GONE=[D-20260930-1]=R1357 修补件常驻差集侧预期态非漂移·D-20260930-19 水位差集制〕/ledger @BigStream tag 43==43 锚静尾=L284 未动·P-2026-10-05-01/02/03=@HQ/@CPH4/@BigLife 皆非本司面〔R1363 已核·尾 4 行零新涉司行〕/派工通告板零 BigStream 涉司新行〔D-20261005-06~11 批 R1356 已消费〕/零 index.lock/production=open/树态
+
+ORD| O-20260928-1910-bm-a.md mtime=09-28 19:12
+ORD| O-20260928-1836-bm-a.md mtime=09-28 18:57
+ORD| O-20260928-1748-bm-a.md mtime=09-28 18:12
+
+decisions_set=149 new_vs_watermark=[]
+ledger_tag_lines=43
+LED| L283 - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 disk-sweep -Sweep 实跑**：Class-A 直清=win-tem
+LED| L284 - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame .git 2965MB 第十晚 >2GB 旗标维持（较夜班 3230MB 回落
+== ledger tail 4 ==
+T| - **P-2026-10-05-01 | 巡检整改催办批·HQ 工具面（patrol RUN_ID=20261005-092301·@HQ P1）**——PT-20260928-01 probe fetch 静默回退复发#3（probe-20261005 [ENTITY] BS 80.6h/BD 80.2h/BC 80.4h 假陈旧 vs fetch 实测 origin 三鲜）+PT-20260
+T| - **P-2026-10-05-02 | 巡检整改催办批·CPH4 基线表失约（patrol RUN_ID=20261005-092301·@CPH4 P1·PT-20261005-01）**——P-2026-10-03-02 各模型家族版本面基线表（大限 10-04 12:00）+P-2026-10-02-09 首轮回执（检索式库+扫描班接线声明 ≤10-04）双失约（origin resea
+T| - **P-2026-10-05-03 | 巡检整改催办批·BigLife 逾期升级（patrol RUN_ID=20261005-092301·@BigLife P1·PT-20261002-03 ESCALATED）**——主产线静默 ~90h（自有产线 3421d3c5 09-30 后零轮·O-20261002-0118 回执节零填）·根因=BigLife-OSLoop 强冻与 R777 三
+T| 
+anchor C-00030.md exists=False
+anchor C-00031.md exists=False
+index_lock=False
+oh_w4=False
+daily1005=True daily1006=False
+pools MISSING
+e4_verdicts_1005=['20261005-024014-E4-audience.md']
+export_ts=2026-10-05 13:32:33
