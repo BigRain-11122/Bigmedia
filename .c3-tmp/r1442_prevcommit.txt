@@ -1,0 +1,10 @@
+﻿aab29af7 R1441 waiting-idle declaration (path-4): five-checks fresh quiet (orders unchanged; decisions 152==152 canonical d{2} diff zero; ledger 43==43 tail all other-company rows; supply closed: CENSUS absent, pools 1440, daily1006 in, daily1007 not due, OSS-w5 10-08; probes==baseline board 0F readiness 3 CEO-blockers loop_health 3F+142W +6 const); lanes gated: 10-07 day batch (daily+REACT-v10 F-157+#57 final), 10-08 GB+DAILY+OSS-w5, 10-10 B3; commit right after state write [via bm-a]
+
+ .c3-tmp/r1440_verify.txt    | Bin 0 -> 362 bytes
+ .c3-tmp/r1441_check.py      | 107 ++++++++++++++++++++++++++++++++++++++++++++
+ .c3-tmp/r1441_check_out.txt |  38 ++++++++++++++++
+ .c3-tmp/r1441_probes.py     |  21 +++++++++
+ .c3-tmp/r1441_probes.txt    |  99 ++++++++++++++++++++++++++++++++++++++++
+ .c3-tmp/r1441_state.py      |  27 +++++++++++
+ src/os/state.json           |   9 ++--
+ 7 files changed, 297 insertions(+), 4 deletions(-)
