@@ -1,0 +1,11 @@
+6:24) over 20 min comm SLA - long rounds may breach legitimately
+
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-05 17:44 -> 2026-10-05 18:05) over 20 min comm SLA - long rounds may breach legitimately
+
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-05 21:42 -> 2026-10-05 22:05) over 20 min comm SLA - long rounds may breach legitimately
+
+- [FAIL] account-lag: 6 completed round(s) without accounting (done beats=1425 > tick=1419) - the R4/R5 bug pattern
+
+loop health: FAIL (3 fail, 141 warn)
+
+

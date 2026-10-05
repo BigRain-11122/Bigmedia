@@ -1,0 +1,10 @@
+== loop_health rc=1 ==
+ -> 2026-10-03 00:19) over 20 min comm SLA - long rounds may breach legitimately
+
+- [WARN] heartbeat-gap: beat gap 21 min (2026-10-03 00:19 -> 2026-10-03 00:40) over 20 min comm SLA - long rounds may breach legitimately
+
+- [WARN] heartbeat-gap: beat gap 23 min (2026-10-03 00:53 -> 2026-10-03 01:16) over 20 min comm SLA - long rounds may breach legitimately
+
+- [WARN] heartbeat-gap: beat gap 22 min (2026-10-03 04:05 -> 2026-10-03 04:27) over 20 min comm SLA - long rounds may breach legitimately
+
+- [WARN] heartbeat-gap: beat gap 20 min (2026-10-03 06:34 -> 2026-10-03 06:55)
