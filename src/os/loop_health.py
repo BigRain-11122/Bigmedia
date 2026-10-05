@@ -42,8 +42,10 @@ Findings:
   FAIL  log-ts                       entry lacks leading timestamp
   FAIL  state-ts                     ts field missing/malformed (fleet
                                    heartbeat face, PT-20260925-02)
-  FAIL  account-lag                 done beats > tick (rounds ran,
-                                   accounting missing - the R4/R5 bug)
+  FAIL  account-lag                 done beats > tick + adjudicated drift
+                                   (rounds ran, accounting missing - R4/R5)
+  WARN  account-drift-adjudicated   done beats within the documented drift
+                                   baseline (broken-round double-body)
   WARN  state-ts-stale/future        closing step not refreshing ts /
                                    future stamping (clock skew)
   WARN  heartbeat-gap                beat gap over --max-gap (SLA)
@@ -222,11 +224,29 @@ def cross_check(beats, state, done, now, max_age, max_gap, findings):
                              % (age, max_age)))
     if state and isinstance(state.get("tick"), int) and not isinstance(state.get("tick"), bool):
         tick = state["tick"]
-        if len(done) > tick:
+        # R1452 caliber fix: heartbeat done-beats count body completions,
+        # tick counts accounted rounds - a killed body retried under the same
+        # round number (broken-round absorb convention) adds a done beat
+        # without an accounted round, so a documented constant drift is
+        # expected history, not the missing-accounting bug this gate exists
+        # to catch. Only drift BEYOND the adjudicated baseline FAILs; the
+        # baseline itself surfaces as an explicit WARN every run.
+        adj = state.get("account_drift_adjudicated", 0)
+        if not isinstance(adj, int) or isinstance(adj, bool) or adj < 0:
+            adj = 0
+        if len(done) > tick + adj:
             findings.append(("FAIL", "account-lag",
                              "%d completed round(s) without accounting "
-                             "(done beats=%d > tick=%d) - the R4/R5 bug pattern"
-                             % (len(done) - tick, len(done), tick)))
+                             "(done beats=%d > tick=%d + adjudicated=%d) - "
+                             "the R4/R5 bug pattern"
+                             % (len(done) - tick - adj, len(done), tick, adj)))
+        elif len(done) > tick:
+            findings.append(("WARN", "account-drift-adjudicated",
+                             "done beats=%d vs tick=%d: %d beat(s) within "
+                             "adjudicated drift baseline (broken-round "
+                             "double-body history; see state "
+                             "account_drift_note)" % (len(done), tick,
+                                                      len(done) - tick)))
         elif tick > len(done):
             findings.append(("WARN", "account-ahead",
                              "tick=%d ahead of done beats=%d - repair bump "

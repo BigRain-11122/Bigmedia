@@ -308,6 +308,43 @@ class CliTests(unittest.TestCase):
         self.assertIn("FAIL", out)
         self.assertIn("account-lag", out)
 
+    def test_account_drift_within_adjudicated_baseline_warns(self):
+        """done beats == tick + adjudicated drift: explicit WARN, no FAIL
+        (broken-round double-body history is not the R4/R5 bug)."""
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        state = make_state(tick=1)
+        state["account_drift_adjudicated"] = 1
+        root = make_repo(self, spec, state, BOARD)
+        rc, out = self.run_cli(root)
+        self.assertEqual(rc, 0)
+        self.assertIn("account-drift-adjudicated", out)
+        self.assertIn("1 beat(s) within", out)
+        self.assertNotIn("account-lag", out)
+
+    def test_account_drift_beyond_adjudicated_baseline_fails(self):
+        """New drift past the documented baseline still trips the gate."""
+        spec = [(40, "round done exit=0"), (30, "round done exit=0"),
+                (10, "round done exit=0")]
+        state = make_state(tick=1)
+        state["account_drift_adjudicated"] = 1
+        root = make_repo(self, spec, state, BOARD)
+        rc, out = self.run_cli(root)
+        self.assertEqual(rc, 1)
+        self.assertIn("account-lag", out)
+        self.assertIn("done beats=3 > tick=1 + adjudicated=1", out)
+
+    def test_account_drift_invalid_baseline_falls_back_strict(self):
+        """Non-int/negative/bool baseline values are treated as 0 -
+        malformed adjudication data must never widen the gate."""
+        for bad in (-3, True, "7", None):
+            spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+            state = make_state(tick=1)
+            state["account_drift_adjudicated"] = bad
+            root = make_repo(self, spec, state, BOARD)
+            rc, out = self.run_cli(root)
+            self.assertEqual(rc, 1, "bad baseline %r must stay strict" % (bad,))
+            self.assertIn("account-lag", out)
+
     def test_bad_flag_exits_two(self):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
