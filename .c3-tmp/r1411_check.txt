@@ -1,0 +1,31 @@
+NOW: 2026-10-05 22:13:51
+
+tick=1410 ts=2026-10-05 22:03:42 production=open mode=o-2126-production-open
+dnums_count=149
+log_count=1438
+
+ORD| O-20260928-1910-bm-a.md mtime=09-28 19:12
+ORD| O-20260928-1836-bm-a.md mtime=09-28 18:57
+ORD| O-20260928-1748-bm-a.md mtime=09-28 18:12
+decisions_mtime=10-05 12:04:20
+decisions_set=149 new_vs_watermark=[] gone=[]
+ledger_tag_lines_strict=43 mtime=10-05 15:13:46
+LED| L283 - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 disk-sweep -Sweep 实跑**：Class-A 直清=win-tem
+LED| L284 - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame .git 2965MB 第十晚 >2GB 旗标维持（较夜班 3230MB 回落
+board_rows_total=111 board_rows_BigStream=17
+anchor C-00030.md exists=False
+anchor C-00031.md exists=False
+index_lock=False
+oh_w4=True (slice-1 R1409; remaining slices optional until 10-08 21:40)
+daily1005=True daily1006=False (1006=day-boundary batch pre-pointer)
+cognition_pools_exists=True mtime=10-05 22:06 TOTAL_LINES=1440
+interchat_mtime=09-27 08:57 lines=22
+novel_v4_files=['SC-001-01-v4.md', 'SC-001-02-v4.md']
+e4_verdicts_1005_canonical=['20261005-011831-E4-audience.md', '20261005-024014-E4-audience.md', '20261005-055339-E4-audience.md', '20261005-061926-E4-audience.md', '20261005-180052-E4-audience.md']
+e4_root_leftover=0 (expect 0 after R1367)
+export_ts=2026-10-05 22:03:56
+git_status_rc=0
+?? .c3-tmp/r1411_check.py
+?? .c3-tmp/r1411_check.txt
+?? .c3-tmp/r1411_probes.py
+LAST_COMMIT=6c37599a R1410: P-3 pilot A/B judged PASS on BS-003/BS-004 terminal tracks (proper-noun degraded sites 13->5 = 62pct cut, zero prompt leak, char-noise

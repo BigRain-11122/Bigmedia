@@ -1,0 +1,16 @@
+== blade1 chinese text correction python ==
+total_count=1
+Ahmedhass6140/open-dictate | lic=MIT | stars=0 | push=2026-10-04T07:21:27Z | arch=False | lang=Python | Transcribe Traditional Chinese speech to text locally on macOS using MLX Whisper with custom glossary correcti
+== blade2 jiwer wer cer ==
+total_count=25
+jitsi/jiwer | lic=Apache-2.0 | stars=933 | push=2026-09-03T22:31:39Z | arch=False | lang=Python | Evaluate your speech-to-text system with similarity measures such as word error rate (WER)
+maximnara/jiwer | lic=MIT | stars=17 | push=2015-09-15T05:35:25Z | arch=False | lang=JavaScript | AngularJs (+ ionic) mobile friendly image viewer
+chrisputzu/comparison-moonshine-vs-faster-whisper-tiny-en | lic=None | stars=4 | push=2024-10-27T11:36:09Z | arch=False | lang=Jupyter Notebook | Comparative analysis of the Moonshine and Faster-Whisper Tiny transcription models, focusing on latency and Wo
+umairanis03/Noise-Correction-OCR-Bangla | lic=None | stars=2 | push=2020-06-21T07:27:23Z | arch=False | lang=Python | Correcting the noisy OCR output on Bangla language using seq2seq Model
+JyotismoyKalita/BengaliYoutubeTranscription | lic=MIT | stars=2 | push=2026-09-15T20:17:56Z | arch=False | lang=Jupyter Notebook | An end-to-end Bengali speech-to-text pipeline that ingests YouTube clips and generates timestamped transcripti
+lixuanqun/asr-eval | lic=MIT | stars=2 | push=2026-10-02T00:34:54Z | arch=False | lang=Python | 中文 ASR 评测工具箱 · micro-CER 对比 FunASR/Whisper/llama.cpp · 一条命令出报告 · 自带迷你测试集 · Mandarin ASR benchmark toolkit
+== local parked recheck ==
+pinned_medium_model_exists=True files=4
+p3_noise_rates=[] (SenseVoice trigger-A line = >=40pct diff x2 consecutive; in-band = untriggered)
+state_log_tail_mentions_bottleneck=False
+hf_hub_blockage_recent=False (R1410 four transcriptions zero hub contact per log)
