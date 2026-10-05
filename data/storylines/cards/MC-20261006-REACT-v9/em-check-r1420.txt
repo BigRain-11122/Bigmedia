@@ -1,0 +1,11 @@
+em-check-r1420 (REACT-v9 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-06
+OK 15.00em margin +10.56  水刚咽下去，口渴怎么就缓解了？
+OK 12.00em margin +13.56  身体从哪里知道我喝水了？
+OK 21.00em margin +4.56  烟火轴：「卖西瓜嘞，又甜又解渴，来一斤？」
+OK 16.00em margin +9.56  侠气轴：「热天里喝杯凉茶最解渴」
+OK 15.00em margin +10.56  逍遥轴：「树荫下喝口凉茶真爽」
+OK 24.00em margin +1.56  数据粥铺摊主信条：「灶上留一壶，路过的都是客。」
+VERT: est bottom=833px subs_top=932px gap=99px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS

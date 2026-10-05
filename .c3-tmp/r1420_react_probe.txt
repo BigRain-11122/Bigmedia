@@ -1,0 +1,350 @@
+R1420 REACT-v9 M0 pool probe (10-06 brief; fleet = all card faces + city-spirit)
+======================================================================
+== GROUP A_rail_gauge keywords=轨/铁路/火车/列车/电车/地铁/渡轮/船/交通/出行/慢 ==
+烟火/night/17 这饺子皮得慢慢擀，皮薄馅才多 -> HIT: [皮得慢慢擀]->city-spirit ; [皮薄馅才多]->city-spirit ; [，皮薄馅才]->city-spirit ; [擀，皮薄馅]->city-spirit
+烟火/weekend/16 蒸包子得慢慢来，火候正 -> HIT: [子得慢慢]->city-spirit ; [得慢慢来]->city-spirit ; [包子]->MC-20261002-DAILY-v32
+烟火/market_open/1 卖早点的说，包子馅儿得慢慢调 -> HIT: [得慢慢]->city-spirit ; [说，]->MC-20260926-DIGEST-v3,MC-20261002-DAILY-v1,MC-20261002-DAILY-v52 ; [早点]->MC-20261001-DIGEST-v11,MC-20261002-DAILY-v27,MC-20261002-DAILY-v32 ; [，包]->MC-20260925-CENSUS-v6,MC-20260930-REACT-v6
+烟火/market_open/2 食堂师傅感叹，熬汤得慢火炖 -> HIT: [感叹，熬汤]->city-spirit ; [堂师傅感叹]->city-spirit ; [傅感叹，熬]->city-spirit ; [师傅感叹，]->city-spirit
+烟火/market_open/9 这买卖得慢慢讲 -> HIT: [得慢慢]->city-spirit ; [买卖]->city-spirit
+秩序/dusk/11 收工啦，回家慢慢数星星 -> HIT: [回家]->MC-20261002-DAILY-v27 ; [收工]->MC-20261005-DAILY-v68 ; [慢慢]->city-spirit ; [星星]->MC-20261002-DAILY-v12,MC-20261002-DAILY-v43
+秩序/night/7 值夜岗上风吹凉，巡逻慢步保安康 -> HIT: [，巡逻慢步]->MC-20261002-DAILY-v53 ; [风吹凉，巡]->MC-20261002-DAILY-v53 ; [逻慢步保安]->MC-20261002-DAILY-v53 ; [夜岗上风吹]->MC-20261002-DAILY-v53
+秩序/night/10 校准师轻声提醒，这时间不早了，回家路上慢点 -> HIT: [校准师]->MC-20260925-CENSUS-v2 ; [回家]->MC-20261002-DAILY-v27 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52 ; [时间]->MC-20260925-CENSUS-v13,MC-20261002-DAILY-v41
+秩序/weekend/2 周末了，慢悠悠地走，别急 -> HIT: [周末了，]->MC-20260929-REACT-v5 ; [悠悠]->MC-20261002-DAILY-v6 ; [，慢]->city-spirit ; [，别]->MC-20261002-DAILY-v27
+秩序/weekend/5 慢点儿，别让这难得的闲暇走了 -> HIT: [，别]->MC-20261002-DAILY-v27 ; [儿，]->MC-20260928-REACT-v4
+秩序/weekend/8 这日子慢悠悠的，正好看看书 -> HIT: [，正好]->MC-20260929-REACT-v5 ; [这日子]->MC-20261002-DAILY-v21 ; [悠悠]->MC-20261002-DAILY-v6 ; [好看]->MC-20261002-DAILY-v15,MC-20261002-DAILY-v7
+秩序/weekend/9 门口岗哨也不急，就让我们慢慢过 -> HIT: [慢慢过]->city-spirit ; [不急，]->MC-20260926-CENSUS-v17 ; [我们]->MC-20260925-CENSUS-v4,MC-20261001-REACT-v7 ; [，就]->MC-20260925-QUOTE-v3,MC-20261002-DAILY-v39,MC-20261002-DAILY-v43
+秩序/weekend/15 今儿个不忙，慢悠悠过 -> HIT: [今儿个]->MC-20261002-DAILY-v26 ; [悠悠]->MC-20261002-DAILY-v6 ; [，慢]->city-spirit
+怀旧/morning/14 摊开纸伞，慢悠悠地走过石板街 -> HIT: [悠悠]->MC-20261002-DAILY-v6 ; [伞，]->MC-20261005-DAILY-v68 ; [，慢]->city-spirit
+怀旧/morning/17 晨风中，档案夹里的故事慢慢苏醒 -> HIT: [晨风中]->MC-20261003-DAILY-v63 ; [风中，]->city-spirit ; [里的]->MC-20261002-DAILY-v4,MC-20261002-DAILY-v40 ; [故事]->MC-20261002-DAILY-v45
+怀旧/night/17 修伞匠这行，可真是慢工出细活 -> HIT: [是慢工出细]->city-spirit ; [真是慢工出]->city-spirit ; [可真是慢工]->city-spirit ; [匠这行，可]->city-spirit
+怀旧/weekend/0 修了大半辈子伞，还是喜欢这慢悠悠的日子 -> HIT: [半辈子]->MC-20261001-REACT-v7 ; [，还是]->MC-20261002-DAILY-v33 ; [悠悠]->MC-20261002-DAILY-v6 ; [喜欢]->MC-20260926-REACT-v1
+怀旧/weekend/2 周末的茶馆，不着急，慢慢聊 -> HIT: [急，慢慢]->city-spirit ; [不着]->city-spirit ; [，不]->MC-20260926-DIGEST-v2,MC-20261002-REACT-v8 ; [周末]->MC-20260929-REACT-v5
+怀旧/weekend/4 泡一杯茶，看这世界慢慢转 -> HIT: [看这]->MC-20261002-DAILY-v15,MC-20261002-DAILY-v39,MC-20261002-DAILY-v49 ; [世界]->city-spirit ; [慢慢]->city-spirit ; [，看]->MC-20261002-DAILY-v12
+怀旧/weekend/10 小日子慢悠悠，多好啊 -> HIT: [悠悠，]->MC-20261002-DAILY-v6 ; [，多]->MC-20261002-DAILY-v32 ; [日子]->MC-20260925-QUOTE-v2,MC-20260930-REACT-v6,MC-20261002-DAILY-v21,MC-20261002-DAILY-v29
+怀旧/weekend/16 下雨天修伞，天晴了补鞋，日子得慢慢过 -> HIT: [日子得慢慢]->city-spirit ; [伞，天晴了]->city-spirit ; [了补鞋，日]->city-spirit ; [天修伞，天]->city-spirit
+怀旧/coldsnap/2 档案里的故事，比这天气还冷，得慢慢温 -> HIT: [得慢慢]->city-spirit ; [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [里的]->MC-20261002-DAILY-v4,MC-20261002-DAILY-v40 ; [这天]->city-spirit
+怀旧/coldsnap/4 缝补匠的手艺，真像这日子，慢而实诚 -> HIT: [子，慢而实]->city-spirit ; [，慢而实诚]->city-spirit ; [的手艺，真]->city-spirit ; [真像这日子]->city-spirit
+怀旧/market_open/16 旧伞收得慢工夫 -> HIT: [慢工]->city-spirit ; [得慢]->city-spirit
+怀旧/market_close/2 今儿这行情，比我还慢呢 -> HIT: [这行情，]->city-spirit ; [，比]->MC-20261002-DAILY-v15,MC-20261002-DAILY-v49 ; [今儿]->MC-20261002-DAILY-v26
+侠气/morning/1 船长早起水路通 -> HIT: [早起]->MC-20261002-DAILY-v51 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/morning/9 船长早起喝口茶，城中故事都还没讲完 -> HIT: [故事]->MC-20261002-DAILY-v45 ; [早起]->MC-20261002-DAILY-v51 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/morning/12 码头的号角响了，赶早班的船儿已经启航 -> HIT: [的船]->MC-20260926-CENSUS-v16 ; [头的]->city-spirit ; [早班]->MC-20260925-CENSUS-v1 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+侠气/morning/14 码头刚开了，船老大早就喊开嗓门了 -> HIT: [船老大]->MC-20261002-DAILY-v52 ; [，船]->city-spirit ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+侠气/morning/16 码头船长早出海，好风送一程 -> HIT: [，好]->MC-20261002-DAILY-v18,MC-20261002-DAILY-v36,MC-20261002-DAILY-v48 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/dusk/0 夕阳西下，船头风大，收工了 -> HIT: [夕阳西下]->MC-20261002-DAILY-v56 ; [收工了]->MC-20261005-DAILY-v68 ; [，船]->city-spirit ; [下，]->MC-20260929-DIGEST-v10
+侠气/dusk/3 船长收工，今日的风浪真大 -> HIT: [，今日]->MC-20260927-REACT-v3 ; [收工]->MC-20261005-DAILY-v68 ; [日的]->MC-20261002-DAILY-v4 ; [的风]->MC-20260925-CENSUS-v6,MC-20260926-REACT-v1
+侠气/dusk/5 黄昏江边，收工的船笛声声 -> HIT: [黄昏]->city-spirit ; [收工]->MC-20261005-DAILY-v68 ; [的船]->MC-20260926-CENSUS-v16 ; [江边]->city-spirit
+侠气/dusk/8 船老大摇着扇子，对岸灯火渐明：“夜色里，酒香更浓 -> HIT: [船老大]->MC-20261002-DAILY-v52 ; [子，]->city-spirit ; [里，]->MC-20261002-DAILY-v17 ; [夜色]->city-spirit
+侠气/dusk/13 船工哼唱着曲：“江面上的晚风，多快活 -> HIT: [晚风]->city-spirit ; [，多]->MC-20261002-DAILY-v32 ; [上的]->MC-20261002-DAILY-v11,MC-20261002-DAILY-v15,MC-20261002-DAILY-v24 ; [江面]->MC-20260926-CENSUS-v16,MC-20260926-CENSUS-v17,MC-20261002-DAILY-v48
+侠气/dusk/16 今儿个收工晚了点，船舱里还有余热 -> HIT: [今儿个]->MC-20261002-DAILY-v26 ; [了点，]->MC-20260926-REACT-v2 ; [收工]->MC-20261005-DAILY-v68 ; [，船]->city-spirit
+侠气/night/4 船老大说，这河上夜行最是畅快 -> HIT: [船老大说，]->MC-20261002-DAILY-v52 ; [老大说，这]->MC-20261002-DAILY-v52 ; [，这河上夜]->MC-20261002-DAILY-v52 ; [行最是畅快]->MC-20261002-DAILY-v52
+侠气/night/7 船长归航，码头上的伙计喊着号子，热闹得很 -> HIT: [，热闹]->MC-20261002-DAILY-v34 ; [头上的]->city-spirit ; [子，]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/night/9 船长归港晚，风帆带酒香 -> HIT: [，风]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3 ; [酒香]->MC-20261002-DAILY-v40
+侠气/night/14 夜深了，船长还不回家？ -> HIT: [夜深了，]->MC-20261001-REACT-v7 ; [回家]->MC-20261002-DAILY-v27 ; [，船]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/weekend/1 船上人多嘴杂，热闹得很 -> HIT: [，热闹]->MC-20261002-DAILY-v34 ; [船上]->MC-20261002-DAILY-v20
+侠气/weekend/3 慢悠悠过个周末，自在得很 -> HIT: [悠悠]->MC-20261002-DAILY-v6 ; [自在]->MC-20261002-DAILY-v48 ; [，自]->city-spirit ; [周末]->MC-20260929-REACT-v5
+侠气/weekend/7 船长说过，大海才刚启程 -> HIT: [船长说过，]->city-spirit ; [，大]->MC-20261002-DAILY-v17
+侠气/weekend/9 信使路上，慢些也是风景 -> HIT: [慢些也是风]->city-spirit ; [使路上，慢]->city-spirit ; [路上，慢些]->city-spirit ; [，慢些也是]->city-spirit
+侠气/weekend/11 船长归港，满载而归笑开颜 -> HIT: [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3 ; [，满]->MC-20261002-DAILY-v9
+侠气/weekend/15 风和日丽的好天，慢悠悠最香 -> HIT: [悠悠]->MC-20261002-DAILY-v6 ; [天，]->city-spirit ; [，慢]->city-spirit
+侠气/rain/1 船长摇摇手，说天公也不忘送福 -> HIT: [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/rain/4 撑伞慢慢走，江湖上的路更宽 -> HIT: [慢慢走，]->city-spirit ; [，江湖]->MC-20261002-DAILY-v3 ; [上的]->MC-20261002-DAILY-v11,MC-20261002-DAILY-v15,MC-20261002-DAILY-v24 ; [的路]->city-spirit
+侠气/rain/11 船长说过，风雨中才能见英雄 -> HIT: [，风雨中才]->city-spirit ; [才能见英雄]->city-spirit ; [雨中才能见]->city-spirit ; [说过，风雨]->city-spirit
+侠气/rain/12 别急，慢慢走，雨有雨的韵味 -> HIT: [雨有雨的韵]->city-spirit ; [急，慢慢走]->city-spirit ; [慢慢走，雨]->city-spirit ; [，慢慢走，]->city-spirit
+侠气/rain/13 邻里间借把伞，多好比多条船 -> HIT: [邻里间]->MC-20260930-REACT-v6,MC-20261002-DAILY-v13 ; [，多]->MC-20261002-DAILY-v32 ; [伞，]->MC-20261005-DAILY-v68
+侠气/typhoon/1 船长说海上风大，咱这台风也厉害 -> HIT: [，咱这]->MC-20260930-REACT-v6,MC-20261002-DAILY-v21 ; [船长说]->city-spirit ; [上风]->MC-20261002-DAILY-v53 ; [台风]->MC-20260926-CENSUS-v18,MC-20260926-CENSUS-v19
+侠气/typhoon/13 船长家的帆布都绑紧了 -> HIT: [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3 ; [家的]->MC-20261002-DAILY-v1
+侠气/typhoon/17 船长们都加固了锚，咱们也得紧绷着 -> HIT: [，咱]->MC-20260927-REACT-v3,MC-20260930-REACT-v6,MC-20261002-DAILY-v21 ; [加固]->city-spirit ; [也得]->MC-20261002-DAILY-v32,MC-20261002-DAILY-v40,MC-20261002-DAILY-v41,MC-20261002-REACT-v8 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/heatwave/1 哎，你别急，咱慢慢来，啥事儿也得慢慢悠悠的 -> HIT: [也得慢慢]->city-spirit ; [别急，]->city-spirit ; [慢慢来]->city-spirit ; [悠悠]->MC-20261002-DAILY-v6
+侠气/heatwave/9 船长出门忘带伞，只能硬着头皮走了 -> HIT: [，只]->MC-20260926-CENSUS-v19,MC-20261002-REACT-v8 ; [伞，]->MC-20261005-DAILY-v68 ; [长出]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/coldsnap/1 船老大说，天寒地冻，咱这船可不能出海了 -> HIT: [船老大说，]->MC-20261002-DAILY-v52 ; [，咱这]->MC-20260930-REACT-v6,MC-20261002-DAILY-v21 ; [不能]->MC-20260925-CENSUS-v3,MC-20260928-DIGEST-v9,MC-20260930-REACT-v6 ; [，天]->MC-20260925-CENSUS-v8
+侠气/market_open/0 船长刚上码头就吆喝开了：“今儿个买卖兴不兴！ -> HIT: [今儿个]->MC-20261002-DAILY-v26 ; [买卖]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/market_open/3 船夫在岸边吆喝：“顺风顺水，一帆风顺，快上船吧！ -> HIT: [，快]->city-spirit ; [水，]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6 ; [，一]->MC-20261002-DAILY-v44,MC-20261002-DAILY-v46
+侠气/market_open/11 船长说，船要靠岸，心也要有个着落 -> HIT: [也要有个着]->city-spirit ; [，心也要有]->city-spirit ; [岸，心也要]->city-spirit ; [要靠岸，心]->city-spirit
+侠气/market_open/16 船长来了趟远洋，货船满载而归，真解气！ -> HIT: [，真]->city-spirit ; [洋，]->MC-20261002-DAILY-v21 ; [来了]->MC-20261002-DAILY-v19 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/market_close/1 船上还有货，明天再去跑一趟 -> HIT: [，明天]->city-spirit ; [船上]->MC-20261002-DAILY-v20 ; [上还]->MC-20261001-REACT-v7 ; [还有]->MC-20260927-DIGEST-v7,MC-20260928-DIGEST-v9
+侠气/market_close/4 船长说得好，风险大收益大 -> HIT: [得好，]->MC-20260925-QUOTE-v3 ; [船长说]->city-spirit ; [，风]->city-spirit ; [收益]->MC-20261005-DIGEST-v15
+侠气/market_close/8 档口刚落锁，船长今夜得去酒馆吹吹牛 -> HIT: [酒馆]->MC-20261002-DAILY-v40 ; [，船]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/market_close/15 门板上了闩，船长今夜还得守船呢 -> HIT: [还得守]->MC-20261002-DAILY-v51 ; [，船]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/ceo_order/6 脑塔一亮，咱该上船了 -> HIT: [一亮，]->MC-20261002-DAILY-v24 ; [，咱]->MC-20260927-REACT-v3,MC-20260930-REACT-v6,MC-20261002-DAILY-v21
+侠气/ceo_order/8 白光一闪，船长嘿了一声：“走，上脑塔！ -> HIT: [，船]->city-spirit ; [了一]->MC-20261001-DIGEST-v13 ; [一声]->MC-20260927-REACT-v3,MC-20260928-REACT-v4 ; [走，]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5,MC-20261002-DAILY-v9
+侠气/festival/1 船上信使忙不停，信儿传递满城红 -> HIT: [儿传递满城]->MC-20261002-DAILY-v20 ; [忙不停，信]->MC-20261002-DAILY-v20 ; [信儿传递满]->MC-20261002-DAILY-v20 ; [传递满城红]->MC-20261002-DAILY-v20
+侠气/festival/4 船上号子响连天，节日喜庆乐无边 -> HIT: [天，]->city-spirit ; [节日]->MC-20261002-DAILY-v17,MC-20261002-DAILY-v28,MC-20261002-DAILY-v30,MC-20261002-DAILY-v4,MC-20261002-REACT-v8 ; [船上]->MC-20261002-DAILY-v20 ; [喜庆]->MC-20261002-DAILY-v19
+侠气/festival/12 船长说，出海也得有好心情 -> HIT: [船长说，]->city-spirit ; [好心情]->MC-20261002-DAILY-v41 ; [得有]->MC-20261002-DAILY-v25 ; [也得]->MC-20261002-DAILY-v32,MC-20261002-DAILY-v40,MC-20261002-DAILY-v41,MC-20261002-REACT-v8
+侠气/festival/16 酒楼里外都飘香，船长们心情飞扬 -> HIT: [，船]->city-spirit ; [香，]->MC-20261002-DAILY-v40 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3 ; [心情]->MC-20261002-DAILY-v41
+逍遥/dusk/4 茶室里的客人，都是慢慢才来的 -> HIT: [是慢慢才来]->city-spirit ; [里的客人，]->city-spirit ; [慢慢才来的]->city-spirit ; [人，都是慢]->city-spirit
+逍遥/weekend/7 茶香四溢，生活不就该慢慢来 -> HIT: [生活不就该]->city-spirit ; [就该慢慢来]->city-spirit ; [四溢，生活]->city-spirit ; [活不就该慢]->city-spirit
+逍遥/weekend/9 茶香里悠悠度日，慢些 -> HIT: [，慢些]->city-spirit ; [悠悠]->MC-20261002-DAILY-v6 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/coldsnap/0 炉火慢点烧，免得烟太大 -> HIT: [炉火]->city-spirit
+逍遥/market_close/3 鱼上钩了，人生也得慢慢来 -> HIT: [鱼上钩了，]->city-spirit ; [生也得慢慢]->city-spirit ; [上钩了，人]->city-spirit ; [，人生也得]->city-spirit
+======================================================================
+== GROUP B_drink_water keywords=喝水/口渴/渴/茶/汤/水/杯/灌 ==
+烟火/dusk/12 收摊子咯，今儿的鱼汤卖得真不错 -> HIT: [今儿的]->city-spirit ; [，今]->MC-20260927-REACT-v3 ; [得真]->MC-20261002-DAILY-v12,MC-20261002-DAILY-v30
+烟火/night/2 老顾客来了，得赶紧沏壶热茶 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [赶紧]->MC-20260926-REACT-v2 ; [来了]->MC-20261002-DAILY-v19 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+烟火/night/15 熬了大半夜的锅，汤汁才够味儿 -> HIT: [，汤]->MC-20260925-CENSUS-v7,MC-20260926-REACT-v2 ; [夜的]->city-spirit
+烟火/weekend/3 面条汤里打个旋儿，再撒点葱花 -> HIT: [面条汤]->MC-20261002-DAILY-v58 ; [，再]->city-spirit ; [儿，]->MC-20260928-REACT-v4
+烟火/weekend/7 面条汤滚着呢，爱喝热乎的来碗 -> HIT: [着呢，爱喝]->MC-20261002-DAILY-v58 ; [面条汤滚着]->MC-20261002-DAILY-v58 ; [条汤滚着呢]->MC-20261002-DAILY-v58 ; [汤滚着呢，]->MC-20261002-DAILY-v58
+烟火/rain/6 撑把伞，雨水别沾衣裳 -> HIT: [，雨]->MC-20260926-REACT-v1 ; [伞，]->MC-20261005-DAILY-v68
+烟火/rain/9 面条汤里加点葱花，雨天吃起来暖和 -> HIT: [面条汤]->MC-20261002-DAILY-v58 ; [雨天]->MC-20260926-REACT-v1 ; [起来]->MC-20261002-DAILY-v19 ; [，雨]->MC-20260926-REACT-v1
+烟火/rain/11 锅里头的汤，得等一会儿才冒热气 -> HIT: [得等一会儿]->city-spirit ; [，得等一会]->city-spirit ; [里头的汤，]->city-spirit ; [会儿才冒热]->city-spirit
+烟火/typhoon/1 汤圆收好，别让风吹走 -> HIT: [风吹]->MC-20261002-DAILY-v53 ; [好，]->MC-20260925-QUOTE-v3,MC-20260927-DIGEST-v5,MC-20260929-REACT-v5 ; [，别]->MC-20261002-DAILY-v27 ; [汤圆]->MC-20261002-DAILY-v38
+烟火/heatwave/1 赶紧喝碗绿豆汤，降降温 -> HIT: [汤，]->city-spirit ; [赶紧]->MC-20260926-REACT-v2
+烟火/heatwave/3 卖西瓜嘞，又甜又解渴，来一斤？ -> CLEAN
+烟火/heatwave/7 热得连冰棍都化成水了，赶紧买点西瓜解解渴 -> HIT: [，赶紧]->MC-20260926-REACT-v2 ; [热得连]->city-spirit ; [买点]->MC-20260927-REACT-v3 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+烟火/heatwave/8 热得像蒸笼里打转，多喝点绿豆汤解解暑 -> HIT: [，多]->MC-20261002-DAILY-v32 ; [蒸笼]->city-spirit ; [得像]->city-spirit ; [热得]->city-spirit
+烟火/heatwave/11 面条锅里水烧开了，添把柴火让面更劲道 -> HIT: [锅里]->city-spirit ; [面条]->MC-20261002-DAILY-v58 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+烟火/heatwave/14 热成这样，得赶紧来碗绿豆汤解解暑 -> HIT: [样，得]->city-spirit ; [来碗]->MC-20261002-DAILY-v58 ; [赶紧]->MC-20260926-REACT-v2
+烟火/heatwave/17 汗溻溻的，谁不想喝碗凉茶 -> HIT: [的，]->MC-20260925-CENSUS-v6,MC-20260930-REACT-v6,MC-20261002-DAILY-v10,MC-20261002-DAILY-v33,MC-20261002-DAILY-v43,MC-20261005-DIGEST-v15
+烟火/coldsnap/1 早起烧的那锅水，快冻成冰了 -> HIT: [早起]->MC-20261002-DAILY-v51 ; [，快]->city-spirit ; [水，]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6 ; [的那]->MC-20260925-QUOTE-v3
+烟火/coldsnap/3 冻手冻脚的，喝口热茶暖心 -> HIT: [暖心]->city-spirit ; [的，]->MC-20260925-CENSUS-v6,MC-20260930-REACT-v6,MC-20261002-DAILY-v10,MC-20261002-DAILY-v33,MC-20261002-DAILY-v43,MC-20261005-DIGEST-v15
+烟火/coldsnap/5 这天气，得喝碗姜汤暖暖身 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [这天]->city-spirit ; [气，]->MC-20261002-DAILY-v14
+烟火/market_open/2 食堂师傅感叹，熬汤得慢火炖 -> HIT: [感叹，熬汤]->city-spirit ; [堂师傅感叹]->city-spirit ; [傅感叹，熬]->city-spirit ; [师傅感叹，]->city-spirit
+烟火/ceo_order/3 摊贩们互相打招呼：头啖汤，头啖汤！ -> HIT: [摊贩]->MC-20260930-REACT-v6 ; [汤，]->city-spirit ; [互相]->city-spirit
+烟火/ceo_order/10 早点摊前人多得水泄不通 -> HIT: [早点摊]->MC-20261002-DAILY-v32 ; [多得]->city-spirit
+烟火/festival/5 煮汤圆的时候，想家人也想你 -> HIT: [汤圆的时候]->MC-20261002-DAILY-v38 ; [时候，想家]->MC-20261002-DAILY-v38 ; [，想家人也]->MC-20261002-DAILY-v38 ; [候，想家人]->MC-20261002-DAILY-v38
+秩序/dusk/17 收工了，回家喝杯热茶去 -> HIT: [收工了]->MC-20261005-DAILY-v68 ; [回家]->MC-20261002-DAILY-v27 ; [家喝]->MC-20261002-REACT-v8 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+秩序/rain/14 伞光映在水洼，这雨天也有了几分景致 -> HIT: [也有了]->city-spirit ; [伞光映]->city-spirit ; [雨天]->MC-20260926-REACT-v1 ; [这雨]->city-spirit
+秩序/heatwave/1 这天烤得人心里发毛，别忘了补水 -> HIT: [别忘了]->MC-20261005-DAILY-v65 ; [这天]->city-spirit ; [心里]->MC-20261002-DAILY-v24,MC-20261002-DAILY-v5 ; [了补]->city-spirit
+秩序/heatwave/9 这天气得喝点凉茶防中暑 -> HIT: [这天]->city-spirit
+秩序/heatwave/13 出门在外，记得随身带瓶水 -> HIT: [记得]->MC-20260925-CENSUS-v1 ; [，记]->city-spirit
+秩序/coldsnap/4 赶紧多喝点热水，暖和暖和 -> HIT: [赶紧]->MC-20260926-REACT-v2 ; [水，]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6 ; [暖和]->MC-20261002-DAILY-v24
+秩序/coldsnap/11 外面寒流，家里温暖，多喝热水 -> HIT: [，家里]->MC-20261002-DAILY-v4 ; [温暖，]->city-spirit ; [，多]->MC-20261002-DAILY-v32 ; [喝热]->MC-20261002-DAILY-v58
+秩序/coldsnap/17 寒风刺骨，别忘了给水管加点保温 -> HIT: [别忘了]->MC-20261005-DAILY-v65 ; [，别]->MC-20261002-DAILY-v27
+秩序/market_close/8 交易所关门了，家里的茶壶还得再烧一烧 -> HIT: [了，家里的]->MC-20261002-DAILY-v4 ; [交易]->MC-20260927-REACT-v3 ; [还得]->MC-20261002-DAILY-v51
+求新/morning/3 街边一壶茶，天明看人来 -> HIT: [一壶]->MC-20260925-CENSUS-v1 ; [街边]->city-spirit ; [，天]->MC-20260925-CENSUS-v8
+求新/morning/14 早餐摊前热乎乎的豆浆真解渴 -> HIT: [的豆浆]->MC-20261002-DAILY-v44 ; [热乎]->MC-20261002-DAILY-v58 ; [乎的]->MC-20261002-DAILY-v58
+求新/dusk/1 这晚霞真是个调皮鬼，把江水都染红了 -> HIT: [水都]->MC-20260925-QUOTE-v5 ; [真是]->city-spirit
+求新/rain/2 雨水敲打伞面，叮叮咚咚好听得很 -> HIT: [听得]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50 ; [叮咚]->MC-20261003-DAILY-v64 ; [打伞]->MC-20260926-REACT-v1
+求新/rain/16 雨水打在伞上，好个清静 -> HIT: [，好个]->MC-20261002-DAILY-v18,MC-20261002-DAILY-v48 ; [上，]->city-spirit
+求新/heatwave/8 真热得像蒸笼啊，得赶紧喝杯冰镇柠檬水解解渴 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [蒸笼]->city-spirit ; [赶紧]->MC-20260926-REACT-v2 ; [得像]->city-spirit
+求新/coldsnap/1 喝碗热汤，才觉得活在这世上的劲儿 -> HIT: [汤，]->city-spirit ; [碗热]->city-spirit ; [，才]->MC-20261005-DAILY-v67 ; [上的]->MC-20261002-DAILY-v11,MC-20261002-DAILY-v15,MC-20261002-DAILY-v24
+求新/coldsnap/14 热乎乎的姜茶真解冻！ -> HIT: [热乎]->MC-20261002-DAILY-v58 ; [乎的]->MC-20261002-DAILY-v58
+怀旧/morning/6 茶水刚沏，润润嗓子才好唱老腔 -> HIT: [润嗓子才好]->city-spirit ; [，润润嗓子]->city-spirit ; [沏，润润嗓]->city-spirit ; [刚沏，润润]->city-spirit
+怀旧/morning/10 昨晚的梦还没醒透，今朝的茶就醒了 -> HIT: [，今]->MC-20260927-REACT-v3 ; [的梦]->MC-20260929-REACT-v5,MC-20261001-REACT-v7
+怀旧/morning/11 旧书里的墨香，比这早上的茶更浓 -> HIT: [旧书]->MC-20261002-DAILY-v55 ; [里的]->MC-20261002-DAILY-v4,MC-20261002-DAILY-v40 ; [，比]->MC-20261002-DAILY-v15,MC-20261002-DAILY-v49 ; [香，]->MC-20261002-DAILY-v40
+怀旧/dusk/4 收工了，这天气正好去泡杯茶 -> HIT: [收工了]->MC-20261005-DAILY-v68 ; [这天]->city-spirit ; [正好]->MC-20260929-REACT-v5 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+怀旧/dusk/7 修伞铺里，收工晚来茶香浓 -> HIT: [修伞铺]->MC-20261002-DAILY-v22 ; [收工]->MC-20261005-DAILY-v68 ; [茶香]->MC-20261002-DAILY-v18 ; [里，]->MC-20261002-DAILY-v17
+怀旧/dusk/16 这天算数了，得喝碗热茶 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [这天]->city-spirit ; [碗热]->city-spirit ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+怀旧/night/16 老汤头的锅边儿，藏着多少人的一天故事 -> HIT: [故事]->MC-20261002-DAILY-v45 ; [藏着]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v45 ; [头的]->city-spirit ; [人的]->MC-20260926-CENSUS-v15,MC-20261002-DAILY-v11
+怀旧/weekend/2 周末的茶馆，不着急，慢慢聊 -> HIT: [急，慢慢]->city-spirit ; [不着]->city-spirit ; [，不]->MC-20260926-DIGEST-v2,MC-20261002-REACT-v8 ; [周末]->MC-20260929-REACT-v5
+怀旧/weekend/4 泡一杯茶，看这世界慢慢转 -> HIT: [看这]->MC-20261002-DAILY-v15,MC-20261002-DAILY-v39,MC-20261002-DAILY-v49 ; [世界]->city-spirit ; [慢慢]->city-spirit ; [，看]->MC-20261002-DAILY-v12
+怀旧/weekend/9 瞧这天，正好喝壶热茶 -> HIT: [，正好]->MC-20260929-REACT-v5 ; [这天]->city-spirit ; [天，]->city-spirit
+怀旧/heatwave/4 这天气热，喝口凉茶才解渴 -> HIT: [这天]->city-spirit
+怀旧/coldsnap/3 家里的老茶壶，得烧上一壶暖暖身子 -> HIT: [上一壶]->city-spirit ; [家里的]->MC-20261002-DAILY-v4 ; [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [壶，]->MC-20260925-CENSUS-v1
+怀旧/market_open/4 听说老克勒的茶馆又挂了牌子，生意兴隆 -> HIT: [老克勒]->MC-20261002-DAILY-v33 ; [，生]->city-spirit ; [子，]->city-spirit
+怀旧/market_open/9 头茬茶叶还没喝完，又惦记着炒货 -> CLEAN
+怀旧/market_open/15 交易声里茶香浓 -> HIT: [交易]->MC-20260927-REACT-v3 ; [茶香]->MC-20261002-DAILY-v18
+怀旧/market_close/0 这交易所一收尾，茶馆门口人就稠了 -> HIT: [交易]->MC-20260927-REACT-v3 ; [收尾]->city-spirit ; [，茶]->MC-20261003-DAILY-v60
+怀旧/market_close/5 这家里头，茶叶比股票香多了 -> HIT: [家里]->MC-20261002-DAILY-v4,MC-20261002-REACT-v8 ; [里头]->MC-20261002-DAILY-v24 ; [多了]->MC-20260926-REACT-v2,MC-20261002-DAILY-v4 ; [，茶]->MC-20261003-DAILY-v60
+怀旧/market_close/13 街角的茶馆，才是老克勒们常去的避风港 -> HIT: [老克勒们]->MC-20261002-DAILY-v33 ; [，才是]->city-spirit ; [才是老]->city-spirit ; [街角]->MC-20261002-DAILY-v13
+侠气/morning/1 船长早起水路通 -> HIT: [早起]->MC-20261002-DAILY-v51 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/morning/9 船长早起喝口茶，城中故事都还没讲完 -> HIT: [故事]->MC-20261002-DAILY-v45 ; [早起]->MC-20261002-DAILY-v51 ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/dusk/2 信使归家，今晚怕是要喝两杯 -> HIT: [，今]->MC-20260927-REACT-v3 ; [家，]->MC-20261002-DAILY-v27 ; [是要]->MC-20260925-QUOTE-v1 ; [信使]->MC-20260925-CENSUS-v1,MC-20260926-CENSUS-v17,MC-20261002-DAILY-v20
+侠气/weekend/5 茶余饭后讲讲闲话，才不闷 -> HIT: [话，才不闷]->MC-20261005-DAILY-v67 ; [闲话，才不]->MC-20261005-DAILY-v67 ; [讲讲闲话，]->MC-20261005-DAILY-v67 ; [饭后讲讲闲]->MC-20261005-DAILY-v67
+侠气/weekend/6 周末不用忙，喝杯茶看看天 -> HIT: [看看]->MC-20260926-REACT-v2,MC-20261002-DAILY-v15,MC-20261002-DAILY-v39 ; [周末]->MC-20260929-REACT-v5
+侠气/weekend/14 今儿个日子好，喝碗热茶正好 -> HIT: [今儿个]->MC-20261002-DAILY-v26 ; [好，]->MC-20260925-QUOTE-v3,MC-20260927-DIGEST-v5,MC-20260929-REACT-v5 ; [碗热]->city-spirit ; [正好]->MC-20260929-REACT-v5
+侠气/rain/5 雨水洗净尘，顺便洗去烦恼 -> CLEAN
+侠气/rain/7 巷口茶馆正炖着香 -> CLEAN
+侠气/heatwave/2 这么热的天，喝上一口凉茶，那叫一个舒坦 -> HIT: [这么]->MC-20261005-DAILY-v68 ; [一口]->MC-20261002-DAILY-v36 ; [一个]->MC-20260925-CENSUS-v11,MC-20260925-DIGEST-v1 ; [天，]->city-spirit
+侠气/heatwave/6 热天里喝杯凉茶最解渴 -> CLEAN
+侠气/heatwave/15 热成这样，喝碗绿豆汤最解渴！ -> HIT: [样，]->MC-20261002-DAILY-v37
+侠气/coldsnap/16 冬夜漫长，喝碗热茶心里就敞亮了 -> HIT: [心里]->MC-20261002-DAILY-v24,MC-20261002-DAILY-v5 ; [碗热]->city-spirit ; [长，]->MC-20261002-DAILY-v29 ; [亮了]->MC-20261001-REACT-v7,MC-20261002-DAILY-v11
+侠气/market_open/3 船夫在岸边吆喝：“顺风顺水，一帆风顺，快上船吧！ -> HIT: [，快]->city-spirit ; [水，]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6 ; [，一]->MC-20261002-DAILY-v44,MC-20261002-DAILY-v46
+逍遥/morning/2 茶香四溢，日头正高 -> HIT: [茶香四溢，]->city-spirit ; [头正]->MC-20260929-REACT-v5 ; [，日]->MC-20260925-QUOTE-v2,MC-20260930-REACT-v6
+逍遥/morning/7 茶香浓，人未醒，等一壶晨风 -> HIT: [一壶]->MC-20260925-CENSUS-v1 ; [等一]->MC-20260926-DIGEST-v3 ; [，等]->MC-20261002-DAILY-v51 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/morning/9 茶香袅袅待客来，咱这生意早上好 -> HIT: [，咱这]->MC-20260930-REACT-v6,MC-20261002-DAILY-v21 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/morning/16 茶香伴着鸟鸣声，闲情逸致享安宁 -> HIT: [茶香伴着]->MC-20261002-DAILY-v18 ; [声，]->MC-20260927-REACT-v3,MC-20260928-REACT-v4
+逍遥/dusk/1 钓了一天鱼，回家正好煮茶喝 -> HIT: [回家]->MC-20261002-DAILY-v27 ; [正好]->MC-20260929-REACT-v5 ; [了一]->MC-20261001-DIGEST-v13 ; [一天]->city-spirit
+逍遥/dusk/4 茶室里的客人，都是慢慢才来的 -> HIT: [是慢慢才来]->city-spirit ; [里的客人，]->city-spirit ; [慢慢才来的]->city-spirit ; [人，都是慢]->city-spirit
+逍遥/dusk/9 江风带晚凉，茶香飘半城 -> HIT: [茶香]->MC-20261002-DAILY-v18 ; [，茶]->MC-20261003-DAILY-v60 ; [凉，]->MC-20261002-DAILY-v53
+逍遥/dusk/13 茶室待明日，再续钓鱼情 -> HIT: [茶室]->MC-20261003-DAILY-v60 ; [钓鱼]->MC-20260928-REACT-v4 ; [，再]->city-spirit
+逍遥/dusk/17 茶香袅袅，好个静养时刻 -> HIT: [，好个]->MC-20261002-DAILY-v18,MC-20261002-DAILY-v48 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/night/3 茶香与鱼香，两不相扰 -> HIT: [茶香]->MC-20261002-DAILY-v18 ; [香，]->MC-20261002-DAILY-v40 ; [，两]->city-spirit
+逍遥/night/7 闲来茶室品香茗 -> HIT: [闲来]->MC-20261002-DAILY-v6 ; [茶室]->MC-20261003-DAILY-v60
+逍遥/night/10 茶香里熬过无数个夜晚 -> HIT: [个夜]->city-spirit ; [茶香]->MC-20261002-DAILY-v18 ; [夜晚]->MC-20261003-DAILY-v64 ; [熬过]->city-spirit
+逍遥/night/17 茶室老板煮清茶，闲话人间事如烟 -> HIT: [茶室]->MC-20261003-DAILY-v60 ; [话人]->MC-20260926-CENSUS-v15 ; [老板]->MC-20260925-DIGEST-v1,MC-20260926-DIGEST-v2,MC-20260926-DIGEST-v3 ; [闲话]->MC-20261005-DAILY-v67
+逍遥/weekend/1 茶香入梦浅，闲话长如丝 -> HIT: [闲话]->MC-20261005-DAILY-v67 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/weekend/3 江水悠悠流，人生自在游 -> HIT: [，人生]->city-spirit ; [悠悠]->MC-20261002-DAILY-v6 ; [自在]->MC-20261002-DAILY-v48
+逍遥/weekend/4 檐下观鱼跃，茶室笑谈多 -> HIT: [鱼跃，茶室]->MC-20261003-DAILY-v60 ; [跃，茶室笑]->MC-20261003-DAILY-v60 ; [，茶室笑谈]->MC-20261003-DAILY-v60 ; [茶室笑谈多]->MC-20261003-DAILY-v60
+逍遥/weekend/5 闲云浮流水，悠然自得心 -> HIT: [，悠然自得]->city-spirit ; [浮流水，悠]->city-spirit ; [闲云浮流水]->city-spirit ; [悠然自得心]->city-spirit
+逍遥/weekend/7 茶香四溢，生活不就该慢慢来 -> HIT: [生活不就该]->city-spirit ; [就该慢慢来]->city-spirit ; [四溢，生活]->city-spirit ; [活不就该慢]->city-spirit
+逍遥/weekend/9 茶香里悠悠度日，慢些 -> HIT: [，慢些]->city-spirit ; [悠悠]->MC-20261002-DAILY-v6 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/weekend/12 茶室里闲话家常，最是安逸 -> HIT: [茶室里]->city-spirit ; [闲话]->MC-20261005-DAILY-v67 ; [，最]->city-spirit ; [安逸]->MC-20261002-DAILY-v18
+逍遥/weekend/16 茶室里品茶聊天，日子悠然自得 -> HIT: [悠然自得]->city-spirit ; [茶室里]->city-spirit ; [，日子]->MC-20260925-QUOTE-v2,MC-20260930-REACT-v6 ; [天，]->city-spirit
+逍遥/rain/1 茶香伴雨声，静待云开 -> HIT: [茶香伴]->MC-20261002-DAILY-v18 ; [云开]->MC-20261002-DAILY-v59 ; [声，]->MC-20260927-REACT-v3,MC-20260928-REACT-v4
+逍遥/rain/7 伞光底下好钓鱼，雨水泡茶更香 -> HIT: [水泡]->MC-20261002-DAILY-v36 ; [钓鱼]->MC-20260928-REACT-v4 ; [，雨]->MC-20260926-REACT-v1 ; [伞光]->city-spirit
+逍遥/rain/9 茶室里的茶香，比平时更浓 -> HIT: [茶室里的]->city-spirit ; [，比平时]->MC-20261002-DAILY-v49 ; [茶香]->MC-20261002-DAILY-v18 ; [香，]->MC-20261002-DAILY-v40
+逍遥/rain/16 茶香满室待君尝 -> HIT: [茶香]->MC-20261002-DAILY-v18
+逍遥/typhoon/1 茶室里的老茶客，今日也来帮忙系帆布 -> HIT: [茶室里的]->city-spirit ; [，今日]->MC-20260927-REACT-v3
+逍遥/typhoon/7 大风大雨寻常事，茶室还能卖茶叶 -> HIT: [，茶室]->MC-20261003-DAILY-v60 ; [大风大]->MC-20260926-REACT-v2 ; [事，]->MC-20260925-CENSUS-v10,MC-20260929-REACT-v5 ; [寻常]->MC-20261002-DAILY-v29
+逍遥/typhoon/10 茶室老板也添砖，这天气出门真难 -> HIT: [茶室]->MC-20261003-DAILY-v60 ; [老板]->MC-20260925-DIGEST-v1,MC-20260926-DIGEST-v2,MC-20260926-DIGEST-v3 ; [这天]->city-spirit ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+逍遥/typhoon/16 风大浪急，茶室里喝杯暖茶最宜 -> HIT: [茶室里]->city-spirit ; [，茶室]->MC-20261003-DAILY-v60 ; [风大浪]->MC-20260926-REACT-v2 ; [急，]->MC-20260926-CENSUS-v17
+逍遥/heatwave/1 茶凉了，心也凉了，咋办呢？ -> HIT: [，心也]->city-spirit ; [了，心]->city-spirit
+逍遥/heatwave/2 这天，喝杯凉茶也解不了暑 -> HIT: [这天]->city-spirit ; [天，]->city-spirit ; [不了]->city-spirit
+逍遥/heatwave/6 树荫下喝口凉茶真爽 -> CLEAN
+逍遥/heatwave/8 避暑茶馆来杯凉茶，正好 -> HIT: [，正好]->MC-20260929-REACT-v5
+逍遥/heatwave/9 热浪滚滚，还是茶香解暑 -> HIT: [，还是]->MC-20261002-DAILY-v33 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/heatwave/11 扇把扇，喝喝茶，好生逍遥 -> HIT: [喝喝茶]->MC-20261002-REACT-v8 ; [，好]->MC-20261002-DAILY-v18,MC-20261002-DAILY-v36,MC-20261002-DAILY-v48 ; [逍遥]->MC-20260925-QUOTE-v6,MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261001-REACT-v7,MC-20261002-DAILY-v12,MC-20261002-DAILY-v18,MC-20261002-DAILY-v29,MC-20261002-DAILY-v31,MC-20261002-DAILY-v36,MC-20261002-DAILY-v42,MC-20261002-DAILY-v48,MC-20261002-DAILY-v56,MC-20261002-DAILY-v6,MC-20261002-REACT-v8,MC-20261003-DAILY-v60,MC-20261003-DAILY-v62
+逍遥/heatwave/14 这天气，喝杯凉茶最解渴 -> HIT: [这天]->city-spirit ; [气，]->MC-20261002-DAILY-v14
+逍遥/heatwave/16 茶香遮不住汗滴，这天喝再多茶也不解渴 -> HIT: [这天]->city-spirit ; [茶香]->MC-20261002-DAILY-v18 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+逍遥/heatwave/17 云都晒成黄的了，还不如泡杯凉茶趁凉快 -> HIT: [，还]->MC-20260927-DIGEST-v7,MC-20260928-DIGEST-v9,MC-20261002-DAILY-v33 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4 ; [不如]->MC-20261002-REACT-v8
+逍遥/coldsnap/1 茶汤里加点姜，暖暖身子 -> CLEAN
+逍遥/coldsnap/2 鱼儿都藏深水，等天暖再钓 -> HIT: [，等]->MC-20261002-DAILY-v51 ; [水，]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6 ; [鱼儿]->city-spirit
+逍遥/coldsnap/3 雪太大了，茶室生意冷清 -> HIT: [，茶室]->MC-20261003-DAILY-v60 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+逍遥/coldsnap/4 冷天多喝热水，别冻着 -> HIT: [，别冻着]->MC-20261002-DAILY-v27 ; [水，]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6 ; [喝热]->MC-20261002-DAILY-v58
+逍遥/coldsnap/7 热茶里加块糖，日子也甜些 -> HIT: [，日子]->MC-20260925-QUOTE-v2,MC-20260930-REACT-v6
+逍遥/coldsnap/9 热茶暖身又暖心，寒风中多一分闲适 -> HIT: [暖心]->city-spirit ; [心，]->city-spirit ; [风中]->MC-20261003-DAILY-v63
+逍遥/coldsnap/11 江边寒风吹不透茶香，茶室里依旧热闹 -> HIT: [茶室里]->city-spirit ; [，茶室]->MC-20261003-DAILY-v60 ; [风吹]->MC-20261002-DAILY-v53 ; [热闹]->MC-20261002-DAILY-v16,MC-20261002-DAILY-v22,MC-20261002-DAILY-v32,MC-20261002-DAILY-v34,MC-20261002-DAILY-v49,MC-20261002-REACT-v8
+逍遥/coldsnap/12 钓鱼归来的路漫长，但有茶相伴不冷清 -> HIT: [，但]->city-spirit ; [钓鱼]->MC-20260928-REACT-v4 ; [长，]->MC-20261002-DAILY-v29 ; [来的]->city-spirit
+逍遥/coldsnap/16 热茶暖心，冻得慌 -> HIT: [心，]->city-spirit ; [暖心]->city-spirit
+逍遥/market_open/0 茶香鱼肥，人生几何 -> HIT: [，人生]->city-spirit ; [茶香]->MC-20261002-DAILY-v18
+逍遥/market_open/7 茶香四溢客自多，闲云悠悠任我聊 -> HIT: [茶香四溢]->city-spirit ; [悠悠]->MC-20261002-DAILY-v6 ; [闲云]->city-spirit ; [多，]->MC-20261002-DAILY-v11
+逍遥/market_open/8 茶香鱼肥，人生乐事 -> HIT: [，人生]->city-spirit ; [茶香]->MC-20261002-DAILY-v18
+逍遥/market_open/16 茶叶香，鱼儿肥 -> HIT: [香，]->MC-20261002-DAILY-v40 ; [鱼儿]->city-spirit ; [，鱼]->MC-20260928-REACT-v4
+逍遥/market_close/1 茶水泡久点，滋味更地道 -> HIT: [茶水泡]->MC-20261002-DAILY-v36 ; [点，]->MC-20260926-REACT-v2,MC-20260927-DIGEST-v7 ; [滋味]->city-spirit
+逍遥/market_close/7 茶香鱼肥两不误，人生就该如此乐 -> HIT: [，人生]->city-spirit ; [茶香]->MC-20261002-DAILY-v18 ; [就该]->city-spirit
+逍遥/market_close/9 茶叶香，心里也香 -> HIT: [，心里]->MC-20261002-DAILY-v24,MC-20261002-DAILY-v5 ; [香，]->MC-20261002-DAILY-v40 ; [里也]->city-spirit
+逍遥/market_close/12 茶余饭后，聊聊天儿，多轻松 -> HIT: [茶余饭后]->MC-20261005-DAILY-v67 ; [，多]->MC-20261002-DAILY-v32 ; [后，]->city-spirit ; [儿，]->MC-20260928-REACT-v4
+逍遥/market_close/15 交易所收市了，江边再来一壶茶 -> HIT: [交易]->MC-20260927-REACT-v3 ; [一壶]->MC-20260925-CENSUS-v1 ; [，江]->MC-20261002-DAILY-v3 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+逍遥/ceo_order/2 白光照城，茶香满巷 -> HIT: [茶香]->MC-20261002-DAILY-v18 ; [，茶]->MC-20261003-DAILY-v60
+逍遥/ceo_order/9 茶香鱼肥，这日子自在得很 -> HIT: [，这日子]->city-spirit ; [茶香]->MC-20261002-DAILY-v18 ; [自在]->MC-20261002-DAILY-v48
+逍遥/ceo_order/16 茶香满室，云淡风轻好个悠哉 -> HIT: [云淡风轻]->MC-20260928-REACT-v4,MC-20261002-DAILY-v29 ; [好个]->MC-20261002-DAILY-v18,MC-20261002-DAILY-v42,MC-20261002-DAILY-v48 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/festival/1 茶香伴着灯影摇，好个安逸节 -> HIT: [灯影摇，好]->MC-20261002-DAILY-v18 ; [影摇，好个]->MC-20261002-DAILY-v18 ; [着灯影摇，]->MC-20261002-DAILY-v18 ; [，好个安逸]->MC-20261002-DAILY-v18
+逍遥/festival/7 茶室里喝杯热茶，心里暖和 -> HIT: [，心里暖和]->city-spirit ; [茶室里]->city-spirit
+逍遥/festival/10 茶香灯影话桑麻 -> HIT: [灯影]->MC-20261002-DAILY-v18,MC-20261002-DAILY-v48 ; [茶香]->MC-20261002-DAILY-v18
+逍遥/festival/16 茶水泡得正浓，好品一口闲 -> HIT: [，好品一口]->MC-20261002-DAILY-v36 ; [水泡得正浓]->MC-20261002-DAILY-v36 ; [得正浓，好]->MC-20261002-DAILY-v36 ; [正浓，好品]->MC-20261002-DAILY-v36
+逍遥/festival/17 节日热闹，不如在家喝喝茶 -> HIT: [热闹，不如]->MC-20261002-REACT-v8 ; [，不如在家]->MC-20261002-REACT-v8 ; [不如在家喝]->MC-20261002-REACT-v8 ; [日热闹，不]->MC-20261002-REACT-v8
+sprite/rain/0 叮叮咚咚，雨水轻敲 -> HIT: [叮叮]->MC-20261002-DAILY-v50 ; [叮咚]->MC-20261003-DAILY-v64 ; [，雨]->MC-20260926-REACT-v1
+sprite/rain/8 叮叮作响，雨水洗亮水晶 -> HIT: [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50 ; [，雨]->MC-20260926-REACT-v1
+sprite/heatwave/9 潺潺流水，心静自然 -> HIT: [潺流水，心]->city-spirit ; [流水，心静]->city-spirit ; [，心静自然]->city-spirit ; [水，心静自]->city-spirit
+======================================================================
+== GROUP C_xp_boot keywords=开机/关机/启动/电脑/系统/音乐/旋律/响 ==
+烟火/morning/9 锅里咕嘟咕嘟响，今天又得忙到晌 -> HIT: [，今]->MC-20260927-REACT-v3 ; [响，]->city-spirit ; [锅里]->city-spirit ; [咕嘟]->city-spirit
+烟火/morning/16 锅碗瓢盆响，一天好开始！ -> HIT: [，一天]->city-spirit ; [响，]->city-spirit ; [开始]->MC-20260926-DIGEST-v3
+烟火/heatwave/13 扇子摇得呼呼响，凉快点儿干活不中暑 -> HIT: [响，]->city-spirit ; [活不]->city-spirit ; [干活]->city-spirit
+烟火/ceo_order/12 老板娘招呼客人声声响亮 -> HIT: [老板]->MC-20260925-DIGEST-v1,MC-20260926-DIGEST-v2,MC-20260926-DIGEST-v3 ; [客人]->MC-20261002-DAILY-v51
+烟火/ceo_order/16 这光一闪，厨房里的锅碗瓢盆响个不停 -> HIT: [里的]->MC-20261002-DAILY-v4,MC-20261002-DAILY-v40 ; [厨房]->city-spirit ; [不停]->MC-20261002-DAILY-v20
+秩序/market_open/6 开市钟一响，心里就踏实了 -> HIT: [，心里]->MC-20261002-DAILY-v24,MC-20261002-DAILY-v5 ; [响，]->city-spirit ; [钟一]->city-spirit ; [开市]->city-spirit
+秩序/market_open/9 这钟声一响，手脚要快，可别犯了错 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [，手]->MC-20260929-REACT-v5,MC-20261002-DAILY-v23 ; [，可]->MC-20261005-DAILY-v68
+秩序/market_open/14 交易一响，黄金万两 -> HIT: [交易一]->city-spirit ; [响，]->city-spirit
+求新/market_open/0 交易平台一响，我的小心脏也跟着跳 -> HIT: [也跟着]->MC-20261002-DAILY-v8 ; [交易]->MC-20260927-REACT-v3 ; [响，]->city-spirit ; [的小]->MC-20261002-DAILY-v33
+怀旧/morning/9 伞骨咔咔响，人生故事多得像这雨后的路 -> HIT: [故事多得像]->city-spirit ; [响，人生故]->city-spirit ; [得像这雨后]->city-spirit ; [人生故事多]->city-spirit
+怀旧/market_open/6 敲门声脆响，买卖声不息 -> HIT: [响，]->city-spirit ; [买卖]->city-spirit
+怀旧/market_open/8 交易所一响，铜钿叮当 -> HIT: [交易]->MC-20260927-REACT-v3 ; [响，]->city-spirit ; [叮当]->MC-20261002-DAILY-v50
+怀旧/market_open/14 这钟声一响，买卖场上热闹开锣 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [热闹]->MC-20261002-DAILY-v16,MC-20261002-DAILY-v22,MC-20261002-DAILY-v32,MC-20261002-DAILY-v34,MC-20261002-DAILY-v49,MC-20261002-REACT-v8 ; [买卖]->city-spirit
+怀旧/market_close/6 交易所那锣声一响，又得琢磨明天的买卖经了 -> HIT: [明天]->city-spirit ; [交易]->MC-20260927-REACT-v3 ; [响，]->city-spirit ; [买卖]->city-spirit
+侠气/morning/12 码头的号角响了，赶早班的船儿已经启航 -> HIT: [的船]->MC-20260926-CENSUS-v16 ; [头的]->city-spirit ; [早班]->MC-20260925-CENSUS-v1 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+侠气/night/15 夜市摊前吆喝响，小本生意赚点光 -> HIT: [响，]->city-spirit ; [，小]->MC-20260930-REACT-v6 ; [夜市]->city-spirit
+侠气/market_open/4 交易所一响，黄金万两 -> HIT: [交易]->MC-20260927-REACT-v3 ; [响，]->city-spirit
+侠气/festival/4 船上号子响连天，节日喜庆乐无边 -> HIT: [天，]->city-spirit ; [节日]->MC-20261002-DAILY-v17,MC-20261002-DAILY-v28,MC-20261002-DAILY-v30,MC-20261002-DAILY-v4,MC-20261002-REACT-v8 ; [船上]->MC-20261002-DAILY-v20 ; [喜庆]->MC-20261002-DAILY-v19
+逍遥/market_open/3 钟声敲响，买卖兴隆 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [买卖]->city-spirit
+逍遥/market_open/6 钟声一响买卖忙，鱼饵钓上心头来 -> HIT: [，鱼]->MC-20260928-REACT-v4 ; [钟声]->MC-20260925-CENSUS-v2 ; [买卖]->city-spirit
+逍遥/market_open/15 钟声一响，买卖忙 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [买卖]->city-spirit
+sprite/morning/0 叮叮叮当响 -> HIT: [叮叮当]->MC-20261002-DAILY-v50 ; [叮叮叮]->city-spirit
+sprite/morning/4 叮叮当当响 -> HIT: [叮叮当]->MC-20261002-DAILY-v50
+sprite/morning/5 叮叮当响，开店营业忙 -> HIT: [叮叮当]->MC-20261002-DAILY-v50 ; [响，]->city-spirit
+sprite/morning/7 叮咚铃响开市忙 -> HIT: [开市]->city-spirit ; [叮咚]->MC-20261003-DAILY-v64
+sprite/morning/10 叮叮响，开店忙 -> HIT: [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50
+sprite/dusk/1 叮叮铃响收工晚 -> HIT: [叮叮]->MC-20261002-DAILY-v50 ; [收工]->MC-20261005-DAILY-v68
+sprite/night/0 叮叮当响夜未央 -> HIT: [叮叮当]->MC-20261002-DAILY-v50 ; [夜未央]->MC-20261003-DAILY-v61 ; [响夜]->MC-20261003-DAILY-v64
+sprite/night/4 叮叮响夜幕，灯火伴梦语 -> HIT: [响夜]->MC-20261003-DAILY-v64 ; [叮叮]->MC-20261002-DAILY-v50 ; [，灯]->MC-20261002-DAILY-v29,MC-20261002-DAILY-v8 ; [灯火]->MC-20261002-DAILY-v39,MC-20261002-DAILY-v6
+sprite/night/6 叮叮铃响入梦乡 -> HIT: [叮叮]->MC-20261002-DAILY-v50
+sprite/weekend/4 叮咚响夜晚 -> HIT: [叮咚响夜晚]->MC-20261003-DAILY-v64
+sprite/weekend/8 叮叮轻响，夜幕降临 -> HIT: [，夜幕]->MC-20261002-DAILY-v50 ; [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50
+sprite/rain/8 叮叮作响，雨水洗亮水晶 -> HIT: [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50 ; [，雨]->MC-20260926-REACT-v1
+sprite/typhoon/0 风呼呼/叮叮响加固忙 -> HIT: [叮叮]->MC-20261002-DAILY-v50 ; [加固]->city-spirit
+sprite/typhoon/2 夜幕降临/喵呜声更响 -> HIT: [喵呜]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20260929-REACT-v5 ; [夜幕]->MC-20261002-DAILY-v50
+sprite/typhoon/8 叮叮响提醒声不断 -> HIT: [叮叮]->MC-20261002-DAILY-v50
+sprite/coldsnap/4 叮叮响，保暖忙 -> HIT: [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50
+sprite/coldsnap/7 叮叮响，冰霜舞 -> HIT: [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50
+sprite/coldsnap/11 叮叮作响护温暖 -> HIT: [温暖]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50
+sprite/market_open/11 啾啾交易响，市场舞银光 -> HIT: [交易]->MC-20260927-REACT-v3 ; [响，]->city-spirit ; [市场]->city-spirit ; [啾啾]->MC-20260926-REACT-v1,MC-20260926-REACT-v2
+sprite/market_close/0 叮叮铃响夜幕垂 -> HIT: [响夜]->MC-20261003-DAILY-v64 ; [叮叮]->MC-20261002-DAILY-v50 ; [夜幕]->MC-20261002-DAILY-v50
+sprite/ceo_order/0 铃铃作响心欢喜 -> CLEAN
+sprite/ceo_order/4 叮咚鸣响起 -> HIT: [叮咚]->MC-20261003-DAILY-v64
+sprite/ceo_order/6 叮一声令下响 -> HIT: [一声]->MC-20260927-REACT-v3,MC-20260928-REACT-v4
+sprite/ceo_order/10 叮咚响一声 -> HIT: [叮咚响]->MC-20261003-DAILY-v64 ; [一声]->MC-20260927-REACT-v3,MC-20260928-REACT-v4
+sprite/festival/4 叮叮响，灯满街 -> HIT: [响，]->city-spirit ; [叮叮]->MC-20261002-DAILY-v50 ; [，灯]->MC-20261002-DAILY-v29,MC-20261002-DAILY-v8
+sprite/festival/6 叮叮作响庆佳节 -> HIT: [叮叮]->MC-20261002-DAILY-v50
+sprite/festival/10 叮叮铃响庆佳节 -> HIT: [叮叮]->MC-20261002-DAILY-v50
+======================================================================
+== GROUP D_dorm_reno keywords=宿舍/改造/爆改/翻新/收拾/打扫/房间/住 ==
+烟火/rain/15 伞布下也挡不住这雨的调皮 -> HIT: [这雨]->city-spirit ; [雨的]->city-spirit ; [下也]->city-spirit
+烟火/heatwave/15 天气真是遭不住啊 -> HIT: [真是]->city-spirit
+秩序/morning/3 守规矩，才稳得住这超体宇宙城的根 -> HIT: [守规矩，]->city-spirit ; [得住]->city-spirit ; [，才]->MC-20261005-DAILY-v67 ; [才稳]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+秩序/market_open/2 校准了心，才能稳住手 -> HIT: [校准了心，]->city-spirit ; [才能稳住手]->city-spirit ; [准了心，才]->city-spirit ; [了心，才能]->city-spirit
+秩序/market_open/12 买卖交易，谨慎行事，别轻敌，得稳住 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [交易]->MC-20260927-REACT-v3 ; [事，]->MC-20260925-CENSUS-v10,MC-20260929-REACT-v5 ; [，别]->MC-20261002-DAILY-v27
+怀旧/heatwave/5 伞坏了修了又修，还是挺得住这天气 -> HIT: [，还是]->MC-20261002-DAILY-v33 ; [得住]->city-spirit ; [这天]->city-spirit ; [修了]->MC-20261005-DAILY-v68
+怀旧/coldsnap/8 这天冷得连热气都冻住了 -> HIT: [得连]->city-spirit ; [热气]->city-spirit ; [这天]->city-spirit
+怀旧/coldsnap/13 旧日的布衣虽薄，却裹得住心 -> HIT: [衣虽薄，却]->city-spirit ; [薄，却裹得]->city-spirit ; [布衣虽薄，]->city-spirit ; [，却裹得住]->city-spirit
+怀旧/ceo_order/5 老档案了，这城里的秘密藏不住 -> HIT: [里的]->MC-20261002-DAILY-v4,MC-20261002-DAILY-v40 ; [档案]->MC-20260925-CENSUS-v14,MC-20260925-CENSUS-v4,MC-20260927-DIGEST-v7,MC-20261002-DAILY-v10 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+怀旧/festival/7 旧伞上哪怕有个小破洞，也遮得住春雨 -> HIT: [得住]->city-spirit ; [有个]->city-spirit ; [，也]->MC-20261002-DAILY-v40
+逍遥/typhoon/15 台风来了要稳住，招牌也得牢固 -> HIT: [招牌也]->city-spirit ; [台风]->MC-20260926-CENSUS-v18,MC-20260926-CENSUS-v19 ; [来了]->MC-20261002-DAILY-v19 ; [也得]->MC-20261002-DAILY-v32,MC-20261002-DAILY-v40,MC-20261002-DAILY-v41,MC-20261002-REACT-v8
+逍遥/heatwave/16 茶香遮不住汗滴，这天喝再多茶也不解渴 -> HIT: [这天]->city-spirit ; [茶香]->MC-20261002-DAILY-v18 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+======================================================================
+== GROUP E_clothes_price keywords=衣服/衬衫/买/穿/价 ==
+烟火/morning/10 卖豆腐了嘞，要买嫩点的还是老点的？ -> HIT: [的还]->MC-20261002-DAILY-v15 ; [还是]->MC-20260925-QUOTE-v1,MC-20261002-DAILY-v33 ; [是老]->city-spirit ; [的？]->MC-20260926-REACT-v1,MC-20260927-REACT-v3
+烟火/morning/11 早点买早点，一天的好开始 -> HIT: [，一天]->city-spirit ; [早点]->MC-20261001-DIGEST-v11,MC-20261002-DAILY-v27,MC-20261002-DAILY-v32 ; [开始]->MC-20260926-DIGEST-v3 ; [点，]->MC-20260926-REACT-v2,MC-20260927-DIGEST-v7
+烟火/morning/12 青菜萝卜两厢情愿，咱这价格明镜儿似的 -> HIT: [两厢情愿，]->MC-20260930-REACT-v6 ; [这价格明镜]->MC-20260930-REACT-v6 ; [青菜萝卜两]->MC-20260930-REACT-v6 ; [格明镜儿似]->MC-20260930-REACT-v6
+烟火/dusk/17 今天的鱼真鲜，明天还得早起买 -> HIT: [，明天]->city-spirit ; [今天的]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5 ; [还得]->MC-20261002-DAILY-v51 ; [早起]->MC-20261002-DAILY-v51
+烟火/night/10 今儿这肉价不错，明早多买点 -> HIT: [，明]->city-spirit ; [买点]->MC-20260927-REACT-v3 ; [今儿]->MC-20261002-DAILY-v26
+烟火/weekend/13 市场买卖讲价，公平公正正 -> HIT: [市场]->city-spirit ; [买卖]->city-spirit
+烟火/rain/0 今天出门没带伞，衣服都淋湿了 -> HIT: [淋湿了]->city-spirit ; [伞，]->MC-20261005-DAILY-v68 ; [今天]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5,MC-20261002-REACT-v8
+烟火/rain/5 菜场里买菜，要挑新鲜的 -> HIT: [菜场]->MC-20261002-DAILY-v19
+烟火/rain/10 菜场里买把伞，回家路上不用怕 -> HIT: [回家]->MC-20261002-DAILY-v27 ; [上不]->MC-20260925-QUOTE-v5 ; [伞，]->MC-20261005-DAILY-v68 ; [路上]->city-spirit
+烟火/heatwave/7 热得连冰棍都化成水了，赶紧买点西瓜解解渴 -> HIT: [，赶紧]->MC-20260926-REACT-v2 ; [热得连]->city-spirit ; [买点]->MC-20260927-REACT-v3 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+烟火/heatwave/16 卖的包子都不爱买了 -> HIT: [包子]->MC-20261002-DAILY-v32
+烟火/coldsnap/0 今儿这天，穿两层还不暖和 -> HIT: [这天]->city-spirit ; [天，]->city-spirit ; [暖和]->MC-20261002-DAILY-v24 ; [今儿]->MC-20261002-DAILY-v26
+烟火/coldsnap/7 这天真是冷，得加两件衣服才成 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [这天]->city-spirit ; [得加]->MC-20261002-REACT-v8 ; [真是]->city-spirit
+烟火/coldsnap/16 今天这天寒风刺骨的，得多穿点儿 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [这天]->city-spirit ; [的，]->MC-20260925-CENSUS-v6,MC-20260930-REACT-v6,MC-20261002-DAILY-v10,MC-20261002-DAILY-v33,MC-20261002-DAILY-v43,MC-20261005-DIGEST-v15 ; [得多]->MC-20260926-REACT-v2
+烟火/market_open/3 早市上，大爷买菜不忘挑三拣四 -> HIT: [上，]->city-spirit ; [，大]->MC-20261002-DAILY-v17
+烟火/market_open/6 早上好，买卖开始了！ -> HIT: [好，]->MC-20260925-QUOTE-v3,MC-20260927-DIGEST-v5,MC-20260929-REACT-v5 ; [开始]->MC-20260926-DIGEST-v3 ; [买卖]->city-spirit
+烟火/market_open/7 米价又涨了点，赶紧看看 -> HIT: [点，赶紧看]->MC-20260926-REACT-v2 ; [涨了点，赶]->MC-20260926-REACT-v2 ; [米价又涨了]->MC-20260926-REACT-v2 ; [，赶紧看看]->MC-20260926-REACT-v2
+烟火/market_open/8 粮油买卖两兴旺 -> HIT: [买卖]->city-spirit
+烟火/market_open/9 这买卖得慢慢讲 -> HIT: [得慢慢]->city-spirit ; [买卖]->city-spirit
+烟火/market_open/12 日头一升买卖开 -> HIT: [买卖]->city-spirit
+烟火/market_open/14 买卖的热闹才刚刚开始 -> HIT: [开始]->MC-20260926-DIGEST-v3 ; [热闹]->MC-20261002-DAILY-v16,MC-20261002-DAILY-v22,MC-20261002-DAILY-v32,MC-20261002-DAILY-v34,MC-20261002-DAILY-v49,MC-20261002-REACT-v8 ; [买卖]->city-spirit
+烟火/market_close/2 赶紧去食堂买碗面条 -> HIT: [赶紧]->MC-20260926-REACT-v2 ; [面条]->MC-20261002-DAILY-v58 ; [食堂]->MC-20260925-CENSUS-v7,MC-20260926-REACT-v2,MC-20261002-REACT-v8
+烟火/market_close/4 青菜便宜了些，今天买的 -> HIT: [，今]->MC-20260927-REACT-v3 ; [青菜]->MC-20260930-REACT-v6 ; [些，]->MC-20260928-REACT-v4,MC-20261002-DAILY-v8 ; [今天]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5,MC-20261002-REACT-v8
+烟火/market_close/6 今天蔬菜价格又涨了点 -> HIT: [又涨了点]->MC-20260926-REACT-v2 ; [今天]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5,MC-20261002-REACT-v8 ; [价格]->MC-20260927-DIGEST-v7,MC-20260930-REACT-v6,MC-20261001-REACT-v7
+烟火/market_close/11 炒菜的油星溅到了衣服上 -> HIT: [到了]->MC-20261002-DAILY-v39
+烟火/market_close/12 刚赚的这份钱，得给孩子买点糖 -> HIT: [钱，得给孩]->MC-20260927-REACT-v3 ; [赚的这份钱]->MC-20260927-REACT-v3 ; [份钱，得给]->MC-20260927-REACT-v3 ; [孩子买点糖]->MC-20260927-REACT-v3
+烟火/market_close/15 卖了大半辈子鸡蛋，这价格还是有点乱 -> HIT: [半辈子]->MC-20261001-REACT-v7 ; [这价格]->MC-20260930-REACT-v6 ; [还是]->MC-20260925-QUOTE-v1,MC-20261002-DAILY-v33 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52
+烟火/market_close/16 今儿的白菜还真便宜，正好买点 -> HIT: [，正好]->MC-20260929-REACT-v5 ; [今儿的]->city-spirit ; [的白菜]->MC-20261002-DAILY-v19 ; [买点]->MC-20260927-REACT-v3
+烟火/festival/11 菜场阿姨们这回得多买点灯串回去 -> HIT: [阿姨]->MC-20261002-DAILY-v13 ; [得多]->MC-20260926-REACT-v2 ; [回去]->city-spirit ; [灯串]->MC-20261002-DAILY-v25,MC-20261002-DAILY-v43
+秩序/dusk/7 今儿个风大，回家得多穿件衣裳 -> HIT: [今儿个]->MC-20261002-DAILY-v26 ; [回家]->MC-20261002-DAILY-v27 ; [得多]->MC-20260926-REACT-v2 ; [风大]->MC-20260926-REACT-v2
+秩序/heatwave/5 流汗多得像下雨，衣服都溻湿了 -> HIT: [多得像]->city-spirit ; [湿了]->city-spirit ; [下雨]->MC-20260926-REACT-v1
+秩序/coldsnap/2 穿上厚厚的棉衣，出门别受冻 -> CLEAN
+秩序/coldsnap/10 天寒地冻的，多穿件衣裳 -> HIT: [的，]->MC-20260925-CENSUS-v6,MC-20260930-REACT-v6,MC-20261002-DAILY-v10,MC-20261002-DAILY-v33,MC-20261002-DAILY-v43,MC-20261005-DIGEST-v15 ; [，多]->MC-20261002-DAILY-v32
+秩序/market_open/12 买卖交易，谨慎行事，别轻敌，得稳住 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [交易]->MC-20260927-REACT-v3 ; [事，]->MC-20260925-CENSUS-v10,MC-20260929-REACT-v5 ; [，别]->MC-20261002-DAILY-v27
+求新/weekend/1 新买的手工艺品，得拍拍视频给大家瞧瞧 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [手工]->MC-20260926-CENSUS-v15 ; [的手]->city-spirit ; [大家]->MC-20261002-DAILY-v17
+求新/coldsnap/2 这天气，穿得再多也得搓搓手 -> HIT: [这天]->city-spirit ; [气，]->MC-20261002-DAILY-v14 ; [也得]->MC-20261002-DAILY-v32,MC-20261002-DAILY-v40,MC-20261002-DAILY-v41,MC-20261002-REACT-v8
+求新/coldsnap/6 这天气，得穿得像粽子似的才保暖 -> HIT: [的才]->city-spirit ; [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [这天]->city-spirit ; [气，]->MC-20261002-DAILY-v14
+求新/coldsnap/8 天这么冷，还是别穿裙子了吧 -> HIT: [，还是]->MC-20261002-DAILY-v33 ; [这么]->MC-20261005-DAILY-v68
+求新/coldsnap/9 新衣服还没做出来，先用毛毯凑合凑合 -> HIT: [出来]->MC-20261002-DAILY-v9 ; [，先]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5
+求新/market_open/14 新货来了，得赶紧看看能不能出个好价钱 -> HIT: [赶紧看看]->MC-20260926-REACT-v2 ; [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [来了]->MC-20261002-DAILY-v19 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+怀旧/typhoon/17 雨怕是躲不过了，得赶紧收衣服 -> HIT: [，得]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20261002-DAILY-v28 ; [赶紧]->MC-20260926-REACT-v2 ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+怀旧/market_open/6 敲门声脆响，买卖声不息 -> HIT: [响，]->city-spirit ; [买卖]->city-spirit
+怀旧/market_open/14 这钟声一响，买卖场上热闹开锣 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [热闹]->MC-20261002-DAILY-v16,MC-20261002-DAILY-v22,MC-20261002-DAILY-v32,MC-20261002-DAILY-v34,MC-20261002-DAILY-v49,MC-20261002-REACT-v8 ; [买卖]->city-spirit
+怀旧/market_close/6 交易所那锣声一响，又得琢磨明天的买卖经了 -> HIT: [明天]->city-spirit ; [交易]->MC-20260927-REACT-v3 ; [响，]->city-spirit ; [买卖]->city-spirit
+侠气/morning/13 市集上讨价还价，生活的小确幸就在这一句 -> HIT: [的小确幸]->MC-20261002-DAILY-v33 ; [，生活]->city-spirit ; [市集]->MC-20260926-CENSUS-v17 ; [一句]->MC-20260925-CENSUS-v4,MC-20260925-CENSUS-v6,MC-20260926-CENSUS-v17,MC-20260927-DIGEST-v7,MC-20261001-DIGEST-v13
+侠气/coldsnap/10 冻得我这棉袄都不够穿，真后悔没多买件 -> HIT: [，真]->city-spirit
+侠气/coldsnap/14 这寒风忒刺骨，穿暖和点啊 -> HIT: [暖和]->MC-20261002-DAILY-v24
+侠气/market_open/0 船长刚上码头就吆喝开了：“今儿个买卖兴不兴！ -> HIT: [今儿个]->MC-20261002-DAILY-v26 ; [买卖]->city-spirit ; [船长]->MC-20260926-CENSUS-v16,MC-20260927-REACT-v3
+侠气/market_open/2 江湖大侠挥了挥手：“来往皆是客，买卖公平点！ -> HIT: [江湖]->MC-20261002-DAILY-v3 ; [是客]->MC-20260925-CENSUS-v1 ; [买卖]->city-spirit ; [来往]->city-spirit
+侠气/market_open/7 隔壁老李又在吆喝什么低价货 -> HIT: [老李]->city-spirit ; [什么]->MC-20260926-REACT-v1,MC-20261003-DIGEST-v14
+侠气/market_open/9 买卖虽小，人情味儿可不少 -> HIT: [小，]->MC-20260925-CENSUS-v9,MC-20260925-QUOTE-v4 ; [，人]->MC-20260925-CENSUS-v3,MC-20260925-QUOTE-v1,MC-20260926-CENSUS-v16,MC-20260927-REACT-v3,MC-20261001-REACT-v7 ; [买卖]->city-spirit ; [情味]->city-spirit
+侠气/market_open/10 来来往往，人都是靠买卖牵线的 -> HIT: [往，人都是]->city-spirit ; [，人都是靠]->city-spirit ; [买卖牵线的]->city-spirit ; [来往往，人]->city-spirit
+侠气/market_open/15 这交易所一开张，买卖双方可都精神了 -> HIT: [都精神]->MC-20261002-DAILY-v44 ; [交易]->MC-20260927-REACT-v3 ; [买卖]->city-spirit ; [一开]->city-spirit
+侠气/market_close/0 交易所刚收了，这买卖真过瘾 -> HIT: [交易]->MC-20260927-REACT-v3 ; [，这]->MC-20261002-DAILY-v10,MC-20261002-DAILY-v2,MC-20261002-DAILY-v52 ; [买卖]->city-spirit ; [了，]->MC-20260926-REACT-v2,MC-20260927-REACT-v3,MC-20260929-REACT-v5,MC-20260930-REACT-v6,MC-20261001-REACT-v7,MC-20261002-DAILY-v4
+侠气/market_close/11 听说股市今天挺热闹，我这买卖可就清淡了 -> HIT: [热闹，]->MC-20261002-DAILY-v32,MC-20261002-REACT-v8 ; [，我]->MC-20260925-CENSUS-v13,MC-20260925-QUOTE-v6,MC-20261002-DAILY-v1 ; [买卖]->city-spirit ; [今天]->MC-20260925-CENSUS-v12,MC-20260929-REACT-v5,MC-20261002-REACT-v8
+侠气/market_close/12 交易所一关门，街上人声鼎沸，买卖家们都散了 -> HIT: [交易]->MC-20260927-REACT-v3 ; [门，]->MC-20261002-DAILY-v34 ; [买卖]->city-spirit ; [，街]->city-spirit
+侠气/ceo_order/13 城主一声令，咱这买卖就能赚翻天 -> HIT: [，咱这]->MC-20260930-REACT-v6,MC-20261002-DAILY-v21 ; [一声]->MC-20260927-REACT-v3,MC-20260928-REACT-v4 ; [买卖]->city-spirit ; [令，]->MC-20260926-DIGEST-v4
+逍遥/night/14 灯下夜市热闹，买卖两相欢 -> HIT: [热闹，]->MC-20261002-DAILY-v32,MC-20261002-REACT-v8 ; [夜市]->city-spirit ; [买卖]->city-spirit ; [灯下]->MC-20261002-DAILY-v3
+逍遥/market_open/3 钟声敲响，买卖兴隆 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [买卖]->city-spirit
+逍遥/market_open/6 钟声一响买卖忙，鱼饵钓上心头来 -> HIT: [，鱼]->MC-20260928-REACT-v4 ; [钟声]->MC-20260925-CENSUS-v2 ; [买卖]->city-spirit
+逍遥/market_open/9 江湖多变，买卖从容 -> HIT: [江湖]->MC-20261002-DAILY-v3 ; [买卖]->city-spirit
+逍遥/market_open/15 钟声一响，买卖忙 -> HIT: [响，]->city-spirit ; [钟声]->MC-20260925-CENSUS-v2 ; [买卖]->city-spirit
+sprite/rain/3 啾啾鸣叫，光鸟穿梭 -> HIT: [啾啾鸣叫，]->MC-20260926-REACT-v1
+sprite/market_close/11 喵呜买卖息，夜色笼轻纱 -> HIT: [，夜色]->city-spirit ; [喵呜]->MC-20260927-REACT-v3,MC-20260928-REACT-v4,MC-20260929-REACT-v5 ; [买卖]->city-spirit
+======================================================================
