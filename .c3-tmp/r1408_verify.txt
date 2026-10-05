@@ -1,0 +1,5 @@
+tick=1408 ts=2026-10-05 21:26:04
+task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
+focus_len=525
+LOG_TAIL:
+2026-10-05 21:2x R1408: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 2/6=R1407 同窗承继·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 实证 .c3-tmp/r1408_check.txt 21:24（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/decisions dnum 内容寻址差集 NEW=[] GONE=[] 水位 149==149 mtime 10-05 12:04:20 零漂移〔D-20260930-19 水位差集制·双零差集=R1357 水位修补件收敛承继〕/ledger strict @tag 43==43 锚静〔pattern 内置主查零伪差·mtime 1
