@@ -1,0 +1,12 @@
+=== board (key lines) ===
+(no FAIL/blocker lines)
+
+=== readiness (key lines) ===
+> 口径：距离首发＝批次①账号亮灯＋10 稿 M4 门全绿＋测试件纪律零发现；未上线＝未测量；阻塞≠失败（发布前诚实态）。
+## 距离首发的阻塞清单（3 项）
+
+=== loop (key lines) ===
+- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+- [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+- [FAIL] account-lag: 7 completed round(s) without accounting (done beats=1457 > tick=1450) - the R4/R5 bug pattern
+loop health: FAIL (3 fail, 142 warn)
