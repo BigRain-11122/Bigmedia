@@ -20,9 +20,14 @@ C2 calibration (queue R169, v12 mother track = cyber light voice,
 - medium int8 + beam5 + no-context: raw CER 5.53% -> model size is
   the dominant factor (homophone sites 12 -> 8, real-word damage
   still zero; first model download ~1min, then ~21s per 57s clip)
-S2 asr-check QC recipe: --model medium --beam-size 5 --no-context;
-small (defaults) stays the fast lane. Defaults unchanged on
-purpose: no behavior change without measured gain.
+S2 asr-check QC recipe: --model medium --beam-size 5 --no-context
+plus per-piece proper-noun preload via --initial-prompt (P-3 pilot
+R1410, A/B on BS-003/BS-004 terminal tracks: proper-noun degraded
+sites 13 -> 5 = 62% cut, prompt leakage 0, char-noise rate down on
+both tracks; prompt = the piece's own fact-word list, terms already
+present in the piece only); small (defaults) stays the fast lane.
+Defaults unchanged on purpose: no behavior change without measured
+gain.
 
 HF_HUB_OFFLINE pitfall (R638, canonized R644): faster-whisper model
 load does an online HF-hub etag check by default; on this machine
@@ -162,8 +167,11 @@ def build_parser():
                     help="condition_on_previous_text=False; short-clip "
                          "QC recipe (measured: ~1 char gain, ~30%% faster)")
     ap.add_argument("--initial-prompt", default=None,
-                    help="domain bias prompt (measured: DEGRADED small "
-                         "model accuracy - use with caution)")
+                    help="domain bias prompt (small model: measured "
+                         "DEGRADED, use with caution; P-3 pilot R1410: "
+                         "medium-int8 + targeted per-piece proper-noun "
+                         "preload MEASURED GAIN - 62 percent proper-noun "
+                         "degradation cut, zero leak)")
     return ap
 
 

@@ -1,0 +1,6 @@
+2 | 平台 API 发布对接 | 平台运营部 | blocked | 卡点=账号未开（批次①） |
+| C-13 | 数据回流自动化（后台导出→对账） | 数据分析部 | planned | 待上线后实况定通道 |
+| C-17 | 本地算力链 PoC（FFmpeg 时间线+TTS 参数表+字幕对轴） | 工程技术部+内容生产部 | live | backlog #9 · m2-local-stack.md §4——**全梯 done（R-A/R-B/R-C·R12）**：R-A 渲染器 `render_card_video.py`（1080×1920 实渲染+抽帧实证）；R-B TTS 双轨台账 `data/sources/tts-samples/`（edge-tts 6 样件+piper1-gpl 真装真录·T3 解锁·音色定档待人耳 #8）；R-C 双路字幕对轴：B 路 `srt_fix.py` 钳重叠=合成稿正路（strict 过）·A 路 `whisper_to_srt.py` small-int8-cpu=真人原声件（ASR 错字在案·**C2 校准 R169**：S2 QC recipe=`--model medium --beam-size 5 --no-context`=CER 13.07%→5.53%·三旋钮落工具·small 默认快道）·BS-001 v2 音轨重渲（59.93s·像素实证）·连带修红 drawtext CRLF 行距翻倍（LF+回归锁·tests 14+18 绿）·台账=`data/sources/bs001/README.md`·**深纵律装配 R195**：`emotive_tts --deepdive`（#14 B站线·段界 ①-⑳+段间 ≥2s+滚动 60s ≤55s 求解器·BS-001-DD 首战全绿） |
+| C-14 | 自动化生产全链路（七站表+生产闸门+生产模式协议） | 总裁办公室+工程技术部 | live | `docs/production-chain.md` · 闸门拒稿实测 exit=3 |
+| C-15 | 草稿骨架生成器 make_draft（M1/M3 站） | 内容生产部+平台运营部 | live | `python src/make_draft.py` · 三类骨架 lint 0 FAIL 实测 |
+| C-16 | 全链量产生产轮（M0-M3 无人值守量产） | 全部门 | **live** | D-BS-06 量产开闸（O-20260924-2126·2026-09-24 state.json production=open 翻正·册行漏更账 4 日 09-28 补——state.json=派生真相源）——生产轮实证=R170 起连续量产（F-001~F-005 成品库立账
