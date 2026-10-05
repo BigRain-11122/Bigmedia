@@ -1,0 +1,28 @@
+check_time=2026-10-05 23:02:50
+tick=1414 ts=2026-10-05 22:55:20
+log_len=1442
+LOG: 2026-10-05 22:4x R1413: declared-idle 一行声明收轮（空轮判定路径④·五静 fresh 实证 r1413_check.txt 22:43+三探针照跑不省 r1413_probes.txt 基线平+四查尽承 R1412 derive 禁重扫·声明轮并窗 2/6=R1412 同窗续静零漂移·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 静：orders 顶=O-202
+LOG: 2026-10-05 22:5x R1414: declared-idle 一行声明收轮（空轮判定路径④·五静 fresh 实证 r1414_check.txt 22:54+三探针照跑不省 r1414_probes.txt 基线平+四查尽承 R1412/R1413 derive 禁重扫·声明轮并窗 3/6=R1412/R1413 同窗续静零漂移·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 静：or
+watermark_count=148
+ORDER: O-20260928-1836-bm-a.md mtime=09-28 18:57:07
+ORDER: O-20260928-1910-bm-a.md mtime=09-28 19:12:33
+dec_mtime=10-05 12:04:20
+dec_dnum=148 old=148 NEW=[] GONE=[]
+board_section_lines=121
+board_bs_rows=20
+board_tail:
+  BT: | 2026-09-29 | D-20260929-05 BigLife 停造人令链台账补全+滚动清单冻结维持（13:37 令缺行补录+04:37 令核销+批 3+ 冻结定谳） | BigLife F-20260929-BL02（P1·ack+判据核验回执）+orders.md 04:37 行 | 
+  BT: | 2026-09-29 | D-20260929-06 D-20260925-09 骑楼/遮棚资产线重路由（City 3D 主线定谳后 2D 城车道悬空件收口） | 夜轮 09-29 03:07 悬空件点名+FluxVerse F-20260925-09/12 链 | 09-28 22:5x Ci
+  BT: 
+ledger_hits=43
+ledger_mtime=10-05 15:13:46
+  LT: - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 d
+  LT: - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame
+git_status= M src/os/state.json | ?? .c3-tmp/r1412_probes.txt | ?? .c3-tmp/r1412_verify.txt | ?? .c3-tmp/r1413_check.py | ?? .c3-tmp/r1413_check.txt | ?? .c3-tmp/r1413_close.py | ?? .c3-tmp/r1413_probes.py | ?? .c3-tmp/r1413_probes.txt | ?? .c3-tmp/r1413_verify.txt | ?? .c3-tmp/r1414_backlog_head.txt | ?? .c3-tmp/r1414_check.py | ?? .c3-tmp/r1414_check.txt | ?? .c3-tmp/r1414_close.py | ?? .c3-tmp/r1414_logsc
+index_lock=False
+backlog_mtime=10-05 21:40:18
+queue_mtime=10-05 22:02:52
+hq_feedback_mtime=10-05 00:23:53
+export_mtime=10-05 22:19:42
+daily_1005=True
+daily_1006=False

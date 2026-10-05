@@ -1,0 +1,21 @@
+dd_hits=17
+DD 2026-09-25 03:2x R194
+DD 2026-09-25 03:5x R195
+DD 2026-09-25 03:5x R196
+DD 2026-09-25 04:1x R197
+DD 2026-09-25 04:3x R198
+DD 2026-09-25 04:5x R199
+DD 2026-09-25 05:3x R200
+DD 2026-09-25 05:1x R201
+DD 2026-09-25 05:5x R202
+DD 2026-09-25 09:0x R223
+DD 2026-09-25 09:5x R227
+DD 2026-09-26 21:47 R429
+DD 2026-09-26 23:57 R442
+DD 2026-09-27 01:31 R450
+DD 2026-09-27 02:00 R452
+DD 2026-10-01 05:3x R807
+DD 2026-10-05 12:41 R1358
+FULL: 2026-09-27 02:00 R452: 生产轮·#71 重制批 F-003 v15 件全链走门收官（claim 沿用 R445 56a1233·R451 起件→R452 渲染+终审两轮链=F-002 同型提速第二证·实活轮）——①轮首快速路径五查静（orders 双 NONE=r452_check/ledger 严格 @ 前缀五模式 28=锚零新转办/decisions UTF8 非空行 45=锚零新行/树净零锁 HEAD=00652f7 R451/C-00030+C-00031 锚仍不在位 supply-gated 照守/日报 09-27 在案不重跑）→backlog 顶行 #71 F-003 渲染腿届领转全任务书；三探针=board 0 FAIL（5 题 10 稿 5 in production）/readiness 3 阻塞皆外部 CEO 物理件+决策 0 发现/loop_health 1 FAIL+20 WARN 皆在案史实（FAIL=R425 调度器漏触发 49min 同事件足迹·R426 已裁定不重复触发）；②渲染腿=对位表 cards-v15-matched.json（build_cards_v15.py·v15 TTS 基线时钟×v1-matched visuals 承继×卡面 v5 锚·line_diffs=0=卡锚零动实证）+R-E shipinhao 渲染 bs-003-v15-shipinhao-60s.mp4（9:16 1080×1920·57.45s ffprobe·2.5s 余量·12 段 11 柔 0 硬切·hits=[0] 同 v2b·S
+FULL: 2026-10-01 05:3x R807: 生产轮·queue §E 补池选优轮兑现=E26 BS-011 稿集件《三级记忆》入池激活+起链五腿毕（R806 指针①兑现·lane=E26〔active〕+supply-gated 豁免面维持·实活轮·产品优先律对位=本轮实物增量=BS-011 拍稿三件套 v1→v3+S1 判词档 10/10+TTS v3 定稿音轨 53.156s 在链）——①轮首五查静（r807_scan.py 内容寻址复跑 05:03 留档 r807_scan.txt：orders 42=锚零新令〔顶=O-20260928-1910〕/ledger 六模式 40=锚带内〔值守行位移带零新 CEO 令级事件〕/decisions dnum 差集 0 新行=112 基线〔D-20260930-19 水位差集制·D-13 SLA 无触发〕/production=open 自愈核 tick806/无 index.lock·树态三成员维持=M CODELY.md〔R767 定谳零接触〕+codex 两件〔mtime 09-29 04:06 未动=#86 c+d 判据未达·bm-a 让位〕）+三探针=board 0 FAIL（5 ideas 10 稿 5 in production）/readiness 3 阻塞皆外部 CEO 面 0 发现（71 renders 全注账）/loop_health 2 FAIL+101 WARN 皆在案史实类（09-26/09-28 outage 已裁定+heartbeat-gap 断洞带）；②选优定谳=BS-001 母稿 §「无人值守
+FULL: 2026-10-05 12:41 R1358: 自进轮·queue §B B5 段子对标 slice2 采样腿毕（全预算轮领兑现 R1357 指针⑤·≤15 分钟限时窗内收口·空转规则②路=清单唯一 open 顶项·产品优先律对位=0 分位研究件如实记·CEO 扩面令点名「段子」承接）——①轮首快速路径五查 fresh（r1358_probe.txt：orders 顶=O-20260928-1910 未变 mtime 09-28/decisions dnum 内容寻址差集 NEW=[]〔total D/C 149==水位 149 含 D-20260930-1=R1357 水位修补件零复发性伪差实证〕·ledger @hits 42==42 尾=已消费面锚静/派工板零 BigStream 涉司新行/零 index.lock/production=open/树净 HEAD=346ece68 R1357）+三探针照跑不省（r1358_probe_board/readiness/loop.txt〔python io 通道 r1358_run_probes.py=R1244/R1288 编码律·PS5.1 `>` UTF-16 重定向坑轮内定谳后绕开〕：board 0 FAIL〔5 ideas 10 drafts 5 in production 0 fail〕/readiness 3 阻塞皆外部 CEO 面〔账号批次①+M4 GATE 6/10+#17 needs-CEO〕0 发现〔阻塞≠失败口径〕/loop_health 3 FAIL+138 WARN==基线族持平零新增〔两 outa

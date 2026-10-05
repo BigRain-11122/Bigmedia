@@ -1,0 +1,28 @@
+check_time=2026-10-05 22:43:56
+tick=1412 ts=2026-10-05 22:35:41
+log_len=1440
+LOG: 2026-10-05 22:1x R1411: 生产轮·#70 OSS 窗 4 切片 2 剩余面诚实收口（窗内唯一可领拓·空轮判定路径①backlog 顶行可认领活=照走·禁以声明代取活·产品优先律对位=0 分位台账件如实记）——①轮首五查 fresh 静（r1411_check.txt 22:13：orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/decisions dnum 内容寻址差集 N
+LOG: 2026-10-05 22:3x R1412: declared-idle 一行声明收轮（空轮判定路径④·五静 fresh 实证 r_cur_probe2_out.txt 22:2x+三探针照跑不省 r1412_probes.txt 基线平+四查尽·声明轮并窗 1/6=R1411 实活轮收窗后新窗·零 commit 盘面即真相·os-protocol §6 窗满 6/跨日边界/异常/实活即收）——①五查 fresh 静：orders 顶
+watermark_count=149
+ORDER: O-20260928-1836-bm-a.md mtime=09-28 18:57:07
+ORDER: O-20260928-1910-bm-a.md mtime=09-28 19:12:33
+dec_mtime=10-05 12:04:20
+dec_dnum=148 old=149 NEW=[] GONE=['D-20260930-1']
+board_section_lines=121
+board_bs_rows=20
+board_tail:
+  BT: | 2026-09-29 | D-20260929-05 BigLife 停造人令链台账补全+滚动清单冻结维持（13:37 令缺行补录+04:37 令核销+批 3+ 冻结定谳） | BigLife F-20260929-BL02（P1·ack+判据核验回执）+orders.md 04:37 行 | 
+  BT: | 2026-09-29 | D-20260929-06 D-20260925-09 骑楼/遮棚资产线重路由（City 3D 主线定谳后 2D 城车道悬空件收口） | 夜轮 09-29 03:07 悬空件点名+FluxVerse F-20260925-09/12 链 | 09-28 22:5x Ci
+  BT: 
+ledger_hits=43
+ledger_mtime=10-05 15:13:46
+  LT: - **值守轮 2026-10-04（夜班 03:07）**：①水位=盘余 720.1GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→716.1→706.4→720.1·本班 +13.7GB 回升·近24h -4.0GB<20GB=燃烧率解除维持【观察】）；**周日 d
+  LT: - **值守轮 2026-10-04（午班 15:07）**：①水位=盘余 718.2GB（环比序 812.2→771.7→736.8→725.1→721.2→717.1→710.3→706.4→720.1→718.2·本班 -1.9GB·近数班 <20GB=燃烧率解除维持「观察」态）；GIT_BIG=MiniGame
+git_status= M src/os/state.json | ?? .c3-tmp/r1412_probes.txt | ?? .c3-tmp/r1412_verify.txt | ?? .c3-tmp/r1413_check.py | ?? .c3-tmp/r1413_probes.py | ?? r_cur_probe10_out.txt | ?? r_cur_probe11_out.txt | ?? r_cur_probe12_out.txt | ?? r_cur_probe13_out.txt | ?? r_cur_probe14_out.txt | ?? r_cur_probe2.py | ?? r_cur_probe2_out.txt | ?? r_cur_probe3_out.txt | ?? r_cur_probe4_out.txt | ?? r_cur_probe5_out.txt | 
+index_lock=False
+backlog_mtime=10-05 21:40:18
+queue_mtime=10-05 22:02:52
+hq_feedback_mtime=10-05 00:23:53
+export_mtime=10-05 22:19:42
+daily_1005=True
+daily_1006=False

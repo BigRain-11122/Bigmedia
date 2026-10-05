@@ -1,0 +1,6 @@
+R1414 tail segment:
+-54⑤】",
+    "2026-10-05 22:5x R1414: declared-idle 一行声明收轮（空轮判定路径④·五静 fresh 实证 r1414_check.txt 22:54+三探针照跑不省 r1414_probes.txt 基线平+四查尽承 R1412/R1413 derive 禁重扫·声明轮并窗 3/6=R1412/R1413 同窗续静零漂移·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 静：orders 顶=O-20260928
+
+--- task field ---
+declared-idle 一行声明收轮（空轮判定路径④·五静 fresh 实证 r1414_check.txt 22:
