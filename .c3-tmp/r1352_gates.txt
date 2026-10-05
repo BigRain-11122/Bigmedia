@@ -1,0 +1,14 @@
+now=2026-10-05 11:23:22
+POOLS_LEAF_STRINGS: 1440 (baseline 1440; mtime 10-05 11:06)
+POOLS_GATE: QUIET 1440==1440
+INTERCHAT_ROWS: 22 (baseline 22; mtime 09-27 08:57)
+INTERCHAT_GATE: QUIET 22==22
+CENSUS_ANCHOR_C-00030: ABSENT (supply-gated)
+ANCHORS_COUNT: 20
+NOSTALGIA_DUSK_13: '修了这么多伞，可算收工了' len=18 [dusk standby ~18:00 -> DAILY v68]
+YANHUO_WEEKEND_13: '市场买卖讲价，公平公正正' [gated row 10-08 market re-open]
+OSS_W4_LEDGER_OH-20261005: NOT-BUILT (normal pre-window) (window opens 21:40 tonight)
+DAILY 2026-10-05: EXISTS
+DAILY 2026-10-06: MISSING
+AUDIO_CH6_V4: MISSING (bm-a gate)
+export_ts=2026-10-05 08:54:32 (mtime 10-05 08:54)
