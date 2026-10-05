@@ -1,0 +1,9 @@
+pool assert: axes[怀旧][dusk][13] verbatim OK; dusk bucket=18 rows; axes 6 structure (R982); v56 dusk/6 + v22 festival/12 (伞 motif anchor) + v58 weekend/7 + v59 weekend/8 + v60 weekend/4 + v63/v64 sprite weekend/3,4 + v65 night/16 + v66 weekend/17 + v67 weekend/5 consumed-row structural anchors; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v67); dusk-window standby redemption: R1337 registration (r1337_dusk_scan.txt 1 CLEAN row) -> held through R1338-R1387 -> redeemed this round; quote-face word probe: 6 words see r1388_quote_face.txt; production time 2026-10-05 18:00:52 (post-sunset literal dusk)
+H1 96 budget 9.58em | H2 50 budget 18.40em (ladder pick, margin>=0.2em) | VERT stack bottom 686px vs subs top 970px gap +284px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 068
+14.60 em  budget 18.40 em  margin +3.80em  single=True  2026-10-05 · 国庆假期 · 傍晚
+14.00 em  budget 18.40 em  margin +4.40em  single=True  「修了这么多伞，可算收工了」
+12.65 em  budget 18.40 em  margin +5.75em  single=True  ——硅基城市台词池 · 怀旧轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_50: quote line 14.00em driver (canonical band library em-budget-ladder.md 50->46->44->40->36->32->28 max-feasible pick; 50-band budget 18.40em margins +3.80/+4.40/+5.75em; four-LINES stack VERT +284px); all other QUOTE-v2 params verbatim; dusk-window standby + supply-determined + 伞-motif-family + same-day-two-signs honest notes carried in meta.form

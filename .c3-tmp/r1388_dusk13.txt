@@ -1,0 +1,7 @@
+[烟火/dusk/13] 菜场里的活儿，一天到晚忙不停 | card-face-shingles=7 不停,儿，,忙不,活儿,菜场,里的| spirit-layer=1 里的
+[秩序/dusk/13] 夜幕低垂，心中有数就好 | card-face-shingles=3 夜幕,就好,，心| spirit-layer=1 ，心
+[求新/dusk/13] 今儿的创作灵感像是从江面来的 | card-face-shingles=2 今儿,江面| spirit-layer=1 来的
+[怀旧/dusk/13] 修了这么多伞，可算收工了 | card-face-shingles=0 ZERO| spirit-layer=3 了这,伞，,，可 | CLEAN 怀旧/dusk/13
+[侠气/dusk/13] 船工哼唱着曲：“江面上的晚风，多快活 | card-face-shingles=3 上的,江面,，多| spirit-layer=1 上的
+[逍遥/dusk/13] 茶室待明日，再续钓鱼情 | card-face-shingles=2 茶室,钓鱼| spirit-layer=1 ，再
+dusk-face CLEAN rows: 怀旧/dusk/13 修了这么多伞，可算收工了
