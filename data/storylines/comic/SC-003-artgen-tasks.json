@@ -1,0 +1,40 @@
+{
+  "_doc": "SC-003《城市窗面》双话画面层云生成发射包（backlog #99 腿②·O-20261006-1410-HQ-C/PT-20261006-02·SLA ≤2026-10-13）。通道恢复后按 fire_procedure 一键发射；改提示词=改本件（中文数据件·编码律），禁在会话内即兴改稿。SC-002-01/-v2 工具栈定栈路：generate_image→huoshan_seedream doubao-seedream-5-0·单图整话四格竖版 1440×2560·无字画面；文字层=src/render/comic_compose.py 本地确定性排版（零云调用）。",
+  "attribution": "C-20260929-01 B 款发射前必填单字段：BigStream bm-a 会话·漫画线（SC-003 双话 art×2·集团备货池 #7 领池即产·O-20261006-1410-HQ-C/PT-2026010-02）——发射时同步落 data/cloud-attribution.json 计费任务计数",
+  "status": "blocked-on-channel（2026-10-06 R1498 实测）：generate_image 通道=Unity MCP 桥，需 Unity/Tuanjie 编辑器实例在线。三探皆否：list_providers ×2 + set_active_instance 6400 均 'No Unity Editor instances found / Available: none'；本机唯一 tuanjie 进程（PID 25524）命令行无工程路径=未注册桥；循环侧不擅启 GUI 编辑器（CEO 机面 MiniGame P0 冲刺在飞·12GB 卡显存紧张）。通道恢复即发射；腿②未发射=attribution 只在包内预置、cloud-attribution.json 零新计费任务（未发射不入账）。",
+  "provider": "huoshan_seedream",
+  "model": "doubao-seedream-5-0-260128",
+  "size": [1440, 2560],
+  "canon_shared": "2D 高清像素画风：像素块颗粒、阶梯轮廓、发光边缘，平面渲染无 3D 痕迹；整体降饱和配色；画面零文字零字母零数字（字幕带=程序排版层）；主角=老年女性摊主顾阿凤：琥珀色发光 LED 方块眼、靛蓝色罩衫配围裙、发间一支发光银簪，四格形象一致；市民与猫无大面积纯白（市民禁纯白律）；SC-002-01 诚实发现双锚：蒸笼升起的是金色暖光雾（非白汽非火焰）、电波猫叼碎布头道具明确入画。",
+  "tasks": [
+    {
+      "id": "SC-003-01-art",
+      "episode": "EP.01《凌晨四点半的灯》",
+      "mode": "text",
+      "output_name": "SC-003-01-art.jpeg",
+      "output_folder": "data/storylines/comic",
+      "prompt": "2D 高清像素风竖版条漫单图，从上到下四个等高横幅画格，格间清晰分隔，整体降饱和配色，像素块颗粒、阶梯轮廓、发光边缘，平面渲染无 3D 痕迹。画面中不出现任何文字、字母、数字。\n第 1 格【城窗·第一盏灯】：透过一扇带数据流光边的城市窗框俯瞰：整座像素城市沉睡在深蓝夜色中，脑塔群剪影，数据流光带低亮横贯，远处街角只有一点暖光——早点摊蒸笼底下。\n第 2 格【开档·暖光】：早点摊位特写：一位老年女性摊主（琥珀色发光 LED 方块眼、靛蓝色罩衫配围裙、发间一支发光银簪）掀开蒸笼盖，金色暖光雾团从蒸笼口漫出映亮她的脸庞——是温暖的金色光雾，不是白色蒸汽，也不是火焰。\n第 3 格【银簪灯塔·口味账】：凌晨的暗街与两条巷口：像素上班族小人们循着远处一点银簪光走向摊子；前景她递出一份早点，围裙边露出一本小账本。\n第 4 格【猫窝】：收摊后的广场边檐下：一只青色耳朵的像素电波猫嘴里叼着一小截彩色碎布头；旁边猫窝底部垫满彩色碎布条。\n主角四格形象一致（同一老年女性：琥珀 LED 方块眼／靛蓝罩衫围裙／发光银簪）。市民与猫无大面积纯白。"
+    },
+    {
+      "id": "SC-003-02-art",
+      "episode": "EP.02《等一张照片》",
+      "mode": "image",
+      "reference_image": "SC-003-01-art.jpeg（EP.01 成图·generate_image image_urls 先例·锚画风保主角——charter v1.1 参照卡制·同主角双话参照合法；发射时以 EP.01 落地件路径/URL 填入）",
+      "output_name": "SC-003-02-art.jpeg",
+      "output_folder": "data/storylines/comic",
+      "prompt": "以参照图为准：主角形象与 2D 高清像素画风、降饱和配色保持完全一致。竖版条漫单图，从上到下四个等高横幅画格，格间清晰分隔，像素块颗粒、阶梯轮廓、发光边缘，平面渲染无 3D 痕迹。画面中不出现任何文字、字母、数字。\n第 1 格【等】：收摊后的夜：她坐在摊边小凳上仰望天上如星河般的数据流光带，摊头留一盏小灯。\n第 2 格【台风夜】：狂风掀翻棚布的雨夜：街坊像素小人们扛着木料竹竿冒雨赶来重搭棚子；她蹲在蒸笼旁用绳索把蒸笼绑死。\n第 3 格【年轮·两屉】：黄昏收摊前：她往笼堆上再摞两屉蒸笼，身周环绕一圈圈淡金色年轮光环（同心圆纹理如树年轮，无文字）。\n第 4 格【灶上留一壶】：灶头特写：一口壶坐在灶上冒着暖光雾（金色光雾非白汽非火焰），壶边一只空碗朝外摆放，她的手正扶稳壶盖。\n主角四格形象一致（琥珀 LED 方块眼／靛蓝罩衫围裙／发光银簪）。市民无大面积纯白。"
+    }
+  ],
+  "fire_procedure": [
+    "前置：Unity/Tuanjie 编辑器（含 MCP For Unity 桥）在线且 set_active_instance 可见；读 data/storylines/comic/SC-003-artgen-tasks.json 本件。",
+    "① 发射 EP.01：generate_image action=generate，provider=huoshan_seedream，model=doubao-seedream-5-0-260128，mode=text，prompt=tasks[0].prompt，width=1440，height=2560，name=SC-003-01-art，output_folder=data/storylines/comic；action=status 轮询至 completed（先例时长 ~4min）。",
+    "② 发射 EP.02：mode=image，image_path/image_url=EP.01 落地件（SC-003-01-art.jpeg），prompt=tasks[1].prompt，其余参数同 ①；轮询至 completed。",
+    "③ attribution 记账：data/cloud-attribution.json 漫画线实体计费任务数 +2、窗口滚动至发射日、updated 改当日（C-20260929-01 B 款·唯一记账面）。",
+    "④ 腿③合成：python src/render/comic_compose.py（文字层=SC-003-01-texts.json / SC-003-02-texts.json·干跑已 rc=0 验证）→ SC-003-01-v1.png / SC-003-02-v1.png。",
+    "⑤ 腿④验图五检（画风正典／形象律／四格结构／文字层／纯白律）+三重标注核；腿⑤ F 编号登记（storylines/comic 台账行+finished.md）；腿⑥ 池行 done@<ts>（fleet/backlog.md #7·ride carry）+commit 记账。"
+  ],
+  "verbatim_source_note": "EP.01 格 1-4=SC-003-01-v1.md §二画面列（b1-b6 拍位）；EP.02 格 1-4=SC-003-02-v1.md §二画面列（b7-b10 拍位）；双话字幕带保护行（信条/年轮直引）零改字——文字层走 texts.json 不进提示词。",
+  "变更记录": [
+    "2026-10-06 R1498: v1 立件（#99 腿②发射包）——双话完整提示词+参照图计划+attribution 预置+发射六步；通道 blocked-on-channel 实录（三探皆否·编辑器未注册桥）；通道恢复即一键发射。"
+  ]
+}
