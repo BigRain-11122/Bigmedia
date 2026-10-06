@@ -1,0 +1,12 @@
+em-check-r1548 (REACT-v10 M2 front-fit + VERT R381)
+h2_size=32 budget=28.75em  H1=6.15em
+OK 15.55em margin +13.20  今日热点 · 知乎热榜 2026-10-07
+OK 26.00em margin +2.75  媒体称破铜烂铁、废纸壳、废塑料可能正在创造巨量财富，
+OK 21.00em margin +7.75  这是真的吗？为啥「破烂」正在变成黄金赛道？
+OK 21.00em margin +7.75  怀旧轴：「捡破烂也是门技术活，得眼尖手快」
+OK 23.00em margin +5.75  侠气轴：「晨风一扫夜的凉，摊子开张早赚两分光」
+OK 14.00em margin +14.75  逍遥轴：「早市忙，人声鼎沸」
+OK 25.00em margin +3.75  引擎医生信条：「机器不坏是本事，坏了能修是人品。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=795px subs_top=932px gap=137px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS

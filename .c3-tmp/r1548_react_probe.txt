@@ -1,0 +1,50 @@
+A pool-verbatim 怀旧/morning: OK :: 捡破烂也是门技术活，得眼尖手快
+A pool-verbatim 侠气/morning: OK :: 晨风一扫夜的凉，摊子开张早赚两分光
+A pool-verbatim 逍遥/morning: OK :: 早市忙，人声鼎沸
+A anchor-C00019-creed-verbatim: OK :: 机器不坏是本事，坏了能修是人品。
+A registry dir entries: 6 (anchor C-00019 = handwritten anchor, registry!=anchor per R316)
+A daily-verbatim hot-title: OK
+B fleet pieces scanned: 119, face lines: 649
+--- R1 :: 捡破烂也是门技术活，得眼尖手快
+  exact/near4: exact=0 near>=4=0
+    SHINGLE '是门' -> MC-20260926-CENSUS-v20 :: 信条：「蹭饭是门艺术，报恩是门手艺。」
+    SHINGLE '，得' -> MC-20260927-REACT-v3 :: 烟火轴：「刚赚的这份钱，得给孩子买点糖」
+--- R2 :: 晨风一扫夜的凉，摊子开张早赚两分光
+  exact/near4: exact=0 near>=4=0
+    SHINGLE '，摊' -> MC-20261001-REACT-v7 :: 烟火轴：「夜深了，人散了，摊位上还留着烟火味」
+    SHINGLE '凉，' -> MC-20261002-DAILY-v53 :: 「值夜岗上风吹凉，巡逻慢步保安康」
+    SHINGLE '晨风' -> MC-20261003-DAILY-v63 :: 「嗡嗡嗡，晨风中的舞」
+--- R3 :: 早市忙，人声鼎沸
+  exact/near4: exact=0 near>=4=0
+    SHINGLE '，人' -> MC-20260925-CENSUS-v3 :: 信条：「队形不能乱，人心更不能散。」
+--- CREED :: 机器不坏是本事，坏了能修是人品。
+  exact/near4: exact=1 near>=4=1
+    NEAR 16 MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '是本事，坏' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '能修是人品' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '坏是本事，' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '修是人品。' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '了能修是人' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '本事，坏了' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '，坏了能修' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    SHINGLE '事，坏了能' -> MC-20260925-CENSUS-v10 :: 信条：「机器不坏是本事，坏了能修是人品。」
+    ... more shingle hits (54 total shingles)
+
+=== C) fresh-bucket / topic-domain mapping scan (r1548) ===
+C fresh-bucket dusk recycle-domain hits: 3
+   烟火: 收摊回家了，今儿的生意不错
+   怀旧: 街角那家修伞铺子，生意不赖
+   侠气: 小贩吹着口哨：“夜市开张，热闹才刚开始
+C fresh-bucket typhoon recycle-domain hits: 2
+   怀旧: 旧物虽旧，放在家里总让人心里暖和
+   怀旧: 街角的伞摊生意今儿怕是要冷清
+C fresh-bucket coldsnap recycle-domain hits: 2
+   求新: 这破天寒风，得把暖气片当宝贝一样护着
+   逍遥: 雪太大了，茶室生意冷清
+C fresh-bucket ceo_order recycle-domain hits: 3
+   烟火: 白茫茫的光，包子铺都得开张了
+   怀旧: 旧物摊上寻宝去，古董新客两相迎
+   侠气: 城主一声令，咱这买卖就能赚翻天
+C fraud-domain whole-pool hits: 1
+   秩序/heatwave: 门口那扇铁闸可要关紧，别让贼光顾
+C v6 used morning bucket: True
