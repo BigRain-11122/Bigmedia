@@ -1,0 +1,16 @@
+orders.md 2026-10-06 total rows (machine count) = 5
+orders.md 2026-10-06 CEO-quote rows (machine count) = 4
+CEO quote verbatim substring present in orders.md direct-send row: OK
+fact fragments (8) present in orders.md: OK
+H1 size 84 budget 10.95em | H2 size 32 budget 28.75em (ladder pick, zero-margin exclusion margin>=0.2em)
+VERT stack bottom est 840px vs subs top 970px gap +130px (need >=20px) (R381 vertical law)
+6.15  em  budget 10.95 em  margin +4.80em  single=True  城市盘点 016
+23.15 em  budget 28.75 em  margin +5.60em  single=True  集团首报日 2026-10-06（5 行令批 · 首报+直投）
+15.00 em  budget 28.75 em  margin +13.75em  single=True  「自己写一个发送邮件的小程序，
+23.00 em  budget 28.75 em  margin +5.75em  single=True  然后通过这小程序去发送吗？不管你用什么方法。」
+22.90 em  budget 28.75 em  margin +5.85em  single=True  首报令 12:0x · 九司+委员会全量整理 · 简报成文
+24.10 em  budget 28.75 em  margin +4.65em  single=True  发送受阻如实呈报 · 旧码判泄露禁用 · 新码挂物理件
+23.10 em  budget 28.75 em  margin +5.65em  single=True  方法定谳 · 邮件协议本无需授权码 · 自建直投程序
+26.15 em  budget 28.75 em  margin +2.60em  single=True  实弹 250 QUEUED · 直连收件方 MX · 10-06 12:2x 受理
+subs   22.00 em  budget 24.21 em  margin +2.21em  基于硅基城市真实事件（集团首报直投台账档案）
+EM_CHECK: ALL OK
