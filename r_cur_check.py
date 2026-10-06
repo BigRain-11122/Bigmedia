@@ -22,8 +22,8 @@ for line in logs[-5:]:
     out.write("LOG>> " + line[:400] + "\n")
 
 # 2) daily brief today
-today_md = os.path.join(ROOT, "data", "intel", "daily", "2026-10-05.md")
-out.write(f"\ndaily 2026-10-05 exists: {os.path.exists(today_md)}\n")
+today_md = os.path.join(ROOT, "data", "intel", "daily", "2026-10-06.md")
+out.write(f"\ndaily 2026-10-06 exists: {os.path.exists(today_md)}\n")
 
 # 3) orders latest
 od = os.path.join(ROOT, "orders")
