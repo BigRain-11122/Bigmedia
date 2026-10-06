@@ -1,5 +1,0 @@
-LIVE0: 当前活：2026-10-06 14:45 R1498 生产轮=#99 腿② 发射包交付+通道阻断如实入账（SC-003-artgen-tasks.json v1=双话完整提示词+EP.02←EP.01 参照图计划+huoshan_seedream 1440×2560 定栈参数+attribution 预置 C-20260929-01 B+发射六步·JSON 机核 OK；generate_image 通道=Unity MCP 桥·三探皆否无编辑器实例在线=declared blocked-on-channel·零云零模型）；通道恢复即按包内六步一键发射→腿③合成→④验图五检→⑤F 登记→⑥池行 done（SLA ≤10-13）
-LIVE1: 最近实物：SC-003 腿②发射包（data/storylines/comic/SC-003-artgen-tasks.json·10-06 14:4x·双话完整提示词+attribution 预置+发射六步）+腿①四件（SC-003-01/02-v1.md+SC-003-01/02-texts.json·10-06 14:3x·第 1 话《凌晨四点半的灯》+第 2 话《等一张照片》）+前件=F-156 MC-20261006-REACT-v9《城市速报 009·喝水解渴》（10-06 00:16·成品库第 156 件）
-LIVE2: 下个里程碑：SC-003 双话成片入库（腿② 通道恢复即发射→腿③-⑥·SLA 窗 ≤10-13）+10-07 治理日 #57 本地替代率首报终报+10-07 日界批 REACT-v10 F-157——窗 ≤48h
-OUTS0: tick 1429，R1429 实活轮=W41 周报周中真相首档 weekly-2026-W41.md（C-09 重跑覆盖制·130 轮/40 commits/自驱面 idle 99·proposals 2·CLOUD_LINE 云计量行实渲染·周轮件对账勘正=R1300 四件毕在案本档=周中真相非补做）。下轮=10-07 #57 替代率首报终报（治理日）+10-07 日界批（日报→REACT-v10 窗）。真发布=blocked-on-CEO 账号物理件·发布锁=M5 不变
-EXPORT_TS: 2026-10-06 14:45:00
