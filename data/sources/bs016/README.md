@@ -40,9 +40,20 @@
 - 评审材料=s1-review-material-v1.md（盲评材料律：零嵌审计史+**R197 尾格式锚在位**=R1688 根因修复正典·长材料指令跟随退化防线）·wrapper=.bs016-tmp/s1_call.py（bs015 同型 1500s 通道）·R1691 脱壳起飞（PID 92920·03:35:15）→**热载 12s 快落 03:35:27**：S1 v1.5 门=**总分 10/10·违律清单「无」·一次过零整改=系列五连满分**（总裁决「PASS，无实锤违律且亮点突出」·判词档=docs/reviews/expert-verdicts/20261008-033527-S1-script.md+expert-calls 行 wrapper 自动）。
 - M1 措辞即检=plain_language_check 0 FAIL 2 WARN→轮内标点机械拆修复复扫 0/0（hook「第五问，最后一问」→「第五问也是最后一问」-1 逗号+b4 尾句「…城有了自己的事」独立成句·语义零改·卡片锚点列零动=R1684/R1687 判例）；判词有效性注=S1 对 v1 口播全文落判·后置标点机械修属空气预算域语义零改=R1678「S1 判词对 v1·机械裁口不回炉」同律。
 
+## 渲染腿（R1692·断轮承接）
+
+- **断轮承接定谳**：R1692 前体（round_20261008_034202·03:42:02 起跑）03:50:49 亡于落台账步〔backend moderation guardrail 族〕——已毕生产件=空气预算 v2/v3 机械裁〔trim_v2/trim_v3.py·卡片锚点列 assert 锁〕+TTS light 定稿音轨 57.89s+对位表 cards-v1-matched.json 11/12+R-E 渲染 bs-016-v1-shipinhao-60s.mp4 57.89s+前体自跑 S2 三门绿与帧验三律过〔.out 尾读数在案〕·**账面零写盘**（renders/README/station-reviews/backlog/state 四件+收账全缺）→本 body 同轮号承接续账（R155/R806/R1536 先例）。
+- **空气预算**：v1 336 字起链稿→v2 子句级 -84 字=252〔bs013 v2 口径〕→v3 微裁 -7 字=245 定稿〔b5 铺垫词〕=TTS light 57.89s〔ffprobe 实测·2.11s 余量 fleet 带内〕·卡片锚点列逐版字节一致〔trim 脚本 assert 锁〕·题眼句/三块砖换算/推演声明标签句/自指句/五问收官 cta 全保·v1-v3 beats 全留档（S1 判词对 v1·机械裁口不回炉=R1678 先例）。
+- **对位表**：cards-v1-matched.json 12/12 声明·对位 11/12=0.92（citywatch×2+looplog×2+reviewsdoc×4+editgrid×2+census-card-v13×1+cards-only×1·素材探针=在案证据复用〔反重复律〕R808 probe-r808+R188/R197 citywatch 净窗 4.400s+R1685 census-card-v13 帧提取实锚·b6 时间轴倒放=bs012 b6 正放镜像=十问结构律收束位·b8 名字在册直证=C-00022〔BS-014 b8 同位先例·形态 C 拆条面第三证〕）。
+- **R-E 渲染**：bs-016-v1-shipinhao-60s.mp4（12 段 11 柔 0 硬切·9:16 1080×1920·57.89s=音轨分毫一致·hits=[0]·角标 BigStream|BS-016 EP.16+§4.5 三开关〔plan.series badge+s45_dials 全开〕·plan.json 入 git）。
+- **S2 三门循环独立执法全绿**（本体复跑·s2-results.txt 留档 .bs016-tmp）：ai_feel 0F0W〔gaps 11 处 0.220-0.558s varied/pacing CV 0.235/prosody 9 档 12 拍/copy CV 0.245〕+层 1.8 六面 PASS〔beat-align 11/11+camera 12 段全动+visual-ratio 0.92+transition-share 1.00 无连排+variety+timeline 代数过〕+spec 微信视频号双 PASS〔9:16+57.89s ∈30-60s 窗 2.1s 余量〕。
+- **帧验三律全过**（本体独立复验·与前体读数互证一致）：拍头 12/12 语义全中〔H1/H2 逐拍对位+sys.beat 01→12 连续+badge 全帧在+AIGC 全帧可读+tile 三处低清疑读全分辨率定谳（b2 砖一·指令卡面标题在位清晰=tile 误读/b9 首字=诚 U+8BDA 讷旁定谳非城/b8 拆条卡 C-00022 卡面字段全可读零乱码）=R189/R1680 tile 失读族〕+回环边界 b0/b4 双越界点 6/6 零录穿〔拍长皆 >citywatch 净窗 4.400s 走 stream_loop·4.400s 穿越点 pre/x/post 全净·观城台净面零隐私=R188/R197 净源链继承=系列首件双回环位覆盖〕+全分辨率三帧复核（b2/b8/b9 文字零截断零乱码·nitpick 注=b2 字幕下缘半透明白残影=字幕盒背板家族·b9 H2 分隔符读差=渲染源 cards.json verbatim 确定性·皆非缺陷）。
+- **余腿**：E8 终审〔ASR 终轨 R169 QC recipe+E4 参考仪并飞〕→M4→F-164 登记（下轮领·REACT-v12 顺延 F-165〔R978 判例〕）。
+
 ## 变更记录
 
 | 日期 | 轮 | 行 |
 |---|---|---|
 | 2026-10-08 | R1691 | 起链：M0 定谳+拍稿 v1+溯源表+S1 wrapper（claim） |
 | 2026-10-08 | R1691 | S1 v1.5 门 10/10 一次过（热载 12s 快落·系列五连满分）+M1 2 WARN 轮内标点机械拆修复复扫 0/0——余链=空气预算→TTS light→对位表→渲染→S2 三门→E8→M4→F 登记 |
+| 2026-10-08 | R1692 | 渲染腿毕（断轮承接·前体生产件+本体收账）：空气预算三程 57.89s+对位 0.92+R-E 渲染+S2 三门全绿+帧验三律全过——余链=E8→M4→F-164 登记（下轮领） |
