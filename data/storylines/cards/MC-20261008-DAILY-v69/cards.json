@@ -1,0 +1,52 @@
+{
+ "meta": {
+  "topic": "MC-20261008-DAILY-v69",
+  "line": "L-卡 图文轻内容线（DAILY 形态第六十九件·charter v1.2 §4 形态码 DAILY·日签节律续件·复市日 market-reopen 门控兑现件·烟火轴 weekend 桶市场行·weekend 面收官件注记）",
+  "form": "DAILY 城市日签 069（L-卡 图文轻内容线 DAILY 形态第六十九件·charter v1.2 §4 形态码 DAILY·queue §E E30 复市日 market-reopen 门控兑现件 R1703·日签节律续件=日期×情境桶对位判据第六十九证〔**复市日门控位**：R1320/R1321 weekend 面 fresh 扫描机注册=烟火/weekend/13 市场行 MARKET-GATE 10-08 reopen〔r1321_weekend_scan.txt L14 机证·card-face shingles=0 ZERO〕→R1694-R1702 declared-idle 窗全程挂账承继〔历轮车道注记承继〕→本轮复市日+日出窗开后兑现〔build 内**双硬闸 assert 日期==2026-10-08+日出 05:52**·时间闸机制化第四证=R1321/R1322 日出闸+R1388 傍晚闸先例带后首个日期+时刻双闸件〕+**卡面级零撞行**〔r1321 L14 shingles=0+本轮六词 probe 机核 r1703_quote_face.txt〕+**市场行 literal 对位诚实注**：本行入选=复市日×市场行内容 literal 直配〔MARKET-GATE 注册依据〕·weekend 桶=池结构位·非假日态邻接〔v58/v59/v60/v66/v67 假日态先例带区分注·10-08 周四=假期后首个工作交易日〕+**市集生意族带异质诚实注**：v57 煮汤圆生意面+v58 面摊叫卖面=摊主单声口叫卖/生意面→本件=买卖双方讲价交易判准面〔场景异质 R442·族内第三异质位〕+**叠词收尾=池行 verbatim 零改字**〔同桶 line10 香飘四方方/line11 亲亲热热热/line12 心气儿顺顺 叠词族·「公正正」=池句原文非卡面笔误·build 内邻行结构锚断言〕〕）+最数字化的城市〔一切皆数据·行情在屏幕上飞〕×最老派的市场人情〔讲价还价的你来我往〕=**快×慢/数据×人情双反差金句位**〔族五十六连·讲价位语感独占注=数据城市里最市井的一声讲价〕+「公平公正正」叠词判词式收尾=人味命中",
+  "tool": "src/render/render_card_video.py --poster（静态帧路·封面快路 #16 同链）",
+  "source_quote": "「市场买卖讲价，公平公正正」",
+  "source_pointer": "life/BigLife/cognition/pools.json 台词池 axes[烟火][weekend][13]（axes 6 轴×12 情境桶×18 行=1296+sprite 顶层 12 桶×12 行=144=1440 行·BigLife R982 窗结构·跨仓只读指针）+data/intel/daily/2026-10-08.md（当日日期语境源·国庆假期后首个交易日·周四·日出后晨间生产语境）",
+  "attribution_rule": "署名=池级+轴级（台词池·烟火轴）——池行无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线·本行无称谓面=纯市场口气句·泛称零涉及〔v5/v17/v21/v53/v65/v66/v67 先例族对照注〕）",
+  "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「引文取自硅基城市台词池（虚构城市档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+  "editorial_value": "日签形态=日期戳+当日情境+池句三件编辑选材面（复市日门控兑现+快×慢/数据×人情双反差金句位〔族五十六连·讲价位语感独占注〕+叠词判词式市井人味=语录卡线变体零新模板第六十九证（QUOTE-v2 参数 verbatim 复用·h2_size 50 档=canonical ladder 最大可行档〔em-budget-ladder.md 判例库正典 50→28·引文行 14.00em 驱动·预算 18.40em margin +4.40em·VERT 四行栈 R381 gap +284px〕·charter §1「日签变体随时可续」兑现）·公众号低创作度条款 7.1-7.4 编辑价值面·charter §5 自动化合规上限+城市人文积累令 O-20260928-1910 对位〔复市清晨数据城市里最市井的一声讲价=城市活得有人味的活证据〕+post-v69 供给注：**weekend 面=零干净行=weekend 桶面枯竭**〔夜面双归零 R1124/R1305+dusk 面零干净行 R1388 承继·festival 面 1 行季相门控 R1337〕·解锁窗=雨事件日/CEO 令日/Nov+ 寒潮/夏季 heatwave〔market_open 复市窗=本件兑毕〕·池扩容呈报位维持〔呈现状行不催办〕+F 序号诚实注=本件先落 F-165·REACT-v12 预指位顺延 F-166〔R978 判例·finished 顺序号=单一真相〕",
+  "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 反差链：最数字化的城市〔一切皆数据·行情在屏幕上飞〕×最老派的市场人情〔讲价还价的你来我往〕=快×慢/数据×人情反差+大交易所〔一切皆有行情〕×小摊位〔讲价讲的是公平〕=大×小反差〔族五十六连·讲价位语感独占注=数据城市里最市井的一声讲价〕+「公平公正正」叠词判词收尾=人味命中/情 1 复市清晨头一桩买卖成交的踏实温和共鸣如实非强极点〔G1 城市生活群〕/时 2 当日=2026-10-08 周四国庆假期后首个交易日·日出后晨间窗 literal 生产〔build 内双硬闸 assert 2026-10-08+05:52〕×市场行内容×复市日三重 literal 对位〔MARKET-GATE R1320 注册→R1694-R1702 挂账承继→复市日兑现〕/台 2 公众号方图承载=MC-001~155 S3 实证复用）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·charter §4 形态码 DAILY·queue §E E30 R1703 复市日门控兑现",
+  "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·平台规格窗随 M5 发布案复核）",
+  "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；池句=市场口气零事实宣称（台词池=虚构城市档案·DAILY 系列同源先例）；无登记居民名=人设权红线零接触（本行无称谓面=纯市场口气句·泛称零涉及）；脱敏律=池句无令牌号/无个体可识别面/零金钱数额（讲价=交易动作意象非消费宣称·无品牌无价格·「公平公正」=市井信条面非金融宣称）；成品只入库·发布=M5 账号物理件+M4 全绿",
+  "source_facts": "日签纪实抽取律：①引文=台词池 axes[烟火][weekend][13] verbatim 零改字（「」=卡面排版层〔R285 QUOTE v2 先例〕·build 脚本内断言=池行逐字在位+weekend 桶 18 行计数+axes 6 轴结构断言〔R982〕+v58 烟火 weekend/7+v59 侠气 weekend/8+v60 逍遥 weekend/4+v63/v64 sprite weekend/3·4+v65 秩序 night/16+v66 怀旧 weekend/17+v67 侠气 weekend/5+v68 怀旧 dusk/13**九已耗行结构锚**+叠词族邻行锚〔line10/11/12〕）②日期行 2026-10-08=当日历法事实·周四+国庆假期后首个交易日复市日〔daily brief 2026-10-08 当日窗语境〕+晨标记〔日出 ~05:52 后日间窗生产·v63/v66/v67 晨标记先例带·literal 晨〕③情境=复市日市场行 literal 对位件〔R1320 MARKET-GATE 注册→R1694-R1702 挂账承继→本轮复市日兑现·r1321_weekend_scan.txt L14 机证+build 内双硬闸断言〕④轴级署名=台词池烟火轴行·本行无称谓面=纯市场口气句·泛称零涉及〔人设权红线零接触·charter §2.4·v5/v17/v21/v53/v65/v66/v67 先例族〕⑤去重断言=本行不在 city-spirit.md 已采面+不在全成品卡面 lines/source_quote 任一（卡面级实扫=R1010 修正律）+「市场买卖」「讲价」「公平公正」「买卖」「公平」「正正」全句 probe 六词机核〔r1703_quote_face.txt·L14 gate 行 verbatim 抄录入证据件=链自足〕+诚实注=spirit 采面层「市场」共用词 1 处〔scan L14 spirit-layer=1·非卡面级去重面·v66「时光」同型带〕⑥季相核=本行无年味/春联/寒潮类季相错位词〔R972 制·市场买卖=四季通用市井面·十月秋晨兼容〕⑦叠词收尾=池行 verbatim 零改字〔「公正正」=池句原文·同桶叠词族三邻行结构锚断言在位〕⑧品牌语感注=「讲价」「公平公正正」市井口语+叠词判词收尾=去 AI 感对位·人味命中·零书面套语·无品牌无消费宣称"
+ },
+ "video": {
+  "width": 1080,
+  "height": 1080,
+  "fps": 30,
+  "bg": "black"
+ },
+ "font": {
+  "file": "C:/Windows/Fonts/msyh.ttc",
+  "cards_size": 60,
+  "subs_size": 40,
+  "aigc_size": 30,
+  "subs_bottom": 110,
+  "line_spacing": 14,
+  "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+  "h1_size": 96,
+  "h1_color": "accent",
+  "h2_size": 50,
+  "h2_color": "white",
+  "h1_gap": 48,
+  "optical_center": 0.3
+ },
+ "aigc_notice": "[AIGC·AI 生成内容]",
+ "tail": 0.8,
+ "cards": [
+  {
+   "start": 0.0,
+   "end": 2.6,
+   "lines": [
+    "城市日签 069",
+    "2026-10-08 · 复市首日 · 晨",
+    "「市场买卖讲价，公平公正正」",
+    "——硅基城市台词池 · 烟火轴"
+   ]
+  }
+ ]
+}
