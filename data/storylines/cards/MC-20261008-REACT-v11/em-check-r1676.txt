@@ -1,0 +1,11 @@
+em-check-r1676 (REACT-v11 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-08
+OK 14.00em margin +11.56  世界上最宜居的城市是哪一座？
+OK 25.00em margin +0.56  侠气轴：「街坊邻居得互相照应，这日子才过得多舒心」
+OK 18.00em margin +7.56  烟火轴：「早点摊上的粥，比啥都管用」
+OK 22.00em margin +3.56  逍遥轴：「热茶暖身又暖心，寒风中多一分闲适」
+OK 19.00em margin +6.56  食堂大厨信条：「行情再绿，汤是热的。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=772px subs_top=932px gap=159px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS
