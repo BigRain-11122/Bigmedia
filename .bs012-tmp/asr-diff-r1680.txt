@@ -1,0 +1,13 @@
+src_len=204 asr_len=202 sites=12 diff_chars=15
+replace src[34:35]='当' asr[34:35]='到'
+replace src[40:42]='城令' asr[40:42]='成另'
+replace src[43:44]='万' asr[43:44]='半'
+replace src[66:67]='过' asr[66:67]='国'
+delete src[84:85]='了' asr[84:84]=''
+replace src[123:124]='硅' asr[122:123]='归'
+replace src[129:130]='档' asr[128:129]='大'
+replace src[153:156]='诚实交' asr[152:155]='城市焦'
+replace src[157:158]='档' asr[156:157]='大'
+replace src[166:167]='档' asr[165:166]='大'
+delete src[170:171]='的' asr[169:169]=''
+replace src[185:186]='剪' asr[183:184]='捡'
