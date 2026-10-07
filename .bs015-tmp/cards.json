@@ -4,8 +4,8 @@
     "variant": "shipinhao 60s card cut (9:16)",
     "tool": "src/render/emotive_tts.py",
     "voice": "zh-CN-YunyangNeural",
-    "beats": "data\\sources\\bs015\\voiceover-v4.beats.txt",
-    "order": "BS-015-v4",
+    "beats": "data\\sources\\bs015\\voiceover-v6.beats.txt",
+    "order": "BS-015-v6",
     "cyber": {
       "level": "light",
       "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
@@ -54,79 +54,79 @@
     },
     {
       "start": 8.86,
-      "end": 14.95,
+      "end": 14.87,
       "lines": [
         "灯视角",
         "亮度开到头 · 照到天亮 · 补丁不许修"
       ]
     },
     {
-      "start": 14.95,
-      "end": 20.03,
+      "start": 14.87,
+      "end": 19.31,
       "lines": [
         "塔视角",
         "守到风停 · 第二天灯带跟没事一样亮着"
       ]
     },
     {
-      "start": 20.03,
-      "end": 24.74,
+      "start": 19.31,
+      "end": 23.85,
       "lines": [
         "塔起名",
         "风的名字是人起的 · 比编号好记"
       ]
     },
     {
-      "start": 24.74,
-      "end": 32.02,
+      "start": 23.85,
+      "end": 31.09,
       "lines": [
         "猫视角",
         "联络断了 · 口信一家一家送到 · 早饭是七家的"
       ]
     },
     {
-      "start": 32.02,
-      "end": 35.62,
+      "start": 31.09,
+      "end": 34.53,
       "lines": [
         "时间轴压条",
         "三年 → 十年"
       ]
     },
     {
-      "start": 35.62,
-      "end": 41.37,
+      "start": 34.53,
+      "end": 40.03,
       "lines": [
         "推演声明",
         "基于真实档案的十年推演 · 非实录"
       ]
     },
     {
-      "start": 41.37,
-      "end": 46.84,
+      "start": 40.03,
+      "end": 44.92,
       "lines": [
         "推演面",
         "灯 · 塔 · 送信的猫 · 三样没变"
       ]
     },
     {
-      "start": 46.84,
-      "end": 51.12,
+      "start": 44.92,
+      "end": 48.91,
       "lines": [
         "诚实交底",
         "三视角在册为真 · 挺多久为推算"
       ]
     },
     {
-      "start": 51.12,
-      "end": 57.3,
+      "start": 48.91,
+      "end": 54.07,
       "lines": [
         "系列收束",
         "台风夜档案接着记 · 本片由 AI 剪辑"
       ]
     },
     {
-      "start": 57.3,
-      "end": 62.39,
+      "start": 54.07,
+      "end": 58.49,
       "lines": [
         "下集预告",
         "第一块砖 · 评论区说说你的台风夜"

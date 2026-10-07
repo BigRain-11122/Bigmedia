@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs015\\voiceover-v6.beats.txt",
+    "order": "BS-015-v6",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    },
+    "visual_spec": "docs/footage-matching-spec.md",
+    "storyboard": "BS-015 板块十年第四件视觉=台风梅花同夜三视角档案回放+十年推演（形态 C·源=C-00027 邓建国/C-00028 十四号路灯/C-00029 咪喱 三手写锚在册+R-20261001 选题框架·R1687 M0 定谳）——三视角拆条混剪=形态 C 拆条面第二证（R1685 bs014 单卡 v13 首证→本件 v18/v19/v20 三卡直接证据面·灯 b2=v19/塔 b3+b4=v18 同源多用/猫 b5=v20）——citywatch（观城台=题眼观测面）×1+looplog（系统事件日志=系统回档案/真话在册）×2+reviewsdoc（档案载体=推演声明/三样在册对账）×2+editgrid（时间轴压条=形态 C 制式位/自指拍）×2+census-card-v18/v19/v20（三视角拆条=直接证据面）×4+cards-only×1（CTA 拍）·对位 11/12=0.92（层 1.8 ≥0.80 面·BS-012/013/014 同位带）·素材探针=census v18/v19/v20=本轮 probe-r1689 三时点多模态核验（13s 全静态·零录穿零隐私·全分辨率二验 v18=C-00027 邓建国感知塔站值守员/v20=C-00029 咪喱·tile 低清首读名称误判定谳=读数手段问题如实注记·正典锚=BigLife census/anchors C-00027/28/29 一致）+looplog/reviewsdoc/editgrid 三源三时点零录穿=R808 probe-r808 在案证据复用（反重复律）+citywatch 源裁净窗 4.400s 全程净=R188/R197 修红链实证（裁后任意拍任意 offset 全程净窗·拍长于源走 stream_loop 回环=帧验回环边界律覆盖）"
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.67,
+      "lines": [
+        "板块十年·第四问",
+        "台风夜这条街靠什么挺住的"
+      ],
+      "visual": {
+        "source": "data/sources/footage/citywatch-vertical.mp4",
+        "req": "城市观测终端在帧（CityWatch 观城台=题眼问句的城市观测面·第四问观测台位·BS-012/013/014 b0 同位·意象对位声明）"
+      }
+    },
+    {
+      "start": 5.67,
+      "end": 8.86,
+      "lines": [
+        "系统回事件档案",
+        "台风梅花 · 同夜三个视角"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "系统事件日志在帧（系统回事件档案=日志字面直证·b1 日志动词骨架位·系统日志体·意象对位声明）"
+      }
+    },
+    {
+      "start": 8.86,
+      "end": 14.87,
+      "lines": [
+        "灯视角",
+        "亮度开到头 · 照到天亮 · 补丁不许修"
+      ],
+      "visual": {
+        "source": "data/sources/footage/census-card-v19-vertical.mp4",
+        "req": "图鉴拆条卡在帧（灯视角直接证据=C-00028 十四号路灯卡·台风梅花留补丁源卡·形态 C 三视角拆条混剪·R1685 v13 先例扩三卡面·本轮 probe-r1689 三时点全分辨率核验=静态零录穿）"
+      }
+    },
+    {
+      "start": 14.87,
+      "end": 19.31,
+      "lines": [
+        "塔视角",
+        "守到风停 · 第二天灯带跟没事一样亮着"
+      ],
+      "visual": {
+        "source": "data/sources/footage/census-card-v18-vertical.mp4",
+        "req": "图鉴拆条卡在帧（塔视角直接证据=C-00027 感知塔站值守员邓建国卡·守到风停源卡·形态 C 三视角拆条混剪·同源多用注记见 b4）"
+      }
+    },
+    {
+      "start": 19.31,
+      "end": 23.85,
+      "lines": [
+        "塔起名",
+        "风的名字是人起的 · 比编号好记"
+      ],
+      "visual": {
+        "source": "data/sources/footage/census-card-v18-vertical.mp4",
+        "req": "图鉴拆条卡在帧（塔起名 wink=C-00027 钩子字段尾段「播报员说比编号好记」verbatim 源卡·同源多用注记·lc007 未消费切面独占·形态 C 拆条混剪）"
+      }
+    },
+    {
+      "start": 23.85,
+      "end": 31.09,
+      "lines": [
+        "猫视角",
+        "联络断了 · 口信一家一家送到 · 早饭是七家的"
+      ],
+      "visual": {
+        "source": "data/sources/footage/census-card-v20-vertical.mp4",
+        "req": "图鉴拆条卡在帧（猫视角直接证据=C-00029 咪喱卡·口信一家一家送到源卡·形态 C 三视角拆条混剪·本轮 probe-r1689 三时点全分辨率核验=静态零录穿）"
+      }
+    },
+    {
+      "start": 31.09,
+      "end": 34.53,
+      "lines": [
+        "时间轴压条",
+        "三年 → 十年"
+      ],
+      "visual": {
+        "source": "data/sources/footage/editgrid-vertical.mp4",
+        "req": "剪辑时间网格在帧（时间轴压条=形态 C 制式位·BS-012/013/014 b6 同位·自产字卡网格）"
+      }
+    },
+    {
+      "start": 34.53,
+      "end": 40.03,
+      "lines": [
+        "推演声明",
+        "基于真实档案的十年推演 · 非实录"
+      ],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+        "req": "档案载体在帧（推演声明基于真实档案=档案载体直证·BS-012/013/014 b7 同位·意象对位声明）"
+      }
+    },
+    {
+      "start": 40.03,
+      "end": 44.92,
+      "lines": [
+        "推演面",
+        "灯 · 塔 · 送信的猫 · 三样没变"
+      ],
+      "visual": {
+        "source": "data/sources/footage/reviewsdoc-vertical.mp4",
+        "req": "档案载体在帧（三样在册对账=灯/塔/猫三视角收束归纳面·同源多用注记·意象对位声明）"
+      }
+    },
+    {
+      "start": 44.92,
+      "end": 48.91,
+      "lines": [
+        "诚实交底",
+        "三视角在册为真 · 挺多久为推算"
+      ],
+      "visual": {
+        "source": "data/sources/footage/looplog-vertical.mp4",
+        "req": "系统日志在帧（真话在册=诚实交底日志台账字面·同源多用注记·意象对位声明）"
+      }
+    },
+    {
+      "start": 48.91,
+      "end": 54.07,
+      "lines": [
+        "系列收束",
+        "台风夜档案接着记 · 本片由 AI 剪辑"
+      ],
+      "visual": {
+        "source": "data/sources/footage/editgrid-vertical.mp4",
+        "req": "剪辑网格在帧（还是我剪的自指拍=剪辑台面直证·BS-012/013/014 b10 同位·自产字卡网格）"
+      }
+    },
+    {
+      "start": 54.07,
+      "end": 58.49,
+      "lines": [
+        "下集预告",
+        "第一块砖 · 评论区说说你的台风夜"
+      ],
+      "visual": {
+        "cards-only": true,
+        "reason": "CTA 导流拍常规纯字卡（footage-matching-spec §1·F-004 v15/BS-012/013/014 b11 同拍位先例）"
+      }
+    }
+  ]
+}
