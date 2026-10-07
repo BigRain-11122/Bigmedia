@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+import json, io
+
+def read(p):
+    return io.open(p, encoding="utf-8").read()
+
+def write(p, s):
+    io.open(p, "w", encoding="utf-8", newline="\n").write(s)
+
+c = json.loads(read(".bs013-tmp/cards.json"))
+assert len(c["cards"]) == 12, len(c["cards"])
+
+VIS = [
+ ("data/sources/footage/citywatch-vertical.mp4", "城市观测终端在帧（CityWatch 观城台=题眼问句的城市观测面·第二问观测台呼应·BS-012 b0 同位·意象对位声明）"),
+ ("data/sources/footage/reviewsdoc-vertical.mp4", "档案载体在帧（评审台账文档=系统回档案·立国日档回放的载体形态·意象对位声明·BS-012 b7 同源族）"),
+ ("data/sources/footage/looplog-vertical.mp4", "系统指令日志在帧（全城对频=感知网调试的指令执行面·系统日志字面直证·意象对位声明）"),
+ ("data/sources/footage/citywatch-vertical.mp4", "城市观测面在帧（观城台守望位=天黑上岗·天亮交晨的昼夜值守观测位呼应·BS-012 b5 同拍位·意象对位声明）"),
+ ("data/sources/footage/editgrid-vertical.mp4", "剪辑字卡网格在帧（光语两档=暖黄/橙红对照表形态·自产字卡网格非实盘素材·意象对位声明）"),
+ ("data/sources/footage/looplog-vertical.mp4", "系统事件日志在帧（多亮半档=日志多了一行的事件字面·BS-012 b4 同型·同源多用注记）"),
+ ("data/sources/footage/editgrid-vertical.mp4", "剪辑时间网格在帧（时间轴/轨道形态=时间轴快进字面意象·BS-012 b6 同位·自产字卡网格）"),
+ ("data/sources/footage/reviewsdoc-vertical.mp4", "台账档案实体在帧（真实档案实体=推演声明基于档案的载体呼应·BS-012 b7 同位·意象对位声明）"),
+ ("data/sources/footage/citywatch-vertical.mp4", "城市数据面板在帧（观测终端数据行/统计面=数据生长条的数据终端形态·口播真数字 1→5 的面板呼应·BS-012 b8 同位）"),
+ ("data/sources/footage/reviewsdoc-vertical.mp4", "检查台账在帧（真数对账=一盏到五盏的台账证据形态·BS-012 b3/b9 同源族·意象对位声明）"),
+ ("data/sources/footage/editgrid-vertical.mp4", "剪辑网格在帧（还是我剪的自指拍=剪辑台面直证·BS-012 b10 同位·自产字卡网格）"),
+]
+for i, (src, req) in enumerate(VIS):
+    c["cards"][i]["visual"] = {"source": src, "req": req}
+c["cards"][11]["visual"] = {"cards-only": True, "reason": "CTA 导流拍常规纯字卡（footage-matching-spec §1·F-004 v15 b11/BS-012 b11 同拍位先例）"}
+
+c["meta"]["order"] = "BS-013-v2"
+c["meta"]["visual_spec"] = "docs/footage-matching-spec.md"
+c["meta"]["storyboard"] = (
+    "BS-013 板块十年第二件视觉=灯亮起来那天档案回放+推演声明（源=C-00028 十四号路灯户籍锚+SC-001-01 立国日档·R1681 M0 定谳）——"
+    "citywatch（观城台=题眼观测面/守望位=昼夜值守/数据面板=数据生长条）×3+looplog（指令日志=全城对频/事件日志=多亮半档）×2+"
+    "reviewsdoc（档案载体=立国日档回放/档案实体=推演声明/检查台账=真数对账）×3+editgrid（字卡网格=光语两档/时间轴=快进轨道/AI 剪辑=自指）×3+"
+    "cards-only×1（CTA 拍）·对位 11/12=0.92（层 1.8 ≥0.80 面·BS-012/009/010/011 同位带）·"
+    "素材探针=在案证据复用（反重复律）：looplog/reviewsdoc/editgrid 三源三时点多模态零录穿=R808 probe-r808（bs011/bs012 同源同窗）+"
+    "citywatch 源裁净窗 4.400s 全程净=R188/R197 修红链实证（裁后任意拍任意 offset 全程净窗·拍长于源走 stream_loop 回环=帧验回环边界律覆盖）"
+)
+write("data/sources/bs013/cards-v1-matched.json", json.dumps(c, ensure_ascii=False, indent=2))
+m = json.loads(read("data/sources/bs013/cards-v1-matched.json"))
+n_vis = sum(1 for x in m["cards"] if "visual" in x)
+print("OK matched cards=12 visual=%d ratio=%.3f order=%s" % (n_vis, n_vis / 12.0, m["meta"]["order"]))
