@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs014\\voiceover-v5.beats.txt",
+    "order": "BS-014-v5",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.77,
+      "lines": [
+        "板块十年·第三问",
+        "哪句口头禅是从这条街传出去的"
+      ]
+    },
+    {
+      "start": 5.77,
+      "end": 9.77,
+      "lines": [
+        "系统回语录库",
+        "六轴信条 · 一句一个脾气"
+      ]
+    },
+    {
+      "start": 9.77,
+      "end": 15.98,
+      "lines": [
+        "怀旧轴",
+        "数据是新黄浦江 · 人还是要沿江散步"
+      ]
+    },
+    {
+      "start": 15.98,
+      "end": 19.88,
+      "lines": [
+        "烟火轴",
+        "布要顺着纹路剪 · 日子要顺着人心过"
+      ]
+    },
+    {
+      "start": 19.88,
+      "end": 23.6,
+      "lines": [
+        "秩序轴",
+        "风控做得好 · 就是没人夸的那种好"
+      ]
+    },
+    {
+      "start": 23.6,
+      "end": 27.16,
+      "lines": [
+        "侠气轴",
+        "桥上不问来路 · 落水都得拉一把"
+      ]
+    },
+    {
+      "start": 27.16,
+      "end": 30.88,
+      "lines": [
+        "时间轴压条",
+        "三年 → 十年"
+      ]
+    },
+    {
+      "start": 30.88,
+      "end": 37.12,
+      "lines": [
+        "推演声明",
+        "基于真实档案的十年推演 · 非实录"
+      ]
+    },
+    {
+      "start": 37.12,
+      "end": 41.13,
+      "lines": [
+        "传播面",
+        "话不是自己长腿的 · 谁搬走谁顺路捎带"
+      ]
+    },
+    {
+      "start": 41.13,
+      "end": 45.88,
+      "lines": [
+        "诚实交底",
+        "六句在册为真 · 传多远为推算"
+      ]
+    },
+    {
+      "start": 45.88,
+      "end": 51.94,
+      "lines": [
+        "系列收束",
+        "哪句传出去档案接着记 · 本片由 AI 剪辑"
+      ]
+    },
+    {
+      "start": 51.94,
+      "end": 57.03,
+      "lines": [
+        "下集预告",
+        "台风夜之后 · 评论区报一句你街上的口头禅"
+      ]
+    }
+  ]
+}
