@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs012\\voiceover-v4.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 4.44,
+      "lines": [
+        "板块十年·第一问",
+        "十年前这块地是什么"
+      ]
+    },
+    {
+      "start": 4.44,
+      "end": 9.25,
+      "lines": [
+        "立国日 14:50",
+        "一条指令 · 开一家媒体公司"
+      ]
+    },
+    {
+      "start": 9.25,
+      "end": 14.25,
+      "lines": [
+        "造城令 21:30",
+        "一万个居民 · 天亮前交付"
+      ]
+    },
+    {
+      "start": 14.25,
+      "end": 19.14,
+      "lines": [
+        "23:42 万人交付",
+        "一万零三 · 三道检查全过"
+      ]
+    },
+    {
+      "start": 19.14,
+      "end": 23.45,
+      "lines": [
+        "04:30 事件日志",
+        "北外滩 · 蒸笼发光"
+      ]
+    },
+    {
+      "start": 23.45,
+      "end": 28.84,
+      "lines": [
+        "塔顶纯白",
+        "全城唯一 · 老板的灯"
+      ]
+    },
+    {
+      "start": 28.84,
+      "end": 33.02,
+      "lines": [
+        "时间轴快进",
+        "立国日 → 三年 → 十年"
+      ]
+    },
+    {
+      "start": 33.02,
+      "end": 38.52,
+      "lines": [
+        "推演声明",
+        "基于真实档案的十年推演 · 非实录"
+      ]
+    },
+    {
+      "start": 38.52,
+      "end": 43.43,
+      "lines": [
+        "数据生长条",
+        "户数 · 店铺 · 灯 · 三个真数字起步"
+      ]
+    },
+    {
+      "start": 43.43,
+      "end": 47.97,
+      "lines": [
+        "诚实交底",
+        "档案为真 · 未来为推算"
+      ]
+    },
+    {
+      "start": 47.97,
+      "end": 52.76,
+      "lines": [
+        "系列开篇",
+        "第一块砖 · 本片由 AI 剪辑"
+      ]
+    },
+    {
+      "start": 52.76,
+      "end": 57.51,
+      "lines": [
+        "下集预告",
+        "灯亮起来那天 · 评论区报路名"
+      ]
+    }
+  ]
+}
