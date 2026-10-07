@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\sources\\bs016\\voiceover-v3.beats.txt",
+    "order": "BS-016-v3",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 5.93,
+      "lines": [
+        "板块十年·终问",
+        "十年后回头看 · 谁还记得第一块砖"
+      ]
+    },
+    {
+      "start": 5.93,
+      "end": 10.09,
+      "lines": [
+        "系统回城市档案",
+        "档案里没有砖 · 第一块砖是三样"
+      ]
+    },
+    {
+      "start": 10.09,
+      "end": 15.21,
+      "lines": [
+        "砖一·指令",
+        "14:50 · 开一家媒体公司"
+      ]
+    },
+    {
+      "start": 15.21,
+      "end": 19.28,
+      "lines": [
+        "砖二·名字",
+        "23:42 · 一万零三落库"
+      ]
+    },
+    {
+      "start": 19.28,
+      "end": 24.25,
+      "lines": [
+        "砖三·光",
+        "04:30 蒸笼发光 · 塔顶纯白"
+      ]
+    },
+    {
+      "start": 24.25,
+      "end": 26.81,
+      "lines": [
+        "谁还记得",
+        "不用问人 · 问档案 · 一翻就到"
+      ]
+    },
+    {
+      "start": 26.81,
+      "end": 31.71,
+      "lines": [
+        "时间轴倒放",
+        "十年 → 三年 → 立国日"
+      ]
+    },
+    {
+      "start": 31.71,
+      "end": 37.21,
+      "lines": [
+        "推演声明",
+        "基于真实档案的十年推演 · 非实录"
+      ]
+    },
+    {
+      "start": 37.21,
+      "end": 41.47,
+      "lines": [
+        "推演面",
+        "十年后砖还在 · 谁砌的有名有姓"
+      ]
+    },
+    {
+      "start": 41.47,
+      "end": 46.1,
+      "lines": [
+        "诚实交底",
+        "砖是比喻 · 档案是真的"
+      ]
+    },
+    {
+      "start": 46.1,
+      "end": 53.23,
+      "lines": [
+        "系列回环收束",
+        "首问兑现 · 看得见第一块砖 · 本片由 AI 剪辑"
+      ]
+    },
+    {
+      "start": 53.23,
+      "end": 57.86,
+      "lines": [
+        "系列收官",
+        "五问全系列 · 评论区说说你的第一块砖"
+      ]
+    }
+  ]
+}
