@@ -1,0 +1,96 @@
+FILE=data/storylines/cards\MC-20260925-QUOTE-v1\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2·O-20260925-1327-HQ-C 执行件③ 首件 PoC）
+  /meta/source_quote = 「数据是新黄浦江，人还是要沿江散步。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v1-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v2\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「布要顺着纹路剪，日子要顺着人心过。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v2-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v3\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「风控做得好，就是没人夸的那种好。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v3-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v4\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「像素越小，心眼越大。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v4-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v5\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「桥上不问来路，落水都得拉一把。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v5-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v6\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「流量像潮水，我是灯塔不是渔船。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v6-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v1\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2·O-20260925-1327-HQ-C 执行件③ 首件 PoC）
+  /meta/source_quote = 「数据是新黄浦江，人还是要沿江散步。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v1-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v2\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「布要顺着纹路剪，日子要顺着人心过。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v2-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v3\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「风控做得好，就是没人夸的那种好。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v3-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v4\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「像素越小，心眼越大。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v4-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v5\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「桥上不问来路，落水都得拉一把。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v5-tmp\e4-result.json
+FILE=data/storylines/cards\MC-20260925-QUOTE-v6\cards.json
+  /meta/line = L-卡 图文轻内容线（charter v1.2）
+  /meta/source_quote = 「流量像潮水，我是灯塔不是渔船。」
+  /meta/red_line = aigc_notice 烧录每帧（CONSTITUTION S2-4）；成品只入库·发布=M5 账号物理件+M4 全绿
+  /font/h1_font = C:/Windows/Fonts/msyhbd.ttc
+  /font/h1_color = accent
+  /font/h2_color = white
+FILE=data/storylines/cards\MC-20260925-QUOTE-v6-tmp\e4-result.json

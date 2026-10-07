@@ -1,0 +1,5 @@
+bs012/voiceover-v1.beats.txt:11 :: close | 系列开篇 / 第一块砖 · 本片由 AI 剪辑 | 十年后回头，看得见第一块砖。这段推演，就是我剪的。
+bs012/voiceover-v2.beats.txt:11 :: close | 系列开篇 / 第一块砖 · 本片由 AI 剪辑 | 十年后回头，看得见第一块砖。这推演，是我剪的。
+bs012/voiceover-v3.beats.txt:11 :: close | 系列开篇 / 第一块砖 · 本片由 AI 剪辑 | 十年后回头，看得见第一块砖。是我剪的推演。
+bs012/voiceover-v4.beats.txt:11 :: close | 系列开篇 / 第一块砖 · 本片由 AI 剪辑 | 十年后回头，看得见第一块砖——是我剪的。
+bs013/voiceover-v1.beats.txt:3 :: beat | 灯亮起来那天 / 感知网调试夜 · 对频那一秒 · 编号十四 | 灯亮起来那天，是感知网调试夜。全城对频那一秒，一盏路灯在塔尖亮起，编号十四。

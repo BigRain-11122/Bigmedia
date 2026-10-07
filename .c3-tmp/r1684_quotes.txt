@@ -1,0 +1,29 @@
+QUOTE_SERIES_ROWS=65
+## F-013 · MC-20260925-QUOTE-v1 · 图文轻内容线 L-卡 首件（2026-09-25 R251 登记·O-20260925-1327-HQ-C 执行件③ 首件 PoC·线别入备注=charter §4 口径）
+---
+- **文件**：`data/storylines/cards/MC-20260925-QUOTE-v1/MC-20260925-QUOTE-v1.png`《城市语录 001·怀旧轴信条卡》（1080×1080 静态卡·PNG 入 git·模板+台账=`data/storylines/cards/README.md`）
+---
+## F-014 · MC-20260925-QUOTE-v2 · 图文轻内容线 L-卡 第二件（2026-09-25 R285 登记·O-20260925-1931-HQ-C 执行件③ 首件实证=hit-chain v1.0 全链审查留痕首件·线别入备注=charter §4 口径）
+---
+- **文件**：`data/storylines/cards/MC-20260925-QUOTE-v2/MC-20260925-QUOTE-v2.png`《城市语录 002·烟火轴信条卡》（1080×1080 静态卡·PNG 入 git·模板+台账=`data/storylines/cards/README.md`）
+---
+## F-015 · MC-20260925-QUOTE-v3 · 图文轻内容线 L-卡 第三件（2026-09-25 R286 登记·系列量产按序领件=hit-chain v1.0 全链审查留痕系列化第二件·线别入备注=charter §4 口径）
+---
+- **文件**：`data/storylines/cards/MC-20260925-QUOTE-v3/MC-20260925-QUOTE-v3.png`《城市语录 003·秩序轴信条卡》（1080×1080 静态卡·PNG 入 git·模板+台账=`data/storylines/cards/README.md`）
+---
+## F-016 · MC-20260925-QUOTE-v4 · 图文轻内容线 L-卡 第四件（2026-09-25 R287 登记·系列量产按序领件=hit-chain v1.0 全链审查留痕系列化第三件·线别入备注=charter §4 口径）
+---
+- **文件**：`data/storylines/cards/MC-20260925-QUOTE-v4/MC-20260925-QUOTE-v4.png`《城市语录 004·求新轴信条卡》（1080×1080 静态卡·PNG 入 git·模板+台账=`data/storylines/cards/README.md`）
+---
+## F-017 · MC-20260925-QUOTE-v5 · 图文轻内容线 L-卡 第五件（2026-09-25 R288 登记·系列量产按序领件=hit-chain v1.0 全链审查留痕系列化第四件·线别入备注=charter §4 口径）
+---
+- **文件**：`data/storylines/cards/MC-20260925-QUOTE-v5/MC-20260925-QUOTE-v5.png`《城市语录 005·侠气轴信条卡》（1080×1080 静态卡·PNG 入 git·模板+台账=`data/storylines/cards/README.md`）
+---
+## F-018 · MC-20260925-QUOTE-v6 · 图文轻内容线 L-卡 第六件（2026-09-25 R289 登记·**系列量产按序领件收官件=六轴毕·金句语录卡系列完整性闭环**·hit-chain v1.0 全链审查留痕系列化第五件·线别入备注=charter §4 口径）
+---
+- **文件**：`data/storylines/cards/MC-20260925-QUOTE-v6/MC-20260925-QUOTE-v6.png`《城市语录 006·逍遥轴信条卡》（1080×1080 静态卡·PNG 入 git·模板+台账=`data/storylines/cards/README.md`）
+---
+- **hit-chain 站审留痕**（§8 承接口径）：M0 选题四维分 7/8=A 档进 M1（钩 2 反差链〔68 岁早点摊主 vs 心里整本口味账·暖光蒸笼=事实性赛博意象·「全城唯一」=具体稀缺性〕+信条句自带传播性/情 1 弄堂烟火温情如实/时 2 人物档案常青/台 2 方图实证复用·cards.json meta 数据件自证）+站审 M0-M6 判据行全链留痕（评审单 `docs/reviews/review-20260925-mccensus-v1.md`）+**E4 参考仪同轮回填 8.0**（会停下来看+会保存并分享=三意愿正面明说〔QUOTE-v4/v5 同带·低于 DIGEST 9.0 如实〕·「信息丰富·适合社交媒体分享」=图鉴收集型面正面读数·旗①=「碳基市民·弄堂派」世界观词语门槛扣 2〔MC-003 同族·verbatim 字段律不可改写·吸收位=M5 图
+---
+- **hit-chain 站审留痕**（§8 承接口径）：M0 选题四维分 7/8=A 档进 M1（钩 2 反差链〔42 岁风控官 vs 拦截单上写「一句话理由」=拦单者×说理者反差·一句话理由=程序正义温度感=事实性赛博意象+信条「红灯是为所有人亮的，包括我」=规则〔对外〕×包括我〔对己〕反差对仗金句级+钩子行「全城唯一」具体稀缺性·陈雅雯=novel ch.5 cta 预告钩同名人物=跨载体姓名预热位〕/情 1 规则守护温和共鸣如实/时 2 人物档案常青/台 2 方图实证复用·cards.json meta 数据件自证）+站审 M0-M6 判据行全链留痕（评审单 `docs/reviews/review-20260925-mccensus-v6.md`）+**E4 参考仪同轮回填 7.0**（会停下来看+会保存〔转发=条件式「确定朋友也感兴趣才转」如实〕·低于 CENSUS 8.0 
+---

@@ -1,0 +1,3 @@
+WARN longsentence 22 chars/4 commas: '推演里，风再大，这条街靠的还是那三样：灯，塔，送...'
+SUMMARY terms=12 FAIL=0 WARN=1
+PASS
