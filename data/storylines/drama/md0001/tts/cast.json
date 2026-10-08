@@ -1,44 +1,78 @@
 {
-  "piece": "MD-0001",
-  "title": "台风梅花夜",
-  "voice_policy": "主声线守 light 赛博定档（D-BS/O-2136 CEO 定档不变）·配角多声纹=CosyVoice3 zero-shot 克隆·声音档位非人格新增（#108 立案条款）",
-  "narrator_chain": "src/render/emotive_tts.py --voice zh-CN-YunyangNeural --cyber light --human 42（v12 全件套产线默认·BGM-A 纯净）",
-  "cosyvoice3_prefix": "You are a helpful assistant.<|endofprompt|>",
-  "roles": {
-    "narrator": {
-      "name": "旁白·机器叙述者",
-      "engine": "edge-tts+cyber-light",
-      "shots": [1, 3, 5, 6, 8, 9, 12, 13]
-    },
-    "lamp": {
-      "name": "十四号路灯",
-      "trait": "慢而轻·暖光气质",
-      "engine": "cosyvoice3-zero-shot",
-      "ref_voice": "zh-CN-YunxiNeural",
-      "ref_flags": ["--rate=-18%", "--pitch=-6Hz"],
-      "ref_text": "今夜风大，灯先亮着。",
-      "shots": [2, 4],
-      "lines": {"2": "知道原因，不能说。", "4": "灯不问来路，只管照路。"}
-    },
-    "tower": {
-      "name": "邓建国",
-      "trait": "部队腔·慢悠悠",
-      "engine": "cosyvoice3-zero-shot",
-      "ref_voice": "zh-CN-YunjianNeural",
-      "ref_flags": ["--rate=-15%", "--pitch=-4Hz"],
-      "ref_text": "报告，塔上一切正常。",
-      "shots": [7],
-      "lines": {"7": "「台风天的日志最见人品。」"}
-    },
-    "cat": {
-      "name": "咪喱",
-      "trait": "嘴甜·喵语混人话",
-      "engine": "cosyvoice3-zero-shot",
-      "ref_voice": "zh-CN-XiaoyiNeural",
-      "ref_flags": ["--rate=+6%", "--pitch=+8Hz"],
-      "ref_text": "喵——包在我身上啦。",
-      "shots": [10, 11],
-      "lines": {"10": "「就是耳朵痒」。", "11": "蹭饭是门艺术，报恩是门手艺。"}
-    }
+ "piece": "MD-0001",
+ "title": "台风梅花夜",
+ "voice_policy": "主声线守 light 赛博定档（D-BS/O-2136 CEO 定档不变）·配角=edge-tts 档位声直出（声音档位非人格新增·#108 立案条款；CosyVoice3 zero-shot 克隆路 R1786/R1787 四路判负弃用·QC 证据=qc-r1787.json+qc-r1787-edge.json）",
+ "narrator_chain": "src/render/emotive_tts.py --voice zh-CN-YunyangNeural --cyber light --human 42（v12 全件套产线默认·BGM-A 纯净）",
+ "cosyvoice3_prefix": "You are a helpful assistant.<|endofprompt|>",
+ "roles": {
+  "narrator": {
+   "name": "旁白·机器叙述者",
+   "engine": "edge-tts+cyber-light",
+   "shots": [
+    1,
+    3,
+    5,
+    6,
+    8,
+    9,
+    12,
+    13
+   ]
+  },
+  "lamp": {
+   "name": "十四号路灯",
+   "trait": "慢而轻·暖光气质",
+   "engine": "edge-tts-register",
+   "ref_voice": "zh-CN-YunxiNeural",
+   "ref_flags": [
+    "--rate=-18%",
+    "--pitch=-6Hz"
+   ],
+   "ref_text": "今夜风大，灯先亮着。",
+   "shots": [
+    2,
+    4
+   ],
+   "lines": {
+    "2": "知道原因，不能说。",
+    "4": "灯不问来路，只管照路。"
+   }
+  },
+  "tower": {
+   "name": "邓建国",
+   "trait": "部队腔·慢悠悠",
+   "engine": "edge-tts-register",
+   "ref_voice": "zh-CN-YunjianNeural",
+   "ref_flags": [
+    "--rate=-15%",
+    "--pitch=-4Hz"
+   ],
+   "ref_text": "报告，塔上一切正常。",
+   "shots": [
+    7
+   ],
+   "lines": {
+    "7": "「台风天的日志最见人品。」"
+   }
+  },
+  "cat": {
+   "name": "咪喱",
+   "trait": "嘴甜·喵语混人话",
+   "engine": "edge-tts-register",
+   "ref_voice": "zh-CN-XiaoyiNeural",
+   "ref_flags": [
+    "--rate=+6%",
+    "--pitch=+8Hz"
+   ],
+   "ref_text": "喵——包在我身上啦。",
+   "shots": [
+    10,
+    11
+   ],
+   "lines": {
+    "10": "「就是耳朵痒」。",
+    "11": "蹭饭是门艺术，报恩是门手艺。"
+   }
   }
+ }
 }

@@ -1,0 +1,225 @@
+{
+ "round": "R1787",
+ "methods": [
+  "A_pad_trim",
+  "B_breath_finegrained",
+  "C_instruct2"
+ ],
+ "lines": {
+  "shot02": {
+   "role": "lamp",
+   "target": "知道原因，不能说。",
+   "results": {
+    "A": {
+     "pass": false,
+     "fail": "align-cue-not-found",
+     "raw_dur": 9.88,
+     "raw_asr": ""
+    },
+    "B": {
+     "pass": false,
+     "dur": 6.4,
+     "asr": "爹的啊爹爹爹不舒服啊爹不啊出去",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 45.7
+    },
+    "C": {
+     "pass": false,
+     "dur": 0.08,
+     "asr": "中文字幕提供陈憶",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": false,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 4.6
+    }
+   },
+   "winner": {
+    "method": null
+   }
+  },
+  "shot04": {
+   "role": "lamp",
+   "target": "灯不问来路，只管照路。",
+   "results": {
+    "A": {
+     "pass": false,
+     "fail": "align-cue-not-found",
+     "raw_dur": 8.0,
+     "raw_asr": ""
+    },
+    "B": {
+     "pass": false,
+     "dur": 16.8,
+     "asr": "我只能在你面前在你面前我不能我不能我只能在你面前在你面前在你面前在你面前",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": true,
+      "pass": false
+     },
+     "infer_s": 48.3
+    },
+    "C": {
+     "pass": false,
+     "dur": 8.8,
+     "asr": "",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 155.4
+    }
+   },
+   "winner": {
+    "method": null
+   }
+  },
+  "shot07": {
+   "role": "tower",
+   "target": "台风天的日志最见人品。",
+   "results": {
+    "A": {
+     "pass": false,
+     "fail": "align-cue-not-found",
+     "raw_dur": 23.2,
+     "raw_asr": "是在必备一骨一骨吃鸡一骨他妈吓你骨头萝卜啊有萝卜吃鸡必杀必杀哨火骨骨萝卜佛骨头劲一牙骨头"
+    },
+    "B": {
+     "pass": false,
+     "dur": 17.6,
+     "asr": "咱们这种奥特曼比亚不齐我的这种奥特曼比亚不齐我们的国民民主党我们的民主党我们的民主党我们的民主党我们的民主党",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": true,
+      "pass": false
+     },
+     "infer_s": 16.8
+    },
+    "C": {
+     "pass": false,
+     "dur": 3.56,
+     "asr": "斯戴达普克法尔艾姆亚克斯戴达",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 7.2
+    }
+   },
+   "winner": {
+    "method": null
+   }
+  },
+  "shot10": {
+   "role": "cat",
+   "target": "就是耳朵痒。",
+   "results": {
+    "A": {
+     "pass": false,
+     "raw_dur": 9.8,
+     "trim": "cut 1.19-3.43 of 9.80",
+     "trim_dur": 2.24,
+     "asr": "",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false,
+      "context_bleed": false
+     },
+     "infer_s": 15.9
+    },
+    "B": {
+     "pass": false,
+     "dur": 1.92,
+     "asr": "",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 5.3
+    },
+    "C": {
+     "pass": false,
+     "dur": 4.8,
+     "asr": "啊可不可以好吃吧婆多喝点我吃不飽",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 7.3
+    }
+   },
+   "winner": {
+    "method": null
+   }
+  },
+  "shot11": {
+   "role": "cat",
+   "target": "蹭饭是门艺术，报恩是门手艺。",
+   "results": {
+    "A": {
+     "pass": false,
+     "fail": "align-cue-not-found",
+     "raw_dur": 7.52,
+     "raw_asr": "早再戴帕递墨早啊爬啥子的我啊寡人我去嘛"
+    },
+    "B": {
+     "pass": false,
+     "dur": 19.2,
+     "asr": "",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 61.7
+    },
+    "C": {
+     "pass": false,
+     "dur": 1.04,
+     "asr": "哼哼哼哼",
+     "qc": {
+      "anchor_hits": 0,
+      "cue_located": false,
+      "dur_ok": true,
+      "repeat_loop": false,
+      "pass": false
+     },
+     "infer_s": 5.2
+    }
+   },
+   "winner": {
+    "method": null
+   }
+  }
+ }
+}

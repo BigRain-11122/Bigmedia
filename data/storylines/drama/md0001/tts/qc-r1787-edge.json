@@ -1,0 +1,80 @@
+{
+ "round": "R1787",
+ "method": "edge-tts-direct-register-fallback",
+ "note": "CosyVoice3 <=12c short-line decisively FAIL (R1786 2 rounds + probe; R1787 A/B/C/D 15/15). Fallback = cast.json register voices synthesized directly (production-stack, same registers as design references).",
+ "asr_recipe": "medium-int8 + beam5 + noctx (R169)",
+ "qc_error": null,
+ "results": {
+  "2": {
+   "role": "lamp",
+   "voice": "zh-CN-YunxiNeural",
+   "flags": [
+    "--rate=-18%",
+    "--pitch=-6Hz"
+   ],
+   "line": "知道原因，不能说。",
+   "dur": 3.36,
+   "rc": 0,
+   "asr": "知道原因,不能說",
+   "anchor_pass": true,
+   "full_verbatim": false
+  },
+  "4": {
+   "role": "lamp",
+   "voice": "zh-CN-YunxiNeural",
+   "flags": [
+    "--rate=-18%",
+    "--pitch=-6Hz"
+   ],
+   "line": "灯不问来路，只管照路。",
+   "dur": 3.72,
+   "rc": 0,
+   "asr": "登不问来路只管照路",
+   "anchor_pass": true,
+   "full_verbatim": false
+  },
+  "7": {
+   "role": "tower",
+   "voice": "zh-CN-YunjianNeural",
+   "flags": [
+    "--rate=-15%",
+    "--pitch=-4Hz"
+   ],
+   "line": "台风天的日志最见人品。",
+   "dur": 3.94,
+   "rc": 0,
+   "asr": "排风天的日志 最见人品",
+   "anchor_pass": true,
+   "full_verbatim": false
+  },
+  "10": {
+   "role": "cat",
+   "voice": "zh-CN-XiaoyiNeural",
+   "flags": [
+    "--rate=+6%",
+    "--pitch=+8Hz"
+   ],
+   "line": "就是耳朵痒。",
+   "dur": 1.87,
+   "rc": 0,
+   "asr": "就是耳朵癢",
+   "anchor_pass": true,
+   "full_verbatim": false,
+   "strip_fix_note": "resynth clean text (prior strip left stray corner bracket in request text; audio QC unaffected, canon cleanliness fix)"
+  },
+  "11": {
+   "role": "cat",
+   "voice": "zh-CN-XiaoyiNeural",
+   "flags": [
+    "--rate=+6%",
+    "--pitch=+8Hz"
+   ],
+   "line": "蹭饭是门艺术，报恩是门手艺。",
+   "dur": 3.5,
+   "rc": 0,
+   "asr": "蹭犯世门艺术,报恩世门手艺",
+   "anchor_pass": true,
+   "full_verbatim": false
+  }
+ }
+}
