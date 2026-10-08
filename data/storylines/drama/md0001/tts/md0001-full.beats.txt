@@ -1,0 +1,13 @@
+hook | narrator-open | 台风梅花过境之夜。
+wink | lamp-line | 知道原因，不能说。
+beat | narrator-scar | 它不许修——「疤是资历」。
+wink | lamp-line | 灯不问来路，只管照路。
+body | narrator-log | 检修日志写：超载运行，无损耗。
+turn | narrator-tower | 邓建国守了一宿，睡了整整一天。
+punch | tower-line | 「台风天的日志最见人品。」
+body | narrator-dawn | 第二天，全城灯带如常亮起。
+beat | narrator-cat | 全巷通讯中断，它的尾巴天线立了大功。
+wink | cat-line | 「就是耳朵痒」。
+wink | cat-line | 蹭饭是门艺术，报恩是门手艺。
+close | narrator-close | 「交晨」——把夜交给早晨。
+close | endcard-statement | 本片根据硅基城市真实档案改编，部分情节为合理推演。
