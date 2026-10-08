@@ -1,0 +1,39 @@
+s
+    this_tts_speech = self.token2wav(token=this_tts_speech_token,
+                                     prompt_token=flow_prompt_speech_token,
+    ...<4 lines>...
+                                     finalize=True,
+                                     speed=speed)
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\assets\cosyvoice-runtime\CosyVoice\cosyvoice\cli\model.py", line 447, in token2wav
+    tts_speech, _ = self.hift.inference(speech_feat=tts_mel, finalize=finalize)
+                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\utils\_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\assets\cosyvoice-runtime\CosyVoice\cosyvoice\hifigan\generator.py", line 717, in inference
+    f0 = self.f0_predictor(speech_feat.to(torch.float64), finalize=finalize).to(speech_feat)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\assets\cosyvoice-runtime\CosyVoice\cosyvoice\hifigan\f0_predictor.py", line 97, in forward
+    x = self.condnet[0](x)
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\nn\modules\module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\nn\modules\module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\assets\cosyvoice-runtime\CosyVoice\cosyvoice\transformer\convolution.py", line 185, in forward
+    x = super(CausalConv1d, self).forward(x)
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\nn\modules\conv.py", line 375, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\torch\nn\modules\conv.py", line 370, in _conv_forward
+    return F.conv1d(
+           ~~~~~~~~^
+        input, weight, bias, self.stride, self.padding, self.dilation, self.groups
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+RuntimeError: Calculated padded input size per channel: (3). Kernel size: (4). Kernel size can't be greater than actual input size
