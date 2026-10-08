@@ -1,0 +1,2 @@
+shot_count=13 invalid=0 invalid_rate=0.0% total_seconds=75 elapsed=24.6s
+PROBLEM: declared total != sum: 72 vs 75

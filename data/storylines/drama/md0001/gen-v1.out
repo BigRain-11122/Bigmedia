@@ -1,0 +1,5 @@
+POST http://localhost:11434/v1/chat/completions model=qwen3.5:9b-16k prompt_chars=1537
+CALL done in 66.5s
+usage: {"prompt_tokens": 944, "prompt_tokens_details": {"cached_tokens": 0}, "completion_tokens": 4096, "total_tokens": 5040}
+finish: length
+VALIDATION FAIL: no parsable JSON object

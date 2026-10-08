@@ -1,0 +1,5 @@
+POST http://localhost:11434/api/generate model=qwen3.5:9b-16k think=false prompt_chars=1537
+CALL done in 24.6s done=True eval_count=1117
+shot_count=13 invalid=0 invalid_rate=0.0% total_seconds=75 elapsed=24.6s
+PROBLEM: declared total != sum: 72 vs 75
+VALIDATION FAIL

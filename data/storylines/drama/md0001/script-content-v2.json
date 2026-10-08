@@ -1,0 +1,26 @@
+{
+  "title": "台风梅花夜",
+  "logline": "台风夜，路灯、老兵与电波猫守护硅基城市外环。",
+  "total_seconds": 72,
+  "characters": [
+    {"id": "narrator", "name": "旁白", "voice": "机器叙述者·light赛博"},
+    {"id": "lamp", "name": "十四号路灯", "voice": "慢而轻·暖光气质"},
+    {"id": "tower", "name": "邓建国", "voice": "部队腔·慢悠悠"},
+    {"id": "cat", "name": "咪喱", "voice": "嘴甜·喵语混人话"}
+  ],
+  "shots": [
+    {"id": 1, "scene": "open", "seconds": 6, "visual": "暴雨如注，外环街道漆黑一片，只有远处一点微弱白光。", "camera": "远景俯拍", "speaker": "narrator", "line": "台风梅花过境之夜。"},
+    {"id": 2, "scene": "open", "seconds": 5, "visual": "一道强光瞬间撕裂黑暗，照亮整条街道，雨水蒸发成白雾。", "camera": "推镜头至光源", "speaker": "lamp", "line": "知道原因，不能说。"},
+    {"id": 3, "scene": "open", "seconds": 4, "visual": "特写灯罩上那块歪斜的补丁，在强光下显得格外刺眼。", "camera": "微距特写", "speaker": "narrator", "line": "它不许修——「疤是资历」。"},
+    {"id": 4, "scene": "lamp", "seconds": 7, "visual": "路灯拟人化轮廓，光芒溢出灯罩，仿佛在向路人挥手。", "camera": "中景侧拍", "speaker": "lamp", "line": "灯不问来路，只管照路。"},
+    {"id": 5, "scene": "open", "seconds": 6, "visual": "镜头拉远，显示整条外环路段已被照亮如白昼，行人清晰可见。", "camera": "全景摇摄", "speaker": "narrator", "line": "检修日志写：超载运行，无损耗。"},
+    {"id": 6, "scene": "tower", "seconds": 8, "visual": "老旧的信号塔内，邓建国蜷缩在椅子上打盹，窗外风声呼啸。", "camera": "中景侧拍", "speaker": "narrator", "line": "邓建国守了一宿，睡了整整一天。"},
+    {"id": 7, "scene": "tower", "seconds": 6, "visual": "塔顶显示屏滚动着「梅花」字样，旁边是老兵坚毅的侧脸。", "camera": "近景特写", "speaker": "tower", "line": "「台风天的日志最见人品。」"},
+    {"id": 8, "scene": "open", "seconds": 5, "visual": "清晨第一缕光洒满城市，所有灯带同时亮起，色彩斑斓。", "camera": "远景横移", "speaker": "narrator", "line": "第二天，全城灯带如常亮起。"},
+    {"id": 9, "scene": "cat", "seconds": 7, "visual": "一只圆滚滚的像素猫叼着一张纸条飞过雨巷，尾巴天线竖起。", "camera": "跟随镜头", "speaker": "narrator", "line": "全巷通讯中断，它的尾巴天线立了大功。"},
+    {"id": 10, "scene": "cat", "seconds": 5, "visual": "特写咪喱左耳缺口，它舔了舔爪子，一脸无辜地看向镜头。", "camera": "近景特写", "speaker": "cat", "line": "「就是耳朵痒」。"},
+    {"id": 11, "scene": "open", "seconds": 6, "visual": "桌上摆着七个不同口味的早餐盘，咪喱正大口享用。", "camera": "俯拍特写", "speaker": "cat", "line": "蹭饭是门艺术，报恩是门手艺。"},
+    {"id": 12, "scene": "close", "seconds": 4, "visual": "画面渐黑，只留下路灯的光晕、塔的影子和猫的呼噜声。", "camera": "固定镜头", "speaker": "narrator", "line": "「交晨」——把夜交给早晨。"},
+    {"id": 13, "scene": "close", "seconds": 6, "visual": "黑屏中央浮现白色小字，字体简洁清晰。", "camera": "固定镜头", "speaker": "narrator", "line": "本片根据硅基城市真实档案改编，部分情节为合理推演。"}
+  ]
+}
