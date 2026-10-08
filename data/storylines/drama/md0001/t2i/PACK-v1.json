@@ -1,0 +1,134 @@
+{
+  "pack": "MD-0001-T2I-PACK-v1",
+  "title": "台风梅花夜",
+  "producer_round": "R1788",
+  "source_script": "../SCRIPT-v1.md",
+  "schema_consumes": "../storyboard-schema-v0.1.md",
+  "consumers": [
+    "bm-a ComfyUI local (C:/Agent/ComfyUI, checkpoint sd_xl_base_1.0.safetensors, draft PoC path)",
+    "bm-c ComfyUI (canon T2I seat per ai-drama-mv-pipeline-plan-v1.md - same pack consumable when seat frees)"
+  ],
+  "checkpoint": {
+    "file": "sd_xl_base_1.0.safetensors",
+    "expected_bytes": 6938078334,
+    "pull_log": "data/assets/model-pulls/sdxl-base-pull.log",
+    "gate": "three-gate passed at launch: usable=official stabilityai all-in-one XL checkpoint; speed=hf-mirror night lane; tier=SDXL starter per approved plan (SDXL/FLUX 现役起步)"
+  },
+  "defaults": {
+    "width": 1216,
+    "height": 683,
+    "steps": 30,
+    "cfg": 6.5,
+    "sampler": "dpmpp_2m",
+    "scheduler": "karras",
+    "denoise": 1.0
+  },
+  "style_lock": "stylized flat 2D digital illustration, silicon city world, muted desaturated palette, cinematic night atmosphere, clean bold shapes, soft film grain, game-art aesthetic, dramatic rain lighting",
+  "negative_lock": "photorealistic, photo, 3d render, octane render, text, letters, chinese characters, watermark, signature, logo, blurry, low quality, deformed, disfigured, extra limbs, oversaturated, neon overload",
+  "characters": {
+    "lamp": {
+      "id": "C-00028",
+      "ref_card": "data/storylines/cards/MC-20260926-CENSUS-v19/MC-20260926-CENSUS-v19.png",
+      "seed": 41041,
+      "tokens": "an old outer-ring street lamp number 14, cast-iron pole, wide lampshade with a small tilted metal patch welded on its side, warm white light glowing"
+    },
+    "tower": {
+      "id": "C-00027",
+      "ref_card": "data/storylines/cards/MC-20260926-CENSUS-v18/MC-20260926-CENSUS-v18.png",
+      "seed": 27027,
+      "tokens": "a sturdy 50-year-old Chinese veteran signal-tower guard, short grey-streaked hair, worn work jacket, calm weathered face, inside an old signal tower station room with analog gauges and one amber rolling display, tall antenna mast outside"
+    },
+    "cat": {
+      "id": "C-00029",
+      "ref_card": "data/storylines/cards/MC-20260926-CENSUS-v20/MC-20260926-CENSUS-v20.png",
+      "seed": 19019,
+      "tokens": "a chubby round pixel-art cat spirit, plump body of soft square pixels, thin radio antenna on its tail tip, small notch in its left ear"
+    }
+  },
+  "scene_seeds": { "open": 70071, "close": 13013 },
+  "shots": [
+    {
+      "id": 1, "scene": "open", "seconds": 6, "speaker": "narrator",
+      "camera": "远景俯拍", "kb": { "move": "zoom-in", "start_scale": 1.0, "end_scale": 1.08 },
+      "seed": 70071,
+      "prompt": "aerial far shot looking down at a pitch-black outer-ring street in torrential rain at night, deep darkness, one single faint warm-white light far away in the distance, wet asphalt, heavy rain streaks"
+    },
+    {
+      "id": 2, "scene": "open", "seconds": 5, "speaker": "lamp",
+      "camera": "推镜头至光源", "kb": { "move": "zoom-in-fast", "start_scale": 1.0, "end_scale": 1.15 },
+      "seed": 41041, "char": "lamp",
+      "prompt": "a powerful beam of street-lamp light tearing through the darkness of a rainy night street, the whole road lit in a single instant, heavy rain turning into white mist around the beam, dramatic god rays through rain"
+    },
+    {
+      "id": 3, "scene": "open", "seconds": 4, "speaker": "narrator",
+      "camera": "微距特写", "kb": { "move": "zoom-in", "start_scale": 1.05, "end_scale": 1.12 },
+      "seed": 41041, "char": "lamp",
+      "prompt": "extreme macro close-up of a small tilted metal patch welded on an old cast-iron lampshade, rivets and scratches on the patch, glaring under a strong warm light, rain droplets on metal, dark background"
+    },
+    {
+      "id": 4, "scene": "lamp", "seconds": 7, "speaker": "lamp",
+      "camera": "中景侧拍", "kb": { "move": "pan", "pan": "left-to-right" },
+      "seed": 41041, "char": "lamp",
+      "prompt": "mid side shot of an old outer-ring street lamp number 14, warm light overflowing from its lampshade like gentle arms waving to passersby, faint personified silhouette of light, quiet rainy street"
+    },
+    {
+      "id": 5, "scene": "open", "seconds": 6, "speaker": "narrator",
+      "camera": "全景摇摄", "kb": { "move": "pan", "pan": "right-to-left" },
+      "seed": 70071,
+      "prompt": "wide panoramic shot of an entire outer-ring road lit bright as day by street lamps after the storm surge, wet asphalt mirroring the light, a few pedestrians with umbrellas walking clearly visible, sense of safety"
+    },
+    {
+      "id": 6, "scene": "tower", "seconds": 8, "speaker": "narrator",
+      "camera": "中景侧拍", "kb": { "move": "zoom-out", "start_scale": 1.1, "end_scale": 1.0 },
+      "seed": 27027, "char": "tower",
+      "prompt": "mid side shot inside an old signal tower station, a sturdy 50-year-old Chinese veteran guard curled up asleep on a chair, worn work jacket, wall of analog gauges, typhoon wind and rain howling outside the window"
+    },
+    {
+      "id": 7, "scene": "tower", "seconds": 6, "speaker": "tower",
+      "camera": "近景特写", "kb": { "move": "zoom-in", "start_scale": 1.0, "end_scale": 1.08 },
+      "seed": 27027, "char": "tower",
+      "prompt": "close-up of a weathered Chinese veteran guard's resolute side profile, amber glow of a rolling warning display reflecting on his face, old signal-tower interior at night, warm amber and deep blue contrast"
+    },
+    {
+      "id": 8, "scene": "open", "seconds": 5, "speaker": "narrator",
+      "camera": "远景横移", "kb": { "move": "pan", "pan": "left-to-right" },
+      "seed": 70071,
+      "prompt": "first light of dawn washing over a stylized silicon city after a typhoon night, all the light strips along streets and bridges turning on in soft varied colors, fresh clean air, gentle sky gradient"
+    },
+    {
+      "id": 9, "scene": "cat", "seconds": 7, "speaker": "narrator",
+      "camera": "跟随镜头", "kb": { "move": "pan", "pan": "right-to-left" },
+      "seed": 19019, "char": "cat",
+      "prompt": "dynamic follow shot of a chubby round pixel-art cat spirit flying through a narrow rain alley, carrying a small paper note in its mouth, thin radio antenna on its tail tip pointing up, motion lines, determined cute expression"
+    },
+    {
+      "id": 10, "scene": "cat", "seconds": 5, "speaker": "cat",
+      "camera": "近景特写", "kb": { "move": "zoom-in", "start_scale": 1.0, "end_scale": 1.08 },
+      "seed": 19019, "char": "cat",
+      "prompt": "close-up of a chubby pixel-art cat spirit's face, small notch clearly visible in its left ear, licking its paw, innocent wide eyes looking straight at the camera, soft warm indoor light"
+    },
+    {
+      "id": 11, "scene": "open", "seconds": 6, "speaker": "cat",
+      "camera": "俯拍特写", "kb": { "move": "zoom-in", "start_scale": 1.0, "end_scale": 1.06 },
+      "seed": 19019, "char": "cat",
+      "prompt": "overhead close shot of a wooden table holding seven small breakfast plates of different flavors and colors, a chubby pixel-art cat spirit eating heartily from one plate, cozy morning light, homey warm mood"
+    },
+    {
+      "id": 12, "scene": "close", "seconds": 4, "speaker": "narrator",
+      "camera": "固定镜头", "kb": { "move": "static" },
+      "seed": 13013,
+      "prompt": "nearly black frame, only a faint warm glow halo of a distant street lamp, the silhouette of a signal tower against the night sky, a tiny round cat shape curled up asleep, quiet peaceful ending mood"
+    },
+    {
+      "id": 13, "scene": "close", "seconds": 6, "speaker": "narrator",
+      "camera": "固定镜头", "kb": { "move": "static" },
+      "program_layer": true,
+      "note": "黑屏中央白色小字=推演声明（本片根据硅基城市真实档案改编，部分情节为合理推演）——文字层分离律：程序层渲染（FFmpeg drawtext/黑色底），零 T2I 消耗"
+    }
+  ],
+  "verification": {
+    "consistency_gate": "同角色 10 镜一致抽验 ≥8（#108 判据）——抽验法=角色出现镜（lamp 2/3/4/12, tower 6/7, cat 9/10/11）多模态并排 vs census 参照卡 v18/v19/v20 逐特征核对（灯罩补丁/老兵侧脸+工装/猫耳缺口+尾天线）",
+    "draft_note": "PoC 草稿档（480P/720P 装配链消费·NC 分级草稿期合法）——升档位=Qwen-Image-2.0 GGUF 并行 A/B（#109 位）",
+    "text_rule": "画面内零文字承载（文字层分离律·SC-002 定谳）——shot7 amber display 为氛围元素非文字承载·中文一律程序层"
+  }
+}
