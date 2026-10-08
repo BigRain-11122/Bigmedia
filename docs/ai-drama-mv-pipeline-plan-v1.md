@@ -12,7 +12,7 @@
 
 | 环节 | 最新档（2026-10 谱系） | 现实档（现役/保底） | 装在哪 | 判负条件 |
 |---|---|---|---|---|
-| ①设定/剧本 | **Qwen3.5:9b**（Ollama·6.6GB·256K 多模态·防线二验讫）；重批升 27b/35b（96GB RAM 混合档） | 现役 qwen2.5:14b 维持至 A/B 过线 | bm-a | 剧本盲评低于现役即回退 |
+| ①设定/剧本 | **Qwen3.5:9b**（Ollama·6.6GB·256K 多模态·防线二验讫）日活快档；**重档 A/B=Qwen3.8:27b**（最新旗舰·18GB·10-08 CEO 点名·官方页验讫：256K+图像视频理解+thinking 可调）——18GB 超单卡显存=bm-a 96GB RAM 混合档·夜窗重批（剧本终稿/改写） | 现役 qwen2.5:14b 维持至 A/B 过线 | bm-a | 剧本盲评低于现役即回退；9b vs 3.8-27b 同集对打定主档 |
 | ②分镜/一致性 | **StoryDiffusion**（漫剧多格一致对口·low_vram 官方脚本）+PuLID-FLUX（16GB 档）；分镜表=qwen3.5 JSON schema 结构化输出 | IP-Adapter+SDXL 现役零训练 | bm-c | 同角色 10 镜一致抽验<8 达标 |
 | ③提示词 | 编排仓内建 LLM→prompt 链（OpenMontage/Toonflow）+qwen3.5 分镜 schema 直出镜头提示词 | 现役 prompt 模板面 | bm-a | 无效 schema 率>5% |
 | ④文生图 | **Qwen-Image-2.0**（2026-02-10 发布·排版/海报/**漫画**增强·ComfyUI 原生路径）；2.1 细节待证 | FLUX GGUF/SDXL 现役（集团配方在案） | bm-c | 单图>3min 或中文文字渲染抽验不过 |
