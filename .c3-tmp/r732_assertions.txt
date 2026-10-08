@@ -1,20 +1,0 @@
-beats_count v1=12 v2=12 v3=12
-col2_zero_change=True (drift=0)
-creed_zero_change=True ('她的信条：灶上留一壶，路过的都是客。')
-fact_digits_missing=NONE
---- per-beat col3 char counts (v1/v2/v3, delta v3-v1) ---
-b00 hook   v1= 27 v2= 27 v3= 27 delta=+0
-b01 body   v1= 18 v2= 18 v3= 14 delta=-4
-b02 body   v1= 15 v2= 12 v3= 12 delta=-3
-b03 beat   v1= 20 v2= 18 v3= 17 delta=-3
-b04 punch  v1= 32 v2= 32 v3= 28 delta=-4
-b05 turn   v1= 32 v2= 30 v3= 23 delta=-9
-b06 wink   v1= 27 v2= 25 v3= 24 delta=-3
-b07 body   v1= 24 v2= 16 v3= 16 delta=-8
-b08 proof  v1= 25 v2= 22 v3= 22 delta=-3
-b09 proof  v1= 19 v2= 19 v3= 19 delta=+0
-b10 close  v1= 18 v2= 18 v3= 18 delta=+0
-b11 cta    v1= 23 v2= 23 v3= 19 delta=-4
-TOTAL v1=280 v2=260 v3=239 delta=-41
-M1_v2 exit=0 WARN longsentence 14 chars/3 commas: '�˰��̼������Ū���ɣ���ʮ����...' | SUMMARY terms=12 FAIL=0 WARN=1 | PASS | 
-M1_v3 exit=0 SUMMARY terms=12 FAIL=0 WARN=0 | PASS | 

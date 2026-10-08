@@ -1,7 +1,0 @@
-R1033 FINAL glyph audit (extended corpus)
-corpus: 417 files, 2120 unique chars
-missing from msyh.ttc face0: ['U+2194', 'U+2702', 'U+2713']
-  U+2194 in 9 file(s): ['A2:data\\storylines\\cards\\MC-20260925-CENSUS-v13\\cards.json', 'A2:data\\storylines\\cards\\MC-20260925-CENSUS-v9\\cards.json', 'A2:data\\storylines\\cards\\MC-20260926-REACT-v2\\cards.json', 'A2:data\\storylines\\cards\\MC-20260927-REACT-v3\\cards.json', 'A2:data\\storylines\\cards\\MC-20260928-REACT-v4\\cards.json', 'A2:data\\storylines\\cards\\MC-20260929-REACT-v5\\cards.json', 'A2:data\\storylines\\cards\\MC-20260930-REACT-v6\\cards.json', 'A2:data\\storylines\\cards\\MC-20261001-REACT-v7\\cards.json', 'A2:data\\storylines\\cards\\MC-20261002-REACT-v8\\cards.json']
-  U+2702 in 1 file(s): ['A2:data\\sources\\bs005\\cards-v1-matched.json']
-  U+2713 in 2 file(s): ['A2:data\\storylines\\cards\\MC-20261002-DAILY-v42\\cards.json', 'A2:data\\storylines\\cards\\MC-20261002-DAILY-v43\\cards.json']
-missing from msyhbd.ttc face0: ['U+2194', 'U+2702', 'U+2713']

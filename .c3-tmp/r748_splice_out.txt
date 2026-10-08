@@ -1,6 +1,0 @@
-OK .lc019-tmp\mid-26-48.mp3 -> .lc019-tmp/mid-check.srt cues=4 dropped=0 audio_dur=21.10s model=medium-int8-cpu
-mid exit= 0
-MERGED_CUES 11
-SITES 30 DIFFCHARS 88 REF 196 RATIO 44.9
-SURVIVE_MISS ['扭塔', '川渝', '钻到底', '章硬', '徐根福', '长身体', '陈雅雯', '回撤', '讣告']
-SPLICE_OK

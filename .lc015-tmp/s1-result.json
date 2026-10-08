@@ -1,7 +1,0 @@
-{
- "exit": 0,
- "expert": "S1-script",
- "material": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\data\\sources\\lc015\\s1-review-material-v1.md",
- "verdict": "### 违律清单\n无\n\n### 总分\n10\n\n### 一句话总裁决\nPASS（稿件结构严谨，符合所有规定，无违律）\n\n### 未测面\n无（稿件完全符合 copy-craft 文本视角，无需额外测试）",
- "verdict_file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\docs\\reviews\\expert-verdicts\\20260930-053858-S1-script.md"
-}

@@ -1,4 +1,0 @@
-TYPE dict
-TOPKEYS 2
-KEY 'axes' dict 6
-KEY 'sprite' dict 12

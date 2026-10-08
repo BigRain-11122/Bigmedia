@@ -1,3 +1,0 @@
-WARN longsentence 22 chars/4 commas: '��������ٴ������ֿ��Ļ������������ƣ�������...'
-SUMMARY terms=12 FAIL=0 WARN=1
-PASS

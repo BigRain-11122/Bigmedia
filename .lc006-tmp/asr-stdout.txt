@@ -1,1 +1,0 @@
-OK .lc006-tmp\audio.mp3 -> .lc006-tmp/asr-check.srt cues=11 dropped=0 audio_dur=58.62s model=medium-int8-cpu

@@ -1,2 +1,0 @@
-outs[0] label='OS 循环' text_head=tick 696，R696 生产轮·queue §E 补池义务兑现=E7 LC-007 邓建国拆条入池+选优定谳+起链（R695 出池注记承接·冗余扩容位第四件
-results[46] label='684' text_head=tick 696，R696 生产轮·queue §E 补池义务兑现=E7 LC-007 邓建国拆条入池+选优定谳+起链（R695 出池注记承接·冗余扩容位第四件

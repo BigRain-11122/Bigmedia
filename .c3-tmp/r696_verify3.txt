@@ -1,6 +1,0 @@
-restored=1
-row684_ok=True
-os_row_ok=True
-results_tick696_rows=0 (expect 0 in results)
-results_count=58
-results_tail=696

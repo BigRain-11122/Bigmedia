@@ -1,2 +1,0 @@
-state tick=740 ts=2026-09-30 10:04:19 logN=767 task[:20]='R740: 生产轮·E19 LC-018'
-export_ts=2026-09-30 10:04:19 results_tail=740 outs0_head='tick 740，R740 生产轮·' live_rows=3

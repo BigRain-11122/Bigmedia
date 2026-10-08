@@ -1,5 +1,0 @@
-tick=1401
-ts=2026-10-05 20:13:54
-task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
-log_len=1429
-log_tail_300=2026-10-05 20:1x R1401: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 1/6=R1400 批闭 8bcc4c79 窗重置后新窗首轮·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 实证 .c3-tmp/r1401_check.txt 20:13（orders 顶=O-20260928-1910 未变 mtime 09-28 19:12/decisions dnum 内容寻址差集 NEW=[] GONE=[] 水位 149==149 mti

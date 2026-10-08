@@ -1,5 +1,0 @@
-exit=0
-SUMMARY terms=12 FAIL=0 WARN=0
-PASS
-
-[stderr]

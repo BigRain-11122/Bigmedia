@@ -1,8 +1,0 @@
-10. E30 DAILY post-v63 supply scan (fleet = all card dirs incl. MC-20261003-DAILY-v63):
-    fleet dirs = 110 (DAILY-v63 dir present: ['MC-20261003-DAILY-v63'])
-    context = 2026-10-03 Sat production ~11:25 LITERAL late-morning; day/night adjacency gates set for day hours
-    clean-vs-fleet rows still context-gated = 47
-    VERDICT ungated at ~11:25 = 0
-    note: sprite/weekend/4 叮咚响夜晚 = unique night-content clean row -> opens at LITERAL NIGHT tonight
-    (Saturday) subject to fresh evening scan incl. onomatopoeia-band (v50 叮叮当 + v63 嗡嗡嗡 = 2-member
-    band registration, third-use-block pattern mirrors morning-scene band pre-reg R1086)

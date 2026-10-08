@@ -1,3 +1,0 @@
-tick=1153 loglen=1181
-last line first 120:
-2026-10-03 22:35:13 R1153: declared-idle 一行声明收轮·并窗 6/6 批收 R1148-R1153（等待态：五查静 fresh 实证 r1153_all.py 22:33——orders 顶=O-20

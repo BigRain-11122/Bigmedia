@@ -1,1 +1,0 @@
-L3: > 正典=`docs/city-storylines-charter.md` §1/§4/§5（有声线编制/路径/门禁映射）。产线=循环既有 TTS 链直接复用（research/city-storylines-research-v1.md §5）：`emotive_tts --cyber light --human 42`·机器叙述者=城市自述视角。mp3 产物 gitignored（charter §4 口径·本 README 即记账）。

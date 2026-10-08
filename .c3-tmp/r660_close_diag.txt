@@ -1,6 +1,0 @@
-ts=2026-09-29 06:31:36
-task60=R660: declared-idle 空轮判定（五静+探针绿+可领序尽·P-2026-09-28-02 ②④序·新窗 
-logline_len=2129
-state_roundtrip_ok=True
-state.json written (tick=660, log +2129 chars)
-status-export.json written (export_ts + OS line + results 660 append)

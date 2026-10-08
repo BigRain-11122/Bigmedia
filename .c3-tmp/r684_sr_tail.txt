@@ -1,5 +1,0 @@
-L158: eview-20260929-lc002-v1.md+sr-check.srt/sr-diff-r681.txt+e4-result.json（回填位）+lc002 README 收口行+finished.md F-055 块 |
-
-L159: | 2026-09-29 | **M2+验图+M4.5 站审（MC-20260929-DIGEST-v10=queue §E 批活池 E2 首件·#67 触发律第三用·P-20260929-01 云端 token 机制令盘点·R682）** | MC-20260929-DIGEST-v10.png（--poster 出图 exit 0·3.8s 副产 mp4 149KB 移件 tmp=v2-v9 惯例） | 静态卡先人审（charter §5）+em 机核断言（横向+VERT R381 律·em-check-r682.txt）+多模态转写先行 | M4.5 七席 ≥9（6×9.0+E7 N/A 维度复用·评审单 review-20260929-mcdigest-v10.md） | h2_size 32 档（DIGEST 形态首用·REACT-v4 同档先例带·40/36 档排除=引文 26.75em 驱动）·VERT est 840px gap +130px·subs 21.00em<24.21em margin +3.21em·M1 脱敏分界=配额/峰值/泄洪用量细节不入卡面（v9 GPU 指标同型）·206/98%/零云=治理审计读数入卡面 | 验图五检 5/5 一次过初稿即正字（转写先行十行全中·零重叠零越界零截断·单行机核 single=True·来源行闭合·AIGC 角标清晰）·E4 异步在飞（下轮回填追加制·非拦截） | em-check-r682.txt+review-20260929-mcdigest-v10.md+F-056 finished.md 块 |
-
-L160: 

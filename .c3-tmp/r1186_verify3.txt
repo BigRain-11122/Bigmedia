@@ -1,3 +1,0 @@
-ts=2026-10-04 04:45:07
-head=2026-10-04 04:45 R1186: declared-idle 一行
-no_future_stamp=True

@@ -1,3 +1,0 @@
-data/sources/lc018/voiceover-v3.beats.txt :: turn | 口头禅 / 普通话干脆利落：「过」「不过」「理由三条」；从不说「应该没问题」——只有「实测没问题」 | 过，不过，理由三条。从不说应该，只说实测。
-data/sources/lc003/voiceover-v5.beats.txt :: close | 信条 / 流量像潮水 我是灯塔不是渔船 | 她的信条：流量像潮水，我是灯塔不是渔船。
-data/sources/lc010/voiceover-v3.beats.txt :: close | 信条 / 像素越小，心眼越大 | 他的信条：像素越小，心眼越大。

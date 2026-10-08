@@ -1,3 +1,0 @@
-﻿exit=0
-verdictFile=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\docs\reviews\expert-verdicts\20260929-213815-S1-script.md
-总分：10   | 违律清单：无   | 总裁决：PASS（材料完全符合所有律例，无任何违律行为，且亮点突出）   | 未测面：视觉元素与配音实听效果需进一步机检与对应席补审。

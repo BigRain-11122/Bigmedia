@@ -1,5 +1,0 @@
-﻿HIT: ts.md[���Ŷ�����]�����Բ�Դ��=data/sources/footage/census-card-v15-vertical.mp4��F-034 ��Ʒ�� PNG ������scale 660+pad y=16
-HIT: ials �� plan.json��**������̬��λ=Դ����֤�� 12/12**��census-card-v15-vertical Դ�������12��visual-ratio 1.00��Դ��=F-034 PNG 
----other vN refs---
-X: ata/sources/footage/census-card-v9-vertical��F-028 PNG ������scale 660+pad y=
-X: ����̬��λ=Դ����֤�� 12/12**��census-card-v9-vertical Դ�������12��visual-ratio 1.00��Դ��=

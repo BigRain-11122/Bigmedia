@@ -1,1 +1,0 @@
-﻿RESULT: zero hits for facet terms across all fleet beats excluding data/sources/bs010 (self) - R805 facet zero-usage proof (first scan 03:4x pre-bs010-creation also zero hits; bs007 close hits were for 不无礼/不抢=克制设计细节=excluded sub-facet)

@@ -1,1 +1,0 @@
-dur=57.232000 exists=True

@@ -1,5 +1,0 @@
-tick=1112
-ts=2026-10-03 15:43:59
-task=declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh 机证+
-log_tail_first_120=2026-10-03 15:4x R1112: declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh 机证+四查尽承继 R1096-R1111 fresh 链〔同窗 ~9 分钟禁重
-log_count=1140

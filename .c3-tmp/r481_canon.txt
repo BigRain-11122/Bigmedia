@@ -1,4 +1,0 @@
-ledger_matches=29 anchor=29
-ledger_last_hit_ascii=- **??? 2026-09-27??? 03:07?**????=?? 899.8GB ???????? bigmo
-ledger_modes={'全司': 6, '六司': 3, 'BigStream': 29, '七线全司': 1, '八线全量': 2}
-occurrences_total=41 (r481_check metric mismatch root cause: occurrences vs lines)

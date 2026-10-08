@@ -1,3 +1,0 @@
-addendum_ok True
-results_n 23
-ALL_PASS True

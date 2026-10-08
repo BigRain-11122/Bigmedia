@@ -1,5 +1,0 @@
-tick=1352
-ts=2026-10-05 11:23:54
-task=R1352: declared-idle 一行声明收轮=声明窗 6/6 窗满即收·batch close R1347~R
-task_len=60
-log_len=1380

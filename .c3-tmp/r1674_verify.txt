@@ -1,6 +1,0 @@
-tick=1674
-ts=2026-10-07 23:33:54
-task=R1674: waiting-idle 一行声明收轮（新窗 1/6 声明位·R1673 预案照走·全线时序闸维持）（空轮
-log[-1] head=2026-10-07 23:3x R1674: waiting-idle 一行声明收轮（新窗 1/6 声明位·R1673 预案照走·全线时序闸维持）（空轮判定路
-focus head=R1674 新窗 1/6 声明位收轮（waiting-idle·不 commit）。五查 fresh 全静（23:33）：own orders O-202610
-log entries=1705

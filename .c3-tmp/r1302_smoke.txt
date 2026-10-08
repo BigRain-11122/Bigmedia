@@ -1,3 +1,0 @@
-RESOLVED_MODEL: C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\assets\models\faster-whisper-medium
-SMOKE_OK cues=11 dropped=0 audio_dur=57.23s
-FIRST_CUE: 系统日制一家公司三颗心脏两颗十分钟一跳一

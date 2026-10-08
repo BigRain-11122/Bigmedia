@@ -1,5 +1,0 @@
-WARN=107 FAIL=3
-- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
-- [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
-- [FAIL] account-lag: 3 completed round(s) without accounting (done beats=894 > tick=891) - the R4/R5 bug pattern
-summary: tick=891, beats=915 (done=894 nonzero=15 skip=6 timeout=15 error=0), log=919 entries, backlog=96 items 78 done (81% burn)

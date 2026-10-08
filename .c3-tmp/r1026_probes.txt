@@ -1,4 +1,0 @@
-﻿== board rc=0 -> r1021_board.txt ==
-== readiness rc=1 -> r1021_rd.txt ==
-== loop rc=1 -> r1021_loop.txt ==
-summary written

@@ -1,6 +1,0 @@
-tick=1314
-ts=2026-10-05 04:36:53
-task=declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 ②④序·
-focus=R1314 declared-idle 声明窗 1/6（R1313 batch close 后新窗）·时间闸内活=日间窗 E30 weekend 3 行 standby→10-05 21:40 OSS
-log_tail=2026-10-05 04:36 R1314: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 
-log_len=1342

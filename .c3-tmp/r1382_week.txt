@@ -1,1 +1,0 @@
-[('W41-audit', True), ('W41-weekly', []), ('W40-audit', True), ('W40-weekly', ['output\\reports\\weekly-2026-W40.md'])]

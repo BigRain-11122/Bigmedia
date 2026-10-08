@@ -1,2 +1,0 @@
-head=2026-10-04 04:53 R1186: declared-idle 一行声明收轮（等待态·五查静 fresh 实
-pre_ok=True

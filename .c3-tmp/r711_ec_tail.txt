@@ -1,4 +1,0 @@
-﻿59
-| 2026-09-29 21:38 | S1-script | S1 ���٣������������� | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc010\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-213815-S1-script.md / �ܷ֣�10   (1500s 
-| 2026-09-29 22:14 | E4-audience | E4 ֱ�����ڣ��ο��ǡ�������ϯ�� | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.lc010-tmp\subs.srt | 1 | full text=expert-verdicts/20260929-221414-E4-audience.md / 8.0 �ῴ��+����ת����˵������ʽ��+�Ƽ��С������黳�Ա���
-| 2026-09-29 22:40 | S1-script | S1 ���٣������������� | C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\sources\lc011\s1-review-material-v1.md | 0 | full text=expert-verdicts/20260929-224025-S1-script.md / **�ܷ֣�10** (1500

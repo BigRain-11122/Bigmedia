@@ -1,8 +1,0 @@
-LINES = [
-    u"城市日签 050",
-    u"2026-10-02 · 国庆假期",
-    u"「叮叮当，夜幕挂新装」",
-    u"——硅基城市台词池 · 城市生灵",
-]
-
-assert H2_SIZE == 60, "em ladder expected 60-band return (quote 11.00em short-driver + attribution 13.65em both inside 60-band budget 15.33em = v1-v28 band; v29/v49 were 17.00em qu

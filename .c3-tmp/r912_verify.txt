@@ -1,3 +1,0 @@
-r912 c-leg6 verify: PASS
-
-rows=97

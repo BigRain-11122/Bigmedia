@@ -1,1 +1,0 @@
-axes_lines=1296 sprite_lines=144 total=1440 interchat=22 anchors=20 tail=['C-00028.md', 'C-00029.md']

@@ -1,5 +1,0 @@
-tick=1165
-ts=2026-10-04 01:04:52
-task=declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1165_all.py 01:04——or
-focus=R1165: declared-idle 声明窗 5/6（五查静 fresh 实证 r1165_all.py 01:04·三探针持平·全 lane 时序闸·waiting: 10-05 milestone batch ETA 2026-10-05）
-log_tail=2026-10-04 01:04 R1165: declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1165_all.py 01:04——orders 顶=O-20260928-1910 未变/ledger @ta

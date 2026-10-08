@@ -1,8 +1,0 @@
-TICK=582
-TS=2026-09-28 01:23:27
-TASK=R582: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 4/6=R579-R584·本轮不 co
-
-LOG_TAIL_HEAD=2026-09-28 01:23 R582: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 4/6=R579-R584·本轮不 commit〔满 6 或跨日 09-29 00:00 先到即收〕）——①无新令（orders 35 O-件零新增零编辑=r582_all·锚=O-20
-
-EXPORT_TS=2026-09-28T01:23:27+08:00
-OS_ROW=tick 582：R582（idle-fast 快速路径·五静+探针定谳绿——orders 35/ledger 五模式 31 行级 diff 零新/decisions 63 三锚全未动·#63 C-00030/31 双 False 照守·#78 素材面前置 blocked 维持·探针 board 0F/readiness 3 外部 0F/loop 2F 在案类+25W 在案类）——并窗 R579-R584 计 4/6 本轮不 commit；下轮=快速路径五查（行级基线 r582_lednew5.txt）

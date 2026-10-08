@@ -1,4 +1,0 @@
-SUMMARY LINES=3
-## 探针发现项（findings·机器纪律核验）
-- [FAIL] render-unannot: media file not annotated as test piece: lc-001-v1-shipinhao-60s.mp4
-readiness: 3 blocker(s), 1 finding(s) -> NOT READY

@@ -1,3 +1,0 @@
-exit=1
-## 探针发现项（findings·机器纪律核验）
-readiness: 3 blocker(s), 0 finding(s) -> NOT READY

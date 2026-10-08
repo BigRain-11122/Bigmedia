@@ -1,2 +1,0 @@
-OK .bs011-tmp\audio.mp3 -> .bs011-tmp/asr-check.srt cues=10 dropped=0 audio_dur=53.16s model=medium-int8-cpu
-exit= 0

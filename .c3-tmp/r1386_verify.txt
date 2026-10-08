@@ -1,4 +1,0 @@
-tick=1386 ts=2026-10-05 17:33:37
-task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
-log_len=1414
-log_tail=2026-10-05 17:3x R1386: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 1/6=R1385 批闭 b5bbb306 窗重置后新窗首轮·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 实证 .c3-tmp/r1386_check.txt 17:3

@@ -1,4 +1,0 @@
-GPU: 0 %, 6367 MiB, 12282 MiB
-MiniGame last_commit: c45ab5b01 10-04 03:26 X1838: fold-C收编合并C1522-C1523✅（台账auto-merge union验重+kanban C1522/C1523行嫁接+state-c/快照-c take-theirs vC1523态+weather epoch本地回贴）+X1822等待态维持（TJ
-FluxVerse last_commit: 44b603c 10-03 13:12 R0 diag v2 evidence landed (bm-a, O-20261003-1210 order-3): direct-path dump proves Avatar CharacterAvatar valid=True isHuman=True mappedBon
-BigLife last_commit: 3421d3c5 09-30 15:18 决策轮回执 R777: D-20260930-35/36 审核回执(F-20260930-BL05·D-35 Biggame域零涉·D-36七线对标涉本司R-L面=基线10030/下游3仓与consumer_wiring wired=3互证·R-L机判解冻后立单双前置如实记=P

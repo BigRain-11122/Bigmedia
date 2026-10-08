@@ -1,3 +1,0 @@
-state.json OK tick=484 log_append=R484 ts=2026-09-27 07:45:53
-task=idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·并窗轮 4/6 不 commit）——①无新令（order
-status-export OK path=json fidelity=yes export_ts=2026-09-27T07:45:53+08:00

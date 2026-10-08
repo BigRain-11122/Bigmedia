@@ -1,8 +1,0 @@
-tick=1391
-ts=2026-10-05 18:33:16
-task_prefix_ok=True
-task_len=60
-log_tail_starts_R1391=True
-log_tail_has_3of6=True
-focus_R1391=True
-production=open

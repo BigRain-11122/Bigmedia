@@ -1,9 +1,0 @@
-tick=606
-ts=2026-09-28 05:23:26
-task=R606: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 4/6=R603-R608·本窗不 co
-task_len=60
-log_count=629
-log_tail_head=2026-09-28 05:23 R606: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·新窗 4/6=R603-R608·本窗不 commit〔满 6=R608 或跨日 09-29
-focus_head=R607: 快速路径五查首行——锚=orders 35〔13:53:11〕·ledger 五模式 31〔03:14:32·行级基线=.c3-tmp/r606_lednew5.txt〕·decision
-export_ts=2026-09-28T05:23:26+08:00
-os_row_head=tick 606：R606（idle-fast 快速路径·五静+探针定谳绿——orders 35/ledger 五模式 31/decisions 63 三锚未动

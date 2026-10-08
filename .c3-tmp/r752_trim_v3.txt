@@ -1,1 +1,0 @@
-OK v3 written: col1/col2 verbatim 12/12 vs v1+v2; creed+facts+names kept; voiceover chars 213 -> 200 (-13)

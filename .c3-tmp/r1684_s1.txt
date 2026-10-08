@@ -1,5 +1,0 @@
-exit=0
-verdict_file=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\docs\reviews\expert-verdicts\20261008-014633-S1-script.md
-总分：10
-违律清单：无
-总裁决：完美合规，无违律现象。

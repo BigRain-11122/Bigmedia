@@ -1,4 +1,0 @@
-FOCUS_HEAD='R616: 快速路径五查'
-HAS_R615_R620=False
-HAS_WIN2=True
-SEG='idle-fast 一行收账（窗 2/6·本窗不 commit·满 6=R620 或跨日 09-29 00:00 先到即'

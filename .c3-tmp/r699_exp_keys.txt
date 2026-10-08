@@ -1,1 +1,0 @@
-{"export_ts": "str", "do": "str", "depts": "list", "outs": "list", "chips": "list", "results": "list", "live": "list"}

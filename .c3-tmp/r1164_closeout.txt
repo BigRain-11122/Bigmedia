@@ -1,5 +1,0 @@
-tick=1164
-ts=2026-10-04 00:55:45
-task=declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1164_all.py 00:55——or
-focus=R1164: declared-idle 声明窗 4/6（五查静 fresh 实证 r1164_all.py 00:55·三探针持平·全 lane 时序闸·waiting: 10-05 milestone batch ETA 2026-10-05）
-log_tail=2026-10-04 00:55 R1164: declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1164_all.py 00:55——orders 顶=O-20260928-1910 未变/ledger @target 41==41 零新行〔mtime 10-03 15:15 冻结基线承继·本轮自伤事件如实记：PS5.1 Get-Content 无 -Encoding

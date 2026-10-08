@@ -1,8 +1,0 @@
-SR157 eview-20260929-lc002-v1.md+sr-check.srt/sr-diff-r681.txt+e4-result.json（回填位）+lc002 README 收口行+finished.md F-055 块 |
-SR158 | 2026-09-29 | **M2+验图+M4.5 站审（MC-20260929-DIGEST-v10=queue §E 批活池 E2 首件·#67 触发律第三用·P-20260929-01 云端 token 机制令盘点·R682）** | MC-20260929-DIGEST-v10.png（--poster 出图 exit 0·3.8s 副产 mp4 149KB 移件 tmp=v2-v9 惯例） | 静态卡先人审（charter §5）+em 机核断言（横向+VERT R381 律·em-check-r682.txt）+多模态转写先行 | M4.5 七席 ≥9（6×9.0+E7 N/A
-SR159 
-SR160 | 2026-09-29 | **S2 三门循环独立执法+帧验三律（lc-003-v1-shipinhao=queue §E1 批活池 E1 件·#79 尾注 D25 缺口续补·源卡 CENSUS-v13 F-032 何雨欣·R684 渲染腿）** | lc-003-v1-shipinhao-60s.mp4（R-E shipinhao 12 段·11 柔转场 0 硬切·58.69s） | 循环独立执法（ai_feel+层 1.8+spec 微信视频号·纯脚本机检零 LLM）+帧验三律（会话内建多模态） | —（机检档·E8 终审待收官腿） | 对位表=cards-v1-matched（**拆条
-SR161 | 2026-09-29 | **E8 终审+ASR 终轨+M4 收官（lc-003-v1-shipinhao=queue §E1 批活池 E1 件·#79 尾注 D25 缺口续补收官件·F-057·排期表 D25 落位=视频号缺口清零·R683 claim 兑现·R685 收官腿）** | lc-003-v1-shipinhao-60s.mp4（R-E shipinhao 12 段 11 柔 0 硬切·58.69s）+.lc003-tmp/ audio.mp3 | 循环独立执法（ASR 终轨 R169 QC recipe medium-int8+beam5+noctx·HF_HUB_OFFL
-SR162 | 2026-09-29 | **S2 三门循环独立执法+帧验三律（lc-004-v1-shipinhao=queue §E 批活池 E4 件·冗余扩容位·源卡 CENSUS-v16 F-035 陆海峰·R687 渲染腿·断轮承接）** | lc-004-v1-shipinhao-60s.mp4（R-E shipinhao 12 段·11 柔转场 0 硬切·58.68s） | 循环独立执法（ai_feel+层 1.8+spec 微信视频号·纯脚本机检零 LLM）+帧验三律（会话内建多模态） | —（机检档·E8 终审待收官腿） | 对位表=cards-v1-matched（**拆条形态源卡即证
-SR163 
-SR164 | 2026-09-29 | **E8 终审+ASR 终轨+M4 收官（lc-004-v1-shipinhao=queue §E 批活池 E4 件·冗余扩容位收官件·F-058·排期表冗余池首件视频入池·R686 claim 兑现·R688 收官腿）** | lc-004-v1-shipinhao-60s.mp4（R-E shipinhao 12 段 11 柔 0 硬切·58.68s）+.lc004-tmp/ audio.mp3 | 循环独立执法（ASR 终轨 R169 QC recipe medium-int8+beam5+noctx·HF_HUB_OFFLINE=1 满载机面脱壳飞行 15

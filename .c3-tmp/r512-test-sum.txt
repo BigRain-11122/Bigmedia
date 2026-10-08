@@ -1,6 +1,0 @@
-    + FullyQualifiedErrorId : NativeCommandError
- 
-----------------------------------------------------------------------
-Ran 28 tests in 0.095s
-
-OK

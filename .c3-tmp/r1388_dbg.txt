@@ -1,5 +1,0 @@
-"\n    u'——这一句是假期清晨居家茶余饭后的一声爽朗闲话）。'\n    u'前六十六张：做灯笼的师傅在直播间晒灯笼/'\n    u'老房子居民看着街上挂起的节日灯亮堂了/灯下兄弟聚饮把酒言欢/节日"
----
-"一张老唱片，针尖沙沙落下，忆起往昔岁月，'\n    u'说听老唱片，忆往昔岁月，时光倒流一二里）。'\n    u'请回答三个问题，每题一段，"
----
-"2.5:14b',\n          'material': 'MC-20261005-DAILY-v67 static card (cards.json + render output)'}\ntry:\n    p = subprocess.run(['ollama', 'run', 'qwen2.5:14b'], input=prom"

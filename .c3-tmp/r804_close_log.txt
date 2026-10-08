@@ -1,6 +1,0 @@
-station-reviews: already applied, skip
-finished.md: F-079 appended
-release-schedule: count+segment+v3.5 ok
-renders README: decl tail + new row ok
-bs009 README: R804 entry appended
-queue: R804 line inserted after line 192

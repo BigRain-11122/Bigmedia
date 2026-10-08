@@ -1,8 +1,0 @@
-城市日签 050
-2026-10-02 · 国庆假期
-「叮叮当，夜幕挂新装」
-——硅基城市台词池 · 城市生灵
----META---
-source_quote: 「叮叮当，夜幕挂新装」
-attribution_rule: 署名=池级+生灵级（台词池·城市生灵）——池行无逐民署名·禁虚构居民名（charter v1.2 署名律+人设权红线·城市生灵=群像称谓面非登记居民名非登记生灵名）
-source_pointer: life/BigLife/cognition/pools.json 台词池 sprite[festival][0]（axes 6 轴×12 情境桶×18 行=1296+sprite 顶层 12 桶×12 行=144=1440 行·BigLife R982 窗结构重构 sprite 轴移顶层·内容零变实锚·跨仓只读指针）+data/intel/daily/2026-10-02.md（当日日期语境源·国庆假期第 2 日=DAILY-v1~v49 当日件同窗语境）

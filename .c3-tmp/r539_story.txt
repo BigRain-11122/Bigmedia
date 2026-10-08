@@ -1,4 +1,0 @@
-video tail=SC-003-01-v1.md @09-27 12:49:57
-novel tail=SC-001-04-v3.md @09-25 17:58:48
-audio tail=sc001-04-v3-tmp\r282_close.py @09-25 19:35:12
-comic tail=SC-002-02-v1.md @09-25 09:09:35

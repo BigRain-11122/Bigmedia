@@ -1,8 +1,0 @@
-orders_files=42 top=O-20260928-1910 (anchor, zero new)
-ledger_mtime=2026-10-02 03:17:36 baseline=2026-10-02 03:17:36 drift=NONE
-decisions_mtime=2026-10-02 00:06:16 baseline=2026-10-02 00:06:16 drift=NONE
-dnum_fresh_diff=NONE/120 (content-addressed; newest=D-20261002-02/03 in watermark; D-13 SLA no trigger)
-CENSUS_C00030_present=False (anchors top C-00029, supply gate held)
-index_lock=False production=open tick=969(pre-close)
-daily_2026_10_02=True W40_weekly_audit=held GB_gate=10-08
-lane_blind_spot_correction: charter v1.2 S1/S4 form code DAILY zero pieces + R810 five-face inventory omission + zero closure keyword hits -> claimable (R870 same-class correction)

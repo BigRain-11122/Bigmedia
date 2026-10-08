@@ -1,3 +1,0 @@
-len=685
-tailcodes=U+8BC4(评) U+5F8B(律) U+5408(合) U+89C4(规) U+96F6(零) U+5D4C(嵌) U+5BA1(审) U+8BA1(计) U+53F2(史) U+005D(]) U+FF09(）) U+3002(。)
-old2_found=True

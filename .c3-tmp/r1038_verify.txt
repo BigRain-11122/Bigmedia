@@ -1,5 +1,0 @@
-tick=1038
-ts=2026-10-03 02:13:52
-log_len=1066
-task=declared-idle 声明轮（空轮判定路径④·五静+探针绿+四查尽·声明轮并窗第四轮=零 commit 盘面即真相
-log_last_prefix=2026-10-03 02:13x R1038: declared-idle 声明轮（空轮判定路径④·五静+探针绿+四查尽·声明轮并窗第四轮=零 commit 

@@ -1,6 +1,0 @@
-exit=0
-WARN longsentence 13 chars/3 commas: '����̼࣬������ԭ������11 ��...'
-SUMMARY terms=12 FAIL=0 WARN=1
-PASS
-
-[stderr]

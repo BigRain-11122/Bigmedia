@@ -1,1 +1,0 @@
-- [WARN] account-drift-adjudicated: done beats=1468 vs tick=1461: 7 beat(s) within adjudicated drift baseline (broken-round double-body history; see state account_drift_note)

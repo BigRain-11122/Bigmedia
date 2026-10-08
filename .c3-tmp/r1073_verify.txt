@@ -1,5 +1,0 @@
-tick=1073
-ts=2026-10-03 08:54:57
-task=declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平+四查尽承继 R1069-R1072 f
-focus_head=R1073: declared-idle 声明轮并窗 5/6（五静 fresh+探针基线平+四查尽承继 R1069-R1072 fresh 链·D-202609
-log_tail=2026-10-03 08:54x R1073: declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平+四查尽承继 R1069-R1072 fresh 链·声明轮并窗第五轮 5/6·零 commit 盘面即真相·os-protocol §6 窗满 6 轮/跨日边界/任一异常/实活轮出现即收）——①轮首五查静（fresh r1071_check.py 复用实跑 08:52:58·证据件 .c3-tmp/r1071_check.txt（复用件名·mtime 08:52:58 fresh 实证）：orders 顶=O-20260928-1910 mtime 09-28 19:12:33 fresh 实证未动零新令/ledger @target 41 行==冻结基线零新派工行〔mtime 10-03 03:13:47=R1045 夜班例行条目已裁定承继〕/decisio

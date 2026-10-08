@@ -1,4 +1,0 @@
-font: {"file": "C:/Windows/Fonts/msyh.ttc", "cards_size": 60, "subs_size": 40, "aigc_size": 30, "subs_bottom": 110, "line_spacing": 14, "h1_font": "C:/Windows/Fonts/msyhbd.ttc", "h1_size": 96, "h1_color": "accent", "h2_size": 60, "h2_color": "white", "h1_gap": 48, "optical_center": 0.3}
-video: {"width": 1080, "height": 1080, "fps": 30, "bg": "black"}
-cards[0] keys: ['start', 'end', 'lines']
-meta keys: ['topic', 'line', 'form', 'tool', 'source_quote', 'source_pointer', 'attribution_rule', 'triple_label', 'editorial_value', 'hit_chain_m0', 'aspect_note', 'red_line']

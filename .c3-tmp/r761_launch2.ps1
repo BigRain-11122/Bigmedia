@@ -1,2 +1,0 @@
-Start-Process -FilePath "python" -ArgumentList "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r761_asr2.py" -WorkingDirectory "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream" -WindowStyle Hidden -RedirectStandardOutput "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r761_asr2_out.txt" -RedirectStandardError "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r761_asr2_err.txt"
-Write-Output "LAUNCHED-2"

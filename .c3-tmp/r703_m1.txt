@@ -1,6 +1,0 @@
-exit=0
-WARN jargon-term term '�ز�' first@L6 x1 (voiceover-v1.beats.txt) - L18: needs gloss same/next beat (human ruling)
-SUMMARY terms=12 FAIL=0 WARN=1
-PASS
-
-[stderr]

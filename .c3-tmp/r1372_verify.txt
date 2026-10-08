@@ -1,6 +1,0 @@
-tick=1372
-ts=2026-10-05 15:16:19
-task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
-production=open
-log_len=1400
-last_head=2026-10-05 15:2x R1372: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 5/6=R1368~R1371 同窗续静·开窗 commit 锁窗末收 os-protocol §6）——①

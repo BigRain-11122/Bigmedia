@@ -1,5 +1,0 @@
-tick=1167
-ts=2026-10-04 01:29:01
-task=declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1167_all.py 01:23——or
-last_log=2026-10-04 01:01:29 R1167: declared-idle 一行声明收轮（等待态·五查静 fresh 实证 r1167_all.py 01:23——orders 顶=O-20260928-1910 未变/ledger 
-FIXED head ok

@@ -1,2 +1,0 @@
-keys of axis[0]: ['morning', 'dusk', 'night', 'weekend', 'rain', 'typhoon', 'heatwave', 'coldsnap', 'market_open', 'market_close', 'ceo_order', 'festival']
-axis IS bucket map, sample key type: ['str', 'str', 'str']

@@ -1,9 +1,0 @@
-tick=590
-ts=2026-09-28 02:43:23
-task=R590: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·**新窗 6/6 满=R585-R590 本轮
-task_len=60
-log_count=613
-log_tail_head=2026-09-28 02:43 R590: idle-fast（快速路径·五静+探针定谳绿·不进开轮四步·**新窗 6/6 满=R585-R590 本轮 batch commit 收账+push**
-focus_head=R591: 快速路径五查首行——锚=orders 35〔13:53:11〕·ledger 五模式 31〔00:43:06·行级基线=.c3-tmp/r590_lednew5.txt〕·decision
-export_ts=2026-09-28T02:43:23+08:00
-os_row_head=tick 590：R590（idle-fast 快速路径·五静+探针定谳绿——orders 35/ledger 五模式 31 行级 diff 零新/decisi

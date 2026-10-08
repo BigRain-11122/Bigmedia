@@ -1,6 +1,0 @@
-tick=1390
-ts=2026-10-05 18:25:22
-task=declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-0
-log_len=1418
-log_tail1=2026-10-05 18:2x R1390: declared-idle 一行声明收轮（空轮判定·五静 fresh+探针基线带平+四查尽·P-2026-09-28-02 ②④序·声明轮并窗 2/6=R1389 同窗续静零漂移·开窗 commit 锁窗末收 os-protocol §6）——①五查 fresh 实证 .
-focus=R1390 declared-idle 声明窗 2/6（R1389 同窗续静零漂移·18:2x 五静+探针基线平·全 lane 时间闸·dusk 面 post-v68 枯竭）——下轮可领序：①OSS 窗 4 首切片（10-05 21:40 

@@ -1,7 +1,0 @@
-results_len=24
-last=660 elems=2
-prev=659 elems=2
-os_head=tick 660：R660 declared-idle 空轮判定（五静+探针绿+可领序尽·P-02 ②④序·窗 2/6=R659-R664）：E4 双回填态核已
-export_ts=2026-09-29T06:31:36+08:00
-reparse_ok results_len=24 last=660
-prev_elems=2 (must be 2)

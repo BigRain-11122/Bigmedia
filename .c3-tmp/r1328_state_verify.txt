@@ -1,4 +1,0 @@
-tick=1328 ts=2026-10-05 07:23:59
-task=R1328: declared-idle 声明窗 6/6 窗满即收=batch close R1323~R1328 一盘
-log_len=1356 last_line_head=2026-10-05 07:2x R1328: declared-idle 声明窗 6/6 窗满即收=batch close R1323~R1328 一盘 co
-production=open focus_head=R1328 声明窗 6/6 窗满即收=batch close R1323~R1328 一盘 commit 毕（五查静+探

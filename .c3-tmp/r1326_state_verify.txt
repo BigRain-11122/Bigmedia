@@ -1,4 +1,0 @@
-tick=1326 ts=2026-10-05 07:07:40
-task=R1326: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽+晨间面 derive 复核
-log_len=1354 last_line_head=2026-10-05 07:0x R1326: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽+晨间面 derive 复核判负留
-production=open focus_head=R1326 declared-idle 声明窗 4/6（五查静+探针平·晨间面 derive 复核判负留痕=供给枯竭独立

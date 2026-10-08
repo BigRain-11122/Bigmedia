@@ -1,4 +1,0 @@
-POOLS lines 1626 axes 1 sprite 1 (baseline 1440 total leaves: axes 1296 + sprite 144)
-LOOP FAIL 3 WARN 123 (baseline R1057: 3 FAIL + 123 WARN)
-ACCOUNT_LAG_LINES 1
-LAG_TAIL: - [FAIL] account-lag: 4 completed round(s) without accounting (done beats=1061 > tick=1057) - the R4/R5 bug pattern

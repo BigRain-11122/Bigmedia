@@ -1,1 +1,0 @@
-DL_PATH:C:\Users\sjs20\.cache\huggingface\hub\models--Systran--faster-whisper-medium\snapshots\08e178d48790749d25932bbc082711ddcfdfbc4f

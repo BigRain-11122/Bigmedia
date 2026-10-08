@@ -1,5 +1,0 @@
-tick=1127
-ts=2026-10-03 18:16:37
-task=declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh 机证+
-log_last_prefix=2026-10-03 18:2x R1127: declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+#86 三腿 fresh
-log_len=1155

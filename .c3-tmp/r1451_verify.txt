@@ -1,6 +1,0 @@
-tick=1451
-ts=2026-10-06 06:25:41
-task=R1451: waiting-idle 一行声明收轮（空轮判定路径④·五静 fresh+探针绿+四查尽·P-2026-0
-log_tail_first120=2026-10-06 06:25 R1451: waiting-idle 一行声明收轮（空轮判定路径④·五静 fresh+探针绿+四查尽·P-2026-09-28-02 ②④·保护态豁免面在案=时间闸/素材闸/CEO 物理件三族·结构性满载
-focus_head80=R1451 waiting-idle 一行声明收轮（空轮判定路径④·五静 fresh 实证 r1451_check_out.txt：orders 顶=O-202
-log_count=1480

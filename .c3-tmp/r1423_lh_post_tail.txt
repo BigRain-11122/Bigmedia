@@ -1,8 +1,0 @@
-- [WARN] heartbeat-gap: beat gap 30 min (2026-10-05 01:25 -> 2026-10-05 01:55) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] heartbeat-gap: beat gap 24 min (2026-10-05 05:39 -> 2026-10-05 06:03) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] heartbeat-gap: beat gap 21 min (2026-10-05 06:03 -> 2026-10-05 06:24) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] heartbeat-gap: beat gap 22 min (2026-10-05 17:44 -> 2026-10-05 18:05) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] heartbeat-gap: beat gap 23 min (2026-10-05 21:42 -> 2026-10-05 22:05) over 20 min comm SLA - long rounds may breach legitimately
-- [WARN] heartbeat-gap: beat gap 23 min (2026-10-05 23:54 -> 2026-10-06 00:17) over 20 min comm SLA - long rounds may breach legitimately
-- [FAIL] account-lag: 5 completed round(s) without accounting (done beats=1428 > tick=1423) - the R4/R5 bug pattern
-loop health: FAIL (3 fail, 142 warn)

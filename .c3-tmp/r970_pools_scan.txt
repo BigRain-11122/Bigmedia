@@ -1,6 +1,0 @@
-path=C:\Users\sjs20\Desktop\FluxGroup\life\BigLife\cognition\pools.json
-top_type=dict
-{
- "axes": "dict",
- "sprite": "dict"
-}

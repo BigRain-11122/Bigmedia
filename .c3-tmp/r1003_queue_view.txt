@@ -1,4 +1,0 @@
-L235: - 2026-10-02: **R999 E30 standby 续领=DAILY v30《城市日签 030》=F-115 登记（秩序/festival/2 verbatim「这节日灯挂得真妥当」·festival 桶当日直配第三十证+六轴
-L236: - 2026-10-02: **R1000 E30 standby 续领=DAILY v31《城市日签 031》=F-116 登记（逍遥/festival/4 verbatim「看那灯笼摇曳舞，胜过人间烟火炉」·festival 桶当日直配
-L237: - 2026-10-02: **R1001 E30 standby 续领=DAILY v32《城市日签 032》=F-117 登记（烟火/festival/10 verbatim「早点摊也得趁热闹，多卖点包子」·festival 桶当日直配
-L238: - 2026-10-02: **R1002 E30 standby 续领=DAILY v33《城市日签 033》=F-118 登记（怀旧/festival/4 verbatim「老克勒们最爱的，还是这传统的小确幸」·festival 桶当日

@@ -1,8 +1,0 @@
-keys: export_ts, do, depts, outs, chips, results, live
-export_ts: "2026-09-30 13:07:57"
-do: "AI 媒体产线：M0-M6 全链 OS 自治（量产已开闸 D-BS-06·成品库生产模式·发布仍锁账号物理件·未上线=未测量）+硅基城市内容宇宙三线新纪元（O-0850：网文/有声/漫画）+大众内容自动化面扩展（O-1327 三执行件全毕）+故事线爆款工艺立制（O-1720 四件闭环毕）+风格校准令（O-1756：ch.1-ch.4 v3 四章全毕 R276-R282）+全链条爆款机制（O-1931 三执行件全闭环：hit-chain
-depts: list len=8; first elem type=dict; sample={"n": "总裁办公室", "t": "O-20260925-1931-HQ-C 全链条爆款机制令收讫（R283 ack·R284 ①立制+②审查机制件交付毕=hit-chain-mechanism v1.0·R285 ③首件实证毕=**令三执行件全闭环·24h 窗内提前毕**）+O-20260925-1756 风格校准令（bm-a 创作腿闭环+循环音频腿：ch.1-ch.4 四章全毕 R276-R282）+O-1720 四件闭环毕+
-outs: list len=9; first elem type=list; sample=["OS 循环", "tick 748，R748 生产轮·LC-019 周浩宇拆条收官腿毕=F-074 登记+冗余池第十六件落位（产品优先律对位=本轮实物增量=lc-019 成片 F-074 入成品库 74 件·R746/R747 断洞链承接：E4 8.0 断洞轮落地+ASR 双跑证伪 VAD 因果→R748 R711 型两段拼接根修 11 cues 全覆盖 44.9% 字位·E8 七席 ≥9+M4）——lane=E20 徐根福 sta
-chips: list len=36; first elem type=list; sample=["M4 机检门", "live"]
-results: list len=19; first elem type=list; sample=["748", "2026-09-30 13:07 R748: 生产轮·LC-019 周浩宇拆条收官腿毕=F-074 登记+冗余池第十六件落位（queue §E 批活池 E16 件收官·R746/R747 断洞链承接·R726/R730/R734/R738/R742 同型·实活轮·产品优先律 P-20260929-07 对位=本轮新实物=lc-019 成片 F-074 入成品库 74 件）——①轮首五查静（r694_probe 口径：o
-live: list len=3; first elem type=list; sample=["当前活：LC-019 周浩宇拆条收官腿毕（R748）——F-074 登记=成品库第七十四件·冗余池第十六件落位（视频号冗余弹药 16 件）·lane=E20 徐根福 standby 单条<2·补池义务随轮领"]

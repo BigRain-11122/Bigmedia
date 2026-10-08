@@ -1,6 +1,0 @@
-tick=1091
-ts=2026-10-03 12:04:48
-task=declared-idle 声明轮（空轮判定路径④·五静 fresh+探针基线平零新增+四查尽承继 R1090 fres
-log_tail_is_R1091=2026-10-03 12:04x R1091: declared-idle 声明轮（空轮判定路径④·五静 fresh+
-log_len=1119
-focus_head=R1091: declared-idle 声明轮收口（五静+探针基线平零新增+E30 post-v63 供给机核 ungated=0 四连复证·声明窗 5/6）

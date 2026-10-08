@@ -1,4 +1,0 @@
-tick=1324 ts=2026-10-05 06:50:55
-task=R1324: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-
-log_len=1352 last_line_head=2026-10-05 06:5x R1324: declared-idle 一行声明收轮（空轮判定·五查静+探针基线平+四查尽·P-2026-09-28-02 
-production=open focus_head=R1324 declared-idle 声明窗 2/6（五查静+探针基线平·全 lane 时间闸：post-v67 日间

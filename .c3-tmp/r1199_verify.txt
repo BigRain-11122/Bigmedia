@@ -1,7 +1,0 @@
-﻿tick= 1199
-ts= 2026-10-04 06:54:24
-task_len= 60
-log_last= 2026-10-04 06:54 R1199: declared-idle һ���������֣������ж�����龲+̽�����ƽ+�Ĳ龡��P-2026-09-28-02 
-focus_head= R1198: declared-idle �����´� 1/6��
-prod= open
-dnums= 133

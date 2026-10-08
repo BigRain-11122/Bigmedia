@@ -1,3 +1,0 @@
-FOCUS-NUM: 60
-QUEUE-ROWS-NUMS: ['65', '60']
-R1010-QUEUE-ROW-TAIL: ）/E30 standby 续件/#94 记忆梳理（10-04）/W41 周轮件（10-05：周报+自驱提案窗+CLOUD_LINE 首测）。〔**轮内修正实录**=①festival 余行计数口径修正：R1008/R1009 行 65 未随消费递减=旧口径漂移·本行起=卡面级实扫（cards[].lines+source_quote+city-spirit）实测 60/108〔r1010_festcount.txt 逐轴实证〕②轮前 r1010_pool.txt 首版整 cards.json 文本匹配法误标秩序 line1 USED（meta 叙述面引用假命中）→卡面级重生成=R981/R1006 扫描件修正谱系回归·line1「守规矩才能让城市更安稳」真实 FREE 但零人物零场景口号（R442 弱点正中）内容强度弱于本行=选优结果不受影响·build fleet 断言=硬门不受影响〕
