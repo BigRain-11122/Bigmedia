@@ -35,7 +35,7 @@ d['tick'] = 1739
 d['ts'] = now
 d['task'] = log_line.split('R1739: ', 1)[1][:60]
 d['log'].append(log_line)
-json.dump(d, io.open(SP, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+json.dump(d, io.open(SP, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 
 e = json.load(io.open(EP, encoding='utf-8'))
 e['export_ts'] = now_min
