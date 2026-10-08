@@ -12,11 +12,11 @@
 
 | 环节 | 最新档（2026-10 谱系） | 现实档（现役/保底） | 装在哪 | 判负条件 |
 |---|---|---|---|---|
-| ①设定/剧本 | **Qwen3.5:9b**（Ollama·6.6GB·256K 多模态·防线二验讫）日活快档；**重档 A/B=Qwen3.8:27b**（最新旗舰·18GB·10-08 CEO 点名·官方页验讫：256K+图像视频理解+thinking 可调）——18GB 超单卡显存=bm-a 96GB RAM 混合档·夜窗重批（剧本终稿/改写） | 现役 qwen2.5:14b 维持至 A/B 过线 | bm-a | 剧本盲评低于现役即回退；9b vs 3.8-27b 同集对打定主档 |
+| ①设定/剧本 | **Qwen3.5:9b** 日活快档（6.6GB 显卡直跑）；**重档=Qwen3.8:27b 量化版**（CEO 10-08 追加令·unsloth/Qwen3.8-27B-GGUF 验讫存在·Dynamic 3.0 Q2~Q4 按卡选：bm-c 16GB=Q3/Q4 档·bm-a 12GB=Q2/Q3 档·执行前实测选档）；官方 ollama qwen3.8:27b=18GB 全量档=bm-a 96GB RAM 混合备位 | 现役 qwen2.5:14b 维持至 A/B 过线 | bm-a/bm-c | 量化档画质抽验不过即升全量档；9b vs 3.8-27b 同集对打定主档 |
 | ②分镜/一致性 | **StoryDiffusion**（漫剧多格一致对口·low_vram 官方脚本）+PuLID-FLUX（16GB 档）；分镜表=qwen3.5 JSON schema 结构化输出 | IP-Adapter+SDXL 现役零训练 | bm-c | 同角色 10 镜一致抽验<8 达标 |
 | ③提示词 | 编排仓内建 LLM→prompt 链（OpenMontage/Toonflow）+qwen3.5 分镜 schema 直出镜头提示词 | 现役 prompt 模板面 | bm-a | 无效 schema 率>5% |
 | ④文生图 | **Qwen-Image-2.0**（2026-02-10 发布·排版/海报/**漫画**增强·ComfyUI 原生路径）；2.1 细节待证 | FLUX GGUF/SDXL 现役（集团配方在案） | bm-c | 单图>3min 或中文文字渲染抽验不过 |
-| ⑤视频生成 | **HunyuanVideo-1.5**（8.3B·2025-11-21 发布·防线二验讫：蒸馏 8-12 步+FP8+cache+4090 单卡 75s+ComfyUI 官方指南+**Wan2GP 地板 6GB VRAM**+训练/LoRA 全开源）；LTX-2（音画同生）=解 gate 后升级候选 | LTX-0.9.8-13B-distilled 主选维持（集团既有选型·offload 律在案）+Wan2.2-5B GGUF 16GB 重验 | bm-a/bm-c | OOM 或 >2min/5s 片 |
+| ⑤视频生成 | **HunyuanVideo-1.5**（8.3B·2025-11-21 发布·防线二验讫：蒸馏 8-12 步+FP8+cache 推速+4090 单卡 75s+ComfyUI 官方指南+训练/LoRA 全开源·**官方地板=14GB 开 offload（专仓 System Requirements 直读·bm-c 16GB 稳跑；bm-a 12GB 走 Wan2GP 社区量化路线=低至 6GB VRAM 官方仓引证）**）；LTX-2（音画同生）=解 gate 后升级候选 | LTX-0.9.8-13B-distilled 主选维持（集团既有选型·offload 律在案）+Wan2.2-5B GGUF 16GB 重验（QuantStack 月下载 22 万） | bm-a/bm-c | OOM 或 >2min/5s 片 |
 | ⑥配音 | **CosyVoice3-0.5B**（中文 CER 0.81 官方对打表首·多角色多情感）——**声线律**：主声线维持 light 赛博+机器叙述者定档（D-BS 已裁·O-2136），配角扩多声纹（53 声纹池在 bm-c） | GPT-SoVITS（1 分钟克隆·MIT）+Kokoro/piper 在役；edge-tts 云免费位维持非关键任务 | bm-b | 中文盲评不及 edge-tts 现役 |
 | ⑦BGM/音乐 | **ACE-Step v1.5**（2026-01-28 发布·权重 MIT·<4GB）——**U5「暂缓」卡点解除路径就绪**（labbench 评测中·u326 §6.4 对打协议转正） | Stable Audio 3 Small-SFX（peak 2.4GB·锚件在案） | bm-b | 可用率<80% 回「暂缓」留痕 |
 | ⑧剪辑/合成 | **FFmpeg 确定性链主轨**（beats→plan→render 全程序化·全回归绿·反重复律）；增量=auto-editor 静音剪位试点 | 既有链不换 | bm-a/bm-b | 破坏回归链即退 |
@@ -31,7 +31,8 @@
 | **#3 OpenMontage** | 65k★/AGPL-3.0 | 「全本地跑通」证据最硬的 agentic 编排：零 API 键=Piper+免费素材；显式支持本地视频模型（wan2.1-1.3b 等→可换 HunyuanVideo-1.5） | bm-a（编排+skills）+bm-c（视频模型） | 本地 assistant 跑不通 skill 链，或 1.3b 画质不达标 |
 
 前置验证子项：DramaClaw（6.7k★/Elastic-2.0）自带 newapi 网关能否配 Ollama/ComfyUI 上游——能则升级试点，不能则违反全本地判负。
-判负留痕（已闭环）：MoneyPrinterTurbo（129k★ 但四段全与 M0-M6 重复·仅 prompt 模板借鉴）/NarratoAI（重复+定位偏航）/**火宝短剧**（15.8k★ 但 **CC BY-NC-SA 4.0 非商业=商用红线**·防线二 LICENSE 直读实证·视频段仅云端双硬伤）/hypit（2.5 月 2 万星=假仓嫌疑+SaaS 导流）/InstantID（insightface 非商用）。
+判负留痕（已闭环）：MoneyPrinterTurbo（129k★ 但四段全与 M0-M6 重复·仅 prompt 模板借鉴）/NarratoAI（重复+定位偏航）/**火宝短剧**（视频段仅云端=违反全本地令主硬伤；其 CC BY-NC-SA 4.0 防线二 LICENSE 直读实证·按 §6 NC 分级政策不再是草稿期一票否决·但商用前仍须许可）/hypit（2.5 月 2 万星=假仓嫌疑+SaaS 导流）。
+**InstantID 移出判负**（CEO 10-08 追加令 §6 NC 分级政策→草稿期可用位·insightface 非商用许可只限商用发布面；商用前换 PuLID-FLUX 商用安全等价件）。
 
 ## §3 三形态分期路径（题材主权=硅基城市·§2.5 条线同源）
 
@@ -63,7 +64,9 @@
 - **零新增采购**：全环节 12/16GB 档可跑（⑥⑦ bm-b 8GB 面可驻）——§六.6 扩容判据不触发，无购买卡。
 - **零云 API 费用**：全本地闭环；Toonflow/ArcReel 云供应商位全部弃用只走本地端点。
 - **显存预算**：bm-c 16GB=T2I+视频重活互斥分时（ComfyUI 共卡让路律）；bm-a 12GB=LLM 常驻+offload 视频档；磁盘预算行=模型件入 §11.8 预算表（新增模型 ≈Qwen-Image/HunyuanVideo-1.5/ACE-Step 三件 ≤60GB 量级·下前登记）。
-- **合规红线**：AGPL 仓（ArcReel/OpenMontage）=自用+改源开源义务评审先行（商用发布面法务一页纸随 PoC 附）；NC/非商用件全隔离（火宝/InstantID 已判负）。
+- **合规红线**：AGPL 仓（ArcReel/OpenMontage）=自用+改源开源义务评审先行（商用发布面法务一页纸随 PoC 附）。
+- **NC/禁商用件分级政策**（CEO 10-08 追加令原话「禁止商用的也能用，除非真的违规」）：**草稿库阶段**（当前态=零发布零收入）NC 件可用于研发/PoC/试验（InstantID 归位等）；**商用发布前清污门**=发布件开始产生收益前，NC 污染件须换商用安全等价件（PuLID 等）或取得授权——**真违规线=商用发布件含 NC 权重/代码**；本政策不改 M4 硬门（AIGC 标识/脱敏/红线五条照旧）。
+- **量化优先原则**（CEO 10-08 追加令「GitHub 有很多量化版本，请采用最新的能跑的」）：凡超卡档模型一律先查最新社区量化（unsloth/bartowski GGUF·city96/QuantStack ComfyUI-GGUF·Wan2GP 等），按卡选档执行前实测——全量档只作 RAM 混合备位，不作首选。
 
 ## §7 待 CEO 决策项（一句话可选方案）
 
@@ -71,10 +74,12 @@
 |---|---|---|
 | 1 | **新线立项签批**（短剧/漫剧/MV 三形态分期·漫剧先行） | 批 → charter+PLAN 入纲+backlog 排 P0 |
 | 2 | **试点装机授权**（bm-a 装 ArcReel/Toonflow/OpenMontage 三件 Docker·常驻服务装机须逐次授权律） | 批三件试点装（判负条件在案·装后 72h 出 PoC 判读） |
-| 3 | 剧本模型换装（qwen2.5→qwen3.5:9b） | 委托决策面内自决（A/B 判据 §5.1·报备即可） |
+| 3 | 剧本模型换装（qwen2.5→qwen3.5:9b 日活+qwen3.8-27b 量化重档 A/B） | 委托决策面内自决（A/B 判据 §5.1·报备即可） |
 | 4 | 发布面 | 不动（M5 账号锁不变·先成品库） |
 
 > 判负与拒绝也直给：若 CEO 对全本地画质上限有疑，唯一备选=云端 TJGenerators 对照轨（集团既有通道·§9.1.2 闸①拿本地探针失败证据才开）——本方案不默认走云。
 
 ## 变更记录
 - 2026-10-08: v1.0 首版（CEO 令 P-2026-10-08-02·双切片调研+防线二验讫组装·待签批）。
+- 2026-10-08: v1.1 Qwen3.8-27b 入剧本重档 A/B（CEO 点名·官方页 18GB 验讫）。
+- 2026-10-08: v1.2 CEO 追加令并案——①量化优先原则（Qwen3.8-27B-GGUF unsloth 验讫存在·Q2~Q4 按卡选档；HunyuanVideo-1.5 官方地板 14GB offload 直读验讫）②NC 分级政策（草稿期可用·商用发布前清污·InstantID 归位·火宝维持判负主因=仅云端）。
