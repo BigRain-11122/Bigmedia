@@ -711,11 +711,11 @@
   ],
   [
    "1773",
-   "2026-10-08 22:x R1773: 生产轮·#107 AIHOT 夜窗读数三组+栈守卫过零干预（栈三件全活 receipts 一分钟前真负载·评分 scored 159/ge60=54 续破局·failed 104→2 收口·归组队列 created 71+retry 6 吞吐 5 件/30min 排空 ≈明晨 06:00·非回填 ge60 三件全卡归组门·selected=0·首份真日报=明晨 08:00 compose 位三问判据收官点维持·state-ts 秒级修复自愈）——详见 state.json log R1773 行"
+   "2026-10-08 22:3x R1773: 生产轮·#107 AIHOT 夜窗读数三组+栈守卫过零干预（栈三件全活 receipts 一分钟前真负载·评分 scored 159/ge60=54 续破局·failed 104→2 收口·归组队列 created 71+retry 6 吞吐 5 件/30min 排空 ≈明晨 06:00·非回填 ge60 三件全卡归组门·selected=0·首份真日报=明晨 08:00 compose 位三问判据收官点维持·state-ts 秒级修复自愈）——详见 state.json log R1773 行"
   ]
  ],
  "live": [
-  "当前活：2026-10-08 22:x R1773 生产轮=#107 AIHOT 夜窗读数三组零干预〔栈三件全活 worker 39108+receipts 一分钟前真负载·评分面 scored 159/ge60=54 续破局·归组队列 created 71+retry 6 活磨吞吐 5 件/30min 排空 ≈明晨 06:00·非回填 ge60 三件 75.0/62.0/61.0 全卡归组门=selected 翻转唯一闸口〕→明晨 08:00 版窗 compose 位首份真日报三问判据收官〔质量问已过·窗 ≤10-10 12:00〕·下轮=OSS w5 切片 1+#110 Toonflow 装机腿+#109 余腿·MV 产线=bm-c A 向预开工在产（bm-a 查看位）+#99 blocked-on-channel（SLA ≤10-13）",
+  "当前活：2026-10-08 22:3x R1773 生产轮=#107 AIHOT 夜窗读数三组零干预〔栈三件全活 worker 39108+receipts 一分钟前真负载·评分面 scored 159/ge60=54 续破局·归组队列 created 71+retry 6 活磨吞吐 5 件/30min 排空 ≈明晨 06:00·非回填 ge60 三件 75.0/62.0/61.0 全卡归组门=selected 翻转唯一闸口〕→明晨 08:00 版窗 compose 位首份真日报三问判据收官〔质量问已过·窗 ≤10-10 12:00〕·下轮=OSS w5 切片 1+#110 Toonflow 装机腿+#109 余腿·MV 产线=bm-c A 向预开工在产（bm-a 查看位）+#99 blocked-on-channel（SLA ≤10-13）",
   "最近实物：qwen2.5:14b-8k 派生模型入库（2026-10-08 21:4x·ollama 本地册 9.0GB 层共享·num_ctx 8192·AIHOT PoC 模型位迭代三件）+AIHOT「雷达日报」全本地栈在役〔api 3101 health ok+worker 39108〔14b-8k 档〕+web 3100+PG 55432·scored 159 件 max 83.0·ge60=54=精选通道已打开〕+Toonflow v2.0.4 安装器落盘（20:31·42,179,191 字节·sha256 FDE76ABC…2949）+MV 风格样图 5 张+分镜呈审包（18:23·查看位过目·CEO 三选项 A/B/C 待勾选）——呈审包完整路径 C:/Users/sjs20/Desktop/FluxGroup/fleet/mv0001-handover/outbound/REVIEW-PACKAGE-v1.md（样图同目录 st1-st4 共 5 张 jpg）+MV0001 样片 v2（14:0x·234.25s 720P 59 镜十场）+F-166 DAILY v70（13:20）+「板块十年」五件 F-160~F-164（10-08）",
   "下个里程碑：AIHOT 首份本地日报三问判据（归组队列排空 ≈明晨 06:00→selected 翻转核→明晨 08:00 版窗〔10-08 08:00→10-09 08:00 非回填精选件〕compose 位首份真日报→质量〔已过=14b 证据在案〕/聚簇/资源三问·窗 ≤10-10 12:00→过=接城市信源+换名换标/判负=关线留痕）+OSS w5 切片（21:40 开窗随轮领）+#110 Toonflow 装机腿（NSIS 静默安装→Ollama 端点+ComfyUI 桥核验→1 集漫剧实测·72h 判读窗起算待装机）+MV CEO 勾选三选项（A=纯本地再修书库+刻字/B=云端关键帧批〔须批准〕/C=改构图）→视频段解冻→20 秒完成片级样片+REACT-v12 10-09（F-167·日报先补产）+#99 SLA ≤10-13+10-10 B3 W41+W42 周轮件 10-12+BigHouse P3 10-28"
  ]
