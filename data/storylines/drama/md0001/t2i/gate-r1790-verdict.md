@@ -23,3 +23,22 @@
 3. 装配腿不阻塞可并行启动（12 帧草稿档+13 段音轨已齐·KB 动效参数在 PACK）——但 **M4 前须 gate 复核 ≥8/9** 方可呈 CEO。
 
 **证据件**：gate-r1790-{lamp,tower,cat}.png（首轮）·gate-r1790-reroll-*.png（迭代一/二）·gate-r1790-pick-*.png（择优）·reroll{,2,3}-r1790.log+status.json·reroll3-candidates/ 9 候选。
+
+---
+
+## R1793 复核（Qwen-Image-2.1 全量重 roll frames-r1792/ 正式 gate）
+
+**首轮读数**：lamp 3/4（shot02/03/04 PASS·shot12 远景灯成光点锚不可辨 FAIL）/ tower 1/2（shot06 PASS·shot07 判 FAIL）/ cat 2/3（shot10/11 PASS·shot09 天线错位头顶+缺口不可见+毛色漂移 FAIL）= **6/9**。
+
+**勘误（如实入账）**：shot07 的 FAIL 系 gate 指令错置预期——PACK 正典 shot07=resolute side profile+琥珀屏光（非打盹镜；打盹镜=shot06「curled up asleep」且已 PASS），多模态确认 shot07 ①②③④⑥全命中=tower 实为 **2/2**。修正后真实读数 **7/9**，真残余=shot09+shot12 两镜。
+
+**迭代（reroll_r1793.py·定向 best-of-N 3 seed×2 镜·负锁加 antenna on head）**：
+- shot09：s19019/s19120 天线仍长头顶淘汰；**s19221=4/5 BEST**（尾尖金属天线正位唯一候选+纸条+灰白像素感+占比大；左耳 V 缺口侧跑角度被耳型遮挡不醒目=弱过注记·R1790「PASS 弱·不可证」同口径）→ 换入 frames-r1792/shot09.png。
+- shot12：**s13013=6/6 全中**（歪斜灯罩+暖光勾出补丁+同款悬臂灯+塔剪影+柱脚蜷猫+近黑收尾）→ 换入 frames-r1792/shot12.png；s13114=5/6 备选（塔剪影过暗）；s13215 灯型漂移弃用。
+
+**终读数：lamp 4/4 + tower 2/2 + cat 3/3 = 9/9 ≥8 = GATE PASS**（shot09 弱过注记：耳缺口角度遮·装配腿可选补耳部特写/转身镜强化该锚）。
+
+**证据件（R1793）**：gate-r1792-{lamp,tower,cat}.png（首轮三并排）·gate-r1792-reroll-{cat09,lamp12}.png（择优并排）·reroll_r1793.py+reroll-r1793.log+status.json+reroll-r1793/（6 候选+2 prev-fail 保全）。
+
+**装配腿解锁**（判据窗 72h 至 ~10-11 带内）：12 帧正档=frames-r1792/（9 角色镜全过+shot01/05/08 非角色镜）；13 段音轨+KB 参数在 PACK → 装配→S2 三门+帧验三律→E8→M4→F 登记。
+
