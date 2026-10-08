@@ -1,0 +1,37 @@
+now=2026-10-08 21:43:04
+tick=1770
+ts=2026-10-08 21:33:18
+task=R1770: 生产轮·#107 AIHOT 16k 重发链修复+双 worker 残活清剿（R1769 下步指针兑现·实
+wm_dnums=["D-20261008-04", "C-20261008-04", "D-20261008-05", "D-20261008-06", "D-20261008-07", "D-20261008-08", "D-20260930-008", "D-20260930-1"]
+wm_full={"dnums": ["C-20260101-01", "C-20260927-01", "C-20260927-02", "C-20260928-02", "C-20260929-01", "C-20260929-02", "C-20260929-03", "C-20260930-04", "C-20260930-05", "C-20260930-06", "C-20261001-01", "C-20261001-02", "C-20261001-03", "C-20261002-01", "C-20261006-01", "C-20261006-03", "D-20260924-01", "D-20260924-02", "D-20260924-03", "D-20260924-04", "D-20260924-05", "D-20260924-06", "D-20260924-07"
+log_len=1805
+---LOG---
+2026-10-08 20:5x R1768: 生产轮·#107 AIHOT「nothing judged」根因定谳+模型三切 qwen3.5:9b 迭代（R1767 下步指针兑现·实活轮）——①轮首五查=own orders 顶 O-20261008-1105 mtime 12:08:14==R1733 锚零新令/origin_gap_check QUIET ahead=0 behind=0/decisions mtime 12:07:19==锚·dnum 内容寻址差集 NEW=[] 水位 175 维持/ledger mtime 17:13:56==锚·@BigStream 族 3 行==值守锚零新转办/集团 orders mtime 20:11:10 尾行实读定谳=19:33 U360 吸嘟嘟游戏优化令（MiniGame 域 20:11 落盘·非 BS 份额知悉）+~20:0x gitsilent 勘误行（R1766 已消费）=零 BS 新份额/树态=mv0001 M+untracked bm-c 批域零接触/无 index.lock；②#107 三程读数+根因定谳：20:30 compose 落点=仍空集「daily:2026-10-08 nothing judged in its window」（compose 50/50 全同族）·栈三件活（api 200 {ok,db:ok}/web 200/PG 55432 在役）·链读数 articles 160〔analyzed 62/failed 52/new 44/blocked 2〕/analyses 68/embedd
+---LOG---
+2026-10-08 21:1x R1769: 生产轮·#107 AIHOT 9b 通道修复链全落位（两段根因+三修实证·科学决策迭代续）——①一轮失败定谳：9b 切档后 prefilter receipts 11/11+7/7 全同签名 finish=length No JSON=qwen3.5:9b reasoning 模型烧输出预算（probe 实证 think:false 经 /v1 可传且 node env-file 解析 OK·短 prompt 过/真实文章〔prompt 1855-2662 tokens〕思维链超 512 预算·enable_thinking 被忽略）；②二轮真根因：LLM_REASONING_TOKENS=4096 头寸落地〔错误信息处方〕后 21:07:55 receipt 铁证 maxTokens=4608 生效仍截断——usage total=4096=prompt 1855+completion 2241=打满 ollama CONTEXT 4096 上下文窗（r1769d 决定性双测 num_ctx 经 /v1 body 被忽略双截 4096）；③正修=模型级派生 qwen3.5:9b-16k〔ollama create FROM qwen3.5:9b PARAMETER num_ctx 16384·层共享零重下·零 ollama serve 重启=不碰他司共卡面〕+.env LLM_MODEL 切 16k 档+worker 重启 PID 34616→r1769f 验证过〔completion 5000 越界 total 5026=16
+---LOG---
+2026-10-08 21:3x R1770: 生产轮·#107 AIHOT 16k 重发链修复+双 worker 残活清剿（R1769 下步指针兑现·实活轮）——①轮首五查静（own orders 顶=O-20261008-1105 mtime 12:08:14==R1733 锚零新令/origin_gap_check QUIET ahead=0 behind=0/decisions dnum 内容寻址差集 NEW=[] 水位 175 维持/ledger @BigStream 族 3 行==值守锚零新转办/树脏仅 mv0001 批域〔最后写盘 15:30 陈迹·bm-c sprint 域零接触〕/今日日报 2026-10-08 在案不重产）；②首读定谳：16k receipts 零笔=重发面缺失非模型面——articles failed 96 终态〔content.ts unknown=立即 failed 不自动重发·33 new 于 21:00-21:16 被 base-9b 批次烧尽〕·cron sweep/recover 全 ok 但终态无自动重发·settings 活跃告警「新内容卡住了」在案→设计路径修复=admin API POST /api/admin/processing/requeue（password 登录→session+CSRF→requeueFailed 全组·审计面）**requeued=96**；③双 worker 残活实锤：21:27:25 同秒 interleave 双模型 receipts（base-9b 8 笔 failed 在烧 att
+dec_new=[]
+ledger_at_lines=2
+ledger_tail2=[" @BigStream ", " @BigStream "]
+order: O-20261008-1105-bm-a.md mtime=10-08 12:08
+order: O-20261008-1015-bm-a.md mtime=10-08 10:34
+order: O-20261008-0650-bm-a.md mtime=10-08 06:59
+---mv0001 dirty mtimes---
+10-08 15:30 PRODUCTION.md
+10-08 14:28 style-tests
+10-08 13:38 release
+10-08 13:36 full_mv_v2.py
+10-08 13:34 __pycache__
+10-08 13:11 BRIEF-v2.md
+10-08 13:37 MV0001_爱在西元前_样片v2.mp4
+10-08 13:36 lyrics_v2.ass
+10-08 12:05 MV0001_爱在西元前_样片v1.mp4
+10-08 12:05 lyrics.ass
+10-08 14:52 era-ref
+10-08 13:07 original-mv
+10-08 11:54 structure.json
+10-08 11:54 structure_quick.py
+10-08 11:53 analyze_structure.py
+10-08 11:52 lyrics-draft.srt
+daily_today=True

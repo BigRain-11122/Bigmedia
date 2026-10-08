@@ -1,0 +1,57 @@
+now=2026-10-08 21:45:48
+api_health=200 b'{"ok":true,"db":"ok","ms":0,"release":"dev"}'
+web=200
+=== articles by processing_state ===
+ processing_state | count 
+------------------+-------
+ new              |    64
+ analyzed         |    61
+ failed           |    48
+ blocked          |     2
+(4 rows)
+
+
+=== publications distribution (all) ===
+ total | scored | avg  | min  |  max  | ge60 | ge65 | ge76 | sel 
+-------+--------+------+------+-------+------+------+------+-----
+    64 |     62 | 26.9 | 3.00 | 50.00 |    0 |    0 |    0 |   0
+(1 row)
+
+
+=== publications 16k era (updated_at > 21:25) ===
+ total | scored | avg | min | max | ge60 | ge65 | ge76 | sel 
+-------+--------+-----+-----+-----+------+------+------+-----
+     0 |      0 |     |     |     |    0 |    0 |    0 |   0
+(1 row)
+
+
+=== receipts since 21:28 by model/status ===
+     model      |  status  | count | avg_s 
+----------------+----------+-------+-------
+ qwen3.5:9b-16k | unknown  |    44 |      
+ qwen3.5:9b-16k | pending  |     8 |      
+ qwen3.5:9b-16k | received |     6 |      
+ qwen3.5:9b-16k | failed   |     5 |      
+(4 rows)
+
+
+=== reports recent ===
+ id | kind | key | model | generated_at | len 
+----+------+-----+-------+--------------+-----
+(0 rows)
+
+
+=== job_runs recent ===
+ id  |       job        |          started_at           |         finished_at          | status |            detail            | error 
+-----+------------------+-------------------------------+------------------------------+--------+------------------------------+-------
+ 922 | sources.schedule | 2026-10-08 21:45:13.518603+08 | 2026-10-08 21:45:13.51994+08 | ok     | {"shards": 0, "enqueued": 0} | 
+ 921 | content.sweep    | 2026-10-08 21:45:13.517272+08 | 2026-10-08 21:45:13.52121+08 | ok     | {"enqueued": 1}              | 
+(2 rows)
+
+
+=== selected count ===
+ count 
+-------
+     0
+(1 row)
+
