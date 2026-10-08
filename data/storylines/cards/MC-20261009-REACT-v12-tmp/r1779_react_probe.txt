@@ -1,0 +1,7 @@
+r1779_react_probe.txt - R1010 exact-line probe, REACT-v12 selected rows vs all fleet card faces
+R1=守门人说，规矩不能松
+R2=有难处，找我准没错
+R3=城主发令，咱悠着点
+scan scope: data/storylines/cards/MC-*/cards.json (self excluded), exact substring
+result: 0 collisions (build assertion passed)
+bucket note: ceo_order REACT-series card-face FIRST USE; fleet-level first open = DAILY-v70 R1738 (yanhuo/17), rows disjoint, zero exact collision

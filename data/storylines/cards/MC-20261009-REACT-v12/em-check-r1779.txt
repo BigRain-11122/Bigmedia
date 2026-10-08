@@ -1,0 +1,12 @@
+em-check-r1779 (REACT-v12 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-09
+OK 24.10em margin +1.46  车子熄火距加油站仅 20 米，加油员拒绝打散装汽油，
+OK 21.65em margin +3.91  车主花 350 元拖车到加油站，到底是谁的问题？
+OK 16.00em margin +9.56  秩序轴：「守门人说，规矩不能松」
+OK 15.00em margin +10.56  侠气轴：「有难处，找我准没错」
+OK 15.00em margin +10.56  逍遥轴：「城主发令，咱悠着点」
+OK 20.00em margin +5.56  时空校准师信条：「差之毫秒，谬以全城。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=833px subs_top=932px gap=99px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS
