@@ -1,0 +1,2 @@
+SELECT 'top_pubs|' || p.article_id || '|score=' || p.score || '|tier=' || s.tier || '|upd=' || p.updated_at || '|sel=' || p.selected || '|vis=' || p.visibility || '|backfill=' || p.backfill || '|ready=' || coalesce(p.selected_ready_at::text,'null') FROM publications p JOIN sources s ON s.id = p.source_id WHERE p.score >= 65 ORDER BY p.score DESC LIMIT 10;
+SELECT 'src_tiers|' || tier || '|' || count(*) FROM sources GROUP BY tier;
