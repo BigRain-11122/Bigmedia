@@ -1,0 +1,9 @@
+pool assert: axes[烟火][ceo_order][17] verbatim OK; ceo_order bucket=18 rows; axes 6 structure (R982); bucket-head structure anchor + v69 weekend/13 + REACT-v11 coldsnap/0 consumed-row structural anchors; CEO-order-day gate: own CEO direct order receipt file + group orders P-2026-10-08-05 rows asserted; card-face-level fleet dedup OK (R1010 law: lines+source_quote scan; city-spirit NOT_IN pre-check + all cards.json incl DAILY-v1..v69; CEO-order-day gate redemption production time 2026-10-08 13:10:20
+H1 96 budget 9.58em | H2 50 budget 18.40em (ladder pick, margin>=0.2em) | VERT stack bottom 686px vs subs top 970px gap +284px (need >=20) R381
+6.15  em  budget 9.58  em  margin +3.43em  single=True  城市日签 070
+14.60 em  budget 18.40 em  margin +3.80em  single=True  2026-10-08 · 城主连令日 · 午
+17.00 em  budget 18.40 em  margin +1.40em  single=True  「城主发话了，早点铺子快忙活起来」
+12.65 em  budget 18.40 em  margin +5.75em  single=True  ——硅基城市台词池 · 烟火轴
+subs   19.00 em  budget 23.00 em  margin +4.00em  引文取自硅基城市台词池（虚构城市档案）
+EM_CHECK: ALL OK
+LADDER_50: quote line 17.00em driver (canonical band library em-budget-ladder.md 50->46->44->40->36->32->28 max-feasible pick; 50-band budget 18.40em margin +1.40em; four-LINES stack VERT +284px); all other QUOTE-v2 params verbatim; CEO-order-day double-anchor + ceo_order-bucket-first-use + same-axis-different-line + fictional-register honest notes carried in meta.form
