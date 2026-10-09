@@ -360,10 +360,17 @@ def _probe_duration(path):
 def _wrap_crossings(seg, start, end):
     """(sampled_times, unsampled_count, error) for a stream_loop beat.
 
-    Law 3 (footage-matching-spec v1.1 S4): a beat longer than its source
-    wraps at beat-relative (src_len - src_off) + k*src_len. R196 fake
-    green: a dirty source tail wrapped into 8 beats while neither mid
-    nor tail sampling touched the crossing zone.
+    Law 3 (footage-matching-spec v1.1 S4) samples where the RENDER
+    branch actually crosses the loop boundary (tech#23 pilot, R1834):
+    plain matched plays the looped source from its head (render_segments
+    passes no -ss), so plan src_off_s is dead data on that branch and
+    wraps land at k*src_len; ramp segments consume the looped timeline
+    through variable-speed micro-blocks (ramp_filter_complex trims at
+    absolute src_off_s + block positions), so crossing times are walked
+    block by block - a speed>1 block reaches the boundary EARLIER than
+    the linear src_len-src_off guess (pilot: 2nd crossing 5.43s actual
+    vs 6.00s linear, far outside the +-LOOP_EDGE_S zone = R196 fake
+    green face). Sample the true crossing zone, never the guess.
     """
     src = seg.get("visual_source")
     if not src:
@@ -374,22 +381,44 @@ def _wrap_crossings(seg, start, end):
     dur = _probe_duration(src)
     if dur is None:
         return [], 0, "source duration unprovable: %s" % src
-    src_off = float(seg.get("src_off_s", 0.0) or 0.0)
-    first = dur - src_off
-    if first <= 0:
-        return [], 0, "src_off_s >= source length (degenerate plan): %s" % src
-    full, t = 0, first
-    while t < span - 1e-3:
-        full += 1
-        t += dur
-    if not full:
+    if dur <= 0:
+        return [], 0, "source length <= 0 (degenerate): %s" % src
+    beats = []                        # beat-relative wrap times, in order
+    ramp = seg.get("ramp")
+    if not ramp:
+        t, k = dur, 1
+        while t < span - 1e-3:
+            beats.append(t)
+            k += 1
+            t = k * dur
+    else:
+        off = float(seg.get("src_off_s", 0.0) or 0.0)
+        t_beat = 0.0
+        for b in ramp:
+            a = off + float(b.get("src_start_s", 0.0) or 0.0)
+            e = off + float(b.get("src_end_s", 0.0) or 0.0)
+            v = float(b.get("speed", 1.0) or 1.0)
+            if e <= a or v <= 0:
+                continue              # degenerate block: consumes nothing
+            m = int(a // dur)
+            if a - m * dur > 1e-9:
+                m += 1                # crossings at m*dur within [a, e)
+            if m < 1:
+                m = 1                 # position 0 is the segment head, not a wrap
+            while m * dur < e - 1e-9:
+                bt = t_beat + (m * dur - a) / v
+                if bt >= span - 1e-3:
+                    break
+                beats.append(bt)
+                m += 1
+            t_beat += (e - a) / v
+            if t_beat >= span - 1e-3:
+                break
+    if not beats:
         return [], 0, None  # beat shorter than source: no wrap occurs
-    sampled = min(full, LOOP_MAX_CROSS)
-    times, t = [], first
-    while len(times) < sampled:
-        times.append(start + t)
-        t += dur
-    return times, full - sampled, None
+    sampled = min(len(beats), LOOP_MAX_CROSS)
+    times = [start + b for b in beats[:sampled]]
+    return times, len(beats) - sampled, None
 
 
 def check_frames(video, plan, outdir):

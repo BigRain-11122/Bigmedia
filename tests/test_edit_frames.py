@@ -273,6 +273,62 @@ class TestLoopCrossLaw(unittest.TestCase):
         self.assertIsNone(self.level(fs, "loop-cross"))
         self.assertIsNone(self.level(fs, "loop-cross-probe"))
 
+    # ---- tech#23 (R1834): branch-aware wrap crossing faces ----------
+
+    def test_plain_matched_src_off_is_dead_data(self):
+        """Plain matched renders from the source head (no -ss), so a
+        plan src_off_s never shifts the wrap - crossings at k*src_len."""
+        src = self.root / "src3.mp4"
+        make_source_video(src, dur=3.0)
+        seg = {"visual_source": str(src), "src_off_s": 1.5}
+        times, over, err = ecc._wrap_crossings(seg, 0.0, 5.0)
+        self.assertIsNone(err)
+        self.assertEqual([round(t, 3) for t in times], [3.0])
+        self.assertEqual(over, 0)
+
+    def test_ramp_walk_matches_ladder_speeds(self):
+        """A speed>1 micro-block reaches the boundary EARLIER than the
+        linear src_len guess - the walk must reflect block speeds."""
+        src = self.root / "src3.mp4"
+        make_source_video(src, dur=3.0)
+        seg = {"visual_source": str(src), "src_off_s": 0.0,
+               "ramp": [{"src_start_s": 0.0, "src_end_s": 4.833,
+                         "speed": 1.0},
+                        {"src_start_s": 4.833, "src_end_s": 9.1,
+                         "speed": 2.0}]}
+        times, over, err = ecc._wrap_crossings(seg, 0.0, 8.0)
+        self.assertIsNone(err)
+        self.assertEqual(len(times), 3)
+        for want, got in zip([3.0, 5.417, 6.917], times):
+            self.assertAlmostEqual(want, got, places=2)
+        self.assertEqual(over, 0)
+
+    def test_ramp_src_off_honored_in_head_block(self):
+        """Ramp trims at absolute src_off + block position on the looped
+        timeline - a head-block crossing lands at src_len - src_off."""
+        src = self.root / "src3.mp4"
+        make_source_video(src, dur=3.0)
+        seg = {"visual_source": str(src), "src_off_s": 1.5,
+               "ramp": [{"src_start_s": 0.0, "src_end_s": 3.033,
+                         "speed": 1.0}]}
+        times, over, err = ecc._wrap_crossings(seg, 0.0, 5.0)
+        self.assertIsNone(err)
+        self.assertEqual([round(t, 3) for t in times], [1.5])
+        self.assertEqual(over, 0)
+
+    def test_ramp_src_off_beyond_src_len_still_valid(self):
+        """src_off >= src_len is legal on a looped input (the old linear
+        face mislabeled it degenerate); the walk still finds k >= 1."""
+        src = self.root / "src3.mp4"
+        make_source_video(src, dur=3.0)
+        seg = {"visual_source": str(src), "src_off_s": 3.5,
+               "ramp": [{"src_start_s": 0.0, "src_end_s": 2.967,
+                         "speed": 1.0}]}
+        times, over, err = ecc._wrap_crossings(seg, 0.0, 5.0)
+        self.assertIsNone(err)
+        self.assertEqual([round(t, 3) for t in times], [2.5])
+        self.assertEqual(over, 0)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
