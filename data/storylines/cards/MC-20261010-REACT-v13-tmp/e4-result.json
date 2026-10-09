@@ -1,0 +1,6 @@
+{
+  "ts": "2026-10-10 00:15:12",
+  "model": "qwen2.5:14b",
+  "material": "MC-20261010-REACT-v13 static card (cards.json + render output)",
+  "verdict": "TIMEOUT-1500s"
+}
