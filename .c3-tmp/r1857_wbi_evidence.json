@@ -1,0 +1,86 @@
+{
+ "ts": "2026-10-10 03:05:10",
+ "requests": 5,
+ "unsigned_rid138": {
+  "http": 200,
+  "code": -352,
+  "message": "-352"
+ },
+ "J1_nav": {
+  "http": 200,
+  "code": -101,
+  "isLogin": false,
+  "img_key": "7cd084941338484aae1ad9425b84077c",
+  "sub_key": "4932caff0ff746eab6f01bf08b70ac45"
+ },
+ "J1_pass": true,
+ "mixin_key_len": 32,
+ "signed_rid138": {
+  "http": 200,
+  "code": -352,
+  "message": "-352",
+  "list_len": 0,
+  "note": null
+ },
+ "buvid": {
+  "b3": "D0E546A7...",
+  "b4": "CF023C2C..."
+ },
+ "signed_rid138_buvid": {
+  "http": 200,
+  "code": -352,
+  "message": "-352",
+  "list_len": 0,
+  "note": null
+ },
+ "sample_top3": [],
+ "J2_pass": false,
+ "verdict": "FAIL",
+ "legacy_route": {
+  "endpoint": "GET https://api.bilibili.com/x/web-interface/ranking/region?rid={rid}&day={day}",
+  "probes": {
+   "rid=138 day=3": {
+    "code": 0,
+    "len": 9,
+    "top1": {
+     "title": "每天一遍，天天开心",
+     "author": "小小潮爱生活",
+     "play": 3229616,
+     "duration": "0:58",
+     "create": "2025-04-08 16:12",
+     "bvid": "BV1dFdpYqEcq"
+    }
+   },
+   "rid=138 day=7": {
+    "code": 0,
+    "len": 10,
+    "top1_play": 4685697
+   },
+   "rid=5 day=3": {
+    "code": 0,
+    "len": 11,
+    "top1_play": 5217309
+   }
+  },
+  "schema_fields": [
+   "aid",
+   "bvid",
+   "title",
+   "author",
+   "mid",
+   "play",
+   "video_review",
+   "coins",
+   "favorites",
+   "pts",
+   "duration",
+   "create",
+   "typename",
+   "pic",
+   "description"
+  ],
+  "note": "zero-key anonymous, no wbi, no cookie, UA+Referer only"
+ },
+ "goal_level_verdict": "vertical leaderboard channel reachable via legacy region route (PASS); wbi engineering candidate itself judged negative (insufficient for v2 endpoint, unnecessary for legacy endpoint)",
+ "total_external_requests": 17
+}
