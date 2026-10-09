@@ -59,6 +59,13 @@ TEMPLATE = REPO / "src" / "os" / "report_template.md"
 OUT_DIR = REPO / "output" / "reports"
 QUEUE = REPO / "docs" / "self-improvement-queue.md"
 CLOUD_ATTR = REPO / "data" / "cloud-attribution.json"
+# P-33 collected face, read-side consumption (tech#8, self-drive 7.1):
+# BigCompute's machine-level GPU util collector appends one JSONL row per
+# ~15 min sample on this host (since 2026-09-28). Cross-repo READ ONLY;
+# the file lives outside this repo, so clones/other machines degrade to
+# the honest N/A / instant-sample fallback.
+GPU_SAMPLES = (REPO.parent.parent / "compute" / "BigCompute" /
+               "state" / "gpu-util" / "samples.jsonl")
 
 LOG_RE = re.compile(r"^(\d{4}-\d{2}-\d{2})\s+(.*)$")
 ROUND_RE = re.compile(r"^R\d+\b")
@@ -102,7 +109,8 @@ PLACEHOLDERS = (
     "WEEK_LABEL", "GEN_TS", "SINCE", "UNTIL", "ROUNDS", "TICK", "IDLE",
     "OTHER", "COMMITS_N", "DONE_N", "OPEN_N", "ORDERS_N",
     "NOVEL_N", "NOVEL_P", "AUDIO_N", "AUDIO_P", "COMIC_N", "COMIC_P",
-    "EXT_N", "EXT_P", "GPU_MEAN", "PROPOSALS_N", "CLOUD_LINE",
+    "EXT_N", "EXT_P", "GPU_MEAN", "GPU_N", "GPU_MAX", "GPU_INSTANT",
+    "PROPOSALS_N", "CLOUD_LINE",
     "ROUNDS_LOG", "COMMITS_LOG", "DONE_LOG", "OPEN_LOG", "ORDERS_LOG",
 )
 
@@ -292,6 +300,40 @@ def gpu_util_mean(samples=5, delay=1.0, query=None):
     return int(round(sum(vals) / float(len(vals))))
 
 
+def gpu_ledger_weekly(path, since, until):
+    """Weekly GPU utilization stats from the P-33 collector ledger.
+
+    Rows look like {"ts": "YYYY-MM-DDTHH:MM:SS", "util_pct": 4.0, ...};
+    rows dated inside [since, until] feed a sample-count-weighted weekly
+    mean (honest replacement for the old generation-time-only probe).
+    Malformed/out-of-window lines are skipped, never guessed; a missing
+    or unreadable ledger returns None (report prints N/A).
+    """
+    try:
+        rows = path.read_text(encoding="utf-8",
+                              errors="replace").splitlines()
+    except OSError:
+        return None
+    vals = []
+    for line in rows:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rec = json.loads(line)
+        except ValueError:
+            continue
+        if not in_window(str(rec.get("ts", ""))[:10], since, until):
+            continue
+        v = rec.get("util_pct")
+        if isinstance(v, (int, float)):
+            vals.append(float(v))
+    if not vals:
+        return None
+    return {"mean": int(round(sum(vals) / len(vals))),
+            "n": len(vals), "max": int(round(max(vals)))}
+
+
 def cloud_attribution(path=CLOUD_ATTR):
     """Cloud billing-task line from the local attribution ledger share
     (C-20260929-01 A/B dispatch item 3; L1 script, zero LLM).
@@ -345,8 +387,8 @@ def collect_selfdrive(repo, queue_path, since, until, week_label):
     Each leg degrades to None ("N/A" in the report) instead of guessing.
     """
     sd = {"total": None, "novel": None, "audio": None, "comic": None,
-          "video": None, "cards": None, "gpu": None, "proposals": None,
-          "cloud": None}
+          "video": None, "cards": None, "gpu": None, "gpu_ledger": None,
+          "proposals": None, "cloud": None}
     try:
         total, counts = commits_line_touch(repo, since, until)
         sd["total"] = total
@@ -354,6 +396,7 @@ def collect_selfdrive(repo, queue_path, since, until, week_label):
             sd[name] = counts[name]
     except (OSError, ValueError, subprocess.SubprocessError):
         pass
+    sd["gpu_ledger"] = gpu_ledger_weekly(GPU_SAMPLES, since, until)
     sd["gpu"] = gpu_util_mean()
     sd["proposals"] = proposal_count(queue_path, week_label)
     sd["cloud"] = cloud_attribution()
@@ -379,6 +422,12 @@ def build_report(template_text, week_label, since, until, state, commits,
             return "N/A"
         return "%d%%" % int(round(100.0 * v / total))
 
+    led = sd.get("gpu_ledger") or {}
+
+    def _led(key):
+        v = led.get(key)
+        return "N/A" if v is None else str(v)
+
     values = {
         "WEEK_LABEL": week_label,
         "GEN_TS": gen_ts,
@@ -398,7 +447,9 @@ def build_report(template_text, week_label, since, until, state, commits,
         "EXT_N": "N/A" if ext is None else str(ext),
         "EXT_P": "N/A" if ext is None or not total else
                  "%d%%" % int(round(100.0 * ext / total)),
-        "GPU_MEAN": "N/A" if sd.get("gpu") is None else str(sd["gpu"]),
+        "GPU_MEAN": _led("mean"), "GPU_N": _led("n"),
+        "GPU_MAX": _led("max"),
+        "GPU_INSTANT": "N/A" if sd.get("gpu") is None else str(sd["gpu"]),
         "PROPOSALS_N": "N/A" if sd.get("proposals") is None
                        else str(sd["proposals"]),
         "CLOUD_LINE": "N/A" if sd.get("cloud") is None else str(sd["cloud"]),
@@ -455,10 +506,11 @@ def main(argv):
     ext = None
     if sd.get("video") is not None or sd.get("cards") is not None:
         ext = (sd.get("video") or 0) + (sd.get("cards") or 0)
-    print("self-drive: novel=%s audio=%s comic=%s ext=%s gpu=%s idle=%d"
-          " proposals=%s"
+    led = sd.get("gpu_ledger") or {}
+    print("self-drive: novel=%s audio=%s comic=%s ext=%s gpu_ledger=%s"
+          " gpu_instant=%s idle=%d proposals=%s"
           % (sd.get("novel"), sd.get("audio"), sd.get("comic"), ext,
-             sd.get("gpu"), state["idle"], sd.get("proposals")))
+             led or "N/A", sd.get("gpu"), state["idle"], sd.get("proposals")))
     return 0
 
 

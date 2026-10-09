@@ -122,6 +122,27 @@ class ParserTests(unittest.TestCase):
                          20)
         self.assertIsNone(wr.gpu_util_mean(2, 0, query=lambda: None))
 
+    def test_gpu_ledger_weekly_window_and_noise(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "samples.jsonl"
+            p.write_text(
+                '{"ts": "2026-09-20T23:00:00", "util_pct": 99.0}\n'   # before window
+                '{"ts": "2026-09-21T09:00:00", "util_pct": 4.0}\n'
+                '{"ts": "2026-09-23T12:30:00", "util_pct": 8.0}\n'
+                'not json at all\n'
+                '{"ts": "2026-09-25T18:00:00"}\n'                     # no util_pct
+                '{"ts": "2026-09-27T23:59:00", "util_pct": 100.0}\n'
+                '{"ts": "2026-09-28T00:01:00", "util_pct": 77.0}\n'   # after window
+                '\n',
+                encoding="utf-8")
+            led = wr.gpu_ledger_weekly(p, date(2026, 9, 21), date(2026, 9, 27))
+            # in-window vals: 4.0, 8.0, 100.0 -> mean 37.33 -> 37, max 100
+            self.assertEqual(led, {"mean": 37, "n": 3, "max": 100})
+        # missing ledger degrades to None (report prints N/A)
+        self.assertIsNone(wr.gpu_ledger_weekly(
+            Path("no", "such", "samples.jsonl"),
+            date(2026, 9, 21), date(2026, 9, 27)))
+
     def test_template_has_all_placeholders(self):
         text = wr.TEMPLATE.read_text(encoding="utf-8")
         for ph in wr.PLACEHOLDERS:
@@ -133,7 +154,8 @@ class ParserTests(unittest.TestCase):
         names = wr.parse_orders(self.orders_dir, self.monday, self.sunday)
         template = wr.TEMPLATE.read_text(encoding="utf-8")
         sd = {"total": 1, "novel": 1, "audio": 0, "comic": 0,
-              "video": 0, "cards": 0, "gpu": 7, "proposals": 1}
+              "video": 0, "cards": 0, "gpu": 7, "proposals": 1,
+              "gpu_ledger": {"mean": 9, "n": 196, "max": 100}}
         text = wr.build_report(template, "2026-W39", self.monday, self.sunday, st,
                                [("abc1234", "2026-09-23 10:00", "fixture commit")],
                                done_lines, open_lines, names, sd,
@@ -143,7 +165,11 @@ class ParserTests(unittest.TestCase):
         self.assertIn("- O-20260923-0900-bm-a.md", text)
         # self-drive line renders counts, shares and criteria table
         self.assertIn("\u7f51\u6587 1 \u4ef6/100%", text)
-        self.assertIn("GPU \u5229\u7528\u7387 7%", text)
+        # tech#8: ledger weekly mean line + generation-time fallback both render
+        self.assertIn("GPU \u5229\u7528\u7387 \u5468\u5747 9%", text)
+        self.assertIn("P-33 \u91c7\u96c6\u53f0\u8d26 196 \u91c7\u6837", text)
+        self.assertIn("\u7a97\u5185 max 100%", text)
+        self.assertIn("\u751f\u6210\u65f6\u70b9 7%", text)
         self.assertIn("\u521b\u65b0\u63d0\u6848 1 \u4ef6", text)
         for ph in wr.PLACEHOLDERS:
             self.assertNotIn("{%s}" % ph, text, "unfilled placeholder %s" % ph)
