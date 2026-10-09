@@ -38,3 +38,4 @@ schema 无效率 ≤5% + verbatim 锚逐字在位 + 单集 60-90s（drama-ep 窗
 ## 生产记录
 
 - [R1843 claim 2026-10-09] 起链腿=题材选型定谳+溯源预登+避让表（本件）。GPU 10.5/12GB 满载（MV 出图窗）→剧本腿顺延独占窗。
+- [R1870 材料预置 2026-10-10] 剧本腿材料件三件全落（等待窗 CPU 面·12:00 独占窗 fire-ready）：`sources.md` 溯源对表（编年史第一日五节点 verbatim+C-00010 正典字段 verbatim+**时间窗边界**〔防后时段字段错位植入第一夜〕+meet_ring 令牌排除面承继）+`prompt-script-v1.txt`（三幕结构 open→order→delivery→dawn→close·12-13 镜 60-90s·三声部 narrator/system/afeng）+`gen-script-v1.py`（R1782 v2 工艺承继=原生 /api/generate think=false·validate 扩 verbatim 五锚机检·SMOKE-OK 三面〔valid 零问题/bad 锚缺旗/extract_json 鲁棒〕）——12:00 窗 fire 序=nvidia-smi 守卫（≥9GB·R-20261010 §5 调度铁律）→`python data/storylines/drama/md0002/gen-script-v1.py` 一条命令。
