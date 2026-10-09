@@ -147,13 +147,14 @@ class RenderTests(unittest.TestCase):
         d = make_renders(self, ["alpha.mp4", "beta.wav"], "readiness_renders_ok")
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), set())
-        self.assertEqual([ok for _, ok in rows], [True, True])
+        self.assertEqual([s for _, s in rows],
+                         [readiness.TEST_MARK, readiness.TEST_MARK])
 
     def test_unannotated_fails(self):
         d = make_renders(self, ["alpha.mp4"], "readiness_renders_bare")
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), {"render-unannot"})
-        self.assertEqual(rows[0][1], False)
+        self.assertIsNone(rows[0][1])
 
     def test_production_mark_passes(self):
         # D-BS-06 gate-open era: ledger rows carrying the production mark
@@ -161,7 +162,7 @@ class RenderTests(unittest.TestCase):
         d = make_renders(self, ["gamma.mp4"], "readiness_renders_product")
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), set())
-        self.assertEqual([ok for _, ok in rows], [True])
+        self.assertEqual([s for _, s in rows], [readiness.PRODUCT_MARK])
 
     def test_superseded_mark_passes_and_prose_guard(self):
         # #23 v14 rectification-batch era: rows superseded by re-renders
@@ -173,8 +174,8 @@ class RenderTests(unittest.TestCase):
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), {"render-unannot"})
         marks = dict(rows)
-        self.assertEqual(marks["gamma.mp4"], True)
-        self.assertEqual(marks["delta.mp4"], False)
+        self.assertEqual(marks["gamma.mp4"], readiness.SUPERSEDED_MARK)
+        self.assertIsNone(marks["delta.mp4"])
 
     def test_disposed_mark_passes_and_prose_guard(self):
         # D-BS-08 escalation-disposal era: rows disposed by ruling stay
@@ -186,8 +187,8 @@ class RenderTests(unittest.TestCase):
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), {"render-unannot"})
         marks = dict(rows)
-        self.assertEqual(marks["gamma.mp4"], True)
-        self.assertEqual(marks["delta.mp4"], False)
+        self.assertEqual(marks["gamma.mp4"], readiness.DISPOSED_MARK)
+        self.assertIsNone(marks["delta.mp4"])
 
     def test_product_slot_mark_passes_and_prose_guard(self):
         # R512 release-schedule D-slot era: pre-production goods registered
@@ -200,14 +201,28 @@ class RenderTests(unittest.TestCase):
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), {"render-unannot"})
         marks = dict(rows)
-        self.assertEqual(marks["gamma.mp4"], True)
-        self.assertEqual(marks["delta.mp4"], False)
+        self.assertEqual(marks["gamma.mp4"], readiness.PRODUCT_SLOT_MARK)
+        self.assertIsNone(marks["delta.mp4"])
+
+    def test_multi_mention_keeps_highest_state(self):
+        # R1802 display-layer fix: a file mentioned in several lines
+        # keeps its highest-precedence real state (production states
+        # beat archive states beat the generic test-piece mark).
+        d = make_renders(self, ["gamma.mp4"], None)
+        (d / "README.md").write_text(
+            "| gamma.mp4 | %s | prose mention |\n"
+            "| gamma.mp4 | %s | registered row |\n" % (
+                readiness.TEST_MARK, readiness.PRODUCT_SLOT_MARK),
+            encoding="utf-8")
+        rows, findings = readiness.parse_renders(d, d / "README.md")
+        self.assertEqual(fail_codes(findings), set())
+        self.assertEqual(rows[0][1], readiness.PRODUCT_SLOT_MARK)
 
     def test_missing_ledger_fails(self):
         d = make_renders(self, ["alpha.mp4"], None)
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), {"render-ledger"})
-        self.assertEqual(rows[0][1], False)
+        self.assertIsNone(rows[0][1])
 
     def test_stale_ledger_row_fails(self):
         d = make_renders(self, ["alpha.mp4"], "readiness_renders_stale")
@@ -261,13 +276,32 @@ class ReportTests(unittest.TestCase):
     def test_template_placeholders_all_filled(self):
         template = (REPO / "src" / "os" / "readiness_template.md").read_text(encoding="utf-8")
         flow, rows, _ = readiness.parse_accounts(ledger("readiness_accounts_ok"))
-        render_rows = [("alpha.mp4", True)]
+        render_rows = [("alpha.mp4", readiness.TEST_MARK)]
         report = readiness.build_report(template, "ts", flow, rows,
                                         {"a.md": "PENDING"}, render_rows,
                                         [("3", "clause")], [], ["b1"], [])
         for key in readiness.PLACEHOLDERS:
             self.assertNotIn("{%s}" % key, report)
         self.assertIn(readiness.TEST_MARK, report)
+
+    def test_report_shows_real_ledger_states(self):
+        # R1802 display-layer fix: the 3rd section shows each ledger
+        # row's real state, not a hard-coded test-piece string.
+        template = (REPO / "src" / "os" / "readiness_template.md").read_text(encoding="utf-8")
+        flow, rows, _ = readiness.parse_accounts(ledger("readiness_accounts_ok"))
+        render_rows = [("a.mp4", readiness.PRODUCT_SLOT_MARK),
+                       ("b.mp4", readiness.PRODUCT_MARK),
+                       ("c.mp4", readiness.SUPERSEDED_MARK),
+                       ("d.mp4", readiness.DISPOSED_MARK),
+                       ("e.mp4", readiness.TEST_MARK),
+                       ("f.mp4", None)]
+        report = readiness.build_report(template, "ts", flow, rows,
+                                        {"a.md": "PENDING"}, render_rows,
+                                        [], [], [], [])
+        for mark in (readiness.PRODUCT_SLOT_MARK, readiness.PRODUCT_MARK,
+                     readiness.SUPERSEDED_MARK, readiness.DISPOSED_MARK,
+                     readiness.TEST_MARK, readiness.MISSING_MARK):
+            self.assertIn(mark, report)
         self.assertIn("- none", report)  # empty suspended/findings lists
 
 

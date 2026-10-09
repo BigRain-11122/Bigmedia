@@ -94,6 +94,15 @@ SUPERSEDED_B = "\u53d6\u4ee3"  # "superseded/replaced" word
 # prose that merely mentions discarding ("弃件" alone in narrative lines).
 DISPOSED_A = "\u5f03\u4ef6"  # "disposed/discarded" mark
 DISPOSED_B = "\u7559\u6863"  # "archived on disk" qualifier
+# Display-layer status labels (R1802): the 3rd report section shows the
+# ledger row's real state instead of hard-coding the test-piece string
+# (R1799 finding: all 78 mp4s displayed as test pieces masked the
+# production / superseded / disposed rows). Gate legality unchanged.
+SUPERSEDED_MARK = "\u5df2\u88ab\u53d6\u4ee3"  # superseded archive display label
+DISPOSED_MARK = "\u5f03\u4eb6\u7559\u6863"  # disposed archive display label
+MISSING_MARK = "(missing test-piece mark)"  # unannotated display cell
+STATUS_PRECEDENCE = (PRODUCT_SLOT_MARK, PRODUCT_MARK, SUPERSEDED_MARK,
+                    DISPOSED_MARK, TEST_MARK)  # multi-mention rank
 STATUS_WORD = "\u72b6\u6001"  # status column header word
 BATCH_WORD = "\u6279\u6b21"  # batch word in accounts remark
 BATCH1_MARK = "\u2460"  # circled-one first-batch marker
@@ -176,8 +185,31 @@ def parse_gates(drafts_dir):
     return gates, findings
 
 
+def _line_status(line):
+    """Ledger-line annotation state for the display layer (R1802):
+    the real mark the row carries, None when the line has no legal
+    mark. The legality set matches the gate exactly (five states)."""
+    if PRODUCT_SLOT_MARK in line:
+        return PRODUCT_SLOT_MARK
+    if PRODUCT_MARK in line:
+        return PRODUCT_MARK
+    if SUPERSEDED_A in line and SUPERSEDED_B in line:
+        return SUPERSEDED_MARK
+    if DISPOSED_A in line and DISPOSED_B in line:
+        return DISPOSED_MARK
+    if TEST_MARK in line:
+        return TEST_MARK
+    return None
+
+
 def parse_renders(renders_dir, ledger_path):
-    """Test-piece inventory -> (rows, findings). rows = [(name, annotated)]."""
+    """Render inventory -> (rows, findings). rows = [(name, status)].
+
+    status = the ledger row's real annotation state (production
+    slot-filled / production batch / superseded archive / disposed
+    archive / test piece), None when unannotated. `status is None`
+    feeds the render-unannot gate - gate semantics unchanged; only
+    the display stopped hard-coding the test-piece string."""
     findings = []
     if not renders_dir.is_dir():
         findings.append(("FAIL", "render-dir", "renders directory missing: %s" % renders_dir))
@@ -187,25 +219,27 @@ def parse_renders(renders_dir, ledger_path):
     if media and not ledger_path.is_file():
         findings.append(("FAIL", "render-ledger",
                          "media files exist but annotation ledger missing: %s" % ledger_path))
-        return [(name, False) for name in media], findings
+        return [(name, None) for name in media], findings
     seen = {}
     if ledger_path.is_file():
         text = ledger_path.read_text(encoding="utf-8", errors="replace")
         for line in text.splitlines():
             for m in MEDIA_RE.finditer(line):
                 name = m.group(0).lower()
-                ok = (TEST_MARK in line or PRODUCT_MARK in line
-                      or PRODUCT_SLOT_MARK in line
-                      or (SUPERSEDED_A in line and SUPERSEDED_B in line)
-                      or (DISPOSED_A in line and DISPOSED_B in line))
-                seen[name] = seen.get(name, False) or ok
+                st = _line_status(line)
+                cur = seen.get(name)
+                if st is not None and (cur is None or
+                        STATUS_PRECEDENCE.index(st) < STATUS_PRECEDENCE.index(cur)):
+                    seen[name] = st
+                elif cur is None and name not in seen:
+                    seen[name] = None
     rows = []
     for name in media:
-        annotated = seen.get(name.lower(), False)
-        if not annotated:
+        status = seen.get(name.lower())
+        if status is None:
             findings.append(("FAIL", "render-unannot",
                              "media file not annotated as test piece: %s" % name))
-        rows.append((name, annotated))
+        rows.append((name, status))
     on_disk = {n.lower() for n in media}
     for name in sorted(seen):
         if name not in on_disk:
@@ -288,8 +322,8 @@ def build_report(template_text, gen_ts, flow, rows, gates, render_rows,
         return "\n".join(seq) if seq else "- none"
     acc_rows = ["| %s | %s | %s |" % (p, s if s else "?", r) for p, s, r in rows]
     gate_rows = ["| %s | %s |" % (n, v if v else "(no GATE line)") for n, v in gates.items()]
-    render_lines = ["| %s | %s |" % (n, TEST_MARK if ok else "(missing test-piece mark)")
-                    for n, ok in render_rows]
+    render_lines = ["| %s | %s |" % (n, s if s else MISSING_MARK)
+                    for n, s in render_rows]
     needs_lines = ["- #%s [needs-CEO] %s" % (n, c) for n, c in needs]
     susp_lines = ["- #%s [suspended] %s" % (n, c) for n, c in suspended]
     finding_lines = ["- [%s] %s: %s" % (sev, code, msg) for sev, code, msg in findings]
