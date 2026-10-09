@@ -130,6 +130,41 @@ def build_cues(words, max_chars=20):
     return cues
 
 
+def load_noise_dict(path):
+    """Load the ASR noise dictionary (opt-in, tech#12 R1827).
+    Returns list of (noise, true, cls) sorted longest-noise-first so a
+    longer phrase entry always wins over a substring entry. Data file:
+    data/pipeline/asr-noise-dict-v1.json (evidence-anchored pairs).
+    QC-channel only - never wire this into real-voice lanes."""
+    import json
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    entries = [(str(e["noise"]), str(e["true"]), str(e.get("class", "guarded")))
+               for e in data.get("entries", [])]
+    entries.sort(key=lambda x: len(x[0]), reverse=True)
+    return entries
+
+
+def apply_noise_dict(cues, entries, expect_text=None):
+    """Replace noise->true in cue text. 'safe' entries fire
+    unconditionally; 'guarded' entries only fire when expect_text
+    (the piece's own beats) contains the true term - collision
+    guard so a common-word mishear never rewrites legitimate text
+    in a piece that does not contain the true term. Pure function;
+    timestamps untouched. Returns (new_cues, applied, skipped_guard)."""
+    out, applied, skipped = [], 0, 0
+    for s, e, text in cues:
+        for noise, true, cls in entries:
+            if noise not in text:
+                continue
+            if cls == "safe" or (expect_text is not None and true in expect_text):
+                text = text.replace(noise, true)
+                applied += 1
+            else:
+                skipped += 1
+        out.append((s, e, text))
+    return out, applied, skipped
+
+
 def transcribe_to_cues(audio, model_size="small", language="zh",
                        max_chars=20, beam_size=1,
                        condition_on_previous_text=True,
@@ -172,6 +207,16 @@ def build_parser():
                          "medium-int8 + targeted per-piece proper-noun "
                          "preload MEASURED GAIN - 62 percent proper-noun "
                          "degradation cut, zero leak)")
+    ap.add_argument("--noise-dict", default=None,
+                    help="OPT-IN homophone noise dictionary (tech#12 "
+                         "R1827, data/pipeline/asr-noise-dict-v1.json). "
+                         "S2 asr-check QC channel only; default off = "
+                         "zero behavior change; never for real-voice "
+                         "transcripts")
+    ap.add_argument("--expect", default=None,
+                    help="reference text (the piece's own beats file) "
+                         "for the guarded-entry collision gate; only "
+                         "meaningful together with --noise-dict")
     return ap
 
 
@@ -193,6 +238,19 @@ def main(argv=None):
     if not cues:
         print("FAIL no cues produced for %s" % audio)
         return 2
+    if args.noise_dict:
+        entries = load_noise_dict(args.noise_dict)
+        expect_text = None
+        if args.expect:
+            expect_path = Path(args.expect)
+            if not expect_path.exists():
+                print("FAIL expect reference not found: %s" % expect_path)
+                return 2
+            expect_text = expect_path.read_text(encoding="utf-8")
+        cues, applied, skipped = apply_noise_dict(cues, entries, expect_text)
+        print("noise-dict: entries=%d applied=%d skipped_guard=%d expect=%s"
+              % (len(entries), applied, skipped,
+                 "yes" if expect_text is not None else "no"))
     write_srt(cues, args.out)
     print("OK %s -> %s cues=%d dropped=%d audio_dur=%.2fs model=%s-int8-cpu"
           % (audio, args.out, len(cues), dropped, dur, args.model))
