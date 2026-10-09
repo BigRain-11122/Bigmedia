@@ -14,3 +14,4 @@
 10. 硅基城市题材新形态扫描（编年史/codex 源→图文物料包/互动页面/播客候选·零账号依赖原型评估）——可即领
 11. GPU 空闲时任务候选设计（self-drive §2「空闲自动跑」本司候选清单=本地 embedding/批量初筛/批量出图·headroom 守卫参数化）——可即领
 12. MV 产线衍生内容位预研（正片旁支规格草案：歌词卡/幕后花絮脚本/竖版切片模板·正片定稿后即用·现可先做规格件）——可即领
+13. [R1845 补货] REACT 台词池桶面新鲜度盘点注记（本轮 pools.json 全量 dump 实读：6 轴×12 桶=72 桶位·REACT 卡面已耗 bucket=rain/market_open×2/festival/weekend×2/morning×2/night/heatwave/coldsnap/ceo_order/market_close〔v3〕——**dusk 与 typhoon 两桶=REACT 卡面零用**·dusk=黄昏回望情境/typhoon=台风应对情境〔F-163 台风夜之后系=L-卡已消费台风题材·REACT 面候选=下一个台风日热点窗直配位〕·供给面盘点非造活·热点窗择优时按映射对位优先律取用）

@@ -1,0 +1,12 @@
+em-check-r1845 (REACT-v13 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em  ladder: 40档 budget 23.00em 驱动行 23.00em margin 0.00 EXCLUDED (zero-margin R293)
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-10
+OK 17.00em margin +8.56  为什么很多人买新能源车之前很兴奋，
+OK 14.00em margin +11.56  开了一年后却开始怀念燃油车？
+OK 21.00em margin +4.56  求新轴：「新上市的玩意儿真让人眼睛都花了」
+OK 21.00em margin +4.56  怀旧轴：「老货郎说，旧物总比新玩意儿耐看」
+OK 23.00em margin +2.56  秩序轴：「买卖交易，谨慎行事，别轻敌，得稳住」
+OK 20.00em margin +5.56  穿城信使信条：「急件不急，稳到才算到。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=833px subs_top=932px gap=99px OK (assert >=20)
+ALL-HORIZ: PASS  VERT: PASS

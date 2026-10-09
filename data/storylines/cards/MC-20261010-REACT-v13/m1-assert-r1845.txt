@@ -1,0 +1,31 @@
+ASSERT1 pool verbatim x3 (qiuxin/huaijiu/zhixu @ market_open) OK
+ASSERT2 anchor creed verbatim (C-00026) OK
+ASSERT3 daily hot title verbatim OK
+ASSERT4 hot split integrity OK
+ASSERT5 R1010 fleet exact-line probe x3 CLEAN OK
+ASSERT6 C-00026 creed REACT-closing first-use OK
+em-check-r1845 (REACT-v13 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-10
+OK 17.00em margin +8.56  为什么很多人买新能源车之前很兴奋，
+OK 14.00em margin +11.56  开了一年后却开始怀念燃油车？
+OK 21.00em margin +4.56  求新轴：「新上市的玩意儿真让人眼睛都花了」
+OK 21.00em margin +4.56  怀旧轴：「老货郎说，旧物总比新玩意儿耐看」
+OK 23.00em margin +2.56  秩序轴：「买卖交易，谨慎行事，别轻敌，得稳住」
+OK 20.00em margin +5.56  穿城信使信条：「急件不急，稳到才算到。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=833px subs_top=932px gap=99px OK
+cards.json written
+subs.srt written
+render rc=0
+poster: data\storylines\cards\MC-20261010-REACT-v13\MC-20261010-REACT-v13.png (cover frame at t=0.150s)
+OK .c3-tmp\MC-20261010-REACT-v13.mp4
+cards=1 cues=1 duration=3.400s size=153KB
+codec_name=h264
+width=1080
+height=1080
+duration=3.400000
+
+poster PNG OK -> data\storylines\cards\MC-20261010-REACT-v13\MC-20261010-REACT-v13.png (249475 bytes)
+R1010 fleet exact-line probe: 3 pool lines zero prior card-face usage (scan=all data/storylines/cards/*/cards.json)
+C-00026 creed REACT closing-position first-use assertion: zero prior REACT closing usage
