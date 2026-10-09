@@ -1,0 +1,43 @@
+{
+ "schemaVersion": 1,
+ "report": {
+  "date": "2026-10-09",
+  "generatedAt": "2026-10-09T00:00:21.949Z",
+  "windowStart": "2026-10-08T00:00:00.000Z",
+  "windowEnd": "2026-10-09T00:00:00.000Z",
+  "links": {
+   "aihot": "http://127.0.0.1:3100/daily/2026-10-09"
+  },
+  "attribution": {
+   "name": "雷达日报",
+   "url": "http://127.0.0.1:3100/daily/2026-10-09"
+  },
+  "lead": {
+   "title": "AI 代理按需支付：BlockRun 和 Incarna 如何使用 Amazon Bedrock AgentCore 支付",
+   "leadParagraph": "Amazon Bedrock AgentCore 支付功能使 AI 代理能够按需支付服务费用，通过 Coinbase CDP 连接钱包并处理支付流程。Incarna 使用该功能与 BlockRun 集成，实现按请求支付模型推理费用。该功能简化了支付集成流程，将原本需要数月的工作缩短至几天内完成。"
+  },
+  "sections": [
+   {
+    "label": "产品发布/更新",
+    "items": [
+     {
+      "title": "AI 代理按需支付：BlockRun 和 Incarna 如何使用 Amazon Bedrock AgentCore 支付",
+      "summary": "Amazon Bedrock AgentCore 支付功能使 AI 代理能够按需支付服务费用，通过 Coinbase CDP 连接钱包并处理支付流程。Incarna 使用该功能与 BlockRun 集成，实现按请求支付模型推理费用。该功能简化了支付集成流程，将原本需要数月的工作缩短至几天内完成。",
+      "source": {
+       "name": "AWS Machine Learning Blog"
+      },
+      "links": {
+       "aihot": "http://127.0.0.1:3100/items/ery1saoz71log400o2ud9x1el",
+       "original": "https://aws.amazon.com/blogs/machine-learning/pay-per-inference-for-ai-agents-how-blockrun-and-incarna-use-amazon-bedrock-agentcore-payments/"
+      },
+      "attribution": {
+       "name": "雷达日报",
+       "url": "http://127.0.0.1:3100/items/ery1saoz71log400o2ud9x1el"
+      }
+     }
+    ]
+   }
+  ],
+  "flashes": []
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "health": {
+  "status": 200
+ },
+ "get_with_origin": {
+  "status": 200,
+  "acao": null,
+  "vary": "Accept-Encoding",
+  "allow_headers": null
+ },
+ "options_preflight": {
+  "status": 204,
+  "acao": null,
+  "acam": null,
+  "allow": null,
+  "body_head": ""
+ },
+ "get_null_origin": {
+  "status": 200,
+  "acao": null
+ },
+ "probe_ts": "2026-10-10 02:27:35"
+}
