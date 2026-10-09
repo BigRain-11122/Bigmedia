@@ -39,7 +39,30 @@
 
 - **机队消费形态**：任一 codely/agent 实例将 `http://127.0.0.1:3101/api/mcp` 注册为 MCP server → 雷达日报能力（日报/周报/热点/精选快照族 tool）成为机队各循环可直接调用的情报源——**零账号、零 API key、零平台依赖**；
 - **安全面正身（A 级）**：anonymous+read-only+stateless+no push=最小暴露面；TRUST_META 双声明=内容污染/指令注入防线内置；
-- **未实测面（如实）**：MCP handshake 与 tool 清单未实跑（list_tools/initialize 调用判据位）；机队 codely 配置域接线=机队配置面（.codely-cli MCP 注册=宿主/机队管辖，本司循环不擅动——提案面走 §6）。
+- **实测销项（R1853·explore#15）**：MCP handshake 与 tool 清单已实跑全通 → **判据 PASS**（详见 §3.1）；机队 codely 配置域接线=机队配置面（.codely-cli MCP 注册=宿主/机队管辖，本司循环不擅动——提案面走 §3.2）。
+
+## §3.1 MCP 实测读数（R1853·判据=一次 MCP 通道真读日报 lead 字段）
+
+四步全通（探针 `.c3-tmp/r1853_mcp_probe.py`+`r1853b_mcp_criterion.py`·证据 `.c3-tmp/r1853_mcp_evidence.json`+`r1853_mcp_criterion.json`）：
+
+| 步 | 调用 | 读数 |
+|---|---|---|
+| 1 | `initialize`（protocolVersion 2025-03-26） | **200**·`text/event-stream` 回流·`serverInfo={name:"radar",version:"4.0.0"}`·instructions 真返（7 tool 用法自述+TRUST_META 内容申明原文在位）·**无 Mcp-Session-Id 头=stateless 实证** |
+| 2 | `notifications/initialized` | **202**·空正文（notification 预期态） |
+| 3 | `tools/list` | **200**·**7 tools**=radar_get_latest / radar_search / radar_get_hot_topics / radar_get_story / radar_get_daily / radar_get_weekly / radar_get_monthly——「一能力一 tool」代码申明实证 |
+| 4 | `tools/call radar_get_daily` | **200**·784B markdown 渲染件（`# 雷达日报 日报 · 2026-10-09`+窗口行+安全边界行+头条位） |
+
+**判据闭合（内容级等价）**：MCP 渲染件为 markdown 形态（非 JSON），与 `/api/v1/dailies/latest` 的 `report.lead` 字段交叉对读——`lead.title`+`lead.leadParagraph` **2/2 全文命中** MCP 件（头条行=`头条：AI 代理按需支付：BlockRun 和 Incarna 如何使用 Amazon Bedrock AgentCore 支持`）→ **「MCP 通道真读日报 lead 字段」判据 PASS**（.c3-tmp/r1853_mcp_criterion.json 留档）。
+
+## §3.2 机队 codely MCP 注册提案 v0.1（呈报位=HQ-FEEDBACK F-20261010-01·宿主/机队管辖域·本司不擅动）
+
+- **目标**：机队 codely/agent 实例将 `http://127.0.0.1:3101/api/mcp`（Streamable HTTP·protocolVersion 2025-03-26·server name `radar`）注册为 MCP server → 7 tool 成为机队各循环可直接调用的情报源（**零账号、零 API key、零平台依赖**）；接线条判据=真读 daily lead 成功（**本件已单机预演 PASS=§3.1**）。
+- **分期（改动量升序）**：
+  - **P1 零改动档**=本机（bm-a）codely 实例注册（127.0.0.1 面内即可用）——配置正身=codely MCP server 配置域（`.codely-cli` 键名格式=宿主文档域·本提案不擅断具体键名）；
+  - **P2 配置级档**=跨机机队接入（bm-b/bm-c）——前置三件：API 绑定面 127.0.0.1→LAN IP（R1710 端口隔离律放宽=安全面权衡·宿主/CEO 决策域）+防火墙放行+**栈存活 SLA**（三外部杀进程史 R1727/R1750/R1752·活性守卫 R1752 在役·栈死即 tool 失败=机队接线后可见性上升需值守面知悉）；
+  - **P3 gated 档**=公网暴露（域名备案=CEO 物理件·§5 表）。
+- **受益面**：机队循环直连情报源——M0 选题源参考（hot_topics Top10/主题检索 radar_search/get_latest 24h·7 日 briefings）+每日/每周/每月编辑件；TRUST_META 防注入内置=机队消费安全面前置达标。
+- **呈报位**：HQ-FEEDBACK F-20261010-01（P2·宿主/机队管辖域待点头·点头后接线窗=本机 P1 档零改动先行）。
 
 ## §4 嵌入输出候选（零账号·跨仓提案位）
 
@@ -63,7 +86,7 @@
 | # | 结论 | 级别 | 下一步 |
 |---|---|---|---|
 | 1 | Feed 层已达标（RSS 2.0 合规+30 期窗+全文 CDATA）——订阅形态零工程 | M 实测 | 无需改动；SITE_URL 改 LAN IP=同机/LAN 阅读器订阅（配置级） |
-| 2 | **MCP 端点=机队零账号情报分发最优路径**（匿名只读+防注入内置） | A 代码 | 接线评估入队（explore 新行：handshake 实测+机队配置提案面） |
+| 2 | **MCP 端点=机队零账号情报分发最优路径**（匿名只读+防注入内置） | A 代码+M 实测 | **R1853 实测销项=判据 PASS**（handshake/7 tools/daily lead 交叉对读全通=§3.1）；机队注册提案 v0.1 呈报 HQ-FEEDBACK（§3.2·宿主域待点头） |
 | 3 | v1 API+OG 图族=嵌入/素材双面就绪 | A 代码 | 元宇宙模块提案件入队（跨仓提案·CORS 判据位先行） |
 | 4 | weekly/monthly feed 合法空态=数据窗未满非缺陷 | M 实测 | 不干预；10-16/11-09 自然解锁（推算） |
 | 5 | 公网分发/订阅/变现全面 gated（域名/SMTP/决策件） | 盘点 | 现状行呈报·零催办 |
@@ -71,3 +94,4 @@
 ## 变更记录
 
 - v1.0（2026-10-10 R1852）：首版（五端点族 live 盘点+MCP/v1/OG 三新面发现+gated 面盘点+结论应用表）。
+- v1.1（2026-10-10 R1853）：§3 未测面销项（explore#15 承接）——§3.1 MCP 四步实测读数+判据 PASS（daily lead 内容级等价交叉对读）+§3.2 机队注册提案 v0.1（分期 P1/P2/P3·呈报位 HQ-FEEDBACK F-20261010-01）+§6 行 2 升实测态。

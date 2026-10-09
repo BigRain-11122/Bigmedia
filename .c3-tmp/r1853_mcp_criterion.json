@@ -1,0 +1,11 @@
+{
+ "criterion": "daily report lead field read via MCP (content-level)",
+ "api_lead_field": {
+  "title": "AI 代理按需支付：BlockRun 和 Incarna 如何使用 Amazon Bedrock AgentCore 支付",
+  "leadParagraph": "Amazon Bedrock AgentCore 支付功能使 AI 代理能够按需支付服务费用，通过 Coinbase CDP 连接钱包并处理支付流程。Incarna 使用该功能与 BlockRun 集成，实现按请求支付模型推理费用。该功能简化了支付集成流程，将原本需要数月的工作缩短至几天内完成。"
+ },
+ "mcp_text_len": 784,
+ "mcp_headline_line": "头条：AI 代理按需支付：BlockRun 和 Incarna 如何使用 Amazon Bedrock AgentCore 支付",
+ "lead_parts_all_in_mcp_text": true,
+ "verdict": "PASS"
+}
