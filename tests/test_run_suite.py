@@ -32,14 +32,21 @@ def run_wrapper(module=None, log=None, timeout=300):
 
 class RunSuiteWrapperTests(unittest.TestCase):
     def test_green_module_rc_zero_and_summary(self):
-        rc, out = run_wrapper(module="tests.test_board_check")
+        # isolated -Log: never touch the shared default log path (a
+        # concurrent wrapper run, e.g. a live full-suite validation, would
+        # be clobbered by the stale-log guard - R1840 operational red)
+        with tempfile.TemporaryDirectory() as td:
+            rc, out = run_wrapper(module="tests.test_board_check",
+                                  log=os.path.join(td, "green.log"))
         self.assertEqual(0, rc)
         self.assertIn("SUITE_RC=0", out)
         self.assertRegex(out, r"SUITE_RAN=Ran \d+ tests?")
         self.assertRegex(out, r"SUITE_RESULT=OK")
 
     def test_failing_module_propagates_nonzero_rc(self):
-        rc, out = run_wrapper(module="tests.test_definitely_missing_module_xyz")
+        with tempfile.TemporaryDirectory() as td:
+            rc, out = run_wrapper(module="tests.test_definitely_missing_module_xyz",
+                                  log=os.path.join(td, "fail.log"))
         self.assertNotEqual(0, rc)
         # the real python rc is surfaced, not a pipeline pseudo-rc
         m = [line for line in out.splitlines() if line.startswith("SUITE_RC=")]
