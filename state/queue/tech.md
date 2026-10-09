@@ -29,3 +29,4 @@
 
 24. [R1830 补货] local_rate_report 源面切换评估（tech#19 后继位：ledger exact 面累积后·`local_rate_report.py` 的 whisper 分量从 state.json 手记行→探针读数自动化的切换判据〔手记行 vs 探针差值连续 2 窗 ≤1 才切·判据先立〕+W42 周报首读——缺口锚=tech#10「state.json 手记行仍为 local_rate_report 单一真相」+tech#19 exact 面已落位待累积）——gated W42 周报窗
 25. [R1831 补货] 探针输出捕获 UTF-16 坑规避件（缺口锚=R1831 实录：PS5.1 `>` 重定向写 UTF-16 BOM 文件·探针输出被当二进制拒读·4 次返工解码才拿到读数——候选=src/os/probe_capture.py 三探针一键跑+UTF-8 单文件落盘〔--loop/--summary 紧凑面〕或等效文档化正法〔python 进程内 redirect_stdout〕·判负留痕合法）——可即领
+27. [R1833 补货] 收账分段 commit 模式评估（缺口锚=R1832 断洞实录：25min 超时杀落在收账段吞掉整轮交付件 commit——successor R1833 补完才上链——候选：交付件〔tests 绿后〕先行 commit→state.json 记账/log 行后段独立 commit·两段制防尾段超时杀；判据=未来断轮交付件零丢失〔交付件 commit 落在 state commit 前〕+成本=每轮 +1 commit 可接受；试点窗 ≤2 周·判负留痕合法）——可认领
