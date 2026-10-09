@@ -22,6 +22,18 @@ AI-feel gate, layer 1.6). Spec: docs/editing-craft-spec.md v1.0.
                 final +tail) and the expected duration must cover every
                 cue. Hard cuts must blend NOTHING (fade_s = 0, true
                 concat splice - A3 2026-09-24).
+  frame law     (--video) segment head/mid/tail sampling - the R186
+                fake-green closure (2026-10-09): rounds had verified
+                head frames only, so a privacy leak living in the
+                source tail flowed into finished pieces unchecked.
+                Machine-checkable proxies: frame-coverage (every
+                segment sampled head/mid/tail, decodable),
+                frame-degenerate (footage segments must not be
+                near-solid frames), frame-frozen (declared ken/punch
+                segments must actually move head->tail), frame-tile
+                (labeled contact sheet = mid/tail frames are always in
+                the inspector's view; semantic leaks stay a human/
+                multimodal call on the tile).
 
 INDEPENDENCE LAW (group governance S10 defense #2): the spec constants
 below are deliberately NOT imported from render/edit_craft.py - the
@@ -34,6 +46,8 @@ ASCII rule: source is pure ASCII; Chinese lives in the data files only.
 
 Usage:
     python src/edit_craft_check.py --plan FILE --srt FILE --profile NAME [--json]
+    python src/edit_craft_check.py --plan FILE --srt FILE --profile NAME \
+        --video VIDEO [--frames-out DIR] [--json]
 """
 import json
 import sys
@@ -56,6 +70,13 @@ HARD_CUT_FADE_S = 0.0   # A3 true splice: a hard cut must blend NOTHING
                          # (0.001s sub-frame was never legal either: it
                          # EOFs the xfade chain - bilibili 2026-09-24)
 VISUAL_RATIO_MIN = 0.80  # footage-matching-spec S3: matched-beat share
+
+# -- frame-sampling law constants (R186 closure; independent again) ---
+FRAME_EDGE_S = 0.15      # inset from segment edges for head/tail samples
+FRAME_MIN_STD = 2.0      # grayscale stddev below this = near-solid frame
+FRAME_FROZEN_MAD = 1.0   # head-vs-tail mean abs diff a moving seg must beat
+FROZEN_MIN_SPAN_S = 1.0  # sub-second spans carry no readable KB motion
+THUMB_W = 320            # contact-sheet cell width (px)
 
 SPEC = {
     "shipinhao": {
@@ -279,8 +300,155 @@ def check(plan, cues, profile_name):
     return findings
 
 
+# -- segment frame-sampling law (R186 fake-green closure) --------------
+def _seg_spans(plan):
+    """Absolute (idx, start, end) per segment from boundaries + last end."""
+    segs = plan.get("segments") or []
+    times = [float(b["time_s"]) for b in (plan.get("boundaries") or [])]
+    ends = [0.0] + times + [float(plan.get("last_beat_end_s", 0.0))]
+    return [(k, ends[k], ends[k + 1]) for k in range(len(segs))]
+
+
+def _sample_times(start, end):
+    """head / mid / tail timestamps inside one segment."""
+    span = max(0.0, end - start)
+    inset = min(FRAME_EDGE_S, span / 4.0)
+    return [("head", start + inset),
+            ("mid", start + span / 2.0),
+            ("tail", end - inset)]
+
+
+def _extract_frame(video, t, out_png):
+    """One decoded frame at t -> out_png. True iff usable."""
+    import subprocess
+    cmd = ["ffmpeg", "-nostdin", "-loglevel", "error",
+           "-ss", "%.3f" % t, "-i", str(video),
+           "-frames:v", "1", "-y", str(out_png)]
+    try:
+        p = subprocess.run(cmd, capture_output=True, timeout=30)
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    return p.returncode == 0 and out_png.exists() \
+        and out_png.stat().st_size > 0
+
+
+def check_frames(video, plan, outdir):
+    """Head/mid/tail frame law on the rendered video (R186 closure).
+
+    Coverage / degenerate / frozen are machine proxies; the labeled
+    contact sheet (tile.png) forces mid/tail frames into the
+    inspector's view - semantic leaks (record-through, privacy) stay a
+    human/multimodal call on the tile, never skipped again. Returns
+    findings; writes frames/ + tile.png under outdir.
+    """
+    from PIL import Image, ImageChops, ImageDraw, ImageStat  # lazy: plan-only runs stay light
+
+    video = Path(video)
+    if not video.exists():
+        return [("FAIL", "frame-video", "video not on disk: %s" % video)]
+    spans = _seg_spans(plan)
+    if not spans:
+        return [("FAIL", "frame-coverage", "plan has no segments to sample")]
+    segs = plan.get("segments") or []
+    outdir = Path(outdir)
+    frames_dir = outdir / "frames"
+    frames_dir.mkdir(parents=True, exist_ok=True)
+
+    rows = []  # (idx, start, end, [(tag, img)])
+    bad = []
+    for idx, start, end in spans:
+        cells = []
+        for tag, t in _sample_times(start, end):
+            png = frames_dir / ("s%02d-%s.png" % (idx, tag))
+            ok = _extract_frame(video, t, png)
+            img = None
+            if ok:
+                try:
+                    img = Image.open(png)
+                    img.load()
+                except Exception:
+                    img = None
+            if img is None:
+                bad.append("s%02d-%s" % (idx, tag))
+            cells.append((tag, img))
+        rows.append((idx, start, end, cells))
+
+    if bad:
+        findings = [("FAIL", "frame-coverage",
+                     "%d/%d segment frame samples failed extraction/decode: "
+                     "%s" % (len(bad), len(spans) * 3, bad[:6]))]
+    else:
+        findings = [("PASS", "frame-coverage",
+                     "%d segments x head/mid/tail sampled" % len(spans))]
+
+    degenerate, frozen = [], []
+    for idx, start, end, cells in rows:
+        seg = segs[idx] if idx < len(segs) else {}
+        declared_still = seg.get("cards_only") or \
+            seg.get("treatment") == "flat"
+        if not declared_still and not seg.get("flash"):
+            for tag, img in cells:
+                if img is None:
+                    continue
+                std = ImageStat.Stat(img.convert("L")).stddev[0]
+                if std < FRAME_MIN_STD:
+                    degenerate.append("s%02d-%s(std%.1f)" % (idx, tag, std))
+        if seg.get("cards_only") or seg.get("treatment") not in MOVES:
+            continue
+        if (end - start) < FROZEN_MIN_SPAN_S:
+            continue  # sub-second span: KB motion unreadable at frame level
+        head, tail = cells[0][1], cells[2][1]
+        if head is None or tail is None or head.size != tail.size:
+            continue  # coverage already flagged; resolution jump = motion
+        mad = ImageStat.Stat(ImageChops.difference(
+            head.convert("L"), tail.convert("L"))).mean[0]
+        if mad <= FRAME_FROZEN_MAD:
+            frozen.append("s%02d(mad %.2f)" % (idx, mad))
+    if degenerate:
+        findings.append(("FAIL", "frame-degenerate",
+                         "near-solid frames in footage segments (stddev < "
+                         "%.1f): %s" % (FRAME_MIN_STD, degenerate[:6])))
+    if frozen:
+        findings.append(("FAIL", "frame-frozen",
+                         "declared-motion segments static head->tail (mad "
+                         "<= %.1f): %s" % (FRAME_FROZEN_MAD, frozen[:6])))
+
+    # labeled contact sheet: rows = head/mid/tail, cols = segments
+    tile_path = outdir / "tile.png"
+    cell_h = 0
+    for _, _, _, cells in rows:
+        for _, img in cells:
+            if img is not None:
+                cell_h = max(cell_h, int(img.height * THUMB_W / img.width))
+    cell_h = cell_h or 120
+    label_h = 14
+    sheet = Image.new("RGB", (THUMB_W * len(rows),
+                              (cell_h + label_h) * 3), (24, 24, 24))
+    draw = ImageDraw.Draw(sheet)
+    for r, tag in enumerate(("head", "mid", "tail")):
+        y = r * (cell_h + label_h)
+        for c, (idx, _, _, cells) in enumerate(rows):
+            x = c * THUMB_W
+            draw.text((x + 2, y + 1), "s%02d-%s" % (idx, tag),
+                      fill=(255, 220, 80))
+            img = cells[r][1] if r < len(cells) else None
+            if img is None:
+                draw.rectangle([x, y + label_h, x + THUMB_W,
+                                y + label_h + cell_h], fill=(60, 20, 20))
+                draw.text((x + 4, y + label_h + cell_h // 2),
+                          "MISSING", fill=(255, 90, 90))
+            else:
+                thumb = img.resize((THUMB_W, cell_h))
+                sheet.paste(thumb.convert("RGB"), (x, y + label_h))
+    sheet.save(tile_path)
+    findings.append(("PASS", "frame-tile",
+                     "contact sheet (head/mid/tail per segment): %s"
+                     % tile_path))
+    return findings
+
+
 def main(argv):
-    plan_path = srt_path = profile = None
+    plan_path = srt_path = profile = video_path = frames_out = None
     as_json = False
     i = 1
     while i < len(argv):
@@ -293,12 +461,18 @@ def main(argv):
         elif argv[i] == "--profile":
             i += 1
             profile = argv[i]
+        elif argv[i] == "--video":
+            i += 1
+            video_path = argv[i]
+        elif argv[i] == "--frames-out":
+            i += 1
+            frames_out = argv[i]
         elif argv[i] == "--json":
             as_json = True
         i += 1
     if not (plan_path and srt_path and profile):
         print("usage: edit_craft_check.py --plan FILE --srt FILE "
-              "--profile NAME [--json]")
+              "--profile NAME [--video VIDEO [--frames-out DIR]] [--json]")
         return 2
     try:
         plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
@@ -312,6 +486,10 @@ def main(argv):
         return 2
 
     findings = check(plan, cues, profile)
+    if video_path:
+        out = frames_out or str(Path(video_path).parent /
+                                (".frame-probe-" + Path(video_path).stem))
+        findings += check_frames(video_path, plan, out)
     fails = [f for f in findings if f[0] == "FAIL"]
     warns = [f for f in findings if f[0] == "WARN"]
     if as_json:
