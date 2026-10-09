@@ -76,6 +76,9 @@ FRAME_EDGE_S = 0.15      # inset from segment edges for head/tail samples
 FRAME_MIN_STD = 2.0      # grayscale stddev below this = near-solid frame
 FRAME_FROZEN_MAD = 1.0   # head-vs-tail mean abs diff a moving seg must beat
 FROZEN_MIN_SPAN_S = 1.0  # sub-second spans carry no readable KB motion
+LOOP_EDGE_S = 0.10       # wrap-crossing zone half-window (spec S4 law 3)
+LOOP_MAX_CROSS = 4       # crossings sampled per segment; beyond = WARN
+_DUR_CACHE = {}          # visual-source duration cache (path -> seconds)
 THUMB_W = 320            # contact-sheet cell width (px)
 
 SPEC = {
@@ -332,14 +335,72 @@ def _extract_frame(video, t, out_png):
         and out_png.stat().st_size > 0
 
 
-def check_frames(video, plan, outdir):
-    """Head/mid/tail frame law on the rendered video (R186 closure).
+def _probe_duration(path):
+    """Source length in s via ffprobe (cached). None = unprovable."""
+    key = str(path)
+    if key in _DUR_CACHE:
+        return _DUR_CACHE[key]
+    import subprocess
+    dur = None
+    try:
+        p = subprocess.run(["ffprobe", "-v", "error",
+                            "-show_entries", "format=duration",
+                            "-of", "default=nw=1:nk=1", key],
+                           capture_output=True, timeout=30)
+        if p.returncode == 0:
+            dur = float(p.stdout.strip())
+    except (OSError, ValueError, subprocess.TimeoutExpired):
+        dur = None
+    if dur is not None and dur <= 0:
+        dur = None
+    _DUR_CACHE[key] = dur
+    return dur
 
-    Coverage / degenerate / frozen are machine proxies; the labeled
-    contact sheet (tile.png) forces mid/tail frames into the
-    inspector's view - semantic leaks (record-through, privacy) stay a
-    human/multimodal call on the tile, never skipped again. Returns
-    findings; writes frames/ + tile.png under outdir.
+
+def _wrap_crossings(seg, start, end):
+    """(sampled_times, unsampled_count, error) for a stream_loop beat.
+
+    Law 3 (footage-matching-spec v1.1 S4): a beat longer than its source
+    wraps at beat-relative (src_len - src_off) + k*src_len. R196 fake
+    green: a dirty source tail wrapped into 8 beats while neither mid
+    nor tail sampling touched the crossing zone.
+    """
+    src = seg.get("visual_source")
+    if not src:
+        return [], 0, None
+    span = end - start
+    if span <= 0:
+        return [], 0, None
+    dur = _probe_duration(src)
+    if dur is None:
+        return [], 0, "source duration unprovable: %s" % src
+    src_off = float(seg.get("src_off_s", 0.0) or 0.0)
+    first = dur - src_off
+    if first <= 0:
+        return [], 0, "src_off_s >= source length (degenerate plan): %s" % src
+    full, t = 0, first
+    while t < span - 1e-3:
+        full += 1
+        t += dur
+    if not full:
+        return [], 0, None  # beat shorter than source: no wrap occurs
+    sampled = min(full, LOOP_MAX_CROSS)
+    times, t = [], first
+    while len(times) < sampled:
+        times.append(start + t)
+        t += dur
+    return times, full - sampled, None
+
+
+def check_frames(video, plan, outdir):
+    """Head/mid/tail + wrap-crossing frame law on the rendered video.
+
+    Coverage / degenerate / frozen / loop-crossing are machine proxies;
+    the labeled contact sheet (tile.png) forces mid/tail and wrap-zone
+    frames into the inspector's view - semantic leaks (record-through,
+    privacy, dirty wraps) stay a human/multimodal call on the tile,
+    never skipped again. Returns findings; writes frames/ + tile.png
+    under outdir.
     """
     from PIL import Image, ImageChops, ImageDraw, ImageStat  # lazy: plan-only runs stay light
 
@@ -413,37 +474,109 @@ def check_frames(video, plan, outdir):
                          "declared-motion segments static head->tail (mad "
                          "<= %.1f): %s" % (FRAME_FROZEN_MAD, frozen[:6])))
 
-    # labeled contact sheet: rows = head/mid/tail, cols = segments
+    # law 3: wrap-crossing zone sampling (R196 closure; spec v1.1 S4).
+    # pre/x/post at +-LOOP_EDGE_S around every stream_loop wrap - the
+    # zone where a dirty source tail wraps into the render is sampled,
+    # machine-checked and forced into the tile, never skipped.
+    xrows, xbad, xdirty, xprobe = [], [], [], []
+    xsampled, xover = 0, 0
+    for idx, start, end in spans:
+        seg = segs[idx] if idx < len(segs) else {}
+        if not seg.get("visual_source") or seg.get("cards_only"):
+            continue
+        times, over, err = _wrap_crossings(seg, start, end)
+        if err:
+            xprobe.append("s%02d: %s" % (idx, err))
+            continue
+        xover += over
+        xsampled += len(times)
+        exempt = seg.get("treatment") == "flat" or seg.get("flash")
+        for k, t in enumerate(times):
+            for tag, dt in (("pre", -LOOP_EDGE_S), ("x", 0.0),
+                            ("post", LOOP_EDGE_S)):
+                ts = min(max(t + dt, start + 1e-3), end - 1e-3)
+                png = frames_dir / ("s%02d-x%d-%s.png" % (idx, k, tag))
+                img = None
+                if _extract_frame(video, ts, png):
+                    try:
+                        img = Image.open(png)
+                        img.load()
+                    except Exception:
+                        img = None
+                if img is None:
+                    xbad.append("s%02d-x%d-%s" % (idx, k, tag))
+                elif not exempt:
+                    std = ImageStat.Stat(img.convert("L")).stddev[0]
+                    if std < FRAME_MIN_STD:
+                        xdirty.append("s%02d-x%d-%s(std%.1f)"
+                                      % (idx, k, tag, std))
+                xrows.append((idx, k, tag, img))
+    if xprobe:
+        findings.append(("FAIL", "loop-cross-probe",
+                         "wrap-crossing zone unprovable (untested face "
+                         "must stay visible): %s" % xprobe[:4]))
+    if xbad:
+        findings.append(("FAIL", "loop-cross-coverage",
+                         "%d wrap-crossing sample(s) failed extraction/"
+                         "decode (R196 zone never skipped): %s"
+                         % (len(xbad), xbad[:6])))
+    if xdirty:
+        findings.append(("FAIL", "loop-cross-dirty",
+                         "near-solid frames inside the wrap-crossing "
+                         "zone (dirty-tail wrap tell, R196): %s"
+                         % xdirty[:6]))
+    if xover:
+        findings.append(("WARN", "loop-cross-capped",
+                         "%d wrap crossing(s) beyond the %d-per-segment "
+                         "cap left unsampled (visible, not silent)"
+                         % (xover, LOOP_MAX_CROSS)))
+    if xsampled and not xbad and not xprobe:
+        findings.append(("PASS", "loop-cross",
+                         "%d wrap crossing(s) sampled pre/x/post +-%.2fs "
+                         "(R196 zone forced into tile)"
+                         % (xsampled, LOOP_EDGE_S)))
+
+    # labeled contact sheet: rows = head/mid/tail + one sparse row per
+    # wrap-crossing sample (owning segment's column), cols = segments
     tile_path = outdir / "tile.png"
     cell_h = 0
     for _, _, _, cells in rows:
         for _, img in cells:
             if img is not None:
                 cell_h = max(cell_h, int(img.height * THUMB_W / img.width))
+    for _, _, _, img in xrows:
+        if img is not None:
+            cell_h = max(cell_h, int(img.height * THUMB_W / img.width))
     cell_h = cell_h or 120
     label_h = 14
     sheet = Image.new("RGB", (THUMB_W * len(rows),
-                              (cell_h + label_h) * 3), (24, 24, 24))
+                              (cell_h + label_h) * (3 + len(xrows))),
+                      (24, 24, 24))
     draw = ImageDraw.Draw(sheet)
+
+    def _cell(x, y, label, img):
+        draw.text((x + 2, y + 1), label, fill=(255, 220, 80))
+        if img is None:
+            draw.rectangle([x, y + label_h, x + THUMB_W,
+                            y + label_h + cell_h], fill=(60, 20, 20))
+            draw.text((x + 4, y + label_h + cell_h // 2),
+                      "MISSING", fill=(255, 90, 90))
+        else:
+            sheet.paste(img.resize((THUMB_W, cell_h)).convert("RGB"),
+                        (x, y + label_h))
+
     for r, tag in enumerate(("head", "mid", "tail")):
         y = r * (cell_h + label_h)
         for c, (idx, _, _, cells) in enumerate(rows):
-            x = c * THUMB_W
-            draw.text((x + 2, y + 1), "s%02d-%s" % (idx, tag),
-                      fill=(255, 220, 80))
-            img = cells[r][1] if r < len(cells) else None
-            if img is None:
-                draw.rectangle([x, y + label_h, x + THUMB_W,
-                                y + label_h + cell_h], fill=(60, 20, 20))
-                draw.text((x + 4, y + label_h + cell_h // 2),
-                          "MISSING", fill=(255, 90, 90))
-            else:
-                thumb = img.resize((THUMB_W, cell_h))
-                sheet.paste(thumb.convert("RGB"), (x, y + label_h))
+            _cell(c * THUMB_W, y, "s%02d-%s" % (idx, tag),
+                  cells[r][1] if r < len(cells) else None)
+    for j, (idx, k, tag, img) in enumerate(xrows):
+        y = (3 + j) * (cell_h + label_h)
+        _cell(idx * THUMB_W, y, "s%02d-x%d-%s" % (idx, k, tag), img)
     sheet.save(tile_path)
     findings.append(("PASS", "frame-tile",
-                     "contact sheet (head/mid/tail per segment): %s"
-                     % tile_path))
+                     "contact sheet (head/mid/tail + %d wrap-crossing "
+                     "row(s)): %s" % (len(xrows), tile_path)))
     return findings
 
 

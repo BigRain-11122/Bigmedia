@@ -55,6 +55,44 @@ def make_solid_video(path, dur=2.4):
              "-t", str(dur), "-pix_fmt", "yuv420p", "-y", str(path)])
 
 
+def make_source_video(path, dur=1.0):
+    """The stream_loop visual source: short so beats must wrap."""
+    _ffmpeg(["-f", "lavfi", "-i", "testsrc=size=160x120:rate=10",
+             "-t", str(dur), "-pix_fmt", "yuv420p", "-y", str(path)])
+
+
+def make_dirty_wrap_video(path, dur=3.0, band_at=0.9, band=0.3):
+    """Moving footage with a near-solid band covering the crossing."""
+    _ffmpeg(["-f", "lavfi", "-i", "testsrc=size=160x120:rate=10",
+             "-f", "lavfi", "-i", "color=c=gray:size=160x120:rate=10",
+             "-filter_complex",
+             "[0:v]split=2[s1][s2];"
+             "[s1]trim=duration=%.2f,setpts=PTS-STARTPTS[a];"
+             "[1:v]trim=duration=%.2f,setpts=PTS-STARTPTS[b];"
+             "[s2]trim=start=%.2f,setpts=PTS-STARTPTS[c];"
+             "[a][b][c]concat=n=3:v=1:a=0" % (band_at, band, band_at),
+             "-t", str(dur), "-pix_fmt", "yuv420p", "-y", str(path)])
+
+
+def loop_plan(n=1, seg_s=3.0, src=None, src_off=0.0, cards_only=()):
+    """Matched-mode plan whose segments cite a (short) visual source."""
+    segs, bounds = [], []
+    for k in range(n):
+        segs.append({"idx": k, "dur_s": seg_s, "flash": False,
+                     "treatment": "ken_in",
+                     "cards_only": k in cards_only,
+                     "cards_only_reason":
+                         "declared" if k in cards_only else "",
+                     "visual_source": str(src), "src_off_s": src_off})
+        if k:
+            bounds.append({"time_s": k * seg_s, "type": "fade",
+                           "fade_s": 0.2})
+    return {"segments": segs, "boundaries": bounds,
+            "last_beat_end_s": n * seg_s, "tail_s": 0.0,
+            "duration_expected_s": n * seg_s, "hits": [],
+            "visual_mode": "matched"}
+
+
 def frame_plan(n=2, seg_s=1.2, treatment="ken_in",
                cards_only=(), flat=(), flash=()):
     segs, bounds = [], []
@@ -150,6 +188,90 @@ class TestFrameLaw(unittest.TestCase):
         make_solid_video(v)
         fs = ecc.check_frames(v, {"segments": []}, self.out)
         self.assertEqual(self.level(fs, "frame-coverage"), "FAIL")
+
+
+class TestLoopCrossLaw(unittest.TestCase):
+    """Law 3: stream_loop wrap-crossing zone sampling (R196 closure)."""
+
+    def setUp(self):
+        self.holder = tempfile.TemporaryDirectory()
+        self.root = Path(self.holder.name)
+        self.out = self.root / "probe"
+
+    def tearDown(self):
+        self.holder.cleanup()
+
+    def level(self, findings, code):
+        for lv, c, _ in findings:
+            if c == code:
+                return lv
+        return None
+
+    def test_wrap_beat_samples_crossing_zone(self):
+        src = self.root / "src.mp4"
+        make_source_video(src, dur=1.0)
+        v = self.root / "moving.mp4"
+        make_moving_video(v, dur=3.0)
+        fs = ecc.check_frames(v, loop_plan(src=src), self.out)
+        self.assertEqual(self.level(fs, "loop-cross"), "PASS")
+        for tag in ("pre", "x", "post"):
+            self.assertTrue(
+                (self.out / "frames" / ("s00-x0-%s.png" % tag)).exists())
+        self.assertTrue((self.out / "tile.png").exists())
+
+    def test_short_beat_no_wrap_no_findings(self):
+        src = self.root / "src.mp4"
+        make_source_video(src, dur=5.0)
+        v = self.root / "moving.mp4"
+        make_moving_video(v, dur=3.0)
+        fs = ecc.check_frames(v, loop_plan(src=src), self.out)
+        self.assertIsNone(self.level(fs, "loop-cross"))
+        self.assertIsNone(self.level(fs, "loop-cross-probe"))
+
+    def test_dirty_crossing_zone_flags_r196_tell(self):
+        src = self.root / "src.mp4"
+        make_source_video(src, dur=1.0)
+        v = self.root / "dirtywrap.mp4"
+        make_dirty_wrap_video(v, band_at=0.9, band=0.3, dur=3.0)
+        fs = ecc.check_frames(v, loop_plan(src=src), self.out)
+        self.assertEqual(self.level(fs, "loop-cross-dirty"), "FAIL")
+        self.assertEqual(self.level(fs, "loop-cross"), "PASS")
+
+    def test_crossing_samples_on_junk_video_flag_coverage(self):
+        src = self.root / "src.mp4"
+        make_source_video(src, dur=1.0)
+        v = self.root / "junk.mp4"
+        v.write_bytes(b"not a video")
+        fs = ecc.check_frames(v, loop_plan(src=src), self.out)
+        self.assertEqual(self.level(fs, "frame-coverage"), "FAIL")
+        self.assertEqual(self.level(fs, "loop-cross-coverage"), "FAIL")
+
+    def test_unprovable_source_flags_probe_face(self):
+        src = self.root / "src.txt"
+        src.write_text("not footage", encoding="utf-8")
+        v = self.root / "moving.mp4"
+        make_moving_video(v, dur=3.0)
+        fs = ecc.check_frames(v, loop_plan(src=src), self.out)
+        self.assertEqual(self.level(fs, "loop-cross-probe"), "FAIL")
+
+    def test_cap_beyond_four_crossings_warns(self):
+        src = self.root / "src.mp4"
+        make_source_video(src, dur=0.3)
+        v = self.root / "moving.mp4"
+        make_moving_video(v, dur=3.0)
+        fs = ecc.check_frames(v, loop_plan(src=src), self.out)
+        self.assertEqual(self.level(fs, "loop-cross-capped"), "WARN")
+        self.assertEqual(self.level(fs, "loop-cross"), "PASS")
+
+    def test_cards_only_source_skipped(self):
+        src = self.root / "src.mp4"
+        make_source_video(src, dur=1.0)
+        v = self.root / "moving.mp4"
+        make_moving_video(v, dur=3.0)
+        fs = ecc.check_frames(v, loop_plan(src=src, cards_only=(0,)),
+                              self.out)
+        self.assertIsNone(self.level(fs, "loop-cross"))
+        self.assertIsNone(self.level(fs, "loop-cross-probe"))
 
 
 if __name__ == "__main__":
