@@ -19,7 +19,21 @@ ASCII rule: this source is pure ASCII; Chinese lives in the registry /
 prompt / material data files.
 
 Exit codes: 0 ok; 2 bad args / unknown expert / missing files;
-            3 ollama call failed; 4 ledger append failed (verdict kept).
+            3 ollama call failed; 4 ledger append failed (verdict kept);
+            5 GPU guard defer (only with --gpu-guard; advisory, see
+              read_gpu_headroom / defer_decision).
+
+GPU pre-flight guard (tech#44): two E4 reference flights burned 2x1500s
+to TIMEOUT during a jman-LoRA training window with zero verdicts (R1847).
+Long wrapper flights (s1_call / e4_call pattern, timeout=1500) should
+probe headroom before takeoff:
+
+    reading = ce.read_gpu_headroom()
+    defer, reason = ce.defer_decision(reading)
+    if defer and not FORCE: sys.exit(...)  # print reason first
+
+The guard is advisory: a missing/failing nvidia-smi probe never blocks,
+and --gpu-force overrides the CLI gate.
 """
 import json
 import re
@@ -33,6 +47,11 @@ REGISTRY = REPO / "data" / "experts" / "registry.json"
 LEDGER = REPO / "docs" / "reviews" / "expert-calls.md"
 VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
 DEFAULT_TIMEOUT = 300
+# GPU pre-flight guard thresholds (tech#44): defer when the card is
+# clearly occupied by another lane (training/render window) or when
+# free VRAM is too tight for a local LLM seat.
+GPU_DEFER_UTIL_PCT = 80
+GPU_DEFER_FREE_MB = 2048
 # ollama streams ANSI line-erase codes on slow generations (cold-load
 # case); without stripping they land verbatim in verdict archives
 # (2026-09-24 BS-003 S1 case). Braille spinner glyphs (U+2800 block)
@@ -75,6 +94,55 @@ def call_model(model, prompt, timeout=DEFAULT_TIMEOUT):
     return p.returncode, out
 
 
+def parse_headroom(raw_output):
+    """Pure: first CSV row of `nvidia-smi --query-gpu=utilization.gpu,
+    memory.free --format=csv,noheader,nounits` -> reading dict, or None
+    when the output is empty / malformed (probe face, never raises)."""
+    lines = (raw_output or "").strip().splitlines()
+    if not lines:
+        return None
+    try:
+        util_s, free_s = [t.strip() for t in lines[0].split(",")[:2]]
+        return {"util_pct": int(util_s), "free_mb": int(free_s),
+                "raw": lines[0]}
+    except (IndexError, ValueError):
+        return None
+
+
+def read_gpu_headroom():
+    """Probe nvidia-smi for GPU utilization + free VRAM (advisory face).
+
+    Returns a reading dict or None when nvidia-smi is missing / errors /
+    is not parseable - a broken probe must never block an expert call."""
+    try:
+        p = subprocess.run(
+            ["nvidia-smi", "--query-gpu=utilization.gpu,memory.free",
+             "--format=csv,noheader,nounits"],
+            capture_output=True, timeout=15)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if p.returncode != 0:
+        return None
+    return parse_headroom(p.stdout.decode("utf-8", "replace"))
+
+
+def defer_decision(reading, util_threshold=GPU_DEFER_UTIL_PCT,
+                   free_threshold=GPU_DEFER_FREE_MB):
+    """Pure: should this expert call be deferred given the GPU reading?
+
+    Returns (defer, reason). None reading -> (False, "") - probe
+    unavailable means the guard stays silent (advisory only)."""
+    if reading is None:
+        return False, ""
+    if reading["util_pct"] > util_threshold:
+        return True, "gpu util %d%% > %d%% (occupied window)" % (
+            reading["util_pct"], util_threshold)
+    if reading["free_mb"] < free_threshold:
+        return True, "gpu free %dMB < %dMB" % (
+            reading["free_mb"], free_threshold)
+    return False, ""
+
+
 def ledger_row(expert_id, role, dept, material, exit_code, note):
     """One markdown table row for the call ledger (pure)."""
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -111,6 +179,7 @@ def save_verdict(out_dir, file_name, expert_id, role, dept, model,
 
 def main(argv):
     expert_id = material = None
+    gpu_guard = gpu_force = False
     i = 1
     while i < len(argv):
         if argv[i] == "--expert":
@@ -119,9 +188,14 @@ def main(argv):
         elif argv[i] == "--material":
             i += 1
             material = argv[i]
+        elif argv[i] == "--gpu-guard":
+            gpu_guard = True
+        elif argv[i] == "--gpu-force":
+            gpu_force = True
         i += 1
     if not (expert_id and material):
-        print("usage: call_expert.py --expert ID --material FILE")
+        print("usage: call_expert.py --expert ID --material FILE "
+              "[--gpu-guard] [--gpu-force]")
         return 2
     try:
         _, experts = load_registry()
@@ -141,6 +215,27 @@ def main(argv):
     if not material_path.exists():
         print("FAIL material file missing: %s" % material_path)
         return 2
+    if gpu_guard:
+        # tech#44 pre-flight: probe before burning a (possibly 1500s)
+        # local-LLM flight. Advisory - force overrides, probe failure
+        # stays silent-but-proceeds.
+        reading = read_gpu_headroom()
+        defer, reason = defer_decision(reading)
+        if defer:
+            if gpu_force:
+                print("WARN gpu-force override: %s" % reason)
+            else:
+                print("DEFER %s" % reason)
+                print("DEFER note: under an occupied window the 1500s "
+                      "wrapper cap burned through twice with zero "
+                      "verdicts (R1847 E4 case); retry in a GPU release "
+                      "window, or pass --gpu-force to fly anyway.")
+                return 5
+        elif reading is None:
+            print("WARN gpu probe unavailable; proceeding (advisory guard)")
+        else:
+            print("GPU-OK util=%d%% free=%dMB"
+                  % (reading["util_pct"], reading["free_mb"]))
     prompt = build_prompt(prompt_path.read_text(encoding="utf-8"),
                           material_path.read_text(encoding="utf-8"))
     try:

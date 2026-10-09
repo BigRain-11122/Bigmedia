@@ -91,7 +91,13 @@ class TestBuildReadoutCli(unittest.TestCase):
             fh.write(EC_FIXTURE)
         try:
             since = datetime.datetime(2026, 10, 9, 0, 0)
-            out = tlm.build_readout(since, expert_path=path, station_path=path)
+            # ledger_path must be injected: the real repo whisper ledger
+            # grows with live concurrent-session runs (untracked file),
+            # which would leak in-window rows into this hermetic test.
+            out = tlm.build_readout(since, expert_path=path,
+                                    station_path=path,
+                                    ledger_path=os.path.join(
+                                        "no", "such", "ledger.jsonl"))
             # station parsing finds no dated asr rows in the EC fixture.
             self.assertEqual(out["ollama_produced"], 2)
             self.assertEqual(out["whisper_rows"], 0)
