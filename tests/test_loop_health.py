@@ -563,5 +563,74 @@ class RootLitterTests(unittest.TestCase):
         self.assertIn("root-probe-litter", buf.getvalue())
 
 
+class StaleDirtyTests(unittest.TestCase):
+    """tech#31: sediment-dirty naming guard (C-20261009-03 dirty-face
+    split law - in-flight files are naturally fresh, sediment >7d named)."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=2), BOARD)
+
+    def test_fresh_files_never_flag(self):
+        now = datetime.now()
+        entries = [("src/a.py", now - timedelta(days=1)),
+                   ("data/b.txt", now),
+                   ("src/c.py", now - timedelta(days=6, hours=23))]
+        self.assertEqual(loop_health.classify_stale_dirty(entries, now), [])
+
+    def test_stale_flagged_and_sorted(self):
+        now = datetime.now()
+        entries = [("zz/old.txt", now - timedelta(days=9)),
+                   ("aa/older.txt", now - timedelta(days=30))]
+        self.assertEqual(loop_health.classify_stale_dirty(entries, now),
+                         ["aa/older.txt", "zz/old.txt"])
+
+    def test_seven_day_boundary(self):
+        now = datetime.now()
+        self.assertEqual(loop_health.classify_stale_dirty(
+            [("x/exactly7.txt", now - timedelta(days=7))], now), [])
+        self.assertEqual(loop_health.classify_stale_dirty(
+            [("x/just_over.txt", now - timedelta(days=7, hours=2))], now),
+            ["x/just_over.txt"])
+
+    def test_whitelist_and_deleted_skip(self):
+        now = datetime.now()
+        entries = [("data/storylines/drama/mv0001/PRODUCTION.md",
+                    now - timedelta(days=30)),
+                   ("data/sources/mv001/song.ape", now - timedelta(days=30)),
+                   ("src/deleted.py", None),
+                   ("src/gone.txt", now - timedelta(days=30))]
+        self.assertEqual(loop_health.classify_stale_dirty(entries, now),
+                         ["src/gone.txt"])
+
+    def test_parse_porcelain_z(self):
+        data = (b" M src/render/a.py\x00"
+                b"?? .c3-tmp/r19_probe.py\x00"
+                b"R  docs/new.txt\x00docs/old.txt\x00"
+                b" D src/gone.py\x00"
+                b"?? data/pic/\xe5\x91\xa8.txt\x00")
+        self.assertEqual(
+            loop_health._parse_porcelain_z(data),
+            ["src/render/a.py", ".c3-tmp/r19_probe.py",
+             "docs/new.txt", "src/gone.py", "data/pic/周.txt"])
+
+    def test_check_skips_non_git_tree(self):
+        root = self._repo()
+        (root / "src" / "old.py").write_text("x", encoding="utf-8")
+        findings = []
+        loop_health.check_stale_dirty(root, datetime.now(), findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_no_crash_on_fake_repo(self):
+        root = self._repo()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("loop health:", buf.getvalue())
+        self.assertNotIn("stale-dirty", buf.getvalue())
+        self.assertEqual(rc, 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

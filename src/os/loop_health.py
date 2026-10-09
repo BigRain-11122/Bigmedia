@@ -59,6 +59,13 @@ Findings:
   FAIL  root-probe-litter            >= 3 root-level r<digit>/r_ probe
                                    files (recurring-litter pattern -
                                    episodic sweeps R1807/R1816/R1828)
+  WARN  stale-dirty                uncommitted file(s) whose on-disk
+                                   mtime is older than 7 days
+                                   (C-20261009-03 workspace baseline v1
+                                   dirty-face split law: in-flight files
+                                   belong to their authoring window and
+                                   are naturally fresh; sediment gets
+                                   named - tech#31)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -86,6 +93,7 @@ Usage:
 """
 import json
 import re
+import subprocess
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -113,6 +121,21 @@ FOLD_DENSE_DEFAULT = 5  # tech#20: dense same-code WARN group fold size
 # an underscore); subdirectories are not scanned.
 PROBE_LITTER_RE = re.compile(r"^r[\d_]")
 LITTER_FAIL_N = 3  # >= 3 leftovers = recurring pattern, not a one-off
+# tech#31: sediment-dirty guard. C-20261009-03 workspace baseline v1
+# dirty-face split law - in-flight files belong to their authoring window,
+# sediment older than 7 days gets named. Before this machine face the
+# naming was episodic human bookkeeping (same disease as tech#22: rule on
+# the books, no machine teeth). In-flight files are naturally fresh, so an
+# uncommitted file whose on-disk mtime predates the sediment bound is
+# sediment by definition. Concurrent-session active batch domains are
+# whitelisted (R1745 zero-contact carryover: an in-flight batch may
+# legitimately hold old-mtime source assets the owning window will commit).
+STALE_DIRTY_DAYS = 7
+INFLIGHT_DIR_PREFIXES = (
+    "data/storylines/drama/mv0001/",  # MV-session batch domain (+ release/)
+    "data/sources/mv001/",           # MV-session source assets (song/frames)
+)
+GIT_TIMEOUT_S = 30
 
 
 def parse_beats(path):
@@ -318,6 +341,89 @@ def check_root_litter(root, findings):
                          "at round end" % (len(names), shown)))
 
 
+def _parse_porcelain_z(data):
+    """`git status --porcelain -z` stdout -> [relpath]. -z records are
+    NUL-separated with no path quoting (raw UTF-8 bytes); a rename/copy
+    record is followed by a second NUL field holding the old path, which
+    is skipped. Short/garbled chunks never crash the guard."""
+    paths, skip_next = [], False
+    for chunk in data.split(b"\0"):
+        if not chunk:
+            continue
+        if skip_next:
+            skip_next = False
+            continue
+        if len(chunk) < 4:
+            continue
+        xy = chunk[:2]
+        if b"R" in xy or b"C" in xy:
+            skip_next = True
+        paths.append(chunk[3:].decode("utf-8", "replace"))
+    return paths
+
+
+def _git_status_files(root):
+    """Working-tree dirty/untracked relpaths (all untracked files listed
+    individually so file-level mtimes, not parent-dir stamps, age the
+    sediment test). Any git failure - not a work tree, git missing,
+    timeout - yields [] : this guard is advisory and never breaks the
+    probe (fake-repo CLI tests and non-git roots silently skip it)."""
+    try:
+        p = subprocess.run(
+            ["git", "status", "--porcelain", "-z", "--untracked-files=all"],
+            cwd=str(root), capture_output=True, timeout=GIT_TIMEOUT_S)
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    if p.returncode != 0:
+        return []
+    return _parse_porcelain_z(p.stdout)
+
+
+def classify_stale_dirty(entries, now, stale_days=STALE_DIRTY_DAYS,
+                         prefixes=INFLIGHT_DIR_PREFIXES):
+    """[(relpath, mtime-or-None)] -> sorted stale relpaths (pure core).
+    Deleted paths (None mtime) and whitelisted in-flight-domain paths
+    never flag; an mtime strictly older than stale_days flags."""
+    bound = stale_days * 86400.0
+    stale = []
+    for rel, mtime in entries:
+        if rel is None or mtime is None:
+            continue
+        if any(rel.startswith(p) for p in prefixes):
+            continue
+        if (now - mtime).total_seconds() > bound:
+            stale.append(rel)
+    return sorted(stale)
+
+
+def check_stale_dirty(root, now, findings):
+    """tech#31 guard face: name uncommitted sediment (one WARN with the
+    file list). Fresh-mtime in-flight files never flag - see
+    classify_stale_dirty - so the finding IS the C-20261009-03 baseline
+    "sediment > 7 days gets named" line, machine-enforced every round
+    by the routine probe consumption."""
+    paths = _git_status_files(root)
+    if not paths:
+        return
+    entries = []
+    for rel in paths:
+        mtime = None
+        try:
+            mtime = datetime.fromtimestamp((root / rel).stat().st_mtime)
+        except OSError:
+            pass
+        entries.append((rel, mtime))
+    stale = classify_stale_dirty(entries, now)
+    if not stale:
+        return
+    shown = ", ".join(stale[:5]) + (" ..." if len(stale) > 5 else "")
+    findings.append(("WARN", "stale-dirty",
+                     "%d uncommitted file(s) unchanged on disk for over %d "
+                     "days: %s - sediment naming (C-20261009-03 dirty-face "
+                     "split law; fresh-mtime in-flight files never flag)"
+                     % (len(stale), STALE_DIRTY_DAYS, shown)))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -465,6 +571,7 @@ def main(argv):
         (b_total, b_done), f = parse_backlog(board)
         findings += f
         check_root_litter(root, findings)
+        check_stale_dirty(root, datetime.now(), findings)
     except OSError as e:
         print("source error: %s" % e)
         return 2
