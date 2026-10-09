@@ -1,9 +1,0 @@
-now=2026-10-08 21:49:42
-                                            err                                             | count 
---------------------------------------------------------------------------------------------+-------
- llm HTTP 404: {"error":{"message":"model 'qwen2.5:14b-8k' not found","type":"not_found_err |    99
-(1 row)
-
-
-login_follow=404 (tolerated)
-requeue={"requeued":104}
