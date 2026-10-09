@@ -39,6 +39,16 @@ when the local cache is already populated (1.53GB @ 09-24 anchor).
 whisper.cpp (ggml path, MIT, OH-20260929-bigstream parked) removes
 this class of failure entirely: local ggml model files, no hub.
 
+Whisper exact metering hook (state/queue/tech#19, R1830): every real
+run appends one JSONL row to data/pipeline/whisper-ledger.jsonl
+(ts/purpose/model/audio/duration_s/cues/rc) so tokens_local_meter
+counts whisper runs exactly instead of the station-reviews asr-check
+row approximation (which never saw calibration runs - tech#10 gap).
+--no-ledger opts out; --ledger overrides the path; --purpose tags the
+run (calibration / final-track-qc / ...). Best-effort: a ledger write
+failure warns on stderr and never fails the ASR run itself. Audio
+not found exits with NO row (no model call was attempted).
+
 P-2 pinned-model law (queue R1300 proposal, R1302 pilot): the S2 QC
 medium model is pinned at data/assets/models/faster-whisper-medium
 (real files, gitignored per the model-file law, outside the group
@@ -61,6 +71,8 @@ ASCII rule: code/comments English; Chinese only in data files.
 Exit codes: 0 ok; 2 bad args/model or transcription error.
 """
 import argparse
+import datetime
+import json
 import sys
 from pathlib import Path
 
@@ -73,6 +85,33 @@ BREAK_PUNCT = set(",.!?;..." + "\uff0c\u3002\uff01\uff1f\uff1b\u3001\u2026")
 
 # P-2 pinned-model store: data/assets/models/ (gitignored, sweep-safe)
 PINNED_MODELS_DIR = Path(__file__).resolve().parents[2] / "data" / "assets" / "models"
+
+# exact-metering ledger (tech#19): one JSONL row per real run,
+# consumed by src/os/tokens_local_meter.py
+DEFAULT_LEDGER = Path(__file__).resolve().parents[2] / "data" / "pipeline" / "whisper-ledger.jsonl"
+
+
+def append_ledger_row(path, model, audio, purpose, rc,
+                      duration_s=None, cues=None):
+    """Append one exact-metering JSONL row. Best-effort by design: a
+    write failure warns on stderr and returns False - metering never
+    fails the ASR run it is measuring."""
+    row = {
+        "ts": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "purpose": purpose or "untagged",
+        "model": model,
+        "audio": str(audio),
+        "rc": rc,
+        "duration_s": duration_s,
+        "cues": cues,
+    }
+    try:
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(row) + "\n")
+        return True
+    except OSError as e:
+        sys.stderr.write("WARN whisper-ledger append failed: %s\n" % e)
+        return False
 
 
 def resolve_model(model_size):
@@ -217,6 +256,15 @@ def build_parser():
                     help="reference text (the piece's own beats file) "
                          "for the guarded-entry collision gate; only "
                          "meaningful together with --noise-dict")
+    ap.add_argument("--purpose", default=None,
+                    help="exact-metering tag for this run (e.g. "
+                         "calibration, final-track-qc); default untagged")
+    ap.add_argument("--ledger", default=str(DEFAULT_LEDGER),
+                    help="exact-metering ledger path (tech#19); one "
+                         "JSONL row appended per real run, consumed by "
+                         "src/os/tokens_local_meter.py")
+    ap.add_argument("--no-ledger", action="store_true",
+                    help="skip the exact-metering ledger append")
     return ap
 
 
@@ -226,6 +274,7 @@ def main(argv=None):
     if not audio.exists():
         print("FAIL audio not found: %s" % audio)
         return 2
+    ledger = None if args.no_ledger else args.ledger
     try:
         cues, dropped, dur = transcribe_to_cues(
             audio, args.model, args.language, args.max_chars,
@@ -234,9 +283,14 @@ def main(argv=None):
             initial_prompt=args.initial_prompt)
     except Exception as e:  # model load/download or transcription failure
         print("FAIL transcribe: %s: %s" % (type(e).__name__, e))
+        if ledger:
+            append_ledger_row(ledger, args.model, audio, args.purpose, 2)
         return 2
     if not cues:
         print("FAIL no cues produced for %s" % audio)
+        if ledger:
+            append_ledger_row(ledger, args.model, audio, args.purpose, 2,
+                              duration_s=dur, cues=0)
         return 2
     if args.noise_dict:
         entries = load_noise_dict(args.noise_dict)
@@ -254,6 +308,9 @@ def main(argv=None):
     write_srt(cues, args.out)
     print("OK %s -> %s cues=%d dropped=%d audio_dur=%.2fs model=%s-int8-cpu"
           % (audio, args.out, len(cues), dropped, dur, args.model))
+    if ledger:
+        append_ledger_row(ledger, args.model, audio, args.purpose, 0,
+                          duration_s=dur, cues=len(cues))
     return 0
 
 

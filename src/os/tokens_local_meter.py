@@ -11,10 +11,16 @@ relying on per-round memory:
     attempted-no-output and count 0, per the 2026-09-24 convention (R175:
     timeout with no verdict = 0). Rows with a verdict-style exit cell
     (E4 wrapper form, e.g. ``8.0（…）``) count as produced.
-  - Whisper surface (approx): docs/reviews/station-reviews.md rows
-    mentioning ``asr-check`` within the window — one row ≈ one
-    faster-whisper medium run at current S2 practice (row-evidence
-    approximation, not an exact hook).
+  - Whisper surface (exact since tech#19, R1830):
+    data/pipeline/whisper-ledger.jsonl rows appended by
+    src/render/whisper_to_srt.py - one row per real run (calibration
+    and QC runs included, which the old approximation never saw).
+    rc==0 rows count as produced; rc!=0 rows are reported separately
+    as attempted-no-output (mirroring the ollama classification).
+    Station-reviews asr-check rows remain the approximation for
+    history strictly BEFORE the ledger epoch date; on/after the epoch
+    day they are dropped so a run that leaves both surfaces is never
+    double-counted (epoch-day pre-hook runs undercount honestly).
 
 Not auto-countable (hand-note only): direct ``ollama run`` warm-ups and
 whisper calibration runs that leave no ledger row.
@@ -36,6 +42,7 @@ import sys
 REPO = __file__.replace("\\", "/").rsplit("/src/os/", 1)[0]
 EXPERT_CALLS_PATH = REPO + "/docs/reviews/expert-calls.md"
 STATION_REVIEWS_PATH = REPO + "/docs/reviews/station-reviews.md"
+WHISPER_LEDGER_PATH = REPO + "/data/pipeline/whisper-ledger.jsonl"
 
 # expert-calls row: | 2026-10-09 07:17 | S1-script | … | material | 0 | … |
 EC_ROW_RE = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})\s*\|")
@@ -73,6 +80,34 @@ def parse_station_asr(text):
     return rows
 
 
+def parse_whisper_ledger(text):
+    """Yield (datetime, rc) per exact-metering JSONL row (tech#19).
+    Malformed lines are skipped best-effort - a metering probe must
+    never crash on a partially written row."""
+    rows = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            row = json.loads(line)
+            ts = str(row.get("ts", ""))
+            when = None
+            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+                try:
+                    when = datetime.datetime.strptime(ts, fmt)
+                    break
+                except ValueError:
+                    continue
+            if when is None:
+                continue
+            rc = row.get("rc", 0)
+            rows.append((when, rc if isinstance(rc, int) else 0))
+        except ValueError:
+            continue
+    return rows
+
+
 def _is_produced(exit_token):
     """True when the row represents a model call that produced a verdict.
 
@@ -87,19 +122,45 @@ def _is_produced(exit_token):
     return True
 
 
-def meter(expert_rows, asr_rows, since):
-    """Window-filter and classify; returns a readout dict."""
+def meter(expert_rows, asr_rows, since, ledger_rows=None):
+    """Window-filter and classify; returns a readout dict.
+
+    ledger_rows (tech#19): when provided, the exact whisper-ledger
+    surface owns the epoch day onward and station-reviews asr rows
+    stay only as pre-epoch history (no double counting)."""
     ok_rows = [r for r in expert_rows if r[0] >= since]
     attempted = [r for r in ok_rows if not _is_produced(r[1])]
     produced = [r for r in ok_rows if _is_produced(r[1])]
-    asr = [d for d in asr_rows if d >= since]
-    return {
+    base = {
         "since": since.strftime("%Y-%m-%d %H:%M"),
         "ollama_produced": len(produced),
         "ollama_attempted_noproduct": len(attempted),
+    }
+    if ledger_rows:
+        epoch = min(r[0] for r in ledger_rows)
+        epoch_day = datetime.datetime.combine(
+            epoch.date(), datetime.time(0, 0))
+        apprx = [d for d in asr_rows if since <= d < epoch_day]
+        exact = [r for r in ledger_rows if r[0] >= since]
+        ex_produced = [r for r in exact if r[1] == 0]
+        ex_attempted = [r for r in exact if r[1] != 0]
+        base.update({
+            "whisper_apprx_rows": len(apprx),
+            "whisper_exact_produced": len(ex_produced),
+            "whisper_exact_attempted": len(ex_attempted),
+            "whisper_rows": len(apprx) + len(exact),
+            "tokens_local": len(produced) + len(apprx) + len(ex_produced),
+        })
+        return base
+    asr = [d for d in asr_rows if d >= since]
+    base.update({
+        "whisper_apprx_rows": len(asr),
+        "whisper_exact_produced": 0,
+        "whisper_exact_attempted": 0,
         "whisper_rows": len(asr),
         "tokens_local": len(produced) + len(asr),
-    }
+    })
+    return base
 
 
 def read_text(path):
@@ -111,9 +172,12 @@ def read_text(path):
 
 
 def build_readout(since, expert_path=EXPERT_CALLS_PATH,
-                  station_path=STATION_REVIEWS_PATH):
+                  station_path=STATION_REVIEWS_PATH,
+                  ledger_path=WHISPER_LEDGER_PATH):
     return meter(parse_expert_calls(read_text(expert_path)),
-                 parse_station_asr(read_text(station_path)), since)
+                 parse_station_asr(read_text(station_path)), since,
+                 ledger_rows=parse_whisper_ledger(read_text(ledger_path))
+                 or None)
 
 
 def main(argv=None):
@@ -145,8 +209,10 @@ def main(argv=None):
         sys.stdout.write(
             "tokens:local={tokens_local} since {since} "
             "(ollama produced {ollama_produced} / attempted-no-output "
-            "{ollama_attempted_noproduct}; whisper asr-check rows "
-            "{whisper_rows})\n".format(**readout))
+            "{ollama_attempted_noproduct}; whisper runs {whisper_rows} "
+            "= approx {whisper_apprx_rows} + exact produced "
+            "{whisper_exact_produced} / attempted-no-output "
+            "{whisper_exact_attempted})\n".format(**readout))
     return 0
 
 
