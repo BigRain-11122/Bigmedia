@@ -236,5 +236,154 @@ class TestGpuGuardCli(unittest.TestCase):
         self.assertEqual(["m"], calls)
 
 
+class TestTimeoutCli(unittest.TestCase):
+    """tech#45 wiring face: --timeout S passes to call_model; default
+    stays 300 (existing surface unchanged); bad values rejected before
+    any model flight. Everything injected - no ollama, no real
+    registry/ledger writes."""
+
+    def _run_main(self, argv):
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            (repo / "prompts").mkdir()
+            (repo / "prompts" / "p.txt").write_text("prompt", encoding="utf-8")
+            mat = repo / "material.md"
+            mat.write_text("material body", encoding="utf-8")
+            captured = []
+
+            def fake_call_model(model, prompt, timeout=ce.DEFAULT_TIMEOUT):
+                captured.append(timeout)
+                return 0, "verdict line"
+
+            patches = [
+                mock.patch.object(ce, "REPO", repo),
+                mock.patch.object(
+                    ce, "load_registry",
+                    lambda path=None: ("m", {"hot-intel": {
+                        "id": "hot-intel", "dept": "d", "role": "r",
+                        "prompt_file": "prompts/p.txt", "model": "m"}})),
+                mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
+                mock.patch.object(ce, "call_model", fake_call_model),
+            ]
+            with patches[0], patches[1], patches[2], patches[3], \
+                    patches[4]:
+                rc = ce.main(["call_expert.py", "--expert", "hot-intel",
+                              "--material", str(mat)] + argv)
+            return rc, captured
+
+    def test_timeout_flag_passes_value(self):
+        # the R176/R1847 long-review case: cap raised without a wrapper
+        rc, captured = self._run_main(["--timeout", "1500"])
+        self.assertEqual(0, rc)
+        self.assertEqual([1500], captured)
+
+    def test_default_timeout_unchanged_without_flag(self):
+        # existing wrapper/CLI surface: no flag -> DEFAULT_TIMEOUT
+        rc, captured = self._run_main([])
+        self.assertEqual(0, rc)
+        self.assertEqual([ce.DEFAULT_TIMEOUT], captured)
+        self.assertEqual(300, ce.DEFAULT_TIMEOUT)
+
+    def test_non_integer_rejected_before_flight(self):
+        rc, captured = self._run_main(["--timeout", "1500s"])
+        self.assertEqual(2, rc)
+        self.assertEqual([], captured)
+
+    def test_non_positive_rejected(self):
+        for bad in ("0", "-5"):
+            rc, captured = self._run_main(["--timeout", bad])
+            self.assertEqual(2, rc)
+            self.assertEqual([], captured)
+
+    def test_missing_value_rejected_gracefully(self):
+        # trailing --timeout with no value: exit 2, no IndexError crash
+        rc, captured = self._run_main(["--timeout"])
+        self.assertEqual(2, rc)
+        self.assertEqual([], captured)
+
+    def test_guard_and_timeout_combine(self):
+        # long-flight正法: --timeout 1500 --gpu-guard both honored,
+        # guard probe unavailable -> proceeds with raised cap
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            (repo / "prompts").mkdir()
+            (repo / "prompts" / "p.txt").write_text("prompt",
+                                                    encoding="utf-8")
+            mat = repo / "material.md"
+            mat.write_text("material body", encoding="utf-8")
+            captured = []
+
+            def fake_call_model(model, prompt, timeout=ce.DEFAULT_TIMEOUT):
+                captured.append(timeout)
+                return 0, "verdict line"
+
+            patches = [
+                mock.patch.object(ce, "REPO", repo),
+                mock.patch.object(
+                    ce, "load_registry",
+                    lambda path=None: ("m", {"hot-intel": {
+                        "id": "hot-intel", "dept": "d", "role": "r",
+                        "prompt_file": "prompts/p.txt", "model": "m"}})),
+                mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
+                mock.patch.object(ce, "read_gpu_headroom", lambda: None),
+                mock.patch.object(ce, "call_model", fake_call_model),
+            ]
+            with patches[0], patches[1], patches[2], patches[3], \
+                    patches[4], patches[5]:
+                rc = ce.main(["call_expert.py", "--expert", "hot-intel",
+                              "--material", str(mat),
+                              "--timeout", "1500", "--gpu-guard"])
+            self.assertEqual(0, rc)
+            self.assertEqual([1500], captured)
+
+
+    def test_timeout_branch_prints_custom_value(self):
+        # the enforce face: TimeoutExpired lands in the branch and the
+        # message echoes the CLI-passed cap, not the hardcoded default.
+        # Fail path stays zero-pollution: no verdict archive, no ledger.
+        import contextlib
+        import io
+        import subprocess as sp
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            (repo / "prompts").mkdir()
+            (repo / "prompts" / "p.txt").write_text("prompt", encoding="utf-8")
+            mat = repo / "material.md"
+            mat.write_text("material body", encoding="utf-8")
+
+            def fake_call_model(model, prompt, timeout=ce.DEFAULT_TIMEOUT):
+                raise sp.TimeoutExpired(cmd="ollama", timeout=timeout)
+
+            patches = [
+                mock.patch.object(ce, "REPO", repo),
+                mock.patch.object(
+                    ce, "load_registry",
+                    lambda path=None: ("m", {"hot-intel": {
+                        "id": "hot-intel", "dept": "d", "role": "r",
+                        "prompt_file": "prompts/p.txt", "model": "m"}})),
+                mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
+                mock.patch.object(ce, "call_model", fake_call_model),
+            ]
+            buf = io.StringIO()
+            with patches[0], patches[1], patches[2], patches[3], \
+                    patches[4], contextlib.redirect_stdout(buf):
+                rc = ce.main(["call_expert.py", "--expert", "hot-intel",
+                              "--material", str(mat),
+                              "--timeout", "1500"])
+            self.assertEqual(3, rc)
+            self.assertIn("FAIL ollama timeout (1500s)", buf.getvalue())
+            self.assertFalse((repo / "ledger.md").exists())
+            self.assertFalse((repo / "verdicts").exists())
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

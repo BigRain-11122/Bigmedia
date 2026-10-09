@@ -5,7 +5,7 @@ Every department keeps dedicated expert roles (functional identities,
 org-structure S3 "not personified" law). This tool makes "ready to be
 called at any time" literal:
 
-    python src/call_expert.py --expert hot-intel --material data/intel/daily/2026-09-24.md
+    python src/call_expert.py --expert hot-intel --material data/intel/daily/2026-09-24.md [--timeout S] [--gpu-guard]
 
 Registry = data/experts/registry.json (id/dept/role/prompt_file/model).
 Prompts live as UTF-8 data files (encoding rule); the model is the local
@@ -34,6 +34,18 @@ probe headroom before takeoff:
 
 The guard is advisory: a missing/failing nvidia-smi probe never blocks,
 and --gpu-force overrides the CLI gate.
+
+--timeout S (tech#45): per-call subprocess timeout in seconds, default
+300 (DEFAULT_TIMEOUT) - existing surface unchanged. The S1/E4 long-
+review flights historically needed hand-rolled s1_call/e4_call wrapper
+copies of this file solely to raise the cap (R176 wrapper lineage);
+future pieces fly the CLI directly:
+
+    python src/call_expert.py --expert S1-script \
+        --material <review-material.md> --timeout 1500 --gpu-guard
+
+(--gpu-guard recommended on every long flight: it defers cheaply when
+another lane owns the card instead of burning the full cap.)
 """
 import json
 import re
@@ -178,7 +190,7 @@ def save_verdict(out_dir, file_name, expert_id, role, dept, model,
 
 
 def main(argv):
-    expert_id = material = None
+    expert_id = material = timeout_raw = None
     gpu_guard = gpu_force = False
     i = 1
     while i < len(argv):
@@ -188,6 +200,12 @@ def main(argv):
         elif argv[i] == "--material":
             i += 1
             material = argv[i]
+        elif argv[i] == "--timeout":
+            i += 1
+            if i >= len(argv):
+                print("FAIL --timeout needs a value (seconds)")
+                return 2
+            timeout_raw = argv[i]
         elif argv[i] == "--gpu-guard":
             gpu_guard = True
         elif argv[i] == "--gpu-force":
@@ -195,8 +213,19 @@ def main(argv):
         i += 1
     if not (expert_id and material):
         print("usage: call_expert.py --expert ID --material FILE "
-              "[--gpu-guard] [--gpu-force]")
+              "[--timeout S] [--gpu-guard] [--gpu-force]")
         return 2
+    timeout_s = DEFAULT_TIMEOUT
+    if timeout_raw is not None:
+        try:
+            timeout_s = int(timeout_raw)
+        except ValueError:
+            print("FAIL --timeout must be an integer number of seconds: %r"
+                  % timeout_raw)
+            return 2
+        if timeout_s <= 0:
+            print("FAIL --timeout must be > 0 seconds: %d" % timeout_s)
+            return 2
     try:
         _, experts = load_registry()
     except (OSError, ValueError) as e:
@@ -239,9 +268,9 @@ def main(argv):
     prompt = build_prompt(prompt_path.read_text(encoding="utf-8"),
                           material_path.read_text(encoding="utf-8"))
     try:
-        code, out = call_model(ex["model"], prompt)
+        code, out = call_model(ex["model"], prompt, timeout=timeout_s)
     except subprocess.TimeoutExpired:
-        print("FAIL ollama timeout (%ds)" % DEFAULT_TIMEOUT)
+        print("FAIL ollama timeout (%ds)" % timeout_s)
         code, out = 3, ""
     if code != 0:
         print("FAIL ollama exit %d" % code)
