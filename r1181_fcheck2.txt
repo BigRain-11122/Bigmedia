@@ -1,7 +1,0 @@
-rows_1004=4
-L286 mark=CEO
-L287 mark=-
-L288 mark=-
-L289 mark=CEO
-F_last=F-202
-F_last10=F-142,F-143,F-144,F-145,F-146,F-147,F-148,F-149,F-150,F-202

@@ -1,5 +1,0 @@
-tick=1357 ts=2026-10-05 12:28:57
-log_len=1385 last_line_prefix=2026-10-05 12:28 R1357: 自进轮·queue §B B5 
-task=自进轮·queue §B B5 段子·幽默工艺对标 slice1=判据预注册毕（空转规则②路·清单唯一 open 顶项拆
-watermark_len=149 artifact_in=True
-export_ts=2026-10-05 12:28:57 results_last_tick=1357 live_lines=3

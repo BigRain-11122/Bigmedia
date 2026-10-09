@@ -35,3 +35,10 @@
 ## 证据链
 
 - 分角机读件=cast.json；narrator beats=narrator.beats.txt；runner=.c3-tmp/r1786_tts_roles.py+log；QC=qc-r1786.json（small 档·繁体噪声面）+qc-r1786-asr-medium.json（正典读数）；探针=.c3-tmp/r1786_probe.py+shot7_crosslingual.wav。
+
+## tech#2 第五路候选定谳退役（R1828·2026-10-09·state/queue P2 队头件·判负留痕合法）
+
+- **语境加长模板法=既有证据足判负**：R1787 A 路（≥25 字语境句+ASR 对位裁剪）5/5 全败的失败面在**裁剪对位机制**（对位 cue 零命中/裁后 ASR 空）与裁后音频完整性，非加长文本自然度——模板变体只改加长文本质量，不触失败机制 → 不另起 GPU 重测（MV 出图窗让路纪律同判）。
+- **标点韵律注入=同族弱变体判负**：R1787 B 路 [breath] fine-grained（官方显式韵律标签=强机制）5/5 全败（复读循环/乱语）；标点=弱于显式标签的韵律信号，且根因面（模型自警「synthesis text too short than prompt text→bad performance」）非韵律控制问题 → 同族不重试。
+- **定谳退役**：CosyVoice3-0.5B 本机栈 **≤12 字短台词路线就此退役**（R1786 两轮+判别探针+R1787 A/B/C/D 四路+本节第五路候选族评估=全谱收口）——**L-剧配角产线正典=edge-tts 档位声直出（cast.json 同源）**；CosyVoice3 保留面=≥25 字长文旁白/跨语候选位（R1785 SMOKE-OK 锚），非短台词。
+- **重开条件（三串联缺一不开）**：①后续 L-剧集 E4/E8 对 edge-tts 档位声配角实质扣分旗（辨识度/情感不足）≥2 件；②GPU 独占窗可用；③**换引擎类重试**（CosyVoice 更大变体/其他 zero-shot TTS）——CosyVoice3-0.5B 短台词重试不在重开面。
