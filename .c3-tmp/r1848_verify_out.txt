@@ -1,0 +1,7 @@
+V1 verbatim_in_pool=True axis_scene=[('秩序', 'rain')]
+V2 zero_dup_vs_spirit_1_100=True
+V3 zero_dup_vs_三志=True hits=[]
+V4 fleet_card_dedup_repo_grep hits=NONE rc=1
+V5 supply_premise cur_total=1440 head_total=1440 expanded=False
+V6 near_twin_motif_check (计算/人间烟火 absent in #1-100)=True
+VERIFY_RESULT=PASS
