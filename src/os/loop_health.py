@@ -136,6 +136,19 @@ INFLIGHT_DIR_PREFIXES = (
     "data/sources/mv001/",           # MV-session source assets (song/frames)
 )
 GIT_TIMEOUT_S = 30
+# tech#37: codex supply-freshness guard. The codex five-dimension files
+# are the shared supply source for the DIGEST / drama / card lines; the
+# README "refresh every batch" discipline had no machine face before this
+# guard (R1844 arrears anchor: the chronicle went 09-29..10-09 - eleven
+# days of zero continuation - before a human sweep cleared the debt).
+# Freshness only: a missing dimension file is the content board's matter,
+# never this guard's face (None mtime -> skipped, like deleted paths in
+# the sediment guard).
+CODEX_DIR = Path("data") / "storylines" / "codex"
+CODEX_DIMENSIONS = ("city-chronicle.md", "city-culture.md",
+                    "city-humanities.md", "city-residents.md",
+                    "city-spirit.md")
+CODEX_FRESH_DAYS = 7  # > 7 days unrefreshed = supply-sediment WARN
 
 
 def parse_beats(path):
@@ -424,6 +437,41 @@ def check_stale_dirty(root, now, findings):
                      % (len(stale), STALE_DIRTY_DAYS, shown)))
 
 
+def classify_codex_freshness(entries, now, fresh_days=CODEX_FRESH_DAYS):
+    """[(name, mtime-or-None)] -> sorted stale names (pure core). A None
+    mtime (missing file) never flags: existence is the content board's
+    face, freshness is this guard's."""
+    bound = fresh_days * 86400.0
+    return sorted(name for name, mtime in entries
+                  if mtime is not None
+                  and (now - mtime).total_seconds() > bound)
+
+
+def check_codex_freshness(root, now, findings):
+    """tech#37 guard face: name codex dimension files unrefreshed for over
+    CODEX_FRESH_DAYS (one WARN with the list). Machine-enforced every round
+    by the routine probe consumption; the R1844 11-day uncaptured-node
+    arrears window (09-29..10-09, zero continuation) is the anchor."""
+    entries = []
+    for name in CODEX_DIMENSIONS:
+        mtime = None
+        try:
+            mtime = datetime.fromtimestamp(
+                (root / CODEX_DIR / name).stat().st_mtime)
+        except OSError:
+            pass
+        entries.append((name, mtime))
+    stale = classify_codex_freshness(entries, now)
+    if not stale:
+        return
+    shown = ", ".join(stale[:5]) + (" ..." if len(stale) > 5 else "")
+    findings.append(("WARN", "codex-stale",
+                     "%d codex supply file(s) unrefreshed for over %d days: "
+                     "%s - supply freshness debt (R1844 arrears anchor; "
+                     "DIGEST/drama/cards shared source)"
+                     % (len(stale), CODEX_FRESH_DAYS, shown)))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -572,6 +620,7 @@ def main(argv):
         findings += f
         check_root_litter(root, findings)
         check_stale_dirty(root, datetime.now(), findings)
+        check_codex_freshness(root, datetime.now(), findings)
     except OSError as e:
         print("source error: %s" % e)
         return 2

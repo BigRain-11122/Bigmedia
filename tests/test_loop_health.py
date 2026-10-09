@@ -12,9 +12,11 @@ Run:
 import contextlib
 import io
 import json
+import os
 import shutil
 import sys
 import tempfile
+import time
 import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -630,6 +632,83 @@ class StaleDirtyTests(unittest.TestCase):
         self.assertIn("loop health:", buf.getvalue())
         self.assertNotIn("stale-dirty", buf.getvalue())
         self.assertEqual(rc, 0)
+
+
+class CodexFreshnessTests(unittest.TestCase):
+    """tech#37: codex supply-freshness naming guard (R1844 arrears anchor -
+    the "refresh every batch" discipline gets machine teeth)."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=2), BOARD)
+
+    def _codex(self, root):
+        d = root / "data" / "storylines" / "codex"
+        d.mkdir(parents=True, exist_ok=True)
+        return d
+
+    def _touch_stale(self, d, name, days):
+        p = d / name
+        p.write_text("x", encoding="utf-8")
+        old = time.time() - days * 86400
+        os.utime(p, (old, old))
+
+    def test_fresh_batch_never_flags(self):
+        now = datetime.now()
+        entries = [(name, now - timedelta(days=i)) for i, name in
+                   enumerate(loop_health.CODEX_DIMENSIONS)]
+        self.assertEqual(loop_health.classify_codex_freshness(entries, now),
+                         [])
+
+    def test_stale_named_and_sorted(self):
+        now = datetime.now()
+        entries = [("city-culture.md", now - timedelta(days=12)),
+                   ("city-chronicle.md", now - timedelta(days=1)),
+                   ("city-residents.md", now - timedelta(days=11))]
+        self.assertEqual(loop_health.classify_codex_freshness(entries, now),
+                         ["city-culture.md", "city-residents.md"])
+
+    def test_seven_day_boundary(self):
+        now = datetime.now()
+        self.assertEqual(loop_health.classify_codex_freshness(
+            [("city-spirit.md", now - timedelta(days=7))], now), [])
+        self.assertEqual(loop_health.classify_codex_freshness(
+            [("city-spirit.md", now - timedelta(days=7, hours=2))], now),
+            ["city-spirit.md"])
+
+    def test_missing_file_never_flags(self):
+        now = datetime.now()
+        entries = [(name, None) for name in loop_health.CODEX_DIMENSIONS]
+        self.assertEqual(loop_health.classify_codex_freshness(entries, now),
+                         [])
+
+    def test_check_silent_without_codex_dir(self):
+        root = self._repo()  # no codex dir at all -> no face, no finding
+        findings = []
+        loop_health.check_codex_freshness(root, datetime.now(), findings)
+        self.assertEqual(findings, [])
+
+    def test_check_names_real_stale_files_only(self):
+        root = self._repo()
+        d = self._codex(root)
+        self._touch_stale(d, "city-culture.md", 12)
+        (d / "city-chronicle.md").write_text("x", encoding="utf-8")  # fresh
+        findings = []
+        loop_health.check_codex_freshness(root, datetime.now(), findings)
+        self.assertEqual(warn_codes(findings), {"codex-stale"})
+        self.assertIn("city-culture.md", findings[0][2])
+        self.assertNotIn("city-chronicle.md", findings[0][2])
+
+    def test_cli_wired_warn_not_fail(self):
+        root = self._repo()
+        d = self._codex(root)
+        self._touch_stale(d, "city-residents.md", 11)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("codex-stale", buf.getvalue())
+        self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
 
 
 if __name__ == "__main__":
