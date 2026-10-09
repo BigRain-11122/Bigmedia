@@ -1,0 +1,121 @@
+# -*- coding: utf-8 -*-
+"""MC-20261010-DIGEST-v17 build (审查执法双日数字盘点).
+
+Pre-stage leg (R1871, CPU face): machine-verify group-ledger anchors,
+emit cards.json + subs.srt. M2 poster render + 验图 + M4.5/E4 seats
+stay gated for the GPU window (12:00) per main#8.
+Assertions (v16 build_digest16 precedent, four families):
+  A1 unique O-20261008-* rows == 16, O-20261009-* == 18 (total 34)
+  A2 CEO verbatim quotes present verbatim in group orders.md
+  A3 C-20261009-01..04 present in group decisions.md
+  A4 deck em costs fit budget at h2_size 40 (23.0em), h1 fits 10.95em
+"""
+import io
+import json
+import re
+import sys
+
+sys.path.insert(0, "src/render")
+from render_card_video import _line_cost  # noqa: E402
+
+ORDERS = r"C:\Users\sjs20\Desktop\FluxGroup\docs\orders.md"
+DECISIONS = r"C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md"
+OUT_DIR = r"data\storylines\cards\MC-20261010-DIGEST-v17"
+
+Q_AUDIT = "每个子公司给我逐个审查审计，然后强力改善"          # O-20261009-1227
+Q_SLOW = "游戏公司项目开发进展非常缓慢，委员会去审查他们"      # O-20261009-1216
+Q_SELF = "我说过等我的时间，自己找创新业务，或者搭建技术底层，等我干嘛？这是不干活的理由吗"  # O-20261009-1246
+
+H1 = "城市盘点 017"
+LINES = [
+    H1,
+    "审查执法双日（10-08/09 · 令批 34 单）",
+    "「" + Q_AUDIT.split("，")[0] + "，",
+    Q_AUDIT.split("，", 1)[1] + "」",
+    "审查三案同窗 7/7 · 直审+逐审+工作区基线",
+    "自驱执法令 · 5/8 司违例 · 三队建面 7/12/12",
+    "三横切病根 · 物理件积压 · 正典断更 · 簿记税",
+    "实弹改善 5 件 · 判据预注册 · 回访 10-16",
+]
+H2_SIZE = 40
+H1_SIZE = 84
+BUDGET_H2 = (1080 - 160) / float(H2_SIZE)  # 23.0em
+BUDGET_H1 = (1080 - 160) / float(H1_SIZE)  # ~10.95em
+
+orders_txt = io.open(ORDERS, encoding="utf-8").read()
+dec_txt = io.open(DECISIONS, encoding="utf-8").read()
+
+o08 = sorted(set(re.findall(r"O-20261008-\d+", orders_txt)))
+o09 = sorted(set(re.findall(r"O-20261009-\d+", orders_txt)))
+c09 = sorted(set(re.findall(r"C-20261009-\d+", dec_txt)))
+
+results = []
+results.append(("A1 order counts 16+18=34", len(o08) == 16 and len(o09) == 18))
+results.append(("A2a quote 1227 verbatim", Q_AUDIT in orders_txt))
+results.append(("A2b quote 1216 verbatim", Q_SLOW in orders_txt))
+results.append(("A2c quote 1246 verbatim", Q_SELF in orders_txt))
+quote_join = (LINES[2] + LINES[3]).strip("「」")
+results.append(("A2d deck quote == verbatim", quote_join == Q_AUDIT))
+results.append(("A3 C-20261009-01..04 present", all(
+    ("C-20261009-0%d" % i) in dec_txt for i in (1, 2, 3, 4))))
+h1_ok = _line_cost(LINES[0]) <= BUDGET_H1
+costs = [_line_cost(s) for s in LINES[1:]]
+results.append(("A4a h1 fits budget", h1_ok))
+results.append(("A4b h2 lines fit budget", all(c <= BUDGET_H2 for c in costs)))
+results.append(("A4c single-line no-wrap needed", all(c <= BUDGET_H2 for c in costs)))
+
+fail = [name for name, ok in results if not ok]
+for name, ok in results:
+    print(("PASS " if ok else "FAIL ") + name)
+print("em costs: " + ", ".join("%.2f" % c for c in costs) + " budget %.2f" % BUDGET_H2)
+if fail:
+    print("ASSERTIONS FAILED: %s" % fail)
+    sys.exit(1)
+
+# --- cards.json (v16 structural template) ---
+meta = {
+    "topic": "MC-20261010-DIGEST-v17",
+    "line": "L-卡 图文轻内容线（DIGEST 形态第十七件·charter v1.2 §4 形态码·#67 触发律=编年史事件随轮领〔R1871 预置腿·main#8〕）",
+    "form": "DIGEST 盘点图文 017（P0 形态 DIGEST 续件第十六件·史源=10-08 MV 令批+10-09 审查执法批两簇 CEO 令级事件=v16〔10-06 首报直投日〕后零消费簇·供给盲区修正=R870/R1536 同型）",
+    "tool": "src/render/render_card_video.py --poster（静态帧路·v16 同链）",
+    "source_facts": "审查执法双日数字盘点八条：①「审查执法双日（10-08/09 · 令批 34 单）」=FluxGroup/docs/orders.md 机核计数（O-20261008-* 16 单〔MV 令批+静默根治+治理四案+吸嘟嘟全速令等〕+O-20261009-* 18 单〔审查批+自驱执法+云端解锁+机队同步族+提示词两令+LoRA 训练令等〕=34 单·build_digest17.py 断言 A1 实锚）／②引文两行「每个子公司给我逐个审查审计，」「然后强力改善」=O-20261009-1227 全司逐审+强力改善令 CEO 原话 verbatim 逗号子句跨两行设计排版（v5/v12/v14/v15/v16 先例同型·断言 A2a/A2d 零改字）／③「审查三案同窗 7/7 · 直审+逐审+工作区基线」=C-20261009-01（Biggame 直审·三因定谳+行动包五条·票档 7/7）+C-20261009-02（九司逐审·三横切病根+改善包·票档 7/7）+C-20261009-03（Git 梳理+机队工作区基线 v1·票档 7/7）——三案审查面（C-20261009-04 任务命令下发机制收口=同窗第四案在册·机制面不入审查三案计数·presence 断言 A3）／④「自驱执法令 · 5/8 司违例 · 三队建面 7/12/12」=O-20261009-1246 自驱执法强化令（CEO 原话 verbatim「我说过等我的时间，自己找创新业务，或者搭建技术底层，等我干嘛？这是不干活的理由吗」·断言 A2c·违例实测=5/8 司无队列面）+三队建面读数（main ≥5 实 7/tech ≥10 实 12/explore ≥10 实 12·R1819 本司回执）／⑤「三横切病根 · 物理件积压 · 正典断更 · 簿记税」=C-20261009-02 定谳三横切（CEO 物理件+决策件积压六司同卡/正典断更族 9 件/簿记税集团面）／⑥「实弹改善 5 件 · 判据预注册 · 回访 10-16」=C-20261009-02 当窗实弹改善五件+预注册判据回访窗=2026-10-16 治理日（与 C-01/03 同窗三案回访）／⑦催办令 O-20261009-1216「游戏公司项目开发进展非常缓慢，委员会去审查他们」=审查批触发首令（CEO 原话 verbatim·断言 A2b·C-01 触发行）／⑧底部行=虚实级+来源级标注",
+    "source_pointer": "FluxGroup/docs/orders.md 10-08/10-09 双日令批台账（O-20261009-1216/1227/1246 审查执法主承重三令+O-20261008 批 16 单·跨仓只读·宿主机直读正典=本机即集团仓宿主机零 git 操作零写接触）+FluxGroup/docs/decisions.md C-20261009-01/02/03/04 票档行+本司 src/os/backlog.md #113/#114 与 state/queue/main.md main#8——编年史 A 级史源（审查执法双日台账·charter §3 一料多吃）",
+    "attribution_rule": "署名=纪实线编年史档案级（charter §2.1 纪实线·零虚构居民名·人设权红线照守；引文=CEO 原话 verbatim 连续子串零改字〔1227 令逗号子句拆行=排版设计非改字〕）",
+    "triple_label": "虚实级+来源级=图内底部行（subs.srt 烧录）「基于硅基城市真实事件（审查执法双日台账档案）」；AIGC 级=引擎烧录角标 [AIGC·AI 生成内容]（D-BS-03 §4.5 机械体）",
+    "editorial_value": "叙事包装=审查执法双日数字盘点档案体（1 句「逐个审查审计，然后强力改善」审查+改善连动词令 vs 当窗三案连审 7/7+5/8 违例点名+三队建面=「一句话 vs 一套自查自纠」母题·v2 开闸至 v16 首报直投日十七连母题续〔v17 审查执法双日〕·催办→直审→逐审→定谳→执法→建面→回访=「令→查→判→改→访」递进链·5/8 违例点名=机器诚实自纠叙事位〔自家亦在点名册·三队建面回执=整改面同窗〕·v14 集团令批日/v16 首报直投日同型=令批盘点先例承继第四件；公众号低创作度条款 7.1-7.4 编辑价值面）",
+    "hit_chain_m0": "M0 选题四维分 7/8=A 档进 M1（钩 2 数字反差链：1 句「逐个审查审计，然后强力改善」审查改善令 vs 双日 34 单令批+三案 7/7 连审+5/8 违例点名+三队 7/12/12 建面——F-042 v2 对照数字结构同源第十六证·十七连母题续+34/7-7/5-8/7-12-12/10-16 五组数字/情 1 AI 自治自查自纠吃瓜温和如实非强极点〔G5 吃瓜未来党+G1 信任党双群对位·委员会审查自家=机器诚实叙事面〕/时 2 事件 10-08→10-09 双日→回访窗 10-16 预注册/台 2 公众号方图承载=MC-001~169 S3 实证复用·盘点=公众号主流图文格式〔O-1327 research §2 #2 A 级通识〕）——hit-chain-mechanism v1.0 §2/§9·D-BS-06 production open·R379 研究件 §5 判据锚定（编年史 A 级事件+数字密度）·#67 触发律=编年史事件随轮领〔R1871 预置腿·main#8 出池领〕",
+    "aspect_note": "1080×1080 方图=公众号图文通用（S3 载体面·系列 S3 实证复用·平台规格窗随 M5 发布案复核）",
+    "red_line": "aigc_notice 烧录每帧（CONSTITUTION S2-4）；脱敏律核=全部数字为令批台账读数（令单数/票档数/违例司数/队面计数/回访日期=非 token 用量细节非财务非持仓面）；CEO 指令原文 verbatim 纪实照录；P1 边界=本件=纪实档案非提案非表决（他司执行面细节〔Biggame 审查结论/九司各自定谳/Git 梳理他司回执〕不入卡面·批级行计数位合法=v14/v16 同型分界）；成品只入库·发布=M5 账号物理件+M4 全绿",
+}
+cards = {
+    "meta": meta,
+    "video": {"width": 1080, "height": 1080, "fps": 30, "bg": "black"},
+    "font": {
+        "file": "C:/Windows/Fonts/msyh.ttc",
+        "cards_size": 50, "subs_size": 38, "subs_bottom": 110,
+        "aigc_size": 30, "line_spacing": 12,
+        "h1_font": "C:/Windows/Fonts/msyhbd.ttc",
+        "h1_size": 84, "h1_color": "accent",
+        "h2_size": H2_SIZE, "h2_color": "white",
+        "h1_gap": 36, "optical_center": 0.24,
+    },
+    "aigc_notice": "[AIGC·AI 生成内容]",
+    "tail": 0.8,
+    "cards": [{
+        "start": 0.0, "end": 3.0,
+        "lines": LINES,
+    }],
+}
+import os
+os.makedirs(OUT_DIR, exist_ok=True)
+with io.open(OUT_DIR + r"\cards.json", "w", encoding="utf-8") as f:
+    json.dump(cards, f, ensure_ascii=False, indent=1)
+subs = """1
+00:00:00,000 --> 00:00:03,000
+基于硅基城市真实事件（审查执法双日台账档案）
+
+"""
+with io.open(OUT_DIR + r"\subs.srt", "w", encoding="utf-8") as f:
+    f.write(subs)
+print("WROTE %s\\cards.json + subs.srt" % OUT_DIR)
+print("ALL ASSERTIONS GREEN")
