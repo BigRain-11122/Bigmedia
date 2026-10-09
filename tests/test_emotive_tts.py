@@ -208,5 +208,85 @@ class TestDeepDive(unittest.TestCase):
             et.deepdive_plan(42, [60.0, 3.0], [])
 
 
+class TestLawProfiles(unittest.TestCase):
+    """tech#7: BS-001-DD hardcode extracted into LAW_PROFILES."""
+
+    def test_deepdive_profile_is_zero_drift_vs_legacy_constants(self):
+        p = et.LAW_PROFILES["deepdive"]
+        self.assertEqual("rolling_spoken", p["law"])
+        self.assertEqual(et.DEEPDIVE_SEG_GAP_BASE, p["seg_gap_base_s"])
+        self.assertEqual(et.DEEPDIVE_SEG_GAP_SPREAD, p["seg_gap_spread_s"])
+        self.assertEqual(et.DEEPDIVE_WINDOW_S, p["window_s"])
+        self.assertEqual(et.DEEPDIVE_SPOKEN_MAX, p["spoken_max_s"])
+        self.assertEqual(et.DEEPDIVE_SCALE_STEP, p["scale_step"])
+        self.assertEqual(et.DEEPDIVE_SCALE_MAX, p["scale_max"])
+        self.assertEqual(et.DEEPDIVE_BREATH_S, p["breath_s"])
+
+    def test_default_arg_equals_explicit_deepdive_profile(self):
+        durs = [5.0] * 12
+        self.assertEqual(et.deepdive_plan(42, durs, [5]),
+                         et.deepdive_plan(42, durs, [5],
+                                          et.LAW_PROFILES["deepdive"]))
+
+    def test_law_profile_unknown_raises(self):
+        with self.assertRaises(KeyError):
+            et.law_profile("nope")
+
+    def test_drama_ep_profile_carries_charter_window(self):
+        # charter: 60-90s per L-剧 episode (MD-0001 anchor)
+        p = et.LAW_PROFILES["drama-ep"]
+        self.assertEqual("total_window", p["law"])
+        self.assertEqual(60.0, p["window_min_s"])
+        self.assertEqual(90.0, p["window_max_s"])
+
+
+class TestDramaEpPlan(unittest.TestCase):
+    """drama-ep total-window law solver (L-剧 mass-production slot)."""
+
+    LAW = None
+
+    @classmethod
+    def setUpClass(cls):
+        cls.LAW = et.LAW_PROFILES["drama-ep"]
+
+    def _total(self, durs, plan):
+        return et._total_duration(durs, plan, self.LAW["breath_s"])
+
+    def test_plan_scales_gaps_up_to_reach_episode_floor(self):
+        # MD-0001-shaped: short drama beats, speech far below the floor
+        durs = [3.0] * 15
+        scenes = [4, 9]
+        plan, scale = et.deepdive_plan(42, durs, scenes, self.LAW)
+        total = self._total(durs, plan)
+        self.assertGreaterEqual(total, self.LAW["window_min_s"])
+        self.assertLessEqual(total, self.LAW["window_max_s"])
+        self.assertGreater(scale, 1.0)
+        for i in scenes:
+            self.assertGreaterEqual(plan[i]["gap"],
+                                    self.LAW["seg_gap_base_s"])
+
+    def test_plan_passes_at_base_when_speech_fills_window(self):
+        durs = [5.0] * 15
+        plan, scale = et.deepdive_plan(42, durs, [4], self.LAW)
+        self.assertEqual(1.0, scale)
+        total = self._total(durs, plan)
+        self.assertGreaterEqual(total, self.LAW["window_min_s"])
+        self.assertLessEqual(total, self.LAW["window_max_s"])
+
+    def test_plan_deterministic(self):
+        durs = [3.0] * 15
+        self.assertEqual(et.deepdive_plan(7, durs, [], self.LAW),
+                         et.deepdive_plan(7, durs, [], self.LAW))
+
+    def test_unsatisfiable_when_speech_alone_exceeds_window(self):
+        with self.assertRaises(SystemExit):
+            et.deepdive_plan(42, [95.0, 20.0], [], self.LAW)
+
+    def test_unsatisfiable_when_cap_cannot_reach_floor(self):
+        # 2 beats + 1 gap: even at the 8.0 scale cap total stays < 60s
+        with self.assertRaises(SystemExit):
+            et.deepdive_plan(42, [2.0, 2.0], [], self.LAW)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -8,7 +8,7 @@
 4. [done 2026-10-09 R1820] edit_craft_check 层 1.8 门视频段落自动抽验扩展（段中尾帧验图三律的机检化·R186 假绿灯面工具收口）——已交付：--video 四码（frame-coverage/degenerate/frozen/tile）+9 新测+355 全回归绿+真成品 md-0001 首战 0 FAIL+tile 多模态终验过（C-28 C2 帧律·capabilities v1.41）
 5. 雷达日报 prefilter.md 行业包口径迭代（全城市热点面候选·prompts.ts 明示改文本非改码·依赖=10-10 门控② 首份真报读数）——gated 10-10 读数
 6. [done 2026-10-09 R1821] 渲染引擎字幕逐行居中评估（drawtext 块居中局限 R9 遗留 vs ASS 字幕引擎换装 A/B·逐行居中/描边/字体回退读数）——已交付：**libass 三维全优定谳**（证据=docs/reviews/tech6-subtitle-centering-r1821.png 拼板+像素读数）——①逐行居中：A 块居中实测短行 Δ-418.5px 悬左/长行 Δ-0.5px（块宽行=行内左对齐）vs B 双行 Δ-6.5/+13.5px 各自居中；②描边：A borderw=2 位图外扩方正硬棱 vs B Outline=2 矢量轮廓圆润贴合；③字体回退（emoji+一+U+20000 三缺字弹）：A 无回退豆腐框双缺（生产 cmap 门=烧前拦截纪律对位）vs B fontconfig 逐字回退全出字（emoji 单色轮廓=libass 无 COLR 彩色支持注记）——判读=drawtext 维持产线默认（355 测试绿+S2 门在位+字形纪律受控）·ASS 注册为升级路径（换装面=S2 craft 层+三 profile 全链迁移非小改→#14 试点门）
-7. emotive_tts --deepdive 引擎泛化（剧集窗参数从 BS-001 专属硬编码提取为产线参数表·L-剧量产位）——可即领
+7. [done 2026-10-09 R1822] emotive_tts --deepdive 引擎泛化（剧集窗参数从 BS-001 专属硬编码提取为产线参数表·L-剧量产位）——已交付：LAW_PROFILES 产线参数表（deepdive=BS-001-DD 精确现值零漂移默认〔默认参等价测试锁〕+drama-ep=L-剧 60-90s 剧集窗律 total_window 求解器〔MD-0001 13 拍 Σ75s 实锚·场切 1.2s 种子值首件复检〕）+--deepdive [PROFILE] CLI 选档（非 flag 裸词=档名·未知档 FAIL exit 2——冒烟揭首版未知词静默吞没缺陷即修）+meta 记 profile+9 新测 364 全回归绿（355+9）·capabilities v1.42（C-17）
 8. 心跳 GPU util 字段本司周报起报接线（self-drive §7.1 配套·P-33 已采集面读侧消费·周报自驱面 GPU 均值行）——可即领
 9. S1 席 27b 档评分制一致性验证（S1 v1.5 违律扣分制 14b 首件真门 10/10〔R192〕后·27b 档判词格式与判据稳定性复核）——GPU 独占窗即领
 10. tokens:local 计量自动化评估（P-54⑤ 手记→探针自动采集设计案·零 token 例行化）——可即领
@@ -16,3 +16,4 @@
 12. whisper ASR 同音噪声字典化压制评估（medium 档 12-14 处/件噪声谱→替换候选表·M6 真人校准线前置）——可即领
 13. [R1820 补货] 回环边界帧律扩展（帧验三律第三律=回环件首尾帧接续性机检——循环播件/v7 口号回环族边界帧跳变检测·帧律 C2 落位后的自然相邻位·缺口锚=S2 技能三律在册而机检面只覆盖拍头/段中尾两律）——可即领
 14. [R1821 补货] ASS 字幕引擎换装试点（tech#6 A/B 读数锚：libass 逐行居中/矢量描边/fontconfig 回退三维全优——换装面=S2 craft 层+355 测试+三 profile 全链迁移非小改；试点判据=单成品件 ASS 渲染盲评 ≥ drawtext 基线才扩门·判负留痕合法）——gated 全链迭代窗
+15. [R1822 补货] drama-ep 剧集窗律首件锁参（tech#7 交付位收口：场切地板 1.2s+步进 0.15=种子值——MD-0002 装配链首件读数复检〔判据=首件 total 落窗+E8 席场切空气人感复核〕·种子值复检不过=改表重测·判负留痕合法）——gated L-剧装配链

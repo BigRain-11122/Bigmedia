@@ -126,10 +126,17 @@ HUMAN_BREATH_AFTER_S = 4.2   # insert breath after segments this long
 HUMAN_BREATH_PROB = 0.5       # ...but only with this probability
 HUMAN_ROOMTONE_AMP = 0.006    # pink noise bed amplitude (~-44 dB)
 
-# ---- deep-dive assembly law (backlog #14, bilibili 3-15min format) -------
-# Law: >=2s breathing between the six segments, and <=55s of speech inside
-# any rolling 60s window. The solver below scales interior gaps until the
-# simulated timeline passes; boundary gaps never drop below the law.
+# ---- assembly law profiles (tech#7: format window laws as a production --
+# ---- table; BS-001-DD hardcode generalized for the L-剧 line) -----------
+# "deepdive" = bilibili 3-15min deep-dive format (backlog #14, BS-001-DD):
+#   >=2s breathing between the marked segments, <=55s spoken inside any
+#   rolling 60s window. Bare --deepdive = this profile = zero drift for
+#   the in-flight deep-dive piece.
+# "drama-ep" = L-剧 episode window (charter 60-90s per episode; MD-0001
+#   anchor: 13 beats, Σ75s declared): the assembled audio total must land
+#   inside [60, 90]s; the solver scales interior gaps up to the floor.
+#   Scene-cut floor 1.2s + step resolution are seed values - the first
+#   mass-production episode re-reads before lock (判据=首件读数).
 
 DEEPDIVE_SEG_GAP_BASE = 2.0     # law: segment boundary breathing floor
 DEEPDIVE_SEG_GAP_SPREAD = 0.4   # seeded jitter on top (never below base)
@@ -139,6 +146,36 @@ DEEPDIVE_SCALE_STEP = 0.15      # interior-gap scale increment per retry
 DEEPDIVE_SCALE_MAX = 8.0        # hard cap = unsatisfiable law (FAIL teeth)
 DEEPDIVE_BREATH_S = 0.22        # nominal breath element duration (sim only)
 CIRCLED_DIGITS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳"
+
+LAW_PROFILES = {
+    "deepdive": {
+        "law": "rolling_spoken",
+        "seg_gap_base_s": DEEPDIVE_SEG_GAP_BASE,
+        "seg_gap_spread_s": DEEPDIVE_SEG_GAP_SPREAD,
+        "window_s": DEEPDIVE_WINDOW_S,
+        "spoken_max_s": DEEPDIVE_SPOKEN_MAX,
+        "scale_step": DEEPDIVE_SCALE_STEP,
+        "scale_max": DEEPDIVE_SCALE_MAX,
+        "breath_s": DEEPDIVE_BREATH_S,
+    },
+    "drama-ep": {
+        "law": "total_window",
+        "window_min_s": 60.0,     # charter: 60-90s per L-剧 episode
+        "window_max_s": 90.0,
+        "seg_gap_base_s": 1.2,    # scene-cut floor (seed; ep-1 re-read)
+        "seg_gap_spread_s": 0.3,
+        "scale_step": DEEPDIVE_SCALE_STEP,
+        "scale_max": DEEPDIVE_SCALE_MAX,
+        "breath_s": DEEPDIVE_BREATH_S,
+    },
+}
+DEFAULT_LAW_PROFILE = "deepdive"
+
+
+def law_profile(name):
+    """Assembly law profile lookup (tech#7). Unknown names raise KeyError;
+    the CLI turns that into FAIL exit 2 before any synthesis runs."""
+    return LAW_PROFILES[name]
 
 
 def human_series(seed, n):
@@ -184,10 +221,23 @@ def detect_segment_boundaries(beats):
     return boundaries
 
 
-def _rolling60_spoken(durations, plan):
+def _total_duration(durations, plan, breath_s=DEEPDIVE_BREATH_S):
+    """Simulated assembled-audio total: speech + gaps + breath elements."""
+    total = sum(durations)
+    for item in plan:
+        if item["breath"]:
+            total += breath_s
+        total += item["gap"]
+    return total
+
+
+def _rolling60_spoken(durations, plan, window_s=None, breath_s=None):
     """Simulate the assembly timeline and return the max seconds of speech
-    inside any rolling DEEPDIVE_WINDOW_S window. Simulation is conservative:
-    it ignores mp3 padding, which only ever adds air."""
+    inside any rolling window (default = the deepdive law window).
+    Simulation is conservative: it ignores mp3 padding, which only
+    ever adds air."""
+    window = DEEPDIVE_WINDOW_S if window_s is None else window_s
+    breath = DEEPDIVE_BREATH_S if breath_s is None else breath_s
     spans = []
     t = 0.0
     for i, d in enumerate(durations):
@@ -195,17 +245,17 @@ def _rolling60_spoken(durations, plan):
         t += d
         if i < len(plan):
             if plan[i]["breath"]:
-                t += DEEPDIVE_BREATH_S
+                t += breath
             t += plan[i]["gap"]
     starts = [s for s, _ in spans]
     ends = [e for _, e in spans]
     cands = sorted(set(starts) |
-                   {e - DEEPDIVE_WINDOW_S for e in ends if e > DEEPDIVE_WINDOW_S})
+                   {e - window for e in ends if e > window})
     best = 0.0
     for w0 in cands:
         if w0 < 0:
             continue
-        w1 = w0 + DEEPDIVE_WINDOW_S
+        w1 = w0 + window
         i0 = bisect.bisect_left(ends, w0)
         spok = 0.0
         for s, e in spans[i0:]:
@@ -217,36 +267,54 @@ def _rolling60_spoken(durations, plan):
     return best
 
 
-def deepdive_plan(seed, durations, boundaries):
-    """Law-driven gap plan for the deep-dive format. Segment boundaries get
-    >= DEEPDIVE_SEG_GAP_BASE seconds of breathing; interior gaps scale up
-    from the human base until every rolling 60s window holds at most
-    DEEPDIVE_SPOKEN_MAX of speech. Deterministic in (seed, durations).
-    Returns (plan, interior_scale). Exits non-zero if the scale cap is hit
-    (a single beat longer than the spoken law cannot be fixed by gaps)."""
+def deepdive_plan(seed, durations, boundaries, law=None):
+    """Law-driven gap plan for a format window law (tech#7). Profile
+    "deepdive" (default): segment boundaries get >= seg_gap_base_s of
+    breathing; interior gaps scale up from the human base until every
+    rolling window holds at most spoken_max_s of speech. Profile
+    "drama-ep": the assembled-audio total must land inside
+    [window_min_s, window_max_s] (gaps only add air, so speech alone
+    over the ceiling is unsatisfiable). Deterministic in
+    (seed, durations). Returns (plan, interior_scale). Exits non-zero
+    when the law cannot be met within the scale cap."""
+    law = law if law is not None else LAW_PROFILES[DEFAULT_LAW_PROFILE]
     rng = random.Random((seed * 104729) + 13)
     jitters = [rng.uniform(-HUMAN_GAP_SPREAD, HUMAN_GAP_SPREAD)
                for _ in range(len(durations) - 1)]
     breaths = [d >= HUMAN_BREATH_AFTER_S and rng.random() < HUMAN_BREATH_PROB
                for d in durations[:-1]]
-    seg_jits = [rng.uniform(0.0, DEEPDIVE_SEG_GAP_SPREAD)
+    seg_jits = [rng.uniform(0.0, law["seg_gap_spread_s"])
                 for _ in range(len(durations) - 1)]
     bset = set(boundaries)
     scale = 1.0
-    while scale <= DEEPDIVE_SCALE_MAX:
+    while scale <= law["scale_max"]:
         plan = []
         for i in range(len(durations) - 1):
             if i in bset:
-                gap = round(DEEPDIVE_SEG_GAP_BASE + seg_jits[i], 3)
+                gap = round(law["seg_gap_base_s"] + seg_jits[i], 3)
             else:
                 gap = max(0.12, round(scale * (HUMAN_GAP_BASE + jitters[i]), 3))
             plan.append({"gap": gap, "breath": breaths[i]})
-        if _rolling60_spoken(durations, plan) <= DEEPDIVE_SPOKEN_MAX:
+        if law["law"] == "total_window":
+            total = _total_duration(durations, plan, law["breath_s"])
+            if law["window_min_s"] <= total <= law["window_max_s"]:
+                return plan, scale
+            if total > law["window_max_s"]:
+                break  # gaps only add air: overshoot can never come back
+        elif (_rolling60_spoken(durations, plan, law["window_s"],
+                                law["breath_s"])
+                <= law["spoken_max_s"]):
             return plan, scale
-        scale += DEEPDIVE_SCALE_STEP
-    print("FAIL deepdive law unsatisfiable within scale cap %.1f "
-          "(a single beat likely exceeds the %.0fs spoken law)"
-          % (DEEPDIVE_SCALE_MAX, DEEPDIVE_SPOKEN_MAX))
+        scale += law["scale_step"]
+    if law["law"] == "total_window":
+        print("FAIL total_window law unsatisfiable (speech alone exceeds "
+              "the %.0f-%.0fs episode window, or the %.1f scale cap cannot "
+              "reach the floor)" % (law["window_min_s"], law["window_max_s"],
+                                    law["scale_max"]))
+    else:
+        print("FAIL rolling_spoken law unsatisfiable within scale cap %.1f "
+              "(a single beat likely exceeds the %.0fs spoken law)"
+              % (law["scale_max"], law["spoken_max_s"]))
     sys.exit(1)
 
 
@@ -324,6 +392,7 @@ def main(argv):
     cyber = template = order = None
     human_seed = None
     deepdive = False
+    law_name = None
     i = 1
     while i < len(argv):
         if argv[i] == "--beats":
@@ -349,11 +418,17 @@ def main(argv):
             human_seed = int(argv[i])
         elif argv[i] == "--deepdive":
             deepdive = True
+            # a bare non-flag token after --deepdive is the profile name;
+            # unknown names FAIL at validation instead of being swallowed
+            if i + 1 < len(argv) and not argv[i + 1].startswith("--"):
+                i += 1
+                law_name = argv[i]
         i += 1
     if not (beats_path and voice and out_dir):
         print("usage: emotive_tts.py --beats FILE --voice VOICE --out DIR"
               " [--cyber light|mid|full] [--human SEED]"
-              " [--template CARDS_JSON] [--order STR] [--deepdive]")
+              " [--template CARDS_JSON] [--order STR]"
+              " [--deepdive [%s]]" % "|".join(sorted(LAW_PROFILES)))
         return 2
     if cyber and cyber not in CYBER_CHAINS:
         print("FAIL unknown --cyber level: %s (light|mid|full)" % cyber)
@@ -362,6 +437,15 @@ def main(argv):
         print("FAIL --deepdive requires --human SEED "
               "(breathing law needs the gap machinery)")
         return 2
+    law = None
+    if deepdive:
+        law_name = law_name or DEFAULT_LAW_PROFILE
+        try:
+            law = law_profile(law_name)
+        except KeyError:
+            print("FAIL unknown --deepdive law profile: %s (%s)"
+                  % (law_name, "|".join(sorted(LAW_PROFILES))))
+            return 2
     out_dir.mkdir(parents=True, exist_ok=True)
 
     profiles = PROFILES
@@ -392,11 +476,22 @@ def main(argv):
     dd_boundaries = dd_scale = None
     if deepdive:
         dd_boundaries = detect_segment_boundaries(beats)
-        plan, dd_scale = deepdive_plan(human_seed, durations, dd_boundaries)
-        print("OK deepdive law plan: %d segment boundaries, seg_gap>=%.1fs"
-              " interior_scale=%.2f (spoken<=%.1fs per %.0fs window)"
-              % (len(dd_boundaries), DEEPDIVE_SEG_GAP_BASE, dd_scale,
-                 DEEPDIVE_SPOKEN_MAX, DEEPDIVE_WINDOW_S))
+        plan, dd_scale = deepdive_plan(human_seed, durations, dd_boundaries,
+                                       law)
+        if law["law"] == "total_window":
+            print("OK deepdive law plan: profile=%s total=%.1fs in "
+                  "[%.0f,%.0f]s episode window, seg_gap>=%.1fs "
+                  "interior_scale=%.2f (%d scene boundaries)"
+                  % (law_name,
+                     _total_duration(durations, plan, law["breath_s"]),
+                     law["window_min_s"], law["window_max_s"],
+                     law["seg_gap_base_s"], dd_scale, len(dd_boundaries)))
+        else:
+            print("OK deepdive law plan: profile=%s %d segment boundaries, "
+                  "seg_gap>=%.1fs interior_scale=%.2f "
+                  "(spoken<=%.1fs per %.0fs window)"
+                  % (law_name, len(dd_boundaries), law["seg_gap_base_s"],
+                     dd_scale, law["spoken_max_s"], law["window_s"]))
     elif human_seed is not None:
         plan = boundary_plan(human_seed, durations)
     else:
@@ -522,14 +617,11 @@ def main(argv):
             "roomtone_amp": HUMAN_ROOMTONE_AMP,
         }
     if deepdive:
-        meta["deepdive"] = {
-            "seg_gap_base_s": DEEPDIVE_SEG_GAP_BASE,
-            "seg_gap_spread_s": DEEPDIVE_SEG_GAP_SPREAD,
-            "window_s": DEEPDIVE_WINDOW_S,
-            "spoken_max_s": DEEPDIVE_SPOKEN_MAX,
-            "interior_scale": dd_scale,
-            "segment_boundaries_after_beat": dd_boundaries,
-        }
+        dd_meta = {"profile": law_name}
+        dd_meta.update(law)
+        dd_meta["interior_scale"] = dd_scale
+        dd_meta["segment_boundaries_after_beat"] = dd_boundaries
+        meta["deepdive"] = dd_meta
 
     cards_doc = {
         "meta": meta,
