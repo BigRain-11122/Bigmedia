@@ -396,5 +396,55 @@ class CliTests(unittest.TestCase):
         self.assertIn(readiness.TEST_MARK, out)  # real render ledger annotated
 
 
+class SummaryModeTests(unittest.TestCase):
+    """--summary routine face (tech#11): count lines + full
+    blockers/findings, no per-file tables; same analysis and exit code."""
+
+    def test_summary_counts_and_blockers_no_tables(self):
+        root = make_root(self, "readiness_accounts_ok",
+                         [("d1.md", "PASS"), ("d2.md", "PENDING")],
+                         ["gamma.mp4", "delta.mp4"], "readiness_renders_superseded",
+                         "readiness_backlog_flags")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = readiness.main(["readiness.py", "--root", str(root), "--summary"])
+        self.assertEqual(rc, 1)
+        out = buf.getvalue()
+        self.assertIn("readiness summary (gen", out)
+        self.assertIn("- gates: 2 drafts -> PASS=1, PENDING=1", out)
+        self.assertIn("renders: 2 media ->", out)
+        self.assertIn("- blocker:", out)
+        self.assertIn("decision pending: #3", out)  # needs-CEO item kept in full
+        self.assertNotIn("|", out)  # no markdown tables in the compact face
+        self.assertIn("NOT READY", out)
+
+    def test_summary_out_file_still_writes_full_report(self):
+        root = make_root(self, "readiness_accounts_ready", [("d1.md", "PASS")],
+                         [], None, "readiness_backlog_clean")
+        out = make_dir(self, "bs-rdy-sum-out-") / "report.md"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = readiness.main(["readiness.py", "--root", str(root),
+                                 "--summary", "--out", str(out)])
+        self.assertEqual(rc, 0)
+        self.assertTrue(out.is_file())
+        text = out.read_text(encoding="utf-8")
+        self.assertIn("|", text)  # file artifact stays the full report
+        self.assertIn("report written", buf.getvalue())
+
+    def test_real_repo_summary_smoke(self):
+        """Read-only smoke: compact face runs on the real repo, keeps
+        the verdict line, drops every table row."""
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = readiness.main(["readiness.py", "--summary"])
+        self.assertEqual(rc, 1)
+        out = buf.getvalue()
+        self.assertIn("readiness summary (gen", out)
+        self.assertIn("renders:", out)
+        self.assertIn("NOT READY", out)
+        self.assertNotIn("|", out)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

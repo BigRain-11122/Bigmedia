@@ -363,5 +363,74 @@ class CliTests(unittest.TestCase):
         self.assertIn("loop health:", out)
 
 
+class LoopModeTests(unittest.TestCase):
+    """--loop routine face (tech#11): same analysis, compact output -
+    FAILs always print, dated WARNs older than the cutoff fold into
+    one suppression count, dateless WARNs stay visible."""
+
+    def run_cli(self, root, extra):
+        argv = ["loop_health.py", "--root", str(root)] + extra
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(argv)
+        return rc, buf.getvalue()
+
+    def test_warn_is_recent_unit(self):
+        self.assertTrue(loop_health.warn_is_recent("drift baseline note", "2026-10-06"))
+        self.assertFalse(loop_health.warn_is_recent(
+            "backwards: 2026-09-23 17:45 -> 2026-09-23 17:25", "2026-10-06"))
+        # any fresh date rescues the line (pair spans the cutoff)
+        self.assertTrue(loop_health.warn_is_recent(
+            "gap (2026-09-23 17:45 -> 2026-10-09 13:54)", "2026-10-06"))
+        self.assertTrue(loop_health.warn_is_recent(
+            "gap (2026-10-06 -> 2026-10-09 13:54)", "2026-10-06"))
+
+    def test_loop_mode_suppresses_old_dated_warn_keeps_fail(self):
+        old_log = ["2026-01-01 10:0x r1 ok", "2026-01-01 09:5x r2 ok"]
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        root = make_repo(self, spec, make_state(tick=1, log=old_log), BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 1)  # account-lag FAIL survives the compact face
+        self.assertIn("account-lag", out)
+        self.assertIn("suppressed: 1 historical WARN", out)
+        self.assertNotIn("log-order", out)  # old dated WARN folded away
+        self.assertNotIn("loop health probe:", out)  # header line dropped
+        # default face unchanged: same tree, full output
+        rc2, out2 = self.run_cli(root, [])
+        self.assertEqual(rc2, 1)
+        self.assertIn("log-order", out2)
+        self.assertIn("loop health probe:", out2)
+        self.assertNotIn("suppressed:", out2)
+
+    def test_loop_mode_keeps_recent_and_dateless_warns(self):
+        spec = [(35, "round done exit=0"), (10, "round done exit=0")]
+        state = make_state(tick=1)
+        state["account_drift_adjudicated"] = 1
+        root = make_repo(self, spec, state, BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 0)
+        self.assertIn("heartbeat-gap", out)      # fresh dated WARN visible
+        self.assertIn("account-drift-adjudicated", out)  # dateless WARN visible
+        self.assertNotIn("suppressed:", out)
+
+    def test_loop_mode_real_repo_smoke(self):
+        """Read-only smoke: compact face runs end-to-end on the real
+        repo and keeps the verdict line shape."""
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--loop"])
+        self.assertIn(rc, (0, 1))
+        out = buf.getvalue()
+        self.assertIn("summary: tick=", out)
+        self.assertIn("loop health:", out)
+        self.assertNotIn("loop health probe:", out)
+
+    def test_bad_loop_flag_exits_two(self):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--recent-days", "0", "--loop"])
+        self.assertEqual(rc, 2)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

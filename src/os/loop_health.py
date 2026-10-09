@@ -56,13 +56,25 @@ Findings:
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
+Output modes:
+    default        every finding printed (audit face, unchanged)
+    --loop         routine loop-consumption face: the same analysis,
+                   compact output - FAILs always print in full, WARNs
+                   that embed only pre-cutoff dates (adjudicated
+                   log-order / heartbeat-gap history) fold into one
+                   suppression count. Structural/every-run WARNs (no
+                   embedded date) stay visible. Nothing is re-derived
+                   differently - analysis identical, verbosity only.
+    --recent-days N  --loop cutoff window (default 3)
+
 Usage:
     python src/os/loop_health.py [--root DIR] [--max-age N] [--max-gap N]
+                                 [--loop] [--recent-days N]
 """
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -73,6 +85,7 @@ from weekly_report import DONE_RE, ITEM_RE  # noqa: E402  board format truth
 BEAT_RE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) osloop: (.+)$")
 ROUND_DONE_RE = re.compile(r"round done exit=(\d+)")
 LOG_TS_RE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d[0-9x])")
+DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 STATE_REQUIRED = ("loop", "mode", "production", "tick", "backlog", "log", "ts", "task")
 PRODUCTION_REGIMES = ("paused", "open")
 LOCK_AGE_MIN = 40  # iteration_loop.ps1 LockMaxAgeMinutes - staleness bound
@@ -200,6 +213,18 @@ def classify(beats):
     return done, skip_n, timeout_n, error_n
 
 
+def warn_is_recent(msg, cutoff):
+    """Loop-mode WARN visibility: a WARN that embeds no date (structural
+    / every-run notes - account drift, board missing) always shows; a
+    WARN whose every embedded date predates the cutoff (adjudicated
+    narrative-hygiene history) folds into the suppression count. New
+    findings carry fresh dates and can never be hidden."""
+    dates = DATE_RE.findall(msg)
+    if not dates:
+        return True
+    return any(d >= cutoff for d in dates)
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -283,11 +308,26 @@ def main(argv):
     except Exception:
         pass
     root, max_age, max_gap = REPO, LOCK_AGE_MIN, SLA_GAP_MIN
+    loop_mode, recent_days = False, 3
     args = argv[1:]
     i = 0
     while i < len(args):
         if args[i] == "--root" and i + 1 < len(args):
             root = Path(args[i + 1])
+            i += 2
+        elif args[i] == "--loop":
+            loop_mode = True
+            i += 1
+        elif args[i] == "--recent-days" and i + 1 < len(args):
+            try:
+                recent_days = int(args[i + 1])
+            except ValueError:
+                print("usage: python src/os/loop_health.py [--root DIR] "
+                      "[--max-age N] [--max-gap N] [--loop] [--recent-days N]")
+                return 2
+            if recent_days <= 0:
+                print("--recent-days must be positive")
+                return 2
             i += 2
         elif args[i] in ("--max-age", "--max-gap") and i + 1 < len(args):
             try:
@@ -305,8 +345,8 @@ def main(argv):
                 max_gap = v
             i += 2
         else:
-            print("usage: python src/os/loop_health.py "
-                  "[--root DIR] [--max-age N] [--max-gap N]")
+            print("usage: python src/os/loop_health.py [--root DIR] "
+                  "[--max-age N] [--max-gap N] [--loop] [--recent-days N]")
             return 2
     heart = root / "logs" / "probe-heartbeat.txt"
     state_path = root / "src" / "os" / "state.json"
@@ -325,14 +365,26 @@ def main(argv):
     cross_check(beats, state, done, datetime.now(), max_age, max_gap, findings)
     tick = state["tick"] if state and isinstance(state.get("tick"), int) else "?"
     burn = ("%.0f%%" % (100.0 * b_done / b_total)) if b_total else "n/a"
-    print("loop health probe: heartbeat=%s state=%s backlog=%s" % (heart, state_path, board))
+    if not loop_mode:
+        print("loop health probe: heartbeat=%s state=%s backlog=%s" % (heart, state_path, board))
     print("summary: tick=%s, beats=%d (done=%d nonzero=%d skip=%d timeout=%d "
           "error=%d), log=%d entries, backlog=%d items %d done (%s burn)"
           % (tick, len(beats), len(done), nonzero, skip_n, timeout_n, error_n,
              len(state["log"]) if state and isinstance(state.get("log"), list) else 0,
              b_total, b_done, burn))
-    for sev, code, msg in findings:
+    if loop_mode:
+        cutoff = (datetime.now() - timedelta(days=recent_days)).strftime("%Y-%m-%d")
+        shown = [f for f in findings
+                 if f[0] != "WARN" or warn_is_recent(f[2], cutoff)]
+        supp = len(findings) - len(shown)
+    else:
+        shown, supp = findings, 0
+    for sev, code, msg in shown:
         print("- [%s] %s: %s" % (sev, code, msg))
+    if supp:
+        print("- [INFO] suppressed: %d historical WARN with no date on/after "
+              "%s (--loop face; run without --loop for the full audit output)"
+              % (supp, cutoff))
     fails = sum(1 for s, _, _ in findings if s == "FAIL")
     warns = sum(1 for s, _, _ in findings if s == "WARN")
     verdict = "FAIL" if fails else ("WARN" if warns else "PASS")

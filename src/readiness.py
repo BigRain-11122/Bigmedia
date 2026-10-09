@@ -38,10 +38,15 @@ are regime state (CEO-directed holds): listed, never counted.
 
 Report: markdown rendered from src/os/readiness_template.md (Chinese
 data file). stdout by default; --out FILE also writes the report.
+--summary prints the routine loop-consumption face instead: per-source
+count lines (accounts / gates / render annotation states) plus every
+blocker and finding in full - the 78-row ledger table is not repeated
+each round. Same analysis, same exit code; full report unchanged.
 
 Usage:
     python src/readiness.py                     # real repo, stdout
     python src/readiness.py --out FILE          # also write report
+    python src/readiness.py --summary           # compact loop face
     python src/readiness.py --root DIR [...]    # alternate repo tree
 
 Exit codes: 0 = publish-ready (no blockers, no findings),
@@ -350,23 +355,69 @@ def build_report(template_text, gen_ts, flow, rows, gates, render_rows,
     return text
 
 
+def build_summary(gen_ts, flow, rows, gates, render_rows, needs, suspended,
+                  blockers, findings):
+    """Compact loop-consumption face (--summary): count lines per source
+    plus every blocker/finding in full. ASCII status labels keep the
+    routine console safe; the full Chinese report stays the default."""
+    lines = ["readiness summary (gen %s)" % gen_ts]
+    first = flow[0] if flow else None
+    lit = sum(1 for _, s, _ in rows if s and s != first)
+    lines.append("- accounts: %d platforms, %d lit beyond first state (%s)"
+                 % (len(rows), lit, FLOW_ARROW.join(flow) if flow else "unparsed"))
+    counts = OrderedDict()
+    for v in gates.values():
+        counts[v if v else "(no GATE)"] = counts.get(v if v else "(no GATE)", 0) + 1
+    lines.append("- gates: %d drafts -> %s"
+                 % (len(gates), ", ".join("%s=%d" % kv for kv in counts.items())))
+    st = OrderedDict((k, 0) for k in
+                     ("prod-slot", "prod", "superseded", "disposed", "test", "unannot"))
+    for _, s in render_rows:
+        if s == PRODUCT_SLOT_MARK:
+            st["prod-slot"] += 1
+        elif s == PRODUCT_MARK:
+            st["prod"] += 1
+        elif s == SUPERSEDED_MARK:
+            st["superseded"] += 1
+        elif s == DISPOSED_MARK:
+            st["disposed"] += 1
+        elif s == TEST_MARK:
+            st["test"] += 1
+        else:
+            st["unannot"] += 1
+    lines.append("- renders: %d media -> %s"
+                 % (len(render_rows), ", ".join("%s=%d" % kv for kv in st.items())))
+    for name, s in render_rows:
+        if s is None:
+            lines.append("  - unannotated: %s" % name)
+    lines.append("- needs-CEO: %d; suspended: %d" % (len(needs), len(suspended)))
+    for b in blockers:
+        lines.append("- blocker: %s" % b)
+    for sev, code, msg in findings:
+        lines.append("- [%s] %s: %s" % (sev, code, msg))
+    return "\n".join(lines)
+
+
 def main(argv):
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
     args = argv[1:]
-    out_path, root = None, REPO
+    out_path, root, summary = None, REPO, False
     i = 0
     while i < len(args):
         if args[i] == "--out" and i + 1 < len(args):
             out_path = Path(args[i + 1])
             i += 2
+        elif args[i] == "--summary":
+            summary = True
+            i += 1
         elif args[i] == "--root" and i + 1 < len(args):
             root = Path(args[i + 1])
             i += 2
         else:
-            print("usage: python src/readiness.py [--root DIR] [--out FILE]")
+            print("usage: python src/readiness.py [--root DIR] [--out FILE] [--summary]")
             return 2
     accounts = root / "docs" / "accounts.md"
     drafts = root / "data" / "drafts"
@@ -386,13 +437,18 @@ def main(argv):
         return 2
     blockers = build_blockers(flow, rows, gates, needs)
     gen_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
-    report = build_report(template_text, gen_ts, flow, rows, gates, render_rows,
-                          needs, suspended, blockers, findings)
-    print(report)
+    if summary:
+        print(build_summary(gen_ts, flow, rows, gates, render_rows, needs,
+                            suspended, blockers, findings))
+    else:
+        report = build_report(template_text, gen_ts, flow, rows, gates, render_rows,
+                              needs, suspended, blockers, findings)
+        print(report)
     if out_path is not None:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         with open(out_path, "w", encoding="utf-8", newline="\n") as fh:
-            fh.write(report)
+            fh.write(build_report(template_text, gen_ts, flow, rows, gates,
+                                  render_rows, needs, suspended, blockers, findings))
         print("report written: %s" % out_path)
     print("readiness: %d blocker(s), %d finding(s) -> %s"
           % (len(blockers), len(findings),
