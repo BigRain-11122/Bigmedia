@@ -385,5 +385,43 @@ class TestTimeoutCli(unittest.TestCase):
             self.assertFalse((repo / "verdicts").exists())
 
 
+class E4AudienceSeatTests(unittest.TestCase):
+    """tech#46: E4-audience reference seat registration integrity.
+
+    E seats sit outside the department roster (R174 lineage); this seat
+    is the audience reference instrument from dept-review-mechanism S6
+    (E4 dual-state: dev-phase Ollama reading, non-intercepting). Checks
+    are read-only against the REAL registry + prompt data files.
+    """
+
+    def test_seat_in_real_registry(self):
+        _, experts = ce.load_registry()
+        self.assertIn("E4-audience", experts)
+        seat = experts["E4-audience"]
+        # dept annotation marks the non-departmental reference seat
+        self.assertEqual(
+            "\u8bc4\u5ba1\u53c2\u8003\u5e2d\uff08\u975e\u90e8\u95e8\u7f16\u5236\uff09",
+            seat["dept"])
+        self.assertEqual("E4 \u76f4\u89c9\u89c2\u4f17\u53c2\u8003\u4eea",
+                         seat["role"])
+        # model falls back to the registry default (qwen2.5:14b)
+        self.assertNotEqual("", seat["model"])
+
+    def test_prompt_file_exists_with_core_clauses(self):
+        _, experts = ce.load_registry()
+        path = REPO / experts["E4-audience"]["prompt_file"]
+        self.assertTrue(path.exists(), "prompt file missing: %s" % path)
+        text = path.read_text(encoding="utf-8")
+        # non-intercepting reference seat (E4 dual-state law)
+        self.assertIn("\u975e\u62e6\u622a\u53c2\u8003\u5e2d", text)
+        # material contract block (platform+form line first)
+        self.assertIn("\u5e73\u53f0\u4e0e\u5f62\u6001", text)
+        # the three-question core from the wrapper lineage
+        self.assertIn("\u6253\u51e0\u5206\uff080-10\uff09", text)
+        self.assertIn("\u6700\u5f31\u7684\u4e00\u9879", text)
+        # evidence law (verbatim quote anchor)
+        self.assertIn("\u5b9e\u9524\u5f8b", text)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

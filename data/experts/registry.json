@@ -66,6 +66,12 @@
       "dept": "工程技术部",
       "role": "底座审计官",
       "prompt_file": "data/experts/prompts/loop-engineer.txt"
+    },
+    {
+      "id": "E4-audience",
+      "dept": "评审参考席（非部门编制）",
+      "role": "E4 直觉观众参考仪",
+      "prompt_file": "data/experts/prompts/E4-audience.txt"
     }
   ]
 }

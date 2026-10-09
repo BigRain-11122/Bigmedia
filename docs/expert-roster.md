@@ -24,6 +24,8 @@
 
 > **粉丝数据部三席（P-20260924-76 ① 设计态·不进上表）**：采集合规专家（新通道启用合规审查·个保法影响评估）/数据管道专家（采集管道与匿名化层建设维护）/舆情分析师（舆情日报判读→反哺 M0 选题池）——角色已定·**人名与席位 id=CEO 保留面**（定名后入 §1 调用表+registry 提示词启用）；激活门=账号物理件（org-structure v2.2 同口径）；管道正典=`research/R-20260925-fan-ops-architecture.md`。
 
+> **E4-audience 观众参考席（2026-10-10 入 registry·tech#46）**：E4 直觉观众参考仪（dept-review-mechanism §6 E4 双态制——开发期 Ollama 读数·如实记录·不作拦截·只作迭代输入；上线后平台真人实测接管 9 分线）——**registry 首个非部门席**（dept 标注=「评审参考席（非部门编制）」·§2.5 E 席不属部门名册律不变·本席=参考仪工具位非编制席）。wrapper 增殖史收口位：.bs003/.bs004/sc001-01~02/md0001/MC-REACT-v12~v13 世代每件手拷 `e4_call.py` 退役——E4 参考读直飞 `python src/call_expert.py --expert E4-audience --material <材料件> --timeout 1500 --gpu-guard`（长飞守卫联用=tech#44/45 正法）；材料件构成约定=`data/experts/prompts/E4-audience.txt`（首段平台与形态/中段作品完整描述/末段可选全文稿）。
+
 ## §2 调用纪律
 
 1. **一键调用**：`call_expert.py`（材料=文件传入·登记表+提示词外置数据件）——会话/循环/任何人皆可调，无需装配。
@@ -45,3 +47,4 @@
 - 2026-09-24: v1.1 组织精简同步（集团 ledger P-20260924-62 ①②）——hot-intel 归口选题研究部（原情报部并入·八部门→七部门·席位与提示词零变更）；终审团指针改 dept-review-mechanism §6。
 - 2026-09-25: v1.2 增粉丝数据部三席设计态块（集团 ledger P-20260924-76 ①·org-structure v2.2 同批）——角色制三席定职·人名/席位 id=CEO 保留面（不进调用表·定名后启用）；激活门=账号物理件。
 - 2026-09-26: v1.3 提示词数据件 v2 校准层（自进清单 C4·OS 循环 R318）——缺口锚=dept-review §2「进链件=环节席 0-10 分制」法条 vs S2/S3 提示词零分数输出（法说的比提示词做的多）+全席无未测面声明（评审假绿灯律执法位缺）+无刻度锚（带分聚集/10 分通胀风险）。三律落地：①S2/S3 评分制落法（基线 10·实锤扣 1-2·≥9 过门·红线 0 分一票否决）②全席实锤律（逐字引文为锚·可套用任何材料的通用句=无效）+未测面声明（输出末行如实列本席覆盖不到的面）③S1 刻度锚（10 分帽=零违律+逐字引文亮点才可 10·旗分对账=总分须等于 10 减实锤扣分之和）。S1 fixture 验证（`data/experts/fixtures/s1-calib-fixture-v2.md`·预埋 2 违例·真稿零接触）=2/2 命中+旗分对账 8=10-1-1+④未测面在场（verdict=expert-verdicts/20260926-022700-S1-script.md）；S2/S3 首读校验位=首个进链件调用时执行。
+- 2026-10-10: v1.4 E4-audience 参考席入 registry（queue tech#46·wrapper 增殖史最后残余位收口）——E 席不属部门名册（§2.5）但 E4 参考仪每件仍手拷 `e4_call.py` wrapper（.bs003/.bs004/sc001/md0001/MC-REACT 世代在案）→ 正典席位固化=registry 行（dept=「评审参考席（非部门编制）」）+提示词正身件 `data/experts/prompts/E4-audience.txt`（三问核心/实锤律/材料构成约定入档）+CLI 直飞通道（`--timeout 1500 --gpu-guard` 联用=tech#44/45 正法）+席位完整性测试锁（test_call_expert.py E4AudienceSeatTests·真 registry 只读）；判据读数位=REACT v13 E4 重飞（tech#43·GPU 释放窗首个直飞读数入档·材料件 e4-material.md 已备）。
