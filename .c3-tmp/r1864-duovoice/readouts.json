@@ -1,0 +1,462 @@
+{
+ "legA-deepdive-seg": {
+  "total_s": 63.876,
+  "n_cues": 15,
+  "n_shots": 13,
+  "anchor_shot_pass": 10,
+  "role_pass": {
+   "narrator": "6/8",
+   "lamp": "2/2",
+   "tower": "1/1",
+   "cat": "1/2"
+  },
+  "glued_cues": 1,
+  "planned_switch_gap_s": [
+   2.14,
+   2.265,
+   2.017,
+   2.333,
+   2.161,
+   2.143,
+   2.069,
+   2.181
+  ],
+  "measured_cue_gap_at_switch_s": [
+   2.55,
+   3.45,
+   2.47,
+   3.37,
+   2.87,
+   3.22,
+   2.15,
+   2.46
+  ],
+  "per_shot": [
+   {
+    "shot": 1,
+    "role": "narrator",
+    "anchor_hit": [
+     "台风梅花",
+     "过境"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 2,
+    "role": "lamp",
+    "anchor_hit": [
+     "知道原因",
+     "不能说"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 3,
+    "role": "narrator",
+    "anchor_hit": [],
+    "n_anchor": 2,
+    "pass": false
+   },
+   {
+    "shot": 4,
+    "role": "lamp",
+    "anchor_hit": [
+     "不问来路",
+     "照路"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 5,
+    "role": "narrator",
+    "anchor_hit": [
+     "超载运行",
+     "无损耗"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 6,
+    "role": "narrator",
+    "anchor_hit": [
+     "邓建国",
+     "一宿"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 7,
+    "role": "tower",
+    "anchor_hit": [
+     "见人品"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 8,
+    "role": "narrator",
+    "anchor_hit": [
+     "灯带",
+     "如常"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 9,
+    "role": "narrator",
+    "anchor_hit": [
+     "尾巴天线",
+     "大功"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 10,
+    "role": "cat",
+    "anchor_hit": [],
+    "n_anchor": 1,
+    "pass": false
+   },
+   {
+    "shot": 11,
+    "role": "cat",
+    "anchor_hit": [
+     "报恩"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 12,
+    "role": "narrator",
+    "anchor_hit": [],
+    "n_anchor": 1,
+    "pass": false
+   },
+   {
+    "shot": 13,
+    "role": "narrator",
+    "anchor_hit": [
+     "推演"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   }
+  ]
+ },
+ "legB-hand-band": {
+  "total_s": 49.329,
+  "n_cues": 14,
+  "n_shots": 13,
+  "anchor_shot_pass": 11,
+  "role_pass": {
+   "narrator": "6/8",
+   "lamp": "2/2",
+   "tower": "1/1",
+   "cat": "2/2"
+  },
+  "glued_cues": 2,
+  "planned_switch_gap_s": [
+   0.351,
+   0.333,
+   0.36,
+   0.317,
+   0.33,
+   0.376,
+   0.309,
+   0.386
+  ],
+  "measured_cue_gap_at_switch_s": [
+   0.68,
+   1.42,
+   0.92,
+   1.51,
+   0.28,
+   1.46,
+   0.56,
+   0.26
+  ],
+  "per_shot": [
+   {
+    "shot": 1,
+    "role": "narrator",
+    "anchor_hit": [
+     "台风梅花"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 2,
+    "role": "lamp",
+    "anchor_hit": [
+     "知道原因",
+     "不能说"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 3,
+    "role": "narrator",
+    "anchor_hit": [],
+    "n_anchor": 2,
+    "pass": false
+   },
+   {
+    "shot": 4,
+    "role": "lamp",
+    "anchor_hit": [
+     "不问来路"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 5,
+    "role": "narrator",
+    "anchor_hit": [
+     "超载运行",
+     "无损耗"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 6,
+    "role": "narrator",
+    "anchor_hit": [
+     "邓建国",
+     "一宿"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 7,
+    "role": "tower",
+    "anchor_hit": [
+     "见人品"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 8,
+    "role": "narrator",
+    "anchor_hit": [
+     "灯带",
+     "如常"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 9,
+    "role": "narrator",
+    "anchor_hit": [
+     "尾巴天线",
+     "大功"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 10,
+    "role": "cat",
+    "anchor_hit": [
+     "耳朵痒"
+    ],
+    "n_anchor": 1,
+    "pass": true
+   },
+   {
+    "shot": 11,
+    "role": "cat",
+    "anchor_hit": [
+     "报恩"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 12,
+    "role": "narrator",
+    "anchor_hit": [],
+    "n_anchor": 1,
+    "pass": false
+   },
+   {
+    "shot": 13,
+    "role": "narrator",
+    "anchor_hit": [
+     "推演"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   }
+  ]
+ },
+ "legC-subfloor": {
+  "total_s": 47.767,
+  "n_cues": 14,
+  "n_shots": 13,
+  "anchor_shot_pass": 11,
+  "role_pass": {
+   "narrator": "6/8",
+   "lamp": "2/2",
+   "tower": "1/1",
+   "cat": "2/2"
+  },
+  "glued_cues": 1,
+  "planned_switch_gap_s": [
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15
+  ],
+  "measured_cue_gap_at_switch_s": [
+   0.68,
+   1.3,
+   0.38,
+   1.22,
+   0.82,
+   1.28,
+   0.38,
+   0.28
+  ],
+  "per_shot": [
+   {
+    "shot": 1,
+    "role": "narrator",
+    "anchor_hit": [
+     "台风梅花"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 2,
+    "role": "lamp",
+    "anchor_hit": [
+     "知道原因",
+     "不能说"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 3,
+    "role": "narrator",
+    "anchor_hit": [],
+    "n_anchor": 2,
+    "pass": false
+   },
+   {
+    "shot": 4,
+    "role": "lamp",
+    "anchor_hit": [
+     "不问来路",
+     "照路"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 5,
+    "role": "narrator",
+    "anchor_hit": [
+     "超载运行",
+     "无损耗"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 6,
+    "role": "narrator",
+    "anchor_hit": [
+     "邓建国",
+     "一宿"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 7,
+    "role": "tower",
+    "anchor_hit": [
+     "见人品"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 8,
+    "role": "narrator",
+    "anchor_hit": [
+     "灯带",
+     "如常"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 9,
+    "role": "narrator",
+    "anchor_hit": [
+     "尾巴天线",
+     "大功"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 10,
+    "role": "cat",
+    "anchor_hit": [
+     "耳朵痒"
+    ],
+    "n_anchor": 1,
+    "pass": true
+   },
+   {
+    "shot": 11,
+    "role": "cat",
+    "anchor_hit": [
+     "报恩"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   },
+   {
+    "shot": 12,
+    "role": "narrator",
+    "anchor_hit": [],
+    "n_anchor": 1,
+    "pass": false
+   },
+   {
+    "shot": 13,
+    "role": "narrator",
+    "anchor_hit": [
+     "推演"
+    ],
+    "n_anchor": 2,
+    "pass": true
+   }
+  ]
+ }
+}

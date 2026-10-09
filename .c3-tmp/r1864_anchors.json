@@ -1,0 +1,23 @@
+{
+  "piece": "MD-0001",
+  "purpose": "explore#25 dual-voice alternation trial anchors (P-5 criterion 1 de-risk)",
+  "anchors": {
+    "1": ["台风梅花", "过境"],
+    "2": ["知道原因", "不能说"],
+    "3": ["资历", "疤"],
+    "4": ["不问来路", "照路"],
+    "5": ["超载运行", "无损耗"],
+    "6": ["邓建国", "一宿"],
+    "7": ["见人品", "日志"],
+    "8": ["灯带", "如常"],
+    "9": ["尾巴天线", "大功"],
+    "10": ["耳朵痒"],
+    "11": ["蹭饭", "报恩"],
+    "12": ["交晨"],
+    "13": ["真实档案", "推演"]
+  },
+  "baseline_refs": {
+    "narrator_single_voice": "R1786: 8 cues all readable, anchors survived (R-20261010 ROLE-CAST)",
+    "register_single_voice": "R1787: 5/5 anchor_pass on isolated segments (qc-r1787-edge.json)"
+  }
+}

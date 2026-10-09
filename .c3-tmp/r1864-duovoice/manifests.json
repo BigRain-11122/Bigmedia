@@ -1,0 +1,380 @@
+{
+ "legA-deepdive-seg": {
+  "audio": "legA-deepdive-seg.mp3",
+  "total_s": 63.876,
+  "switch_gap_s": [
+   2.14,
+   2.265,
+   2.017,
+   2.333,
+   2.161,
+   2.143,
+   2.069,
+   2.181
+  ],
+  "same_gap_s": [
+   0.458,
+   0.265,
+   0.313,
+   0.411
+  ],
+  "shots": [
+   {
+    "shot": 1,
+    "role": "narrator",
+    "start": 0.0,
+    "end": 2.448,
+    "gap_before": null,
+    "boundary_before": null
+   },
+   {
+    "shot": 2,
+    "role": "lamp",
+    "start": 4.588,
+    "end": 7.948,
+    "gap_before": 2.14,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 3,
+    "role": "narrator",
+    "start": 10.213,
+    "end": 13.189,
+    "gap_before": 2.265,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 4,
+    "role": "lamp",
+    "start": 15.206,
+    "end": 18.926,
+    "gap_before": 2.017,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 5,
+    "role": "narrator",
+    "start": 21.259,
+    "end": 24.763,
+    "gap_before": 2.333,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 6,
+    "role": "narrator",
+    "start": 25.221,
+    "end": 28.965,
+    "gap_before": 0.458,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 7,
+    "role": "tower",
+    "start": 31.126,
+    "end": 35.062,
+    "gap_before": 2.161,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 8,
+    "role": "narrator",
+    "start": 37.205,
+    "end": 40.157,
+    "gap_before": 2.143,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 9,
+    "role": "narrator",
+    "start": 40.422,
+    "end": 44.502,
+    "gap_before": 0.265,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 10,
+    "role": "cat",
+    "start": 46.571,
+    "end": 48.443,
+    "gap_before": 2.069,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 11,
+    "role": "cat",
+    "start": 48.756,
+    "end": 52.26,
+    "gap_before": 0.313,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 12,
+    "role": "narrator",
+    "start": 54.441,
+    "end": 57.345,
+    "gap_before": 2.181,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 13,
+    "role": "narrator",
+    "start": 57.756,
+    "end": 63.876,
+    "gap_before": 0.411,
+    "boundary_before": "same"
+   }
+  ]
+ },
+ "legB-hand-band": {
+  "audio": "legB-hand-band.mp3",
+  "total_s": 49.329,
+  "switch_gap_s": [
+   0.351,
+   0.333,
+   0.36,
+   0.317,
+   0.33,
+   0.376,
+   0.309,
+   0.386
+  ],
+  "same_gap_s": [
+   0.458,
+   0.265,
+   0.313,
+   0.411
+  ],
+  "shots": [
+   {
+    "shot": 1,
+    "role": "narrator",
+    "start": 0.0,
+    "end": 2.448,
+    "gap_before": null,
+    "boundary_before": null
+   },
+   {
+    "shot": 2,
+    "role": "lamp",
+    "start": 2.799,
+    "end": 6.159,
+    "gap_before": 0.351,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 3,
+    "role": "narrator",
+    "start": 6.492,
+    "end": 9.468,
+    "gap_before": 0.333,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 4,
+    "role": "lamp",
+    "start": 9.828,
+    "end": 13.548,
+    "gap_before": 0.36,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 5,
+    "role": "narrator",
+    "start": 13.865,
+    "end": 17.369,
+    "gap_before": 0.317,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 6,
+    "role": "narrator",
+    "start": 17.827,
+    "end": 21.571,
+    "gap_before": 0.458,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 7,
+    "role": "tower",
+    "start": 21.901,
+    "end": 25.837,
+    "gap_before": 0.33,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 8,
+    "role": "narrator",
+    "start": 26.213,
+    "end": 29.165,
+    "gap_before": 0.376,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 9,
+    "role": "narrator",
+    "start": 29.43,
+    "end": 33.51,
+    "gap_before": 0.265,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 10,
+    "role": "cat",
+    "start": 33.819,
+    "end": 35.691,
+    "gap_before": 0.309,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 11,
+    "role": "cat",
+    "start": 36.004,
+    "end": 39.508,
+    "gap_before": 0.313,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 12,
+    "role": "narrator",
+    "start": 39.894,
+    "end": 42.798,
+    "gap_before": 0.386,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 13,
+    "role": "narrator",
+    "start": 43.209,
+    "end": 49.329,
+    "gap_before": 0.411,
+    "boundary_before": "same"
+   }
+  ]
+ },
+ "legC-subfloor": {
+  "audio": "legC-subfloor.mp3",
+  "total_s": 47.767,
+  "switch_gap_s": [
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15,
+   0.15
+  ],
+  "same_gap_s": [
+   0.458,
+   0.265,
+   0.313,
+   0.411
+  ],
+  "shots": [
+   {
+    "shot": 1,
+    "role": "narrator",
+    "start": 0.0,
+    "end": 2.448,
+    "gap_before": null,
+    "boundary_before": null
+   },
+   {
+    "shot": 2,
+    "role": "lamp",
+    "start": 2.598,
+    "end": 5.958,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 3,
+    "role": "narrator",
+    "start": 6.108,
+    "end": 9.084,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 4,
+    "role": "lamp",
+    "start": 9.234,
+    "end": 12.954,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 5,
+    "role": "narrator",
+    "start": 13.104,
+    "end": 16.608,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 6,
+    "role": "narrator",
+    "start": 17.066,
+    "end": 20.81,
+    "gap_before": 0.458,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 7,
+    "role": "tower",
+    "start": 20.96,
+    "end": 24.896,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 8,
+    "role": "narrator",
+    "start": 25.046,
+    "end": 27.998,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 9,
+    "role": "narrator",
+    "start": 28.263,
+    "end": 32.343,
+    "gap_before": 0.265,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 10,
+    "role": "cat",
+    "start": 32.493,
+    "end": 34.365,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 11,
+    "role": "cat",
+    "start": 34.678,
+    "end": 38.182,
+    "gap_before": 0.313,
+    "boundary_before": "same"
+   },
+   {
+    "shot": 12,
+    "role": "narrator",
+    "start": 38.332,
+    "end": 41.236,
+    "gap_before": 0.15,
+    "boundary_before": "switch"
+   },
+   {
+    "shot": 13,
+    "role": "narrator",
+    "start": 41.647,
+    "end": 47.767,
+    "gap_before": 0.411,
+    "boundary_before": "same"
+   }
+  ]
+ }
+}
