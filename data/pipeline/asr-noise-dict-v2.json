@@ -1,0 +1,43 @@
+{
+  "dict": "asr-noise-dict",
+  "version": "v2-20261009",
+  "extends": "asr-noise-dict-v1.json",
+  "law": "tech#21 (P2 queue R1832). v2 = phrase-level expansion closing the v1-excluded single-char families (noise char anchored inside a verbatim phrase = collision-free). Extends v1 via the loader merge; v1 stays untouched as its own file. S2 asr-check QC channel, OPT-IN ONLY (--noise-dict). NEVER for real-voice transcripts (persona rule: real voice first - corrupting a real-voice transcript with a TTS-domain dictionary is forbidden).",
+  "direction": "noise -> true : noise = what the ASR channel wrote, true = the term the TTS track actually says. src=verbatim means the noise string is quoted verbatim from an archived ASR artifact; src=composed means the noise side is derived by applying a RECORDED char/word substitution (station-reviews asr-check row) to a verbatim beats phrase - composed entries are marked per entry and never fire on text the piece did not mishear, because they only match the misheard phrase itself.",
+  "evidence": "v1 rows (BS-002 R174 / BS-003 R180 / BS-004 R187 / BS-013 R1683 / BS-014 R1686 / BS-015 R1690 / BS-016 R1693) + verbatim archived ASR artifacts: data/storylines/audio/sc001-01-v2-tmp/asr-check.srt (cue17-18 一半个 / cue26 归居民+归荡者 verbatim) + SC-001 chapter rows R223/R225/R227/R229/R231/R272",
+  "classes": {
+    "safe": "noise string is implausible in the production domain; fires unconditionally when the dict is on (v1 class, unchanged)",
+    "guarded": "fires ONLY when the --expect reference text (the piece's own beats) contains the true term/phrase (collision guard). ALL v2 phrase entries are guarded - a phrase entry additionally requires the full true PHRASE in the beats, the tightest gate available",
+    "excluded": "observed but still NOT in the auto table: see excluded[] (v2 residue + carried-over v1 out-of-scope classes)"
+  },
+  "entries": [
+    {"noise": "归基城市", "true": "硅基城市", "class": "guarded", "src": "composed", "anchor": "硅→归 family: SC-001 ch.1 硅基→归基 x4 (R223 row) + 板块十年 014/015/016 推演声明尾句承继族 (R1686/R1690/R1693)"},
+    {"noise": "归居民", "true": "硅基民", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp/asr-check.srt cue26 verbatim (管自己叫归荡者零七的归居民); SC-001-01-v2 beats 硅基民"},
+    {"noise": "归荡者", "true": "归档者", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2 cue26 verbatim + ch.3 x2 (R227); 档→荡 single-char anchored inside the 3-char series proper noun 归档者"},
+    {"noise": "童叶", "true": "同夜", "class": "guarded", "src": "verbatim", "anchor": "BS-015 R1690 同夜→童叶; bs015 v6 b1 台风梅花，同夜三个视角"},
+    {"noise": "台风影", "true": "台风夜", "class": "guarded", "src": "verbatim", "anchor": "BS-015 R1690 台风夜→台风影; hook + cta 你的台风夜"},
+    {"noise": "绑块十年", "true": "板块十年", "class": "guarded", "src": "composed", "anchor": "BS-015 R1690 hook 板→绑 composed on verbatim 板块十年，第四问"},
+    {"noise": "守到风亭", "true": "守到风停", "class": "guarded", "src": "composed", "anchor": "BS-015 R1690 停→亭; bs015 v6 b4 守到风停，灯带跟没事一样"},
+    {"noise": "一展灯", "true": "一盏灯", "class": "guarded", "src": "composed", "anchor": "BS-013 R1683 盏→展 x4 量词族; bs013 v2 b1 全城一盏灯"},
+    {"noise": "立国日一展", "true": "立国日一盏", "class": "guarded", "src": "composed", "anchor": "BS-013 盏→展; bs013 v2 b8 立国日一盏，守夜灯灵五盏"},
+    {"noise": "守夜灯灵五展", "true": "守夜灯灵五盏", "class": "guarded", "src": "composed", "anchor": "BS-013 盏→展; bs013 v2 b8 (守夜灯灵 itself garbled to 首页登陵 in ASR = excluded garble class; only the 盏 phrase anchor is in scope)"},
+    {"noise": "一展到五展", "true": "一盏到五盏", "class": "guarded", "src": "composed", "anchor": "BS-013 盏→展; bs013 v2 b9 交底句 一盏到五盏是真数"},
+    {"noise": "九开瓶", "true": "庆功酒开瓶", "class": "guarded", "src": "composed", "anchor": "BS-004 R187 庆功酒→九 (3-char collapse, v1 excluded single-char); bs004 v6 hook 系统日志：庆功酒开瓶"},
+    {"noise": "九开屏", "true": "庆功酒开瓶", "class": "guarded", "src": "composed-chain", "anchor": "BS-004 R187 same hook cue chain: 庆功酒→九 + 开瓶→开屏 both recorded; single-pass sort puts this 3-char entry before v1 开屏→开瓶, so the collapsed+crosstalk form is caught in one shot"},
+    {"noise": "一半个", "true": "一万个", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp/asr-check.srt cue17-18 verbatim (第一批一半个晚上九点半); R272 一万个→一半个 + BS-016 万→半 双实例族 (R1693)"},
+    {"noise": "一半个名字", "true": "一万个名字", "class": "guarded", "src": "composed", "anchor": "BS-016 b3 一万个名字：一万零三落库 (万→半 composed)"},
+    {"noise": "一半零三", "true": "一万零三", "class": "guarded", "src": "composed", "anchor": "BS-016 b3 一万零三落库 (万→半 composed)"},
+    {"noise": "两点五时", "true": "两点五十", "class": "guarded", "src": "verbatim", "anchor": "BS-016 R1693 两点五十→两点五时 (时间锚 十→时); bs016 v3 b2 下午两点五十"},
+    {"noise": "黄土江", "true": "黄浦江", "class": "guarded", "src": "composed", "anchor": "BS-014 R1686 浦→土; bs014 v5 b2 数据是新黄浦江，人还是要沿江散步"},
+    {"noise": "不要顺着纹路剪", "true": "布要顺着纹路剪", "class": "guarded", "src": "composed", "anchor": "BS-014 R1686 布→不; bs014 v5 b3 (SC-001-01-v2 same-proverb garble 不要顺着文录前 does NOT match this entry - garble class stays excluded)"},
+    {"noise": "功控做得好", "true": "风控做得好", "class": "guarded", "src": "composed", "anchor": "BS-014 R1686 风→功; bs014 v5 b4 风控做得好，就是没人夸的那种好"}
+  ],
+  "excluded": [
+    {"observed": "城→成 x2 (BS-016) / 砌→弃 / 里→比 / 交→焦 / 首问→说问 (BS-016 singles)", "reason": "recorded as char-level pairs without verbatim phrase context in the surviving evidence (tmp asr-diff files were batch-cleaned); composing a noise phrase without the raw diff would cross the zero-invention line - needs a re-run raw capture before dict-izing"},
+    {"observed": "bare 夜→叶 (BS-013: 调试夜/把夜，交给早晨 contexts)", "reason": "the 夜→叶 char pair is recorded but the surviving row lists its contexts as garble-family (调试夜对频那秒→条事业绿萍大鸟); only 童叶→同夜 and 台风影→台风夜 have verbatim phrase context and are in entries"},
+    {"observed": "SC-001 word-level families NOT yet in any dict: 八峰→发疯 / 进步条→进度条 / 城市门禁→诚实门禁 / 流荡→留档 / 近川→禁穿 / 沪宇→沪语 / 北外摊→北外滩 / 编冕史→编年史 / 龟鸡·探鸡 (ch.3) / 当安管→档案馆 (ch.5)", "reason": "word-level pairs from the SC-001 chapter rows - NOT single-char-family scope of tech#21 (v2's gap anchor = the v1-excluded 单字族); queued as a separate word-expansion item seeded from the real archived SRT corpus (sc001-*-tmp/asr-check.srt, verbatim noise strings on disk)"},
+    {"observed": "unstable long-span garble (BS-013 调试夜对频那秒→条事业绿萍大鸟 / 守夜灯灵→首页登陵 / SC ch.2 沪语年轮句集中七处 / ch.4 量化术语带)", "reason": "carried over from v1: no stable homophone pair, not dictionary-addressable; carriers = P-3 initial-prompt preload + medium QC recipe + M6 human line"},
+    {"observed": "tail-silence hallucination + traditional-variant glyphs (BS-003/BS-004 cue1 band)", "reason": "carried over from v1: hallucination class needs VAD guard; traditional variants need t2s normalization - both out of dict scope"}
+  ],
+  "acceptance": "tech#21 judgment bar = phrase-level collateral damage 0, two sweeps + fire tests: (1) own-expect sweep (the real QC flow: each beats file as its own --expect) over all 170 in-repo beats files - zero changes, green incl. all v1 entries; (2) cross-expect sweep over the v2 PHRASE entries only - zero cross-fire at any anchor expect. Sweep findings acted on: (a) guard HARDENED in apply_noise_dict - a guarded entry now additionally requires the noise string NOT to appear as legitimate text in the piece's own beats, so a future piece that genuinely uses both words (e.g. kou-qi and kou-xin) can never have its legitimate word rewritten; (b) latent v1 WORD-entry finding recorded, not a v2 failure: under a MISMATCHED expect (never happens in the CLI flow), the v1 pair kou-qi->kou-xin (BS-015 anchor) would rewrite a legitimate kou-qi - see tests/test_noise_dict.py cross-sweep NOTE; queued as a word-entry hardening/word-expansion seed from the real archived SRT corpus. Single-pass replace order preserved (longest-noise-first), v1 file untouched."
+}

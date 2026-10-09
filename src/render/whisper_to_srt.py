@@ -172,30 +172,51 @@ def build_cues(words, max_chars=20):
 def load_noise_dict(path):
     """Load the ASR noise dictionary (opt-in, tech#12 R1827).
     Returns list of (noise, true, cls) sorted longest-noise-first so a
-    longer phrase entry always wins over a substring entry. Data file:
-    data/pipeline/asr-noise-dict-v1.json (evidence-anchored pairs).
+    longer phrase entry always wins over a substring entry. Data files:
+    data/pipeline/asr-noise-dict-v1.json (word pairs) and
+    asr-noise-dict-v2.json (tech#21 R1832: phrase-level entries closing
+    the v1-excluded single-char families; "extends": "v1 file" merges the
+    parent entries first, so v2 is a superset without duplication).
     QC-channel only - never wire this into real-voice lanes."""
     import json
-    data = json.loads(Path(path).read_text(encoding="utf-8"))
-    entries = [(str(e["noise"]), str(e["true"]), str(e.get("class", "guarded")))
-               for e in data.get("entries", [])]
-    entries.sort(key=lambda x: len(x[0]), reverse=True)
-    return entries
+    p = Path(path)
+    merged, seen, visited = [], set(), set()
+    while True:
+        visited.add(p.name)
+        data = json.loads(p.read_text(encoding="utf-8"))
+        for e in data.get("entries", []):
+            key = (str(e["noise"]), str(e["true"]))
+            if key not in seen:
+                seen.add(key)
+                merged.append(key + (str(e.get("class", "guarded")),))
+        parent = data.get("extends")
+        if not parent:
+            break
+        p = p.parent / parent
+        if p.name in visited:  # extends-chain cycle guard
+            break
+    merged.sort(key=lambda x: len(x[0]), reverse=True)
+    return merged
 
 
 def apply_noise_dict(cues, entries, expect_text=None):
     """Replace noise->true in cue text. 'safe' entries fire
     unconditionally; 'guarded' entries only fire when expect_text
-    (the piece's own beats) contains the true term - collision
-    guard so a common-word mishear never rewrites legitimate text
-    in a piece that does not contain the true term. Pure function;
-    timestamps untouched. Returns (new_cues, applied, skipped_guard)."""
+    (the piece's own beats) contains the true term AND does not
+    contain the noise string as legitimate text - the second gate
+    (tech#21 R1832 hardening, found by the collateral sweep) means a
+    piece that genuinely uses the noise word can never have it
+    rewritten, even when some other true term of the same entry is
+    present in the beats. Pure function; timestamps untouched.
+    Returns (new_cues, applied, skipped_guard)."""
     out, applied, skipped = [], 0, 0
     for s, e, text in cues:
         for noise, true, cls in entries:
             if noise not in text:
                 continue
-            if cls == "safe" or (expect_text is not None and true in expect_text):
+            if cls == "safe" or (
+                    expect_text is not None and true in expect_text
+                    and noise not in expect_text):
                 text = text.replace(noise, true)
                 applied += 1
             else:
@@ -248,7 +269,9 @@ def build_parser():
                          "degradation cut, zero leak)")
     ap.add_argument("--noise-dict", default=None,
                     help="OPT-IN homophone noise dictionary (tech#12 "
-                         "R1827, data/pipeline/asr-noise-dict-v1.json). "
+                         "R1827 word pairs = data/pipeline/"
+                         "asr-noise-dict-v1.json; tech#21 R1832 phrase "
+                         "superset = asr-noise-dict-v2.json, extends v1). "
                          "S2 asr-check QC channel only; default off = "
                          "zero behavior change; never for real-voice "
                          "transcripts")
