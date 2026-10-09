@@ -64,6 +64,23 @@
 - **受益面**：机队循环直连情报源——M0 选题源参考（hot_topics Top10/主题检索 radar_search/get_latest 24h·7 日 briefings）+每日/每周/每月编辑件；TRUST_META 防注入内置=机队消费安全面前置达标。
 - **呈报位**：HQ-FEEDBACK F-20261010-01（P2·宿主/机队管辖域待点头·点头后接线窗=本机 P1 档零改动先行）。
 
+## §3.3 MCP 二批 tool 实测读数（R1855·explore#17·判据=hot_topics 榜单 rank 结构成功+latest 双窗可读+search 面可用）
+
+探针 `.c3-tmp/r1855_mcp_tools2_probe.py`（JSON 假设首跑=操作红留档）+`r1855_mcp_tools2_probe2.py`（markdown 感知正跑）+`r1855_mcp_story_probe.py`（story 链加测）·证据 `.c3-tmp/r1855_mcp_tools2_criterion.json`+`r1855_mcp_story_evidence.json`——**7 tool 面实测 5/7**（余 weekly/monthly=刊物窗 10-16/11-09 gated·§6 行 4）：
+
+| tool | schema 要点（tools/list 直读） | 实测读数 |
+|---|---|---|
+| radar_get_hot_topics | limit 1-10（默认 10） | **200**·markdown 渲染件=`# 雷达日报 当前热点 Top N`+安全边界行+**「第 N 名：[title](link)」rank 结构**——今日 N=9（供给面聚簇 9 题·schema 帽 10 非工具缺陷）；limit=3 实测返 3 行=参数真生效 |
+| radar_get_latest | window enum {24h,7d}·mode 默认 selected | **双窗 200**——24h=858B（4 行 briefing）·7d=4976B（4 行） |
+| radar_search | q 2-200 字符·window 默认 7d | **200**·q=「AI」→ 4889B·「10 条，从新到旧」=检索面真可用（v1 首跑误传 keyword/limit 参数=操作红·schema 直读后修正） |
+| radar_get_story | public_id（取自 hot_topics links.story 尾段·禁猜） | **200**·1288B 事件深读件=事件页链接+「6 篇报道 · 6 个信源」+最新进展行+事件综述+TRUST_META 边界行在位 |
+
+**判据闭合（三项全 PASS）**：①hot_topics rank 1..N 结构成功（「第 N 名」markdown 形态·升序·limit 参数生效）②latest 双窗 briefings 可读（24h/7d 双 200）③search 面可用（q 2-200 实测 10 条返回）——**bonus=内容级等价交叉对读第二证**：MCP hot_topics top5 标题 vs `/api/v1/hot-topics` top5 标题 **5/5 全命中**（R1853 daily lead 2/2 同法）→ MCP 通道与 v1 API 同源等价定谳加固。
+
+**新发现（链路级）**：hot_topics 输出自带「来龙去脉：radar_get_story，public_id=…」深读钩子——**hot_topics→get_story=设计好的选题深读链**（M0 选题→事件页 6 信源聚合深读一步直达）·TRUST_META 边界行全 tool 在位=机队消费安全面全量达标。
+
+**消费位判定**：①REACT 热点窗第三源候选=hot_topics 可用面成立（rank+多信源聚簇计数=热点择优判据供给面）·gated 10-10 08:00 门控② 读数后并入选窗评估；②机队点头（§3.2 P1 档）后循环消费清单定谳=daily（R1853）+hot_topics+latest+search+story 五 tool 直用。
+
 ## §4 嵌入输出候选（零账号·跨仓提案位）
 
 - **候选 A=硅基生命元宇宙.html「城市热点雷达」模块**：消费 `/api/v1/dailies/latest` JSON（lead+sections 结构化完整）或 `/feed/daily.xml`——元宇宙=CEO 第一检查入口（09-30 裁决），热点雷达模块=「城市生长」叙事的自然数据面；**未测面**：`file://` 打开跨源 fetch=CORS 判据位（API publicHandler 是否带 CORS 头未验）；**跨仓写禁令**：元宇宙文件=MiniGame 仓域 → 本司只出消费规格+提案件，执行面归该仓 owner（提案落点=本仓 research/ 提案文档+HQ-FEEDBACK 指针）；
@@ -86,7 +103,7 @@
 | # | 结论 | 级别 | 下一步 |
 |---|---|---|---|
 | 1 | Feed 层已达标（RSS 2.0 合规+30 期窗+全文 CDATA）——订阅形态零工程 | M 实测 | 无需改动；SITE_URL 改 LAN IP=同机/LAN 阅读器订阅（配置级） |
-| 2 | **MCP 端点=机队零账号情报分发最优路径**（匿名只读+防注入内置） | A 代码+M 实测 | **R1853 实测销项=判据 PASS**（handshake/7 tools/daily lead 交叉对读全通=§3.1）；机队注册提案 v0.1 呈报 HQ-FEEDBACK（§3.2·宿主域待点头） |
+| 2 | **MCP 端点=机队零账号情报分发最优路径**（匿名只读+防注入内置） | A 代码+M 实测 | **R1853 实测销项=判据 PASS**（handshake/7 tools/daily lead 交叉对读全通=§3.1）；**R1855 二批 5/7 tool 实测 PASS**（hot_topics/latest/search/story+内容等价 5/5=§3.3·余 weekly/monthly 刊物窗 gated）；机队注册提案 v0.1 呈报 HQ-FEEDBACK（§3.2·宿主域待点头） |
 | 3 | v1 API+OG 图族=嵌入/素材双面就绪 | A 代码 | 元宇宙模块提案件入队（跨仓提案·CORS 判据位先行） |
 | 4 | weekly/monthly feed 合法空态=数据窗未满非缺陷 | M 实测 | 不干预；10-16/11-09 自然解锁（推算） |
 | 5 | 公网分发/订阅/变现全面 gated（域名/SMTP/决策件） | 盘点 | 现状行呈报·零催办 |
@@ -95,3 +112,4 @@
 
 - v1.0（2026-10-10 R1852）：首版（五端点族 live 盘点+MCP/v1/OG 三新面发现+gated 面盘点+结论应用表）。
 - v1.1（2026-10-10 R1853）：§3 未测面销项（explore#15 承接）——§3.1 MCP 四步实测读数+判据 PASS（daily lead 内容级等价交叉对读）+§3.2 机队注册提案 v0.1（分期 P1/P2/P3·呈报位 HQ-FEEDBACK F-20261010-01）+§6 行 2 升实测态。
+- v1.2（2026-10-10 R1855）：§3.3 二批 tool 实测读数（explore#17 承接）——hot_topics rank 结构/latest 双窗/search/story 深读链四 tool 判据全 PASS+内容级等价 5/5+7 tool 面 5/7 实测（余 weekly/monthly 刊物窗 gated）+REACT 热点窗第三源候选可用面成立+§6 行 2 增注。
