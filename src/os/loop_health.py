@@ -63,13 +63,20 @@ Output modes:
                    that embed only pre-cutoff dates (adjudicated
                    log-order / heartbeat-gap history) fold into one
                    suppression count. Structural/every-run WARNs (no
-                   embedded date) stay visible. Nothing is re-derived
-                   differently - analysis identical, verbosity only.
+                   embedded date) stay visible. Dense in-window
+                   same-code WARN groups (>= --fold-dense N, default 5)
+                   collapse into one count line with date span and
+                   magnitude band (tech#20: high-cadence production
+                   windows re-read ~40 advisory gap WARNs per round;
+                   worst gap stays visible, anything past the lock-age
+                   bound is a FAIL and never folds). Nothing is re-d
+                   derived differently - analysis identical, verbosity only.
     --recent-days N  --loop cutoff window (default 3)
+    --fold-dense N  --loop dense-group fold threshold (default 5; 0 = off)
 
 Usage:
     python src/os/loop_health.py [--root DIR] [--max-age N] [--max-gap N]
-                                 [--loop] [--recent-days N]
+                                 [--loop] [--recent-days N] [--fold-dense N]
 """
 import json
 import re
@@ -91,6 +98,8 @@ PRODUCTION_REGIMES = ("paused", "open")
 LOCK_AGE_MIN = 40  # iteration_loop.ps1 LockMaxAgeMinutes - staleness bound
 SLA_GAP_MIN = 20   # fleet comm SLA - advisory bound (rounds may run 25m)
 STATE_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+GAP_MIN_RE = re.compile(r"beat gap (\d+) min")
+FOLD_DENSE_DEFAULT = 5  # tech#20: dense same-code WARN group fold size
 
 
 def parse_beats(path):
@@ -225,6 +234,49 @@ def warn_is_recent(msg, cutoff):
     return any(d >= cutoff for d in dates)
 
 
+def dense_fold(shown, fold_dense):
+    """tech#20 loop-face verbosity only: a recent same-code WARN group
+    of >= fold_dense lines collapses into ONE count line (occurrences,
+    date span, magnitude band for heartbeat-gap, pointer to the audit
+    face). SLA advisory semantics survive - worst gap value stays on
+    the folded line and anything past the lock-age bound is a FAIL,
+    which never folds; per-item traceability survives at the default
+    audit face. Findings, verdict and exit codes are untouched."""
+    if fold_dense <= 0:
+        return shown
+    groups, order = {}, []
+    for sev, code, _msg in shown:
+        if sev != "WARN":
+            continue
+        if code not in groups:
+            groups[code] = []
+            order.append(code)
+        groups[code].append(_msg)
+    dense = {c for c in order if len(groups[c]) >= fold_dense}
+    if not dense:
+        return shown
+    result, emitted = [], set()
+    for sev, code, msg in shown:
+        if sev == "WARN" and code in dense:
+            if code in emitted:
+                continue
+            emitted.add(code)
+            msgs = groups[code]
+            dates = sorted({d for m in msgs for d in DATE_RE.findall(m)})
+            span = (dates[0] + ".." + dates[-1]) if len(dates) > 1 else (
+                dates[0] if dates else "no embedded date")
+            band = ""
+            mins = [int(mm.group(1)) for m in msgs
+                    for mm in [GAP_MIN_RE.search(m)] if mm]
+            if mins:
+                band = ", gaps %d-%d min" % (min(mins), max(mins))
+            msg = ("%d occurrence(s) %s%s (dense-window fold; run "
+                   "without --loop for the full list)"
+                   % (len(msgs), span, band))
+        result.append((sev, code, msg))
+    return result
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -308,7 +360,7 @@ def main(argv):
     except Exception:
         pass
     root, max_age, max_gap = REPO, LOCK_AGE_MIN, SLA_GAP_MIN
-    loop_mode, recent_days = False, 3
+    loop_mode, recent_days, fold_dense = False, 3, FOLD_DENSE_DEFAULT
     args = argv[1:]
     i = 0
     while i < len(args):
@@ -323,10 +375,23 @@ def main(argv):
                 recent_days = int(args[i + 1])
             except ValueError:
                 print("usage: python src/os/loop_health.py [--root DIR] "
-                      "[--max-age N] [--max-gap N] [--loop] [--recent-days N]")
+                      "[--max-age N] [--max-gap N] [--loop] [--recent-days N] "
+                      "[--fold-dense N]")
                 return 2
             if recent_days <= 0:
                 print("--recent-days must be positive")
+                return 2
+            i += 2
+        elif args[i] == "--fold-dense" and i + 1 < len(args):
+            try:
+                fold_dense = int(args[i + 1])
+            except ValueError:
+                print("usage: python src/os/loop_health.py [--root DIR] "
+                      "[--max-age N] [--max-gap N] [--loop] [--recent-days N] "
+                      "[--fold-dense N]")
+                return 2
+            if fold_dense < 0:
+                print("--fold-dense must be >= 0 (0 disables the fold)")
                 return 2
             i += 2
         elif args[i] in ("--max-age", "--max-gap") and i + 1 < len(args):
@@ -346,7 +411,8 @@ def main(argv):
             i += 2
         else:
             print("usage: python src/os/loop_health.py [--root DIR] "
-                  "[--max-age N] [--max-gap N] [--loop] [--recent-days N]")
+                  "[--max-age N] [--max-gap N] [--loop] [--recent-days N] "
+                  "[--fold-dense N]")
             return 2
     heart = root / "logs" / "probe-heartbeat.txt"
     state_path = root / "src" / "os" / "state.json"
@@ -377,6 +443,7 @@ def main(argv):
         shown = [f for f in findings
                  if f[0] != "WARN" or warn_is_recent(f[2], cutoff)]
         supp = len(findings) - len(shown)
+        shown = dense_fold(shown, fold_dense)
     else:
         shown, supp = findings, 0
     for sev, code, msg in shown:

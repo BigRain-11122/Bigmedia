@@ -364,9 +364,12 @@ class CliTests(unittest.TestCase):
 
 
 class LoopModeTests(unittest.TestCase):
-    """--loop routine face (tech#11): same analysis, compact output -
+    """--loop routine face (tech#11/#20): same analysis, compact output -
     FAILs always print, dated WARNs older than the cutoff fold into
-    one suppression count, dateless WARNs stay visible."""
+    one suppression count, dateless WARNs stay visible, and dense
+    in-window same-code WARN groups (>= --fold-dense, default 5)
+    collapse into one count line (occurrences + date span + magnitude
+    band + audit-face pointer)."""
 
     def run_cli(self, root, extra):
         argv = ["loop_health.py", "--root", str(root)] + extra
@@ -412,6 +415,72 @@ class LoopModeTests(unittest.TestCase):
         self.assertIn("heartbeat-gap", out)      # fresh dated WARN visible
         self.assertIn("account-drift-adjudicated", out)  # dateless WARN visible
         self.assertNotIn("suppressed:", out)
+
+    def test_dense_fold_unit(self):
+        gap = ("beat gap 21 min (2026-10-09 01:00 -> 2026-10-09 01:21) "
+               "over 20 min comm SLA - long rounds may breach legitimately")
+        shown = [("WARN", "heartbeat-gap", gap)] * 6
+        folded = loop_health.dense_fold(shown, 5)
+        self.assertEqual(len(folded), 1)
+        self.assertIn("6 occurrence(s)", folded[0][2])
+        self.assertIn("2026-10-09", folded[0][2])
+        self.assertIn("gaps 21-21 min", folded[0][2])
+        self.assertIn("dense-window fold", folded[0][2])
+        # FAILs interleave untouched and never fold
+        shown2 = shown[:5] + [("FAIL", "account-lag", "boom")] + shown[5:]
+        folded2 = loop_health.dense_fold(shown2, 5)
+        self.assertEqual(len(folded2), 2)
+        self.assertEqual({c for _, c, _ in folded2},
+                         {"heartbeat-gap", "account-lag"})
+        # below threshold and 0-disable stay verbatim
+        sparse = shown[:3]
+        self.assertIs(loop_health.dense_fold(sparse, 5), sparse)
+        self.assertIs(loop_health.dense_fold(shown, 0), shown)
+
+    def test_dense_same_code_warns_fold_to_one_count_line(self):
+        spec = [(21 * i, "round done exit=0") for i in range(7)]  # 6 x 21-min gaps
+        log = ["2026-09-23 15:%02d r%d ok" % (i, i) for i in range(7)]
+        root = make_repo(self, spec, make_state(tick=7, log=log), BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(out.count("over 20 min comm SLA"), 0)  # verbatim lines gone
+        self.assertIn("6 occurrence(s)", out)      # count preserved
+        self.assertIn("gaps 21-21 min", out)        # magnitude band preserved
+        self.assertIn("dense-window fold", out)     # audit-face pointer preserved
+        self.assertIn("(0 fail, 6 warn)", out)       # verdict counts full findings
+        rc2, out2 = self.run_cli(root, [])           # audit face keeps all lines
+        self.assertEqual(out2.count("over 20 min comm SLA"), 6)
+
+    def test_dense_fold_disabled_by_flag(self):
+        spec = [(21 * i, "round done exit=0") for i in range(7)]
+        root = make_repo(self, spec, make_state(tick=7), BOARD)
+        rc, out = self.run_cli(root, ["--loop", "--fold-dense", "0"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(out.count("over 20 min comm SLA"), 6)
+        self.assertNotIn("dense-window fold", out)
+
+    def test_sparse_warns_stay_verbatim_under_threshold(self):
+        spec = [(21 * i, "round done exit=0") for i in range(4)]  # 3 gaps < 5
+        root = make_repo(self, spec, make_state(tick=4), BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(out.count("over 20 min comm SLA"), 3)
+        self.assertNotIn("dense-window fold", out)
+
+    def test_dense_fail_group_never_folds(self):
+        spec = [(45 * i, "round done exit=0") for i in range(6)]  # 5 x 45-min outages
+        root = make_repo(self, spec, make_state(tick=6), BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 1)
+        self.assertEqual(out.count("exceeds lock age"), 5)  # FAILs print in full
+
+    def test_bad_fold_dense_flag_exits_two(self):
+        for bad in (["--fold-dense", "-1"], ["--fold-dense", "x"]):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = loop_health.main(
+                    ["loop_health.py", "--loop"] + bad)
+            self.assertEqual(rc, 2)
 
     def test_loop_mode_real_repo_smoke(self):
         """Read-only smoke: compact face runs end-to-end on the real
