@@ -53,6 +53,12 @@ Findings:
                                    bump or off-beat accounting)
   WARN  log-order/log-gap            narrative timestamp hygiene
   WARN  backlog-file                 board missing (burn rate unknown)
+  WARN  root-probe-litter            1-2 root-level r<digit>/r_ probe/temp
+                                   files left behind (round-end cleanup
+                                   hook debt; C-20261009-02 order-3 face)
+  FAIL  root-probe-litter            >= 3 root-level r<digit>/r_ probe
+                                   files (recurring-litter pattern -
+                                   episodic sweeps R1807/R1816/R1828)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -100,6 +106,13 @@ SLA_GAP_MIN = 20   # fleet comm SLA - advisory bound (rounds may run 25m)
 STATE_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 GAP_MIN_RE = re.compile(r"beat gap (\d+) min")
 FOLD_DENSE_DEFAULT = 5  # tech#20: dense same-code WARN group fold size
+# tech#22: root-level probe/temp leftovers - both historical families
+# (r_cur_* 28 files R1816 sweep + r<digits>* 107 files R1828 sweep; three
+# episodic manual sweeps R1807/R1816/R1828 before this guard existed).
+# README-style repo files never match (r must be followed by a digit or
+# an underscore); subdirectories are not scanned.
+PROBE_LITTER_RE = re.compile(r"^r[\d_]")
+LITTER_FAIL_N = 3  # >= 3 leftovers = recurring pattern, not a one-off
 
 
 def parse_beats(path):
@@ -277,6 +290,34 @@ def dense_fold(shown, fold_dense):
     return result
 
 
+def check_root_litter(root, findings):
+    """tech#22 guard: root-level r<digit>/r_ probe/temp files left behind by
+    rounds past. The round-end cleanup hook (C-20261009-02 order 3) makes
+    leaving them a violation; before this machine face the only detection
+    was episodic human sweeps (R1807 28 files, R1816 28, R1828 107 - three
+    recurrences = the gap anchor). 1-2 files = WARN (single-round debt,
+    possibly another session's in-flight file - advisory), >= 3 = FAIL
+    (recurring pattern). Non-recursive, files only; README-style names
+    never match (r must be followed by a digit or underscore)."""
+    try:
+        names = sorted(p.name for p in root.iterdir()
+                       if p.is_file() and PROBE_LITTER_RE.match(p.name))
+    except OSError:
+        return
+    if not names:
+        return
+    shown = ", ".join(names[:5]) + (" ..." if len(names) > 5 else "")
+    if len(names) >= LITTER_FAIL_N:
+        findings.append(("FAIL", "root-probe-litter",
+                         "%d root-level probe/temp leftover(s): %s - "
+                         "round-end cleanup hook debt (C-20261009-02 order 3)"
+                         % (len(names), shown)))
+    else:
+        findings.append(("WARN", "root-probe-litter",
+                         "%d root-level probe/temp leftover(s): %s - clean "
+                         "at round end" % (len(names), shown)))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -423,6 +464,7 @@ def main(argv):
         findings += f
         (b_total, b_done), f = parse_backlog(board)
         findings += f
+        check_root_litter(root, findings)
     except OSError as e:
         print("source error: %s" % e)
         return 2

@@ -501,5 +501,67 @@ class LoopModeTests(unittest.TestCase):
         self.assertEqual(rc, 2)
 
 
+class RootLitterTests(unittest.TestCase):
+    """tech#22: root-level r<digits>* probe/temp leftover guard."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=2), BOARD)
+
+    def test_clean_root_passes(self):
+        root = self._repo()
+        findings = []
+        loop_health.check_root_litter(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_one_or_two_leftovers_warn(self):
+        for n in (1, 2):
+            root = self._repo()
+            for i in range(n):
+                (root / ("r18xx_probe%d.py" % i)).write_text("x", encoding="utf-8")
+            findings = []
+            loop_health.check_root_litter(root, findings)
+            self.assertEqual(warn_codes(findings), {"root-probe-litter"})
+            self.assertNotIn("root-probe-litter", fail_codes(findings))
+            self.assertIn("%d root-level" % n, findings[0][2])
+
+    def test_three_leftovers_fail(self):
+        root = self._repo()
+        for name in ("r_cur_check.py", "r_cur_probe1.py", "r1776_close.py"):
+            (root / name).write_text("x", encoding="utf-8")
+        findings = []
+        loop_health.check_root_litter(root, findings)
+        self.assertIn("root-probe-litter", fail_codes(findings))
+
+    def test_repo_files_never_match(self):
+        root = self._repo()
+        for name in ("README.md", "readme.md", "release", "requirements.txt"):
+            (root / name).write_text("x", encoding="utf-8")
+        findings = []
+        loop_health.check_root_litter(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_subdirectory_files_not_scanned(self):
+        root = self._repo()
+        sub = root / "tools"
+        sub.mkdir()
+        for i in range(5):
+            (sub / ("r19xx_probe%d.py" % i)).write_text("x", encoding="utf-8")
+        findings = []
+        loop_health.check_root_litter(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_into_verdict(self):
+        root = self._repo()
+        for i in range(3):
+            (root / ("r%d_probe.py" % i)).write_text("x", encoding="utf-8")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertEqual(rc, 1)
+        self.assertIn("root-probe-litter", buf.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
