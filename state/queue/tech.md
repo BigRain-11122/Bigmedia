@@ -11,7 +11,8 @@
 7. [done 2026-10-09 R1822] emotive_tts --deepdive 引擎泛化（剧集窗参数从 BS-001 专属硬编码提取为产线参数表·L-剧量产位）——已交付：LAW_PROFILES 产线参数表（deepdive=BS-001-DD 精确现值零漂移默认〔默认参等价测试锁〕+drama-ep=L-剧 60-90s 剧集窗律 total_window 求解器〔MD-0001 13 拍 Σ75s 实锚·场切 1.2s 种子值首件复检〕）+--deepdive [PROFILE] CLI 选档（非 flag 裸词=档名·未知档 FAIL exit 2——冒烟揭首版未知词静默吞没缺陷即修）+meta 记 profile+9 新测 364 全回归绿（355+9）·capabilities v1.42（C-17）
 8. [done 2026-10-09 R1823] 心跳 GPU util 字段本司周报起报接线（self-drive §7.1 配套·P-33 已采集面读侧消费·周报自驱面 GPU 均值行）——已交付：采集面定谳=BigCompute `state/gpu-util/samples.jsonl`（09-28 起 ~15min 数值采样·心跳 JSON 只有 VRAM 族字段无数值 util）+`gpu_ledger_weekly()` 窗内均值解析（零猜测 N/A 兜底）+GPU_MEAN/N/MAX/INSTANT 四占位器+模板双报制·1 新测 365 全回归绿·W41 起报实测=周均 8%（429 采样·max 100%）vs 瞬采 2%
 9. S1 席 27b 档评分制一致性验证（S1 v1.5 违律扣分制 14b 首件真门 10/10〔R192〕后·27b 档判词格式与判据稳定性复核）——GPU 独占窗即领
-10. tokens:local 计量自动化评估（P-54⑤ 手记→探针自动采集设计案·零 token 例行化）——可即领
+10. [done 2026-10-09 R1825] tokens:local 计量自动化评估（P-54⑤ 手记→探针自动采集设计案·零 token 例行化）——已交付：`src/os/tokens_local_meter.py` 探针（Ollama 面=expert-calls 台账行精确计数〔每行=一次真调·退出码 0=产出计 1/非 0 整数=尝试无产出计 0=R175「超时无判词=0」口径·E4 形行退出槽=判词文件路径非数字默认产出〕+whisper 面=station-reviews asr-check 行证据近似〔1 行≈1 次 medium 档·精确 hook 缺位注记〕·缺口注=裸 `ollama run` 热身/无台账行校准跑仍手记）·窗口归属（台账时间戳）替代逐轮记忆·state.json 手记行仍为 `local_rate_report` 单一真相（探针只供数·下游零动）；8 单测·378 全回归绿（370+8）·真数据实跑=当日 1（E4 MD-0001 席）/自 10-08 窗 14（ollama 9+whisper 5）——C-33 新席（capabilities v1.45）
+19. [R1825 补货] whisper 精确计量 hook 评估（tech#10 遗留缺口面：station-reviews 行近似→`whisper_to_srt.py` 台账行 append 设计〔calibration 跑/终轨核验逐次精确计数·tokens_local_meter 消费面同步〕——缺口锚=tech#10 缺口注「无台账行校准跑」+R169 型 QC 跑无行实证）——可即领
 11. 三探针启动开销压减（board/readiness/loop_health 例行 token 面持续优化·轮启动成本读数）——可即领
 12. whisper ASR 同音噪声字典化压制评估（medium 档 12-14 处/件噪声谱→替换候选表·M6 真人校准线前置）——可即领
 13. [R1820 补货] 回环边界帧律扩展（帧验三律第三律=回环件首尾帧接续性机检——循环播件/v7 口号回环族边界帧跳变检测·帧律 C2 落位后的自然相邻位·缺口锚=S2 技能三律在册而机检面只覆盖拍头/段中尾两律）——可即领
