@@ -1,0 +1,29 @@
+# r1920 gate three-reading evidence (tech#75 judge position, canon commands)
+# context: MV sprint lane released VRAM mid-round (free 1105 -> 8832 swing), then
+# the load cycle resumed. The preregistered consecutive-2 gate is what decides.
+
+# reading 1 @ 22:54 (first judge pass of the round):
+#   ollama_probe --ledger: GEN-OK done_reason=stop model=qwen2.5:14b-8k
+#   gpu_window_gate --samples 6 --util-max 80 (default min-free 9216):
+#     pause_face=clear (tasks 0/8 disabled); worst-case free 1105MB < 9216
+#     -> VERDICT=NO-GO (band 16MB, steady-saturated regime)
+#   review-leg 2048 guard basis: free 1105 < 2048 -> FAIL (not all-GO)
+
+# reading 2 @ 22:57 (tech#75 canon guard 2048):
+#   gpu_window_gate --samples 6 --sample-interval 5 --min-free-mb 2048 --util-max 80 --json:
+#     {"go": true, "vram_free_mb": 8832, "free_min_mb": 8832, "free_max_mb": 9008,
+#      "band_mb": 176, "util_max": 31, "read_ok": 6}
+#   -> single all-GO reading (fire candidate; needs one more consecutive pass)
+
+# reading 3 @ 22:58 (consecutive confirmation):
+#   ollama_probe --json: {"rc":0,"status":"ok","face":"ok","gpu_util":"98","gpu_mem":"1967"}
+#   gpu_window_gate --samples 6 --sample-interval 5 --min-free-mb 2048 --util-max 80 --json:
+#     {"go": false, "free_min_mb": 5184, "free_max_mb": 10315, "band_mb": 5131,
+#      "util_max": 98, "reasons": ["util-face: worst-case util 98% > gate 80%",
+#      "vram-band advisory: free oscillates band 5131MB -- sec-scale load-cycle regime"]}
+#   -> NO-GO: the 22:57 GO was a load-cycle gap, not a stable window.
+
+# verdict: preregistered "three gates on >= 2 consecutive readings" gate HELD.
+# First real-world catch of the tech#75 stability face: a single-GO gap inside
+# an oscillating regime must not launch a 1500s review long-flight
+# (R1876 contention double-loss family). Four legs stay fire-ready gated.
