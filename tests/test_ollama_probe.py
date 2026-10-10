@@ -34,6 +34,13 @@ CPU-offload crawl, R1927 anchor), face=not-resident (rc=2, status=
 skipped-not-resident, no generation flight at all); every unreadable piece
 falls back to the legacy flight; a not-resident cold-run timeout gets the
 probe-coldload face (our own load is the load) instead of busy-contended.
+
+tech#82 (R1934): eviction-aware cold-skip envelope -- advisory
+counterfactual columns (evictable_mb + eviction_aware_verdict) on every
+--json line and ps-ok ledger row, opt-in --eviction-aware decision change
+(yield discipline: default OFF keeps the active-window skip; the judgment
+position passes the flag only when the lanes owning the resident models
+are judged non-active). Hermetic arithmetic lock + dual-reading surfaces.
 """
 
 import io
@@ -1055,6 +1062,250 @@ class SizeVramTests(unittest.TestCase):
             set(row.keys()),
             {"ts", "rc", "status", "http_status", "model",
              "gpu_util", "gpu_mem", "face"})
+
+
+class EvictionAwareTests(unittest.TestCase):
+    """tech#82: eviction-aware cold-skip envelope + dual-reading counterfactual.
+
+    Gap anchor (R1929/R1931/R1932/R1933): gate GO x3 while the probe
+    cold-skipped every round -- static free (~5.6GB) < the 14b envelope
+    (9000MB), but ollama auto-evicts the resident 7b keep-warm (~4888MiB)
+    on load, making ~10.5GB reachable. The counterfactual ("fly") rides
+    every --json / ps-ok ledger row as ADVISORY; the actual flight changes
+    only under the explicit --eviction-aware opt-in (yield discipline:
+    the MV keep-warm is only evictable in non-active sprint windows).
+    """
+
+    # 7b keep-warm, the R1933 real-window shape (4888 MiB in bytes).
+    KEEP_WARM_BYTES = 4888 * 1024 * 1024
+    RESIDENT_BYTES = 9216 * 1024 * 1024
+
+    def setUp(self):
+        self._orig_ps = op._http_get_ps
+        self._orig_http = op._http_post
+        self._orig_smi = op._nvidia_smi_query
+        self._orig_smi_free = op._nvidia_smi_free_query
+        self.tmp = tempfile.mkdtemp(prefix="bs-ollama-evict-")
+        op._nvidia_smi_query = lambda: "5, 6674\n"
+
+    def tearDown(self):
+        op._http_get_ps = self._orig_ps
+        op._http_post = self._orig_http
+        op._nvidia_smi_query = self._orig_smi
+        op._nvidia_smi_free_query = self._orig_smi_free
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _ps(self, entries):
+        payload = json.dumps({"models": entries}).encode("utf-8")
+        op._http_get_ps = lambda base_url, timeout: _FakeResp(payload)
+
+    def _flight_ok(self, calls):
+        def fake(base_url, body, timeout):
+            calls["flights"] += 1
+            return _FakeResp(json.dumps({"done_reason": "stop"}).encode("utf-8"))
+        op._http_post = fake
+
+    def _run(self, argv):
+        import contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            return op.main(argv), buf.getvalue()
+
+    # ---- _ps_other_resident_vram extraction ------------------------------
+
+    def test_other_resident_vram_sums_and_excludes_target(self):
+        payload = {"models": [
+            {"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES},
+            {"name": "qwen2.5:14b-8k:latest", "size_vram": self.RESIDENT_BYTES}]}
+        # Target with tag suffix must NOT credit itself; the 7b counts.
+        self.assertEqual(
+            op._ps_other_resident_vram(payload, "qwen2.5:14b-8k"), 4888)
+        # From the 7b's perspective the 14b is the other resident.
+        self.assertEqual(
+            op._ps_other_resident_vram(payload, "qwen2.5:7b"), 9216)
+
+    def test_other_resident_vram_missing_size_contributes_zero(self):
+        # Conservative under-credit: an entry with no readable size_vram
+        # contributes 0 -- the arithmetic never claims unprovable room.
+        payload = {"models": [
+            {"name": "qwen2.5:7b"},  # resident, size unknowable
+            {"name": "x:1b", "size_vram": 100 * 1024 * 1024}]}
+        self.assertEqual(op._ps_other_resident_vram(payload, "qwen2.5:14b-8k"), 100)
+        payload2 = {"models": [
+            {"name": "qwen2.5:7b", "size_vram": "garbage"}]}
+        self.assertEqual(op._ps_other_resident_vram(payload2, "qwen2.5:14b-8k"), 0)
+
+    def test_other_resident_vram_empty_junk_and_bad_payload(self):
+        self.assertEqual(op._ps_other_resident_vram({"models": []}, "m:1"), 0)
+        junk = {"models": ["junk", {"nope": 1}, 7]}
+        self.assertEqual(op._ps_other_resident_vram(junk, "m:1"), 0)
+        self.assertEqual(op._ps_other_resident_vram(None, "m:1"), 0)
+
+    # ---- classify_precheck arithmetic lock (hermetic) --------------------
+
+    def test_legacy_path_byte_identical_with_evictable_present(self):
+        # Flag off: evictable evidence must not leak into the decision or
+        # the reason string (active-window skip unchanged, 让路律).
+        proceed, reason = op.classify_precheck(
+            False, True, 4200, 9000, evictable_mb=4888, eviction_aware=False)
+        self.assertFalse(proceed)
+        self.assertEqual(reason, "cold-skip free=4200MB<model=9000MB")
+
+    def test_eviction_aware_run_when_credit_closes_gap(self):
+        # R1933 real-window shape: free 5614 + evictable 4888 = 10502 >= 9000.
+        proceed, reason = op.classify_precheck(
+            False, True, 5614, 9000, evictable_mb=4888, eviction_aware=True)
+        self.assertTrue(proceed)
+        self.assertEqual(
+            reason, "cold-run free=5614MB+evictable=4888MB>=model=9000MB")
+
+    def test_eviction_aware_skip_when_credit_insufficient(self):
+        proceed, reason = op.classify_precheck(
+            False, True, 4200, 9000, evictable_mb=1000, eviction_aware=True)
+        self.assertFalse(proceed)
+        self.assertEqual(
+            reason, "cold-skip free=4200MB+evictable=1000MB<model=9000MB")
+
+    def test_eviction_aware_boundary_at_envelope_runs(self):
+        # 4112 + 4888 == 9000: boundary runs (>=, matching legacy semantics).
+        proceed, reason = op.classify_precheck(
+            False, True, 4112, 9000, evictable_mb=4888, eviction_aware=True)
+        self.assertTrue(proceed)
+        proceed, _ = op.classify_precheck(
+            False, True, 4111, 9000, evictable_mb=4888, eviction_aware=True)
+        self.assertFalse(proceed)
+
+    def test_eviction_aware_none_or_zero_degenerates_to_legacy(self):
+        proceed, reason = op.classify_precheck(
+            False, True, 4200, 9000, evictable_mb=None, eviction_aware=True)
+        self.assertFalse(proceed)
+        self.assertEqual(
+            reason, "cold-skip free=4200MB+evictable=0MB<model=9000MB")
+        proceed, reason = op.classify_precheck(
+            False, True, 9000, 9000, evictable_mb=0, eviction_aware=True)
+        self.assertTrue(proceed)
+        self.assertEqual(
+            reason, "cold-run free=9000MB+evictable=0MB>=model=9000MB")
+
+    def test_eviction_aware_permissive_branches_unchanged(self):
+        # Doubt branches stay permissive regardless of the flag: the
+        # eviction credit only exists where the evidence does.
+        self.assertEqual(
+            op.classify_precheck(False, False, 100, 9000, 4888, True),
+            (True, "ps-unavailable"))
+        self.assertEqual(
+            op.classify_precheck(True, True, 100, 9000, 4888, True),
+            (True, "resident"))
+        self.assertEqual(
+            op.classify_precheck(False, True, 100, 0, 4888, True),
+            (True, "no-estimate"))
+        self.assertEqual(
+            op.classify_precheck(False, True, None, 9000, 4888, True),
+            (True, "free-unknown"))
+
+    # ---- counterfactual advisory table -----------------------------------
+
+    def test_verdict_table(self):
+        v = op.compute_eviction_aware_verdict
+        # Full-evidence contexts: the arithmetic says fly / skip.
+        self.assertEqual(v(False, True, 5614, 9000, 4888), "fly")
+        self.assertEqual(v(False, True, 4200, 9000, 1000), "skip")
+        # No other residents: the counterfactual equals the legacy verdict.
+        self.assertEqual(v(False, True, 4200, 9000, 0), "skip")
+        self.assertEqual(v(False, True, 9000, 9000, 0), "fly")
+        # Any doubt -> None (advisory never fires on doubt).
+        self.assertIsNone(v(True, True, 5614, 9000, 4888))   # resident: no cold load
+        self.assertIsNone(v(False, False, 5614, 9000, 4888))  # ps unreadable
+        self.assertIsNone(v(False, True, None, 9000, 4888))   # free unreadable
+        self.assertIsNone(v(False, True, 5614, 0, 4888))      # no estimate
+
+    # ---- main() dual-reading surfaces --------------------------------------
+
+    def test_main_default_skip_row_carries_counterfactual_fly(self):
+        # Real-window dual reading in ONE row: MV sprint active -> flag
+        # off -> skip maintained; the row still shows what eviction-aware
+        # would say (fly), so the judgment position can act later without
+        # re-flying.
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps([{"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
+        op._nvidia_smi_free_query = lambda: "12288, 6674\n"  # free 5614 < 9000
+        path = os.path.join(self.tmp, "dual-ledger.jsonl")
+        rc, out = self._run(["--json", "--ledger", path])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertEqual(line["status"], "skipped-not-resident")
+        self.assertIn("cold-skip free=5614MB<model=9000MB", line["precheck"])
+        self.assertEqual(line["evictable_mb"], 4888)
+        self.assertEqual(line["eviction_aware_verdict"], "fly")
+        self.assertEqual(calls["flights"], 0)  # skip maintained, no flight
+        with open(path, encoding="utf-8") as fh:
+            row = json.loads(fh.read().splitlines()[0])
+        self.assertEqual(row["evictable_mb"], 4888)
+        self.assertEqual(row["eviction_aware_verdict"], "fly")
+        self.assertEqual(row["status"], "skipped-not-resident")
+
+    def test_main_eviction_aware_flag_flies_the_cold_run(self):
+        # Same window + the opt-in flag: the credit closes the gap and the
+        # flight proceeds (the judgment position decided the sprint window
+        # is non-active when passing the flag).
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps([{"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
+        op._nvidia_smi_free_query = lambda: "12288, 6674\n"
+        rc, out = self._run(["--json", "--eviction-aware"])
+        self.assertEqual(rc, 0)
+        line = json.loads(out.strip())
+        self.assertEqual(line["status"], "ok")
+        self.assertEqual(
+            line["precheck"], "cold-run free=5614MB+evictable=4888MB>=model=9000MB")
+        self.assertEqual(calls["flights"], 1)
+
+    def test_main_eviction_aware_insufficient_credit_keeps_skip(self):
+        # The flag is not a force-fly: insufficient credit keeps the skip,
+        # with the honest arithmetic in the reason.
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps([{"name": "qwen2.5:7b", "size_vram": 1000 * 1024 * 1024}])
+        op._nvidia_smi_free_query = lambda: "12288, 8088\n"  # free 4200
+        rc, out = self._run(["--json", "--eviction-aware"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertEqual(line["status"], "skipped-not-resident")
+        self.assertIn(
+            "cold-skip free=4200MB+evictable=1000MB<model=9000MB",
+            line["precheck"])
+        self.assertEqual(line["eviction_aware_verdict"], "skip")
+        self.assertEqual(calls["flights"], 0)
+
+    def test_main_verdict_null_when_target_resident(self):
+        # Resident target: no cold-load context, counterfactual honestly
+        # null; evictable sum still reported (the other residents' VRAM).
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps([
+            {"name": op.DEFAULT_MODEL, "size_vram": self.RESIDENT_BYTES},
+            {"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 0)
+        line = json.loads(out.strip())
+        self.assertEqual(line["precheck"], "resident")
+        self.assertEqual(line["evictable_mb"], 4888)
+        self.assertIsNone(line["eviction_aware_verdict"])
+
+    def test_main_no_precheck_json_has_no_eviction_columns(self):
+        # Legacy --no-precheck surface: no ps read, no eviction columns.
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+
+        def ps_spy(base_url, timeout):
+            raise AssertionError("ps must not be queried under --no-precheck")
+        op._http_get_ps = ps_spy
+        rc, out = self._run(["--json", "--no-precheck"])
+        self.assertEqual(rc, 0)
+        line = json.loads(out.strip())
+        self.assertNotIn("evictable_mb", line)
+        self.assertNotIn("eviction_aware_verdict", line)
 
 
 if __name__ == "__main__":

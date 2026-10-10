@@ -108,6 +108,31 @@ tech#78 (R1929): consume the /api/ps size_vram reading (R1928 dogfood
   window unusable for the long review flights, and the next rounds may
   cite the prior reading instead of re-flying. rc/face semantics never
   move.
+
+tech#82 (R1934): eviction-aware cold-skip envelope. Gap anchor:
+  R1929/R1931/R1932/R1933 -- the gate read GO three rounds running while
+  the probe cold-skipped every time: the static free reading (~5.6GB)
+  sits below the 14b envelope (9000MB), but ollama auto-evicts the
+  resident 7b keep-warm (~4888MiB) LRU-style when a load needs the VRAM,
+  making ~10.5GB reachable in practice -- the static arithmetic made the
+  dual-GO fire condition structurally unreachable. Two faces, one
+  discipline:
+  - Advisory counterfactual (always on when ps evidence exists): every
+    --json line and ps-ok ledger row carries evictable_mb (summed
+    size_vram of the OTHER resident models) and eviction_aware_verdict
+    ("fly"/"skip"/None) = what the eviction-aware arithmetic WOULD say.
+    This is the dual-reading evidence (real-window side-by-side): one
+    skip row shows both verdicts, zero extra GPU cost, no flight either
+    way.
+  - Opt-in decision change: --eviction-aware switches the actual
+    cold-skip test to free + evictable >= envelope. YIELD DISCIPLINE
+    (让路律) is encoded by the default-OFF posture: evicting e.g. the
+    MV keep-warm model mid-sprint starves that lane, so the judgment
+    position passes the flag ONLY when the lanes owning the resident
+    models are judged non-active; the active window keeps the skip.
+    Entries with a missing/unparseable size_vram contribute 0
+    (conservative under-credit: never claim more room than provable).
+    Skip/rc/face semantics unchanged when the flag is off.
 """
 
 import argparse
@@ -373,23 +398,34 @@ def _get_ps(base_url, timeout=PS_TIMEOUT):
         return None, False
 
 
+def _entry_matches(entry, model):
+    """True when a /api/ps models[] entry is the target model.
+
+    Shared predicate for _ps_find_entry / _ps_other_resident_vram
+    (tech#82): ollama lists loaded models under models[] with name/model
+    fields; a loaded manifest may carry a re-applied tag suffix
+    ("qwen2.5:14b-8k:latest"), so exact match or ":"/"-separated prefix
+    both count.
+    """
+    for key in ("name", "model"):
+        val = entry.get(key)
+        if val == model or (isinstance(val, str) and
+                            (val.startswith(model + ":") or val.startswith(model + "/"))):
+            return True
+    return False
+
+
 def _ps_find_entry(payload, model):
     """Return the /api/ps models[] entry matching the target model, or None.
 
-    Shared matcher for _ps_resident / _ps_size_vram: ollama lists loaded
-    models under models[] with name/model fields; a loaded manifest may
-    carry a re-applied tag suffix ("qwen2.5:14b-8k:latest"), so exact
-    match or ":"/"/"-separated prefix both count. Payload shape is
+    Shared matcher for _ps_resident / _ps_size_vram. Payload shape is
     pre-validated by _get_ps.
     """
     for entry in payload.get("models", []):
         if not isinstance(entry, dict):
             continue
-        for key in ("name", "model"):
-            val = entry.get(key)
-            if val == model or (isinstance(val, str) and
-                                (val.startswith(model + ":") or val.startswith(model + "/"))):
-                return entry
+        if _entry_matches(entry, model):
+            return entry
     return None
 
 
@@ -417,6 +453,30 @@ def _ps_size_vram(payload, model):
         return None
 
 
+def _ps_other_resident_vram(payload, model):
+    """Summed size_vram (MiB) of the OTHER resident models (tech#82).
+
+    ollama auto-evicts resident models LRU-style when a load needs their
+    VRAM, so a not-resident target's reachable envelope is static free +
+    the VRAM the other residents would give back. The target model itself
+    (tag-suffix forms included) never counts. Entries with a missing or
+    unparseable size_vram contribute 0 -- conservative under-credit: the
+    arithmetic must never claim more room than provable. A non-dict
+    payload (defensive; callers gate on ps_ok) reads as 0.
+    """
+    if not isinstance(payload, dict):
+        return 0
+    total = 0
+    for entry in payload.get("models", []):
+        if not isinstance(entry, dict) or _entry_matches(entry, model):
+            continue
+        try:
+            total += int(entry.get("size_vram")) // (1024 * 1024)
+        except (TypeError, ValueError):
+            continue
+    return total
+
+
 def compute_offloaded(resident, size_vram_mib, footprint_mb):
     """Pure advisory: is the loaded model substantially CPU-offloaded? (tech#78)
 
@@ -431,7 +491,30 @@ def compute_offloaded(resident, size_vram_mib, footprint_mb):
     return size_vram_mib < footprint_mb * OFFLOADED_RESIDENT_FRACTION
 
 
-def classify_precheck(resident, ps_ok, free_mb, model_vram_mb):
+def compute_eviction_aware_verdict(resident, ps_ok, free_mb, footprint_mb,
+                                   evictable_mb):
+    """Pure advisory counterfactual: would eviction-aware arithmetic fly?
+
+    (tech#82 gap anchor: R1929-R1933 four rounds read gate GO x3 while the
+    probe cold-skipped every time -- static free (~5.6GB) < the 14b
+    envelope, but ollama auto-evicts the 7b keep-warm on load, making
+    ~10.5GB reachable). "fly"/"skip" only when the cold-skip context has
+    full evidence (ps confirmed the target not resident, a footprint
+    estimate exists and free is readable -- the envelope here is the
+    per-model ESTIMATE, never the --cold-skip-free-mb override, which
+    owns the skip decision only); None on any doubt (advisory never fires
+    on doubt, tech#78 pattern). Consumed by the judgment position as the
+    second reading of the dual-reading discipline; the actual flight only
+    changes under the explicit --eviction-aware opt-in.
+    """
+    if not ps_ok or resident or not footprint_mb or free_mb is None:
+        return None
+    effective = free_mb + (evictable_mb or 0)
+    return "fly" if effective >= footprint_mb else "skip"
+
+
+def classify_precheck(resident, ps_ok, free_mb, model_vram_mb,
+                      evictable_mb=None, eviction_aware=False):
     """Pure decision: run the cold generation flight or skip it (tech#77).
 
     Order of permissiveness (any doubt -> run the legacy flight, the probe
@@ -446,6 +529,17 @@ def classify_precheck(resident, ps_ok, free_mb, model_vram_mb):
         util (R1927 anchor); report the scheduling fact instead.
       not resident + free >= footprint -> run (full-VRAM cold load is
         fast; a busy timeout there is our own load -> probe-coldload face).
+
+    tech#82: eviction_aware=True switches the envelope test to
+    free + evictable (the VRAM ollama reclaims by auto-evicting the OTHER
+    resident models on load). Opt-in by the --eviction-aware flag only --
+    YIELD DISCIPLINE: evicting e.g. the MV keep-warm model mid-sprint
+    starves that lane, so the judgment position passes the flag only when
+    the lanes owning those residents are judged non-active; default OFF
+    keeps the active-window skip and byte-identical reasons. An evictable
+    sum of 0/None under the flag degenerates to the legacy arithmetic
+    (the reason still names the +evictable term).
+
     Returns (proceed: bool, reason: str).
     """
     if not ps_ok:
@@ -456,6 +550,14 @@ def classify_precheck(resident, ps_ok, free_mb, model_vram_mb):
         return True, "no-estimate"
     if free_mb is None:
         return True, "free-unknown"
+    credit = evictable_mb or 0
+    if eviction_aware:
+        effective = free_mb + credit
+        if effective < model_vram_mb:
+            return False, "cold-skip free=%dMB+evictable=%dMB<model=%dMB" % (
+                free_mb, credit, model_vram_mb)
+        return True, "cold-run free=%dMB+evictable=%dMB>=model=%dMB" % (
+            free_mb, credit, model_vram_mb)
     if free_mb < model_vram_mb:
         return False, "cold-skip free=%dMB<model=%dMB" % (free_mb, model_vram_mb)
     return True, "cold-run free=%dMB>=model=%dMB" % (free_mb, model_vram_mb)
@@ -492,6 +594,10 @@ def append_ledger_row(path, result, gpu_ctx=None, precheck=None):
     if precheck is not None and precheck.get("ps_ok"):
         row["ps_size_vram"] = precheck.get("size_vram")
         row["offloaded_resident"] = bool(precheck.get("offloaded"))
+        # tech#82: dual-reading columns on ps-ok rows only (ps-unavailable
+        # rows keep their exact-shape contract byte-stable).
+        row["evictable_mb"] = precheck.get("evictable_mb")
+        row["eviction_aware_verdict"] = precheck.get("eviction_aware_verdict")
     try:
         ledger_path = Path(path)
         ledger_path.parent.mkdir(parents=True, exist_ok=True)
@@ -522,6 +628,16 @@ def build_parser(argv=None):
                         help="tech#77 cold-skip threshold in MiB free VRAM (default: "
                              "per-model estimate for known models, never skip otherwise; "
                              "0 = never skip)")
+    parser.add_argument("--eviction-aware", action="store_true",
+                        help="tech#82 eviction-aware cold-skip arithmetic: credit the "
+                             "summed size_vram of the OTHER ollama-resident models "
+                             "(auto-evicted on load) into the free envelope before the "
+                             "cold-skip test. YIELD DISCIPLINE, opt-in by design: "
+                             "evicting e.g. the MV keep-warm model mid-sprint starves "
+                             "that lane -- pass this only when the lanes owning the "
+                             "resident models are judged non-active; default off keeps "
+                             "the active-window skip (the advisory counterfactual "
+                             "columns ride every ps-ok row either way)")
     return parser
 
 
@@ -548,16 +664,27 @@ def main(argv=None):
         # for a ps-confirmed non-resident model -- read it lazily so the
         # ps-unavailable path costs no extra nvidia-smi call.
         free_mb = read_gpu_free_mb() if (ps_ok and not resident) else None
+        # tech#82: evictable VRAM credit (summed size_vram of the OTHER
+        # resident models) -- payload already in hand, one dict walk.
+        # Feeds the advisory counterfactual always; the decision only
+        # under --eviction-aware (yield discipline at the judgment
+        # position: the flag is passed only in judged-non-active windows).
+        evictable = _ps_other_resident_vram(payload, args.model) if ps_ok else None
         if args.cold_skip_free_mb is not None:
             footprint = args.cold_skip_free_mb
         else:
             footprint = COLD_SKIP_MODEL_VRAM_MB.get(args.model, 0)
         estimate = COLD_SKIP_MODEL_VRAM_MB.get(args.model, 0)
-        proceed, reason = classify_precheck(resident, ps_ok, free_mb, footprint)
+        proceed, reason = classify_precheck(
+            resident, ps_ok, free_mb, footprint,
+            evictable_mb=evictable, eviction_aware=args.eviction_aware)
         precheck = {"ps_ok": ps_ok, "resident": resident,
                     "size_vram": size_vram,
                     "offloaded": compute_offloaded(resident, size_vram, estimate),
-                    "free_mb": free_mb, "reason": reason}
+                    "free_mb": free_mb, "reason": reason,
+                    "evictable_mb": evictable,
+                    "eviction_aware_verdict": compute_eviction_aware_verdict(
+                        resident, ps_ok, free_mb, estimate, evictable)}
         if not proceed:
             result = {
                 "rc": 2,
@@ -581,6 +708,11 @@ def main(argv=None):
                 # loaded here, so the reading is honestly null).
                 result["ps_size_vram"] = precheck.get("size_vram")
                 result["offloaded_resident"] = precheck.get("offloaded", False)
+                # tech#82: dual-reading columns -- the legacy skip verdict
+                # above plus what eviction-aware arithmetic would say.
+                result["evictable_mb"] = precheck.get("evictable_mb")
+                result["eviction_aware_verdict"] = precheck.get(
+                    "eviction_aware_verdict")
                 result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 print(json.dumps(result, ensure_ascii=True))
             else:
@@ -600,6 +732,11 @@ def main(argv=None):
             # only -- flight/rc/face semantics untouched above).
             result["ps_size_vram"] = precheck.get("size_vram")
             result["offloaded_resident"] = precheck.get("offloaded", False)
+            # tech#82: dual-reading columns, schema-uniform (honestly null
+            # when the ps read itself failed).
+            result["evictable_mb"] = precheck.get("evictable_mb")
+            result["eviction_aware_verdict"] = precheck.get(
+                "eviction_aware_verdict")
         result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(json.dumps(result, ensure_ascii=True))
     else:
