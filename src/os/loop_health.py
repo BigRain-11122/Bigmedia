@@ -218,6 +218,23 @@ QUEUE_HEAD_NUM_RE = re.compile(r"^(\d{1,3})\. ")  # entry head at column 0
 # sees). The push-missing half (committed but not pushed) stays with
 # origin_gap_check - one disease, two existing tools, no duplication.
 STATE_REL = "src/os/state.json"
+# tech#64: .c3-tmp cross-round leftover guard. The root litter face
+# (tech#22) only scans root-level r<digit> probe files, so the .c3-tmp
+# evidence dir had no machine face at all - the R1895 anchor: five
+# closing-stage files (close script + data + three probe evidence files)
+# sat uncommitted through a whole round because the two-stage closing
+# commit picked up only the state/export files (cleanup-hook recurrence
+# case 3, C-20261009-02 order 3; R1896 round-open git status was the
+# only detector). Committed evidence files are in the account by
+# definition, so only UNTRACKED files age the test; in-flight files are
+# naturally fresh (written this round), so an untracked .c3-tmp file
+# with mtime > 48h is a leftover by definition. One WARN per file,
+# advisory per the guard family law (tech#22/#31/#37/#58/#60/#61/#62).
+# Boundary note: ls-files --others respects .gitignore, so an ignored
+# .c3-tmp would go silently blind - committed evidence files are the
+# repo's account, keep the dir out of .gitignore.
+C3TMP_DIR_PREFIX = ".c3-tmp/"
+C3TMP_STALE_HOURS = 48.0
 
 
 def parse_beats(path):
@@ -711,6 +728,70 @@ def check_queue_dup_numbers(root, findings):
     findings.extend(classify_queue_dup_numbers(files))
 
 
+def _git_untracked_files(root, _run=None):
+    """`git ls-files --others` stdout -> [relpath] (untracked only, in
+    git's forward-slash form). Any git failure - not a work tree, git
+    missing, timeout - yields []: this face is advisory and never
+    breaks the probe. _run is the injection seam for tests."""
+    if _run is None:
+        _run = subprocess.run
+    try:
+        p = _run(["git", "ls-files", "--others", "-z"],
+                 cwd=str(root), capture_output=True, timeout=GIT_TIMEOUT_S)
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    if p.returncode != 0:
+        return []
+    return [c.decode("utf-8", "replace") for c in p.stdout.split(b"\0") if c]
+
+
+def classify_c3tmp_stale(entries, now, stale_hours=C3TMP_STALE_HOURS):
+    """[(relpath, mtime-or-None)] -> sorted stale relpaths (pure core).
+    Only paths under .c3-tmp/ age the test; an mtime strictly older
+    than stale_hours flags. Deleted/unreadable paths (None) never flag
+    - same advisory skip as the sediment guard's deleted paths."""
+    bound = stale_hours * 3600.0
+    stale = []
+    for rel, mtime in entries:
+        if rel is None or mtime is None:
+            continue
+        if not rel.startswith(C3TMP_DIR_PREFIX):
+            continue
+        if (now - mtime).total_seconds() > bound:
+            stale.append(rel)
+    return sorted(stale)
+
+
+def check_c3tmp_stale(root, now, findings):
+    """tech#64 guard face: name untracked .c3-tmp evidence files left
+    behind across rounds (mtime > 48h). Committed files never flag
+    (tracked = in the account); a missing .c3-tmp dir, a non-git tree
+    or any git failure stays silent (advisory face, never breaks the
+    probe). Enforced every round by the routine probe consumption -
+    an R1895-form leftover is named within one round instead of at the
+    next round's git status read."""
+    entries = []
+    mtimes = {}
+    for rel in _git_untracked_files(root):
+        if not rel.startswith(C3TMP_DIR_PREFIX):
+            continue
+        try:
+            mtime = datetime.fromtimestamp((root / rel).stat().st_mtime)
+        except OSError:
+            continue
+        entries.append((rel, mtime))
+        mtimes[rel] = mtime
+    for rel in classify_c3tmp_stale(entries, now):
+        age_h = (now - mtimes[rel]).total_seconds() / 3600.0
+        findings.append(("WARN", "c3tmp-stale",
+                         "%s uncommitted for %.1f h (> %g h) - round "
+                         "evidence written but never settled (R1895 "
+                         "anchor: five closing-stage files sat a full "
+                         "round; cleanup hook C-20261009-02 order 3) - "
+                         "batch-commit or delete at round end"
+                         % (rel, age_h, C3TMP_STALE_HOURS)))
+
+
 def _git_show_state(root, _run=None):
     """`git show HEAD:<state.json>` stdout bytes, or None on any failure
     (not a work tree, state never committed, git missing, timeout).
@@ -930,6 +1011,7 @@ def main(argv):
         (b_total, b_done), f = parse_backlog(board)
         findings += f
         check_root_litter(root, findings)
+        check_c3tmp_stale(root, datetime.now(), findings)
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
         check_queue_glue(root, findings)

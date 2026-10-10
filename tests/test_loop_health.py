@@ -1231,5 +1231,122 @@ class AccountUncommittedTests(unittest.TestCase):
         self.assertNotIn("account-uncommitted", fail_codes(findings))
 
 
+class C3TmpStaleTests(unittest.TestCase):
+    """tech#64: .c3-tmp cross-round leftover guard - pure core, git
+    untracked seam, check face and CLI wiring. The R1895 anchor form
+    (untracked .c3-tmp evidence file older than 48h) must be named;
+    fresh in-flight files, committed files and every unreadable side
+    stay silent."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=1897), BOARD)
+
+    def _git_repo(self):
+        """Real-git fixture reproducing the R1895 form: one .c3-tmp file
+        committed (in the account, never flags) and one UNTRACKED file
+        with mtime pushed past the 48h bound (the leftover form)."""
+        root = self._repo()
+        c3 = root / ".c3-tmp"
+        c3.mkdir()
+        (c3 / "r1890_probe.txt").write_text("in the account", encoding="utf-8")
+        stale = c3 / "r1895_close.py"
+        stale.write_text("leftover", encoding="utf-8")
+        past = time.time() - 49 * 3600
+        os.utime(str(stale), (past, past))
+        env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
+                   GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+        for args in (["init", "-q"],
+                     ["add", ".c3-tmp/r1890_probe.txt"],
+                     ["commit", "-q", "-m", "x"]):
+            p = subprocess.run(["git"] + args, cwd=str(root), env=env,
+                               capture_output=True, timeout=30)
+            if p.returncode != 0:
+                self.skipTest(
+                    "git fixture unavailable: %.60s"
+                    % p.stderr.decode("utf-8", "replace"))
+        return root  # r1895_close.py stays untracked with a stale mtime
+
+    def test_pure_core_names_stale_only(self):
+        now = datetime.now()
+        stale_mtime = now - timedelta(hours=49)
+        entries = [
+            (".c3-tmp/r1895_close.py", stale_mtime),   # the anchor form
+            (".c3-tmp/r1897_probe.txt", now - timedelta(minutes=30)),  # fresh
+            (".c3-tmp/r1890_gone.txt", None),           # deleted - silent
+            ("data/sources/other.py", stale_mtime),     # outside dir - silent
+            (None, stale_mtime),                        # unparseable - silent
+        ]
+        self.assertEqual(
+            loop_health.classify_c3tmp_stale(entries, now),
+            [".c3-tmp/r1895_close.py"])
+
+    def test_pure_core_boundary_strictly_greater(self):
+        now = datetime.now()
+        self.assertEqual(loop_health.classify_c3tmp_stale(
+            [(".c3-tmp/b.txt", now - timedelta(hours=48))], now), [])
+        self.assertEqual(loop_health.classify_c3tmp_stale(
+            [(".c3-tmp/b.txt", now - timedelta(hours=48, minutes=1))], now),
+            [".c3-tmp/b.txt"])
+
+    def test_untracked_seam_git_failure_silent(self):
+        root = self._repo()
+
+        def dead(_args, **_kw):
+            raise OSError("no git")
+        self.assertEqual(
+            loop_health._git_untracked_files(root, _run=dead), [])
+
+        def bad_rc(_args, **_kw):
+            class P:
+                returncode = 128
+                stdout = b""
+            return P()
+        self.assertEqual(
+            loop_health._git_untracked_files(root, _run=bad_rc), [])
+
+    def test_check_face_non_git_tree_silent(self):
+        # no .git: untracked list yields [] -> advisory skip
+        root = self._repo()
+        c3 = root / ".c3-tmp"
+        c3.mkdir()
+        (c3 / "r1895_close.py").write_text("x", encoding="utf-8")
+        findings = []
+        loop_health.check_c3tmp_stale(root, datetime.now(), findings)
+        self.assertEqual(findings, [])
+
+    def test_git_fixture_r1895_form_named(self):
+        # judgement criterion 2: the anchor leftover form is named at
+        # the check-face level, one WARN per file, committed file silent
+        root = self._git_repo()
+        findings = []
+        loop_health.check_c3tmp_stale(root, datetime.now(), findings)
+        self.assertEqual(warn_codes(findings), {"c3tmp-stale"})
+        self.assertEqual(len(findings), 1)
+        self.assertIn(".c3-tmp/r1895_close.py", findings[0][2])
+        self.assertIn("R1895", findings[0][2])
+        self.assertNotIn("c3tmp-stale", fail_codes(findings))
+
+    def test_cli_wired_on_git_fixture(self):
+        root = self._git_repo()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("c3tmp-stale", buf.getvalue())
+        self.assertEqual(rc, 0)  # WARN-level face never fails the probe
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 1 (round-start face): the real repo's
+        .c3-tmp evidence files are committed at round open, so the guard
+        must stay silent on the committed baseline. Read-only: a fresh
+        in-flight evidence file from a live round is naturally under
+        the 48h bound; assert only that the face never FAILs the probe
+        and never crashes."""
+        findings = []
+        loop_health.check_c3tmp_stale(REPO, datetime.now(), findings)
+        self.assertNotIn("c3tmp-stale", fail_codes(findings))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
