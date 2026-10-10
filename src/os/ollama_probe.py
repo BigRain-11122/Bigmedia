@@ -45,12 +45,26 @@ window; without a face label that is one manual misread away from
   503 + GPU idle (<80%)   -> slot-wedged      (queue wedged, R1883-85 family)
   503 + GPU busy (>=80%)   -> saturated-busy   (genuine queue-full, generating)
   timeout + GPU busy      -> busy-contended   (server healthy, slow under load: YIELD, not broken)
-  timeout + GPU idle      -> service-anomaly  (genuine service trouble face)
+  timeout + GPU idle + gpu_mem < 4000MiB
+                          -> cold-reload      (no ollama model resident: the probe itself started
+                                               a cold load that outran the request cap; service
+                                               may still be healthy -- tech#56, R1889 11:28:48
+                                               anchor rc2/gpu_mem=2012 13 min after a clean GEN-OK)
+  timeout + GPU idle (model resident)
+                          -> service-anomaly  (genuine service trouble face)
   rc=2 non-timeout        -> error
   GPU context unavailable -> gpu-ctx-none
 GPU busy threshold util>=80 aligns with the tech#44 defer threshold. The
 face lands on the --json line, the human line (non-ok) and every --ledger
 row, so window judgments read the discipline straight off the evidence.
+
+tech#56 (R1890): cold-reload face. The 4000MiB residency line sits below
+the smallest ollama model we probe (qwen2.5:7b needs ~4.7GB VRAM), so a
+timeout row with gpu_mem under the line means no model was resident at
+probe time -- the probe itself triggered the cold load and the 60s cap
+expired mid-load. That is a scheduling fact (wait for residency), not a
+service fault; mislabeling it service-anomaly invites a pointless service
+restart. Unreadable mem stays the conservative anomaly face.
 """
 
 import argparse
@@ -111,13 +125,18 @@ def _is_timeout(exc):
 
 
 FACE_GPU_BUSY_UTIL = 80  # tech#44 defer threshold
+# tech#56: below this much VRAM in use no probed ollama model can be
+# resident (the smallest we run, qwen2.5:7b, needs ~4.7GB), so a timeout
+# with gpu_mem under the line means the probe itself started a cold load.
+FACE_COLD_RELOAD_VRAM_MB = 4000
 
 
 def compute_face(result, gpu_ctx):
-    """Advisory three-face reading (tech#55). Never moves rc semantics.
+    """Advisory face reading (tech#55 + tech#56). Never moves rc semantics.
 
     Faces: ok / slot-wedged / saturated-busy / busy-contended /
-    service-anomaly / error / gpu-ctx-none (see module docstring).
+    cold-reload / service-anomaly / error / gpu-ctx-none (see module
+    docstring).
     """
     rc = result.get("rc")
     if rc == 0:
@@ -130,7 +149,18 @@ def compute_face(result, gpu_ctx):
     if rc == 1:
         return "saturated-busy" if busy else "slot-wedged"
     if rc == 2 and result.get("timeout"):
-        return "busy-contended" if busy else "service-anomaly"
+        if busy:
+            return "busy-contended"
+        # tech#56 cold-reload face: timeout + GPU idle + no model resident
+        # (gpu_mem below the smallest model's footprint) = the probe itself
+        # triggered a cold load that outran the request cap; the service can
+        # still be healthy (R1889 11:28:48 anchor: rc2/gpu_mem=2012, 13 min
+        # after a clean GEN-OK). Unreadable mem -> conservative anomaly.
+        mem = (gpu_ctx or {}).get("gpu_mem", "NONE")
+        try:
+            return "cold-reload" if int(mem) < FACE_COLD_RELOAD_VRAM_MB else "service-anomaly"
+        except (TypeError, ValueError):
+            return "service-anomaly"
     return "error"
 
 

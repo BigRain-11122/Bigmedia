@@ -20,6 +20,13 @@ tech#55 (R1889): advisory `face` column -- three-face reading discipline
 busy-contended / timeout+idle=service-anomaly). Advisory only: rc 0/1/2
 semantics never move. Face lands on --json, human line (non-ok) and every
 --ledger row. GPU busy threshold util>=80 (tech#44 defer threshold).
+
+tech#56 (R1890): cold-reload face -- timeout + GPU idle + gpu_mem below
+the 4000MiB residency line (smallest probed model ~4.7GB) = the probe
+itself started a cold load that outran the request cap; not a service
+fault (R1889 11:28:48 anchor). Busy generation still wins (busy-contended);
+unreadable mem stays the conservative service-anomaly face; 503 saturation
+semantics untouched (slot-wedged family).
 """
 
 import io
@@ -183,10 +190,10 @@ class FaceTests(unittest.TestCase):
         self.assertEqual(result["rc"], 1)
         self.assertFalse(result["timeout"])
 
-    def _face(self, rc, util, timeout=False, status="error"):
+    def _face(self, rc, util, timeout=False, status="error", mem="3246"):
         return op.compute_face(
             {"rc": rc, "status": status, "timeout": timeout},
-            {"gpu_util": util, "gpu_mem": "3246"})
+            {"gpu_util": util, "gpu_mem": mem})
 
     def test_face_table(self):
         # ① 503 + GPU idle = wedged-slot face (R1883-85 family).
@@ -198,13 +205,34 @@ class FaceTests(unittest.TestCase):
         # ② timeout + GPU busy = busy-contended (yield, not broken) --
         #    the R1888 10:59 flight (rc2 + util 100) is this face.
         self.assertEqual(self._face(2, "100", timeout=True), "busy-contended")
-        # ③ timeout + GPU idle = genuine service-anomaly face.
-        self.assertEqual(self._face(2, "1", timeout=True), "service-anomaly")
+        # ③ timeout + GPU idle + model resident = genuine service-anomaly
+        #    face (tech#56 split the old idle branch: low-mem reads are
+        #    cold-reload, so the anomaly case needs a resident-model mem).
+        self.assertEqual(self._face(2, "1", timeout=True, mem="11348"), "service-anomaly")
         # rc=2 non-timeout stays a plain error face.
         self.assertEqual(self._face(2, "100", timeout=False), "error")
         # rc=0 is ok regardless of GPU state.
         self.assertEqual(self._face(0, "100", status="ok"), "ok")
         self.assertEqual(self._face(0, "1", status="ok"), "ok")
+
+    def test_cold_reload_face(self):
+        # tech#56: timeout + GPU idle + gpu_mem below the smallest model's
+        # footprint = cold-reload, not service-anomaly (R1889 11:28:48
+        # anchor: rc2/gpu_mem=2012, 13 min after a clean GEN-OK).
+        self.assertEqual(self._face(2, "1", timeout=True, mem="2012"), "cold-reload")
+        # Default helper mem (3246) also sits under the 4000MiB line.
+        self.assertEqual(self._face(2, "1", timeout=True), "cold-reload")
+        # Boundary: strictly below the line is cold; at/above = anomaly.
+        self.assertEqual(self._face(2, "1", timeout=True, mem="3999"), "cold-reload")
+        self.assertEqual(self._face(2, "1", timeout=True, mem="4000"), "service-anomaly")
+        # Busy generation wins regardless of mem: contended, not cold.
+        self.assertEqual(self._face(2, "100", timeout=True, mem="2012"), "busy-contended")
+        # Unreadable mem stays the conservative anomaly face.
+        self.assertEqual(self._face(2, "1", timeout=True, mem="NONE"), "service-anomaly")
+        self.assertEqual(self._face(2, "1", timeout=True, mem="[N/A]"), "service-anomaly")
+        # Cold-reload is a timeout-only face: 503 with low mem stays
+        # slot-wedged (R1883-85 family semantics untouched).
+        self.assertEqual(self._face(1, "1", status="saturated", mem="2012"), "slot-wedged")
 
     def test_face_gpu_context_unavailable(self):
         self.assertEqual(self._face(1, "NONE", status="saturated"), "gpu-ctx-none")
