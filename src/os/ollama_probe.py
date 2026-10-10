@@ -29,11 +29,18 @@ data/pipeline/ollama-probe-ledger.jsonl). Opt-in only: without the flag the
 existing call surface is untouched. Best-effort (whisper-ledger tech#19
 pattern): a failed append WARNs on stderr and never changes the exit code.
 No probe flight (bad timeout) -> no row.
+
+Rows also carry gpu_util/gpu_mem context columns (tech#54, R1888): a
+best-effort nvidia-smi CSV read so a saturation row shows whether the GPU
+was actually generating at probe time (the R1883-R1885 wedged-slot case was
+only diagnosable by hand because 503 rows carried no GPU context). Any
+read failure -> "NONE" markers; never raises, never changes the exit code.
 """
 
 import argparse
 import datetime
 import json
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -112,8 +119,44 @@ def _human_line(result):
     return "GEN-ERROR transport=%s" % result["detail"]
 
 
+def _nvidia_smi_query():
+    """Injection seam for tests: run the nvidia-smi CSV query, return stdout.
+
+    Raises on any failure (binary missing, timeout, bad rc) - the caller
+    converts every failure into NONE markers.
+    """
+    out = subprocess.run(
+        ["nvidia-smi", "--query-gpu=utilization.gpu,memory.used",
+         "--format=csv,noheader,nounits"],
+        capture_output=True, text=True, timeout=15)
+    if out.returncode != 0:
+        raise RuntimeError("nvidia-smi rc=%s" % out.returncode)
+    return out.stdout
+
+
+def read_gpu_context():
+    """Best-effort GPU context for ledger rows (tech#54).
+
+    Returns {"gpu_util": ..., "gpu_mem": ...} parsed from the first
+    nvidia-smi CSV row; any failure -> "NONE" markers. Never raises.
+    """
+    try:
+        text = _nvidia_smi_query()
+        first = text.strip().splitlines()[0] if text.strip() else ""
+        parts = [p.strip() for p in first.split(",")]
+        if len(parts) < 2 or not parts[0] or not parts[1]:
+            raise ValueError("unparseable nvidia-smi csv: %r" % first[:80])
+        return {"gpu_util": parts[0], "gpu_mem": parts[1]}
+    except Exception:
+        return {"gpu_util": "NONE", "gpu_mem": "NONE"}
+
+
 def append_ledger_row(path, result):
     """Best-effort JSONL append (tech#52): one row per real probe flight.
+
+    Rows carry gpu_util/gpu_mem context columns (tech#54, R1883-R1885
+    wedged-slot diagnosis gap: saturation + zero GPU activity is only
+    visible when the row records GPU state at probe time).
 
     WARN on failure, never raises, never changes the probe exit code.
     """
@@ -124,6 +167,7 @@ def append_ledger_row(path, result):
         "http_status": result["http_status"],
         "model": result["model"],
     }
+    row.update(read_gpu_context())
     try:
         ledger_path = Path(path)
         ledger_path.parent.mkdir(parents=True, exist_ok=True)

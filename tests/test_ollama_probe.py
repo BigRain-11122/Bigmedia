@@ -11,6 +11,9 @@ safety (no probe flight on import).
 tech#52 (R1883): --ledger JSONL append face -- opt-in only (no flag = no
 append anywhere), one row per real probe flight, best-effort WARN on write
 failure with the probe exit code untouched, bad-timeout writes no row.
+
+tech#54 (R1888): ledger rows carry gpu_util/gpu_mem context columns
+(best-effort nvidia-smi read; failure -> NONE markers, probe rc untouched).
 """
 
 import io
@@ -242,7 +245,8 @@ class LedgerTests(unittest.TestCase):
         self._run(["--ledger", path])
         self.assertEqual(
             set(self._rows(path)[0].keys()),
-            {"ts", "rc", "status", "http_status", "model"})
+            {"ts", "rc", "status", "http_status", "model",
+             "gpu_util", "gpu_mem"})
 
     def test_two_flights_two_lines(self):
         path = self._path()
@@ -280,6 +284,73 @@ class LedgerTests(unittest.TestCase):
             rc = self._run(["--ledger", bad])
         self.assertEqual(rc, 1)  # probe verdict untouched by ledger failure
         self.assertIn("WARN", err.getvalue())
+
+
+class GpuContextTests(unittest.TestCase):
+    """tech#54: gpu_util/gpu_mem ledger columns, best-effort NONE on failure."""
+
+    def setUp(self):
+        self._orig = op._http_post
+        self._orig_smi = op._nvidia_smi_query
+        self.tmp = tempfile.mkdtemp(prefix="bs-ollama-gpu-")
+
+        def fake(base_url, body, timeout):
+            raise _http_error(503, SATURATION_DETAIL)
+        op._http_post = fake
+
+    def tearDown(self):
+        op._http_post = self._orig
+        op._nvidia_smi_query = self._orig_smi
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _path(self):
+        return os.path.join(self.tmp, "gpu-ledger.jsonl")
+
+    def _rows(self):
+        with open(self._path(), encoding="utf-8") as fh:
+            return [json.loads(line) for line in fh.read().splitlines() if line]
+
+    def _run(self, argv):
+        import contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            return op.main(argv)
+
+    def test_gpu_context_parsed_from_csv(self):
+        # Multi-GPU rows: only the first CSV row is the context face.
+        op._nvidia_smi_query = lambda: "5, 3246\n91, 11737\n"
+        ctx = op.read_gpu_context()
+        self.assertEqual(ctx, {"gpu_util": "5", "gpu_mem": "3246"})
+
+    def test_gpu_read_failure_is_none_and_rc_untouched(self):
+        # Wedged-slot diagnosis gap anchor: any nvidia-smi failure must land
+        # as NONE markers without touching the probe verdict.
+        def boom():
+            raise RuntimeError("nvidia-smi missing")
+        op._nvidia_smi_query = boom
+        self.assertEqual(op.read_gpu_context(),
+                         {"gpu_util": "NONE", "gpu_mem": "NONE"})
+        rc = self._run(["--ledger", self._path()])
+        self.assertEqual(rc, 1)
+        rows = self._rows()
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["gpu_util"], "NONE")
+        self.assertEqual(rows[0]["gpu_mem"], "NONE")
+
+    def test_unparseable_csv_is_none(self):
+        op._nvidia_smi_query = lambda: "no csv headers here\n"
+        self.assertEqual(op.read_gpu_context(),
+                         {"gpu_util": "NONE", "gpu_mem": "NONE"})
+
+    def test_ledger_row_carries_gpu_context(self):
+        # Judgement face: a saturation row shows the GPU state at probe time.
+        op._nvidia_smi_query = lambda: "1, 3328\n"
+        rc = self._run(["--ledger", self._path()])
+        self.assertEqual(rc, 1)
+        row = self._rows()[0]
+        self.assertEqual(row["status"], "saturated")
+        self.assertEqual(row["gpu_util"], "1")
+        self.assertEqual(row["gpu_mem"], "3328")
 
 
 if __name__ == "__main__":
