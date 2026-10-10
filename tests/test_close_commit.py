@@ -16,6 +16,8 @@ Run:
     python tests/test_close_commit.py
 """
 
+import datetime
+import json
 import os
 import shutil
 import subprocess
@@ -319,6 +321,165 @@ class TestCLI(unittest.TestCase):
             self.assertIn("a.txt", repo.head_files())
         finally:
             repo.destroy()
+
+
+class StateFixture(object):
+    """Plain fixture (not a TestCase): a minimal state.json in a temp dir.
+
+    Mirrors the real ledger's field set (tick/log/ts/task/focus/production
+    + decisions_watermark) so preservation and round-trip locks are
+    meaningful.
+    """
+
+    def __init__(self):
+        self.dir = tempfile.mkdtemp(prefix="finalize_state_")
+        self.path = os.path.join(self.dir, "state.json")
+        state = {
+            "tick": 5,
+            "log": ["2026-10-10 23:5x R0005: seed round"],
+            "ts": "2026-10-10 23:57:00",
+            "task": "seed task",
+            "focus": "seed focus",
+            "production": "open",
+            "decisions_watermark": {"dnums": ["D-20261010-03"], "board_rows": 28},
+        }
+        with open(self.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(state, f, ensure_ascii=False, indent=1)
+
+    def destroy(self):
+        shutil.rmtree(self.dir, ignore_errors=True)
+
+    def read(self):
+        with open(self.path, encoding="utf-8") as f:
+            return json.load(f)
+
+    def raw_bytes(self):
+        with open(self.path, "rb") as f:
+            return f.read()
+
+
+class TestDeriveTask(unittest.TestCase):
+    """tech#76: task derivation + the born-level prefix gate."""
+
+    def test_basic_prefix_stripped(self):
+        self.assertEqual("hello world",
+                         cc.derive_task("2026-10-11 00:1x R1927: hello world"))
+        self.assertEqual("plain minute too",
+                         cc.derive_task("2026-10-10 23:26 R1924: plain minute too"))
+
+    def test_x_minute_and_sixty_char_cap(self):
+        body = "等待轮·五查全静" * 20  # CJK body well past the cap
+        line = "2026-10-10 23:5x R1926: " + body
+        self.assertEqual(body[:cc.TASK_MAX_CHARS], cc.derive_task(line))
+
+    def test_rejects_bad_shapes(self):
+        for bad in (
+            "no prefix at all",
+            "2026-10-10 235x R1926: missing colon",
+            "2026-10-10 23:xx R1926: letters in minute",
+            "2026-10-10 23:5x 1926: missing R tag",
+            "2026/10/10 23:5x R1926: wrong date separators",
+            "",
+        ):
+            with self.assertRaises(ValueError):
+                cc.derive_task(bad)
+
+
+class TestFinalizeState(unittest.TestCase):
+    """tech#76: the single-writer state accounting step (R1920 anchor)."""
+
+    LINE = "2026-10-11 00:1x R1927: 等待轮·tech#76 交付轮"
+
+    def _fx(self):
+        fx = StateFixture()
+        self.addCleanup(fx.destroy)
+        return fx
+
+    def test_happy_auto_tick_and_fields(self):
+        fx = self._fx()
+        summary = cc.finalize_state(self.LINE, focus="next round focus",
+                                    state_path=fx.path)
+        self.assertEqual(6, summary["tick"])
+        d = fx.read()
+        self.assertEqual(6, d["tick"])
+        self.assertEqual(self.LINE, d["log"][-1])
+        self.assertEqual("等待轮·tech#76 交付轮", d["task"])
+        self.assertEqual("next round focus", d["focus"])
+        # unrelated fields preserved by the round-trip
+        self.assertEqual("open", d["production"])
+        self.assertEqual("seed round", d["log"][0][len("2026-10-10 23:5x R0005: "):])
+        # atomic write: no temp residue, no BOM (house format)
+        self.assertFalse(os.path.exists(fx.path + ".tmp_final"))
+        self.assertFalse(fx.raw_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_focus_none_leaves_untouched(self):
+        fx = self._fx()
+        cc.finalize_state(self.LINE, state_path=fx.path)
+        self.assertEqual("seed focus", fx.read()["focus"])
+
+    def test_tick_guard_explicit_and_mismatch(self):
+        fx = self._fx()
+        cc.finalize_state(self.LINE, tick=6, state_path=fx.path)
+        self.assertEqual(6, fx.read()["tick"])
+        # a re-run with a stale tick must be loud and touch nothing
+        before = fx.raw_bytes()
+        with self.assertRaises(ValueError):
+            cc.finalize_state(self.LINE, tick=6, state_path=fx.path)
+        self.assertEqual(before, fx.raw_bytes())
+
+    def test_ts_default_uses_injected_clock(self):
+        fx = self._fx()
+        fixed = datetime.datetime(2026, 10, 11, 0, 20, 33)
+        summary = cc.finalize_state(self.LINE, state_path=fx.path, now=fixed)
+        self.assertEqual("2026-10-11 00:20:33", summary["ts"])
+        self.assertEqual(summary["ts"], fx.read()["ts"])
+
+    def test_ts_bad_shape_rejected_before_write(self):
+        fx = self._fx()
+        before = fx.raw_bytes()
+        with self.assertRaises(ValueError):
+            cc.finalize_state(self.LINE, ts="2026-10-11 00:20", state_path=fx.path)
+        self.assertEqual(before, fx.raw_bytes())
+
+    def test_watermark_add_dedup(self):
+        fx = self._fx()
+        summary = cc.finalize_state(self.LINE, state_path=fx.path,
+                                    watermark_add=["C-20261010-04",
+                                                   "D-20261010-03"])
+        self.assertEqual(1, summary["wm_added"])  # D-20261010-03 deduped
+        dnums = fx.read()["decisions_watermark"]["dnums"]
+        self.assertEqual(["D-20261010-03", "C-20261010-04"], dnums)
+        # board_rows sibling key preserved
+        self.assertEqual(28, fx.read()["decisions_watermark"]["board_rows"])
+
+    def test_verbatim_no_substitution_r1920_anchor(self):
+        """The R1920 failure class: a '@TS'-looking token in the payload.
+
+        This API has no substitution step, so the token lands verbatim -
+        visible in the ledger and in the summary lengths, never silently
+        half-replaced. The defect was never the token; it was the
+        external-template substitution pattern, banned here by design.
+        """
+        fx = self._fx()
+        line = "2026-10-11 00:1x R1927: body with @TS token and @BigStream tag"
+        cc.finalize_state(line, state_path=fx.path)
+        self.assertEqual(line, fx.read()["log"][-1])
+
+    def test_rejects_bad_log_line_and_non_list_log(self):
+        fx = self._fx()
+        before = fx.raw_bytes()
+        with self.assertRaises(ValueError):
+            cc.finalize_state("2026-10-11 garbage", state_path=fx.path)
+        with self.assertRaises(ValueError):
+            cc.finalize_state("", state_path=fx.path)
+        d = fx.read()
+        d["log"] = "not a list"
+        with open(fx.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        mid = fx.raw_bytes()
+        with self.assertRaises(ValueError):
+            cc.finalize_state(self.LINE, state_path=fx.path)
+        self.assertEqual(mid, fx.raw_bytes())  # writer touched nothing
 
 
 if __name__ == "__main__":

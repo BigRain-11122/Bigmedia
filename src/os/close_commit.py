@@ -46,10 +46,19 @@ evidence capture files.
 CLI:
     python src/os/close_commit.py --files A B C --message "..."
         [--root PATH] [--no-push] [--dry-run]
+
+tech#76 (R1920 placeholder anchor) adds finalize_state(): the single-writer
+state.json accounting step. Import-only by design (no CLI): the ledger line
+is CJK prose, and CLI args are exactly the shell-quoting/GBK pit surface -
+close scripts pass it as an in-script UTF-8 string literal instead.
 """
 
 import argparse
+import datetime
+import io
+import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -60,6 +69,13 @@ RC_USAGE = 2
 
 MSG_MAX_SOFT = 500  # P-30 one-line convention; WARN only, never fails
 PYCACHE_DIRNAME = "__pycache__"
+
+# tech#76: ledger prefix shape. Minute field is two chars - digit+digit
+# ("23:26") or digit+x ("23:5x", fuzzy-minute house style). Anything else
+# raises before the ledger is touched (born-level gate).
+LOG_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{1}[0-9x] R\d+: ")
+TASK_MAX_CHARS = 60  # mandate: task = log line minus prefix, first 60 chars
+TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 
 
 def message_is_ascii(message):
@@ -145,6 +161,137 @@ def purge_c3tmp_pycache(root, dry=False):
             # do not descend into the removed/skipped cache dir
             dirnames[:] = [d for d in dirnames if d != PYCACHE_DIRNAME]
     return purged, failed
+
+
+def derive_task(log_line):
+    """Validate the ledger prefix and derive the state ``task`` field.
+
+    mandate rule (PT-20260925-02): task = this round's log line minus the
+    "YYYY-MM-DD HH:MMx RNNNN: " prefix, first 60 chars. The prefix length
+    was previously hand-computed per close script (fragile); this is the
+    single tested implementation.
+
+    Raises ValueError when the line does not match the ledger prefix
+    shape - the born-level gate that keeps malformed lines out of the
+    permanent ledger (and, per the R1920 anchor, out of anything that
+    would silently half-substitute them).
+    """
+    m = LOG_PREFIX_RE.match(log_line)
+    if not m:
+        raise ValueError(
+            "log_line does not match ledger prefix "
+            "'YYYY-MM-DD HH:MMx RNNNN: ': %r" % (log_line[:40],))
+    return log_line[m.end():][:TASK_MAX_CHARS]
+
+
+def finalize_state(log_line, ts=None, focus=None, tick=None,
+                   watermark_add=None, state_path=None, now=None):
+    """Single-writer state.json accounting step (tech#76, R1920 anchor).
+
+    R1920 root cause: that round's log line lived in an external template
+    data file with a placeholder token; the close script substituted
+    "@TS@" while the template spelled "@TS" - the replace silently missed
+    AND the completeness assert checked the wrong token. Double error,
+    one root: the placeholder token had no single source of truth.
+
+    Authoring law encoded here: the caller passes ``log_line`` as an
+    in-script UTF-8 Python string literal. This writer performs NO
+    substitution step at all, so the placeholder failure class is
+    structurally impossible - what you pass lands in the ledger verbatim
+    (and lengths echo in the ASCII summary). External template files with
+    placeholder tokens are banned for the state accounting step.
+
+    Steps: validate log prefix shape -> derive task (60-char law) ->
+    resolve ts (explicit or injected clock, second-precision ASCII) ->
+    load state -> tick guard (explicit tick must equal on-disk tick+1;
+    default = auto-increment) -> append log line -> stamp ts/task ->
+    optional focus overwrite -> optional decisions_watermark.dnums append
+    (dedup, order-preserving) -> atomic write (temp + os.replace,
+    indent=1, UTF-8, no BOM - the on-disk house format).
+
+    Args:
+        log_line: full ledger line, e.g. "2026-10-11 00:1x R1927: ..."
+            (verbatim; no placeholders exist in this API).
+        ts: "YYYY-MM-DD HH:MM:SS" (second-precision ASCII); default=now.
+        focus: optional next-round focus string; None = leave untouched.
+        tick: optional expected new tick (double-run guard: on-disk tick
+            must equal tick-1); None = auto-increment from on-disk tick.
+        watermark_add: optional iterable of decision/council ids appended
+            to decisions_watermark.dnums (dedup, order-preserving).
+        state_path: default = state.json next to this module.
+        now: injectable clock (needs strftime) for tests.
+
+    Returns: summary dict {tick, ts, task, wm_added, log_len}.
+    Raises: ValueError on any usage error - loud, zero partial writes
+    (validation happens before the first disk mutation; the atomic
+    replace makes the write itself all-or-nothing).
+    """
+    if state_path is None:
+        state_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "state.json")
+    if not isinstance(log_line, str) or not log_line.strip():
+        raise ValueError("log_line must be a non-empty string literal")
+    task = derive_task(log_line)  # raises on bad prefix shape
+    if ts is None:
+        clock = now if now is not None else datetime.datetime.now()
+        ts = clock.strftime("%Y-%m-%d %H:%M:%S")
+    elif not isinstance(ts, str) or not TS_RE.match(ts):
+        raise ValueError("ts must match 'YYYY-MM-DD HH:MM:SS' (got %r)" % (ts,))
+    if focus is not None and (not isinstance(focus, str) or not focus.strip()):
+        raise ValueError("focus must be a non-empty string when given")
+
+    with io.open(state_path, encoding="utf-8") as f:
+        data = json.load(f)
+    if not isinstance(data.get("log"), list):
+        raise ValueError("state.json 'log' is not a list - refusing to touch")
+
+    cur = data.get("tick")
+    if not isinstance(cur, int):
+        raise ValueError("state.json tick is not an int: %r" % (cur,))
+    if tick is None:
+        new_tick = cur + 1
+    else:
+        if not isinstance(tick, int):
+            raise ValueError("tick must be an int when given")
+        if tick != cur + 1:
+            raise ValueError(
+                "tick guard: on-disk tick=%s, expected new tick=%s "
+                "(double-run or concurrent writer?)" % (cur, tick))
+        new_tick = tick
+
+    wm_added = 0
+    if watermark_add is not None:
+        wm = data.setdefault("decisions_watermark", {})
+        if not isinstance(wm, dict):
+            raise ValueError("decisions_watermark is not an object")
+        dnums = wm.setdefault("dnums", [])
+        if not isinstance(dnums, list):
+            raise ValueError("decisions_watermark.dnums is not a list")
+        for d in watermark_add:
+            if not isinstance(d, str) or not d.strip():
+                raise ValueError("watermark_add entries must be non-empty strings")
+            if d not in dnums:
+                dnums.append(d)
+                wm_added += 1
+
+    data["tick"] = new_tick
+    data["log"].append(log_line)
+    data["ts"] = ts
+    data["task"] = task
+    if focus is not None:
+        data["focus"] = focus
+
+    payload = json.dumps(data, ensure_ascii=False, indent=1)
+    tmp = state_path + ".tmp_final"
+    with io.open(tmp, "w", encoding="utf-8", newline="") as f:
+        f.write(payload)
+    os.replace(tmp, state_path)
+    # ASCII-only evidence line (encoding law; task/ts contain CJK digits text)
+    print("STATE-FINALIZED tick=%s ts=%s task_len=%d focus_set=%s "
+          "wm_added=%d log_len=%d" % (
+              new_tick, ts, len(task), focus is not None, wm_added, len(log_line)))
+    return {"tick": new_tick, "ts": ts, "task": task,
+            "wm_added": wm_added, "log_len": len(log_line)}
 
 
 def run_close_commit(files, message, root=None, push=True, dry_run=False):
