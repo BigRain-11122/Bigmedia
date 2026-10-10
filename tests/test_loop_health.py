@@ -14,6 +14,7 @@ import io
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -1000,6 +1001,138 @@ class QueueGlueTests(unittest.TestCase):
             files[path.name] = path.read_text(
                 encoding="utf-8-sig", errors="replace")
         self.assertEqual(loop_health.classify_queue_glue(files), [])
+
+
+@unittest.skipIf(shutil.which("git") is None, "git binary not available")
+class AccountUncommittedTests(unittest.TestCase):
+    """tech#61: round accounting-chain completeness guard - pure core,
+    HEAD-read seam, check face and CLI wiring. The R1893 anchor form
+    (closing stage-2 wrote the tick to disk, the round died before the
+    accounting commit) must be named; the committed clean tree, the
+    same-tick closing transient and every unreadable side stay silent."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=1892), BOARD)
+
+    def _git_repo(self, head_tick=1892, disk_tick=1893):
+        """Real-git fixture reproducing the R1893 form: state.json
+        committed at head_tick, then the on-disk copy bumped to
+        disk_tick and left uncommitted (the died-before-commit form)."""
+        root = self._repo()
+        state_path = root / "src" / "os" / "state.json"
+        state_path.write_text(
+            json.dumps(make_state(tick=head_tick), ensure_ascii=True),
+            encoding="utf-8")
+        env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
+                   GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+        for args in (["init", "-q"], ["add", "src/os/state.json"],
+                     ["commit", "-q", "-m", "state"]):
+            p = subprocess.run(["git"] + args, cwd=str(root), env=env,
+                               capture_output=True, timeout=30)
+            if p.returncode != 0:
+                self.skipTest(
+                    "git fixture unavailable: %.60s"
+                    % p.stderr.decode("utf-8", "replace"))
+        state_path.write_text(
+            json.dumps(make_state(tick=disk_tick), ensure_ascii=True),
+            encoding="utf-8")
+        return root
+
+    def _disk_state(self, root):
+        return json.loads(
+            (root / "src" / "os" / "state.json").read_text(encoding="utf-8"))
+
+    def test_r1893_anchor_form_named(self):
+        findings = loop_health.classify_account_uncommitted(1892, 1893, True)
+        self.assertEqual(warn_codes(findings), {"account-uncommitted"})
+        msg = findings[0][2]
+        self.assertIn("tick=1893", msg)
+        self.assertIn("HEAD tick=1892", msg)
+        self.assertIn("R1893", msg)
+
+    def test_committed_tree_and_same_tick_transient_silent(self):
+        # accounting committed: clean tree - judgement criterion 2
+        self.assertEqual(
+            loop_health.classify_account_uncommitted(1893, 1893, False), [])
+        # closing transient: same tick, file dirty - not the seed form
+        self.assertEqual(
+            loop_health.classify_account_uncommitted(1893, 1893, True), [])
+
+    def test_unreadable_or_backward_sides_silent(self):
+        self.assertEqual(
+            loop_health.classify_account_uncommitted(None, 1893, True), [])
+        self.assertEqual(
+            loop_health.classify_account_uncommitted(1892, None, True), [])
+        # HEAD ahead of disk is another face's disease - scope stays tight
+        self.assertEqual(
+            loop_health.classify_account_uncommitted(1895, 1893, True), [])
+
+    def test_read_head_tick_seam(self):
+        root = self._repo()
+
+        def ok(_root):
+            return json.dumps(make_state(tick=1892)).encode()
+
+        def bad_rc(_root):
+            return None
+
+        def garbage(_root):
+            return b"not json"
+        self.assertEqual(
+            loop_health.read_head_state_tick(root, show=ok), 1892)
+        self.assertIsNone(
+            loop_health.read_head_state_tick(root, show=bad_rc))
+        self.assertIsNone(
+            loop_health.read_head_state_tick(root, show=garbage))
+
+    def test_check_face_non_git_tree_silent(self):
+        # temp tree without .git: HEAD read yields None -> advisory skip
+        root = self._repo()
+        findings = []
+        loop_health.check_account_uncommitted(
+            root, make_state(tick=1893), findings)
+        self.assertEqual(findings, [])
+
+    def test_git_fixture_check_face_names(self):
+        # judgement criterion 1 at the check-face level: the committed-
+        # 1892 / disk-1893-dirty form is named
+        root = self._git_repo(head_tick=1892, disk_tick=1893)
+        findings = []
+        loop_health.check_account_uncommitted(
+            root, self._disk_state(root), findings)
+        self.assertEqual(warn_codes(findings), {"account-uncommitted"})
+
+    def test_git_fixture_committed_silent(self):
+        # judgement criterion 2 at the check-face level: committed tree
+        # (HEAD == disk, clean) yields no finding
+        root = self._git_repo(head_tick=1893, disk_tick=1893)
+        findings = []
+        loop_health.check_account_uncommitted(
+            root, self._disk_state(root), findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_on_git_fixture(self):
+        root = self._git_repo(head_tick=1892, disk_tick=1893)
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("account-uncommitted", buf.getvalue())
+        self.assertEqual(rc, 0)  # WARN-level face never fails the probe
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 3 (round-start face): in the real repo the
+        accounting is committed at round open (disk tick == HEAD tick),
+        so the guard must stay silent on the committed clean baseline.
+        Read-only: if a concurrent window is mid-closing (disk ahead),
+        the WARN is the guard working as designed - assert only that the
+        face never FAILs the probe and never crashes."""
+        findings = []
+        loop_health.check_account_uncommitted(
+            REPO, json.loads((REPO / "src" / "os" / "state.json").read_text(
+                encoding="utf-8-sig", errors="replace")), findings)
+        self.assertNotIn("account-uncommitted", fail_codes(findings))
 
 
 if __name__ == "__main__":

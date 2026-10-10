@@ -79,6 +79,12 @@ Findings:
                                    entries (R1891 anchor: seed 58 glued
                                    to entry 57 tail went unsighted five
                                    rounds; tech#60)
+  WARN  account-uncommitted     on-disk state.json tick ahead of the
+                                   git-HEAD tick with the file dirty -
+                                   closing stage-2 wrote the accounting
+                                   but the round died before the commit
+                                   (R1893 anchor; the push-missing half
+                                   is the origin_gap_check face; tech#61)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -191,6 +197,19 @@ AIHOT_PROBE_TIMEOUT_S = 4.0
 QUEUE_DIR = Path("state") / "queue"
 QUEUE_ENTRY_HEAD_RE = re.compile(r"\d{1,3}\. \[")
 QUEUE_GLUE_SHOW_N = 3  # glued lines shown per file before the "+N more" tail
+# tech#61: round accounting-chain completeness guard. R1893 anchor: the
+# two-stage closing died between its stages - tick 1893 + log + export
+# refresh + queue restock were all written to disk and left uncommitted
+# (origin ahead=1), and the next round had to absorb them. The existing
+# account faces reconcile beats vs the ON-DISK tick, so accounting that
+# was written but never committed had no reconciliation face at all. This
+# guard compares the git-HEAD state.json tick with the on-disk one: HEAD
+# behind + state.json dirty = account-uncommitted WARN (advisory per the
+# guard family law; the write->commit window inside a live round's
+# closing is a legal transient that round-open probe consumption never
+# sees). The push-missing half (committed but not pushed) stays with
+# origin_gap_check - one disease, two existing tools, no duplication.
+STATE_REL = "src/os/state.json"
 
 
 def parse_beats(path):
@@ -626,6 +645,78 @@ def check_queue_glue(root, findings):
     findings.extend(classify_queue_glue(files))
 
 
+def _git_show_state(root, _run=None):
+    """`git show HEAD:<state.json>` stdout bytes, or None on any failure
+    (not a work tree, state never committed, git missing, timeout).
+    _run is the injection seam for tests (subprocess.run signature)."""
+    if _run is None:
+        _run = subprocess.run
+    try:
+        p = _run(["git", "show", "HEAD:" + STATE_REL],
+                 cwd=str(root), capture_output=True, timeout=GIT_TIMEOUT_S)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    if p.returncode != 0:
+        return None
+    return p.stdout
+
+
+def read_head_state_tick(root, show=None):
+    """git-HEAD state.json -> tick int or None. `show` is the
+    data-provider injection seam (root -> bytes-or-None); an absent or
+    malformed HEAD copy stays None (advisory skip - the account faces
+    already FAIL a broken disk ledger; this face only reconciles two
+    readable ticks)."""
+    data = (show or _git_show_state)(root)
+    if not data:
+        return None
+    try:
+        state = json.loads(data.decode("utf-8", "replace"))
+    except ValueError:
+        return None
+    tick = state.get("tick") if isinstance(state, dict) else None
+    if isinstance(tick, int) and not isinstance(tick, bool):
+        return tick
+    return None
+
+
+def classify_account_uncommitted(head_tick, disk_tick, state_dirty):
+    """(head_tick, disk_tick, state_dirty) -> findings (pure core). The
+    R1893 anchor form names exactly one WARN: disk tick ahead of the
+    HEAD tick with state.json dirty = closing stage-2 wrote the
+    accounting but the round died before the commit. A clean tree, equal
+    ticks (the same-tick closing transient), an unreadable side (None)
+    or HEAD ahead of disk are all silent - scope is exactly the seed
+    form, nothing looser."""
+    if head_tick is None or disk_tick is None or not state_dirty:
+        return []
+    if disk_tick > head_tick:
+        return [("WARN", "account-uncommitted",
+                 "state.json tick=%d on disk > HEAD tick=%d - round "
+                 "accounting written but not committed (R1893 anchor: "
+                 "closing stage-2 died before commit; push-missing half "
+                 "= origin_gap_check face) - commit the accounting"
+                 % (disk_tick, head_tick))]
+    return []
+
+
+def check_account_uncommitted(root, state, findings):
+    """tech#61 guard face: compare the git-HEAD state.json tick with the
+    on-disk ledger and name written-but-uncommitted accounting. Enforced
+    every round by the routine probe consumption - the R1893 absorb
+    pattern is named within one round instead of being silently
+    absorbed by the next. Unusable disk ledger / unreadable HEAD copy /
+    non-git tree all stay silent (other faces own those diseases)."""
+    tick = state.get("tick") if isinstance(state, dict) else None
+    if not isinstance(tick, int) or isinstance(tick, bool):
+        return  # parse_state already FAILed the ledger
+    head_tick = read_head_state_tick(root)
+    if head_tick is None:
+        return
+    dirty = STATE_REL in _git_status_files(root)
+    findings.extend(classify_account_uncommitted(head_tick, tick, dirty))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -776,6 +867,7 @@ def main(argv):
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
         check_queue_glue(root, findings)
+        check_account_uncommitted(root, state, findings)
         check_aihot_stack(findings)
     except OSError as e:
         print("source error: %s" % e)
