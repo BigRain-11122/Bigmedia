@@ -1,0 +1,37 @@
+{
+ "dynamic_region_rid188": {
+  "code": -404,
+  "n": null
+ },
+ "newlist_rid188": {
+  "code": 0,
+  "n": 50,
+  "first_keys": [
+   "ai_rcmd",
+   "aid",
+   "attribute_v3",
+   "bvid",
+   "cid",
+   "copyright",
+   "cover43",
+   "ctime",
+   "current_state",
+   "desc",
+   "dimension",
+   "duration",
+   "dynamic",
+   "enable_vt",
+   "global_state",
+   "is_ogv",
+   "ogv_info",
+   "owner",
+   "pic",
+   "pid_name_v2"
+  ],
+  "first_title": "荣事达平面扇",
+  "first_pubdate": 1791595261,
+  "first_age_days": 0.0,
+  "age_days_min": 0.0,
+  "age_days_max": 0.0
+ }
+}

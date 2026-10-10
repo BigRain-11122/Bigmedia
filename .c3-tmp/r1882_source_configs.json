@@ -1,0 +1,18 @@
+[
+ {
+  "id": "json-bilibili-popular",
+  "raw": "json-bilibili-popular|json_list|60|t|T1_5|{\"url\": \"https://api.bilibili.com/x/web-interface/popular?ps=20&pn=1\", \"itemsPath\": \"data.list\", \"titlePaths\": [\"title\"], \"authorPaths\": [\"owner.name\"], \"urlTemplate\": \"https://www.bilibili.com/video/{raw:bvid}\", \"summaryPaths\": [\"desc\"], \"summaryIsBody\": true, \"externalIdPath\": \"bvid\", \"publishedAtPath\": \"pubdate\", \"publishedAtUnit\": \"epoch_s\"}"
+ },
+ {
+  "id": "json-zhihu-hot",
+  "raw": "json-zhihu-hot|json_list|60|t|T1_5|{\"url\": \"https://api.zhihu.com/topstory/hot-list?limit=20\", \"itemsPath\": \"data\", \"titlePaths\": [\"target.title\"], \"urlTemplate\": \"https://www.zhihu.com/question/{target.id}\", \"summaryPaths\": [\"target.excerpt\", \"detail_text\"], \"summaryIsBody\": true, \"externalIdPath\": \"target.id\", \"publishedAtPath\": \"target.created\", \"publishedAtUnit\": \"epoch_s\"}"
+ },
+ {
+  "id": "jsonl-bilibili-popular",
+  "raw": "jsonl-bilibili-popular|json_list|60|f|T2|{\"url\": \"https://api.bilibili.com/x/web-interface/popular?ps=20&pn=1\", \"_aihot\": {\"initialBackfillLimit\": 10}, \"headers\": {\"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36\"}, \"itemsPath\": \"data.list\", \"titlePaths\": [\"title\"], \"authorPaths\": [\"owner.name\"], \"urlTemplate\": \"{raw:short_link_v2}\", \"summaryPaths\": [\"desc\"], \"externalIdPath\": \"bvid\", \"publishedAtPath\": \"pubdate\", \"publishedAtUnit\": \"epoch_s\"}"
+ },
+ {
+  "id": "jsonl-zhihu-hotlist",
+  "raw": "jsonl-zhihu-hotlist|json_list|60|f|T2|{\"url\": \"https://api.zhihu.com/topstory/hot-list?limit=20\", \"_aihot\": {\"initialBackfillLimit\": 10}, \"itemsPath\": \"data\", \"titlePaths\": [\"target.title\"], \"authorPaths\": [\"target.author.name\"], \"urlTemplate\": \"https://www.zhihu.com/question/{target.id}\", \"summaryPaths\": [\"target.excerpt\"], \"externalIdPath\": \"target.id\", \"publishedAtPath\": \"target.created\", \"publishedAtUnit\": \"epoch_s\"}"
+ }
+]

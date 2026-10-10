@@ -1,0 +1,24 @@
+{
+ "ts": "2026-10-10T09:3x",
+ "steps": [
+  {
+   "id": "json-bilibili-tech",
+   "rc": 0,
+   "stdout": "INSERT 0 1",
+   "stderr": "",
+   "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=188&type=all"
+  },
+  {
+   "id": "json-bilibili-knowledge",
+   "rc": 0,
+   "stdout": "INSERT 0 1",
+   "stderr": "",
+   "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=36&type=all"
+  }
+ ],
+ "note": "v2 stdin insert after 0xbf GBK argv corruption",
+ "verify_rows": [
+  "json-bilibili-knowledge|B站知识区热榜|t|T1_5|60|t|ok",
+  "json-bilibili-tech|B站科技区热榜|t|T1_5|60|t|ok"
+ ]
+}

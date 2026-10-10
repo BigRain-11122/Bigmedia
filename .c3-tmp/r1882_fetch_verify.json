@@ -1,0 +1,16 @@
+{
+ "src_state": [
+  "json-bilibili-knowledge|2026-10-10 09:21:33.797487+08|2026-10-10 09:21:33.797487+08|none|0|ok",
+  "json-bilibili-tech|2026-10-10 09:21:33.420096+08|2026-10-10 09:21:33.420096+08|none|0|ok"
+ ],
+ "articles": [
+  "json-bilibili-knowledge|50|new",
+  "json-bilibili-tech|50|new"
+ ],
+ "runs": [
+  "json-bilibili-knowledge|ok|2026-10-10 09:21:33.52482+08",
+  "json-bilibili-tech|ok|2026-10-10 09:21:33.043459+08",
+  "json-bilibili-knowledge|ok|2026-10-10 09:18:32.838127+08",
+  "json-bilibili-tech|ok|2026-10-10 09:18:32.838016+08"
+ ]
+}
