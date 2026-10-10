@@ -1,0 +1,40 @@
+# r1922 probe evidence (waiting-round, generated 2026-10-10 23:17:10)
+== five-check: own-orders-anchor=O-20260908-1105 mtime 2026-10-08 12:08:14 (==R1733, no new order); origin_gap QUIET ahead0 behind0
+== group_scan: decisions truly_new=0 watermark 131; ledger @BigStream 4==duty anchor; HQ orders mtime 22:58:58 == R1921 consumed anchor; no index.lock
+== tree: MV sprint session-batch in-flight files expected state (R1745 zero-contact)
+== gpu gate: pause_face=clear(8/8), worst-case free 738MB band 356 < 9216 guard, util 100 > 80 -> VERDICT=NO-GO (steady saturated)
+== ollama probe: GEN-ERROR transport=TimeoutError face=busy-contended
+== viewing: meme outbound zero new (V1 mp4 not landed); frames_full N03_goddess_pass.png 23:08:37 new (new anchor); others zero new
+
+--- src/os/loop_health.py --loop (rc=1) ---
+summary: tick=1922, beats=1985 (done=1938 nonzero=36 skip=10 timeout=37 error=0), log=1958 entries, backlog=115 items 93 done (81% burn)
+- [WARN] log-order: 14 occurrence(s) 2026-10-07..2026-10-10 (dense-window fold; run without --loop for the full list)
+- [WARN] account-uncommitted: state.json tick=1922 on disk > HEAD tick=1921 - round accounting written but not committed (R1893 anchor: closing stage-2 died before commit; push-missing half = origin_gap_check face) - commit the accounting
+- [FAIL] heartbeat-outage: beat gap 49 min (2026-09-26 20:24 -> 2026-09-26 21:13) exceeds lock age 40 min - loop outage window
+- [FAIL] heartbeat-outage: beat gap 609 min (2026-09-28 10:02 -> 2026-09-28 20:11) exceeds lock age 40 min - loop outage window
+- [WARN] heartbeat-gap: 70 occurrence(s) 2026-10-07..2026-10-10, gaps 20-35 min (dense-window fold; run without --loop for the full list)
+- [WARN] account-drift-adjudicated: done beats=1938 vs tick=1922: 16 beat(s) within adjudicated drift baseline (broken-round double-body history; see state account_drift_note)
+- [INFO] suppressed: 144 historical WARN with no date on/after 2026-10-07 (--loop face; run without --loop for the full audit output)
+loop health: FAIL (2 fail, 230 warn)
+
+--- src/readiness.py --summary (rc=1) ---
+readiness summary (gen 2026-10-10 23:17)
+- accounts: 11 platforms, 0 lit beyond first state (未注册→已注册→已认证→API 可用)
+- gates: 10 drafts -> PENDING=6, PASS=4
+- renders: 78 media -> prod-slot=32, prod=6, superseded=12, disposed=2, test=26, unannot=0
+- needs-CEO: 1; suspended: 0
+- blocker: first-launch accounts not open (微信视频号, 微信公众号): opening = CEO physical action (batch order in docs/accounts.md)
+- blocker: M4 gate not green: 6/10 draft(s) not GATE PASS (M4 = publish precondition; verdicts in section 2)
+- blocker: decision pending: #17 直播推流链 BigStream 分工 (needs CEO sign-off)
+readiness: 3 blocker(s), 0 finding(s) -> NOT READY
+
+--- src/board_check.py (rc=0) ---
+board probe: ledger=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\ideas\ideas.md drafts=C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\drafts
+summary: 5 ideas, 10 drafts, 5 in production, 0 fail
+
+--- src/os/gpu_window_gate.py --samples (rc=1) ---
+pause_face=clear (tasks 2/8 disabled, 8 known)
+vram_free_mb=860 (worst-case of 4 samples, band 2MB)
+- vram-face: worst-case free 860MB < guard 9216MB
+- util-face: worst-case util 100% > gate 80%
+VERDICT=NO-GO
