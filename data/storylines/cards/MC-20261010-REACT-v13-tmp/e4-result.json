@@ -1,6 +1,6 @@
 {
-  "ts": "2026-10-10 00:15:12",
+  "ts": "2026-10-10 07:47:31",
   "model": "qwen2.5:14b",
   "material": "MC-20261010-REACT-v13 static card (cards.json + render output)",
-  "verdict": "TIMEOUT-1500s"
+  "verdict": "Error: 503 Service Unavailable: server busy, please try again.  maximum pending requests exceeded"
 }
