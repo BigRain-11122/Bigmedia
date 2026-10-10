@@ -1479,5 +1479,191 @@ class BrokenRoundDebrisTests(unittest.TestCase):
         self.assertNotIn("round-debris", fail_codes(findings))
 
 
+class ExportFaceTests(unittest.TestCase):
+    """tech#68: status-export contract guard - the R1901 anchor drift
+    (do 3406 chars / 39 outs bare strings / 67 [tick, log-line] results
+    / cap breaches) must be named face by face; the contract-form export
+    (the shape the v6.2 shaper consumes) stays silent."""
+
+    # the R1901 pre-fix anchor form (fixture reproduction, judgement
+    # criterion 1)
+    ANCHOR_EXPORT = {
+        "do": "x" * 3406,
+        "outs": ["R1901 bare string entry %d" % n for n in range(39)],
+        "chips": [["chip%d" % n, "live"] for n in range(15)],
+        "results": [[1893, "2026-10-10 full log line " + "y" * 300]
+                    for _ in range(67)],
+    }
+
+    # the post-fix contract form (the shape generate.ps1 v6.2 consumes)
+    CONTRACT_EXPORT = {
+        "do": "production open; meme V1 in flight; MV 30s reel v4 done",
+        "outs": [["reel v4 delivered", "on", "mv0001"],
+                 ["gate2 window 10-11", "wait", "gate2"]],
+        "chips": [["chip %d" % n, "live" if n % 2 else "wip"]
+                  for n in range(14)],
+        "results": [["168", "finished items"], ["712", "tests green"],
+                    ["1901", "OS rounds"], ["4/10", "M4 gate"]],
+    }
+
+    def test_r1901_anchor_names_all_four_faces(self):
+        codes = warn_codes(loop_health.classify_export_face(
+            dict(self.ANCHOR_EXPORT)))
+        self.assertEqual(codes, {"export-do", "export-outs",
+                                 "export-results", "export-caps"})
+
+    def test_contract_form_silent(self):
+        self.assertEqual(
+            loop_health.classify_export_face(dict(self.CONTRACT_EXPORT)), [])
+
+    def test_do_boundary_exact_budget_silent_one_over_warns(self):
+        ok = dict(self.CONTRACT_EXPORT, do="x" * 120)
+        self.assertEqual(
+            [f for f in loop_health.classify_export_face(ok)
+             if f[1] == "export-do"], [])
+        over = dict(self.CONTRACT_EXPORT, do="x" * 121)
+        self.assertIn("export-do",
+                      warn_codes(loop_health.classify_export_face(over)))
+        not_str = dict(self.CONTRACT_EXPORT, do=None)
+        self.assertIn("export-do",
+                      warn_codes(loop_health.classify_export_face(not_str)))
+
+    def test_outs_cell_violations_named(self):
+        bad_outs = [
+            "bare string",                    # anchor form: not a list
+            ["only-two", "on"],               # wrong arity
+            ["t" * 65, "on", "tag"],          # txt over cap
+            ["ok text", "maybe", "tag"],      # state off-enum
+            ["ok text", "on", "t" * 25],      # tag over cap
+            ["ok text", "on", 5],             # tag not a string
+        ]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, outs=bad_outs))
+        named = [f for f in findings if f[1] == "export-outs"]
+        self.assertEqual(len(named), 1)
+        self.assertIn("6/6", named[0][2])
+
+    def test_outs_boundary_and_valid_states_silent(self):
+        ok_outs = [["x" * 64, "on", "t" * 24],
+                   ["entry", "wait", "tag"],
+                   ["entry", "off", "tag"]]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, outs=ok_outs))
+        self.assertNotIn("export-outs", warn_codes(findings))
+
+    def test_results_cell_violations_named(self):
+        bad_results = [
+            [1893, "y" * 300],                # anchor: long log line
+            ["only-one"],                    # wrong arity
+            ["v" * 17, "k"],                  # v over cap
+            ["v", "k" * 15],                  # k over cap
+            [["nested"], "k"],                # v not a scalar
+            ["v", 12],                        # k not a string
+            "bare string",                    # not a list at all
+        ]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, results=bad_results))
+        named = [f for f in findings if f[1] == "export-results"]
+        self.assertEqual(len(named), 1)
+        self.assertIn("7/7", named[0][2])
+
+    def test_results_int_value_and_boundary_silent(self):
+        ok_results = [[168, "finished items"], ["x" * 16, "k" * 14]]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, results=ok_results))
+        self.assertNotIn("export-results", warn_codes(findings))
+
+    def test_caps_face_names_each_over_list(self):
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT,
+                 outs=[["ok", "on", "t"]] * 13,
+                 chips=[["c", "live"]] * 15,
+                 results=[["v", "k"]] * 5))
+        named = [f for f in findings if f[1] == "export-caps"]
+        self.assertEqual(len(named), 1)
+        for piece in ("outs 13>12", "chips 15>14", "results 5>4"):
+            self.assertIn(piece, named[0][2])
+
+    def test_caps_boundary_at_cap_silent(self):
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT,
+                 outs=[["ok", "on", "t"]] * 12,
+                 chips=[["c", "live"]] * 14,
+                 results=[["v", "k"]] * 4))
+        self.assertNotIn("export-caps", warn_codes(findings))
+
+    def test_missing_lists_silent(self):
+        # absent keys are not this face's disease (shaper shows the
+        # curated fallback; the refresh step owns presence)
+        self.assertEqual(
+            loop_health.classify_export_face({"do": "one line"}), [])
+
+    def test_parse_error_one_wholesale_warn(self):
+        findings = loop_health.classify_export_face(None, "boom")
+        self.assertEqual(warn_codes(findings), {"export-contract"})
+        self.assertIn("unparseable", findings[0][2])
+
+    def test_none_without_error_silent(self):
+        self.assertEqual(loop_health.classify_export_face(None), [])
+
+    def test_non_dict_top_level_named(self):
+        self.assertEqual(
+            warn_codes(loop_health.classify_export_face(["not", "obj"])),
+            {"export-contract"})
+
+    def test_check_face_missing_file_silent(self):
+        root = make_dir(self, "bs-export-missing-")
+        findings = []
+        loop_health.check_export_face(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_face_reads_anchor_and_names(self):
+        root = make_repo(self, [(0, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        (root / "docs").mkdir()
+        (root / "docs" / "status-export.json").write_text(
+            json.dumps(self.ANCHOR_EXPORT, ensure_ascii=True),
+            encoding="utf-8")
+        findings = []
+        loop_health.check_export_face(root, findings)
+        self.assertEqual(warn_codes(findings),
+                         {"export-do", "export-outs",
+                          "export-results", "export-caps"})
+
+    def test_check_face_unparseable_json_wholesale_warn(self):
+        root = make_repo(self, [(0, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        (root / "docs").mkdir()
+        (root / "docs" / "status-export.json").write_text(
+            "{not json", encoding="utf-8")
+        findings = []
+        loop_health.check_export_face(root, findings)
+        self.assertEqual(warn_codes(findings), {"export-contract"})
+
+    def test_cli_wiring_export_warns_never_fails(self):
+        root = make_repo(self, [(0, "round done exit=0"), (5, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        (root / "docs").mkdir()
+        (root / "docs" / "status-export.json").write_text(
+            json.dumps(self.ANCHOR_EXPORT, ensure_ascii=True),
+            encoding="utf-8")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
+        for code in ("export-do", "export-outs", "export-results",
+                     "export-caps"):
+            self.assertIn(code, buf.getvalue())
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 2: the real repo's R1901 contract rewrite
+        is compliant on every face, so the new guard stays silent -
+        read-only smoke through the check face."""
+        findings = []
+        loop_health.check_export_face(REPO, findings)
+        self.assertEqual(
+            [f for f in findings if f[1].startswith("export-")], [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

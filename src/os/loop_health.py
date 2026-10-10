@@ -237,6 +237,29 @@ C3TMP_DIR_PREFIX = ".c3-tmp/"
 C3TMP_STALE_HOURS = 48.0
 # Round-numbered middleware name convention: r<N>_<rest> under .c3-tmp/
 ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
+# tech#68: status-export contract guard. R1901 anchor: the CEO-facing
+# docs/status-export.json drifted silently for ~1700 rounds - "do" grew
+# into a 3406-char paragraph (product-priority law section 5 wants a
+# one-line current-activity), 39 outs entries degraded to bare strings
+# and 67 results entries became [tick, full-log-line] pairs, while the
+# MiniGame siliconwatch generate.ps1 v6.2 shaper silently fell back to
+# the curated face on every bad field - the board went stale with zero
+# alarm anywhere on the producing side. This guard enforces the
+# producing side so drift is named within one round, not 1700.
+# Contract constants are same-source with the generator-side caps
+# (MiniGame tools/siliconwatch generate.ps1 v6.2 field-shaping law);
+# WARN level per the guard family law (tech#22/#31/#37/#58/#60/#61/
+# #62/#64).
+EXPORT_REL = Path("docs") / "status-export.json"
+EXPORT_DO_MAX_CHARS = 120  # "current activity" is one line (law sec.5)
+EXPORT_OUT_MAX_N = 12
+EXPORT_CHIP_MAX_N = 14
+EXPORT_RES_MAX_N = 4
+EXPORT_OUT_STATES = ("on", "wait", "off")
+EXPORT_OUT_TXT_MAX = 64
+EXPORT_OUT_TAG_MAX = 24
+EXPORT_RES_V_MAX = 16
+EXPORT_RES_K_MAX = 14
 
 
 def parse_beats(path):
@@ -915,6 +938,136 @@ def check_account_uncommitted(root, state, findings):
     findings.extend(classify_account_uncommitted(head_tick, tick, dirty))
 
 
+def _export_cell_preview(entry):
+    """Compact shape description of a bad list entry for WARN text."""
+    if isinstance(entry, str):
+        return "bare string %r" % (entry[:24],)
+    if isinstance(entry, list):
+        kinds = ",".join(type(c).__name__ for c in entry)
+        return "%d-cell [%s]" % (len(entry), kinds)
+    return type(entry).__name__
+
+
+def _export_out_cell_ok(entry):
+    """[txt<=64, on|wait|off, tag<=24] triple per the v6.2 contract."""
+    if not isinstance(entry, list) or len(entry) != 3:
+        return False
+    txt, state, tag = entry
+    if not isinstance(txt, str) or not isinstance(tag, str):
+        return False
+    return (len(txt) <= EXPORT_OUT_TXT_MAX
+            and state in EXPORT_OUT_STATES
+            and len(tag) <= EXPORT_OUT_TAG_MAX)
+
+
+def _export_result_cell_ok(entry):
+    """[v<=16, k<=14] short value/key pair per the v6.2 contract."""
+    if not isinstance(entry, list) or len(entry) != 2:
+        return False
+    v, k = entry
+    if isinstance(v, bool) or not isinstance(v, (str, int)):
+        return False
+    if not isinstance(k, str):
+        return False
+    return len(str(v)) <= EXPORT_RES_V_MAX and len(k) <= EXPORT_RES_K_MAX
+
+
+def classify_export_face(data, parse_err=""):
+    """(parsed-export-or-None, parse_err) -> findings (pure core). The
+    R1901 anchor form: the export drifted for ~1700 rounds because the
+    consuming shaper falls back to the curated face on every bad field,
+    so no alarm fired anywhere. Faces named here, one WARN per face:
+    "do" over the one-line budget (product-priority law section 5),
+    outs entries that are not well-formed 3-cell [txt, on|wait|off,
+    tag] arrays, results entries that are not [v<=16, k<=14] short
+    value/key pairs, and any of the three lists over its entry cap. A
+    parse failure or non-object top level is one WARN (the shaper
+    falls back wholesale). None without an error (missing export) is
+    silent - the export freshness step owns that disease. Clean exports
+    yield no findings (silent PASS like the other guard faces)."""
+    if parse_err:
+        return [("WARN", "export-contract",
+                 "status-export.json unparseable (%.60s) - the v6.2 "
+                 "shaper falls back to the curated face wholesale, the "
+                 "board goes stale with zero alarm - fix the writer"
+                 % parse_err)]
+    if data is None:
+        return []
+    if not isinstance(data, dict):
+        return [("WARN", "export-contract",
+                 "status-export.json top level is %s, want an object - "
+                 "the shaper falls back wholesale; fix the writer"
+                 % type(data).__name__)]
+    findings = []
+    do = data.get("do")
+    if not isinstance(do, str) or len(do) > EXPORT_DO_MAX_CHARS:
+        findings.append(("WARN", "export-do",
+                         '"do" is %s (want a one-line string <= %d '
+                         "chars, product-priority law section 5) - the "
+                         "shaper truncates or drops it; write the "
+                         "current activity as ONE line"
+                         % (("%d chars" % len(do)) if isinstance(do, str)
+                            else "not a string", EXPORT_DO_MAX_CHARS)))
+    outs = data.get("outs")
+    if isinstance(outs, list):
+        bad = [e for e in outs if not _export_out_cell_ok(e)]
+        if bad:
+            findings.append(("WARN", "export-outs",
+                             "%d/%d outs entries are not well-formed "
+                             "3-cell [txt<=64, on|wait|off, tag<=24] "
+                             "arrays (first: %s) - the v6.2 shaper drops "
+                             "every bad entry to the curated fallback, "
+                             "the CEO board goes stale entry by entry "
+                             "(R1901 anchor: 39/39 bare strings); write "
+                             "outs as 3-cell arrays"
+                             % (len(bad), len(outs),
+                                _export_cell_preview(bad[0]))))
+    results = data.get("results")
+    if isinstance(results, list):
+        bad = [e for e in results if not _export_result_cell_ok(e)]
+        if bad:
+            findings.append(("WARN", "export-results",
+                             "%d/%d results entries are not [v<=16, "
+                             "k<=14] short value/key pairs (first: %s) - "
+                             "the R1901 anchor form [tick, full log "
+                             "line] made the CEO board render raw log "
+                             "lines; keep results as short readouts"
+                             % (len(bad), len(results),
+                                _export_cell_preview(bad[0]))))
+    over = []
+    for key, cap in (("outs", EXPORT_OUT_MAX_N),
+                     ("chips", EXPORT_CHIP_MAX_N),
+                     ("results", EXPORT_RES_MAX_N)):
+        entries = data.get(key)
+        if isinstance(entries, list) and len(entries) > cap:
+            over.append("%s %d>%d" % (key, len(entries), cap))
+    if over:
+        findings.append(("WARN", "export-caps",
+                         "%d list(s) over the v6.2 entry caps: %s - the "
+                         "shaper truncates silently; trim to the caps"
+                         % (len(over), ", ".join(over))))
+    return findings
+
+
+def check_export_face(root, findings):
+    """tech#68 guard face: parse docs/status-export.json and name the
+    v6.2 contract violations (do budget / outs cells / results cells /
+    entry caps). Enforced every round by the routine probe consumption -
+    export drift is named within one round instead of 1700. A missing
+    export file stays silent (the export refresh step owns that
+    disease)."""
+    path = root / EXPORT_REL
+    if not path.is_file():
+        return
+    try:
+        data = json.loads(path.read_text(encoding="utf-8-sig",
+                                         errors="replace"))
+        err = ""
+    except (OSError, ValueError) as e:
+        data, err = None, str(e)
+    findings.extend(classify_export_face(data, err))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -1069,6 +1222,7 @@ def main(argv):
         check_queue_glue(root, findings)
         check_queue_dup_numbers(root, findings)
         check_account_uncommitted(root, state, findings)
+        check_export_face(root, findings)
         check_aihot_stack(findings)
     except OSError as e:
         print("source error: %s" % e)
