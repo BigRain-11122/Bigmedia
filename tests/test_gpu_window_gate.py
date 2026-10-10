@@ -1,8 +1,9 @@
-"""Tests for src/os/gpu_window_gate.py (tech#57)."""
+"""Tests for src/os/gpu_window_gate.py (tech#57 + tech#75 stability face)."""
 
 import contextlib
 import importlib.util
 import io
+import json
 import os
 import sys
 import unittest
@@ -146,6 +147,215 @@ class CliTests(unittest.TestCase):
             rc, out = self._run_main(["--json"])
         self.assertEqual(rc, 2)
         self.assertIn("null", out)
+
+
+class ReadGpuSampleTests(unittest.TestCase):
+    def test_parse_ok(self):
+        with mock.patch.object(gate, "_run_capture",
+                               return_value="12288, 3278, 68\n"):
+            r = gate.read_gpu_sample()
+        self.assertEqual(r, {"free": 9010, "util": 68})
+
+    def test_multi_gpu_first_row(self):
+        with mock.patch.object(gate, "_run_capture",
+                               return_value="12288, 4000, 25\n12288, 0, 0\n"):
+            r = gate.read_gpu_sample()
+        self.assertEqual(r, {"free": 8288, "util": 25})
+
+    def test_probe_failure_none(self):
+        with mock.patch.object(gate, "_run_capture", return_value=None):
+            self.assertIsNone(gate.read_gpu_sample())
+        with mock.patch.object(gate, "_run_capture", return_value="junk\n"):
+            self.assertIsNone(gate.read_gpu_sample())
+        with mock.patch.object(gate, "_run_capture", return_value="1,2\n"):
+            self.assertIsNone(gate.read_gpu_sample())
+
+
+class SampleGpuTests(unittest.TestCase):
+    def test_counts_and_sleep_injection(self):
+        calls = []
+
+        def sampler():
+            calls.append(1)
+            return {"free": 100, "util": 5}
+
+        sleeps = []
+
+        def sleep_fn(s):
+            sleeps.append(s)
+
+        readings, n_fail = gate.sample_gpu(3, 5, sampler=sampler,
+                                           sleep_fn=sleep_fn)
+        self.assertEqual(len(readings), 3)
+        self.assertEqual(n_fail, 0)
+        self.assertEqual(sleeps, [5, 5])  # n-1 sleeps
+
+    def test_failures_counted_not_fabricated(self):
+        seq = [{"free": 100, "util": 5}, None, {"free": 90, "util": 9}]
+
+        def sampler():
+            return seq.pop(0) if seq else None
+
+        readings, n_fail = gate.sample_gpu(3, 0, sampler=sampler,
+                                          sleep_fn=lambda s: None)
+        self.assertEqual(len(readings), 2)
+        self.assertEqual(n_fail, 1)
+
+
+class AggregateGpuReadingsTests(unittest.TestCase):
+    def test_r1917_anchor_shape(self):
+        # R1917 real readings: 3278 <-> 11692 swing, band 8414
+        agg = gate.aggregate_gpu_readings([
+            {"free": 9010, "util": 68}, {"free": 610, "util": 77},
+        ])
+        self.assertEqual(agg["free_min"], 610)
+        self.assertEqual(agg["free_max"], 9010)
+        self.assertEqual(agg["band_mb"], 8400)
+        self.assertEqual(agg["util_max"], 77)
+        self.assertEqual(agg["read_ok"], 2)
+        self.assertEqual(agg["read_fail"], 0)
+
+    def test_empty_none(self):
+        self.assertIsNone(gate.aggregate_gpu_readings([], 3))
+
+    def test_single_reading_band_zero(self):
+        agg = gate.aggregate_gpu_readings([{"free": 9010, "util": 68}])
+        self.assertEqual(agg["band_mb"], 0)
+
+    def test_util_missing_column(self):
+        agg = gate.aggregate_gpu_readings([{"free": 100}])
+        self.assertIsNone(agg["util_max"])
+
+
+class DecideStabilityTests(unittest.TestCase):
+    def test_worst_case_min_fails_no_go(self):
+        v = gate.decide("clear", 610, 2048, sampled=True,
+                        band_mb=8400, max_util=77, util_max=80)
+        self.assertFalse(v["go"])
+        self.assertTrue(any("worst-case" in r for r in v["reasons"]))
+
+    def test_band_advisory_present_but_go(self):
+        v = gate.decide("clear", 9010, 2048, sampled=True,
+                        band_mb=2048, max_util=77, util_max=80)
+        self.assertTrue(v["go"])
+        self.assertTrue(any("vram-band advisory" in r
+                            for r in v["reasons"]))
+
+    def test_band_below_threshold_no_advisory(self):
+        v = gate.decide("clear", 9010, 2048, sampled=True,
+                        band_mb=2047, max_util=77, util_max=80)
+        self.assertTrue(v["go"])
+        self.assertFalse(any("vram-band advisory" in r
+                             for r in v["reasons"]))
+
+    def test_util_gate_strict_boundary(self):
+        self.assertTrue(gate.decide("clear", 9010, 2048, sampled=True,
+                                    max_util=80, util_max=80)["go"])
+        self.assertFalse(gate.decide("clear", 9010, 2048, sampled=True,
+                                      max_util=81, util_max=80)["go"])
+
+    def test_util_unreadable_with_gate_conservative(self):
+        v = gate.decide("clear", 9010, 2048, sampled=True,
+                        max_util=None, util_max=80)
+        self.assertFalse(v["go"])
+        self.assertTrue(any("util-face" in r for r in v["reasons"]))
+
+    def test_read_fail_note(self):
+        v = gate.decide("clear", 9010, 2048, sampled=True,
+                        band_mb=0, read_fail=2)
+        self.assertTrue(v["go"])
+        self.assertTrue(any("2 probe sample(s) failed" in r
+                            for r in v["reasons"]))
+
+    def test_legacy_call_signature_unchanged(self):
+        # 3-arg call = pre-tech#75 behavior, no new reason text
+        v = gate.decide("clear", 10000, 9216)
+        self.assertTrue(v["go"])
+        self.assertEqual(len(v["reasons"]), 1)
+        self.assertIn("both faces clear", v["reasons"][0])
+
+
+class CliStabilityTests(unittest.TestCase):
+    def _run_main(self, argv):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = gate.main(argv)
+        return rc, buf.getvalue()
+
+    def _clear_tasks(self):
+        return {t: False for t in gate.MACHINE_STATE_TASKS}
+
+    def test_samples_go_json_fields(self):
+        readings = [{"free": 9010, "util": 68}, {"free": 8900, "util": 75},
+                    {"free": 9050, "util": 60}]
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_gpu_sample",
+                               side_effect=list(readings)), \
+             mock.patch.object(gate, "time") as mt:
+            mt.sleep = lambda s: None
+            rc, out = self._run_main(
+                ["--samples", "3", "--min-free-mb", "2048",
+                 "--util-max", "80", "--json"])
+        self.assertEqual(rc, 0)
+        row = json.loads(out)
+        self.assertTrue(row["go"])
+        self.assertEqual(row["free_min_mb"], 8900)
+        self.assertEqual(row["band_mb"], 150)
+        self.assertEqual(row["util_max"], 75)
+        self.assertEqual(row["read_ok"], 3)
+
+    def test_samples_worst_case_no_go(self):
+        readings = [{"free": 9010, "util": 68}, {"free": 610, "util": 77}]
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_gpu_sample",
+                               side_effect=list(readings)), \
+             mock.patch.object(gate, "time") as mt:
+            mt.sleep = lambda s: None
+            rc, out = self._run_main(
+                ["--samples", "2", "--min-free-mb", "2048", "--json"])
+        self.assertEqual(rc, 1)
+        row = json.loads(out)
+        self.assertFalse(row["go"])
+        self.assertEqual(row["free_min_mb"], 610)
+        self.assertTrue(any("worst-case" in r for r in row["reasons"]))
+
+    def test_samples_all_fail_probe_blind(self):
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_gpu_sample",
+                               return_value=None), \
+             mock.patch.object(gate, "time") as mt:
+            mt.sleep = lambda s: None
+            rc, out = self._run_main(["--samples", "3", "--json"])
+        self.assertEqual(rc, 1)  # pause clear + vram unreadable -> NO-GO
+        row = json.loads(out)
+        self.assertFalse(row["go"])
+
+    def test_util_max_single_sample_uses_sampled_path(self):
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_gpu_sample",
+                               return_value={"free": 9010, "util": 95}):
+            rc, out = self._run_main(
+                ["--min-free-mb", "2048", "--util-max", "80"])
+        self.assertEqual(rc, 1)
+        self.assertIn("util-face", out)
+
+    def test_legacy_path_untouched(self):
+        # no --samples/--util-max: single-sample read via read_vram_free_mb
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=11000):
+            rc, out = self._run_main([])
+        self.assertEqual(rc, 0)
+        self.assertIn("VERDICT=GO", out)
+
+    def test_bad_samples_arg(self):
+        with self.assertRaises(SystemExit):
+            gate.main(["--samples", "0"])
 
 
 if __name__ == "__main__":

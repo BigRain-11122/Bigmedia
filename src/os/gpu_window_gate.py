@@ -19,6 +19,17 @@ Faces:
               (e.g. MiniGameOllamaKeepWarm was Disabled pre-pause, R1878).
   vram_face:  nvidia-smi free MB < --min-free-mb -> NO-GO
               (default 9216 = MD-0002 script-leg guard line).
+  stability:  tech#75 face (R1917 anchor): under a co-lane load cycle
+              (MV sprint Krea2 gen cycles swing free 3278<->11692 MB on a
+              seconds scale) a single-sample free reading is unreliable --
+              a 1500s review flight spans many cycles. --samples N takes N
+              consecutive readings --sample-interval seconds apart and the
+              verdict uses the WORST-CASE (min) free / (max) util.
+              Band (max-min) is reported and >= VRAM_BAND_ADVISE_MB adds an
+              advisory reason (oscillating regime; long-flight contention
+              risk) without changing the verdict on its own.
+  util_face:  --util-max P adds a compute gate (tech#75 three-gate member):
+              worst-case util > P -> NO-GO (boundary strict, tech#44 parity).
 
 Exit codes: 0=GO, 1=NO-GO, 2=probe error (both faces unknown).
 Consumed at GPU window judgment rounds (12:00-type); zero GPU work itself.
@@ -28,6 +39,7 @@ import argparse
 import json
 import subprocess
 import sys
+import time
 
 # machine-state.ps1 LOCALIZE-1 task list (bm-a deploy face, r798 kit)
 MACHINE_STATE_TASKS = [
@@ -44,6 +56,11 @@ MACHINE_STATE_TASKS = [
 # >=6/8 disabled = pause fingerprint; 4-5 = ambiguous (conservative NO-GO)
 PAUSE_FINGERPRINT_MIN = 6
 PAUSE_AMBIGUOUS_MIN = 4
+
+# tech#75 stability face: sampled free band >= this (MB) within the sampling
+# window -> oscillating-regime advisory (R1917 anchor band was 8414MB:
+# 3278 <-> 11692 swing between two probes ~110s apart).
+VRAM_BAND_ADVISE_MB = 2048
 
 
 def _run_capture(cmd, timeout=10):
@@ -135,8 +152,86 @@ def read_vram_free_mb():
     return total - used
 
 
-def decide(pause_label, free_mb, min_free_mb):
-    """Compose the two faces -> verdict dict (go bool + reasons)."""
+def read_gpu_sample():
+    """One nvidia-smi query -> {'free': MB, 'util': pct} or None.
+
+    Single query carries both the VRAM and the compute columns so a sampled
+    window never doubles the probe cost (tech#54 read_gpu_context parity).
+    """
+    out = _run_capture(
+        ["nvidia-smi",
+         "--query-gpu=memory.total,memory.used,utilization.gpu",
+         "--format=csv,noheader,nounits"],
+        timeout=15,
+    )
+    if not out:
+        return None
+    first = out.strip().splitlines()[0]
+    parts = [p.strip() for p in first.split(",")]
+    if len(parts) < 3:
+        return None
+    try:
+        total, used = int(parts[0]), int(parts[1])
+        util = int(parts[2])
+    except ValueError:
+        return None
+    return {"free": total - used, "util": util}
+
+
+def sample_gpu(n, interval, sampler=None, sleep_fn=None):
+    """Take n consecutive GPU readings, `interval` seconds apart.
+
+    Returns (readings, n_fail): readings = list of {'free','util'} dicts
+    (successful probes only), n_fail = probe failure count (honest note,
+    never fabricated as data). sleep_fn injectable for tests.
+    """
+    if sampler is None:
+        sampler = read_gpu_sample
+    if sleep_fn is None:
+        sleep_fn = time.sleep
+    readings = []
+    n_fail = 0
+    for i in range(n):
+        if i > 0 and interval > 0:
+            sleep_fn(interval)
+        r = sampler()
+        if r is None:
+            n_fail += 1
+        else:
+            readings.append(r)
+    return readings, n_fail
+
+
+def aggregate_gpu_readings(readings, n_fail=0):
+    """Pure core: aggregate sampled readings -> worst-case stats dict.
+
+    Returns {'free_min','free_max','band_mb','util_max','read_ok','read_fail'}
+    or None when no reading succeeded (probe-unreadable face).
+    """
+    if not readings:
+        return None
+    frees = [r["free"] for r in readings]
+    utils = [r.get("util") for r in readings if r.get("util") is not None]
+    return {
+        "free_min": min(frees),
+        "free_max": max(frees),
+        "band_mb": max(frees) - min(frees),
+        "util_max": max(utils) if utils else None,
+        "read_ok": len(readings),
+        "read_fail": n_fail,
+    }
+
+
+def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
+           band_mb=None, read_fail=None, sampled=False):
+    """Compose the faces -> verdict dict (go bool + reasons).
+
+    Backward-compatible: the extra kwargs default to None and the
+    single-sample path (legacy callers/tests) is behavior-identical.
+    Sampled path: free_mb must be the WORST-CASE (min) reading; band_mb /
+    read_fail add honest notes; util_max adds the compute gate
+    (worst-case max_util; boundary strict, tech#44 parity).
+    """
     reasons = []
     go = True
     if pause_label == "pause-fingerprint":
@@ -155,14 +250,51 @@ def decide(pause_label, free_mb, min_free_mb):
             reasons.append("vram-face: probe-unreadable (cannot verify)")
     elif free_mb < min_free_mb:
         go = False
+        if sampled:
+            reasons.append(
+                "vram-face: worst-case free %dMB < guard %dMB"
+                % (free_mb, min_free_mb)
+            )
+        else:
+            reasons.append(
+                "vram-face: free %dMB < guard %dMB" % (free_mb, min_free_mb)
+            )
+    if util_max is not None:
+        if max_util is None:
+            go = False
+            reasons.append(
+                "util-face: probe-unreadable (cannot verify max %d%%)"
+                % util_max
+            )
+        elif max_util > util_max:
+            go = False
+            reasons.append(
+                "util-face: worst-case util %d%% > gate %d%%"
+                % (max_util, util_max)
+            )
+    if sampled and band_mb is not None and band_mb >= VRAM_BAND_ADVISE_MB:
         reasons.append(
-            "vram-face: free %dMB < guard %dMB" % (free_mb, min_free_mb)
+            "vram-band advisory: free oscillates band %dMB within sampling "
+            "window (>= %dMB) -- sec-scale load-cycle regime, long-flight "
+            "contention risk (tech#75/R1917 anchor)" % (band_mb,
+                                                        VRAM_BAND_ADVISE_MB)
+        )
+    if read_fail:
+        reasons.append(
+            "vram-face note: %d probe sample(s) failed; verdict on "
+            "measured samples only" % read_fail
         )
     if go:
-        reasons.append(
-            "both faces clear (pause-face clear, vram free %sMB >= %dMB)"
-            % (free_mb, min_free_mb)
-        )
+        if sampled:
+            reasons.append(
+                "faces clear (pause-face clear, worst-case free %sMB >= "
+                "%dMB across samples)" % (free_mb, min_free_mb)
+            )
+        else:
+            reasons.append(
+                "both faces clear (pause-face clear, vram free %sMB >= %dMB)"
+                % (free_mb, min_free_mb)
+            )
     return {"go": go, "pause_face": pause_label,
             "vram_free_mb": free_mb, "min_free_mb": min_free_mb,
             "reasons": reasons}
@@ -172,25 +304,70 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--min-free-mb", type=int, default=9216,
                     help="VRAM free guard line in MB (default 9216)")
+    ap.add_argument("--samples", type=int, default=1,
+                    help="consecutive nvidia-smi readings for the stability "
+                         "face (tech#75); 1 = legacy single-sample path")
+    ap.add_argument("--sample-interval", type=int, default=5,
+                    help="seconds between samples (samples > 1 only)")
+    ap.add_argument("--util-max", type=int, default=None,
+                    help="compute gate: worst-case util %% must be <= this "
+                         "(tech#75 three-gate member; boundary strict)")
     ap.add_argument("--json", action="store_true",
                     help="single machine-readable line")
     args = ap.parse_args(argv)
+    if args.samples < 1:
+        ap.error("--samples must be >= 1")
+    if args.sample_interval < 0:
+        ap.error("--sample-interval must be >= 0")
 
     states = query_task_states()
     pause_label, dis, tot, known = classify_pause_face(states)
-    free_mb = read_vram_free_mb()
-    verdict = decide(pause_label, free_mb, args.min_free_mb)
+
+    max_util = None
+    band_mb = None
+    read_fail = None
+    sampled = args.samples > 1
+    if sampled or args.util_max is not None:
+        readings, read_fail = sample_gpu(
+            args.samples, args.sample_interval)
+        agg = aggregate_gpu_readings(readings, read_fail)
+        if agg is None:
+            free_mb = None
+        else:
+            free_mb = agg["free_min"]
+            max_util = agg["util_max"]
+            band_mb = agg["band_mb"]
+        sampled = True
+    else:
+        free_mb = read_vram_free_mb()
+    verdict = decide(pause_label, free_mb, args.min_free_mb,
+                     util_max=args.util_max, max_util=max_util,
+                     band_mb=band_mb, read_fail=read_fail,
+                     sampled=sampled)
     verdict["tasks_disabled"] = dis
     verdict["tasks_total"] = tot
     verdict["tasks_known"] = known
+    if sampled:
+        verdict["samples"] = args.samples
+        verdict["free_min_mb"] = free_mb
+        if band_mb is not None:
+            verdict["free_max_mb"] = agg["free_max"]
+            verdict["band_mb"] = band_mb
+            verdict["util_max"] = max_util
+            verdict["read_ok"] = agg["read_ok"]
+            verdict["read_fail"] = agg["read_fail"]
 
     if args.json:
         print(json.dumps(verdict, ensure_ascii=False))
     else:
         print("pause_face=%s (tasks %d/%d disabled, %d known)"
               % (pause_label, dis, tot, known))
-        print("vram_free_mb=%s guard=%d"
-              % (free_mb, args.min_free_mb))
+        if sampled:
+            print("vram_free_mb=%s (worst-case of %d samples, band %sMB)"
+                  % (free_mb, args.samples, band_mb))
+        else:
+            print("vram_free_mb=%s guard=%d"
+                  % (free_mb, args.min_free_mb))
         for r in verdict["reasons"]:
             print("- %s" % r)
         print("VERDICT=%s" % ("GO" if verdict["go"] else "NO-GO"))

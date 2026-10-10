@@ -1,0 +1,1 @@
+{"go": false, "pause_face": "clear", "vram_free_mb": 520, "min_free_mb": 2048, "reasons": ["vram-face: worst-case free 520MB < guard 2048MB", "util-face: worst-case util 100% > gate 80%"], "tasks_disabled": 0, "tasks_total": 8, "tasks_known": 8, "samples": 6, "free_min_mb": 520, "free_max_mb": 535, "band_mb": 15, "util_max": 100, "read_ok": 6, "read_fail": 0}
