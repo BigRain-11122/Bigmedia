@@ -425,6 +425,86 @@ class ClassifyProducersTests(unittest.TestCase):
         self.assertEqual(len(att["producers"]), 2)
 
 
+class ProducerNoiseFoldTests(unittest.TestCase):
+    """tech#80: GUI tray/launcher shells fold to other before whitelist.
+
+    R1930 live anchor: unityvcstray.exe (PlasticSCM tray) matched the
+    "unity" producer pattern; Tuanjie Hub.exe (launcher shell) matched
+    "tuanjie" -- both GUI noise, not VRAM producers.
+    """
+
+    def test_r1930_anchor_tray_and_hub_fold(self):
+        rows = [
+            {"pid": 40564, "process":
+             r"C:\Program Files\PlasticSCM5\client\unityvcstray.exe"},
+            {"pid": 37376, "process":
+             r"C:\Program Files\Tuanjie Hub\Tuanjie Hub.exe"},
+            {"pid": 58200, "process":
+             r"C:\Users\sjs20\comfyui-krea\ComfyUI_windows_portable"
+             r"\python_embeded\python.exe"},
+            {"pid": 38828, "process":
+             r"C:\Program Files\Tuanjie\Hub\Editor\2022.3.55t4\Editor"
+             r"\Tuanjie.exe"},
+            {"pid": 60536, "process":
+             r"C:\Users\sjs20\AppData\Local\Programs\Ollama\lib"
+             r"\ollama\llama-server.exe"},
+        ]
+        att = gate.classify_producers(rows)
+        self.assertEqual([p["pid"] for p in att["producers"]],
+                         [58200, 38828, 60536])
+        self.assertEqual(att["other"], 2)
+        self.assertEqual(att["raw"], 5)
+
+    def test_noise_matches_basename_not_directory(self):
+        # R1931 first-cut anchor: matching "hub" against the FULL path
+        # false-folded the real Tuanjie editor (installed under
+        # \Hub\Editor\); noise must read the exe basename only.
+        att = gate.classify_producers([
+            {"pid": 38828, "process":
+             r"C:\Program Files\Tuanjie\Hub\Editor\2022.3.55t4\Editor"
+             r"\Tuanjie.exe"},
+            {"pid": 37376, "process":
+             r"C:\Program Files\Tuanjie Hub\Tuanjie Hub.exe"},
+        ])
+        self.assertEqual([p["pid"] for p in att["producers"]], [38828])
+        self.assertEqual(att["other"], 1)
+
+    def test_noise_case_insensitive(self):
+        att = gate.classify_producers(
+            [{"pid": 1, "process": "UNITYVCSTRAY.EXE"},
+             {"pid": 2, "process": "Tuanjie HUB.exe"},
+             {"pid": 3, "process": "python.exe"}])
+        self.assertEqual([p["pid"] for p in att["producers"]], [3])
+        self.assertEqual(att["other"], 2)
+
+    def test_noise_override_empty_restores_legacy_face(self):
+        att = gate.classify_producers(
+            [{"pid": 9, "process": "unityvcstray.exe"},
+             {"pid": 10, "process": "python.exe"}],
+            noise=())
+        # raw-whitelist face for callers who want the unfiltered read
+        self.assertEqual([p["pid"] for p in att["producers"]], [9, 10])
+        self.assertEqual(att["other"], 0)
+
+    def test_custom_noise_list_param(self):
+        att = gate.classify_producers(
+            [{"pid": 1, "process": "myhub-python.exe"},
+             {"pid": 2, "process": "python.exe"},
+             {"pid": 3, "process": "trayapp.exe"}],
+            noise=("hub",))
+        self.assertEqual([p["pid"] for p in att["producers"]], [2])
+        self.assertEqual(att["other"], 2)
+
+    def test_noise_row_not_matching_producers_also_folds(self):
+        # noise check runs before the whitelist: a noise row that would
+        # not have matched producers folds the same way (no double path)
+        att = gate.classify_producers(
+            [{"pid": 5, "process": "SystemTray.exe"},
+             {"pid": 6, "process": "python.exe"}])
+        self.assertEqual([p["pid"] for p in att["producers"]], [6])
+        self.assertEqual(att["other"], 1)
+
+
 class CliAttributionTests(unittest.TestCase):
     def _run_main(self, argv):
         buf = io.StringIO()
@@ -469,6 +549,28 @@ class CliAttributionTests(unittest.TestCase):
             rc, out = self._run_main(["--json"])
         self.assertEqual(rc, 0)
         self.assertNotIn("attribution", json.loads(out))
+
+    def test_no_go_attribution_folds_tray_noise(self):
+        # tech#80 CLI integration: tray shell never reaches producers
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=100), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=[
+                                   {"pid": 40564,
+                                    "process": "unityvcstray.exe"},
+                                   {"pid": 58200,
+                                    "process": "python.exe"},
+                                   {"pid": 999,
+                                    "process": "dwm.exe"}]):
+            rc, out = self._run_main(["--json"])
+        self.assertEqual(rc, 1)
+        row = json.loads(out)
+        att = row["attribution"]
+        self.assertEqual([p["pid"] for p in att["producers"]], [58200])
+        self.assertEqual(att["other"], 2)
+        self.assertEqual(att["raw"], 3)
 
     def test_no_go_unreadable_error_note(self):
         with mock.patch.object(gate, "query_task_states",

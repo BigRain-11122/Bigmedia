@@ -230,6 +230,18 @@ def aggregate_gpu_readings(readings, n_fail=0):
 PRODUCER_PATTERNS = ("python", "llama", "ollama", "tuanjie", "unity",
                      "comfy")
 
+# tech#80: GUI-noise exclusion (advisory face only). Families that can
+# FALSE-match a producer pattern are folded to other BEFORE the whitelist
+# check -- R1930 live anchor: PlasticSCM "unityvcstray.exe" matched the
+# "unity" pattern, "Tuanjie Hub.exe" matched "tuanjie"; both are tray /
+# launcher shells, not VRAM producers. Noise is matched against the
+# executable BASENAME only: the families are exe-name traits, and a
+# full-path match false-folds real producers installed under e.g.
+# C:\Program Files\Tuanjie\Hub\Editor\... (R1931 first-cut anchor).
+# GUI rows that can never match a producer pattern already fold
+# naturally, so the list stays minimal (tray/hub).
+GUI_NOISE_PATTERNS = ("tray", "hub")
+
 
 def query_compute_apps(timeout=10):
     """nvidia-smi --query-compute-apps -> [{'pid','process'}] or None.
@@ -254,17 +266,26 @@ def query_compute_apps(timeout=10):
     return rows
 
 
-def classify_producers(rows, patterns=None):
+def classify_producers(rows, patterns=None, noise=None):
     """Fold compute-app rows -> attribution dict (advisory only).
 
-    Whitelist-matched processes are listed with pid; everything else folds
+    Whitelist-matched processes are listed with pid; GUI-noise rows
+    (tray/launcher shells -- GUI_NOISE_PATTERNS) and everything else fold
     into a single other count so GUI noise never floods the reading.
+    ``noise=()`` restores the raw-whitelist face (no exclusion).
     """
     pats = PRODUCER_PATTERNS if patterns is None else tuple(patterns)
+    npats = GUI_NOISE_PATTERNS if noise is None else tuple(noise)
     producers = []
     other = 0
     for r in rows:
         name = r["process"].lower()
+        # noise families are exe-name traits: match basename only, else
+        # directory names (\Hub\Editor\) false-fold real producers.
+        tail = name.replace("/", "\\").split("\\")[-1]
+        if any(n in tail for n in npats):
+            other += 1
+            continue
         if any(p in name for p in pats):
             producers.append(r)
         else:

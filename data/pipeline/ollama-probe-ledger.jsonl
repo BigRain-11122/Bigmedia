@@ -34,3 +34,4 @@
 {"ts": "2026-10-11 00:06:58", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "1934", "face": "busy-contended"}
 {"ts": "2026-10-11 00:34:51", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "1867", "face": "busy-contended"}
 {"ts": "2026-10-11 00:42:44", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "95", "gpu_mem": "1843", "face": "busy-contended"}
+{"ts": "2026-10-11 01:44:42", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "55", "gpu_mem": "1526", "face": "ok", "ps_size_vram": null, "offloaded_resident": false}
