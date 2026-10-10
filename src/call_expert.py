@@ -33,7 +33,9 @@ probe headroom before takeoff:
     if defer and not FORCE: sys.exit(...)  # print reason first
 
 The guard is advisory: a missing/failing nvidia-smi probe never blocks,
-and --gpu-force overrides the CLI gate.
+and --gpu-force overrides the CLI gate. Every DEFER also lands one
+JSONL row in data/pipeline/gpu-guard-defer-ledger.jsonl (tech#89
+fire->defer conversion telemetry; best-effort, never blocks the defer).
 
 --timeout S (tech#45): per-call subprocess timeout in seconds, default
 300 (DEFAULT_TIMEOUT) - existing surface unchanged. The S1/E4 long-
@@ -58,6 +60,7 @@ REPO = Path(__file__).resolve().parents[1]
 REGISTRY = REPO / "data" / "experts" / "registry.json"
 LEDGER = REPO / "docs" / "reviews" / "expert-calls.md"
 VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
+DEFER_LEDGER = REPO / "data" / "pipeline" / "gpu-guard-defer-ledger.jsonl"
 DEFAULT_TIMEOUT = 300
 # GPU pre-flight guard thresholds (tech#44): defer when the card is
 # clearly occupied by another lane (training/render window) or when
@@ -153,6 +156,42 @@ def defer_decision(reading, util_threshold=GPU_DEFER_UTIL_PCT,
         return True, "gpu free %dMB < %dMB" % (
             reading["free_mb"], free_threshold)
     return False, ""
+
+
+def defer_row(expert_id, material, reason, reading, now=None):
+    """Pure: one JSONL row for a GPU-guard DEFER (tech#89 telemetry).
+
+    R1943 anchor: two guard defers in one fire window were visible only
+    as hand-written round-log notes. Rows make the fire->defer
+    conversion a readable ledger (symmetric with the ollama-probe /
+    mv-sprint JSONL ledgers). Exact field set, one defer = one line."""
+    stamp = (now or datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+    payload = {
+        "ts": stamp,
+        "event": "defer",
+        "expert": expert_id,
+        "material": str(material),
+        "reason": reason,
+        "util_pct": reading.get("util_pct") if reading else None,
+        "free_mb": reading.get("free_mb") if reading else None,
+        "rc": 5,
+    }
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def append_defer_row(row, path=None):
+    """Best-effort JSONL append (tech#19/52 law: a write failure WARNs,
+    it never changes the guard outcome). Returns True on success.
+    path=None resolves DEFER_LEDGER at call time (hermetic tests patch
+    the module global; a def-time default would bind the real path)."""
+    try:
+        target = Path(path) if path is not None else DEFER_LEDGER
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("a", encoding="utf-8") as f:
+            f.write(row + "\n")
+        return True
+    except OSError:
+        return False
 
 
 def ledger_row(expert_id, role, dept, material, exit_code, note):
@@ -259,6 +298,11 @@ def main(argv):
                       "wrapper cap burned through twice with zero "
                       "verdicts (R1847 E4 case); retry in a GPU release "
                       "window, or pass --gpu-force to fly anyway.")
+                # tech#89 telemetry: defer events land as JSONL rows
+                # (best-effort; a write failure never blocks the defer).
+                if not append_defer_row(defer_row(expert_id, material,
+                                                  reason, reading)):
+                    print("WARN defer ledger append failed (defer kept)")
                 return 5
         elif reading is None:
             print("WARN gpu probe unavailable; proceeding (advisory guard)")

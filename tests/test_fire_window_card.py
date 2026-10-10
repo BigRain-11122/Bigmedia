@@ -1,6 +1,7 @@
 """Tests for src/os/fire_window_card.py (tech#85 composite card)."""
 
 import contextlib
+import datetime
 import importlib.util
 import io
 import json
@@ -234,6 +235,52 @@ class OrchestrateTests(unittest.TestCase):
         self.assertEqual(card["readings"]["probe"]["evictable_mb"], 4888)
         self.assertEqual(card["readings"]["probe"]
                          ["eviction_aware_verdict"], "fly")
+
+
+class FireFreshnessTests(unittest.TestCase):
+    """tech#89 candidate (1): a fire verdict carries fired_at +
+    valid_s + expires_at so a consumer can reject a stale GO
+    (R1943 anchor: window closed <2min after the card said fire)."""
+
+    NOW = datetime.datetime(2026, 10, 11, 5, 24, 11)
+
+    def _card(self, gate, probe, credit):
+        return fwc.orchestrate(
+            lambda *a: gate, lambda: MV_QUIET, lambda: probe,
+            lambda *a: credit, now=self.NOW)
+
+    def test_path_a_fire_carries_freshness_fields(self):
+        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        self.assertEqual(card["verdict"], "fire")
+        self.assertEqual(card["fired_at"],
+                         int(self.NOW.timestamp()))
+        self.assertEqual(card["valid_s"], fwc.FIRE_VALID_S)
+        self.assertEqual(card["expires_at"],
+                         card["fired_at"] + fwc.FIRE_VALID_S)
+
+    def test_path_b_fire_carries_freshness_fields(self):
+        card = self._card(GATE_NOGO_UTIL, PROBE_SKIP_FLY, CREDIT_GO)
+        self.assertEqual(card["verdict"], "fire")
+        self.assertEqual(card["path"], "B-eviction-credit")
+        self.assertEqual(card["expires_at"] - card["fired_at"],
+                         fwc.FIRE_VALID_S)
+
+    def test_no_fire_omits_freshness_fields(self):
+        card = self._card(GATE_NOGO_UTIL, PROBE_OK, CREDIT_GO)
+        self.assertEqual(card["verdict"], "no-fire")
+        for key in ("fired_at", "valid_s", "expires_at"):
+            self.assertNotIn(key, card)
+
+    def test_human_render_carries_fire_valid_line(self):
+        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        text = fwc._render_human(card)
+        self.assertIn("fire-valid:", text)
+        self.assertIn(str(fwc.FIRE_VALID_S), text)
+        self.assertIn(str(card["expires_at"]), text)
+
+    def test_human_render_no_fire_no_valid_line(self):
+        card = self._card(GATE_NOGO_UTIL, PROBE_OK, CREDIT_GO)
+        self.assertNotIn("fire-valid:", fwc._render_human(card))
 
 
 class CliTests(unittest.TestCase):

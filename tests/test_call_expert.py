@@ -12,6 +12,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import datetime
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
@@ -196,16 +197,25 @@ class TestGpuGuardCli(unittest.TestCase):
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
+                mock.patch.object(ce, "DEFER_LEDGER",
+                                  repo / "defer-ledger.jsonl"),
                 mock.patch.object(ce, "read_gpu_headroom", lambda: reading),
                 mock.patch.object(ce, "defer_decision",
                                   lambda r, **kw: decision),
                 mock.patch.object(ce, "call_model", fake_call_model),
             ]
             with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4], patches[5], patches[6]:
+                    patches[4], patches[5], patches[6], patches[7]:
                 # argv[0] = script path slot (production: sys.argv[0])
                 rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                               "--material", str(mat)] + argv)
+            # capture defer rows inside the tmpdir lifetime (tech#89)
+            self.defer_rows = []
+            dl = repo / "defer-ledger.jsonl"
+            if dl.exists():
+                for ln in dl.read_text(encoding="utf-8").splitlines():
+                    if ln.strip():
+                        self.defer_rows.append(json.loads(ln))
             return rc, calls
 
     def test_guard_defers_before_call(self):
@@ -234,6 +244,78 @@ class TestGpuGuardCli(unittest.TestCase):
             [], {"util_pct": 87, "free_mb": 1400}, (True, "busy"))
         self.assertEqual(0, rc)
         self.assertEqual(["m"], calls)
+
+    def test_defer_lands_one_jsonl_row(self):
+        # tech#89 telemetry: the defer event itself lands as one row
+        # (R1943 anchor: defers were previously invisible outside the
+        # hand-written round log).
+        self.defer_rows = []
+        rc, calls = self._run_main(
+            ["--gpu-guard"],
+            {"util_pct": 87, "free_mb": 1400},
+            (True, "gpu util 87% > 80% (occupied window)"))
+        self.assertEqual(5, rc)
+        self.assertEqual(1, len(self.defer_rows))
+        row = self.defer_rows[0]
+        self.assertEqual(row["event"], "defer")
+        self.assertEqual(row["expert"], "hot-intel")
+        self.assertEqual(row["rc"], 5)
+        self.assertEqual(row["util_pct"], 87)
+        self.assertEqual(row["free_mb"], 1400)
+        self.assertEqual(row["reason"],
+                         "gpu util 87% > 80% (occupied window)")
+        self.assertIn("material", row)
+        self.assertIn("ts", row)
+
+    def test_no_defer_no_row(self):
+        self.defer_rows = []
+        rc, _ = self._run_main(["--gpu-guard"],
+                               {"util_pct": 5, "free_mb": 9000},
+                               (False, ""))
+        self.assertEqual(0, rc)
+        self.assertEqual([], self.defer_rows)
+
+    def test_force_override_writes_no_defer_row(self):
+        self.defer_rows = []
+        rc, _ = self._run_main(
+            ["--gpu-guard", "--gpu-force"],
+            {"util_pct": 87, "free_mb": 1400}, (True, "busy"))
+        self.assertEqual(0, rc)
+        self.assertEqual([], self.defer_rows)
+
+
+class TestDeferLedger(unittest.TestCase):
+    """tech#89 pure face: defer_row exact field set + best-effort
+    append (tech#19/52 law: write failure never blocks the defer)."""
+
+    def test_row_exact_field_set(self):
+        row = ce.defer_row("E4-audience", "m/e4-material.md",
+                           "gpu free 231MB < 2048MB",
+                           {"util_pct": 100, "free_mb": 231},
+                           now=datetime(2026, 10, 11, 5, 26, 3))
+        payload = json.loads(row)
+        self.assertEqual(set(payload), {
+            "ts", "event", "expert", "material", "reason",
+            "util_pct", "free_mb", "rc"})
+        self.assertEqual(payload["ts"], "2026-10-11 05:26:03")
+        self.assertEqual(payload["event"], "defer")
+        self.assertEqual(payload["rc"], 5)
+
+    def test_row_none_reading_nulls(self):
+        row = ce.defer_row("hot-intel", "m.md", "r", None)
+        payload = json.loads(row)
+        self.assertIsNone(payload["util_pct"])
+        self.assertIsNone(payload["free_mb"])
+
+    def test_append_best_effort_true_then_false(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "sub" / "defer.jsonl"
+            self.assertTrue(ce.append_defer_row("{}", path))
+            self.assertTrue(path.exists())
+            # a directory target fails -> False, never raises
+            dir_target = Path(td) / "adir"
+            dir_target.mkdir()
+            self.assertFalse(ce.append_defer_row("{}", dir_target))
 
 
 class TestTimeoutCli(unittest.TestCase):

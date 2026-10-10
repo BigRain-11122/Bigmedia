@@ -59,6 +59,11 @@ DEFAULT_INTERVAL = 5
 REVIEW_MIN_FREE_MB = 2048
 REVIEW_UTIL_MAX = 80
 CHILD_TIMEOUT_S = 240
+# Fire-verdict freshness (tech#89): R1943 anchor -- the window closed
+# <2min after the card said fire (MV i2v wave re-occupied the card, two
+# guard defers followed). A consumer holding a fire verdict older than
+# this TTL must re-run the card instead of consuming a stale GO.
+FIRE_VALID_S = 120
 
 PROBE_SKIP_STATUS = "skipped-not-resident"
 PATH_A = "A-hot-resident"
@@ -237,7 +242,7 @@ def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
 
     verdict, path, reasons = classify_fire(gate, mv, probe, gate_credit)
     now_dt = now or datetime.datetime.now()
-    return {
+    card = {
         "card": "fire_window_card",
         "ts": now_dt.strftime("%Y-%m-%d %H:%M:%S"),
         "verdict": verdict,
@@ -251,6 +256,12 @@ def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
             "gate_credit": _slim_gate(gate_credit),
         },
     }
+    if verdict == "fire":
+        fired_epoch = int(now_dt.timestamp())
+        card["fired_at"] = fired_epoch
+        card["valid_s"] = FIRE_VALID_S
+        card["expires_at"] = fired_epoch + FIRE_VALID_S
+    return card
 
 
 def _render_human(card):
@@ -276,6 +287,10 @@ def _render_human(card):
         lines.append("  gate-credit: go=%s evictable=%s effective_free=%s"
                      % (credit.get("go"), credit.get("evictable_mb"),
                         credit.get("effective_free_mb")))
+    if card.get("verdict") == "fire":
+        lines.append("  fire-valid: %ss (expires epoch %s; re-run the "
+                     "card after expiry, never consume a stale GO)"
+                     % (card.get("valid_s"), card.get("expires_at")))
     return "\n".join(lines)
 
 
