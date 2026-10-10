@@ -7,12 +7,18 @@ Covers the two trap families the probe retires:
   historical 400 was a PS inline-quoting transport artifact, R1880),
 plus CLI surface (--model/--timeout/--json) and the main-guard import
 safety (no probe flight on import).
+
+tech#52 (R1883): --ledger JSONL append face -- opt-in only (no flag = no
+append anywhere), one row per real probe flight, best-effort WARN on write
+failure with the probe exit code untouched, bad-timeout writes no row.
 """
 
 import io
 import json
 import os
+import shutil
 import sys
+import tempfile
 import unittest
 import urllib.error
 
@@ -186,6 +192,94 @@ class CliTests(unittest.TestCase):
             import importlib
             importlib.reload(op)
         self.assertEqual(buf.getvalue(), "")
+
+
+class LedgerTests(unittest.TestCase):
+    """tech#52 --ledger JSONL append face: opt-in, best-effort, one row per flight."""
+
+    def setUp(self):
+        self._orig = op._http_post
+        self._orig_default_ledger = op.DEFAULT_LEDGER
+        self.tmp = tempfile.mkdtemp(prefix="bs-ollama-ledger-")
+        op.DEFAULT_LEDGER = self._path("default-ledger.jsonl")
+
+        def fake(base_url, body, timeout):
+            raise _http_error(503, SATURATION_DETAIL)
+        op._http_post = fake
+
+    def tearDown(self):
+        op._http_post = self._orig
+        op.DEFAULT_LEDGER = self._orig_default_ledger
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _path(self, name="probe-ledger.jsonl"):
+        return os.path.join(self.tmp, name)
+
+    def _rows(self, path):
+        with open(path, encoding="utf-8") as fh:
+            return [json.loads(line) for line in fh.read().splitlines() if line]
+
+    def _run(self, argv):
+        import contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            return op.main(argv)
+
+    def test_ledger_row_appended(self):
+        path = self._path()
+        rc = self._run(["--ledger", path])
+        self.assertEqual(rc, 1)
+        rows = self._rows(path)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["rc"], 1)
+        self.assertEqual(rows[0]["status"], "saturated")
+        self.assertEqual(rows[0]["http_status"], 503)
+        self.assertEqual(rows[0]["model"], op.DEFAULT_MODEL)
+        self.assertTrue(rows[0]["ts"])
+
+    def test_row_fields_exact(self):
+        path = self._path()
+        self._run(["--ledger", path])
+        self.assertEqual(
+            set(self._rows(path)[0].keys()),
+            {"ts", "rc", "status", "http_status", "model"})
+
+    def test_two_flights_two_lines(self):
+        path = self._path()
+        self._run(["--ledger", path])
+        self._run(["--ledger", path])
+        self.assertEqual(len(self._rows(path)), 2)
+
+    def test_bare_flag_uses_default_path(self):
+        rc = self._run(["--ledger"])
+        self.assertEqual(rc, 1)
+        self.assertEqual(len(self._rows(self._path("default-ledger.jsonl"))), 1)
+
+    def test_default_off_writes_nothing(self):
+        # Existing call surface untouched: no --ledger -> no append anywhere.
+        rc = self._run([])
+        self.assertEqual(rc, 1)
+        self.assertFalse(os.path.exists(self._path("default-ledger.jsonl")))
+
+    def test_bad_timeout_writes_no_row(self):
+        # No probe flight -> no row (one row per real flight only).
+        path = self._path()
+        rc = self._run(["--timeout", "0", "--ledger", path])
+        self.assertEqual(rc, 2)
+        self.assertFalse(os.path.exists(path))
+
+    def test_append_failure_is_best_effort(self):
+        # Parent path is a regular file -> OSError -> WARN, rc unchanged.
+        blocker = os.path.join(self.tmp, "blocker")
+        with open(blocker, "w") as fh:
+            fh.write("x")
+        bad = os.path.join(blocker, "row.jsonl")
+        import contextlib
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            rc = self._run(["--ledger", bad])
+        self.assertEqual(rc, 1)  # probe verdict untouched by ledger failure
+        self.assertIn("WARN", err.getvalue())
 
 
 if __name__ == "__main__":

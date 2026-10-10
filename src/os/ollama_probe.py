@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""Fixed ollama generation probe (tech#41 recovery criterion; tech#51, R1881).
+"""Fixed ollama generation probe (tech#41 recovery criterion; tech#51, R1881;
+tech#52 --ledger JSONL evidence face, R1883).
 
 Recovery criterion for a saturated ollama server (F-20261010-03 family):
 generate-probe only. Two trap families this probe permanently retires:
@@ -17,10 +18,17 @@ Exit codes:
   2 = other transport/server error (ambiguous, raw status surfaced)
 
 Usage:
-  python src/os/ollama_probe.py [--model M] [--timeout S] [--base-url URL] [--json]
+  python src/os/ollama_probe.py [--model M] [--timeout S] [--base-url URL] [--json] [--ledger [PATH]]
 
 The per-round recovery check (tech#41) uses this fixed probe; ad-hoc rewrites
 are retired. --json emits one machine-readable line for evidence files.
+
+--ledger (tech#52, R1883) appends one JSONL row (ts/rc/status/http_status/
+model) per real probe flight to the given path (bare --ledger = default
+data/pipeline/ollama-probe-ledger.jsonl). Opt-in only: without the flag the
+existing call surface is untouched. Best-effort (whisper-ledger tech#19
+pattern): a failed append WARNs on stderr and never changes the exit code.
+No probe flight (bad timeout) -> no row.
 """
 
 import argparse
@@ -29,11 +37,13 @@ import json
 import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 DEFAULT_MODEL = "qwen2.5:14b-8k"
 DEFAULT_TIMEOUT = 60
 DEFAULT_BASE_URL = "http://localhost:11434"
 GEN_PATH = "/api/generate"
+DEFAULT_LEDGER = Path(__file__).resolve().parents[2] / "data" / "pipeline" / "ollama-probe-ledger.jsonl"
 
 
 def build_request_body(model):
@@ -102,6 +112,27 @@ def _human_line(result):
     return "GEN-ERROR transport=%s" % result["detail"]
 
 
+def append_ledger_row(path, result):
+    """Best-effort JSONL append (tech#52): one row per real probe flight.
+
+    WARN on failure, never raises, never changes the probe exit code.
+    """
+    row = {
+        "ts": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "rc": result["rc"],
+        "status": result["status"],
+        "http_status": result["http_status"],
+        "model": result["model"],
+    }
+    try:
+        ledger_path = Path(path)
+        ledger_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(ledger_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(row, ensure_ascii=True) + "\n")
+    except OSError as exc:
+        sys.stderr.write("WARN ollama-probe-ledger append failed: %s\n" % exc)
+
+
 def build_parser(argv=None):
     parser = argparse.ArgumentParser(
         description="Ollama generation probe (recovery criterion, exit 0/1/2).")
@@ -113,6 +144,9 @@ def build_parser(argv=None):
                         help="ollama base url (default: %s)" % DEFAULT_BASE_URL)
     parser.add_argument("--json", action="store_true",
                         help="emit one machine-readable JSON line")
+    parser.add_argument("--ledger", nargs="?", const=str(DEFAULT_LEDGER), default=None,
+                        help="append one JSONL row per probe flight to this path "
+                             "(tech#52; bare --ledger = default %s)" % DEFAULT_LEDGER)
     return parser
 
 
@@ -122,6 +156,8 @@ def main(argv=None):
         print("GEN-ERROR bad-timeout=%s" % args.timeout)
         return 2
     result = run_probe(model=args.model, timeout=args.timeout, base_url=args.base_url)
+    if args.ledger:
+        append_ledger_row(args.ledger, result)
     if args.json:
         result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(json.dumps(result, ensure_ascii=True))
