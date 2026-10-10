@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-004-01-v1.beats.txt",
+    "order": "SC-004-01-v1",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 20.89,
+      "lines": [
+        "硅基城市事件纪实",
+        "特别篇 · 台风梅花夜"
+      ]
+    },
+    {
+      "start": 20.89,
+      "end": 39.27,
+      "lines": [
+        "有名字的风",
+        "值守员的私账"
+      ]
+    },
+    {
+      "start": 39.27,
+      "end": 56.1,
+      "lines": [
+        "警报当夜",
+        "三样老规矩"
+      ]
+    },
+    {
+      "start": 56.1,
+      "end": 61.69,
+      "lines": [
+        "视角一",
+        "感知塔站 · 守一宿"
+      ]
+    },
+    {
+      "start": 61.69,
+      "end": 80.09,
+      "lines": [
+        "日志",
+        "台风天的日志最见人品"
+      ]
+    },
+    {
+      "start": 80.09,
+      "end": 88.84,
+      "lines": [
+        "天亮",
+        "灯带如常"
+      ]
+    },
+    {
+      "start": 88.84,
+      "end": 95.0,
+      "lines": [
+        "视角二",
+        "十四号路灯 · 满格"
+      ]
+    },
+    {
+      "start": 95.0,
+      "end": 108.55,
+      "lines": [
+        "检修日志",
+        "超载运行，无损耗"
+      ]
+    },
+    {
+      "start": 108.55,
+      "end": 127.56,
+      "lines": [
+        "补丁",
+        "疤是资历"
+      ]
+    },
+    {
+      "start": 127.56,
+      "end": 137.65,
+      "lines": [
+        "交晨",
+        "把夜交给早晨"
+      ]
+    },
+    {
+      "start": 137.65,
+      "end": 147.16,
+      "lines": [
+        "视角三",
+        "咪喱 · 尾巴天线"
+      ]
+    },
+    {
+      "start": 147.16,
+      "end": 160.73,
+      "lines": [
+        "口信",
+        "一趟一趟叼到位"
+      ]
+    },
+    {
+      "start": 160.73,
+      "end": 171.4,
+      "lines": [
+        "报恩",
+        "七家的早饭"
+      ]
+    },
+    {
+      "start": 171.4,
+      "end": 180.6,
+      "lines": [
+        "耳朵",
+        "缺口"
+      ]
+    },
+    {
+      "start": 180.6,
+      "end": 196.6,
+      "lines": [
+        "三个视角",
+        "同一场风"
+      ]
+    },
+    {
+      "start": 196.6,
+      "end": 207.68,
+      "lines": [
+        "城的记法",
+        "名字进档案"
+      ]
+    },
+    {
+      "start": 207.68,
+      "end": 236.39,
+      "lines": [
+        "尾声明",
+        "下一个有名字的风"
+      ]
+    }
+  ]
+}
