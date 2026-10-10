@@ -1,0 +1,21 @@
+# group-scan 2026-10-10 09:02:46
+=== DECISIONS (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md | mtime 2026-10-10 00:15:21 | 214423 B | tokens=138
+watermark=140 | truly_new=0 | wm_only=2 (slim/inline-consumed family)
+TRULY_NEW: (none)
+wm_only: C-20260909-05, D-20260930-00
+=== LEDGER (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\cph4\evolution-ledger.md | mtime 2026-10-10 03:17:03 | 139921 B
+@BigStream lines=4 occurrences=5
+@七线全司 lines=0 occurrences=0
+@全司 lines=0 occurrences=0
+@六司 lines=1 occurrences=1
+@八线全量 lines=0 occurrences=0
+last-@BigStream: - **值守轮 2026-10-09（夜班 03:07）**：①水位=盘余 630.2GB（retention 实测·环比 …686.2→674.2→665.2〔10-08 15:07〕→630.2·本班对前班 -35. ...
+=== MTIME (rc=0) ===
+hq-orders | 2026-10-10 00:31:00 | 323557 B
+hq-orders-tail: | 10-10 00:4x | 「你自己全部科学解决」「项目全力开工」（吸嘟嘟焦点窗 bm-a 承接令·全自主授权+全速开工） | **O-20261010-0040 夜窗全速开工批**（bm-a 吸嘟嘟窗·三批连发）： ...
+hq-decisions | 2026-10-10 00:15:21 | 214423 B
+hq-decisions-tail: | 2026-10-10 | D-20261010-03 机队工作区审计 A 腿假 FAIL 根治采纳（C-20261009-03 基线 v1 修法·bigmoney F-20261009-05 呈报） | bigmon ...
+ledger | 2026-10-10 03:17:03 | 139921 B
+own-orders-top | O-20261008-1105-bm-a.md | 2026-10-08 12:08:14 | 4698 B
