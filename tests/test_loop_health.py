@@ -27,6 +27,14 @@ sys.path.insert(0, str(REPO / "src" / "os"))
 
 import loop_health  # noqa: E402
 
+# tech#58: the AIHOT liveness face probes real localhost HTTP by design
+# (production names a dead stack within one round). The suite must stay
+# deterministic regardless of the live stack state, so tests stub the
+# probe module-wide; the real probe path is covered by injected-_urlopen
+# unit tests below plus every production round run.
+_REAL_PROBE_HTTP_FACE = loop_health.probe_http_face
+loop_health.probe_http_face = lambda url, timeout_s=4.0: (True, "{}")
+
 
 def fail_codes(findings):
     return {code for sev, code, _ in findings if sev == "FAIL"}
@@ -709,6 +717,166 @@ class CodexFreshnessTests(unittest.TestCase):
             rc = loop_health.main(["loop_health.py", "--root", str(root)])
         self.assertIn("codex-stale", buf.getvalue())
         self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
+
+
+class AihotStackTests(unittest.TestCase):
+    """tech#58: AIHOT stack liveness guard - probe, classify and CLI
+    wiring. Real HTTP never runs inside the suite (module-level stub);
+    the probe core is tested through the _urlopen injection seam."""
+
+    class _Resp:
+        def __init__(self, status=200, body=b"{}"):
+            self.status = status
+            self._body = body
+
+        def read(self, n=-1):
+            return self._body
+
+        def getcode(self):
+            return self.status
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+    def _probe(self, resp_or_exc):
+        if isinstance(resp_or_exc, Exception):
+            def _boom(url, timeout):
+                raise resp_or_exc
+            return _REAL_PROBE_HTTP_FACE("http://test/", _urlopen=_boom)
+        return _REAL_PROBE_HTTP_FACE("http://test/",
+                                     _urlopen=lambda u, timeout: resp_or_exc)
+
+    def test_probe_200_ok_with_body(self):
+        ok, detail = self._probe(self._Resp(200, b'{"ok":true}'))
+        self.assertTrue(ok)
+        self.assertEqual(detail, '{"ok":true}')
+
+    def test_probe_non_200_flags(self):
+        ok, detail = self._probe(self._Resp(503, b""))
+        self.assertFalse(ok)
+        self.assertIn("503", detail)
+
+    def test_probe_timeout_never_raises(self):
+        ok, detail = self._probe(TimeoutError("timed out"))
+        self.assertFalse(ok)
+        self.assertIn("TimeoutError", detail)
+
+    def test_probe_refused_never_raises(self):
+        ok, detail = self._probe(ConnectionRefusedError("refused"))
+        self.assertFalse(ok)
+        self.assertIn("ConnectionRefusedError", detail)
+
+    def test_probe_status_none_falls_back_to_getcode(self):
+        class _OldResp:
+            # py<3.9-style response object: no .status attribute at
+            # all, status only reachable via getcode().
+            def __init__(self):
+                self.code = 200
+
+            def read(self, n=-1):
+                return b"{}"
+
+            def getcode(self):
+                return self.code
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+        ok, detail = self._probe(_OldResp())
+        self.assertTrue(ok)
+
+    def test_classify_healthy_silent(self):
+        findings = loop_health.classify_aihot_faces(
+            (True, '{"ok":true,"db":"ok"}'), (True, "<html>200</html>"))
+        self.assertEqual(findings, [])
+
+    def test_classify_both_down_names_both_faces(self):
+        findings = loop_health.classify_aihot_faces(
+            (False, "ConnectionRefusedError: refused"),
+            (False, "HTTP 502"))
+        self.assertEqual(len(findings), 1)
+        sev, code, msg = findings[0]
+        self.assertEqual((sev, code), ("WARN", "aihot-stack"))
+        self.assertIn("api down/unreachable", msg)
+        self.assertIn("web down/unreachable", msg)
+        self.assertIn("R1891", msg)  # recovery runbook pointer
+
+    def test_classify_db_face_flagged(self):
+        findings = loop_health.classify_aihot_faces(
+            (True, '{"ok":true,"db":"fail"}'), (True, "<html>"))
+        self.assertEqual(warn_codes(findings), {"aihot-stack"})
+        self.assertIn("db face 'fail'", findings[0][2])
+
+    def test_classify_db_missing_or_ok_never_flags(self):
+        self.assertEqual(loop_health.classify_aihot_faces(
+            (True, '{"ok":true}'), (True, "<html>")), [])
+        self.assertEqual(loop_health.classify_aihot_faces(
+            (True, '{"ok":true,"db":"ok"}'), (True, "<html>")), [])
+
+    def test_classify_api_body_unparseable_ignored(self):
+        self.assertEqual(loop_health.classify_aihot_faces(
+            (True, "not json at all"), (True, "<html>")), [])
+
+    def test_classify_web_only_down(self):
+        findings = loop_health.classify_aihot_faces(
+            (True, '{"ok":true,"db":"ok"}'), (False, "HTTP 502"))
+        self.assertEqual(len(findings), 1)
+        self.assertIn("web down/unreachable", findings[0][2])
+        self.assertNotIn("api down", findings[0][2])
+
+    def _run_cli(self, root):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        return rc, buf.getvalue()
+
+    def _healthy_repo(self):
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        return make_repo(self, spec, make_state(tick=2), BOARD)
+
+    def test_cli_wiring_down_stack_named(self):
+        root = self._healthy_repo()
+        old = loop_health.probe_http_face
+        loop_health.probe_http_face = lambda url, timeout_s=4.0: (
+            False, "ConnectionRefusedError: refused")
+        try:
+            rc, out = self._run_cli(root)
+        finally:
+            loop_health.probe_http_face = old
+        self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
+        self.assertIn("aihot-stack", out)
+
+    def test_cli_wiring_healthy_stack_silent(self):
+        root = self._healthy_repo()
+        rc, out = self._run_cli(root)
+        self.assertEqual(rc, 0)
+        self.assertNotIn("aihot-stack", out)
+
+    def test_check_env_url_override(self):
+        seen = []
+
+        def fake_probe(url, timeout_s):
+            seen.append(url)
+            return (True, '{"ok":true,"db":"ok"}')
+
+        findings = []
+        old = os.environ.get("AIHOT_API_URL")
+        os.environ["AIHOT_API_URL"] = "http://127.0.0.1:9/api/health"
+        try:
+            loop_health.check_aihot_stack(findings, probe=fake_probe)
+        finally:
+            if old is None:
+                os.environ.pop("AIHOT_API_URL", None)
+            else:
+                os.environ["AIHOT_API_URL"] = old
+        self.assertEqual(findings, [])
+        self.assertIn("http://127.0.0.1:9/api/health", seen)
+        self.assertIn(loop_health.AIHOT_WEB_URL, seen)
 
 
 if __name__ == "__main__":

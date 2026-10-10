@@ -1,0 +1,7 @@
+# r1893 capabilities append-only verify (post-fix, 2026-10-10 13:32:08)
+v1.66 byte-identical restored: True
+C-20 row append-only: True
+v1.67 changelog present: True
+v1.67 seed-repair wording corrected (line-format not missing): True
+tech.md entry-58 at line head: True (len=1175)
+tech.md entry-58 done-marked: True

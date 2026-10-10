@@ -66,6 +66,12 @@ Findings:
                                    belong to their authoring window and
                                    are naturally fresh; sediment gets
                                    named - tech#31)
+  WARN  aihot-stack               AIHOT radar-stack HTTP face(s) down or
+                                   unreachable (api :3101 / web :3100);
+                                   four deaths were all found after the
+                                   fact (R1727/R1750/R1752/R1891) - this
+                                   face names a dead stack within one
+                                   round (tech#58)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -92,9 +98,11 @@ Usage:
                                  [--loop] [--recent-days N] [--fold-dense N]
 """
 import json
+import os
 import re
 import subprocess
 import sys
+import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -149,6 +157,21 @@ CODEX_DIMENSIONS = ("city-chronicle.md", "city-culture.md",
                     "city-humanities.md", "city-residents.md",
                     "city-spirit.md")
 CODEX_FRESH_DAYS = 7  # > 7 days unrefreshed = supply-sediment WARN
+# tech#58: AIHOT stack liveness guard. The self-hosted radar stack
+# (api :3101 / web :3100, PG reported inside the api health JSON) died
+# four times and every death was discovered after the fact by a human
+# (R1727/R1750/R1752/R1891 - the R1891 case sat dead 1.5h through
+# running rounds because api health was only ever verified when some
+# consumer needed it). This face probes both HTTP faces on every
+# routine probe run, so a dead stack gets named within one round (the
+# judging criterion). WARN level - recovery is an operational action
+# and the guard must never break the probe: any probe error reports as
+# the face being down/unreachable. Worker-only hangs are a different
+# failure family (all four anchor deaths were full-stack kills) and
+# stay out of scope. URLs env-overridable for future port changes.
+AIHOT_API_URL = "http://127.0.0.1:3101/api/health"
+AIHOT_WEB_URL = "http://127.0.0.1:3100/"
+AIHOT_PROBE_TIMEOUT_S = 4.0
 
 
 def parse_beats(path):
@@ -472,6 +495,64 @@ def check_codex_freshness(root, now, findings):
                      % (len(stale), CODEX_FRESH_DAYS, shown)))
 
 
+def probe_http_face(url, timeout_s=AIHOT_PROBE_TIMEOUT_S, _urlopen=None):
+    """url -> (ok, detail); advisory HTTP probe, never raises. ok means
+    HTTP 200; detail carries the body head (api face: health JSON) or a
+    short failure reason. _urlopen is the injection seam for tests."""
+    if _urlopen is None:
+        _urlopen = urllib.request.urlopen
+    try:
+        with _urlopen(url, timeout=timeout_s) as resp:
+            status = getattr(resp, "status", None) or resp.getcode()
+            body = resp.read(4096)
+            if status != 200:
+                return False, "HTTP %s" % status
+            return True, body.decode("utf-8", "replace")
+    except Exception as e:  # transport/timeout/decode - advisory only
+        return False, "%s: %.80s" % (type(e).__name__, e)
+
+
+def classify_aihot_faces(api, web):
+    """((api_ok, api_detail), (web_ok, web_detail)) -> findings (pure
+    core). The api face additionally parses its health JSON: an api that
+    answers but reports db != ok names the database face. A healthy
+    stack yields no findings (silent PASS like the other guard faces);
+    a body that fails to parse is ignored (the face answered)."""
+    findings = []
+    down = []
+    if not api[0]:
+        down.append("api down/unreachable (%s)" % api[1])
+    else:
+        try:
+            health = json.loads(api[1])
+        except ValueError:
+            health = None
+        if isinstance(health, dict) and health.get("db") not in (None, "ok"):
+            down.append("api up, db face %r" % (health.get("db"),))
+    if not web[0]:
+        down.append("web down/unreachable (%s)" % web[1])
+    if down:
+        findings.append(("WARN", "aihot-stack",
+                         "AIHOT stack face(s) %s - radar product line "
+                         "supply chain (#112 criteria window); recovery "
+                         "runbook = R1891 (pg_ctl/api/worker/web restart)"
+                         % "; ".join(down)))
+    return findings
+
+
+def check_aihot_stack(findings, timeout_s=AIHOT_PROBE_TIMEOUT_S,
+                      probe=None):
+    """tech#58 guard face: probe the AIHOT stack HTTP faces and name any
+    down face (one WARN). Machine-enforced every round by the routine
+    probe consumption - a dead stack is named within one round."""
+    if probe is None:
+        probe = probe_http_face  # module global read at call time (test seam)
+    api_url = os.environ.get("AIHOT_API_URL", AIHOT_API_URL)
+    web_url = os.environ.get("AIHOT_WEB_URL", AIHOT_WEB_URL)
+    findings.extend(classify_aihot_faces(probe(api_url, timeout_s),
+                                         probe(web_url, timeout_s)))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -621,6 +702,7 @@ def main(argv):
         check_root_litter(root, findings)
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
+        check_aihot_stack(findings)
     except OSError as e:
         print("source error: %s" % e)
         return 2
