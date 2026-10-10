@@ -1,0 +1,7 @@
+{"ts": "2026-10-11 06:45:44", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 239MB < 2048MB", "util_pct": 43, "free_mb": 239, "rc": 5}
+{"ts": "2026-10-11 06:48:10", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu util 93% > 80% (occupied window)", "util_pct": 93, "free_mb": 197, "rc": 5}
+{"ts": "2026-10-11 06:48:56", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 208MB < 2048MB", "util_pct": 44, "free_mb": 208, "rc": 5}
+{"ts": "2026-10-11 06:49:42", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 196MB < 2048MB", "util_pct": 38, "free_mb": 196, "rc": 5}
+{"ts": "2026-10-11 06:50:28", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 218MB < 2048MB", "util_pct": 42, "free_mb": 218, "rc": 5}
+{"ts": "2026-10-11 06:51:14", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 250MB < 2048MB", "util_pct": 39, "free_mb": 250, "rc": 5}
+{"ts": "2026-10-11 06:52:00", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 260MB < 2048MB", "util_pct": 51, "free_mb": 260, "rc": 5}
