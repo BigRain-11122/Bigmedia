@@ -1,0 +1,25 @@
+OWN_ORDERS latest=O-20261008-1105-bm-a.md mtime=10-08 12:08:14
+HQ orders.md mtime=10-10 21:02:01 (R1910 anchor 21:02:01)
+HQ decisions.md mtime=10-10 18:06:21
+decisions dnum total=130 truly_new=0 []
+ledger transfer-mention rows=5
+GPU: 11648 MiB, 12282 MiB, 100 %
+MEME new since 15:41:53 = 12
+  15:41:53 outbound\v1-zunjie-brake\S4-v3-check.png
+  15:41:53 outbound\v1-zunjie-brake\media\narration.mp3
+  16:01:31 SCRIPT-FORMULA.md
+  16:07:52 topics\v1-shots.json
+  16:07:57 tools\assemble_meme.py
+  16:42:25 SPEC-ACCOUNT.md
+  17:02:04 topics\RESEARCH-aftermath-memes.md
+  21:04:21 topics\RESEARCH-platforms-douyin.md
+  21:05:02 topics\RESEARCH-platforms-shipinhao-benchmarks.md
+  21:05:16 topics\RESEARCH-platforms-bilibili.md
+  21:08:09 LEDGER.md
+  21:08:17 PREPRO-V1.md
+30s-reel new since 20:03:42 = 5
+  20:03:42 DELIVERY-NOTE-v44.md
+  21:08:24 mv_full_shots.py
+  21:09:39 mv_full_kf.py
+  21:11:54 __pycache__\mv_full_shots.cpython-314.pyc
+  21:12:09 build_full_mv.py
