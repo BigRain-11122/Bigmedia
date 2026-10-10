@@ -1504,11 +1504,15 @@ class ExportFaceTests(unittest.TestCase):
                   for n in range(14)],
         "results": [["168", "finished items"], ["712", "tests green"],
                     ["1901", "OS rounds"], ["4/10", "M4 gate"]],
+        "export_ts": "2026-10-10 19:19:40",  # P-61 required field
     }
 
     def test_r1901_anchor_names_all_four_faces(self):
+        # the real R1901 file carried export_ts 19:05:00 (the future
+        # stamp tech#69 guards); without clock inputs the ts face is
+        # inert in the pure call, so the contract faces stand alone
         codes = warn_codes(loop_health.classify_export_face(
-            dict(self.ANCHOR_EXPORT)))
+            dict(self.ANCHOR_EXPORT, export_ts="2026-10-10 19:05:00")))
         self.assertEqual(codes, {"export-do", "export-outs",
                                  "export-results", "export-caps"})
 
@@ -1593,10 +1597,13 @@ class ExportFaceTests(unittest.TestCase):
         self.assertNotIn("export-caps", warn_codes(findings))
 
     def test_missing_lists_silent(self):
-        # absent keys are not this face's disease (shaper shows the
-        # curated fallback; the refresh step owns presence)
+        # absent list keys are not this face's disease (shaper shows
+        # the curated fallback; the refresh step owns presence) - but
+        # export_ts is the P-61 required field, so a bare export names
+        # exactly the ts face (tech#69)
         self.assertEqual(
-            loop_health.classify_export_face({"do": "one line"}), [])
+            warn_codes(loop_health.classify_export_face(
+                {"do": "one line"})), {"export-ts"})
 
     def test_parse_error_one_wholesale_warn(self):
         findings = loop_health.classify_export_face(None, "boom")
@@ -1621,8 +1628,13 @@ class ExportFaceTests(unittest.TestCase):
         root = make_repo(self, [(0, "round done exit=0")],
                          make_state(tick=2), BOARD)
         (root / "docs").mkdir()
+        # fresh live-clock export_ts keeps the ts face silent so this
+        # test stays about the four contract faces
         (root / "docs" / "status-export.json").write_text(
-            json.dumps(self.ANCHOR_EXPORT, ensure_ascii=True),
+            json.dumps(dict(self.ANCHOR_EXPORT,
+                            export_ts=datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S")),
+                       ensure_ascii=True),
             encoding="utf-8")
         findings = []
         loop_health.check_export_face(root, findings)
@@ -1645,7 +1657,10 @@ class ExportFaceTests(unittest.TestCase):
                          make_state(tick=2), BOARD)
         (root / "docs").mkdir()
         (root / "docs" / "status-export.json").write_text(
-            json.dumps(self.ANCHOR_EXPORT, ensure_ascii=True),
+            json.dumps(dict(self.ANCHOR_EXPORT,
+                            export_ts=datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S")),
+                       ensure_ascii=True),
             encoding="utf-8")
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
@@ -1658,11 +1673,112 @@ class ExportFaceTests(unittest.TestCase):
     def test_real_repo_clean_baseline_smoke(self):
         """Judgement criterion 2: the real repo's R1901 contract rewrite
         is compliant on every face, so the new guard stays silent -
-        read-only smoke through the check face."""
+        read-only smoke through the check face. The one wall-clock face
+        (24h refresh law) is named by the live probe every round; it
+        cannot be asserted hermetically and is tolerated here."""
         findings = []
         loop_health.check_export_face(REPO, findings)
+        hermetic = [f for f in findings
+                    if f[1].startswith("export-")
+                    and f[1] != "export-ts-stale"]
+        self.assertEqual(hermetic, [])
+
+
+class ExportTsFaceTests(unittest.TestCase):
+    """tech#69: export_ts faces. The R1901 anchor - 19:05:00 stamped
+    into a file written at 18:49:42 while the same round's state.ts
+    read 18:58:00 (an estimate from neither the state face nor the
+    writer's clock) - is named durably via the mtime comparison at
+    any later probe; the stale-copy / 24h-law / malformed faces mirror
+    the cross_check state-ts method."""
+
+    def test_r1901_anchor_future_stamp_named_via_mtime(self):
+        findings = loop_health._export_ts_face(
+            "2026-10-10 19:05:00",
+            now=datetime(2026, 10, 10, 19, 20, 0),
+            mtime=datetime(2026, 10, 10, 18, 49, 42))
+        self.assertEqual(warn_codes(findings), {"export-ts-future"})
+        self.assertIn("R1901 anchor", findings[0][2])
+
+    def test_future_vs_probe_clock_named(self):
+        now = datetime(2026, 10, 10, 19, 20, 0)
+        findings = loop_health._export_ts_face(
+            "2026-10-10 19:30:00", now=now, mtime=now)
+        self.assertEqual(warn_codes(findings), {"export-ts-future"})
+        self.assertIn("probe clock", findings[0][2])
+
+    def test_future_boundary_exact_5min_silent(self):
+        now = datetime(2026, 10, 10, 19, 20, 0)
+        self.assertEqual(loop_health._export_ts_face(
+            "2026-10-10 19:25:00", now=now, mtime=now), [])
+
+    def test_stale_copy_behind_write_time_named(self):
+        at = datetime(2026, 10, 10, 19, 20, 0)
+        findings = loop_health._export_ts_face(
+            "2026-10-10 17:50:00", now=at, mtime=at)
+        self.assertEqual(warn_codes(findings), {"export-ts-stale"})
+        self.assertIn("copied a stale value", findings[0][2])
+
+    def test_stale_copy_boundary_exact_60min_silent(self):
+        at = datetime(2026, 10, 10, 19, 20, 0)
+        self.assertEqual(loop_health._export_ts_face(
+            "2026-10-10 18:20:00", now=at, mtime=at), [])
+
+    def test_stale_beyond_24h_refresh_law_named(self):
+        findings = loop_health._export_ts_face(
+            "2026-10-09 18:00:00",
+            now=datetime(2026, 10, 10, 19, 20, 0),
+            mtime=datetime(2026, 10, 9, 18, 0, 0))
+        self.assertEqual(warn_codes(findings), {"export-ts-stale"})
+        self.assertIn("24h", findings[0][2])
+
+    def test_stale_24h_boundary_exact_silent(self):
+        self.assertEqual(loop_health._export_ts_face(
+            "2026-10-09 19:20:00",
+            now=datetime(2026, 10, 10, 19, 20, 0),
+            mtime=datetime(2026, 10, 9, 19, 20, 0)), [])
+
+    def test_malformed_and_unparseable_ts_named(self):
+        for bad in (None, 12, "2026-10-10", "2026-10-10 24:61:61"):
+            findings = loop_health._export_ts_face(bad)
+            self.assertEqual(warn_codes(findings), {"export-ts"}, bad)
+        # padded-but-well-formed strips clean, mirroring the state-ts
+        # face (accepted)
+        self.assertEqual(loop_health._export_ts_face(
+            "  2026-10-10 19:05:00  "), [])
+
+    def test_valid_ts_silent_without_clock_inputs(self):
+        # legacy pure-call shape: no clock inputs, no comparisons -
+        # a well-formed ts stays silent (backward compat)
         self.assertEqual(
-            [f for f in findings if f[1].startswith("export-")], [])
+            loop_health._export_ts_face("2026-10-10 19:05:00"), [])
+
+    def test_check_face_names_future_stamp_written_now(self):
+        root = make_repo(self, [(0, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        (root / "docs").mkdir()
+        future = (datetime.now() + timedelta(minutes=15)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        (root / "docs" / "status-export.json").write_text(
+            json.dumps(dict(ExportFaceTests.CONTRACT_EXPORT,
+                            export_ts=future), ensure_ascii=True),
+            encoding="utf-8")
+        findings = []
+        loop_health.check_export_face(root, findings)
+        self.assertEqual(warn_codes(findings), {"export-ts-future"})
+
+    def test_check_face_missing_ts_named(self):
+        root = make_repo(self, [(0, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        (root / "docs").mkdir()
+        payload = {k: v for k, v in ExportFaceTests.CONTRACT_EXPORT.items()
+                   if k != "export_ts"}
+        (root / "docs" / "status-export.json").write_text(
+            json.dumps(payload, ensure_ascii=True),
+            encoding="utf-8")
+        findings = []
+        loop_health.check_export_face(root, findings)
+        self.assertEqual(warn_codes(findings), {"export-ts"})
 
 
 if __name__ == "__main__":

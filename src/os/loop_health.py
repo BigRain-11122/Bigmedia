@@ -260,6 +260,9 @@ EXPORT_OUT_TXT_MAX = 64
 EXPORT_OUT_TAG_MAX = 24
 EXPORT_RES_V_MAX = 16
 EXPORT_RES_K_MAX = 14
+EXPORT_TS_FUTURE_TOL_MIN = 5.0   # mirror cross_check state-ts-future
+EXPORT_TS_STALE_COPY_MIN = 60.0  # ts far behind its own file write time
+EXPORT_TS_MAX_AGE_MIN = 1440.0   # P-61 export refresh law (<=24h)
 
 
 def parse_beats(path):
@@ -972,18 +975,75 @@ def _export_result_cell_ok(entry):
     return len(str(v)) <= EXPORT_RES_V_MAX and len(k) <= EXPORT_RES_K_MAX
 
 
-def classify_export_face(data, parse_err=""):
-    """(parsed-export-or-None, parse_err) -> findings (pure core). The
-    R1901 anchor form: the export drifted for ~1700 rounds because the
-    consuming shaper falls back to the curated face on every bad field,
-    so no alarm fired anywhere. Faces named here, one WARN per face:
-    "do" over the one-line budget (product-priority law section 5),
-    outs entries that are not well-formed 3-cell [txt, on|wait|off,
-    tag] arrays, results entries that are not [v<=16, k<=14] short
-    value/key pairs, and any of the three lists over its entry cap. A
-    parse failure or non-object top level is one WARN (the shaper
-    falls back wholesale). None without an error (missing export) is
-    silent - the export freshness step owns that disease. Clean exports
+def _export_ts_face(ts, now=None, mtime=None):
+    """tech#69: export_ts sanity faces (pure core). The R1901 anchor:
+    the refresh script stamped 19:05:00 into a file written at
+    18:49:42 - an estimated value, not the live clock (the same
+    round's state.ts was 18:58:00, so the value came from neither
+    the state face nor the writer's clock). A ts ahead of the file's
+    own write time is future stamping detectable at any later probe;
+    a ts far behind the write time means the writer copied a stale
+    value; a ts older than the 24h refresh law is a stale export.
+    A missing/malformed export_ts breaks the P-61 required field and
+    the freshness face alike. One WARN per face family, advisor
+    grade - never a probe-break FAIL. now/mtime None (pure calls)
+    skip the clock comparisons, keeping the legacy call shape silent
+    on a well-formed ts."""
+    if not isinstance(ts, str) or not STATE_TS_RE.match(ts.strip()):
+        return [("WARN", "export-ts",
+                 "export_ts missing/malformed (want YYYY-MM-DD "
+                 "HH:MM:SS written from the live clock - P-61 "
+                 "required field): %r" % (ts,))]
+    try:
+        ts_dt = datetime.strptime(ts.strip(), "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        return [("WARN", "export-ts",
+                 "export_ts unparseable: %r" % (ts,))]
+    future, stale = [], []
+    if mtime is not None:
+        lag = (ts_dt - mtime).total_seconds() / 60.0
+        if lag > EXPORT_TS_FUTURE_TOL_MIN:
+            future.append("%.0f min ahead of the file's own write "
+                          "time (R1901 anchor: 19:05:00 stamped at "
+                          "18:49:42)" % lag)
+        elif lag < -EXPORT_TS_STALE_COPY_MIN:
+            stale.append("%.0f min behind the file's write time - "
+                         "the writer copied a stale value instead "
+                         "of the live clock" % (-lag))
+    if now is not None:
+        ahead = (ts_dt - now).total_seconds() / 60.0
+        if ahead > EXPORT_TS_FUTURE_TOL_MIN:
+            future.append("%.0f min ahead of the probe clock" % ahead)
+        elif -ahead > EXPORT_TS_MAX_AGE_MIN:
+            stale.append("%.1f h old - beyond the P-61 <=24h refresh "
+                         "law" % (-ahead / 60.0))
+    findings = []
+    if future:
+        findings.append(("WARN", "export-ts-future",
+                         "export_ts %s - future stamping; write the "
+                         "live clock at refresh time, not an estimate"
+                         % "; ".join(future)))
+    if stale:
+        findings.append(("WARN", "export-ts-stale",
+                         "export_ts %s - refresh the export" %
+                         "; ".join(stale)))
+    return findings
+
+
+def classify_export_face(data, parse_err="", now=None, mtime=None):
+    """(parsed-export-or-None, parse_err, now, mtime) -> findings
+    (pure core). The R1901 anchor form: the export drifted for ~1700
+    rounds because the consuming shaper falls back to the curated face
+    on every bad field, so no alarm fired anywhere. Faces named here,
+    one WARN per face: "do" over the one-line budget (product-priority
+    law section 5), outs entries that are not well-formed 3-cell [txt,
+    on|wait|off, tag] arrays, results entries that are not [v<=16,
+    k<=14] short value/key pairs, any of the three lists over its
+    entry cap, and the tech#69 export_ts faces (future stamp / stale
+    copy / 24h staleness / malformed - see _export_ts_face). A parse
+    failure or non-object top level is one WARN (the shaper falls
+    back wholesale). None without an error (missing export) is silent
+    - the export freshness step owns that disease. Clean exports
     yield no findings (silent PASS like the other guard faces)."""
     if parse_err:
         return [("WARN", "export-contract",
@@ -1046,26 +1106,34 @@ def classify_export_face(data, parse_err=""):
                          "%d list(s) over the v6.2 entry caps: %s - the "
                          "shaper truncates silently; trim to the caps"
                          % (len(over), ", ".join(over))))
+    findings.extend(_export_ts_face(data.get("export_ts"), now, mtime))
     return findings
 
 
 def check_export_face(root, findings):
-    """tech#68 guard face: parse docs/status-export.json and name the
-    v6.2 contract violations (do budget / outs cells / results cells /
-    entry caps). Enforced every round by the routine probe consumption -
-    export drift is named within one round instead of 1700. A missing
-    export file stays silent (the export refresh step owns that
-    disease)."""
+    """tech#68/#69 guard face: parse docs/status-export.json and name
+    the v6.2 contract violations (do budget / outs cells / results
+    cells / entry caps) plus the export_ts faces (future stamp vs the
+    file's own mtime, stale copy, 24h refresh law, malformed). Enforced
+    every round by the routine probe consumption - export drift is
+    named within one round instead of 1700. A missing export file
+    stays silent (the export refresh step owns that disease)."""
     path = root / EXPORT_REL
     if not path.is_file():
         return
+    mtime = None
+    try:
+        mtime = datetime.fromtimestamp(path.stat().st_mtime)
+    except OSError:
+        pass
     try:
         data = json.loads(path.read_text(encoding="utf-8-sig",
                                          errors="replace"))
         err = ""
     except (OSError, ValueError) as e:
         data, err = None, str(e)
-    findings.extend(classify_export_face(data, err))
+    findings.extend(classify_export_face(data, err, now=datetime.now(),
+                                         mtime=mtime))
 
 
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
