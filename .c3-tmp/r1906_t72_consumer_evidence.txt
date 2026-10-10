@@ -1,0 +1,196 @@
+tech#72 consumer verification evidence (R1906, CPU face)
+verdict: shaper does NOT consume the export "live" key
+consumed key set: export_ts / do / depts / outs / chips / results
+now-line source: strings.json subs[n].now (curated); last-action: heartbeat face
+re-verify trigger: O-20261010-1955 siliconwatch rework landing
+
+==================== generate.ps1 live-key word hits (9, none consume export "live") ====================
+total_lines=752
+L2: # ASCII-only body per encoding law: ALL Chinese strings live in strings.json
+L26: # run-on paragraphs, char-split rows, log lines as results). All caps/separators live
+L52: # ---- local LLM live probe (CEO order 09-25 ~22:3x): ollama tags/ps, graceful offline ----
+L168: # per-company live interface (CEO order 09-24 ~17:20): <repo>/docs/status-export.json wins over curated when fresh (<=24h)
+L189: $src = 'live-export'
+L192: # face instead of wrecking the board card (live-fire: 3406-char do, 39
+L225: if ($cl2 -ne 'live' -and $cl2 -ne 'wip') { $cl2 = 'wip' }
+L269: # ENTIRE window generation - live-fire 2026-10-04: "fatal: invalid object name
+L619: # numeric fields derive ONLY from evidence JSONs + live probe (U190 machine-read law);
+
+=== export face section (labels/export consumption) ===
+L24: # ---- v6.2 export-face caps (CEO order 2026-10-10 full board refresh) ----
+L27: # in strings.json labels.export_face (encoding law: no CJK literals in this file).
+L28: $EF = $S.labels.export_face
+L168: # per-company live interface (CEO order 09-24 ~17:20): <repo>/docs/status-export.json wins over curated when fresh (<=24h)
+L177: $expFile = Join-Path $repo 'docs\status-export.json'
+L190: # v6.2 export-face normalization (CEO order 2026-10-10): per-field shape
+
+==================== generate.ps1 v6.2 export consumption block L166-250 (six-key set) ====================
+L166:     $act = $act -replace '\{n\}', [string]$c24
+L167: 
+L168:     # per-company live interface (CEO order 09-24 ~17:20): <repo>/docs/status-export.json wins over curated when fresh (<=24h)
+L169:     # NOTE: direct assignment only - PS pipeline enumeration flattens nested arrays (18 pairs -> 36 strings)
+L170:     $do = [string]$sub.do
+L171:     $depts = @(); $outs = @(); $chips = @(); $results = @()
+L172:     if ($sub.depts) { $depts = $sub.depts }
+L173:     if ($sub.outs) { $outs = $sub.outs }
+L174:     if ($sub.chips) { $chips = $sub.chips }
+L175:     if ($sub.results) { $results = $sub.results }
+L176:     $src = 'curated'
+L177:     $expFile = Join-Path $repo 'docs\status-export.json'
+L178:     if (Test-Path $expFile) {
+L179:       try {
+L180:         $exp = Get-Content $expFile -Raw -Encoding UTF8 | ConvertFrom-Json
+L181:         $fresh = $false
+L182:         if ($exp.export_ts) {
+L183:           try {
+L184:             $expAge = [int][math]::Floor(([DateTimeOffset]::Now - [DateTimeOffset]::Parse([string]$exp.export_ts)).TotalMinutes)
+L185:             if (($expAge -ge 0) -and ($expAge -le 1440)) { $fresh = $true }
+L186:           } catch {}
+L187:         }
+L188:         if ($fresh) {
+L189:           $src = 'live-export'
+L190:           # v6.2 export-face normalization (CEO order 2026-10-10): per-field shape
+L191:           # validation + length caps; a malformed or oversized field keeps the curated
+L192:           # face instead of wrecking the board card (live-fire: 3406-char do, 39
+L193:           # char-split out rows, 67 log lines as results, 717-string results arrays).
+L194:           if ($exp.do -is [string] -and ([string]$exp.do).Length -ge 2) { $do = Cut-FaceText ([string]$exp.do) ([int]$EF.do_max) }
+L195:           $nx = @()
+L196:           foreach ($dd in @($exp.depts)) {
+L197:             if ($null -eq $dd) { continue }
+L198:             $dn2 = [string]$dd.n; $dt2 = [string]$dd.t
+L199:             if ($dn2.Length -lt 2) { continue }
+L200:             if ($dt2.Length -lt 2) { continue }
+L201:             $ds2 = 1
+L202:             if ($dd.s -eq 0 -or $dd.s -eq 2) { $ds2 = [int]$dd.s }
+L203:             $nx += [ordered]@{ n = (Cut-FaceText $dn2 ([int]$EF.dept_n_max)); t = (Cut-FaceText $dt2 ([int]$EF.dept_t_max)); s = $ds2 }
+L204:           }
+L205:           if ($nx.Count -gt 0) { $depts = $nx }
+L206:           $nx = @()
+L207:           foreach ($oo in @($exp.outs)) {
+L208:             if ($null -eq $oo) { continue }
+L209:             $cells = @($oo)
+L210:             if ($cells.Count -lt 3) { continue }
+L211:             $tx = [string]$cells[0]; $st2 = [string]$cells[1]; $tg2 = [string]$cells[2]
+L212:             if ($tx.Length -lt 2) { continue }
+L213:             if ($st2 -ne 'on' -and $st2 -ne 'wait' -and $st2 -ne 'off') { $st2 = 'on' }
+L214:             if ($nx.Count -ge [int]$EF.out_max_n) { break }
+L215:             $nx += ,@((Cut-FaceText $tx ([int]$EF.out_txt_max)), $st2, (Cut-FaceText $tg2 ([int]$EF.out_tag_max)))
+L216:           }
+L217:           if ($nx.Count -gt 0) { $outs = $nx }
+L218:           $nx = @()
+L219:           foreach ($cc in @($exp.chips)) {
+L220:             if ($null -eq $cc) { continue }
+L221:             $cells = @($cc)
+L222:             if ($cells.Count -lt 2) { continue }
+L223:             $tx = [string]$cells[0]; $cl2 = [string]$cells[1]
+L224:             if ($tx.Length -lt 2) { continue }
+L225:             if ($cl2 -ne 'live' -and $cl2 -ne 'wip') { $cl2 = 'wip' }
+L226:             if ($nx.Count -ge [int]$EF.chip_max_n) { break }
+L227:             $nx += ,@((Cut-FaceText $tx ([int]$EF.chip_txt_max)), $cl2)
+L228:           }
+L229:           if ($nx.Count -gt 0) { $chips = $nx }
+L230:           $nx = @()
+L231:           foreach ($rr in @($exp.results)) {
+L232:             if ($null -eq $rr) { continue }
+L233:             $cells = @($rr)
+L234:             if ($cells.Count -lt 2) { continue }
+L235:             $vv = [string]$cells[0]; $kk = [string]$cells[1]
+L236:             if ($vv.Length -lt 1 -or $vv.Length -gt [int]$EF.res_v_max) { continue }
+L237:             if ($kk.Length -lt 2 -or $kk.Length -gt [int]$EF.res_k_max) { continue }
+L238:             $nx += ,@($vv, $kk)
+L239:             if ($nx.Count -ge [int]$EF.res_max_n) { break }
+L240:           }
+L241:           if ($nx.Count -ge 2) { $results = $nx }
+L242:         } else { $src = 'export-stale' }
+L243:       } catch {}
+L244:     }
+L245:     $subs += [ordered]@{ ico = [string]$sub.ico; accent = [string]$sub.accent; nm = [string]$sub.nm; do = $do; status = $status; act = $act; src = $src; snapshot = [string]$S._meta
+L246:   }
+L247:   $D['subs'] = $subs
+L248:   $D['snapshot_note'] = ([string]$S.labels.snapshot_note) -replace '\{ts\}', [string]$S._meta.curated_ts
+L249: 
+L250:   # ---- fleet: merge MiniGame + BigMoney heartbeats, derive flags -----------
+
+==================== canonical.html live/now/next/recent scan (s.now source = curated subs, L820-824) ====================
+=== canonical.html (lines=1308) live/now/next/recent hits ===
+L69: .mile.now .dot{background:var(--amber);box-shadow:0 0 12px #fbbf24cc;animation:bp 1.6s infinite}
+L71: .mile.done .ml{color:var(--teal)}.mile.now .ml{color:var(--amber)}
+L128: .chip.live{color:var(--amber);border-color:#fbbf2444}
+L232: .sub-src.live{color:var(--green)}
+L307: .panowrap.live .pano-hint{opacity:0}
+L393: .sub-live{font-size:12px;color:#5eead4;padding:0 16px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+L394: .sub-live b{font-weight:600}
+L467: .gcard.live{border-top:2px solid var(--amber)}
+L474: .g-tag.t-live{background:#fbbf2422;color:var(--amber)}
+L538: const SRCZH={'live-export':'⚡ 实况接口','export-stale':'接口过期·回退策展','curated':'策展快照'};
+L584: return '<span class="fpc" data-cmd="'+m.n+'" data-pre="致 '+m.n+'：安排任务 " title="'+esc(m.now||'')+'"><span class="fdot '+fdotCls(m.flag)+'"></span>'+m.n+' · '+(m.
+L678: if(DATA.veto&&DATA.veto.length){h+='<div class="block-label">'+(DATA.priority.veto_label||'')+'</div><div class="outs"><div class="chips">'+DATA.veto.map(functi
+L710: if(DATA.recent&&DATA.recent.length){
+L711: h+='<div class="sec-title"><span class="sq" style="background:#60a5fa;box-shadow:0 0 8px #60a5fa"></span>'+(DATA.recent_sec||'你最近的令与结果')+'<span class="hint">'+(
+L713: DATA.recent.forEach(function(r){h+='<div class="out-line"><span class="st on"></span><span class="txt">'+r.t+' '+r.q+'</span><span class="tag">'+r.st+'</span></
+L734: h+='<div class="sub-now" style="padding-bottom:13px">'+(C.building||'')+(C.next?' · '+C.next:'')+'</div></div>';
+L799: (a.now?'<div class="fc-now">'+MT.lb_now+'：'+a.now+'</div>':'')+
+L820: if(s.last_subj)h+='<div class="sub-live" title="'+esc(s.last_subj)+'"><b>最新动作：</b>'+esc(s.last_subj)+(s.last_rel?('（'+s.last_rel+'）'):'')+'</div>';
+L821: h+='<div class="sub-now">'+(s.now||'')+'</div>';
+L824: if(s.src)h+='<div class="sub-src'+(s.src==='live-export'?' live':(s.src==='export-stale'?' estale':''))+'" style="padding:0 16px 12px">'+(s.src==='live-export'?
+L843: (L.rounds||[]).forEach(function(rd){h+='<div class="out-line"><span class="st wait"></span><span class="txt">'+L.l_rounds+'：'+rd.n+'</span><span class="tag">下次 
+L879: // P-79: local LLM face (CEO order 09-25 ~22:3x) - live probe + benchmark scores + business lines
+L915: h+='<div class="machine'+(m.flag==='stale'?' stale':(m.flag==='gsoft'?' gsoft':''))+'" data-cmd="'+m.n+'" data-pre="致 '+m.n+'：安排任务 " title="'+esc(m.title||'')+'
+L929: const now=track.querySelector('.mile.now');
+L985: pano.addEventListener('pointerdown',function(e){drag=true;auto=false;sx=e.clientX;sl=pano.scrollLeft;wrap.classList.add('live');pano.setPointerCapture(e.pointer
+L989: pano.addEventListener('wheel',function(e){auto=false;wrap.classList.add('live');},{passive:true});
+L1161: var GS=D.game_status||{live:'已上线',ready:'上线冲刺',wip:'在产',build:'在建'};
+L1184: if(s.now)h+='<div class="pg-lead">'+s.now+'</div>';
+L1197: var cnt={live:0,ready:0,wip:0,build:0};
+L1199: h+='<div class="gstat"><span class="gs">已上线 <b>'+cnt.live+'</b> 款</span><span class="gs">上线冲刺 <b>'+cnt.ready+'</b> 款</span><span class="gs">在产 <b>'+cnt.wip+'</b
+L1203: h+='<div class="gcard '+(g.st==='live'?'live':'wip')+'" data-game="'+i+'"><div class="g-nm">'+g.nm+'<span class="g-tag t-'+g.st+'">'+(GS[g.st]||'')+'</span></di
+L1256: h+='<div class="pg-lead">'+(C.building||'')+(C.next?' · '+C.next:'')+'</div>';
+
+=== siliconwatch dir files ===
+.gitignore
+cache-weather.json
+canonical.html
+generate.ps1
+pano-rerender.ps1
+pano-state.json
+pano-stitch.py
+strings.json
+sync-template.ps1
+
+=== status-export consumers scan ===
+C:\Users\sjs20\Desktop\FluxGroup\gaming\MiniGame\tools\siliconwatch\generate.ps1 | status-export ref | live-word=True
+
+==================== generate.ps1 now/last_subj source trace + strings.json now keys ====================
+L19: $now = [DateTimeOffset]::Now
+L20: $epoch = $now.ToUnixTimeSeconds()
+L50: $D['gen_ts'] = $now.ToString('HH:mm')
+L245: $subs += [ordered]@{ ico = [string]$sub.ico; accent = [string]$sub.accent; nm = [string]$sub.nm; do = $do; status = $status; act = $act; src = $src; snapshot = [string]$S._meta.curated_ts; depts = $de
+L367: $o['now'] = $nowline
+L387: $fleet += [ordered]@{ n = [string]$st.n; role = [string]$st.role; flag = [string]$st.flag; ft = [string]$st.ft; spec = [string]$st.spec; now = [string]$st.now; age_min = -1; title = '' }
+L406: $todayKey = $now.ToString('yyyy-MM-dd')
+L450: $todayStr = $now.ToString('yyyy-MM-dd')
+L471: $hh = $now.Hour
+L474: $mm = $now.Month
+L506: $D['city_time'] = [ordered]@{ phase = $phase; phase_label = $phL; season = $season; season_label = $seL; clock = $now.ToString('MM-dd HH:mm'); weather = $weatherTxt; lines = @($ctLines) }
+L555: bd = [string]$cj.brain_digest; now = [string]$cj.behavior_hint; ring = [string]$cj.recent_ring }
+L701: $D['footer'] = ([string]$S.footer_tpl) -replace '\{0\}', $now.ToString('HH:mm')
+--- strings.json live/now/subj/rel keys ---
+KEY /labels/game_status/live
+KEY /labels/rel
+KEY /labels/weather_kinds/snow
+KEY /labels/weather_kinds/unknown
+KEY /subs[0]/now
+KEY /subs[1]/now
+KEY /subs[2]/now
+KEY /subs[3]/now
+KEY /subs[4]/now
+KEY /subs[5]/now
+KEY /subs[6]/now
+KEY /city_time/weather_lines/snow
+KEY /fleet_static[0]/now
+KEY /fleet_static[1]/now
+KEY /fleet_tpl/mg_now
+KEY /fleet_tpl/bm_now
+KEY /fleet_tpl/stale_now
+KEY /meet/lb_now
+

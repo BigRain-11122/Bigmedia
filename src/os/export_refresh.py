@@ -52,7 +52,21 @@ import sys
 DEFAULT_EXPORT_REL = os.path.join("docs", "status-export.json")
 
 # patch whitelist - the export's full top-level schema minus the
-# writer-owned export_ts
+# writer-owned export_ts.
+# tech#72 (R1906) consumer verification: the siliconwatch shaper
+# (MiniGame tools/siliconwatch/generate.ps1 v6.2 L180-241) consumes
+# exactly six keys - export_ts/do/depts/outs/chips/results - and does
+# NOT read "live"; the board card's now-line comes from curated
+# strings.json subs[n].now, the last-action line from the heartbeat
+# face (evidence: .c3-tmp/r1906_t72_consumer_evidence.txt). "live" is
+# therefore retained in the whitelist for CEO-direct consumption
+# (product-priority-law section 5: the export file itself is the
+# CEO-visible face), not for the shaper. Per the tech#72 prereg this
+# downgrades the proposed live-shape guard to this annotation (negative
+# result kept on file). Re-verify trigger: the O-20261010-1955
+# siliconwatch rework (second-level company pages) may add live-key
+# consumption - re-scan on its landing; only then consider a shape
+# guard (existence + 3 rows + caps).
 KNOWN_KEYS = ("do", "depts", "outs", "chips", "results", "live")
 
 RC_OK = 0
