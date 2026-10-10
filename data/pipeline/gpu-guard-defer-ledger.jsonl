@@ -5,3 +5,4 @@
 {"ts": "2026-10-11 06:50:28", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 218MB < 2048MB", "util_pct": 42, "free_mb": 218, "rc": 5}
 {"ts": "2026-10-11 06:51:14", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 250MB < 2048MB", "util_pct": 39, "free_mb": 250, "rc": 5}
 {"ts": "2026-10-11 06:52:00", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 260MB < 2048MB", "util_pct": 51, "free_mb": 260, "rc": 5}
+{"ts": "2026-10-11 07:12:23", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 286MB < 2048MB", "util_pct": 44, "free_mb": 286, "rc": 5}
