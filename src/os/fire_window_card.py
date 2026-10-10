@@ -65,6 +65,16 @@ CHILD_TIMEOUT_S = 240
 # this TTL must re-run the card instead of consuming a stale GO.
 FIRE_VALID_S = 120
 
+# tech#90: readings are collected SEQUENTIALLY (gate 6x5s ~30s, then
+# mv, then probe, then an optional credit re-run), so by verdict time
+# the oldest reading is already ~40-70s stale -- the 120s fire TTL's
+# usable margin is silently eaten by read-side staleness (R1943
+# anchor: the shadow window closed <2min after fire). Each slim
+# reading therefore carries collected_at + age_s_at_verdict, plus a
+# card-level oldest_reading_age_s, so a consumer can discount the TTL
+# by the reading age instead of consuming an implicitly stale GO.
+COLLECTED_AT_FMT = "%Y-%m-%d %H:%M:%S"
+
 PROBE_SKIP_STATUS = "skipped-not-resident"
 PATH_A = "A-hot-resident"
 PATH_B = "B-eviction-credit"
@@ -216,32 +226,40 @@ def _slim_probe(p):
 def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
                 samples=DEFAULT_SAMPLES, interval=DEFAULT_INTERVAL,
                 min_free=REVIEW_MIN_FREE_MB, util_max=REVIEW_UTIL_MAX,
-                now=None):
+                now=None, clock=None):
     """Run the three readings in sequence-law order, attempt the credit
     re-run only per the SOP, and compose the one-line card dict.
 
     The four function arguments are the injection seams (real seams =
     real_gate_static / real_mv_probe / real_ollama_probe /
-    real_gate_credit); tests inject fakes for hermetic runs."""
+    real_gate_credit); tests inject fakes for hermetic runs. ``clock``
+    (tech#90) stamps each reading's collection time; tests inject a
+    deterministic advancing clock for age-math verification."""
+    clock = clock or datetime.datetime.now
     sequence = ["gate-static"]
+    gate_at = clock()
     gate = gate_static_fn(samples, interval, min_free, util_max)
     sequence.append("mv-probe")
+    mv_at = clock()
     mv = mv_fn()
     sequence.append("ollama-probe")
+    probe_at = clock()
     probe = probe_fn()
 
     gate_credit = None
+    credit_at = None
     if (probe.get("status") == PROBE_SKIP_STATUS
             and probe.get("eviction_aware_verdict") == "fly"
             and mv.get("verdict") == "quiet"):
         credit_mb = probe.get("evictable_mb") or 0
         if isinstance(credit_mb, (int, float)) and credit_mb > 0:
             sequence.append("gate-credit")
+            credit_at = clock()
             gate_credit = gate_credit_fn(credit_mb, samples, interval,
                                          min_free, util_max)
 
     verdict, path, reasons = classify_fire(gate, mv, probe, gate_credit)
-    now_dt = now or datetime.datetime.now()
+    now_dt = now or clock()
     card = {
         "card": "fire_window_card",
         "ts": now_dt.strftime("%Y-%m-%d %H:%M:%S"),
@@ -256,6 +274,18 @@ def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
             "gate_credit": _slim_gate(gate_credit),
         },
     }
+    stamps = {"gate": gate_at, "mv": mv_at, "probe": probe_at,
+              "gate_credit": credit_at}
+    oldest_age_s = 0
+    for name, reading in card["readings"].items():
+        stamp = stamps.get(name)
+        if reading is None or stamp is None:
+            continue
+        age_s = int((now_dt - stamp).total_seconds())
+        reading["collected_at"] = stamp.strftime(COLLECTED_AT_FMT)
+        reading["age_s_at_verdict"] = age_s
+        oldest_age_s = max(oldest_age_s, age_s)
+    card["oldest_reading_age_s"] = oldest_age_s
     if verdict == "fire":
         fired_epoch = int(now_dt.timestamp())
         card["fired_at"] = fired_epoch
@@ -287,6 +317,18 @@ def _render_human(card):
         lines.append("  gate-credit: go=%s evictable=%s effective_free=%s"
                      % (credit.get("go"), credit.get("evictable_mb"),
                         credit.get("effective_free_mb")))
+    age_parts = []
+    for name in ("gate", "mv", "probe", "gate_credit"):
+        reading = card["readings"].get(name)
+        if isinstance(reading, dict) and "age_s_at_verdict" in reading:
+            age_parts.append("%s=%ss" % (name,
+                                         reading["age_s_at_verdict"]))
+    if age_parts:
+        lines.append("  readings-age: %s (oldest=%ss vs fire TTL %ss"
+                     " -- count reading staleness against the TTL, the"
+                     " verdict-ts clock starts the window)"
+                     % (" ".join(age_parts),
+                        card.get("oldest_reading_age_s"), FIRE_VALID_S))
     if card.get("verdict") == "fire":
         lines.append("  fire-valid: %ss (expires epoch %s; re-run the "
                      "card after expiry, never consume a stale GO)"

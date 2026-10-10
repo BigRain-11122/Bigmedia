@@ -337,5 +337,102 @@ class CliTests(unittest.TestCase):
         self.assertEqual(rc, 2)
 
 
+class ReadingsTimestampTests(unittest.TestCase):
+    """tech#90: readings are collected sequentially, so by verdict time
+    the oldest (gate) reading is already tens of seconds stale -- the
+    120s fire TTL's usable margin is silently eaten. Every slim
+    reading carries collected_at + age_s_at_verdict, the card carries
+    oldest_reading_age_s, and the human face renders a readings-age
+    line so a consumer can discount the TTL by read-side staleness."""
+
+    BASE = datetime.datetime(2026, 10, 11, 6, 0, 0)
+
+    def _clock(self, step_s):
+        state = {"n": 0}
+
+        def clock():
+            stamp = self.BASE + datetime.timedelta(
+                seconds=state["n"] * step_s)
+            state["n"] += 1
+            return stamp
+        return clock
+
+    def _card(self, gate, probe, credit, step_s=10, now=None):
+        return fwc.orchestrate(
+            lambda *a: gate, lambda: MV_QUIET, lambda: probe,
+            lambda *a: credit, now=now, clock=self._clock(step_s))
+
+    def test_age_math_deterministic_path_b(self):
+        # clock calls: gate@0s mv@10s probe@20s credit@30s verdict@40s
+        card = self._card(GATE_NOGO_UTIL, PROBE_SKIP_FLY, CREDIT_GO)
+        self.assertEqual(card["verdict"], "fire")
+        readings = card["readings"]
+        self.assertEqual(readings["gate"]["age_s_at_verdict"], 40)
+        self.assertEqual(readings["mv"]["age_s_at_verdict"], 30)
+        self.assertEqual(readings["probe"]["age_s_at_verdict"], 20)
+        self.assertEqual(readings["gate_credit"]["age_s_at_verdict"], 10)
+        # oldest = the first-collected gate reading
+        self.assertEqual(card["oldest_reading_age_s"], 40)
+
+    def test_age_math_deterministic_path_a_no_credit(self):
+        # clock calls: gate@0s mv@10s probe@20s verdict@30s (no credit)
+        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        self.assertEqual(card["verdict"], "fire")
+        self.assertEqual(card["readings"]["gate"]["age_s_at_verdict"],
+                         30)
+        self.assertNotIn("gate_credit", card["sequence"])
+        self.assertIsNone(card["readings"]["gate_credit"])
+        self.assertEqual(card["oldest_reading_age_s"], 30)
+
+    def test_collected_at_string_format(self):
+        card = self._card(GATE_NOGO_UTIL, PROBE_SKIP_FLY, CREDIT_GO)
+        self.assertEqual(card["readings"]["gate"]["collected_at"],
+                         "2026-10-11 06:00:00")
+        self.assertEqual(card["readings"]["gate_credit"]
+                         ["collected_at"], "2026-10-11 06:00:30")
+        for name in ("gate", "mv", "probe", "gate_credit"):
+            reading = card["readings"][name]
+            self.assertRegex(reading["collected_at"],
+                             r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+            self.assertIsInstance(reading["age_s_at_verdict"], int)
+
+    def test_now_override_uses_now_for_verdict_ts(self):
+        # explicit now still wins for the verdict ts (backward compat
+        # with FireFreshnessTests); ages read against that now.
+        now = datetime.datetime(2026, 10, 11, 6, 1, 0)
+        card = self._card(GATE_NOGO_UTIL, PROBE_SKIP_FLY, CREDIT_GO,
+                          step_s=10, now=now)
+        self.assertEqual(card["ts"], "2026-10-11 06:01:00")
+        self.assertEqual(card["readings"]["gate"]["age_s_at_verdict"],
+                         60)
+        self.assertEqual(card["oldest_reading_age_s"], 60)
+
+    def test_human_render_carries_readings_age_line(self):
+        card = self._card(GATE_NOGO_UTIL, PROBE_SKIP_FLY, CREDIT_GO)
+        text = fwc._render_human(card)
+        self.assertIn("readings-age:", text)
+        self.assertIn("gate=40s", text)
+        self.assertIn("mv=30s", text)
+        self.assertIn("probe=20s", text)
+        self.assertIn("gate_credit=10s", text)
+        self.assertIn("oldest=40s", text)
+        self.assertIn(str(fwc.FIRE_VALID_S), text)
+
+    def test_human_render_path_a_omits_credit_age(self):
+        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        text = fwc._render_human(card)
+        self.assertIn("gate=30s", text)
+        self.assertNotIn("gate_credit=", text)
+
+    def test_no_fire_path_carries_ages_too(self):
+        # freshness face is read-side, not verdict-side: a no-fire card
+        # still archives the staleness readings for the record.
+        card = self._card(GATE_NOGO_UTIL, PROBE_OK, CREDIT_GO)
+        self.assertEqual(card["verdict"], "no-fire")
+        self.assertIn("age_s_at_verdict",
+                      card["readings"]["gate"])
+        self.assertEqual(card["oldest_reading_age_s"], 30)
+
+
 if __name__ == "__main__":
     unittest.main()

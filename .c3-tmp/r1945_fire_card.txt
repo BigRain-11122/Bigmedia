@@ -1,0 +1,6 @@
+﻿fire-window-card 2026-10-11 06:11:28: verdict=no-fire path=None
+  reasons: gate-static-no-go; vram-face: worst-case free 541MB < guard 2048MB; util-face: worst-case util 100% > gate 80%
+  gate: go=False free_min=541 util_max=100 band=5
+  mv: verdict=quiet newest_age_min=395.3
+  probe: status=ok face=ok evictable=0 counterfactual=None
+  readings-age: gate=40s mv=14s probe=14s (oldest=40s vs fire TTL 120s -- count reading staleness against the TTL, the verdict-ts clock starts the window)
