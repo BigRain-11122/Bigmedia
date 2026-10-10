@@ -65,6 +65,31 @@ probe time -- the probe itself triggered the cold load and the 60s cap
 expired mid-load. That is a scheduling fact (wait for residency), not a
 service fault; mislabeling it service-anomaly invites a pointless service
 restart. Unreadable mem stays the conservative anomaly face.
+
+tech#77 (R1928): residency pre-check via /api/ps before the generation
+flight (probe-gate order contamination, R1927 anchor: a cold 14b-8k load
+with free 4.2GB < 9GB model crawls in CPU offload, spikes util to 100
+during the load, times out the probe AND pollutes the gpu_window_gate
+samples taken right after -- the R1927/R1928-pre-fix "busy-contended"
+readings were partially the probe's own load, misattributed to the MV
+lane). Three retirements:
+  - /api/ps pre-check (status endpoint, never enters the generation
+    queue -- same family as the R1877 /api/tags trap, safe under
+    saturation): model not resident + free VRAM < model footprint ->
+    SKIP the cold flight, report face=not-resident (rc=2, status=
+    skipped-not-resident). No wasted cold load, no self-polluted util.
+    Model not resident but free >= footprint -> proceed (full-VRAM cold
+    load is fast and the flight still means something for tech#41);
+    a timeout there with the GPU busy gets face=probe-coldload (our own
+    load is the load) instead of busy-contended. ps unreadable -> old
+    behavior, no regression. --no-precheck forces the legacy flight.
+  - gate ordering discipline lives in the tech#75 判断位正法 (tech.md):
+    gpu_window_gate samples FIRST, probe SECOND -- with the pre-check
+    skip the probe no longer loads anything, so gate readings carry zero
+    probe self-load either way.
+  - footprint estimates per model (COLD_SKIP_MODEL_VRAM_MB): only known
+    models can trigger the skip; unknown models keep the legacy flight
+    (conservative). --cold-skip-free-mb N overrides (0 = never skip).
 """
 
 import argparse
@@ -130,17 +155,37 @@ FACE_GPU_BUSY_UTIL = 80  # tech#44 defer threshold
 # with gpu_mem under the line means the probe itself started a cold load.
 FACE_COLD_RELOAD_VRAM_MB = 4000
 
+PS_PATH = "/api/ps"
+PS_TIMEOUT = 10  # status endpoint: fast even under saturation (R1877 family)
+# tech#77: full-VRAM footprint estimates for the models we actually probe.
+# Below the estimate a cold load spills into CPU offload and crawls (R1927
+# anchor: free 4.2GB < 14b-8k ~9GB -> partial-offload slow load, util 100
+# during load, probe cap burned mid-load). Unknown models -> no estimate ->
+# legacy flight always (conservative).
+COLD_SKIP_MODEL_VRAM_MB = {
+    "qwen2.5:14b-8k": 9000,
+    "qwen2.5:7b": 4700,
+}
 
-def compute_face(result, gpu_ctx):
-    """Advisory face reading (tech#55 + tech#56). Never moves rc semantics.
 
-    Faces: ok / slot-wedged / saturated-busy / busy-contended /
-    cold-reload / service-anomaly / error / gpu-ctx-none (see module
-    docstring).
+def compute_face(result, gpu_ctx, precheck=None):
+    """Advisory face reading (tech#55 + tech#56 + tech#77). Never moves rc.
+
+    Faces: ok / not-resident / probe-coldload / slot-wedged /
+    saturated-busy / busy-contended / cold-reload / service-anomaly /
+    error / gpu-ctx-none (see module docstring). precheck carries the
+    tech#77 /api/ps reading (None = no pre-check ran; legacy callers
+    unchanged): when it saw the model NOT resident, a timeout with the GPU
+    busy is our own cold load in flight -> probe-coldload, not
+    busy-contended (R1927 misattribution anchor).
     """
     rc = result.get("rc")
     if rc == 0:
         return "ok"
+    # tech#77 pre-check skip: the flight never happened; the scheduling
+    # fact (model not resident, cold load would crawl) is the whole face.
+    if result.get("status") == "skipped-not-resident":
+        return "not-resident"
     util = (gpu_ctx or {}).get("gpu_util", "NONE")
     try:
         busy = int(util) >= FACE_GPU_BUSY_UTIL
@@ -150,6 +195,12 @@ def compute_face(result, gpu_ctx):
         return "saturated-busy" if busy else "slot-wedged"
     if rc == 2 and result.get("timeout"):
         if busy:
+            # tech#77: pre-check evidence says the model was NOT resident ->
+            # the busy GPU includes our own cold load (probe-coldload), not
+            # just the other lanes (busy-contended). No pre-check evidence ->
+            # honest unknown, keep the legacy face.
+            if precheck and precheck.get("ps_ok") and not precheck.get("resident"):
+                return "probe-coldload"
             return "busy-contended"
         # tech#56 cold-reload face: timeout + GPU idle + no model resident
         # (gpu_mem below the smallest model's footprint) = the probe itself
@@ -202,6 +253,10 @@ def _human_line(result):
     face = " face=%s" % result["face"] if result.get("face") and result["rc"] != 0 else ""
     if result["status"] == "ok":
         return "GEN-OK done_reason=%s model=%s" % (result["detail"], result["model"])
+    if result["status"] == "skipped-not-resident":
+        # tech#77: the flight never happened -- say so, never mimic a
+        # server signal.
+        return "GEN-SKIP not-resident %s%s" % (result.get("detail", ""), face)
     if result["status"] == "saturated":
         return "GEN-SATURATED status=%s detail=%s%s" % (
             result["http_status"], result["detail"], face)
@@ -243,18 +298,119 @@ def read_gpu_context():
         return {"gpu_util": "NONE", "gpu_mem": "NONE"}
 
 
-def append_ledger_row(path, result, gpu_ctx=None):
+def _nvidia_smi_free_query():
+    """Injection seam for tests: nvidia-smi total/used CSV query, or raise."""
+    out = subprocess.run(
+        ["nvidia-smi", "--query-gpu=memory.total,memory.used",
+         "--format=csv,noheader,nounits"],
+        capture_output=True, text=True, timeout=15)
+    if out.returncode != 0:
+        raise RuntimeError("nvidia-smi rc=%s" % out.returncode)
+    return out.stdout
+
+
+def read_gpu_free_mb():
+    """Best-effort free VRAM in MiB (tech#77 pre-check input).
+
+    None on any failure -> the pre-check stays permissive (legacy flight).
+    """
+    try:
+        text = _nvidia_smi_free_query()
+        first = text.strip().splitlines()[0] if text.strip() else ""
+        parts = [p.strip() for p in first.split(",")]
+        if len(parts) < 2 or not parts[0] or not parts[1]:
+            raise ValueError("unparseable nvidia-smi csv: %r" % first[:80])
+        return int(parts[0]) - int(parts[1])
+    except Exception:
+        return None
+
+
+def _http_get_ps(base_url, timeout):
+    """Injection seam for tests: real call is urllib GET /api/ps."""
+    req = urllib.request.Request(base_url.rstrip("/") + PS_PATH)
+    return urllib.request.urlopen(req, timeout=timeout)
+
+
+def _get_ps(base_url, timeout=PS_TIMEOUT):
+    """Best-effort /api/ps read (tech#77).
+
+    Returns (payload, True) on a well-shaped response ({models: [...]});
+    (None, False) on any transport error or bad shape -- the pre-check is
+    never a gate, a failed read falls back to the legacy generation flight.
+    """
+    try:
+        with _http_get_ps(base_url, timeout) as resp:
+            payload = json.loads(resp.read().decode("utf-8", "replace"))
+        if not isinstance(payload, dict) or not isinstance(payload.get("models"), list):
+            return None, False
+        return payload, True
+    except Exception:
+        return None, False
+
+
+def _ps_resident(payload, model):
+    """True when the /api/ps payload shows the target model loaded.
+
+    ollama lists loaded models under models[] with name/model fields; a
+    loaded manifest may carry a re-applied tag suffix
+    ("qwen2.5:14b-8k:latest"), so exact match or ":"-separated prefix
+    both count. Payload shape is pre-validated by _get_ps.
+    """
+    for entry in payload.get("models", []):
+        if not isinstance(entry, dict):
+            continue
+        for key in ("name", "model"):
+            val = entry.get(key)
+            if val == model or (isinstance(val, str) and
+                                (val.startswith(model + ":") or val.startswith(model + "/"))):
+                return True
+    return False
+
+
+def classify_precheck(resident, ps_ok, free_mb, model_vram_mb):
+    """Pure decision: run the cold generation flight or skip it (tech#77).
+
+    Order of permissiveness (any doubt -> run the legacy flight, the probe
+    itself stays the ground truth):
+      ps unreadable -> run (no evidence either way)
+      model resident -> run (no cold load exists; faces stay meaningful)
+      no footprint estimate for this model -> run (cannot pre-judge)
+      free VRAM unreadable -> run (tech#56 cold-reload face catches it
+        after the fact)
+      not resident + free < footprint -> SKIP: the cold load would spill
+        into CPU offload and crawl, burn the request cap and self-pollute
+        util (R1927 anchor); report the scheduling fact instead.
+      not resident + free >= footprint -> run (full-VRAM cold load is
+        fast; a busy timeout there is our own load -> probe-coldload face).
+    Returns (proceed: bool, reason: str).
+    """
+    if not ps_ok:
+        return True, "ps-unavailable"
+    if resident:
+        return True, "resident"
+    if not model_vram_mb:
+        return True, "no-estimate"
+    if free_mb is None:
+        return True, "free-unknown"
+    if free_mb < model_vram_mb:
+        return False, "cold-skip free=%dMB<model=%dMB" % (free_mb, model_vram_mb)
+    return True, "cold-run free=%dMB>=model=%dMB" % (free_mb, model_vram_mb)
+
+
+def append_ledger_row(path, result, gpu_ctx=None, precheck=None):
     """Best-effort JSONL append (tech#52): one row per real probe flight.
 
     Rows carry gpu_util/gpu_mem context columns (tech#54, R1883-R1885
     wedged-slot diagnosis gap: saturation + zero GPU activity is only
     visible when the row records GPU state at probe time) and the advisory
-    face column (tech#55) so window judgments read the three-face
-    discipline straight off the ledger row.
+    face column (tech#55, tech#77 not-resident/probe-coldload) so window
+    judgments read the face discipline straight off the ledger row.
 
     gpu_ctx: pre-read context reused when the caller already has it (one
     nvidia-smi per probe flight, not two); None -> read here (tech#52
-    call surface). WARN on failure, never raises, never changes the exit code.
+    call surface). precheck: tech#77 /api/ps evidence for the
+    probe-coldload face (None = legacy callers, faces unchanged). WARN on
+    failure, never raises, never changes the exit code.
     """
     gpu = gpu_ctx if gpu_ctx is not None else read_gpu_context()
     row = {
@@ -265,7 +421,7 @@ def append_ledger_row(path, result, gpu_ctx=None):
         "model": result["model"],
     }
     row.update(gpu)
-    row["face"] = compute_face(result, gpu)
+    row["face"] = compute_face(result, gpu, precheck)
     try:
         ledger_path = Path(path)
         ledger_path.parent.mkdir(parents=True, exist_ok=True)
@@ -289,6 +445,13 @@ def build_parser(argv=None):
     parser.add_argument("--ledger", nargs="?", const=str(DEFAULT_LEDGER), default=None,
                         help="append one JSONL row per probe flight to this path "
                              "(tech#52; bare --ledger = default %s)" % DEFAULT_LEDGER)
+    parser.add_argument("--no-precheck", action="store_true",
+                        help="skip the tech#77 /api/ps residency pre-check and always "
+                             "run the legacy generation flight")
+    parser.add_argument("--cold-skip-free-mb", type=int, default=None,
+                        help="tech#77 cold-skip threshold in MiB free VRAM (default: "
+                             "per-model estimate for known models, never skip otherwise; "
+                             "0 = never skip)")
     return parser
 
 
@@ -297,13 +460,58 @@ def main(argv=None):
     if args.timeout <= 0:
         print("GEN-ERROR bad-timeout=%s" % args.timeout)
         return 2
+    # tech#77 pre-check: /api/ps residency read before any generation
+    # flight. Never a gate -- any unreadable piece falls back to the
+    # legacy flight. ps_ok=False also feeds the probe-coldload face as
+    # "no evidence" (legacy faces unchanged).
+    precheck = None
+    if not args.no_precheck:
+        payload, ps_ok = _get_ps(args.base_url)
+        resident = _ps_resident(payload, args.model) if ps_ok else False
+        # free VRAM only feeds the cold-skip decision, which only exists
+        # for a ps-confirmed non-resident model -- read it lazily so the
+        # ps-unavailable path costs no extra nvidia-smi call.
+        free_mb = read_gpu_free_mb() if (ps_ok and not resident) else None
+        if args.cold_skip_free_mb is not None:
+            footprint = args.cold_skip_free_mb
+        else:
+            footprint = COLD_SKIP_MODEL_VRAM_MB.get(args.model, 0)
+        proceed, reason = classify_precheck(resident, ps_ok, free_mb, footprint)
+        precheck = {"ps_ok": ps_ok, "resident": resident,
+                    "free_mb": free_mb, "reason": reason}
+        if not proceed:
+            result = {
+                "rc": 2,
+                "status": "skipped-not-resident",
+                "http_status": None,
+                "detail": reason,
+                "model": args.model,
+                "base_url": args.base_url,
+                "timeout": False,
+                "skipped": True,
+                "gpu_free_mb": free_mb,
+                "precheck": reason,
+            }
+            gpu_ctx = read_gpu_context()
+            result["face"] = compute_face(result, gpu_ctx, precheck)
+            if args.ledger:
+                append_ledger_row(args.ledger, result, gpu_ctx, precheck)
+            if args.json:
+                result.update(gpu_ctx)
+                result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                print(json.dumps(result, ensure_ascii=True))
+            else:
+                print(_human_line(result))
+            return result["rc"]
     result = run_probe(model=args.model, timeout=args.timeout, base_url=args.base_url)
     gpu_ctx = read_gpu_context()
-    result["face"] = compute_face(result, gpu_ctx)
+    result["face"] = compute_face(result, gpu_ctx, precheck)
     if args.ledger:
-        append_ledger_row(args.ledger, result, gpu_ctx)
+        append_ledger_row(args.ledger, result, gpu_ctx, precheck)
     if args.json:
         result.update(gpu_ctx)
+        if precheck is not None:
+            result["precheck"] = precheck["reason"]
         result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(json.dumps(result, ensure_ascii=True))
     else:

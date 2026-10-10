@@ -27,6 +27,13 @@ itself started a cold load that outran the request cap; not a service
 fault (R1889 11:28:48 anchor). Busy generation still wins (busy-contended);
 unreadable mem stays the conservative service-anomaly face; 503 saturation
 semantics untouched (slot-wedged family).
+
+tech#77 (R1928): /api/ps residency pre-check -- skip only the pathological
+cold flight (ps-confirmed not resident + free VRAM < model footprint =
+CPU-offload crawl, R1927 anchor), face=not-resident (rc=2, status=
+skipped-not-resident, no generation flight at all); every unreadable piece
+falls back to the legacy flight; a not-resident cold-run timeout gets the
+probe-coldload face (our own load is the load) instead of busy-contended.
 """
 
 import io
@@ -246,9 +253,13 @@ class FaceTests(unittest.TestCase):
     def test_cli_json_carries_face_and_gpu_columns(self):
         orig_http = op._http_post
         orig_smi = op._nvidia_smi_query
+        orig_ps = op._http_get_ps
         op._http_post = lambda base_url, body, timeout: (_ for _ in ()).throw(
             TimeoutError("timed out"))
         op._nvidia_smi_query = lambda: "100, 11348\n"
+        # tech#77: main() pre-checks /api/ps before any flight -> hermetic.
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
         try:
             import contextlib
             buf = io.StringIO()
@@ -257,6 +268,7 @@ class FaceTests(unittest.TestCase):
         finally:
             op._http_post = orig_http
             op._nvidia_smi_query = orig_smi
+            op._http_get_ps = orig_ps
         self.assertEqual(rc, 2)  # rc semantics untouched by the advisory face
         line = json.loads(buf.getvalue().strip())
         self.assertEqual(line["face"], "busy-contended")
@@ -267,9 +279,12 @@ class FaceTests(unittest.TestCase):
     def test_human_line_carries_face_on_non_ok(self):
         orig_http = op._http_post
         orig_smi = op._nvidia_smi_query
+        orig_ps = op._http_get_ps
         op._http_post = lambda base_url, body, timeout: (_ for _ in ()).throw(
             TimeoutError("timed out"))
         op._nvidia_smi_query = lambda: "100, 11348\n"
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
         try:
             import contextlib
             buf = io.StringIO()
@@ -278,14 +293,18 @@ class FaceTests(unittest.TestCase):
         finally:
             op._http_post = orig_http
             op._nvidia_smi_query = orig_smi
+            op._http_get_ps = orig_ps
         self.assertEqual(rc, 2)
         self.assertIn("GEN-ERROR", buf.getvalue())
         self.assertIn("face=busy-contended", buf.getvalue())
 
     def test_human_line_ok_has_no_face_noise(self):
         orig_http = op._http_post
+        orig_ps = op._http_get_ps
         op._http_post = lambda base_url, body, timeout: _FakeResp(
             json.dumps({"done_reason": "stop"}).encode("utf-8"))
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
         try:
             import contextlib
             buf = io.StringIO()
@@ -293,6 +312,7 @@ class FaceTests(unittest.TestCase):
                 rc = op.main([])
         finally:
             op._http_post = orig_http
+            op._http_get_ps = orig_ps
         self.assertEqual(rc, 0)
         self.assertIn("GEN-OK", buf.getvalue())
         self.assertNotIn("face=", buf.getvalue())
@@ -302,12 +322,18 @@ class CliTests(unittest.TestCase):
     def setUp(self):
         self._orig = op._http_post
         self._orig_smi = op._nvidia_smi_query
+        self._orig_ps = op._http_get_ps
         # main() reads GPU context once per flight (tech#55 face) -> hermetic.
         op._nvidia_smi_query = lambda: "1, 3328\n"
+        # tech#77: main() pre-checks /api/ps before any flight -> hermetic
+        # (ps unavailable -> legacy flight, existing rc semantics exercised).
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
 
     def tearDown(self):
         op._http_post = self._orig
         op._nvidia_smi_query = self._orig_smi
+        op._http_get_ps = self._orig_ps
 
     def _patch_saturation(self):
         def fake(base_url, body, timeout):
@@ -375,11 +401,15 @@ class LedgerTests(unittest.TestCase):
         self._orig = op._http_post
         self._orig_smi = op._nvidia_smi_query
         self._orig_default_ledger = op.DEFAULT_LEDGER
+        self._orig_ps = op._http_get_ps
         self.tmp = tempfile.mkdtemp(prefix="bs-ollama-ledger-")
         op.DEFAULT_LEDGER = self._path("default-ledger.jsonl")
         # Hermetic GPU context (tech#55: main() reads GPU once per flight).
         op._nvidia_smi_query = lambda: "1, 3328\n"
-
+        # tech#77: /api/ps pre-check -> hermetic (ps unavailable -> legacy flight).
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
+        # Hermetic _http_post for the default ledger paths: 503 saturation.
         def fake(base_url, body, timeout):
             raise _http_error(503, SATURATION_DETAIL)
         op._http_post = fake
@@ -387,6 +417,7 @@ class LedgerTests(unittest.TestCase):
     def tearDown(self):
         op._http_post = self._orig
         op._nvidia_smi_query = self._orig_smi
+        op._http_get_ps = self._orig_ps
         op.DEFAULT_LEDGER = self._orig_default_ledger
         shutil.rmtree(self.tmp, ignore_errors=True)
 
@@ -477,15 +508,20 @@ class GpuContextTests(unittest.TestCase):
     def setUp(self):
         self._orig = op._http_post
         self._orig_smi = op._nvidia_smi_query
+        self._orig_ps = op._http_get_ps
         self.tmp = tempfile.mkdtemp(prefix="bs-ollama-gpu-")
 
         def fake(base_url, body, timeout):
             raise _http_error(503, SATURATION_DETAIL)
         op._http_post = fake
+        # tech#77: /api/ps pre-check -> hermetic (ps unavailable -> legacy flight).
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
 
     def tearDown(self):
         op._http_post = self._orig
         op._nvidia_smi_query = self._orig_smi
+        op._http_get_ps = self._orig_ps
         shutil.rmtree(self.tmp, ignore_errors=True)
 
     def _path(self):
@@ -536,6 +572,283 @@ class GpuContextTests(unittest.TestCase):
         self.assertEqual(row["status"], "saturated")
         self.assertEqual(row["gpu_util"], "1")
         self.assertEqual(row["gpu_mem"], "3328")
+
+
+class PrecheckTests(unittest.TestCase):
+    """tech#77: /api/ps residency pre-check (probe-gate order
+    contamination, R1927 anchor).
+
+    Skip only the pathological cold flight (ps-confirmed not resident +
+    free VRAM < model footprint = CPU-offload crawl that burns the cap and
+    self-pollutes util); every unreadable piece stays permissive (legacy
+    flight). probe-coldload face annotates the remaining cold-run timeout
+    (our own load is the load) -- R1927/R1928-pre-fix readings were
+    partially self-load misattributed to the MV lane as busy-contended.
+    """
+
+    def setUp(self):
+        self._orig_ps = op._http_get_ps
+        self._orig_http = op._http_post
+        self._orig_smi = op._nvidia_smi_query
+        self._orig_smi_free = op._nvidia_smi_free_query
+        self.tmp = tempfile.mkdtemp(prefix="bs-ollama-precheck-")
+        op._nvidia_smi_query = lambda: "100, 1867\n"
+
+    def tearDown(self):
+        op._http_get_ps = self._orig_ps
+        op._http_post = self._orig_http
+        op._nvidia_smi_query = self._orig_smi
+        op._nvidia_smi_free_query = self._orig_smi_free
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _ps(self, models):
+        payload = json.dumps(
+            {"models": [{"name": n} for n in models]}).encode("utf-8")
+        op._http_get_ps = lambda base_url, timeout: _FakeResp(payload)
+
+    def _ps_fail(self):
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
+
+    def _flight_timeout(self, calls):
+        def fake(base_url, body, timeout):
+            calls["flights"] += 1
+            raise TimeoutError("timed out")
+        op._http_post = fake
+
+    def _flight_ok(self, calls):
+        def fake(base_url, body, timeout):
+            calls["flights"] += 1
+            return _FakeResp(json.dumps({"done_reason": "stop"}).encode("utf-8"))
+        op._http_post = fake
+
+    def _run(self, argv):
+        import contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            return op.main(argv), buf.getvalue()
+
+    # ---- classify_precheck pure decisions -------------------------------
+
+    def test_decide_ps_unavailable_runs(self):
+        proceed, reason = op.classify_precheck(False, False, 100, 9000)
+        self.assertTrue(proceed)
+        self.assertEqual(reason, "ps-unavailable")
+
+    def test_decide_resident_runs(self):
+        proceed, reason = op.classify_precheck(True, True, 100, 9000)
+        self.assertTrue(proceed)
+        self.assertEqual(reason, "resident")
+
+    def test_decide_no_estimate_runs(self):
+        # Unknown model: no footprint entry -> cannot pre-judge -> legacy flight.
+        self.assertTrue(op.classify_precheck(False, True, 100, 0)[0])
+        self.assertEqual(op.classify_precheck(False, True, 100, 0)[1], "no-estimate")
+
+    def test_decide_free_unknown_runs(self):
+        # nvidia-smi unreadable -> tech#56 cold-reload face catches it after
+        # the fact; the pre-check never gates on missing data.
+        proceed, reason = op.classify_precheck(False, True, None, 9000)
+        self.assertTrue(proceed)
+        self.assertEqual(reason, "free-unknown")
+
+    def test_decide_cold_skip_below_footprint(self):
+        # R1927 anchor shape: not resident + free 4.2GB < 14b-8k ~9GB ->
+        # partial CPU-offload crawl. Skip, report the scheduling fact.
+        proceed, reason = op.classify_precheck(False, True, 4200, 9000)
+        self.assertFalse(proceed)
+        self.assertIn("cold-skip", reason)
+        self.assertIn("4200", reason)
+        self.assertIn("9000", reason)
+
+    def test_decide_cold_run_at_or_above_footprint(self):
+        # Boundary strictly at the footprint -> full-VRAM cold load -> run.
+        proceed, reason = op.classify_precheck(False, True, 9000, 9000)
+        self.assertTrue(proceed)
+        self.assertEqual(reason, "cold-run free=9000MB>=model=9000MB")
+        proceed, _ = op.classify_precheck(False, True, 8999, 9000)
+        self.assertFalse(proceed)
+
+    # ---- /api/ps payload handling ---------------------------------------
+
+    def test_ps_resident_name_forms(self):
+        payload = {"models": [{"name": "qwen2.5:14b-8k:latest"},
+                              {"model": "other:7b"}]}
+        self.assertTrue(op._ps_resident(payload, "qwen2.5:14b-8k"))
+        self.assertTrue(op._ps_resident(payload, "other:7b"))
+        self.assertFalse(op._ps_resident(payload, "qwen2.5:7b"))
+
+    def test_ps_resident_tolerates_junk_entries(self):
+        payload = {"models": ["junk", {"nope": 1}, {"name": "qwen2.5:7b"}]}
+        self.assertTrue(op._ps_resident(payload, "qwen2.5:7b"))
+        self.assertFalse(op._ps_resident(payload, "qwen2.5:14b-8k"))
+
+    def test_get_ps_shape_gates(self):
+        # Bad JSON / non-dict / models-not-a-list all read as (None, False)
+        # -- the pre-check is never a gate, unreadable -> legacy flight.
+        orig = op._http_get_ps
+        try:
+            op._http_get_ps = lambda base_url, timeout: _FakeResp(b"not json")
+            self.assertEqual(op._get_ps("http://x"), (None, False))
+            op._http_get_ps = lambda base_url, timeout: _FakeResp(b'{"models": "nope"}')
+            self.assertEqual(op._get_ps("http://x"), (None, False))
+            op._http_get_ps = lambda base_url, timeout: _FakeResp(b'[]')
+            self.assertEqual(op._get_ps("http://x"), (None, False))
+            op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+                urllib.error.URLError("refused"))
+            self.assertEqual(op._get_ps("http://x"), (None, False))
+            good = {"models": [{"name": "m:1"}]}
+            op._http_get_ps = lambda base_url, timeout: _FakeResp(
+                json.dumps(good).encode("utf-8"))
+            self.assertEqual(op._get_ps("http://x"), (good, True))
+        finally:
+            op._http_get_ps = orig
+
+    def test_read_gpu_free_mb(self):
+        orig = op._nvidia_smi_free_query
+        try:
+            op._nvidia_smi_free_query = lambda: "12288, 7547\n"
+            self.assertEqual(op.read_gpu_free_mb(), 4741)
+            op._nvidia_smi_free_query = lambda: "garbage csv\n"
+            self.assertIsNone(op.read_gpu_free_mb())
+
+            def boom():
+                raise RuntimeError("nvidia-smi missing")
+            op._nvidia_smi_free_query = boom
+            self.assertIsNone(op.read_gpu_free_mb())
+        finally:
+            op._nvidia_smi_free_query = orig
+
+    # ---- probe-coldload face (tech#77 candidate ③) ---------------------
+
+    def _timeout_result(self):
+        return {"rc": 2, "status": "error", "timeout": True}
+
+    def test_face_probe_coldload_only_with_not_resident_evidence(self):
+        gpu = {"gpu_util": "100", "gpu_mem": "1867"}
+        # ps saw the model NOT resident -> the busy GPU includes our own
+        # cold load (R1927 misattribution anchor) -> probe-coldload.
+        self.assertEqual(op.compute_face(
+            self._timeout_result(), gpu,
+            {"ps_ok": True, "resident": False}), "probe-coldload")
+        # ps saw it resident -> the busy-ness is other lanes -> legacy face.
+        self.assertEqual(op.compute_face(
+            self._timeout_result(), gpu,
+            {"ps_ok": True, "resident": True}), "busy-contended")
+        # ps unavailable / no pre-check -> honest unknown, legacy face.
+        self.assertEqual(op.compute_face(
+            self._timeout_result(), gpu,
+            {"ps_ok": False, "resident": False}), "busy-contended")
+        self.assertEqual(op.compute_face(self._timeout_result(), gpu), "busy-contended")
+
+    def test_face_not_resident_for_skip_status(self):
+        gpu = {"gpu_util": "100", "gpu_mem": "1867"}
+        self.assertEqual(op.compute_face(
+            {"rc": 2, "status": "skipped-not-resident", "timeout": False},
+            gpu, {"ps_ok": True, "resident": False}), "not-resident")
+
+    # ---- main() skip / proceed / flag surfaces --------------------------
+
+    def test_main_skips_pathological_cold_flight(self):
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps([])  # model not resident
+        op._nvidia_smi_free_query = lambda: "12288, 7547\n"  # free 4741 < 9000
+        path = os.path.join(self.tmp, "skip-ledger.jsonl")
+        rc, out = self._run(["--json", "--ledger", path])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertEqual(line["status"], "skipped-not-resident")
+        self.assertEqual(line["face"], "not-resident")
+        self.assertTrue(line["skipped"])
+        self.assertEqual(line["gpu_free_mb"], 4741)
+        self.assertIn("cold-skip", line["precheck"])
+        # The whole point: no generation flight, no cold load, no pollution.
+        self.assertEqual(calls["flights"], 0)
+        with open(path, encoding="utf-8") as fh:
+            row = json.loads(fh.read().splitlines()[0])
+        self.assertEqual(row["status"], "skipped-not-resident")
+        self.assertEqual(row["face"], "not-resident")
+        self.assertEqual(row["rc"], 2)
+
+    def test_main_skip_human_line(self):
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps([])
+        op._nvidia_smi_free_query = lambda: "12288, 7547\n"
+        rc, out = self._run([])
+        self.assertEqual(rc, 2)
+        self.assertIn("GEN-SKIP not-resident", out)
+        self.assertIn("face=not-resident", out)
+        self.assertEqual(calls["flights"], 0)
+
+    def test_main_resident_proceeds_with_flight(self):
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps([op.DEFAULT_MODEL])
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 0)
+        line = json.loads(out.strip())
+        self.assertEqual(line["status"], "ok")
+        self.assertEqual(line["face"], "ok")
+        self.assertEqual(line["precheck"], "resident")
+        self.assertEqual(calls["flights"], 1)
+
+    def test_main_ps_failure_runs_legacy_flight(self):
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps_fail()
+        free_calls = {"n": 0}
+
+        def free_query():
+            free_calls["n"] += 1
+            return "12288, 7547\n"
+        op._nvidia_smi_free_query = free_query
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(json.loads(out.strip())["precheck"], "ps-unavailable")
+        self.assertEqual(calls["flights"], 1)
+        # Lazy free read: ps unavailable -> the nvidia-smi free query never
+        # runs (the decision does not consume it).
+        self.assertEqual(free_calls["n"], 0)
+
+    def test_main_no_precheck_flag_never_touches_ps(self):
+        calls = {"flights": 0, "ps": 0}
+        self._flight_ok(calls)
+
+        def ps_spy(base_url, timeout):
+            calls["ps"] += 1
+            raise AssertionError("ps must not be queried under --no-precheck")
+        op._http_get_ps = ps_spy
+        rc, out = self._run(["--json", "--no-precheck"])
+        self.assertEqual(rc, 0)
+        self.assertNotIn("precheck", json.loads(out.strip()))
+        self.assertEqual(calls, {"flights": 1, "ps": 0})
+
+    def test_main_cold_skip_disabled_by_zero_override(self):
+        calls = {"flights": 0}
+        self._flight_ok(calls)
+        self._ps([])
+        op._nvidia_smi_free_query = lambda: "12288, 7547\n"
+        rc, _ = self._run(["--json", "--cold-skip-free-mb", "0"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(calls["flights"], 1)
+
+    def test_main_cold_run_timeout_gets_probe_coldload_face(self):
+        # Not resident but free >= footprint -> full-VRAM cold load runs;
+        # a timeout there is OUR OWN load in flight (probe-coldload), no
+        # longer misattributed to the other lanes (R1927 anchor).
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps([])
+        op._nvidia_smi_free_query = lambda: "12288, 3000\n"  # free 9288 >= 9000
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertEqual(line["face"], "probe-coldload")
+        self.assertTrue(line["timeout"])
+        self.assertEqual(line["precheck"], "cold-run free=9288MB>=model=9000MB")
+        self.assertEqual(calls["flights"], 1)
 
 
 if __name__ == "__main__":
