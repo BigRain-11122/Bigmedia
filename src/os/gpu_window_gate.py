@@ -222,6 +222,56 @@ def aggregate_gpu_readings(readings, n_fail=0):
     }
 
 
+# tech#79 attribution face: known GPU producer patterns (case-insensitive
+# substring on process_name). Non-whitelist rows fold into one count.
+# R1929 anchor: manual attribution read = ComfyUI python + Tuanjie +
+# llama-server. WDDM blocks per-process VRAM (used_memory=[N/A]) so the
+# face is process_name/pid only -- advisory, never a gate.
+PRODUCER_PATTERNS = ("python", "llama", "ollama", "tuanjie", "unity",
+                     "comfy")
+
+
+def query_compute_apps(timeout=10):
+    """nvidia-smi --query-compute-apps -> [{'pid','process'}] or None.
+
+    Locale-tolerant parse: rows whose first cell is not a plain integer
+    (e.g. the 'No running processes found' banner, junk) are skipped --
+    an empty list is an honest 'no consumers' reading, None is unreadable.
+    """
+    out = _run_capture(
+        ["nvidia-smi", "--query-compute-apps=pid,process_name",
+         "--format=csv,noheader,nounits"],
+        timeout=timeout,
+    )
+    if not out:
+        return None
+    rows = []
+    for line in out.strip().splitlines():
+        parts = [p.strip() for p in line.strip().split(",")]
+        if len(parts) < 2 or not parts[0].isdigit():
+            continue
+        rows.append({"pid": int(parts[0]), "process": parts[1]})
+    return rows
+
+
+def classify_producers(rows, patterns=None):
+    """Fold compute-app rows -> attribution dict (advisory only).
+
+    Whitelist-matched processes are listed with pid; everything else folds
+    into a single other count so GUI noise never floods the reading.
+    """
+    pats = PRODUCER_PATTERNS if patterns is None else tuple(patterns)
+    producers = []
+    other = 0
+    for r in rows:
+        name = r["process"].lower()
+        if any(p in name for p in pats):
+            producers.append(r)
+        else:
+            other += 1
+    return {"producers": producers, "other": other, "raw": len(rows)}
+
+
 def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
            band_mb=None, read_fail=None, sampled=False):
     """Compose the faces -> verdict dict (go bool + reasons).
@@ -357,6 +407,17 @@ def main(argv=None):
             verdict["read_ok"] = agg["read_ok"]
             verdict["read_fail"] = agg["read_fail"]
 
+    # tech#79: attach the producer attribution face on NO-GO only (the
+    # judgment position needs to explain a blocked window, not a clear
+    # one). Advisory -- never touches go/reasons/exit code. Unreadable
+    # probe -> explicit error note (honest absence, not silent omission).
+    if not verdict["go"]:
+        apps = query_compute_apps()
+        if apps is None:
+            verdict["attribution"] = {"error": "compute-apps-unreadable"}
+        else:
+            verdict["attribution"] = classify_producers(apps)
+
     if args.json:
         print(json.dumps(verdict, ensure_ascii=False))
     else:
@@ -370,6 +431,9 @@ def main(argv=None):
                   % (free_mb, args.min_free_mb))
         for r in verdict["reasons"]:
             print("- %s" % r)
+        if "attribution" in verdict:
+            print("attribution=%s"
+                  % json.dumps(verdict["attribution"], ensure_ascii=False))
         print("VERDICT=%s" % ("GO" if verdict["go"] else "NO-GO"))
 
     probe_error = (pause_label == "unknown") and (free_mb is None)

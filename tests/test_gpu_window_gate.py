@@ -124,7 +124,9 @@ class CliTests(unittest.TestCase):
                                return_value={t: True for t in
                                              gate.MACHINE_STATE_TASKS}), \
              mock.patch.object(gate, "read_vram_free_mb",
-                               return_value=11000):
+                               return_value=11000), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=None):
             rc, out = self._run_main(["--json"])
         self.assertEqual(rc, 1)
         self.assertIn("pause-fingerprint", out)
@@ -143,7 +145,9 @@ class CliTests(unittest.TestCase):
         with mock.patch.object(gate, "query_task_states",
                                return_value={t: None for t in
                                              gate.MACHINE_STATE_TASKS}), \
-             mock.patch.object(gate, "read_vram_free_mb", return_value=None):
+             mock.patch.object(gate, "read_vram_free_mb", return_value=None), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=None):
             rc, out = self._run_main(["--json"])
         self.assertEqual(rc, 2)
         self.assertIn("null", out)
@@ -311,6 +315,8 @@ class CliStabilityTests(unittest.TestCase):
                                return_value=self._clear_tasks()), \
              mock.patch.object(gate, "read_gpu_sample",
                                side_effect=list(readings)), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=None), \
              mock.patch.object(gate, "time") as mt:
             mt.sleep = lambda s: None
             rc, out = self._run_main(
@@ -326,6 +332,8 @@ class CliStabilityTests(unittest.TestCase):
                                return_value=self._clear_tasks()), \
              mock.patch.object(gate, "read_gpu_sample",
                                return_value=None), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=None), \
              mock.patch.object(gate, "time") as mt:
             mt.sleep = lambda s: None
             rc, out = self._run_main(["--samples", "3", "--json"])
@@ -337,7 +345,9 @@ class CliStabilityTests(unittest.TestCase):
         with mock.patch.object(gate, "query_task_states",
                                return_value=self._clear_tasks()), \
              mock.patch.object(gate, "read_gpu_sample",
-                               return_value={"free": 9010, "util": 95}):
+                               return_value={"free": 9010, "util": 95}), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=None):
             rc, out = self._run_main(
                 ["--min-free-mb", "2048", "--util-max", "80"])
         self.assertEqual(rc, 1)
@@ -356,6 +366,134 @@ class CliStabilityTests(unittest.TestCase):
     def test_bad_samples_arg(self):
         with self.assertRaises(SystemExit):
             gate.main(["--samples", "0"])
+
+
+class QueryComputeAppsTests(unittest.TestCase):
+    def test_parse_ok(self):
+        with mock.patch.object(
+                gate, "_run_capture",
+                return_value="58200, python.exe\n"
+                             "38828, Tuanjie.exe\n"):
+            rows = gate.query_compute_apps()
+        self.assertEqual(rows, [
+            {"pid": 58200, "process": "python.exe"},
+            {"pid": 38828, "process": "Tuanjie.exe"},
+        ])
+
+    def test_banner_and_junk_pid_rows_skipped(self):
+        # 'No running processes found' banner / non-integer pid -> skipped;
+        # empty list is an honest zero-consumers reading, not None
+        with mock.patch.object(
+                gate, "_run_capture",
+                return_value="No running processes found\n"
+                             "abc, weird.exe\n"):
+            self.assertEqual(gate.query_compute_apps(), [])
+
+    def test_probe_failure_none(self):
+        with mock.patch.object(gate, "_run_capture", return_value=None):
+            self.assertIsNone(gate.query_compute_apps())
+        with mock.patch.object(gate, "_run_capture", return_value=""):
+            self.assertIsNone(gate.query_compute_apps())
+
+
+class ClassifyProducersTests(unittest.TestCase):
+    def test_whitelist_listed_rest_folded(self):
+        att = gate.classify_producers([
+            {"pid": 58200, "process": "python.exe"},
+            {"pid": 67848, "process": "llama-server.exe"},
+            {"pid": 38828, "process": "Tuanjie.exe"},
+            {"pid": 999, "process": "dwm.exe"},
+        ])
+        self.assertEqual([p["pid"] for p in att["producers"]],
+                         [58200, 67848, 38828])
+        self.assertEqual(att["other"], 1)
+        self.assertEqual(att["raw"], 4)
+
+    def test_patterns_override(self):
+        att = gate.classify_producers(
+            [{"pid": 9, "process": "zzz.exe"},
+             {"pid": 10, "process": "python.exe"}],
+            patterns=("zzz",))
+        self.assertEqual([p["pid"] for p in att["producers"]], [9])
+        self.assertEqual(att["other"], 1)
+
+    def test_match_case_insensitive(self):
+        att = gate.classify_producers(
+            [{"pid": 1, "process": "PYTHON.EXE"},
+             {"pid": 2, "process": "ComfyUI.exe"}])
+        self.assertEqual(att["other"], 0)
+        self.assertEqual(len(att["producers"]), 2)
+
+
+class CliAttributionTests(unittest.TestCase):
+    def _run_main(self, argv):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = gate.main(argv)
+        return rc, buf.getvalue()
+
+    def _clear_tasks(self):
+        return {t: False for t in gate.MACHINE_STATE_TASKS}
+
+    def test_no_go_json_carries_attribution(self):
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=100), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=[
+                                   {"pid": 58200,
+                                    "process": "python.exe"},
+                                   {"pid": 67848,
+                                    "process": "llama-server.exe"},
+                                   {"pid": 999,
+                                    "process": "dwm.exe"}]):
+            rc, out = self._run_main(["--json"])
+        self.assertEqual(rc, 1)
+        row = json.loads(out)
+        att = row["attribution"]
+        self.assertEqual([p["pid"] for p in att["producers"]],
+                         [58200, 67848])
+        self.assertEqual(att["other"], 1)
+        self.assertEqual(att["raw"], 3)
+
+    def test_go_json_has_no_attribution_face(self):
+        # GO windows don't pay the extra probe (tech#79: NO-GO face only)
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=11000), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=[{"pid": 1,
+                                              "process": "python.exe"}]):
+            rc, out = self._run_main(["--json"])
+        self.assertEqual(rc, 0)
+        self.assertNotIn("attribution", json.loads(out))
+
+    def test_no_go_unreadable_error_note(self):
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=100), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=None):
+            rc, out = self._run_main(["--json"])
+        self.assertEqual(rc, 1)
+        self.assertEqual(json.loads(out)["attribution"],
+                         {"error": "compute-apps-unreadable"})
+
+    def test_non_json_no_go_prints_attribution(self):
+        with mock.patch.object(gate, "query_task_states",
+                               return_value=self._clear_tasks()), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=100), \
+             mock.patch.object(gate, "query_compute_apps",
+                               return_value=[{"pid": 58200,
+                                              "process": "python.exe"}]):
+            rc, out = self._run_main([])
+        self.assertEqual(rc, 1)
+        self.assertIn("attribution=", out)
+        self.assertIn("python.exe", out)
 
 
 if __name__ == "__main__":
