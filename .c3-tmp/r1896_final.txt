@@ -1,0 +1,16 @@
+=== PROBES_FINAL (post-renumber) ===
+probe-capture: mode=compact overall_rc=1
+  board_check: rc=0
+  readiness: rc=1
+  loop_health: rc=1
+written: C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r1896_probes.txt (2042 bytes, utf-8 no-bom)
+
+=== DUP_GUARD_FACE_CHECK ===
+dup_lines=0
+=== SCRATCH_CLEANUP ===
+deleted r_quickcheck/r1896_quick2/r1896_refs
+=== DUP_PREFIX_EVIDENCE_HEAD ===
+=== LOOP_HEALTH_PREFIX (pre-renumber, real repo) ===
+summary: tick=1895, beats=1955 (done=1914 nonzero=36 skip=10 timeout=31 error=0), log=1931 entries, backlog=115 items 93 done (81% burn)
+- [WARN] log-order: 11 occurrence(s) 2026-10-07..2026-10-10 (dense-window fold; run without --loop for the full list)
+- [WARN] queue-dup-numbers: 1 reused entry number(s) in tech.md: 41 x2 - a double-held number makes every queue cite of it ambiguous (focus lines / done notes / ledger references); renumber the less-referenced arrival and leave a cross-ref note (R1895 anchor: 41 held twice in tech.md); append order is legal, only reuse is the disease
