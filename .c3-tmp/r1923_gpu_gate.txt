@@ -1,0 +1,11 @@
+# R1923 gpu gate + ollama probe + view positions (2026-10-10 23:22-23:25)
+gate: python src/os/gpu_window_gate.py --samples 6 --util-max 80
+pause_face=clear (tasks 2/8 disabled, 8 known)
+vram_free_mb=689 (worst-case of 6 samples, band 2415MB)
+- vram-face: worst-case free 689MB < guard 9216MB
+- util-face: worst-case util 100% > gate 80%
+- vram-band advisory: free oscillates band 2415MB within sampling window (>= 2048MB) -- sec-scale load-cycle regime, long-flight contention risk (tech#75/R1917 anchor)
+VERDICT=NO-GO
+ollama: rc=2 TimeoutError face=busy-contended gpu_util=100 gpu_mem=11753 ts=2026-10-10 23:25:00 (ledger row auto-recorded)
+frames_full delta after R1922 anchor 23:08:37: N04_river_marks 23:21:28 / N05_dead_language 23:22:47 / N06_poem_light 23:23:11 / N07_fire_breath 23:23:32 / C01_carver_face 23:24:05 (MV sprint lane, view-note only, zero contact)
+meme outbound: zero new (V1 mp4 not landed, TTS/assembly legs in flight)
