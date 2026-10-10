@@ -1,0 +1,26 @@
+# r1921 gate three-reading evidence (tech#75 judge position, canon commands)
+# context: HQ orders 23:0x row -- bm-a session took over the 44-shot full-song KF
+# batch locally (CEO 22:5x order "no fleet activity visible" -> local takeover,
+# Krea2 turbo running ~9.9G). GPU now in steady saturation from KF production.
+
+# reading 1 @ 23:0x (first judge pass of the round):
+#   ollama_probe --ledger: GEN-ERROR transport=TimeoutError face=busy-contended
+#   gpu_window_gate --samples 6 --sample-interval 5 --min-free-mb 2048 --util-max 80 --json:
+#     {"go": false, "pause_face": "clear", "vram_free_mb": 624, ...,
+#      "free_min_mb": 624, "free_max_mb": 5744, "band_mb": 5120, "util_max": 100,
+#      "tasks_disabled": 2, "tasks_total": 8}
+#   -> NO-GO (all three faces fail: free 624 < 2048, util 100% > 80%,
+#      band 5120 = load-cycle regime at first read)
+
+# reading 2 @ +30s (regime confirmation):
+#   gpu_window_gate --samples 6 --sample-interval 5 --min-free-mb 2048 --util-max 80 --json:
+#     {"go": false, "free_min_mb": 604, "free_max_mb": 650, "band_mb": 46,
+#      "util_max": 100, "tasks_disabled": 2, "tasks_total": 8}
+#   -> NO-GO, steady-saturated regime (band 46MB -- not even oscillating;
+#      KF batch is a flat full-load producer, unlike R1920's swing regime).
+
+# verdict: NO-GO maintained; four legs (MD-0002 script leg / DIGEST v17 M4.5+E4 /
+# F-170 S1 / tech#43 E4 v13) stay fire-ready gated (turnkey material in place
+# per R1870/R1871/R1875). No single-GO gap appeared this round (unlike R1920),
+# so the consecutive-2 gate was not tested by a gap -- steady saturation is the
+# clean NO-GO case. tech#75 sequence data point recorded in tech.md row 75.
