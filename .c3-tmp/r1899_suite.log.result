@@ -1,0 +1,12 @@
+SUITE_RC=0
+SUITE_RAN=Ran 697 tests in 91.945s
+SUITE_RESULT=OK
+SUITE_LOG_OUT=.c3-tmp/r1899_suite.log.out
+SUITE_LOG_ERR=.c3-tmp/r1899_suite.log.err
+SUITE_RESULT_FILE=.c3-tmp/r1899_suite.log.result
+run_suite: last stderr lines:
+  .....................................................................................................................................................
+  ----------------------------------------------------------------------
+  Ran 697 tests in 91.945s
+  
+  OK
