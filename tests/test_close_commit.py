@@ -305,8 +305,133 @@ class TestPycachePurge(GitRepoCase):
         self.assertEqual((0, []), (n, fails))
 
 
+class TestSelfInclude(unittest.TestCase):
+    """tech#81: the round's own close script rides the manifest (r1930
+    anchor: that script stayed untracked across rounds because the explicit
+    list never contained its own consumer)."""
+
+    def _plain_dir(self):
+        d = tempfile.mkdtemp(prefix="cc_self_")
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        return d
+
+    def _write_state(self, root, payload):
+        os.makedirs(os.path.join(root, "src", "os"), exist_ok=True)
+        path = os.path.join(root, "src", "os", "state.json")
+        with open(path, "w", encoding="utf-8", newline="") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=1)
+        return path
+
+    def _touch_script(self, root, name):
+        d = os.path.join(root, ".c3-tmp")
+        os.makedirs(d, exist_ok=True)
+        p = os.path.join(d, name)
+        with open(p, "w", encoding="utf-8") as f:
+            f.write("# close\n")
+        return p
+
+    def test_autodetect_found(self):
+        root = self._plain_dir()
+        self._write_state(root, {"tick": 41, "log": []})
+        self._touch_script(root, "r41_close.py")
+        self.assertEqual(".c3-tmp/r41_close.py",
+                         cc.autodetect_close_script(root))
+
+    def test_autodetect_missing_cases(self):
+        root = self._plain_dir()
+        # no state at all
+        self.assertIsNone(cc.autodetect_close_script(root))
+        # state without the script file
+        self._write_state(root, {"tick": 41, "log": []})
+        self.assertIsNone(cc.autodetect_close_script(root))
+        # non-int tick
+        self._write_state(root, {"tick": "41", "log": []})
+        self.assertIsNone(cc.autodetect_close_script(root))
+        # unreadable state (bad json)
+        os.makedirs(os.path.join(root, "src", "os"), exist_ok=True)
+        with open(os.path.join(root, "src", "os", "state.json"), "w",
+                  encoding="utf-8") as f:
+            f.write("{not json")
+        self.assertIsNone(cc.autodetect_close_script(root))
+        # script for a DIFFERENT round must not match the tick anchor
+        root2 = self._plain_dir()
+        self._write_state(root2, {"tick": 41, "log": []})
+        self._touch_script(root2, "r40_close.py")
+        self.assertIsNone(cc.autodetect_close_script(root2))
+
+
+class TestSelfIncludeIntegration(GitRepoCase):
+    """tech#81 end-to-end: the committed accounting contains the close
+    script itself, and nothing else from .c3-tmp rides along."""
+
+    def _seed_round(self, tick):
+        os.makedirs(os.path.join(self.root, "src", "os"), exist_ok=True)
+        with open(os.path.join(self.root, "src", "os", "state.json"), "w",
+                  encoding="utf-8", newline="") as f:
+            json.dump({"tick": tick, "log": []}, f, ensure_ascii=False, indent=1)
+        d = self.root / ".c3-tmp"
+        d.mkdir(exist_ok=True)
+        (d / ("r%d_close.py" % tick)).write_text("# close\n", encoding="utf-8")
+
+    def test_close_script_rides_manifest(self):
+        self._seed_round(41)
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any(
+            l == "STEP self-include .c3-tmp/r41_close.py (tech#81)" for l in lines))
+        heads = self.head_files()
+        self.assertIn("a.txt", heads)
+        self.assertIn(".c3-tmp/r41_close.py", heads)
+        # r1930 anchor lock: no untracked close script lingers past the close
+        rc, out, _ = self._git(["status", "--porcelain", "--", ".c3-tmp"])
+        self.assertEqual("", out)
+
+    def test_already_listed_no_duplicate(self):
+        self._seed_round(41)
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(
+            ["a.txt", ".c3-tmp/r41_close.py"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any("already listed" in l for l in lines))
+        self.assertFalse(any("STEP self-include" in l for l in lines))
+        heads = self.head_files()
+        self.assertEqual(1, heads.count(".c3-tmp/r41_close.py"))
+
+    def test_wrong_round_leftover_not_swept(self):
+        os.makedirs(os.path.join(self.root, "src", "os"), exist_ok=True)
+        with open(os.path.join(self.root, "src", "os", "state.json"), "w",
+                  encoding="utf-8", newline="") as f:
+            json.dump({"tick": 41, "log": []}, f, ensure_ascii=False, indent=1)
+        (self.root / ".c3-tmp").mkdir(exist_ok=True)
+        (self.root / ".c3-tmp" / "r40_close.py").write_text(
+            "# stale leftover\n", encoding="utf-8")
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any("self-anchor absent" in l for l in lines))
+        self.assertNotIn(".c3-tmp/r40_close.py", self.head_files())
+        # strict anchor law: the older leftover stays the debris guard's case
+        # (-uall: an untracked dir collapses to "?? .c3-tmp/" otherwise)
+        rc, out, _ = self._git(["status", "--porcelain", "--untracked-files=all",
+                                "--", ".c3-tmp"])
+        self.assertIn("r40_close.py", out)
+
+    def test_dry_run_plan_shows_self_include(self):
+        self._seed_round(41)
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], dry_run=True)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any(
+            l.startswith("DRY-RUN git add") and ".c3-tmp/r41_close.py" in l
+            for l in lines))
+
+
 class TestCLI(unittest.TestCase):
     """The main() face the close script shell-outs to (rc propagation)."""
+
+
+
 
     def test_cli_rc_propagates(self):
         repo = GitRepo()

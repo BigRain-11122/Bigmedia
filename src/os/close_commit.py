@@ -38,6 +38,12 @@ Laws encoded (why this is safe in this shared tree):
   would trip the round-debris guard forever (round anchor N outside
   [tick, tick+1] is always-true for a compiled artifact). Scope law: only
   the .c3-tmp subtree - caches elsewhere (src/, tests/) stay untouched.
+- tech#81 (r1930 anchor) self-inclusion law: the round's own close script
+  ``.c3-tmp/r{tick}_close.py`` rides the manifest automatically. The
+  r1930_close.py leftover happened because the explicit manifest never
+  contained the script that consumed it - a structural gap healed here,
+  not by every future script remembering its own path. Advisory by
+  design: an unreadable state or a missing script never fails the close.
 
 rc: 0 = commit landed (push may have warned); 1 = a git add/commit step
 failed; 2 = usage error. Output lines are plain ASCII text, safe for
@@ -294,6 +300,39 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             "wm_added": wm_added, "log_len": len(log_line)}
 
 
+def autodetect_close_script(root, state_path=None):
+    """tech#81: the round's own close script auto-includes itself.
+
+    r1930 anchor: that round's close script stayed untracked across
+    rounds (cleanup-hook relapse family, R1895/R1896/R1897 priors) because
+    the explicit manifest never contained the script consuming it - the
+    next round had to hand-patch it in. This detector returns the
+    repo-relative path ``.c3-tmp/r{tick}_close.py`` when the state tick is
+    readable and that exact file exists on disk; run_close_commit appends
+    it to the manifest so the accounting commit is self-contained.
+
+    Strict shape law: only the exact round-anchored name is ever returned -
+    no glob, no other .c3-tmp file rides along (older-round leftovers stay
+    the round-debris guard's business, tech#66). Advisory by design: an
+    unreadable state, a non-int tick or a missing script all return None
+    and never fail the close.
+    """
+    if state_path is None:
+        state_path = os.path.join(root, "src", "os", "state.json")
+    try:
+        with io.open(state_path, encoding="utf-8") as f:
+            data = json.load(f)
+        tick = data.get("tick")
+    except (OSError, ValueError):
+        return None
+    if not isinstance(tick, int):
+        return None
+    rel = ".c3-tmp/r%d_close.py" % tick
+    if os.path.isfile(os.path.join(root, rel.replace("/", os.sep))):
+        return rel
+    return None
+
+
 def run_close_commit(files, message, root=None, push=True, dry_run=False):
     """Commit exactly `files` with `message`; push unless disabled.
 
@@ -320,6 +359,19 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False):
     except ValueError as exc:
         lines.append("USAGE-ERROR %s" % exc)
         return RC_USAGE, lines
+
+    # --- tech#81: self-inclusion law (r1930 anchor) - the round's own close
+    # script rides the manifest automatically so it never lingers untracked
+    # across rounds. Advisory: a missing anchor (test fixtures, non-standard
+    # roots) never fails the close; already-listed paths are not duplicated. ---
+    auto_self = autodetect_close_script(root)
+    if auto_self is None:
+        lines.append("NOTE close-script self-anchor absent (tech#81, advisory)")
+    elif auto_self in rel_files:
+        lines.append("NOTE self %s already listed (tech#81)" % auto_self)
+    else:
+        rel_files.append(auto_self)
+        lines.append("STEP self-include %s (tech#81)" % auto_self)
 
     plan_add = ["git", "add", "--"] + rel_files
     plan_commit = ["git", "commit", "-m", message, "--"] + rel_files
