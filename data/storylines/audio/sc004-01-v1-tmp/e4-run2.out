@@ -1,0 +1,2 @@
+DEFER gpu util 98% > 80% (occupied window)
+DEFER note: under an occupied window the 1500s wrapper cap burned through twice with zero verdicts (R1847 E4 case); retry in a GPU release window, or pass --gpu-force to fly anyway.
