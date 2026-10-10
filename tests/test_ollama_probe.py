@@ -851,5 +851,211 @@ class PrecheckTests(unittest.TestCase):
         self.assertEqual(calls["flights"], 1)
 
 
+class SizeVramTests(unittest.TestCase):
+    """tech#78: consume the /api/ps size_vram reading (R1928 dogfood anchor).
+
+    ps reported the model loaded (resident) but generation crawled at
+    gpu_mem 1843 << the 9000MB envelope -- mostly CPU-offloaded -- and the
+    probe burned its 60s cap to learn what the pre-check payload already
+    knew. The reading now lands on --json and --ledger rows as advisory
+    columns; skip semantics, rc and face never move (a loaded model may
+    still generate successfully, 免烧属判断位面非闸面).
+    """
+
+    # 1843 MiB in bytes (the R1928 offloaded shape).
+    OFFLOADED_BYTES = 1843 * 1024 * 1024
+    # ~9216 MiB in bytes (fully VRAM-resident 14b-8k shape).
+    RESIDENT_BYTES = 9216 * 1024 * 1024
+
+    def setUp(self):
+        self._orig_ps = op._http_get_ps
+        self._orig_http = op._http_post
+        self._orig_smi = op._nvidia_smi_query
+        self._orig_smi_free = op._nvidia_smi_free_query
+        self.tmp = tempfile.mkdtemp(prefix="bs-ollama-sizevram-")
+        op._nvidia_smi_query = lambda: "100, 1867\n"
+
+    def tearDown(self):
+        op._http_get_ps = self._orig_ps
+        op._http_post = self._orig_http
+        op._nvidia_smi_query = self._orig_smi
+        op._nvidia_smi_free_query = self._orig_smi_free
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _ps_entry(self, size_vram):
+        payload = json.dumps({"models": [
+            {"name": op.DEFAULT_MODEL, "size_vram": size_vram}]}).encode("utf-8")
+        op._http_get_ps = lambda base_url, timeout: _FakeResp(payload)
+
+    def _ps_resident_no_size(self):
+        payload = json.dumps(
+            {"models": [{"name": op.DEFAULT_MODEL}]}).encode("utf-8")
+        op._http_get_ps = lambda base_url, timeout: _FakeResp(payload)
+
+    def _flight_timeout(self, calls):
+        def fake(base_url, body, timeout):
+            calls["flights"] += 1
+            raise TimeoutError("timed out")
+        op._http_post = fake
+
+    def _run(self, argv):
+        import contextlib
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            return op.main(argv), buf.getvalue()
+
+    # ---- _ps_size_vram extraction ---------------------------------------
+
+    def test_ps_size_vram_bytes_to_mib(self):
+        payload = {"models": [{"name": "qwen2.5:14b-8k",
+                               "size_vram": self.OFFLOADED_BYTES}]}
+        self.assertEqual(op._ps_size_vram(payload, "qwen2.5:14b-8k"), 1843)
+        # Tag-suffix manifest matches the same entry (shared matcher).
+        payload2 = {"models": [{"name": "qwen2.5:14b-8k:latest",
+                                "size_vram": self.RESIDENT_BYTES}]}
+        self.assertEqual(op._ps_size_vram(payload2, "qwen2.5:14b-8k"), 9216)
+
+    def test_ps_size_vram_missing_or_junk(self):
+        # Model not loaded -> None; entry without the field -> None;
+        # unparseable value -> None (advisory never fires on doubt).
+        self.assertIsNone(op._ps_size_vram({"models": []}, "qwen2.5:14b-8k"))
+        self.assertIsNone(op._ps_size_vram(
+            {"models": [{"name": "qwen2.5:14b-8k"}]}, "qwen2.5:14b-8k"))
+        self.assertIsNone(op._ps_size_vram(
+            {"models": [{"name": "qwen2.5:14b-8k", "size_vram": "garbage"}]},
+            "qwen2.5:14b-8k"))
+        self.assertIsNone(op._ps_size_vram(
+            {"models": [{"name": "qwen2.5:14b-8k", "size_vram": None}]},
+            "qwen2.5:14b-8k"))
+
+    # ---- compute_offloaded pure advisory ---------------------------------
+
+    def test_compute_offloaded_table(self):
+        # R1928 anchor shape: resident, 1843 MiB vs 9000 envelope -> True.
+        self.assertTrue(op.compute_offloaded(True, 1843, 9000))
+        # Fully resident: at/above half the footprint -> False.
+        self.assertFalse(op.compute_offloaded(True, 9216, 9000))
+        # Boundary is strict: 4499 < 4500 -> True; exactly 4500 -> False.
+        self.assertTrue(op.compute_offloaded(True, 4499, 9000))
+        self.assertFalse(op.compute_offloaded(True, 4500, 9000))
+        # Not resident / unreadable size / unknown footprint -> False.
+        self.assertFalse(op.compute_offloaded(False, 1843, 9000))
+        self.assertFalse(op.compute_offloaded(True, None, 9000))
+        self.assertFalse(op.compute_offloaded(True, 1843, 0))
+
+    # ---- main() json surfaces --------------------------------------------
+
+    def test_main_json_offloaded_resident_reading(self):
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps_entry(self.OFFLOADED_BYTES)
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        # Advisory columns carry the reading the pre-check already had...
+        self.assertEqual(line["ps_size_vram"], 1843)
+        self.assertTrue(line["offloaded_resident"])
+        # ...while flight/face semantics stay exactly where they were.
+        self.assertEqual(line["face"], "busy-contended")
+        self.assertEqual(line["precheck"], "resident")
+        self.assertEqual(calls["flights"], 1)  # skip semantics untouched
+
+    def test_main_json_full_resident_not_offloaded(self):
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps_entry(self.RESIDENT_BYTES)
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertEqual(line["ps_size_vram"], 9216)
+        self.assertFalse(line["offloaded_resident"])
+        self.assertEqual(line["precheck"], "resident")
+
+    def test_main_json_resident_entry_without_size_is_null_not_offloaded(self):
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps_resident_no_size()
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertIsNone(line["ps_size_vram"])
+        self.assertFalse(line["offloaded_resident"])
+        self.assertEqual(line["precheck"], "resident")
+
+    def test_main_offloaded_advisory_ignores_cold_skip_override(self):
+        # The --cold-skip-free-mb knob owns the skip decision only; the
+        # advisory always uses the per-model footprint estimate.
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps_entry(self.OFFLOADED_BYTES)
+        rc, out = self._run(["--json", "--cold-skip-free-mb", "99999"])
+        self.assertEqual(rc, 2)
+        self.assertTrue(json.loads(out.strip())["offloaded_resident"])
+
+    def test_main_no_precheck_json_has_no_ps_columns(self):
+        # Legacy call surface: --no-precheck runs no /api/ps read at all,
+        # so no precheck-derived fields appear (existing contract).
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+
+        def ps_spy(base_url, timeout):
+            raise AssertionError("ps must not be queried under --no-precheck")
+        op._http_get_ps = ps_spy
+        rc, out = self._run(["--json", "--no-precheck"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertNotIn("precheck", line)
+        self.assertNotIn("ps_size_vram", line)
+        self.assertNotIn("offloaded_resident", line)
+
+    def test_main_skip_path_json_carries_null_evidence_columns(self):
+        # Schema-uniform: the cold-skip path (ps confirmed not resident)
+        # also carries the columns, honestly null/false.
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        op._http_get_ps = lambda base_url, timeout: _FakeResp(
+            json.dumps({"models": []}).encode("utf-8"))
+        op._nvidia_smi_free_query = lambda: "12288, 7547\n"  # free 4741 < 9000
+        rc, out = self._run(["--json"])
+        self.assertEqual(rc, 2)
+        line = json.loads(out.strip())
+        self.assertEqual(line["status"], "skipped-not-resident")
+        self.assertIsNone(line["ps_size_vram"])
+        self.assertFalse(line["offloaded_resident"])
+        self.assertEqual(calls["flights"], 0)
+
+    # ---- ledger row surfaces ---------------------------------------------
+
+    def test_ledger_row_carries_ps_evidence_columns(self):
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        self._ps_entry(self.OFFLOADED_BYTES)
+        path = os.path.join(self.tmp, "size-ledger.jsonl")
+        rc, _ = self._run(["--ledger", path])
+        self.assertEqual(rc, 2)
+        with open(path, encoding="utf-8") as fh:
+            row = json.loads(fh.read().splitlines()[0])
+        self.assertEqual(row["ps_size_vram"], 1843)
+        self.assertTrue(row["offloaded_resident"])
+        self.assertEqual(row["face"], "busy-contended")
+
+    def test_ledger_row_ps_unavailable_keeps_exact_shape(self):
+        # tech#52 exact-shape contract: rows without a real ps read stay
+        # byte-stable (no advisory columns bolted on).
+        calls = {"flights": 0}
+        self._flight_timeout(calls)
+        op._http_get_ps = lambda base_url, timeout: (_ for _ in ()).throw(
+            urllib.error.URLError("connection refused"))
+        path = os.path.join(self.tmp, "nops-ledger.jsonl")
+        rc, _ = self._run(["--ledger", path])
+        self.assertEqual(rc, 2)
+        with open(path, encoding="utf-8") as fh:
+            row = json.loads(fh.read().splitlines()[0])
+        self.assertEqual(
+            set(row.keys()),
+            {"ts", "rc", "status", "http_status", "model",
+             "gpu_util", "gpu_mem", "face"})
+
+
 if __name__ == "__main__":
     unittest.main()

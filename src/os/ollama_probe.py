@@ -67,12 +67,12 @@ service fault; mislabeling it service-anomaly invites a pointless service
 restart. Unreadable mem stays the conservative anomaly face.
 
 tech#77 (R1928): residency pre-check via /api/ps before the generation
-flight (probe-gate order contamination, R1927 anchor: a cold 14b-8k load
-with free 4.2GB < 9GB model crawls in CPU offload, spikes util to 100
-during the load, times out the probe AND pollutes the gpu_window_gate
-samples taken right after -- the R1927/R1928-pre-fix "busy-contended"
-readings were partially the probe's own load, misattributed to the MV
-lane). Three retirements:
+  flight (probe-gate order contamination, R1927 anchor: a cold 14b-8k load
+  with free 4.2GB < 9GB model crawls in CPU offload, spikes util to 100
+  during the load, times out the probe AND pollutes the gpu_window_gate
+  samples taken right after -- the R1927/R1928-pre-fix "busy-contended"
+  readings were partially the probe's own load, misattributed to the MV
+  lane). Three retirements:
   - /api/ps pre-check (status endpoint, never enters the generation
     queue -- same family as the R1877 /api/tags trap, safe under
     saturation): model not resident + free VRAM < model footprint ->
@@ -90,6 +90,24 @@ lane). Three retirements:
   - footprint estimates per model (COLD_SKIP_MODEL_VRAM_MB): only known
     models can trigger the skip; unknown models keep the legacy flight
     (conservative). --cold-skip-free-mb N overrides (0 = never skip).
+
+tech#78 (R1929): consume the /api/ps size_vram reading (R1928 dogfood
+  anchor: ps reported the model loaded -- resident -- but generation
+  crawled at gpu_mem 1843 << the 9000MB envelope, i.e. the model was
+  mostly CPU-offloaded, and the probe still burned its 60s cap to learn
+  what the pre-check payload already knew). The pre-check now extracts
+  size_vram (bytes -> MiB) for the loaded target model and surfaces it
+  plus an advisory offloaded_resident flag (size_vram below half the
+  per-model footprint estimate) on the --json line and on --ledger rows
+  (columns only when a real /api/ps read succeeded, so ps-unavailable
+  rows keep their exact shape). ADVISORY ONLY, deliberately not a skip:
+  a loaded model may still generate successfully (just slowly), so the
+  probe always flies when resident -- skip semantics untouched. The
+  "don't burn" decision belongs to the judgment position (tech#75 正法
+  note in tech.md): an offloaded_resident=true reading pre-judges the
+  window unusable for the long review flights, and the next rounds may
+  cite the prior reading instead of re-flying. rc/face semantics never
+  move.
 """
 
 import argparse
@@ -166,6 +184,13 @@ COLD_SKIP_MODEL_VRAM_MB = {
     "qwen2.5:14b-8k": 9000,
     "qwen2.5:7b": 4700,
 }
+
+# tech#78: a loaded model whose ps size_vram sits below this fraction of
+# its full-VRAM footprint estimate is substantially CPU-offloaded (R1928
+# anchor: resident per ps, gpu_mem 1843 << 9000 envelope -> slow CPU-offload
+# generation that burned the probe cap). Advisory only -- generation may
+# still succeed, so the probe never skips on it (免烧属判断位面非闸面).
+OFFLOADED_RESIDENT_FRACTION = 0.5
 
 
 def compute_face(result, gpu_ctx, precheck=None):
@@ -348,13 +373,14 @@ def _get_ps(base_url, timeout=PS_TIMEOUT):
         return None, False
 
 
-def _ps_resident(payload, model):
-    """True when the /api/ps payload shows the target model loaded.
+def _ps_find_entry(payload, model):
+    """Return the /api/ps models[] entry matching the target model, or None.
 
-    ollama lists loaded models under models[] with name/model fields; a
-    loaded manifest may carry a re-applied tag suffix
-    ("qwen2.5:14b-8k:latest"), so exact match or ":"-separated prefix
-    both count. Payload shape is pre-validated by _get_ps.
+    Shared matcher for _ps_resident / _ps_size_vram: ollama lists loaded
+    models under models[] with name/model fields; a loaded manifest may
+    carry a re-applied tag suffix ("qwen2.5:14b-8k:latest"), so exact
+    match or ":"/"/"-separated prefix both count. Payload shape is
+    pre-validated by _get_ps.
     """
     for entry in payload.get("models", []):
         if not isinstance(entry, dict):
@@ -363,8 +389,46 @@ def _ps_resident(payload, model):
             val = entry.get(key)
             if val == model or (isinstance(val, str) and
                                 (val.startswith(model + ":") or val.startswith(model + "/"))):
-                return True
-    return False
+                return entry
+    return None
+
+
+def _ps_resident(payload, model):
+    """True when the /api/ps payload shows the target model loaded."""
+    return _ps_find_entry(payload, model) is not None
+
+
+def _ps_size_vram(payload, model):
+    """Best-effort loaded target model's ps size_vram in MiB, or None (tech#78).
+
+    ollama /api/ps reports size_vram in BYTES -- the VRAM-resident portion
+    of the loaded model. A resident model with size_vram far below its
+    full-VRAM footprint is substantially CPU-offloaded (R1928 anchor) --
+    the judgment position (tech#75) consumes this reading to pre-judge an
+    unusable window; the probe itself never gates on it. Any missing or
+    unparseable value -> None (advisory never fires on doubt).
+    """
+    entry = _ps_find_entry(payload, model)
+    if entry is None:
+        return None
+    try:
+        return int(entry.get("size_vram")) // (1024 * 1024)
+    except (TypeError, ValueError):
+        return None
+
+
+def compute_offloaded(resident, size_vram_mib, footprint_mb):
+    """Pure advisory: is the loaded model substantially CPU-offloaded? (tech#78)
+
+    True only with ps-confirmed residency, a parseable size_vram and a
+    known per-model footprint estimate, and size_vram strictly below
+    OFFLOADED_RESIDENT_FRACTION x footprint. Every unreadable piece ->
+    False (advisory never fires on doubt). Never a skip input: a loaded
+    model may still generate successfully (just slowly).
+    """
+    if not resident or not footprint_mb or size_vram_mib is None:
+        return False
+    return size_vram_mib < footprint_mb * OFFLOADED_RESIDENT_FRACTION
 
 
 def classify_precheck(resident, ps_ok, free_mb, model_vram_mb):
@@ -422,6 +486,12 @@ def append_ledger_row(path, result, gpu_ctx=None, precheck=None):
     }
     row.update(gpu)
     row["face"] = compute_face(result, gpu, precheck)
+    # tech#78: ps evidence columns -- only when a real /api/ps read
+    # succeeded, so ps-unavailable rows keep their exact shape (the
+    # ledger contract test locks that shape byte-for-byte).
+    if precheck is not None and precheck.get("ps_ok"):
+        row["ps_size_vram"] = precheck.get("size_vram")
+        row["offloaded_resident"] = bool(precheck.get("offloaded"))
     try:
         ledger_path = Path(path)
         ledger_path.parent.mkdir(parents=True, exist_ok=True)
@@ -468,6 +538,12 @@ def main(argv=None):
     if not args.no_precheck:
         payload, ps_ok = _get_ps(args.base_url)
         resident = _ps_resident(payload, args.model) if ps_ok else False
+        # tech#78: consume the size_vram evidence while the payload is in
+        # hand (R1928 anchor: the pre-check knew the model was loaded but
+        # CPU-offloaded and threw the reading away). Advisory uses the
+        # per-model footprint estimate, never the --cold-skip-free-mb
+        # override (that knob owns the skip decision only).
+        size_vram = _ps_size_vram(payload, args.model) if ps_ok else None
         # free VRAM only feeds the cold-skip decision, which only exists
         # for a ps-confirmed non-resident model -- read it lazily so the
         # ps-unavailable path costs no extra nvidia-smi call.
@@ -476,8 +552,11 @@ def main(argv=None):
             footprint = args.cold_skip_free_mb
         else:
             footprint = COLD_SKIP_MODEL_VRAM_MB.get(args.model, 0)
+        estimate = COLD_SKIP_MODEL_VRAM_MB.get(args.model, 0)
         proceed, reason = classify_precheck(resident, ps_ok, free_mb, footprint)
         precheck = {"ps_ok": ps_ok, "resident": resident,
+                    "size_vram": size_vram,
+                    "offloaded": compute_offloaded(resident, size_vram, estimate),
                     "free_mb": free_mb, "reason": reason}
         if not proceed:
             result = {
@@ -498,6 +577,10 @@ def main(argv=None):
                 append_ledger_row(args.ledger, result, gpu_ctx, precheck)
             if args.json:
                 result.update(gpu_ctx)
+                # tech#78: schema-uniform evidence columns (target not
+                # loaded here, so the reading is honestly null).
+                result["ps_size_vram"] = precheck.get("size_vram")
+                result["offloaded_resident"] = precheck.get("offloaded", False)
                 result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 print(json.dumps(result, ensure_ascii=True))
             else:
@@ -512,6 +595,11 @@ def main(argv=None):
         result.update(gpu_ctx)
         if precheck is not None:
             result["precheck"] = precheck["reason"]
+            # tech#78 resident evidence face: consumed by the tech#75
+            # judgment position to pre-judge unusable windows (advisory
+            # only -- flight/rc/face semantics untouched above).
+            result["ps_size_vram"] = precheck.get("size_vram")
+            result["offloaded_resident"] = precheck.get("offloaded", False)
         result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(json.dumps(result, ensure_ascii=True))
     else:
