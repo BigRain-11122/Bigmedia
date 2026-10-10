@@ -22,3 +22,4 @@
 {"ts": "2026-10-10 21:43:58", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "11697", "face": "ok"}
 {"ts": "2026-10-10 21:56:12", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "76", "gpu_mem": "11695", "face": "ok"}
 {"ts": "2026-10-10 22:03:57", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "79", "gpu_mem": "3328", "face": "ok"}
+{"ts": "2026-10-10 22:14:34", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "68", "gpu_mem": "3278", "face": "ok"}
