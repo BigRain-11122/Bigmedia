@@ -17,3 +17,4 @@
 {"ts": "2026-10-10 20:33:59", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "11830", "face": "busy-contended"}
 {"ts": "2026-10-10 20:44:12", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "97", "gpu_mem": "1965", "face": "busy-contended"}
 {"ts": "2026-10-10 20:54:41", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "1947", "face": "busy-contended"}
+{"ts": "2026-10-10 21:07:40", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "1958", "face": "busy-contended"}
