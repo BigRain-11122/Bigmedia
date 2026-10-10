@@ -235,6 +235,8 @@ STATE_REL = "src/os/state.json"
 # repo's account, keep the dir out of .gitignore.
 C3TMP_DIR_PREFIX = ".c3-tmp/"
 C3TMP_STALE_HOURS = 48.0
+# Round-numbered middleware name convention: r<N>_<rest> under .c3-tmp/
+ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
 
 
 def parse_beats(path):
@@ -792,6 +794,49 @@ def check_c3tmp_stale(root, now, findings):
                          % (rel, age_h, C3TMP_STALE_HOURS)))
 
 
+def classify_broken_round_debris(relpaths, tick):
+    """untracked round-numbered .c3-tmp middleware (rN_*) whose round
+    anchor N is neither the just-accounted round (tick) nor the round
+    in flight (tick+1) -> sorted debris paths (pure core). Timing-robust
+    against the probe running before or after the round's tick
+    increment: the current round's own in-flight files never flag in
+    either flow; anything numbered for an already-settled round is
+    debris. tick None/non-int -> [] (no state anchor, advisory skip)."""
+    if not isinstance(tick, int):
+        return []
+    debris = []
+    for rel in relpaths:
+        if not rel or not rel.startswith(C3TMP_DIR_PREFIX):
+            continue
+        m = ROUND_DEBRIS_RE.match(rel.split("/")[-1])
+        if not m:
+            continue
+        if int(m.group(1)) not in (tick, tick + 1):
+            debris.append(rel)
+    return sorted(debris)
+
+
+def check_broken_round_debris(root, state, findings):
+    """tech#66 guard face: name untracked .c3-tmp middleware left by a
+    broken-round prior body, keyed by the round-number anchor in the
+    file name (R1893/R1895/R1897/R1899 family: a body dies before its
+    delivery commit and the successor rebuilds context only via manual
+    git-status archaeology). Catches what the mtime face (tech#64)
+    cannot - fresh debris sits far inside its 48h bound. Advisory WARN;
+    a missing state tick, a non-git tree or any git failure stays
+    silent (never breaks the probe)."""
+    tick = state.get("tick") if isinstance(state, dict) else None
+    if not isinstance(tick, int):
+        return
+    for rel in classify_broken_round_debris(_git_untracked_files(root), tick):
+        findings.append(("WARN", "round-debris",
+                         "%s untracked round middleware (round anchor "
+                         "outside [tick=%d, in-flight=%d]) - broken-round "
+                         "prior-body debris: absorb via git-status "
+                         "archaeology or delete (R1895/R1899 anchors)"
+                         % (rel, tick, tick + 1)))
+
+
 def _git_show_state(root, _run=None):
     """`git show HEAD:<state.json>` stdout bytes, or None on any failure
     (not a work tree, state never committed, git missing, timeout).
@@ -1012,6 +1057,7 @@ def main(argv):
         findings += f
         check_root_litter(root, findings)
         check_c3tmp_stale(root, datetime.now(), findings)
+        check_broken_round_debris(root, state, findings)
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
         check_queue_glue(root, findings)

@@ -1348,5 +1348,115 @@ class C3TmpStaleTests(unittest.TestCase):
         self.assertNotIn("c3tmp-stale", fail_codes(findings))
 
 
+class BrokenRoundDebrisTests(unittest.TestCase):
+    """tech#66: broken-round prior-body debris guard - untracked .c3-tmp
+    middleware whose round anchor N sits outside [tick, tick+1] gets
+    named. The current round's own in-flight files never flag in either
+    probe flow (before or after the tick increment); the R1895/R1899
+    anchor form (settled-round leftovers) must be named."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=1897), BOARD)
+
+    def _git_repo(self):
+        """Real-git fixture: one .c3-tmp file committed (in the account,
+        never flags) and one UNTRACKED r1895_* file (the debris form)."""
+        root = self._repo()
+        c3 = root / ".c3-tmp"
+        c3.mkdir()
+        (c3 / "r1890_probe.txt").write_text("in the account", encoding="utf-8")
+        (c3 / "r1895_close.py").write_text("leftover", encoding="utf-8")
+        env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
+                  GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+        for args in (["init", "-q"],
+                     ["add", ".c3-tmp/r1890_probe.txt"],
+                     ["commit", "-q", "-m", "x"]):
+            p = subprocess.run(["git"] + args, cwd=str(root), env=env,
+                               capture_output=True, timeout=30)
+            if p.returncode != 0:
+                self.skipTest(
+                    "git fixture unavailable: %.60s"
+                    % p.stderr.decode("utf-8", "replace"))
+        return root
+
+    def test_pure_core_settled_round_named(self):
+        rels = [
+            ".c3-tmp/r1895_close.py",       # settled-round debris - named
+            ".c3-tmp/r1897_probe.txt",      # == tick - silent
+            ".c3-tmp/r1898_evidence.json",  # == tick+1 in flight - silent
+            ".c3-tmp/notes.txt",            # not round-numbered - silent
+            ".c3-tmp/r12ab_bad.py",         # non-numeric anchor - silent
+            "data/sources/r1895_x.py",      # outside .c3-tmp - silent
+            None,                            # unparseable - silent
+        ]
+        self.assertEqual(
+            loop_health.classify_broken_round_debris(rels, 1897),
+            [".c3-tmp/r1895_close.py"])
+
+    def test_pure_core_tick_invalid_silent(self):
+        for bad in (None, "1897", 1.5):
+            self.assertEqual(
+                loop_health.classify_broken_round_debris(
+                    [".c3-tmp/r1895_close.py"], bad), [])
+
+    def test_pure_core_timing_robust_both_flows(self):
+        # post-increment flow (tick=1900 after accounting round 1900):
+        # the just-settled 1899 leftovers become debris and are named
+        self.assertEqual(
+            loop_health.classify_broken_round_debris(
+                [".c3-tmp/r1899_close.py", ".c3-tmp/r1900_probes.txt"], 1900),
+            [".c3-tmp/r1899_close.py"])
+        # pre-increment flow (tick=1899 while round 1900 is in flight):
+        # the settled 1899 pair and the in-flight 1900 both stay silent
+        self.assertEqual(
+            loop_health.classify_broken_round_debris(
+                [".c3-tmp/r1899_close.py", ".c3-tmp/r1900_probes.txt"], 1899),
+            [])
+
+    def test_check_face_git_fixture_names_debris(self):
+        # judgement criterion 2: the anchor leftover form is named at the
+        # check-face level, one WARN per file; committed file silent
+        root = self._git_repo()
+        findings = []
+        loop_health.check_broken_round_debris(
+            root, json.loads((root / "src" / "os" / "state.json")
+                             .read_text(encoding="utf-8-sig",
+                                        errors="replace")), findings)
+        self.assertEqual(warn_codes(findings), {"round-debris"})
+        self.assertEqual(len(findings), 1)
+        self.assertIn(".c3-tmp/r1895_close.py", findings[0][2])
+        self.assertIn("R1895", findings[0][2])
+        self.assertNotIn("round-debris", fail_codes(findings))
+
+    def test_check_face_state_without_tick_silent(self):
+        root = self._git_repo()
+        findings = []
+        loop_health.check_broken_round_debris(
+            root, {"tick": None}, findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_on_git_fixture(self):
+        root = self._git_repo()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("round-debris", buf.getvalue())
+        self.assertEqual(rc, 0)  # WARN-level face never fails the probe
+
+    def test_real_repo_baseline_smoke(self):
+        """Judgement criterion 1: on the real repo at round open the only
+        untracked .c3-tmp files belong to the in-flight round, so the
+        face stays silent; a concurrent settle can only add WARNs, never
+        a FAIL. Read-only."""
+        findings = []
+        loop_health.check_broken_round_debris(
+            REPO, json.loads((REPO / "src" / "os" / "state.json")
+                             .read_text(encoding="utf-8-sig",
+                                        errors="replace")), findings)
+        self.assertNotIn("round-debris", fail_codes(findings))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
