@@ -249,7 +249,7 @@ ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
 # Contract constants are same-source with the generator-side caps
 # (MiniGame tools/siliconwatch generate.ps1 v6.2 field-shaping law);
 # WARN level per the guard family law (tech#22/#31/#37/#58/#60/#61/
-# #62/#64).
+# #62/#64/#71).
 EXPORT_REL = Path("docs") / "status-export.json"
 EXPORT_DO_MAX_CHARS = 120  # "current activity" is one line (law sec.5)
 EXPORT_OUT_MAX_N = 12
@@ -260,6 +260,18 @@ EXPORT_OUT_TXT_MAX = 64
 EXPORT_OUT_TAG_MAX = 24
 EXPORT_RES_V_MAX = 16
 EXPORT_RES_K_MAX = 14
+# tech#71 parity facets - caps mirrored from the consumer truth
+# (MiniGame tools/siliconwatch strings.json labels.export_face +
+# generate.ps1 v6.2 normalization loop): the shaper drops depts/chips
+# cells whose text is missing or shorter than 2 chars, silently renames
+# any non live|wip chip class to 'wip' and any non 0|1|2 dept s to 1,
+# and truncates over-cap text - all invisible on the CEO board.
+EXPORT_DEPT_N_MAX = 24     # shaper EF.dept_n_max
+EXPORT_DEPT_T_MAX = 96     # shaper EF.dept_t_max
+EXPORT_DEPT_STATES = (0, 1, 2)  # shaper: missing s defaults to 1
+EXPORT_CHIP_TXT_MAX = 14   # shaper EF.chip_txt_max
+EXPORT_CHIP_CLASSES = ("live", "wip")
+EXPORT_CELL_MIN_TXT = 2    # shaper drops cells with text shorter than 2
 EXPORT_TS_FUTURE_TOL_MIN = 5.0   # mirror cross_check state-ts-future
 EXPORT_TS_STALE_COPY_MIN = 60.0  # ts far behind its own file write time
 EXPORT_TS_MAX_AGE_MIN = 1440.0   # P-61 export refresh law (<=24h)
@@ -975,6 +987,41 @@ def _export_result_cell_ok(entry):
     return len(str(v)) <= EXPORT_RES_V_MAX and len(k) <= EXPORT_RES_K_MAX
 
 
+def _export_chip_cell_ok(entry):
+    """[txt<=14, live|wip] pair per the v6.2 contract (tech#71). The
+    shaper drops cells whose txt is missing/shorter than 2 and silently
+    renames any other class to 'wip' - that silent rename is the
+    invisible mislabel this guard must name."""
+    if not isinstance(entry, list) or len(entry) != 2:
+        return False
+    txt, cls = entry
+    if not isinstance(txt, str) or not isinstance(cls, str):
+        return False
+    return (EXPORT_CELL_MIN_TXT <= len(txt) <= EXPORT_CHIP_TXT_MAX
+            and cls in EXPORT_CHIP_CLASSES)
+
+
+def _export_dept_cell_ok(entry):
+    """{n<=24, t<=96, s in 0|1|2} object per the v6.2 contract
+    (tech#71). The shaper drops entries whose n/t is missing or
+    shorter than 2, truncates over-cap text, and silently defaults a
+    missing (or off-enum) s to 1 - parity means naming every shape the
+    consumer would drop, truncate or silently relabel."""
+    if not isinstance(entry, dict):
+        return False
+    n, t = entry.get("n"), entry.get("t")
+    if not isinstance(n, str) or not isinstance(t, str):
+        return False
+    if not EXPORT_CELL_MIN_TXT <= len(n) <= EXPORT_DEPT_N_MAX:
+        return False
+    if not EXPORT_CELL_MIN_TXT <= len(t) <= EXPORT_DEPT_T_MAX:
+        return False
+    s = entry.get("s", 1)
+    if isinstance(s, bool) or not isinstance(s, int):
+        return False
+    return s in EXPORT_DEPT_STATES
+
+
 def _export_ts_face(ts, now=None, mtime=None):
     """tech#69: export_ts sanity faces (pure core). The R1901 anchor:
     the refresh script stamped 19:05:00 into a file written at
@@ -1036,15 +1083,19 @@ def classify_export_face(data, parse_err="", now=None, mtime=None):
     rounds because the consuming shaper falls back to the curated face
     on every bad field, so no alarm fired anywhere. Faces named here,
     one WARN per face: "do" over the one-line budget (product-priority
-    law section 5), outs entries that are not well-formed 3-cell [txt,
-    on|wait|off, tag] arrays, results entries that are not [v<=16,
-    k<=14] short value/key pairs, any of the three lists over its
-    entry cap, and the tech#69 export_ts faces (future stamp / stale
-    copy / 24h staleness / malformed - see _export_ts_face). A parse
-    failure or non-object top level is one WARN (the shaper falls
-    back wholesale). None without an error (missing export) is silent
-    - the export freshness step owns that disease. Clean exports
-    yield no findings (silent PASS like the other guard faces)."""
+    law section 5), depts entries that are not well-formed {n<=24,
+    t<=96, s in 0|1|2} objects, outs entries that are not well-formed
+    3-cell [txt, on|wait|off, tag] arrays, chips entries that are not
+    [txt<=14, live|wip] pairs (tech#71 parity facets - the shaper
+    drops/truncates/relabels those silently), results entries that are
+    not [v<=16, k<=14] short value/key pairs, any of the three lists
+    over its entry cap, and the tech#69 export_ts faces (future stamp /
+    stale copy / 24h staleness / malformed - see _export_ts_face). A
+    parse failure or non-object top level is one WARN (the shaper
+    falls back wholesale). None without an error (missing export) is
+    silent - the export freshness step owns that disease. Clean
+    exports yield no findings (silent PASS like the other guard
+    faces)."""
     if parse_err:
         return [("WARN", "export-contract",
                  "status-export.json unparseable (%.60s) - the v6.2 "
@@ -1068,6 +1119,22 @@ def classify_export_face(data, parse_err="", now=None, mtime=None):
                          "current activity as ONE line"
                          % (("%d chars" % len(do)) if isinstance(do, str)
                             else "not a string", EXPORT_DO_MAX_CHARS)))
+    depts = data.get("depts")
+    if isinstance(depts, list):
+        bad = [e for e in depts if not _export_dept_cell_ok(e)]
+        if bad:
+            findings.append(("WARN", "export-depts",
+                             "%d/%d depts entries are not well-formed "
+                             "{n<=24, t<=96, s in 0|1|2} objects (first: "
+                             "%s) - the v6.2 shaper drops every bad "
+                             "entry and falls back to the curated face "
+                             "when none survive, silently defaults a "
+                             "missing/off-enum s to 1; the CEO board "
+                             "goes stale dept by dept (tech#71 parity "
+                             "gap: depts was unchecked); write depts as "
+                             "{n, t, s} objects"
+                             % (len(bad), len(depts),
+                                _export_cell_preview(bad[0]))))
     outs = data.get("outs")
     if isinstance(outs, list):
         bad = [e for e in outs if not _export_out_cell_ok(e)]
@@ -1081,6 +1148,22 @@ def classify_export_face(data, parse_err="", now=None, mtime=None):
                              "(R1901 anchor: 39/39 bare strings); write "
                              "outs as 3-cell arrays"
                              % (len(bad), len(outs),
+                                _export_cell_preview(bad[0]))))
+    chips = data.get("chips")
+    if isinstance(chips, list):
+        bad = [e for e in chips if not _export_chip_cell_ok(e)]
+        if bad:
+            findings.append(("WARN", "export-chips",
+                             "%d/%d chips entries are not [txt<=14, "
+                             "live|wip] pairs (first: %s) - the v6.2 "
+                             "shaper drops every bad entry, silently "
+                             "renames any other class to 'wip' and "
+                             "falls back to the curated face when none "
+                             "survive; the CEO board goes stale chip by "
+                             "chip (tech#71 parity gap: chips had only "
+                             "the entry cap); write chips as [txt, "
+                             "live|wip] pairs"
+                             % (len(bad), len(chips),
                                 _export_cell_preview(bad[0]))))
     results = data.get("results")
     if isinstance(results, list):
@@ -1111,13 +1194,14 @@ def classify_export_face(data, parse_err="", now=None, mtime=None):
 
 
 def check_export_face(root, findings):
-    """tech#68/#69 guard face: parse docs/status-export.json and name
-    the v6.2 contract violations (do budget / outs cells / results
-    cells / entry caps) plus the export_ts faces (future stamp vs the
-    file's own mtime, stale copy, 24h refresh law, malformed). Enforced
-    every round by the routine probe consumption - export drift is
-    named within one round instead of 1700. A missing export file
-    stays silent (the export refresh step owns that disease)."""
+    """tech#68/#69/#71 guard face: parse docs/status-export.json and
+    name the v6.2 contract violations (do budget / depts cells / outs
+    cells / chips cells / results cells / entry caps) plus the export_ts
+    faces (future stamp vs the file's own mtime, stale copy, 24h
+    refresh law, malformed). Enforced every round by the routine probe
+    consumption - export drift is named within one round instead of
+    1700. A missing export file stays silent (the export refresh step
+    owns that disease)."""
     path = root / EXPORT_REL
     if not path.is_file():
         return

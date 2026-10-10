@@ -1555,6 +1555,61 @@ class ExportFaceTests(unittest.TestCase):
             dict(self.CONTRACT_EXPORT, outs=ok_outs))
         self.assertNotIn("export-outs", warn_codes(findings))
 
+    def test_chips_cell_violations_named(self):
+        # tech#71 parity facet: the shaper drops short/malformed
+        # cells and silently renames any other class to 'wip' -
+        # the entry-cap-only guard left that mislabel invisible
+        bad_chips = [
+            "bare string",                    # not a list
+            ["only-one"],                     # wrong arity
+            ["ok", "live", "extra"],          # 3 cells
+            ["t" * 15, "live"],               # txt over cap (truncated)
+            ["x", "live"],                    # under consumer floor (dropped)
+            ["ok", "done"],                   # class silently renamed 'wip'
+            ["ok", 5],                        # class not a string
+        ]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, chips=bad_chips))
+        named = [f for f in findings if f[1] == "export-chips"]
+        self.assertEqual(len(named), 1)
+        self.assertIn("7/7", named[0][2])
+
+    def test_chips_boundary_and_valid_classes_silent(self):
+        ok_chips = [["x" * 14, "live"], ["chip", "wip"]]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, chips=ok_chips))
+        self.assertNotIn("export-chips", warn_codes(findings))
+
+    def test_depts_cell_violations_named(self):
+        # tech#71 parity facet: the shaper drops entries with a
+        # missing/short n or t and silently defaults a bad s to 1 -
+        # depts had no guard face at all before this one
+        bad_depts = [
+            "bare string",                            # not an object
+            {"t": "text without a name"},             # missing n (dropped)
+            {"n": "dept name", "t": "x"},             # t under floor (dropped)
+            {"n": "d" * 25, "t": "text"},             # n over cap (truncated)
+            {"n": "dept name", "t": "t" * 97},        # t over cap (truncated)
+            {"n": "dept name", "t": "text", "s": 7},  # s lands on 1 silently
+            {"n": "dept name", "t": "text", "s": "1"},  # s not an int
+        ]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, depts=bad_depts))
+        named = [f for f in findings if f[1] == "export-depts"]
+        self.assertEqual(len(named), 1)
+        self.assertIn("7/7", named[0][2])
+
+    def test_depts_boundary_and_states_silent(self):
+        ok_depts = [
+            {"n": "n" * 24, "t": "t" * 96, "s": 0},
+            {"n": "dept name", "t": "running", "s": 1},
+            {"n": "dept name", "t": "waiting", "s": 2},
+            {"n": "dept name", "t": "s defaults to 1"},  # shaper default
+        ]
+        findings = loop_health.classify_export_face(
+            dict(self.CONTRACT_EXPORT, depts=ok_depts))
+        self.assertNotIn("export-depts", warn_codes(findings))
+
     def test_results_cell_violations_named(self):
         bad_results = [
             [1893, "y" * 300],                # anchor: long log line

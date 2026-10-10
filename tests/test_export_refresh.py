@@ -161,6 +161,33 @@ class RefusalTests(WriterTmpCase):
         self.assertIn("export-results", [v[1] for v in viol])
         self.assertEqual(self.export.read_bytes(), before)
 
+    def test_refuse_bad_chips_shape(self):
+        # tech#71 parity facet: malformed chips cells (the same
+        # classify_export_face the probe runs - one source, both
+        # faces)
+        self.write_base()
+        before = self.export.read_bytes()
+        rc, lines, viol = self.refresh(patch={
+            "chips": [["ok", "done"],        # class off-enum
+                      ["t" * 15, "live"],   # txt over cap
+                      "bare string"]})      # not a list
+        self.assertEqual(rc, 2, lines)
+        self.assertIn("export-chips", [v[1] for v in viol])
+        self.assertEqual(self.export.read_bytes(), before)
+
+    def test_refuse_bad_depts_shape(self):
+        # tech#71 parity facet: depts entries the shaper would drop
+        # or silently relabel
+        self.write_base()
+        before = self.export.read_bytes()
+        rc, lines, viol = self.refresh(patch={
+            "depts": [{"n": "dept name", "t": "text", "s": 7},
+                      {"t": "missing name"},
+                      "bare string"]})
+        self.assertEqual(rc, 2, lines)
+        self.assertIn("export-depts", [v[1] for v in viol])
+        self.assertEqual(self.export.read_bytes(), before)
+
     def test_refuse_caps_over(self):
         # R1902 caps face: 13 well-formed outs > cap 12
         self.write_base()
