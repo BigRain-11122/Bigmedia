@@ -32,6 +32,12 @@ Laws encoded (why this is safe in this shared tree):
   never delete them, so missing = the close step itself failed).
 - Message length >500 chars gets a WARN line only - an accounting close must
   never fail on a soft style bound (P-30 limit is one line <=500).
+- tech#67 (.c3-tmp __pycache__ governance, R1900 anchor): every close purges
+  ``.c3-tmp/**/__pycache__`` dirs. Import-side bytecode caches are never
+  evidence (.gitignore already excludes *.pyc), and a regenerated cache
+  would trip the round-debris guard forever (round anchor N outside
+  [tick, tick+1] is always-true for a compiled artifact). Scope law: only
+  the .c3-tmp subtree - caches elsewhere (src/, tests/) stay untouched.
 
 rc: 0 = commit landed (push may have warned); 1 = a git add/commit step
 failed; 2 = usage error. Output lines are plain ASCII text, safe for
@@ -44,6 +50,7 @@ CLI:
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 
@@ -52,6 +59,7 @@ RC_GIT = 1
 RC_USAGE = 2
 
 MSG_MAX_SOFT = 500  # P-30 one-line convention; WARN only, never fails
+PYCACHE_DIRNAME = "__pycache__"
 
 
 def message_is_ascii(message):
@@ -108,6 +116,37 @@ def _git(root, args):
     return proc.returncode, out, err
 
 
+def purge_c3tmp_pycache(root, dry=False):
+    """Remove every ``__pycache__`` dir under ``<root>/.c3-tmp`` (tech#67).
+
+    Import-side bytecode caches are never evidence middleware; left in
+    place, a regenerated pyc trips the round-debris guard forever (its
+    round anchor sits outside [tick, tick+1] by construction). Scope law:
+    ONLY the .c3-tmp subtree - caches under src/, tests/ or anywhere else
+    are never touched. dry=True counts without deleting (zero side
+    effects). Returns (purged_dir_count, failed_paths) and never raises:
+    a cleanup step must not fail an accounting close.
+    """
+    base = os.path.join(root, ".c3-tmp")
+    purged, failed = 0, []
+    if not os.path.isdir(base):
+        return 0, []
+    for dirpath, dirnames, _filenames in os.walk(base):
+        if PYCACHE_DIRNAME in dirnames:
+            target = os.path.join(dirpath, PYCACHE_DIRNAME)
+            if dry:
+                purged += 1
+                continue
+            try:
+                shutil.rmtree(target)
+                purged += 1
+            except OSError:
+                failed.append(target)
+            # do not descend into the removed/skipped cache dir
+            dirnames[:] = [d for d in dirnames if d != PYCACHE_DIRNAME]
+    return purged, failed
+
+
 def run_close_commit(files, message, root=None, push=True, dry_run=False):
     """Commit exactly `files` with `message`; push unless disabled.
 
@@ -139,6 +178,19 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False):
     plan_commit = ["git", "commit", "-m", message, "--"] + rel_files
     plan_sha = ["git", "rev-parse", "HEAD"]
     plan_push = ["git", "push"]
+
+    # --- tech#67: purge .c3-tmp __pycache__ before the git steps (never
+    # evidence; a regenerated cache would re-trip the round-debris guard
+    # forever). Cleanup is warn-only - it must never fail the close. ---
+    if dry_run:
+        n_cache, _fails = purge_c3tmp_pycache(root, dry=True)
+        lines.append("DRY-RUN pycache purge %d dir(s) (skipped)" % n_cache)
+    else:
+        n_cache, fails = purge_c3tmp_pycache(root)
+        lines.append("STEP pycache purged %d dir(s) (tech#67)" % n_cache)
+        for f in fails:
+            lines.append("WARN pycache purge failed: %s" % f)
+
     if dry_run:
         lines.append("DRY-RUN " + " ".join(plan_add))
         lines.append("DRY-RUN " + " ".join(plan_commit))

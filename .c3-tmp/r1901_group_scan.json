@@ -1,0 +1,20 @@
+# group-scan 2026-10-10 17:13:21
+=== DECISIONS (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md | mtime 2026-10-10 12:11:03 | 186124 B | tokens=130
+watermark=130 | truly_new=0 | wm_only=0 (slim/inline-consumed family)
+TRULY_NEW: (none)
+=== LEDGER (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\cph4\evolution-ledger.md | mtime 2026-10-10 15:27:33 | 149529 B
+@BigStream lines=4 occurrences=5
+@七线全司 lines=0 occurrences=0
+@全司 lines=0 occurrences=0
+@六司 lines=1 occurrences=1
+@八线全量 lines=0 occurrences=0
+last-@BigStream: - **值守轮 2026-10-09（夜班 03:07）**：①水位=盘余 630.2GB（retention 实测·环比 …686.2→674.2→665.2〔10-08 15:07〕→630.2·本班对前班 -35. ...
+=== MTIME (rc=0) ===
+hq-orders | 2026-10-10 17:03:53 | 368398 B
+hq-orders-tail: | 10-10 17:0x | 「所有在册项目，全力推进！不要再等立项了，赶紧走之前定好的流程，全部并行开发，资源缺位就先用资源库的，后面再换，能做的研发什么的先做！」（**全组合并行开发动员令**·O-20261010 ...
+hq-decisions | 2026-10-10 12:11:03 | 186124 B
+hq-decisions-tail: | 2026-10-10 | D-20261010-10 共享推理服务 wedged 态服务级重启边界判例追认（BigStream F-20261010-03 收口腿·让路律条件失效面定谳） | BigStream F- ...
+ledger | 2026-10-10 15:27:33 | 149529 B
+own-orders-top | O-20261008-1105-bm-a.md | 2026-10-08 12:08:14 | 4698 B

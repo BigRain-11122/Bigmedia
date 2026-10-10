@@ -829,12 +829,18 @@ def check_broken_round_debris(root, state, findings):
     if not isinstance(tick, int):
         return
     for rel in classify_broken_round_debris(_git_untracked_files(root), tick):
-        findings.append(("WARN", "round-debris",
-                         "%s untracked round middleware (round anchor "
-                         "outside [tick=%d, in-flight=%d]) - broken-round "
-                         "prior-body debris: absorb via git-status "
-                         "archaeology or delete (R1895/R1899 anchors)"
-                         % (rel, tick, tick + 1)))
+        msg = ("%s untracked round middleware (round anchor "
+               "outside [tick=%d, in-flight=%d]) - broken-round "
+               "prior-body debris: absorb via git-status "
+               "archaeology or delete (R1895/R1899 anchors)"
+               % (rel, tick, tick + 1))
+        if rel.endswith(".pyc"):
+            # tech#67: a .pyc is an import-side bytecode cache, never
+            # evidence - regenerated caches re-trip this guard forever.
+            msg += (" [pyc bytecode cache: delete it and set "
+                    "PYTHONDONTWRITEBYTECODE=1 when importing .c3-tmp "
+                    "middleware - tech#67]")
+        findings.append(("WARN", "round-debris", msg))
 
 
 def _git_show_state(root, _run=None):

@@ -1,0 +1,4 @@
+1115:     def _git_repo(self, head_tick=1892, disk_tick=1893):
+1234: class C3TmpStaleTests(unittest.TestCase):
+1246:     def _git_repo(self):
+1363:     def _git_repo(self):

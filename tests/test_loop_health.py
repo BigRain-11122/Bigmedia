@@ -1430,6 +1430,27 @@ class BrokenRoundDebrisTests(unittest.TestCase):
         self.assertIn("R1895", findings[0][2])
         self.assertNotIn("round-debris", fail_codes(findings))
 
+    def test_pyc_debris_carries_prevention_hint(self):
+        # tech#67 (R1900 r1897_close.pyc anchor): a .pyc debris line must
+        # carry the prevention hint - bytecode caches are never evidence
+        # and a regenerated one would re-trip this guard forever.
+        root = self._git_repo()
+        (root / ".c3-tmp" / "r1895_close.cpython-314.pyc").write_bytes(b"\x00pyc")
+        findings = []
+        loop_health.check_broken_round_debris(
+            root, json.loads((root / "src" / "os" / "state.json")
+                             .read_text(encoding="utf-8-sig",
+                                        errors="replace")), findings)
+        pyc_warns = [f for f in findings
+                     if f[1] == "round-debris" and ".pyc" in f[2]]
+        self.assertEqual(len(pyc_warns), 1)
+        self.assertIn("PYTHONDONTWRITEBYTECODE=1", pyc_warns[0][2])
+        # non-pyc debris keeps the plain message (hint is pyc-only)
+        plain = [f for f in findings
+                 if f[1] == "round-debris" and "r1895_close.py" in f[2]]
+        self.assertEqual(len(plain), 1)
+        self.assertNotIn("PYTHONDONTWRITEBYTECODE", plain[0][2])
+
     def test_check_face_state_without_tick_silent(self):
         root = self._git_repo()
         findings = []

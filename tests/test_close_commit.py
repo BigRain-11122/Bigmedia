@@ -238,6 +238,71 @@ class TestPushLaw(GitRepoCase):
             shutil.rmtree(bare.parent, ignore_errors=True)
 
 
+class TestPycachePurge(GitRepoCase):
+    """tech#67: the close purges .c3-tmp __pycache__ dirs (R1900 anchor:
+    a regenerated r1897_close.cpython-314.pyc would re-trip the
+    round-debris guard forever - bytecode caches are never evidence)."""
+
+    def _mk_pycache(self, *relparts):
+        d = self.root.joinpath(*relparts)
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "x.cpython-314.pyc").write_bytes(b"\x00pyc")
+        return d
+
+    def test_pycache_purged_before_commit(self):
+        pc = self._mk_pycache(".c3-tmp", "__pycache__")
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(pc.exists())
+        self.assertTrue(any(l.startswith("STEP pycache purged 1 dir(s)") for l in lines))
+
+    def test_nested_pycache_dirs_purged(self):
+        pc1 = self._mk_pycache(".c3-tmp", "__pycache__")
+        pc2 = self._mk_pycache(".c3-tmp", "sub", "__pycache__")
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(pc1.exists())
+        self.assertFalse(pc2.exists())
+        self.assertTrue(any("purged 2 dir(s)" in l for l in lines))
+
+    def test_pycache_outside_c3tmp_untouched(self):
+        keep = self._mk_pycache("src", "os", "__pycache__")
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(keep.exists())  # scope law: only the .c3-tmp subtree
+        self.assertTrue(any("purged 0 dir(s)" in l for l in lines))
+
+    def test_dry_run_does_not_purge(self):
+        pc = self._mk_pycache(".c3-tmp", "__pycache__")
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], dry_run=True)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(pc.exists())  # zero side effects
+        self.assertTrue(any("DRY-RUN pycache purge 1 dir(s)" in l for l in lines))
+
+    def test_missing_c3tmp_zero_purge(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any("purged 0 dir(s)" in l for l in lines))
+
+    def test_purge_helper_dry_counts_without_deleting(self):
+        pc = self._mk_pycache(".c3-tmp", "__pycache__")
+        n, fails = cc.purge_c3tmp_pycache(str(self.root), dry=True)
+        self.assertEqual((1, []), (n, fails))
+        self.assertTrue(pc.exists())
+        n, fails = cc.purge_c3tmp_pycache(str(self.root))
+        self.assertEqual((1, []), (n, fails))
+        self.assertFalse(pc.exists())
+
+    def test_purge_helper_missing_base_ok(self):
+        n, fails = cc.purge_c3tmp_pycache(str(self.root))
+        self.assertEqual((0, []), (n, fails))
+
+
 class TestCLI(unittest.TestCase):
     """The main() face the close script shell-outs to (rc propagation)."""
 
