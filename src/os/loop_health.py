@@ -79,6 +79,13 @@ Findings:
                                    entries (R1891 anchor: seed 58 glued
                                    to entry 57 tail went unsighted five
                                    rounds; tech#60)
+  WARN  queue-dup-numbers        the same entry number heading two
+                                   entries in one state/queue/*.md file -
+                                   every queue cite of the number (focus
+                                   lines, done notes, ledger references)
+                                   turns ambiguous under a double-held
+                                   number (R1895 anchor: tech.md held 41
+                                   twice; tech#62)
   WARN  account-uncommitted     on-disk state.json tick ahead of the
                                    git-HEAD tick with the file dirty -
                                    closing stage-2 wrote the accounting
@@ -197,6 +204,7 @@ AIHOT_PROBE_TIMEOUT_S = 4.0
 QUEUE_DIR = Path("state") / "queue"
 QUEUE_ENTRY_HEAD_RE = re.compile(r"\d{1,3}\. \[")
 QUEUE_GLUE_SHOW_N = 3  # glued lines shown per file before the "+N more" tail
+QUEUE_HEAD_NUM_RE = re.compile(r"^(\d{1,3})\. ")  # entry head at column 0
 # tech#61: round accounting-chain completeness guard. R1893 anchor: the
 # two-stage closing died between its stages - tick 1893 + log + export
 # refresh + queue restock were all written to disk and left uncommitted
@@ -645,6 +653,64 @@ def check_queue_glue(root, findings):
     findings.extend(classify_queue_glue(files))
 
 
+def classify_queue_dup_numbers(files):
+    """{name: text} -> findings (pure core). An entry head number is
+    'NN. ' at column 0; the same number heading two entries in one
+    file is a double-booked queue slot - every cite of the number
+    (focus lines, done notes, ledger references) becomes ambiguous
+    about which entry it means (the R1895 anchor: tech.md held 41
+    twice - the ollama saturation monitor and the lcard pilot). One
+    WARN per file naming each reused number with its count. Out-of-
+    order numbers are NOT a finding (append order = delivery order
+    is legal; only reuse is the disease - tech#62 scope note).
+    Clean queue files yield no findings (silent PASS like the other
+    guard faces)."""
+    findings = []
+    for name in sorted(files):
+        seen = {}
+        for line in files[name].splitlines():
+            m = QUEUE_HEAD_NUM_RE.match(line)
+            if not m:
+                continue
+            seen.setdefault(m.group(1), []).append(m.start(1))
+        reused = {n: pos for n, pos in seen.items() if len(pos) >= 2}
+        if not reused:
+            continue
+        shown = ", ".join("%s x%d" % (n, len(reused[n]))
+                          for n in sorted(reused, key=int))
+        findings.append(("WARN", "queue-dup-numbers",
+                         "%d reused entry number(s) in %s: %s - a "
+                         "double-held number makes every queue cite of "
+                         "it ambiguous (focus lines / done notes / "
+                         "ledger references); renumber the "
+                         "less-referenced arrival and leave a cross-ref "
+                         "note (R1895 anchor: 41 held twice in tech.md); "
+                         "append order is legal, only reuse is the "
+                         "disease" % (len(reused), name, shown)))
+    return findings
+
+
+def check_queue_dup_numbers(root, findings):
+    """tech#62 guard face: scan every state/queue/*.md for entry head
+    numbers reused by two entries. Machine-enforced every round by the
+    routine probe consumption - a double-booked number is named within
+    one round instead of at the next hand-written head count. A
+    missing queue dir stays silent (existence is the loop engine's
+    face, not this guard's); unreadable files are skipped (not this
+    face's matter)."""
+    qdir = root / QUEUE_DIR
+    if not qdir.is_dir():
+        return
+    files = {}
+    for path in sorted(qdir.glob("*.md")):
+        try:
+            files[path.name] = path.read_text(
+                encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+    findings.extend(classify_queue_dup_numbers(files))
+
+
 def _git_show_state(root, _run=None):
     """`git show HEAD:<state.json>` stdout bytes, or None on any failure
     (not a work tree, state never committed, git missing, timeout).
@@ -867,6 +933,7 @@ def main(argv):
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
         check_queue_glue(root, findings)
+        check_queue_dup_numbers(root, findings)
         check_account_uncommitted(root, state, findings)
         check_aihot_stack(findings)
     except OSError as e:

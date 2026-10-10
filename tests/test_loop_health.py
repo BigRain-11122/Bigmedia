@@ -1003,6 +1003,102 @@ class QueueGlueTests(unittest.TestCase):
         self.assertEqual(loop_health.classify_queue_glue(files), [])
 
 
+class QueueDupNumbersTests(unittest.TestCase):
+    """tech#62: queue entry-number uniqueness guard - pure core, check
+    face and CLI wiring. The R1895 anchor form (tech.md held number 41
+    twice - two independent entries, the ollama saturation monitor and
+    the lcard pilot) must be named; unique numbers in any order and
+    clean baselines must stay silent."""
+
+    def test_clean_unique_numbers_never_flag(self):
+        files = {"tech.md": "1. [R1900 a] one\n2. [R1900 b] two\n"
+                            "3. [R1900 c] three\n"}
+        self.assertEqual(loop_health.classify_queue_dup_numbers(files), [])
+
+    def test_append_order_is_legal_not_flagged(self):
+        """Non-monotonic head order is the delivery order - only reuse
+        is the disease (tech#62 scope note)."""
+        files = {"tech.md": "10. [R1900 a] ten\n2. [R1900 b] two\n"
+                            "23. [R1900 c] later insert\n"
+                            "11. [R1900 d] eleven\n"}
+        self.assertEqual(loop_health.classify_queue_dup_numbers(files), [])
+
+    def test_r1895_anchor_dup41_named(self):
+        files = {"tech.md": "41. [R1859 seed] lcard pilot guard\n"
+                            "42. [R1862 seed] unrelated\n"
+                            "41. **ollama saturation monitor** anchor\n"}
+        findings = loop_health.classify_queue_dup_numbers(files)
+        self.assertEqual(warn_codes(findings), {"queue-dup-numbers"})
+        msg = findings[0][2]
+        self.assertIn("tech.md", msg)
+        self.assertIn("41 x2", msg)
+        self.assertIn("R1895", msg)
+
+    def test_three_way_reuse_counts_all(self):
+        files = {"tech.md": "7. [R1900 a] x\n7. [R1900 b] y\n"
+                            "7. [R1900 c] z\n8. [R1900 d] ok\n"}
+        findings = loop_health.classify_queue_dup_numbers(files)
+        self.assertEqual(warn_codes(findings), {"queue-dup-numbers"})
+        self.assertIn("7 x3", findings[0][2])
+        self.assertNotIn("8 x", findings[0][2])
+
+    def test_dup_across_files_not_flagged(self):
+        """Per-file scope: the same number in two different queue files
+        is two independent namespaces, not a double-booking."""
+        files = {"main.md": "41. [R1900 a] one\n",
+                 "tech.md": "41. [R1900 b] two\n"}
+        self.assertEqual(loop_health.classify_queue_dup_numbers(files), [])
+
+    def test_indented_continuation_is_not_a_head(self):
+        files = {"tech.md": "40. [R1900 a] tail\n"
+                            "   [R1896 note] prose mentioning 41 here\n"
+                            "41. [R1900 b] the only real head\n"}
+        self.assertEqual(loop_health.classify_queue_dup_numbers(files), [])
+
+    def test_check_face_missing_dir_silent(self):
+        root = make_dir(self, "bs-dup-nodir-")
+        findings = []
+        loop_health.check_queue_dup_numbers(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_face_reads_only_md_files(self):
+        root = make_dir(self, "bs-dup-mixed-")
+        qdir = root / "state" / "queue"
+        qdir.mkdir(parents=True)
+        (qdir / "notes.txt").write_text(
+            "41. [R1900 a] one\n41. [R1900 b] dup in txt\n",
+            encoding="utf-8")
+        findings = []
+        loop_health.check_queue_dup_numbers(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wiring_dup_warns_never_fails(self):
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        root = make_repo(self, spec, make_state(tick=2), BOARD)
+        qdir = root / "state" / "queue"
+        qdir.mkdir(parents=True)
+        (qdir / "tech.md").write_text(
+            "41. [R1859 seed] lcard pilot guard\n"
+            "41. **ollama saturation monitor** anchor\n",
+            encoding="utf-8")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
+        self.assertIn("queue-dup-numbers", buf.getvalue())
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion: the real state/queue/*.md files (the
+        R1896 renumber left every number unique) must produce zero
+        queue-dup-numbers findings - read-only smoke through the pure
+        core."""
+        files = {}
+        for path in sorted((REPO / "state" / "queue").glob("*.md")):
+            files[path.name] = path.read_text(
+                encoding="utf-8-sig", errors="replace")
+        self.assertEqual(loop_health.classify_queue_dup_numbers(files), [])
+
+
 @unittest.skipIf(shutil.which("git") is None, "git binary not available")
 class AccountUncommittedTests(unittest.TestCase):
     """tech#61: round accounting-chain completeness guard - pure core,
