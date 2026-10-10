@@ -1,0 +1,21 @@
+tech#71 chips/depts parity facets - round R1905 evidence
+=========================================================
+[judgement criterion 1] anchor-shape fixture reproduction:
+  guard tests: chips 7/7 bad cells named + depts 7/7 bad cells named
+  (tests.test_loop_health.ExportFaceTests, 4 new cases)
+  writer tests: bad chips/depts patch refused rc=2, export file
+  byte-identical (tests.test_export_refresh.RefusalTests, 2 new)
+  targeted run: Ran 44 tests OK (ExportFaceTests + export_refresh)
+[judgement criterion 2] real-repo read (r1905_realrepo_check.py):
+  tech#71 criterion-2 real-repo read: 0 export face finding(s)
+  RESULT: ZERO-FINDINGS
+[full regression] tools/run_suite.ps1 (tech#33 canonical runner):
+  SUITE_RC=0
+  SUITE_RAN=Ran 767 tests in 118.086s
+  SUITE_RESULT=OK
+[consumer contract source read]
+  MiniGame tools/siliconwatch generate.ps1 L192-225 (v6.2 shape loop)
+  MiniGame tools/siliconwatch strings.json labels.export_face EF caps
+  correction: tech#71 seed text said depts s in {1,2}; shaper L195
+  keeps s=0 too -> valid set {0,1,2}, missing s defaults to 1
+[deliverable commit] segment-1: e12583d3 (pushed)
