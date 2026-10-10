@@ -1,11 +1,16 @@
-"""Tests for src/os/mv_sprint_probe.py (tech#84).
+"""Tests for src/os/mv_sprint_probe.py (tech#84; tech#86 --ledger).
 
 All hermetic: git is an injected seam, outbound faces are tmpdirs, the
-verdict core is pure. No real repo walk, no network, no GPU.
+verdict core is pure. No real repo walk, no network, no GPU. CLI tests
+patch run_probe/append_ledger_row at module level (main() resolves them
+as module globals).
 """
 
+import contextlib
 import datetime
 import importlib.util
+import io
+import json
 import os
 import sys
 import tempfile
@@ -241,6 +246,135 @@ class RunProbeTests(unittest.TestCase):
                 git_runner=lambda root: (True, raw))
             self.assertEqual(result["verdict"], "active")
             self.assertEqual(result["rc"], probe.RC_ACTIVE)
+
+
+class LedgerTests(unittest.TestCase):
+    """tech#86 --ledger JSONL face (tech#52 ollama_probe --ledger family:
+    row fields / error-run nulls / two runs two rows / CLI wiring incl.
+    bare-flag default / no-flag zero writes / best-effort failure)."""
+
+    @staticmethod
+    def _quiet_result():
+        return {
+            "probe": "mv_sprint_probe",
+            "ts": "2026-10-11 03:33:40",
+            "verdict": "quiet", "rc": probe.RC_QUIET,
+            "threshold_min": 90, "newest_age_min": 247.7,
+            "faces": {"repo-mv-dirty": {"status": "empty"},
+                      "mv-outbound": {"status": "empty"},
+                      "h3-outbound": {"status": "absent"}},
+        }
+
+    def test_row_fields_exact(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "ledger.jsonl"
+            probe.append_ledger_row(str(path), self._quiet_result())
+            rows = [json.loads(l) for l in
+                    path.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(len(rows), 1)
+            row = rows[0]
+            self.assertEqual(sorted(row.keys()),
+                             ["newest_age_min", "rc", "threshold_min", "ts",
+                              "verdict"])
+            self.assertEqual(row["verdict"], "quiet")
+            self.assertEqual(row["rc"], 0)
+            self.assertEqual(row["newest_age_min"], 247.7)
+            self.assertEqual(row["threshold_min"], 90)
+            # ts is live-clock stamped, shape-locked only
+            self.assertRegex(row["ts"], r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+
+    def test_error_run_row_carries_nulls(self):
+        # fail-closed is data: an rc-2 run (verdict None, newest None)
+        # still gets its row so the judgment position can cite it
+        result = self._quiet_result()
+        result.update({"verdict": None, "rc": probe.RC_ERROR,
+                       "newest_age_min": None})
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "ledger.jsonl"
+            probe.append_ledger_row(str(path), result)
+            row = json.loads(path.read_text(encoding="utf-8").splitlines()[0])
+            self.assertEqual(row["verdict"], None)
+            self.assertEqual(row["rc"], 2)
+            self.assertEqual(row["newest_age_min"], None)
+
+    def test_two_runs_two_rows(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "ledger.jsonl"
+            probe.append_ledger_row(str(path), self._quiet_result())
+            active = self._quiet_result()
+            active.update({"verdict": "active", "rc": probe.RC_ACTIVE,
+                           "newest_age_min": 12.3})
+            probe.append_ledger_row(str(path), active)
+            rows = [json.loads(l) for l in
+                    path.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(len(rows), 2)
+            self.assertEqual([r["verdict"] for r in rows],
+                             ["quiet", "active"])
+
+    def test_parent_dir_autocreated(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "a" / "b" / "ledger.jsonl"
+            probe.append_ledger_row(str(path), self._quiet_result())
+            self.assertTrue(path.is_file())
+
+    def test_append_failure_warns_never_raises(self):
+        # pointing the ledger at a directory makes open() raise OSError:
+        # best-effort contract = WARN to stderr, no exception, rc untouched
+        with tempfile.TemporaryDirectory() as td:
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err):
+                probe.append_ledger_row(td, self._quiet_result())  # td is a dir
+            self.assertIn("WARN mv-sprint-probe-ledger append failed", err.getvalue())
+
+    def test_cli_writes_row_and_propagates_rc(self):
+        original_run = probe.run_probe
+        original_append = probe.append_ledger_row
+        try:
+            probe.run_probe = lambda **kw: self._quiet_result()
+            with tempfile.TemporaryDirectory() as td:
+                path = Path(td) / "ledger.jsonl"
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out):
+                    rc = probe.main(["--ledger", str(path), "--json"])
+                self.assertEqual(rc, probe.RC_QUIET)
+                row = json.loads(
+                    path.read_text(encoding="utf-8").splitlines()[0])
+                self.assertEqual(row["verdict"], "quiet")
+                self.assertEqual(row["newest_age_min"], 247.7)
+                self.assertIn('"verdict": "quiet"', out.getvalue())
+        finally:
+            probe.run_probe = original_run
+            probe.append_ledger_row = original_append
+
+    def test_cli_bare_flag_resolves_default_path(self):
+        original_run = probe.run_probe
+        original_append = probe.append_ledger_row
+        captured = []
+        try:
+            probe.run_probe = lambda **kw: self._quiet_result()
+            probe.append_ledger_row = lambda path, result: captured.append(path)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                probe.main(["--ledger"])  # bare flag
+            self.assertEqual(captured, [str(probe.DEFAULT_LEDGER)])
+        finally:
+            probe.run_probe = original_run
+            probe.append_ledger_row = original_append
+
+    def test_cli_no_flag_zero_writes(self):
+        # existing call surface zero-drift: no --ledger => no ledger write
+        original_run = probe.run_probe
+        original_append = probe.append_ledger_row
+        try:
+            probe.run_probe = lambda **kw: self._quiet_result()
+            probe.append_ledger_row = lambda path, result: self.fail(
+                "append_ledger_row must not fire without --ledger")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                probe.main(["--json"])
+        finally:
+            probe.run_probe = original_run
+            probe.append_ledger_row = original_append
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MV sprint active-window static probe (tech#84).
+"""MV sprint active-window static probe (tech#84; tech#86 --ledger).
 
 Gap anchor (tech#82 yield-discipline follow-up): the eviction-aware
 opt-in faces on ollama_probe (--eviction-aware) and gpu_window_gate
@@ -39,6 +39,13 @@ judgment as a write-silence reading:
   every lane look like MV. Kinship: loop_health._parse_porcelain_z
   (tech#31) -- the 12-line NUL parser is kept local so the probe family
   stays standalone (each probe owns its own locked seams).
+
+--ledger [PATH] (tech#86): opt-in one-row-per-run JSONL evidence face
+(ollama_probe --ledger / tech#52 family). The judgment position (the
+four-legs fire card) reads the ledger tail line instead of re-deriving
+readings from state log prose -- one flight, one citable row. Bare
+--ledger = default data/pipeline/mv-sprint-probe-ledger.jsonl. Write
+failure is best-effort WARN: never raises, never changes rc.
 """
 
 import argparse
@@ -57,6 +64,7 @@ MV_DOMAIN_TOKENS = ("mv0001", "mv001")
 MV_OUTBOUND_ROOT = FLUXGROUP_ROOT / "cph4" / "fleet" / "mv0001-handover" / "outbound"
 H3_OUTBOUND_ROOT = FLUXGROUP_ROOT / "cph4" / "fleet" / "h3-local-test" / "outbound"
 GIT_TIMEOUT_S = 20
+DEFAULT_LEDGER = REPO_ROOT / "data" / "pipeline" / "mv-sprint-probe-ledger.jsonl"
 
 RC_QUIET = 0
 RC_ACTIVE = 1
@@ -232,6 +240,32 @@ def run_probe(repo_root=None, face_roots=None, threshold_min=DEFAULT_THRESHOLD_M
     }
 
 
+def append_ledger_row(path, result):
+    """Best-effort JSONL append (tech#86): one row per probe run.
+
+    Row = ts/verdict/rc/newest_age_min/threshold_min (the judgment
+    position cites this tail line instead of re-deriving readings from
+    state log prose -- tech#52 'next round cites the previous reading'
+    discipline). Error runs (rc 2, verdict None, newest None) are
+    still real readings and get their row: fail-closed is data. WARN
+    on write failure, never raises, never changes the exit code
+    (tech#19/tech#52 best-effort contract)."""
+    row = {
+        "ts": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "verdict": result["verdict"],
+        "rc": result["rc"],
+        "newest_age_min": result.get("newest_age_min"),
+        "threshold_min": result["threshold_min"],
+    }
+    try:
+        ledger_path = Path(path)
+        ledger_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(ledger_path, "a", encoding="utf-8") as fh:
+            fh.write(json.dumps(row, ensure_ascii=True) + "\n")
+    except OSError as exc:
+        sys.stderr.write("WARN mv-sprint-probe-ledger append failed: %s\n" % exc)
+
+
 def _face_json(face, now_ts):
     out = {"status": face.get("status")}
     if face.get("status") == "ok":
@@ -252,9 +286,14 @@ def main(argv=None):
                              "poke ceiling sits under it)" % DEFAULT_THRESHOLD_MIN)
     parser.add_argument("--json", action="store_true",
                         help="single machine-readable line")
+    parser.add_argument("--ledger", nargs="?", const=str(DEFAULT_LEDGER), default=None,
+                        help="append one JSONL row per probe run to this path "
+                             "(tech#86; bare --ledger = default %s)" % DEFAULT_LEDGER)
     args = parser.parse_args(argv)
 
     result = run_probe(threshold_min=args.threshold_min)
+    if args.ledger:
+        append_ledger_row(args.ledger, result)
     now_ts = datetime.datetime.now().timestamp()
     if args.json:
         payload = dict(result)
