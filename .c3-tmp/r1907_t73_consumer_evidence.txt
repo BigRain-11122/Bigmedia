@@ -1,0 +1,37 @@
+R1907 tech#73 consumer re-scan evidence (O-20261010-1955 siliconwatch v6.3 landed -> gate arrived)
+Scan time: 2026-10-10 20:3x-20:4x. Files read: MiniGame tools/siliconwatch/generate.ps1 (752 lines, mtime 2026-10-10 20:03:40 = v6.3), canonical.html (1308 lines, mtime 20:10:48), strings.json (45KB, mtime 20:10:57).
+
+FACET 1 - generate.ps1 consumption key set vs status-export.json:
+  L168-245 per-company block. Six-key set UNCHANGED vs v6.2:
+  - L182 export_ts (fresh <=24h gate -> src='live-export' else 'export-stale')
+  - L194 do (Cut-FaceText EF.do_max)
+  - L196 depts / L207 outs / L219 chips / L231 results (per-field shaping)
+  LIVE key: NOT consumed. No new keys consumed. Zero drift vs tech#72 verdict.
+
+FACET 2 - canonical.html v6.3 new render positions data source mapping:
+  - Sub-page (#/sub/N) L1184: pg-lead <- s.now ; L1186: pg-ask <- s.plain.ask
+  - Main card L820-821: s.last_subj + s.now ; L824: s.src source label
+  - Games library L1194-1216: D.games_catalog (strings.json curated, MiniGame-owned)
+  All s.* fields trace to generate.ps1 L245 subs hash:
+    now = [string]$sub.now   -> strings.json subs[n].now (curated layer, NOT export)
+    plain = $sub.plain        -> strings.json subs[n].plain (curated, NOT export)
+    last_subj = $lastSubj     -> git log of company repo (commit subject)
+    depts/chips/outs/results/do/src <- export six keys when fresh
+  => No new export consumption surface. live[0] (product-first-law S5 line 1) has NO board path; JSON direct-read remains its only CEO-visible path.
+
+FACET 3 - live shape guard re-evaluation (tech#72 pre-registered branch):
+  Trigger condition "consumer starts reading live" NOT met. Per pre-registration:
+  verdict = zero new consumption -> note renewal, NO new loop_health face (anti-bloat law).
+  tech#72 renewal note stands; next re-trigger = any future consumer change touching live.
+
+REAL-REPO CONTRACT: current docs/status-export.json (export_ts 2026-10-10 20:22:36, written by
+canonical writer R1906 with pre-write self-check) - dry-run contract check this round: PASS (see
+state log R1907; patch applied at close via export_refresh.py canonical writer, self-check in-line).
+
+Curated strings.json BigStream subs[n].now current value (board card + sub-page pg-lead face):
+  "短视频部成立（八个小组+十位评审专家两轮把关）：第一部片子《慢慢踩》在生产；MV《爱在西元前》30 秒重制机队满跑；每天 3 条的产能备好——就差你开号。" (fresh, curated by interactive window 20:10)
+
+VERDICT: tech#73 = re-scan closed, zero new consumption, six-key contract stable, live stays
+CEO-direct-read face. Genuine new observation -> P-6 proposal (self-improvement-queue.md section D):
+live three lines written in OS jargon vs CEO order O-20261010-1955 plain-language law; pilot =
+plain-language rewrite of live lines at close face (this round's export refresh is pilot #1).
