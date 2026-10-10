@@ -8,3 +8,4 @@
 {"ts": "2026-10-10 11:15:02", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "49", "gpu_mem": "11884"}
 {"ts": "2026-10-10 11:28:48", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "62", "gpu_mem": "2012", "face": "service-anomaly"}
 {"ts": "2026-10-10 13:14:22", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "11512", "face": "busy-contended"}
+{"ts": "2026-10-10 14:44:15", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "11815", "face": "busy-contended"}
