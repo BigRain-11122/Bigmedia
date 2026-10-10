@@ -598,5 +598,128 @@ class CliAttributionTests(unittest.TestCase):
         self.assertIn("python.exe", out)
 
 
+class EvictionAwareCreditTests(unittest.TestCase):
+    """tech#83: gate-side evictable credit (opt-in, default OFF)."""
+
+    def test_r1934_anchor_credit_flips_go(self):
+        # R1934 anchor window: static 5663 < 9216 script-leg guard
+        # (NO-GO) while the probe counterfactual read fly with the
+        # 4888MB evictable credit -- the gate must read the same window
+        # GO once the credit is passed (divergence closed).
+        v = gate.decide("clear", 5663, 9216, evictable_mb=4888)
+        self.assertTrue(v["go"])
+        self.assertEqual(v["vram_free_mb"], 5663)
+        self.assertEqual(v["evictable_mb"], 4888)
+        self.assertEqual(v["effective_free_mb"], 10551)
+        self.assertTrue(any("effective free 10551MB" in r
+                            for r in v["reasons"]))
+
+    def test_static_only_same_window_no_go(self):
+        # the divergence anchor itself: same window without the credit
+        v = gate.decide("clear", 5663, 9216)
+        self.assertFalse(v["go"])
+        self.assertNotIn("evictable_mb", v)
+        self.assertNotIn("effective_free_mb", v)
+
+    def test_credit_boundary_strict(self):
+        # effective == guard passes; one MB below fails (tech#44 parity)
+        self.assertTrue(
+            gate.decide("clear", 5663, 9216, evictable_mb=3553)["go"])
+        self.assertFalse(
+            gate.decide("clear", 5663, 9216, evictable_mb=3552)["go"])
+
+    def test_insufficient_credit_dual_reading_no_go(self):
+        v = gate.decide("clear", 5663, 9216, evictable_mb=1000)
+        self.assertFalse(v["go"])
+        self.assertEqual(v["effective_free_mb"], 6663)
+        self.assertTrue(any(
+            "effective free 6663MB (static 5663MB + credit 1000MB)"
+            in r for r in v["reasons"]))
+
+    def test_unreadable_credit_never_fabricates(self):
+        # a credit must never turn an unreadable probe into a pass
+        v = gate.decide("clear", None, 9216, evictable_mb=4888)
+        self.assertFalse(v["go"])
+        self.assertIsNone(v["effective_free_mb"])
+        self.assertEqual(v["evictable_mb"], 4888)
+
+    def test_pause_face_overrides_credit(self):
+        # CEO pause face blocks regardless of any credit
+        v = gate.decide("pause-fingerprint", 5663, 2048,
+                        evictable_mb=4888)
+        self.assertFalse(v["go"])
+
+    def test_util_gate_still_applies_with_credit(self):
+        # the credit clears the vram face but the util face still gates
+        v = gate.decide("clear", 1500, 2048, util_max=80, max_util=90,
+                        evictable_mb=1000)
+        self.assertFalse(v["go"])
+        self.assertTrue(any("util" in r for r in v["reasons"]))
+
+    def test_credit_with_sampled_stability_reason(self):
+        # credit + sampled path: worst-case static + credit both carried
+        v = gate.decide("clear", 5663, 9216, sampled=True,
+                        band_mb=30, evictable_mb=4888)
+        self.assertTrue(v["go"])
+        self.assertTrue(any("static 5663MB + evictable credit 4888MB"
+                            in r for r in v["reasons"]))
+
+
+class CliEvictionAwareTests(unittest.TestCase):
+    def _run_main(self, argv):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = gate.main(argv)
+        return rc, buf.getvalue()
+
+    def test_credit_json_fields_and_go(self):
+        with mock.patch.object(
+                gate, "query_task_states",
+                return_value={t: False for t in
+                              gate.MACHINE_STATE_TASKS}), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=5663):
+            rc, out = self._run_main(
+                ["--json", "--min-free-mb", "9216",
+                 "--eviction-aware-mb", "4888"])
+        self.assertEqual(rc, 0)
+        row = json.loads(out)
+        self.assertTrue(row["go"])
+        self.assertEqual(row["evictable_mb"], 4888)
+        self.assertEqual(row["effective_free_mb"], 10551)
+        self.assertEqual(row["vram_free_mb"], 5663)
+
+    def test_credit_human_output_line(self):
+        with mock.patch.object(
+                gate, "query_task_states",
+                return_value={t: False for t in
+                              gate.MACHINE_STATE_TASKS}), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=5663):
+            rc, out = self._run_main(
+                ["--min-free-mb", "9216", "--eviction-aware-mb", "4888"])
+        self.assertEqual(rc, 0)
+        self.assertIn("eviction_aware: credit 4888MB", out)
+        self.assertIn("VERDICT=GO", out)
+
+    def test_credit_absent_json_legacy_shape(self):
+        # absent flag = no new keys on the wire (opt-in zero drift)
+        with mock.patch.object(
+                gate, "query_task_states",
+                return_value={t: False for t in
+                              gate.MACHINE_STATE_TASKS}), \
+             mock.patch.object(gate, "read_vram_free_mb",
+                               return_value=11000):
+            rc, out = self._run_main(["--json"])
+        self.assertEqual(rc, 0)
+        row = json.loads(out)
+        self.assertNotIn("evictable_mb", row)
+        self.assertNotIn("effective_free_mb", row)
+
+    def test_negative_credit_rejected(self):
+        with self.assertRaises(SystemExit):
+            self._run_main(["--eviction-aware-mb", "-5"])
+
+
 if __name__ == "__main__":
     unittest.main()

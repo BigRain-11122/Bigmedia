@@ -30,6 +30,17 @@ Faces:
               risk) without changing the verdict on its own.
   util_face:  --util-max P adds a compute gate (tech#75 three-gate member):
               worst-case util > P -> NO-GO (boundary strict, tech#44 parity).
+  eviction_aware: --eviction-aware-mb N (opt-in, tech#83): credits N MB of
+              evictable other-resident VRAM (fed from the ollama probe's
+              ps evictable_mb reading, tech#82 sibling face) to the static
+              worst-case free BEFORE the guard test -- closes the
+              gate/probe envelope-criteria divergence (R1934 anchor:
+              script-leg static 5663<9216 NO-GO while the probe
+              counterfactual read 5663+4888=10551 fly). Yield discipline
+              encoded as default-OFF: absent = static-only legacy
+              behavior, byte-identical. The credit never fabricates a
+              reading (probe-unreadable stays NO-GO) and never bypasses
+              the pause face.
 
 Exit codes: 0=GO, 1=NO-GO, 2=probe error (both faces unknown).
 Consumed at GPU window judgment rounds (12:00-type); zero GPU work itself.
@@ -294,7 +305,7 @@ def classify_producers(rows, patterns=None, noise=None):
 
 
 def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
-           band_mb=None, read_fail=None, sampled=False):
+           band_mb=None, read_fail=None, sampled=False, evictable_mb=None):
     """Compose the faces -> verdict dict (go bool + reasons).
 
     Backward-compatible: the extra kwargs default to None and the
@@ -302,9 +313,15 @@ def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
     Sampled path: free_mb must be the WORST-CASE (min) reading; band_mb /
     read_fail add honest notes; util_max adds the compute gate
     (worst-case max_util; boundary strict, tech#44 parity).
+    tech#83 credit path: evictable_mb (opt-in) adds the probe's ps
+    evictable reading to free_mb before the guard test. Default OFF =
+    yield discipline (only pass when evicting the other resident models
+    is acceptable). The credit never fabricates a reading: an
+    unreadable free stays NO-GO even with credit passed.
     """
     reasons = []
     go = True
+    effective_free = None
     if pause_label == "pause-fingerprint":
         go = False
         reasons.append(
@@ -319,6 +336,17 @@ def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
         else:
             go = False
             reasons.append("vram-face: probe-unreadable (cannot verify)")
+    elif evictable_mb is not None:
+        # tech#83 dual reading in one line (tech#82 family): static,
+        # credit and effective all visible; verdict tests effective.
+        effective_free = free_mb + evictable_mb
+        if effective_free < min_free_mb:
+            go = False
+            reasons.append(
+                "vram-face: eviction-aware effective free %dMB "
+                "(static %dMB + credit %dMB) < guard %dMB"
+                % (effective_free, free_mb, evictable_mb, min_free_mb)
+            )
     elif free_mb < min_free_mb:
         go = False
         if sampled:
@@ -356,7 +384,13 @@ def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
             "measured samples only" % read_fail
         )
     if go:
-        if sampled:
+        if evictable_mb is not None and effective_free is not None:
+            reasons.append(
+                "faces clear (eviction-aware effective free %dMB = "
+                "static %dMB + evictable credit %dMB >= %dMB guard)"
+                % (effective_free, free_mb, evictable_mb, min_free_mb)
+            )
+        elif sampled:
             reasons.append(
                 "faces clear (pause-face clear, worst-case free %sMB >= "
                 "%dMB across samples)" % (free_mb, min_free_mb)
@@ -366,9 +400,14 @@ def decide(pause_label, free_mb, min_free_mb, util_max=None, max_util=None,
                 "both faces clear (pause-face clear, vram free %sMB >= %dMB)"
                 % (free_mb, min_free_mb)
             )
-    return {"go": go, "pause_face": pause_label,
-            "vram_free_mb": free_mb, "min_free_mb": min_free_mb,
-            "reasons": reasons}
+    result = {"go": go, "pause_face": pause_label,
+             "vram_free_mb": free_mb, "min_free_mb": min_free_mb,
+             "reasons": reasons}
+    if evictable_mb is not None:
+        # tech#83 opt-in keys only (absent = legacy shape, zero drift)
+        result["evictable_mb"] = evictable_mb
+        result["effective_free_mb"] = effective_free
+    return result
 
 
 def main(argv=None):
@@ -383,6 +422,15 @@ def main(argv=None):
     ap.add_argument("--util-max", type=int, default=None,
                     help="compute gate: worst-case util %% must be <= this "
                          "(tech#75 three-gate member; boundary strict)")
+    ap.add_argument("--eviction-aware-mb", type=int, default=None,
+                    help="opt-in evictable-VRAM credit in MB, fed from "
+                         "the ollama probe's ps evictable_mb reading "
+                         "(tech#83; tech#82 sibling face): the vram guard "
+                         "then tests static worst-case free + credit. "
+                         "Yield discipline: only pass when evicting the "
+                         "other resident models is acceptable (MV-sprint "
+                         "NON-active windows). Absent = static-only "
+                         "legacy behavior.")
     ap.add_argument("--json", action="store_true",
                     help="single machine-readable line")
     args = ap.parse_args(argv)
@@ -390,6 +438,8 @@ def main(argv=None):
         ap.error("--samples must be >= 1")
     if args.sample_interval < 0:
         ap.error("--sample-interval must be >= 0")
+    if args.eviction_aware_mb is not None and args.eviction_aware_mb < 0:
+        ap.error("--eviction-aware-mb must be >= 0")
 
     states = query_task_states()
     pause_label, dis, tot, known = classify_pause_face(states)
@@ -414,7 +464,8 @@ def main(argv=None):
     verdict = decide(pause_label, free_mb, args.min_free_mb,
                      util_max=args.util_max, max_util=max_util,
                      band_mb=band_mb, read_fail=read_fail,
-                     sampled=sampled)
+                     sampled=sampled,
+                     evictable_mb=args.eviction_aware_mb)
     verdict["tasks_disabled"] = dis
     verdict["tasks_total"] = tot
     verdict["tasks_known"] = known
@@ -450,6 +501,11 @@ def main(argv=None):
         else:
             print("vram_free_mb=%s guard=%d"
                   % (free_mb, args.min_free_mb))
+        if args.eviction_aware_mb is not None:
+            print("eviction_aware: credit %dMB, effective free %sMB "
+                  "(static %sMB)"
+                  % (args.eviction_aware_mb,
+                     verdict.get("effective_free_mb"), free_mb))
         for r in verdict["reasons"]:
             print("- %s" % r)
         if "attribution" in verdict:
