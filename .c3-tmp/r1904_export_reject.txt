@@ -1,0 +1,6 @@
+﻿REFUSE 1 contract violation(s) - export NOT written:
+  WARN [export-do] "do" is 121 chars (want a one-line string <= 120 chars, product-priority law section 5) - the shaper truncates or drops 
+rc=2
+md5_before=8A933063F905789148808386C265F2FE
+md5_after=8A933063F905789148808386C265F2FE
+unchanged=True
