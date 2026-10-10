@@ -5,3 +5,5 @@
 {"ts": "2026-10-10 10:08:31", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k"}
 {"ts": "2026-10-10 10:24:03", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k"}
 {"ts": "2026-10-10 10:59:18", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "100", "gpu_mem": "11348"}
+{"ts": "2026-10-10 11:15:02", "rc": 0, "status": "ok", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "49", "gpu_mem": "11884"}
+{"ts": "2026-10-10 11:28:48", "rc": 2, "status": "error", "http_status": null, "model": "qwen2.5:14b-8k", "gpu_util": "62", "gpu_mem": "2012", "face": "service-anomaly"}

@@ -14,6 +14,12 @@ failure with the probe exit code untouched, bad-timeout writes no row.
 
 tech#54 (R1888): ledger rows carry gpu_util/gpu_mem context columns
 (best-effort nvidia-smi read; failure -> NONE markers, probe rc untouched).
+
+tech#55 (R1889): advisory `face` column -- three-face reading discipline
+(503+idle=slot-wedged / 503+busy=saturated-busy / timeout+busy=
+busy-contended / timeout+idle=service-anomaly). Advisory only: rc 0/1/2
+semantics never move. Face lands on --json, human line (non-ok) and every
+--ledger row. GPU busy threshold util>=80 (tech#44 defer threshold).
 """
 
 import io
@@ -131,12 +137,149 @@ class RunProbeTests(unittest.TestCase):
         self.assertIn("connection refused", result["detail"])
 
 
+class FaceTests(unittest.TestCase):
+    """tech#55: advisory three-face discipline; rc semantics never move."""
+
+    def test_timeout_detection_bare_timeouterror(self):
+        self.assertTrue(op._is_timeout(TimeoutError("timed out")))
+
+    def test_timeout_detection_urlerror_wrapped_socket_timeout(self):
+        import socket as _socket
+        self.assertTrue(op._is_timeout(
+            urllib.error.URLError(_socket.timeout("timed out"))))
+
+    def test_timeout_detection_message_fallback(self):
+        self.assertTrue(op._is_timeout(
+            urllib.error.URLError("something timed out mid-request")))
+
+    def test_non_timeout_transport_is_not_timeout(self):
+        self.assertFalse(op._is_timeout(
+            urllib.error.URLError("connection refused")))
+        self.assertFalse(op._is_timeout(ConnectionResetError("reset")))
+
+    def test_run_probe_flags_timeout_on_transport_timeout(self):
+        orig = op._http_post
+
+        def fake(base_url, body, timeout):
+            raise TimeoutError("timed out")
+        op._http_post = fake
+        try:
+            result = op.run_probe()
+        finally:
+            op._http_post = orig
+        self.assertEqual(result["rc"], 2)
+        self.assertTrue(result["timeout"])
+
+    def test_run_probe_no_timeout_flag_on_503(self):
+        orig = op._http_post
+
+        def fake(base_url, body, timeout):
+            raise _http_error(503, SATURATION_DETAIL)
+        op._http_post = fake
+        try:
+            result = op.run_probe()
+        finally:
+            op._http_post = orig
+        self.assertEqual(result["rc"], 1)
+        self.assertFalse(result["timeout"])
+
+    def _face(self, rc, util, timeout=False, status="error"):
+        return op.compute_face(
+            {"rc": rc, "status": status, "timeout": timeout},
+            {"gpu_util": util, "gpu_mem": "3246"})
+
+    def test_face_table(self):
+        # ① 503 + GPU idle = wedged-slot face (R1883-85 family).
+        self.assertEqual(self._face(1, "1", status="saturated"), "slot-wedged")
+        self.assertEqual(self._face(1, "79", status="saturated"), "slot-wedged")
+        # 503 + GPU busy = genuine queue-full saturation.
+        self.assertEqual(self._face(1, "80", status="saturated"), "saturated-busy")
+        self.assertEqual(self._face(1, "100", status="saturated"), "saturated-busy")
+        # ② timeout + GPU busy = busy-contended (yield, not broken) --
+        #    the R1888 10:59 flight (rc2 + util 100) is this face.
+        self.assertEqual(self._face(2, "100", timeout=True), "busy-contended")
+        # ③ timeout + GPU idle = genuine service-anomaly face.
+        self.assertEqual(self._face(2, "1", timeout=True), "service-anomaly")
+        # rc=2 non-timeout stays a plain error face.
+        self.assertEqual(self._face(2, "100", timeout=False), "error")
+        # rc=0 is ok regardless of GPU state.
+        self.assertEqual(self._face(0, "100", status="ok"), "ok")
+        self.assertEqual(self._face(0, "1", status="ok"), "ok")
+
+    def test_face_gpu_context_unavailable(self):
+        self.assertEqual(self._face(1, "NONE", status="saturated"), "gpu-ctx-none")
+        self.assertEqual(self._face(2, "NONE", timeout=True), "gpu-ctx-none")
+        self.assertEqual(
+            op.compute_face({"rc": 1, "status": "saturated"}, {}),
+            "gpu-ctx-none")
+        # Unparseable util (e.g. "[Not Supported]") also can't judge.
+        self.assertEqual(self._face(1, "[N/A]", status="saturated"), "gpu-ctx-none")
+
+    def test_cli_json_carries_face_and_gpu_columns(self):
+        orig_http = op._http_post
+        orig_smi = op._nvidia_smi_query
+        op._http_post = lambda base_url, body, timeout: (_ for _ in ()).throw(
+            TimeoutError("timed out"))
+        op._nvidia_smi_query = lambda: "100, 11348\n"
+        try:
+            import contextlib
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = op.main(["--json"])
+        finally:
+            op._http_post = orig_http
+            op._nvidia_smi_query = orig_smi
+        self.assertEqual(rc, 2)  # rc semantics untouched by the advisory face
+        line = json.loads(buf.getvalue().strip())
+        self.assertEqual(line["face"], "busy-contended")
+        self.assertEqual(line["gpu_util"], "100")
+        self.assertEqual(line["gpu_mem"], "11348")
+        self.assertTrue(line["timeout"])
+
+    def test_human_line_carries_face_on_non_ok(self):
+        orig_http = op._http_post
+        orig_smi = op._nvidia_smi_query
+        op._http_post = lambda base_url, body, timeout: (_ for _ in ()).throw(
+            TimeoutError("timed out"))
+        op._nvidia_smi_query = lambda: "100, 11348\n"
+        try:
+            import contextlib
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = op.main([])
+        finally:
+            op._http_post = orig_http
+            op._nvidia_smi_query = orig_smi
+        self.assertEqual(rc, 2)
+        self.assertIn("GEN-ERROR", buf.getvalue())
+        self.assertIn("face=busy-contended", buf.getvalue())
+
+    def test_human_line_ok_has_no_face_noise(self):
+        orig_http = op._http_post
+        op._http_post = lambda base_url, body, timeout: _FakeResp(
+            json.dumps({"done_reason": "stop"}).encode("utf-8"))
+        try:
+            import contextlib
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = op.main([])
+        finally:
+            op._http_post = orig_http
+        self.assertEqual(rc, 0)
+        self.assertIn("GEN-OK", buf.getvalue())
+        self.assertNotIn("face=", buf.getvalue())
+
+
 class CliTests(unittest.TestCase):
     def setUp(self):
         self._orig = op._http_post
+        self._orig_smi = op._nvidia_smi_query
+        # main() reads GPU context once per flight (tech#55 face) -> hermetic.
+        op._nvidia_smi_query = lambda: "1, 3328\n"
 
     def tearDown(self):
         op._http_post = self._orig
+        op._nvidia_smi_query = self._orig_smi
 
     def _patch_saturation(self):
         def fake(base_url, body, timeout):
@@ -202,9 +345,12 @@ class LedgerTests(unittest.TestCase):
 
     def setUp(self):
         self._orig = op._http_post
+        self._orig_smi = op._nvidia_smi_query
         self._orig_default_ledger = op.DEFAULT_LEDGER
         self.tmp = tempfile.mkdtemp(prefix="bs-ollama-ledger-")
         op.DEFAULT_LEDGER = self._path("default-ledger.jsonl")
+        # Hermetic GPU context (tech#55: main() reads GPU once per flight).
+        op._nvidia_smi_query = lambda: "1, 3328\n"
 
         def fake(base_url, body, timeout):
             raise _http_error(503, SATURATION_DETAIL)
@@ -212,6 +358,7 @@ class LedgerTests(unittest.TestCase):
 
     def tearDown(self):
         op._http_post = self._orig
+        op._nvidia_smi_query = self._orig_smi
         op.DEFAULT_LEDGER = self._orig_default_ledger
         shutil.rmtree(self.tmp, ignore_errors=True)
 
@@ -246,7 +393,17 @@ class LedgerTests(unittest.TestCase):
         self.assertEqual(
             set(self._rows(path)[0].keys()),
             {"ts", "rc", "status", "http_status", "model",
-             "gpu_util", "gpu_mem"})
+             "gpu_util", "gpu_mem", "face"})
+
+    def test_ledger_row_carries_face(self):
+        # tech#55: saturation + GPU idle (patched "1") = slot-wedged face
+        # readable straight off the ledger row.
+        path = self._path()
+        self._run(["--ledger", path])
+        row = self._rows(path)[0]
+        self.assertEqual(row["rc"], 1)
+        self.assertEqual(row["gpu_util"], "1")
+        self.assertEqual(row["face"], "slot-wedged")
 
     def test_two_flights_two_lines(self):
         path = self._path()

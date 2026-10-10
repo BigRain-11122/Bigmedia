@@ -1,0 +1,21 @@
+# group-scan 2026-10-10 11:13:06
+=== DECISIONS (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md | mtime 2026-10-10 00:15:21 | 214423 B | tokens=138
+watermark=140 | truly_new=0 | wm_only=2 (slim/inline-consumed family)
+TRULY_NEW: (none)
+wm_only: C-20260909-05, D-20260930-00
+=== LEDGER (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\cph4\evolution-ledger.md | mtime 2026-10-10 03:17:03 | 139921 B
+@BigStream lines=4 occurrences=5
+@七线全司 lines=0 occurrences=0
+@全司 lines=0 occurrences=0
+@六司 lines=1 occurrences=1
+@八线全量 lines=0 occurrences=0
+last-@BigStream: - **值守轮 2026-10-09（夜班 03:07）**：①水位=盘余 630.2GB（retention 实测·环比 …686.2→674.2→665.2〔10-08 15:07〕→630.2·本班对前班 -35. ...
+=== MTIME (rc=0) ===
+hq-orders | 2026-10-10 10:51:54 | 325976 B
+hq-orders-tail: | 10-10 11:0x | 「可以，但女主有点老了，其他还不错，然后你让机队其他机器本地给我跑出来视频，出片，注意调色和剪辑，去AI感等工作」（**mv0001 30秒重制·机队本地出片段**·CEO 对 v4 关键 ...
+hq-decisions | 2026-10-10 00:15:21 | 214423 B
+hq-decisions-tail: | 2026-10-10 | D-20261010-03 机队工作区审计 A 腿假 FAIL 根治采纳（C-20261009-03 基线 v1 修法·bigmoney F-20261009-05 呈报） | bigmon ...
+ledger | 2026-10-10 03:17:03 | 139921 B
+own-orders-top | O-20261008-1105-bm-a.md | 2026-10-08 12:08:14 | 4698 B

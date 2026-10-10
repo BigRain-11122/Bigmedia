@@ -35,11 +35,28 @@ best-effort nvidia-smi CSV read so a saturation row shows whether the GPU
 was actually generating at probe time (the R1883-R1885 wedged-slot case was
 only diagnosable by hand because 503 rows carried no GPU context). Any
 read failure -> "NONE" markers; never raises, never changes the exit code.
+
+tech#55 (R1889): advisory `face` column -- the three-face reading discipline
+for probe rows consumed by GPU-window scheduling decisions (gap anchor:
+the R1888 10:59 flight read rc2 timeout during a 100%/11348MiB generation
+window; without a face label that is one manual misread away from
+"service broken"). Faces, advisory only, rc semantics never move:
+  rc=0                    -> ok
+  503 + GPU idle (<80%)   -> slot-wedged      (queue wedged, R1883-85 family)
+  503 + GPU busy (>=80%)   -> saturated-busy   (genuine queue-full, generating)
+  timeout + GPU busy      -> busy-contended   (server healthy, slow under load: YIELD, not broken)
+  timeout + GPU idle      -> service-anomaly  (genuine service trouble face)
+  rc=2 non-timeout        -> error
+  GPU context unavailable -> gpu-ctx-none
+GPU busy threshold util>=80 aligns with the tech#44 defer threshold. The
+face lands on the --json line, the human line (non-ok) and every --ledger
+row, so window judgments read the discipline straight off the evidence.
 """
 
 import argparse
 import datetime
 import json
+import socket
 import subprocess
 import sys
 import urllib.error
@@ -75,6 +92,48 @@ def classify(http_status, detail):
     return 2
 
 
+def _is_timeout(exc):
+    """True when the transport exception family is a timeout (tech#55).
+
+    urllib surfaces request timeouts either as a bare TimeoutError/
+    socket.timeout, or wrapped as URLError(reason=...). Pure substring
+    fallback on the rendered message keeps exotic wrappers honest.
+    """
+    if isinstance(exc, (TimeoutError, socket.timeout)):
+        return True
+    reason = getattr(exc, "reason", None)
+    if reason is not None:
+        if isinstance(reason, (TimeoutError, socket.timeout)):
+            return True
+        if "timed out" in str(reason).lower():
+            return True
+    return "timed out" in str(exc).lower()
+
+
+FACE_GPU_BUSY_UTIL = 80  # tech#44 defer threshold
+
+
+def compute_face(result, gpu_ctx):
+    """Advisory three-face reading (tech#55). Never moves rc semantics.
+
+    Faces: ok / slot-wedged / saturated-busy / busy-contended /
+    service-anomaly / error / gpu-ctx-none (see module docstring).
+    """
+    rc = result.get("rc")
+    if rc == 0:
+        return "ok"
+    util = (gpu_ctx or {}).get("gpu_util", "NONE")
+    try:
+        busy = int(util) >= FACE_GPU_BUSY_UTIL
+    except (TypeError, ValueError):
+        return "gpu-ctx-none"
+    if rc == 1:
+        return "saturated-busy" if busy else "slot-wedged"
+    if rc == 2 and result.get("timeout"):
+        return "busy-contended" if busy else "service-anomaly"
+    return "error"
+
+
 def run_probe(model=DEFAULT_MODEL, timeout=DEFAULT_TIMEOUT, base_url=DEFAULT_BASE_URL):
     """Run one generate probe. Returns a dict result; never raises."""
     result = {
@@ -84,6 +143,7 @@ def run_probe(model=DEFAULT_MODEL, timeout=DEFAULT_TIMEOUT, base_url=DEFAULT_BAS
         "detail": "",
         "model": model,
         "base_url": base_url,
+        "timeout": False,
     }
     body = build_request_body(model)
     try:
@@ -103,20 +163,22 @@ def run_probe(model=DEFAULT_MODEL, timeout=DEFAULT_TIMEOUT, base_url=DEFAULT_BAS
         result["status"] = "saturated" if result["rc"] == 1 else "error"
     except Exception as exc:  # transport-level (connection refused, timeout, ...)
         result["detail"] = repr(exc)[:300]
+        result["timeout"] = _is_timeout(exc)
         result["status"] = "error"
     return result
 
 
 def _human_line(result):
+    face = " face=%s" % result["face"] if result.get("face") and result["rc"] != 0 else ""
     if result["status"] == "ok":
         return "GEN-OK done_reason=%s model=%s" % (result["detail"], result["model"])
     if result["status"] == "saturated":
-        return "GEN-SATURATED status=%s detail=%s" % (
-            result["http_status"], result["detail"])
+        return "GEN-SATURATED status=%s detail=%s%s" % (
+            result["http_status"], result["detail"], face)
     if result["http_status"] is not None:
-        return "GEN-ERROR status=%s detail=%s" % (
-            result["http_status"], result["detail"])
-    return "GEN-ERROR transport=%s" % result["detail"]
+        return "GEN-ERROR status=%s detail=%s%s" % (
+            result["http_status"], result["detail"], face)
+    return "GEN-ERROR transport=%s%s" % (result["detail"], face)
 
 
 def _nvidia_smi_query():
@@ -151,15 +213,20 @@ def read_gpu_context():
         return {"gpu_util": "NONE", "gpu_mem": "NONE"}
 
 
-def append_ledger_row(path, result):
+def append_ledger_row(path, result, gpu_ctx=None):
     """Best-effort JSONL append (tech#52): one row per real probe flight.
 
     Rows carry gpu_util/gpu_mem context columns (tech#54, R1883-R1885
     wedged-slot diagnosis gap: saturation + zero GPU activity is only
-    visible when the row records GPU state at probe time).
+    visible when the row records GPU state at probe time) and the advisory
+    face column (tech#55) so window judgments read the three-face
+    discipline straight off the ledger row.
 
-    WARN on failure, never raises, never changes the probe exit code.
+    gpu_ctx: pre-read context reused when the caller already has it (one
+    nvidia-smi per probe flight, not two); None -> read here (tech#52
+    call surface). WARN on failure, never raises, never changes the exit code.
     """
+    gpu = gpu_ctx if gpu_ctx is not None else read_gpu_context()
     row = {
         "ts": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "rc": result["rc"],
@@ -167,7 +234,8 @@ def append_ledger_row(path, result):
         "http_status": result["http_status"],
         "model": result["model"],
     }
-    row.update(read_gpu_context())
+    row.update(gpu)
+    row["face"] = compute_face(result, gpu)
     try:
         ledger_path = Path(path)
         ledger_path.parent.mkdir(parents=True, exist_ok=True)
@@ -200,9 +268,12 @@ def main(argv=None):
         print("GEN-ERROR bad-timeout=%s" % args.timeout)
         return 2
     result = run_probe(model=args.model, timeout=args.timeout, base_url=args.base_url)
+    gpu_ctx = read_gpu_context()
+    result["face"] = compute_face(result, gpu_ctx)
     if args.ledger:
-        append_ledger_row(args.ledger, result)
+        append_ledger_row(args.ledger, result, gpu_ctx)
     if args.json:
+        result.update(gpu_ctx)
         result["ts"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(json.dumps(result, ensure_ascii=True))
     else:
