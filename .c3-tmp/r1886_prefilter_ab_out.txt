@@ -1,0 +1,18 @@
+== relevance distribution (city sources, window) ==
+block|78
+unknown|13
+pass|11
+== A/B re-judgement (n=12, model=qwen2.5:14b-8k) ==
+p7rx5iyqpl8byax331qijipac | base=UNKNOWN/缺失正文无法判断是否涉及AI | cand=PASS/职场话题，涉及公共讨论 | FLIP=- | 职场上怎么看待“吃亏”这个事?
+x2mr9qee9vrf1jh6yj8sgkuan | base=UNKNOWN/仅标题可用，正文缺失，无法判断是否涉及A | cand=PASS/历史军事话题，属于公共热点 | FLIP=- | 辽东明军为什么不大规模装备鸟铳?
+gqk84a9eis7zq9n0y8zbsu9rq | base=UNKNOWN/仅有标题无明确AI相关性 | cand=UNKNOWN/仅标题无法确定是否为公共话题 | FLIP=- | 【昨日海】YW-1至YW-8一摆到底合集版 摆完挂机 简单好抄
+rpna4k9bgqgy1xzgm1k7jdg8p | base=UNKNOWN/仅标题提及NBA，无AI相关信息 | cand=PASS/涉及NBA公共话题和名人科比 | FLIP=- | 如何看待NBA总经理票选“建队基石”结果,科比从未成为首选?
+m1lwocljqo3x1ci1jwkyunbgk | base=UNKNOWN/仅标题无AI相关信息 | cand=PASS/涉及体育赛事及运动员表现 | FLIP=- | WTT 中国大满贯,王艺迪 2-4 张本美和,止步女单八强,如何评价这场
+doum44pnzvayzdr67m439ijcy | base=UNKNOWN/仅标题信息无法确定是否涉及AI | cand=PASS/标题提及公共话题，涉及房产热点 | FLIP=- | 在意大利西西里岛,1欧元竟然可以买一套房?!
+x6xyam4a6ixhotzwjnvlzo96z | base=UNKNOWN/仅标题无法确认是否涉及AI | cand=PASS/标题提及个人成长经历与遗憾，涉及公共话题 | FLIP=- | 成功埋下机车种子,弥补曾经对年少不可得之物的遗憾
+b9r20oxlsyqz599z0vwdic3s9 | base=UNKNOWN/仅标题无明确AI相关性信息 | cand=UNKNOWN/仅标题无法判断是否包含公共话题 | FLIP=- | 【昨日海】YW-1至YW-8 摆完挂机 简单好抄
+rk2wvqxd0ppy3v1js00ny7vkb | base=UNKNOWN/仅标题无AI相关内容 | cand=PASS/标题明确指向高端汽车话题，属于公共热点 | FLIP=- | 行政轿车天花板:迈巴赫S680!
+gb29ovv6yvjv1ctdklspvi2b7 | base=UNKNOWN/仅标题无明确AI相关性 | cand=PASS/标题明确指向公共话题，涉及游戏内容 | FLIP=- | 《原神》过场动画-「『死』,从不讲道理」
+qmwmozdst2uepru0hmuq7sa8u | base=UNKNOWN/仅标题无明确AI相关性，缺失正文无法判断 | cand=PASS/标题提及公共话题，魔术表演属于文娱热点 | FLIP=- | 【男巫ZachKing】2026最佳魔术!
+js5nhz3syinfm8gc6ocak2ctt | base=UNKNOWN/仅标题无明确AI相关性信息 | cand=PASS/标题指向文化作品讨论，可能涉及公共话题 | FLIP=- | 你循宝而来,此地也早已......等待你良久——【世界之外 | 寻至幽墟
+== summary: flips=0/12  same=2  flip_rate=0% ==

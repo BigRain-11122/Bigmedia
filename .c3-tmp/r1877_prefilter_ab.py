@@ -20,13 +20,14 @@ WINDOW = "2026-10-09 08:00"  # gate-2 acceptance window (R1876 anchor)
 
 
 def q(sql):
+    # bytes capture + utf-8/replace manual decode (GBK-locale reader-thread crash pitfall, in-register)
     r = subprocess.run(
         [PSQL, "-h", "127.0.0.1", "-p", "55432", "-U", "aihot", "-d", "aihot", "-A", "-t", "-c", sql],
-        capture_output=True, text=True, env={**os.environ, "PGPASSWORD": ""}, timeout=60,
+        capture_output=True, env={**os.environ, "PGPASSWORD": ""}, timeout=60,
     )
     if r.returncode != 0:
-        raise SystemExit("psql ERR: " + r.stderr.strip()[:200])
-    return r.stdout.strip()
+        raise SystemExit("psql ERR: " + r.stderr.decode("utf-8", "replace").strip()[:200])
+    return r.stdout.decode("utf-8", "replace").strip()
 
 
 def ollama_ok():
