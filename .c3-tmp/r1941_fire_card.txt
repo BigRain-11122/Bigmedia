@@ -1,0 +1,9 @@
+# fire_window_card live dogfood run (R1941, captured 2026-10-11 05:03:18)
+# Judged criteria (tech#85): one-line verdict carrying all three readings
+# (gate / mv-sprint / ollama-probe) + the credit fork anchor in-line:
+# static gate failed vram+util (free_min 549, band 4997 oscillation
+# advisory) while the credit re-run passed vram (effective_free 11215)
+# and failed util alone (100 > 80) -- R1934 arithmetic-lock-style dual
+# state captured live in one line. Verdict: no-fire (correct -- the
+# full-MV i2v lane holds the GPU).
+{"card": "fire_window_card", "ts": "2026-10-11 05:03:18", "verdict": "no-fire", "path": null, "reasons": ["gate-credit-no-go", "util-face: worst-case util 100% > gate 80%"], "sequence": ["gate-static", "mv-probe", "ollama-probe", "gate-credit"], "readings": {"gate": {"go": false, "reasons": ["vram-face: worst-case free 549MB < guard 2048MB", "util-face: worst-case util 100% > gate 80%", "vram-band advisory: free oscillates band 4997MB within sampling window (>= 2048MB) -- sec-scale load-cycle regime, long-flight contention risk (tech#75/R1917 anchor)"], "free_min_mb": 549, "free_max_mb": 5546, "band_mb": 4997, "util_max": 100, "min_free_mb": 2048}, "mv": {"verdict": "quiet", "rc": 0, "newest_age_min": 326.9}, "probe": {"status": "skipped-not-resident", "face": "not-resident", "rc": 2, "gpu_free_mb": 4872, "evictable_mb": 5521, "eviction_aware_verdict": "fly"}, "gate_credit": {"go": false, "reasons": ["util-face: worst-case util 100% > gate 80%"], "free_min_mb": 5694, "free_max_mb": 5705, "band_mb": 11, "util_max": 100, "min_free_mb": 2048, "evictable_mb": 5521, "effective_free_mb": 11215}}}
