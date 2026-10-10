@@ -84,7 +84,9 @@ def main():
     files = [STATE_PATH.replace("\\", "/"), EXPORT_PATH.replace("\\", "/"),
              os.path.join(".c3-tmp", "r1918_close.py"),
              LOG_DATA, PATCH_DATA, PROBES_EVID, STABILITY_EVID]
-    rc = close_commit.run_close_commit(files, msg)
+    rc, lines = close_commit.run_close_commit(files, msg)
+    for ln in lines:
+        print(ln)
     print("close rc=%s" % rc)
     return 0 if rc == 0 else 1
 
