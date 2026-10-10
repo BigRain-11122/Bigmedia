@@ -72,6 +72,13 @@ Findings:
                                    fact (R1727/R1750/R1752/R1891) - this
                                    face names a dead stack within one
                                    round (tech#58)
+  WARN  queue-glue               queue entry head 'NN. [' at a non-zero
+                                   column in state/queue/*.md - entry
+                                   written without a leading newline;
+                                   line-anchored head scans miss glued
+                                   entries (R1891 anchor: seed 58 glued
+                                   to entry 57 tail went unsighted five
+                                   rounds; tech#60)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -172,6 +179,18 @@ CODEX_FRESH_DAYS = 7  # > 7 days unrefreshed = supply-sediment WARN
 AIHOT_API_URL = "http://127.0.0.1:3101/api/health"
 AIHOT_WEB_URL = "http://127.0.0.1:3100/"
 AIHOT_PROBE_TIMEOUT_S = 4.0
+# tech#60: queue entry-glue guard. Queue entries live in state/queue/*.md
+# as single lines starting 'NN. ['; a seed written without its leading
+# newline glues onto the previous entry's tail (R1891 anchor: seed entry
+# 58 sat glued to entry 57's tail - 'v1.65' + '58. [' direct join - and
+# every line-anchored head scan missed it for five rounds while the
+# round focus lines kept claiming 'tech#58 due any round'). This face
+# names a glued head within one round on the routine probe consumption.
+# WARN level per the guard family law (tech#22/#31/#37/#58): advisory,
+# never breaks the probe. Head pattern per the tech#60 seed spec.
+QUEUE_DIR = Path("state") / "queue"
+QUEUE_ENTRY_HEAD_RE = re.compile(r"\d{1,3}\. \[")
+QUEUE_GLUE_SHOW_N = 3  # glued lines shown per file before the "+N more" tail
 
 
 def parse_beats(path):
@@ -553,6 +572,60 @@ def check_aihot_stack(findings, timeout_s=AIHOT_PROBE_TIMEOUT_S,
                                          probe(web_url, timeout_s)))
 
 
+def classify_queue_glue(files):
+    """{name: text} -> findings (pure core). A queue entry head is
+    'NN. [' at column 0; the same pattern at any non-zero column is an
+    entry glued to the previous line's tail without a newline separator
+    (the R1891 anchor form: 'v1.65' + '58. [' direct join - invisible to
+    every line-anchored head scan). One WARN per file, the first
+    QUEUE_GLUE_SHOW_N glued lines shown (first glued head per line
+    names the line). Clean queue files yield no findings (silent PASS
+    like the other guard faces)."""
+    findings = []
+    for name in sorted(files):
+        glued = []
+        for lineno, line in enumerate(files[name].splitlines(), 1):
+            for m in QUEUE_ENTRY_HEAD_RE.finditer(line):
+                if m.start() > 0:
+                    glued.append((lineno, m.start(), m.group(0)))
+                    break
+        if not glued:
+            continue
+        shown = ", ".join("line %d col %d head %r" % g
+                          for g in glued[:QUEUE_GLUE_SHOW_N])
+        if len(glued) > QUEUE_GLUE_SHOW_N:
+            shown += " (+%d more)" % (len(glued) - QUEUE_GLUE_SHOW_N)
+        findings.append(("WARN", "queue-glue",
+                         "%d glued queue entry head(s) in %s: %s - entry "
+                         "head at a non-zero column = entry written "
+                         "without a leading newline; line-anchored queue "
+                         "head scans miss glued entries (R1891 anchor: "
+                         "seed 58 glued to entry 57 tail went unsighted "
+                         "five rounds) - split the line"
+                         % (len(glued), name, shown)))
+    return findings
+
+
+def check_queue_glue(root, findings):
+    """tech#60 guard face: scan every state/queue/*.md for entry heads
+    glued at a non-zero column. Machine-enforced every round by the
+    routine probe consumption - a glued entry is named within one round
+    instead of five. A missing queue dir stays silent (existence is the
+    loop engine's face, not this guard's); unreadable files are skipped
+    (not the glue face's matter)."""
+    qdir = root / QUEUE_DIR
+    if not qdir.is_dir():
+        return
+    files = {}
+    for path in sorted(qdir.glob("*.md")):
+        try:
+            files[path.name] = path.read_text(
+                encoding="utf-8-sig", errors="replace")
+        except OSError:
+            continue
+    findings.extend(classify_queue_glue(files))
+
+
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
     if beats:
@@ -702,6 +775,7 @@ def main(argv):
         check_root_litter(root, findings)
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
+        check_queue_glue(root, findings)
         check_aihot_stack(findings)
     except OSError as e:
         print("source error: %s" % e)

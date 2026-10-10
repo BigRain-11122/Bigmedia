@@ -879,5 +879,128 @@ class AihotStackTests(unittest.TestCase):
         self.assertIn(loop_health.AIHOT_WEB_URL, seen)
 
 
+class QueueGlueTests(unittest.TestCase):
+    """tech#60: queue entry-glue guard - pure core, check face and CLI
+    wiring. The R1891 anchor form (seed entry 58 glued to entry 57's
+    tail without a leading newline - 'v1.65' + '58. [' direct join)
+    must be named; the split clean baseline must stay silent."""
+
+    def test_clean_split_lines_never_flag(self):
+        files = {"tech.md":
+                 "57. [R1890 ok] delivered, C-37 v1.65\n"
+                 "58. [R1891 ok] seed\n"}
+        self.assertEqual(loop_health.classify_queue_glue(files), [])
+
+    def test_r1891_anchor_form_named(self):
+        glued = ("57. [R1890 ok] delivered, C-37 v1.65"
+                 "58. [R1891 seed] queue entry glue guard\n")
+        findings = loop_health.classify_queue_glue({"tech.md": glued})
+        self.assertEqual(warn_codes(findings), {"queue-glue"})
+        msg = findings[0][2]
+        self.assertIn("tech.md", msg)
+        self.assertIn("1 glued queue entry head(s)", msg)
+        self.assertIn("line 1", msg)
+        self.assertIn("R1891", msg)
+        # the version digits bleed into the matched head (v1.65 + 58. [)
+        self.assertIn("558. [", msg)
+
+    def test_done_style_head_glue_also_named(self):
+        glued = "55. [done 2026-10-10 R1889] face table, C-36 v1.6456. [R1891 seed] next\n"
+        findings = loop_health.classify_queue_glue({"tech.md": glued})
+        self.assertEqual(warn_codes(findings), {"queue-glue"})
+        self.assertIn("line 1", findings[0][2])
+
+    def test_mid_line_only_head_flags(self):
+        """A glued head on a continuation line (no head at col 0) is
+        the same disease - the entry was still written without its
+        leading newline."""
+        glued = ("continuation text of entry 57, C-37 v1.65"
+                 "58. [R1891 seed] glue\n")
+        findings = loop_health.classify_queue_glue({"tech.md": glued})
+        self.assertEqual(warn_codes(findings), {"queue-glue"})
+
+    def test_per_file_findings_and_show_cap(self):
+        lines = ["%d. [R1900 ok] tail, v1.6 %d. [R1901 seed] glue"
+                 % (i, i + 1) for i in range(1, 6)]
+        files = {"tech.md": "\n".join(lines) + "\n",
+                 "main.md": "1. [R1900 ok] clean\n"}
+        findings = loop_health.classify_queue_glue(files)
+        self.assertEqual([f[1] for f in findings], ["queue-glue"])
+        self.assertIn("tech.md", findings[0][2])
+        self.assertIn("5 glued queue entry head(s)", findings[0][2])
+        self.assertIn("(+2 more)", findings[0][2])
+        self.assertNotIn("main.md", findings[0][2])  # clean file not named
+
+    def test_check_face_missing_dir_silent(self):
+        root = make_dir(self, "bs-glue-nodir-")
+        findings = []
+        loop_health.check_queue_glue(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_face_reads_only_md_files(self):
+        root = make_dir(self, "bs-glue-mixed-")
+        qdir = root / "state" / "queue"
+        qdir.mkdir(parents=True)
+        (qdir / "notes.txt").write_text(
+            "57. [R1890 ok] tail v1.65 58. [R1891 seed] glue\n",
+            encoding="utf-8")
+        findings = []
+        loop_health.check_queue_glue(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_face_names_glued_queue_file(self):
+        root = make_dir(self, "bs-glue-real-")
+        qdir = root / "state" / "queue"
+        qdir.mkdir(parents=True)
+        (qdir / "tech.md").write_text(
+            "57. [R1890 ok] delivered, C-37 v1.65"
+            "58. [R1891 seed] queue entry glue guard\n",
+            encoding="utf-8")
+        findings = []
+        loop_health.check_queue_glue(root, findings)
+        self.assertEqual(warn_codes(findings), {"queue-glue"})
+        self.assertIn("tech.md", findings[0][2])
+
+    def test_cli_wiring_glue_warns_never_fails(self):
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        root = make_repo(self, spec, make_state(tick=2), BOARD)
+        qdir = root / "state" / "queue"
+        qdir.mkdir(parents=True)
+        (qdir / "tech.md").write_text(
+            "57. [R1890 ok] delivered, C-37 v1.65"
+            "58. [R1891 seed] queue entry glue guard\n",
+            encoding="utf-8")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
+        self.assertIn("queue-glue", buf.getvalue())
+
+    def test_cli_wiring_clean_queue_silent(self):
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        root = make_repo(self, spec, make_state(tick=2), BOARD)
+        qdir = root / "state" / "queue"
+        qdir.mkdir(parents=True)
+        for name, text in (("main.md", "1. [R1900 ok] clean\n"),
+                           ("tech.md", "2. [R1900 ok] clean\n"),
+                           ("explore.md", "3. [R1900 ok] clean\n")):
+            (qdir / name).write_text(text, encoding="utf-8")
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertEqual(rc, 0)
+        self.assertNotIn("queue-glue", buf.getvalue())
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 1: the real state/queue/*.md files (the
+        R1893 split left them clean) must produce zero queue-glue
+        findings - read-only smoke through the pure core."""
+        files = {}
+        for path in sorted((REPO / "state" / "queue").glob("*.md")):
+            files[path.name] = path.read_text(
+                encoding="utf-8-sig", errors="replace")
+        self.assertEqual(loop_health.classify_queue_glue(files), [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
