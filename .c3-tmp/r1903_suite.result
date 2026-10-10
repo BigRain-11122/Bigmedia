@@ -1,0 +1,12 @@
+SUITE_RC=0
+SUITE_RAN=Ran 741 tests in 104.554s
+SUITE_RESULT=OK
+SUITE_LOG_OUT=C:\Users\sjs20\AppData\Local\Temp\bs-test-suite.log.out
+SUITE_LOG_ERR=C:\Users\sjs20\AppData\Local\Temp\bs-test-suite.log.err
+SUITE_RESULT_FILE=C:\Users\sjs20\AppData\Local\Temp\bs-test-suite.log.result
+run_suite: last stderr lines:
+  .....................................................................................................................................................
+  ----------------------------------------------------------------------
+  Ran 741 tests in 104.554s
+  
+  OK
