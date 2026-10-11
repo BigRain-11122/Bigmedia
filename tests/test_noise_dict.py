@@ -359,5 +359,193 @@ class V2CollateralJudgmentTests(unittest.TestCase):
                                  "cross-fire %s -> %s" % (rel, f))
 
 
+# --- tech#26 R1835: v3 word-level SC-001 archive expansion -------------
+
+REAL_DICT_V3 = REPO / "data" / "pipeline" / "asr-noise-dict-v3.json"
+AUDIO_DIR = REPO / "data" / "storylines" / "audio"
+
+N_BAFENG = "\u516b\u5cf0"                              # SC ch.1 archive
+T_FAFENG = "\u53d1\u75af"
+N_JINBUTIAO = "\u8fdb\u6b65\u6761"
+T_JINDUTIAO = "\u8fdb\u5ea6\u6761"
+N_CHENGSHIMENJIN = "\u57ce\u5e02\u95e8\u7981"          # common word
+T_CHENGSHIMENJIN = "\u8bda\u5b9e\u95e8\u7981"
+N_LIUDANG = "\u6d41\u8361"
+T_LIUDANG = "\u7559\u6863"
+N_JINCHUAN = "\u8fd1\u5ddd"
+T_JINCHUAN = "\u7981\u7a7f"
+N_HUYU_ASR = "\u6caa\u5b87"
+T_HUYU = "\u6caa\u8bed"
+N_BEIWAITAN = "\u5317\u5916\u644a"
+T_BEIWAITAN = "\u5317\u5916\u6ee9"
+N_BIANMIANSHI = "\u7f16\u5195\u53f2"                    # series hook x4
+N_BIANNIANSHI = "\u53d8\u5e74\u53f2"
+N_BIANJISHI = "\u7f16\u8f91\u53f2"
+T_BIANSHI = "\u7f16\u5e74\u53f2"
+# NOTE: names are suffixed _GUIJI/_GUI where the v2 block above already
+# uses the bare spelling for a DIFFERENT noise form of the same true
+# term (v2 N_GUIJICHENGSHI = gui->ji base form, v2 N_GUIDANGZHE =
+# gui->dang form); module-level rebinding would silently skew the v2
+# regression tests (caught by this suite, R1835 op-red, honest note).
+N_GUIJICHENGSHI_GUIJI = "\u9f9f\u9e21\u57ce\u5e02"      # gui-ji family
+N_GUIJIMIN = "\u9f9f\u9e21\u6c11"
+N_TANJI = "\u63a2\u9e21"
+T_TANJI = "\u78b3\u57fa"
+N_GUIJI = "\u5f52\u9e21"
+T_GUIJI = "\u7845\u57fa"
+N_GUIDANGZHE_GUI = "\u9f9f\u8361\u8005"
+N_DANGANGUAN = "\u5f53\u5b89\u7ba1"
+T_DANGANGUAN = "\u6863\u6848\u9986"
+N_XINTIAOBEIFEN = "\u5fc3\u8df3\u500d\u594b"
+T_XINTIAOBEIFEN = "\u5fc3\u8df3\u5907\u4efd"
+
+V3_NOISES = [N_BAFENG, N_JINBUTIAO, N_CHENGSHIMENJIN, N_LIUDANG,
+             N_JINCHUAN, N_HUYU_ASR, N_BEIWAITAN, N_BIANMIANSHI,
+             N_BIANNIANSHI, N_BIANJISHI, N_GUIJICHENGSHI_GUIJI,
+             N_GUIJIMIN, N_TANJI, N_GUIJI, N_GUIDANGZHE_GUI,
+             N_DANGANGUAN, N_XINTIAOBEIFEN]
+V3_COUNT = 17
+
+
+def _archive_srt_cues(path):
+    cues = []
+    for ln in path.read_text(encoding="utf-8").splitlines():
+        s = ln.strip()
+        if s and "-->" not in s and not s.isdigit():
+            cues.append((0.0, 0.0, s))
+    return cues
+
+
+class V3ExtendsMergeTests(unittest.TestCase):
+    """tech#26: v3 word dict extends the v2 chain; every v3 word entry
+    is guarded (the latent cross-fire face v1 word entries recorded
+    under a mismatched expect is closed for v3 by class + hard gate)."""
+
+    def test_v3_is_v2_superset_plus_word_entries(self):
+        v2 = w2s.load_noise_dict(str(REAL_DICT_V2))
+        v3 = w2s.load_noise_dict(str(REAL_DICT_V3))
+        self.assertEqual(len(v2) + V3_COUNT, len(v3))
+        self.assertTrue(set(v2) <= set(v3))
+
+    def test_v3_word_entries_all_guarded(self):
+        v3 = w2s.load_noise_dict(str(REAL_DICT_V3))
+        for noise, true, cls in v3:
+            if noise in V3_NOISES:
+                self.assertEqual("guarded", cls, noise)
+
+
+class V3RealArchiveFireTests(unittest.TestCase):
+    """tech#26 acceptance gate 3: 17/17 pairs fire on the archived
+    SRT corpus with the chapter's own beats as --expect; after the
+    pass no v3 noise string survives in any of the 12 archives."""
+
+    @staticmethod
+    def _pairs():
+        for srt in sorted(AUDIO_DIR.glob("sc001-*-tmp/asr-check.srt")):
+            ver = srt.parent.name.replace("sc001-", "").replace("-tmp", "")
+            beats = AUDIO_DIR / ("SC-001-%s.beats.txt" % ver)
+            if beats.exists():
+                yield srt, beats
+
+    def test_all_archived_noise_fires_with_own_expect(self):
+        entries = w2s.load_noise_dict(str(REAL_DICT_V3))
+        total_applied = 0
+        for srt, beats in self._pairs():
+            expect = beats.read_text(encoding="utf-8")
+            cues = _archive_srt_cues(srt)
+            out, applied, _skipped = w2s.apply_noise_dict(
+                cues, entries, expect)
+            self.assertGreater(applied, 0, "no fix on %s" % srt.parent.name)
+            total_applied += applied
+            text = "".join(c[2] for c in out)
+            for noise in V3_NOISES:
+                self.assertNotIn(noise, text,
+                                 "left %s in %s" % (noise, srt.parent.name))
+        self.assertGreater(total_applied, 60)
+
+    def test_mismatched_expect_skips_v3_entries(self):
+        # the real QC flow always pairs --expect with the piece's own
+        # beats; under a mismatched expect the guarded gate holds the
+        # v3 word entries back (no true terms in the reference)
+        entries = [e for e in w2s.load_noise_dict(str(REAL_DICT_V3))
+                   if e[0] in V3_NOISES]
+        for srt, _beats in self._pairs():
+            cues = _archive_srt_cues(srt)
+            before = "".join(c[2] for c in cues)
+            out, applied, skipped = w2s.apply_noise_dict(
+                cues, entries, "unrelated expect text")
+            self.assertEqual(0, applied, srt.parent.name)
+            after = "".join(c[2] for c in out)
+            for noise in V3_NOISES:
+                self.assertEqual(before.count(noise), after.count(noise),
+                                 "%s in %s" % (noise, srt.parent.name))
+
+
+class V3CollateralJudgmentTests(unittest.TestCase):
+    """tech#26 acceptance gates 1-2: own-expect sweep over the full v3
+    chain (zero replacements on every beats file) and cross-expect
+    sweep for the v3 WORD entries - the bar tech#21 could only grant
+    the v2 phrase entries is extended to v3 words because all v3
+    entries are guarded."""
+
+    @staticmethod
+    def _corpus():
+        return sorted(REPO.rglob("*.beats.txt"))
+
+    def test_own_expect_sweep_zero_collateral(self):
+        entries = w2s.load_noise_dict(str(REAL_DICT_V3))
+        for f in self._corpus():
+            text = f.read_text(encoding="utf-8")
+            cues = [(0.0, 1.0, ln) for ln in text.splitlines() if ln.strip()]
+            _, applied, _ = w2s.apply_noise_dict(cues, entries, text)
+            self.assertEqual(0, applied, "collateral on %s" % f)
+
+    def test_cross_expect_sweep_zero_collateral(self):
+        entries = [e for e in w2s.load_noise_dict(str(REAL_DICT_V3))
+                   if e[0] in V3_NOISES]
+        anchors = sorted(AUDIO_DIR.glob("SC-001-*.beats.txt"))
+        self.assertGreaterEqual(len(anchors), 10)
+        corpus = self._corpus()
+        for anchor in anchors:
+            expect = anchor.read_text(encoding="utf-8")
+            for f in corpus:
+                text = f.read_text(encoding="utf-8")
+                cues = [(0.0, 1.0, ln) for ln in text.splitlines()
+                        if ln.strip()]
+                _, applied, _ = w2s.apply_noise_dict(cues, entries, expect)
+                self.assertEqual(0, applied,
+                                 "cross-fire %s -> %s" % (anchor.name, f))
+
+
+class ExpectFingerprintTests(unittest.TestCase):
+    """tech#26 acceptance gate 4: the v1 latent word-entry face
+    (cross-fire under a mismatched expect) is machine-visible now -
+    expect_srt_overlap collapses to ~0 on a mismatched pair, so the
+    CLI WARN fires exactly when the operator needs to check --expect."""
+
+    def test_matched_real_pair_measures_high(self):
+        srt = AUDIO_DIR / "sc001-01-v2-tmp" / "asr-check.srt"
+        beats = AUDIO_DIR / "SC-001-01-v2.beats.txt"
+        overlap = w2s.expect_srt_overlap(
+            beats.read_text(encoding="utf-8"), _archive_srt_cues(srt))
+        self.assertGreaterEqual(overlap, w2s.EXPECT_MATCH_MIN_OVERLAP)
+        self.assertGreater(overlap, 0.4)   # measured 0.575
+
+    def test_mismatched_real_pair_measures_low(self):
+        srt = AUDIO_DIR / "sc001-01-v2-tmp" / "asr-check.srt"
+        bs_expect = (REPO / "data/sources/bs015/voiceover-v6.beats.txt"
+                     ).read_text(encoding="utf-8")
+        overlap = w2s.expect_srt_overlap(bs_expect, _archive_srt_cues(srt))
+        self.assertLess(overlap, w2s.EXPECT_MATCH_MIN_OVERLAP)  # 0.014
+
+    def test_empty_inputs_never_warn(self):
+        self.assertEqual(1.0, w2s.expect_srt_overlap("", [(0, 1, "x")]))
+        self.assertEqual(1.0, w2s.expect_srt_overlap("abc", []))
+
+    def test_degenerate_short_cue_text(self):
+        # a 2-char cue text has no 3-grams: nothing to compare
+        self.assertEqual(1.0, w2s.expect_srt_overlap("abc", [(0, 1, "xy")]))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

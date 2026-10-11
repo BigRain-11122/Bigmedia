@@ -175,8 +175,10 @@ def load_noise_dict(path):
     longer phrase entry always wins over a substring entry. Data files:
     data/pipeline/asr-noise-dict-v1.json (word pairs) and
     asr-noise-dict-v2.json (tech#21 R1832: phrase-level entries closing
-    the v1-excluded single-char families; "extends": "v1 file" merges the
-    parent entries first, so v2 is a superset without duplication).
+    the v1-excluded single-char families) and asr-noise-dict-v3.json
+    (tech#26 R1835: word-level SC-001 archive expansion, all guarded;
+    "extends": "parent file" merges the parent entries first, so each
+    file is a superset without duplication).
     QC-channel only - never wire this into real-voice lanes."""
     import json
     p = Path(path)
@@ -225,6 +227,35 @@ def apply_noise_dict(cues, entries, expect_text=None):
     return out, applied, skipped
 
 
+EXPECT_MATCH_MIN_OVERLAP = 0.25
+# tech#26 R1835 expect fingerprint gate: measured band on the real
+# archived corpus = matched piece pairs 0.52-0.60 (SC-001 x SC-001,
+# 12/12), mismatched expect 0.01-0.02 (bs015 beats x SC-001-01-v2
+# SRT = 0.014). 0.25 sits in the empty middle with margin both ways.
+
+
+def expect_srt_overlap(expect_text, cues):
+    """Fingerprint gate for --expect (tech#26 R1835). Char-3gram
+    overlap ratio, SRT-side denominator: how much of the transcript's
+    3-gram set also occurs in the expect reference text. A matched pair
+    (the piece's own beats vs its own transcript) shares the spoken
+    lines and measures high; a mismatched expect (another piece's
+    beats) collapses to ~0. Closes the v1 latent word-entry face
+    (kou-qi->kou-xin cross-fire under a mismatched expect) at the CLI
+    surface: the caller gets a WARN, not silence. Pure function; no
+    empty-input warning (returns 1.0 when there is nothing to
+    compare)."""
+    def grams(s):
+        s = "".join(s.split())
+        return set(s[i:i + 3] for i in range(len(s) - 2))
+    if not expect_text or not cues:
+        return 1.0
+    b = grams("".join(t for _, _, t in cues))
+    if not b:
+        return 1.0
+    return len(grams(expect_text) & b) / len(b)
+
+
 def transcribe_to_cues(audio, model_size="small", language="zh",
                        max_chars=20, beam_size=1,
                        condition_on_previous_text=True,
@@ -271,14 +302,18 @@ def build_parser():
                     help="OPT-IN homophone noise dictionary (tech#12 "
                          "R1827 word pairs = data/pipeline/"
                          "asr-noise-dict-v1.json; tech#21 R1832 phrase "
-                         "superset = asr-noise-dict-v2.json, extends v1). "
-                         "S2 asr-check QC channel only; default off = "
-                         "zero behavior change; never for real-voice "
-                         "transcripts")
+                         "superset = asr-noise-dict-v2.json; tech#26 "
+                         "R1835 SC-001 archive word expansion = "
+                         "asr-noise-dict-v3.json, each extends the "
+                         "previous). S2 asr-check QC channel only; "
+                         "default off = zero behavior change; never for "
+                         "real-voice transcripts")
     ap.add_argument("--expect", default=None,
                     help="reference text (the piece's own beats file) "
-                         "for the guarded-entry collision gate; only "
-                         "meaningful together with --noise-dict")
+                         "for the guarded-entry collision gate + the "
+                         "expect fingerprint WARN (overlap < 0.25 = "
+                         "suspected mismatched piece); only meaningful "
+                         "together with --noise-dict")
     ap.add_argument("--purpose", default=None,
                     help="exact-metering tag for this run (e.g. "
                          "calibration, final-track-qc); default untagged")
@@ -324,6 +359,13 @@ def main(argv=None):
                 print("FAIL expect reference not found: %s" % expect_path)
                 return 2
             expect_text = expect_path.read_text(encoding="utf-8")
+            overlap = expect_srt_overlap(expect_text, cues)
+            if overlap < EXPECT_MATCH_MIN_OVERLAP:
+                print("WARN expect-srt mismatch suspected (3gram "
+                      "overlap=%.2f < %.2f): --expect may not be this "
+                      "piece's beats - guarded entries may mis-skip and "
+                      "word entries may cross-fire; verify the expect "
+                      "file" % (overlap, EXPECT_MATCH_MIN_OVERLAP))
         cues, applied, skipped = apply_noise_dict(cues, entries, expect_text)
         print("noise-dict: entries=%d applied=%d skipped_guard=%d expect=%s"
               % (len(entries), applied, skipped,

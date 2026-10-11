@@ -12,3 +12,4 @@
 {"ts": "2026-10-11 11:29:38", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 190MB < 2048MB", "util_pct": 41, "free_mb": 190, "rc": 5}
 {"ts": "2026-10-11 11:31:09", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 250MB < 2048MB", "util_pct": 33, "free_mb": 250, "rc": 5}
 {"ts": "2026-10-11 11:50:54", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\cards\\MC-20261011-REACT-v14-tmp\\e4-material.md", "reason": "gpu free 240MB < 2048MB", "util_pct": 1, "free_mb": 240, "rc": 5}
+{"ts": "2026-10-11 15:59:54", "event": "defer", "expert": "S1-script", "material": "data\\storylines\\audio\\SC-005-04-v1-s1-material.md", "reason": "gpu util 93% > 80% (occupied window)", "util_pct": 93, "free_mb": 4702, "rc": 5}

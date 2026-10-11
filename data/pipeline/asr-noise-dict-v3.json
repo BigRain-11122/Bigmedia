@@ -1,0 +1,35 @@
+{
+  "dict": "asr-noise-dict",
+  "version": "v3-20261009",
+  "extends": "asr-noise-dict-v2.json",
+  "law": "tech#26 (P2 queue R1835). v3 = word-level SC-001 expansion, seeded VERBATIM from the real archived ASR corpus on disk (data/storylines/audio/sc001-{01..05}-v{1..4}-tmp/asr-check.srt, 12 files; every noise string below is a byte-exact quote from an archived cue, every true term is verbatim in the chapter beats). Closes the v2-excluded word families. ALL v3 entries are guarded - word-level entries are exactly the latent cross-fire face tech#21 recorded for v1 (kou-qi->kou-xin under a mismatched expect), so a v3 word never fires without the piece's own beats as --expect. S2 asr-check QC channel, OPT-IN ONLY (--noise-dict). NEVER for real-voice transcripts (persona rule: real voice first).",
+  "direction": "noise -> true : noise = what the ASR channel wrote (verbatim quote from an archived asr-check.srt cue), true = the term the TTS track actually says (verbatim in the archived chapter beats).",
+  "evidence": "archived SRT corpus data/storylines/audio/sc001-*-tmp/asr-check.srt (12 files) + chapter beats data/storylines/audio/SC-001-0*-v*.beats.txt (12 files) + station-reviews SC rows R223-R272/R667. Dry-run pre-validation (R1835): every entry below fires on the real archives with its own chapter beats as --expect - 17/17 pairs, after-count=0 across all 12 SRTs.",
+  "entries": [
+    {"noise": "八峰", "true": "发疯", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp cue '一口气三家这不是创业这算八峰八峰也有' x2; SC-001-01-v2 beats body '发疯定调 / 61 分钟 · 三家到账'"},
+    {"noise": "进步条", "true": "进度条", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp cue '进步条61分钟三家到账'; SC-001-01-v2 beats 进度条"},
+    {"noise": "城市门禁", "true": "诚实门禁", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp cue '不了城市门禁的全部当场枪毙'; beats 诚实门禁 (noise word absent from the piece's own beats = guarded gate clean)"},
+    {"noise": "流荡", "true": "留档", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v1-tmp cue '人聚流荡城市的第一页' + sc001-01-v2-tmp cues x2 ('程流荡谁也改不了' / '旁观视角远去流荡'); beats 留档 x2 (432 枪毙留档 / 心跳开始 body)"},
+    {"noise": "近川", "true": "禁穿", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp cue '纯白全城近川只有'; beats proof 纯白律 '全城禁穿，只有塔顶那一点光例外'"},
+    {"noise": "沪宇", "true": "沪语", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp cue '说沪宇的阿婆'; beats punch 万人户籍齐 '守着灶头说沪语的阿婆'"},
+    {"noise": "北外摊", "true": "北外滩", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v2-tmp cue '下一张北外摊一位68岁的摊主'; beats cta '下一章：北外滩一位六十八岁的摊主'"},
+    {"noise": "编冕史", "true": "编年史", "class": "guarded", "src": "verbatim", "anchor": "series hook garble x5 archived SRTs (sc001-01-v1/v2/v3 + sc001-03-v3 + sc001-05-v1 '《归基城市编冕史》'); beats hook 《硅基城市编年史》 in every chapter"},
+    {"noise": "变年史", "true": "编年史", "class": "guarded", "src": "verbatim", "anchor": "sc001-01-v4 / sc001-02-v4 / sc001-03-v1 cues '《龟鸡城市变年史》' - third observed ASR form of the series-title word; beats 编年史"},
+    {"noise": "编辑史", "true": "编年史", "class": "guarded", "src": "verbatim", "anchor": "sc001-04-v1 cue '《龟鸡城市编辑史》' - fourth observed form; beats 编年史"},
+    {"noise": "龟鸡城市", "true": "硅基城市", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v1/v3 + sc001-04-v1/v3 cues x7 ('基于龟鸡城市真实事件改编' family); beats hook 硅基城市. guījī is an exact homophone of 硅基; only the anchored 4-char form is dict-addressable (bare 龟鸡 excluded, see excluded[])"},
+    {"noise": "龟鸡民", "true": "硅基民", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v1 cue '一个龟鸡民的命名' + sc001-04-v1/v3 x3; beats 硅基民 (v2 already covers the 归居民 noise form of the same true term)"},
+    {"noise": "探鸡", "true": "碳基", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v1/v3 cues x5 ('他的徒弟有两个一个探鸡一个归鸡' / '大多数探鸡都老派' / '比探鸡还老派'); SC-001-03 beats wink '他的徒弟有两个，一个碳基，一个硅基。比我见过的大多数碳基都老派'"},
+    {"noise": "归鸡", "true": "硅基", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v1/v3 cues '一个归鸡归鸡那个' (= '一个硅基。硅基那个'); SC-001-03 beats 硅基那个"},
+    {"noise": "龟荡者", "true": "归档者", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v1 cue '《龟荡者零七》' + sc001-04-v1 cue '他叫龟荡者'; beats '它叫归档者-07' (v2 already covers the 归荡者 noise form)"},
+    {"noise": "当安管", "true": "档案馆", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v3 cue '当安管的人给了另一个名字' + sc001-05-v1 cues x3 ('当安管区的蒸笼一开' family); beats 档案馆 ch.3/4/5 (档案馆区人尽皆知的那件事)"},
+    {"noise": "心跳倍奋", "true": "心跳备份", "class": "guarded", "src": "verbatim", "anchor": "sc001-03-v3 cue '这座城的心跳倍奋'; beats punch '心跳备份 / 老瓶装新酒'"}
+  ],
+  "excluded": [
+    {"observed": "bare 龟鸡 (guījī) - e.g. sc001-02-v4 cue '供巨香的龟鸡食谱白粥 葱花要一眼眼'", "reason": "guījī is an exact homophone of BOTH 硅基 and 碳基; the ch.2 recipe cue's true form is not verbatim-resolvable (no beats line carries the corresponding text - SC-001-02-v4 beats has no 食谱/巨香/咸 line), and a food-context 碳基 reading is plausible, so a bare 2-char entry could corrupt the other reading. Only the anchored forms 龟鸡城市/龟鸡民 are dict-addressable; carrier for the rest = M6 human line."},
+    {"observed": "下一张 -> 下一章 (series cta family: sc001-01-v2 cue '下一张北外摊一位68岁的摊主' vs beats '下一章：北外滩一位六十八岁的摊主')", "reason": "下一张 is legitimate card-domain vocabulary (L-卡 line 'next card'); the cta fix is already carried by the 北外摊->北外滩 entry on the same cue - a bare 下一张 entry is a real cross-domain collision face, kept out."},
+    {"observed": "朱鸿盔 (sc001-05-v1 cue '当安管区的朱鸿盔馆')", "reason": "persona proper-noun mishear (朱鸿奎); carrier = P-3 专名预载 per the v1 excluded precedent, out of dict scope."},
+    {"observed": "traditional glyphs 裡/著 in the sc001-01-v2 北外滩 cue (手裡握著)", "reason": "normalization face (t2s variant folding), carried over from v1/v2, out of dict scope."},
+    {"observed": "long-span unstable garble: 供巨香 (ch.2) / 龟鸡城市真实世界改编 (ch.4) / 沪语年轮句集中七处 (ch.2) / 朱鸿盔馆终点全 (ch.5)", "reason": "no stable homophone pair on disk, carried over from v2; carriers = P-3 initial-prompt preload + medium QC recipe + M6 human line."}
+  ],
+  "acceptance": "tech#26 judgment bar, all four gates: (1) own-expect sweep with v3 loaded (full chain) over every in-repo beats file - zero replacements; (2) cross-expect sweep for the v3 WORD entries - every anchor piece's expect against every other piece's true text, zero replacements (the bar tech#21 could only grant v2 phrases is now safe for v3 words because ALL v3 entries are guarded + the noise-not-in-expect hard gate); (3) real-archive applied validation - 17/17 pairs fire on the archived SRT corpus with their own chapter beats as --expect, after-count=0 across all 12 SRTs (zero-invention: every noise string is a byte-exact disk quote); (4) the v1 latent word-entry face (kou-qi->kou-xin under a mismatched expect) is closed at the CLI surface by the expect-SRT fingerprint gate: expect_srt_overlap() char-3gram ratio, WARN below 0.25 - measured band: matched piece pairs 0.52-0.60 (12/12 archived pairs), mismatched expect 0.01-0.02 (bs015 x SC-001-01-v2 = 0.014)."
+}

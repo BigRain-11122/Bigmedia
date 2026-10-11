@@ -1,0 +1,7 @@
+{"ts": "2026-10-10 04:19:00", "purpose": "untagged", "model": "medium", "audio": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\.c3-tmp\\r1864-duovoice\\legA-deepdive-seg.mp3", "rc": 0, "duration_s": 63.879875, "cues": 15}
+{"ts": "2026-10-10 04:19:22", "purpose": "untagged", "model": "medium", "audio": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\.c3-tmp\\r1864-duovoice\\legB-hand-band.mp3", "rc": 0, "duration_s": 49.3309375, "cues": 14}
+{"ts": "2026-10-10 04:19:44", "purpose": "untagged", "model": "medium", "audio": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\.c3-tmp\\r1864-duovoice\\legC-subfloor.mp3", "rc": 0, "duration_s": 47.7689375, "cues": 14}
+{"ts": "2026-10-11 05:29:37", "purpose": "final-track-qc", "model": "medium", "audio": "data\\storylines\\audio\\SC-004-01-v1.mp3", "rc": 0, "duration_s": 236.412, "cues": 48}
+{"ts": "2026-10-11 10:34:46", "purpose": "final-track-qc", "model": "medium-int8", "audio": "data\\storylines\\audio\\SC-005-01-v1.mp3", "rc": 2, "duration_s": null, "cues": null}
+{"ts": "2026-10-11 10:38:31", "purpose": "final-track-qc", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-01-v1.mp3", "rc": 0, "duration_s": 209.83, "cues": 42}
+{"ts": "2026-10-11 11:01:24", "purpose": "untagged", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-02-v1.mp3", "rc": 0, "duration_s": 212.782, "cues": 46}

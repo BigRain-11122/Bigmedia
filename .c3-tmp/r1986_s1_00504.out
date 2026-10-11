@@ -1,0 +1,4 @@
+GPU-OK util=19% free=4639MB
+FAIL ollama timeout (600s)
+FAIL ollama exit 3
+

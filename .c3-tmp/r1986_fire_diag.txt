@@ -1,0 +1,44 @@
+# r1986 fire-window S1 consumption diagnosis trail (successor body)
+# All ASCII. Evidence for zero-false-green S1 adjudication.
+
+[1] S1 attempts for SC-005-04 (data/storylines/audio/sc005-04-v1-tmp/):
+  s1-run.out  15:57:57  GPU-OK util=31% free=9820MB -> ollama timeout (300s) rc=3
+  s1-run2.out 15:59:54  DEFER gpu util 93% > 80% (occupied window)
+               (gpu-guard-defer-ledger.jsonl +1 row: S1-script defer 15:59:54)
+  s1-retry.out 16:26:58 attempt 1/24 non-defer rc=3
+               GPU-OK util=28% free=4716MB -> ollama timeout (1500s) rc=3
+  .c3-tmp/r1986_s1_00504.out 16:4x-16:5x (prior body, PID 79000)
+               GPU-OK util=19% free=4639MB -> ollama timeout (600s) rc=3
+  => 4 fired calls, ZERO verdicts landed; expert-verdicts has no new file.
+  => S1 NOT passed. Zero false-green. Chain stays at the gate.
+
+[2] Fire window timeline:
+  16:34:37 / 16:35:51 cards: no-fire (util worst 100>80)
+  16:40:56 card: FIRE verdict (path=B-eviction-credit, gate go=True
+           free_min=4942 util_max=32, mv quiet 159.7min, TTL 120s)
+  16:42 prior body launches S1 background 79000; 14b cold load ~16:47
+  17:0x successor body: nvidia-smi = 100% util, 11832/12282 MiB used
+  17:08:45 fresh card: no-fire (util-face worst-case 99% > gate 80)
+
+[3] Root cause (this round's adjudication):
+  ComfyUI python PID 58200 (comfyui-krea portable, MV sprint session
+  domain = CEO priority line) is the ONLY compute app holding the GPU,
+  ~11.8GB. llama-server is evicted (no VRAM in compute-apps list), so
+  even an 8-token minimal probe to qwen2.5:14b times out at 92s (needs
+  ~9GB reload into ~450MB free). Pure GPU-starvation family, NOT the
+  10-10 ollama-wedged-slot family. Yield law correctly applied: no
+  restart action taken (restart would not create VRAM).
+
+[4] Ollama service health: /api/tags OK (10 models) - server alive;
+  generation path blocked by VRAM starvation only.
+
+[5] Meme V1 deliverable check (CPU view-point): zero mp4 under
+  cph4/fleet matching zunjie/brake/meme/shortvideo - still not landed
+  (bm-a session domain in flight, zero contact).
+
+[6] tech#26 R1835 stranded backfill recovered this round:
+  src/render/whisper_to_srt.py (v3 dict + expect fingerprint gate)
+  tests/test_noise_dict.py 34 tests OK
+  full suite: Ran 1012 tests in 107.364s OK
+  data/pipeline/asr-noise-dict-v3.json + whisper-ledger.jsonl new files
+  (stranded since ~10-09 = lingering-hook violation fixed by commit)
