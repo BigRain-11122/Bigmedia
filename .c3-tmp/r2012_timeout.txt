@@ -1,0 +1,26 @@
+    python src/call_expert.py --expert hot-intel --material data/intel/daily/2026-09-24.md [--timeout S] [--gpu-guard]
+to TIMEOUT during a jman-LoRA training window with zero verdicts (R1847).
+Long wrapper flights (s1_call / e4_call pattern, timeout=1500) should
+--timeout S (tech#45): per-call subprocess timeout in seconds, default
+300 (DEFAULT_TIMEOUT) - existing surface unchanged. The S1/E4 long-
+        --material <review-material.md> --timeout 1500 --gpu-guard
+DEFAULT_TIMEOUT = 300
+def call_model(model, prompt, timeout=DEFAULT_TIMEOUT):
+                       capture_output=True, timeout=timeout)
+            capture_output=True, timeout=15)
+    except (OSError, subprocess.TimeoutExpired):
+    expert_id = material = timeout_raw = None
+        elif argv[i] == "--timeout":
+                print("FAIL --timeout needs a value (seconds)")
+            timeout_raw = argv[i]
+              "[--timeout S] [--gpu-guard] [--gpu-force]")
+    timeout_s = DEFAULT_TIMEOUT
+    if timeout_raw is not None:
+            timeout_s = int(timeout_raw)
+            print("FAIL --timeout must be an integer number of seconds: %r"
+                  % timeout_raw)
+        if timeout_s <= 0:
+            print("FAIL --timeout must be > 0 seconds: %d" % timeout_s)
+        code, out = call_model(ex["model"], prompt, timeout=timeout_s)
+    except subprocess.TimeoutExpired:
+        print("FAIL ollama timeout (%ds)" % timeout_s)
