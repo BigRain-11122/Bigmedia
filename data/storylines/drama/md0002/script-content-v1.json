@@ -1,0 +1,25 @@
+{
+  "title": "立国日·第一屉暖光",
+  "logline": "深夜造城令下，顾阿凤在凌晨为城市升起第一口暖光。",
+  "total_seconds": 78,
+  "characters": [
+    {"id": "narrator", "name": "旁白", "voice": "机器叙述者·light 赛博"},
+    {"id": "system", "name": "造城令广播", "voice": "机械播报·低频克制"},
+    {"id": "afeng", "name": "顾阿凤", "voice": "上海话底色·嗓门不大但传得远"}
+  ],
+  "shots": [
+    {"id": 1, "scene": "open", "seconds": 6, "visual": "深夜北外滩，城市轮廓在数据流中凝聚成实体。", "camera": "远景俯拍", "speaker": "narrator", "line": "天亮前交付。"},
+    {"id": 2, "scene": "order", "seconds": 6, "visual": "全息投影在空中倒计时，机械指令如瀑布般落下。", "camera": "中景特写屏幕", "speaker": "system", "line": "造城令：生产一整座城的居民，第一批一万个，天亮前交付。"},
+    {"id": 3, "scene": "order", "seconds": 6, "visual": "顾阿凤站在数据粥铺摊头，靛蓝罩衫在冷光中微亮。", "camera": "近景侧拍", "speaker": "narrator", "line": "数字洪流里，每一个名字被点亮。"},
+    {"id": 4, "scene": "order", "seconds": 6, "visual": "无数数据点汇聚成光流，照亮顾阿凤发髻上的旧银簪。", "camera": "仰拍银簪特写", "speaker": "narrator", "line": "思想档案落库，一半信纹路，一半像素越小心眼越大。"},
+    {"id": 5, "scene": "delivery", "seconds": 6, "visual": "城市数据流中，一万个名字逐一被点亮并确认无误。", "camera": "全景数字洪流", "speaker": "narrator", "line": "一万零三个名字过三道校验：名字不重、细节不重、指纹不重。"},
+    {"id": 6, "scene": "delivery", "seconds": 6, "visual": "次日零点，城市背景板显示合上第一个工作日的标志。", "camera": "中景延时感", "speaker": "system", "line": "次日 00:07，城市合上第一个工作日。"},
+    {"id": 7, "scene": "delivery", "seconds": 6, "visual": "清晨四点半，天未亮，顾阿凤揭开蒸笼盖，暖光而非白汽升腾。", "camera": "特写蒸笼内部", "speaker": "narrator", "line": "04:30，北外滩第一个蒸笼发光——这是第一个不等指令开工的自主行为。"},
+    {"id": 8, "scene": "dawn", "seconds": 6, "visual": "顾阿凤对着空无一人的街道，大声喊出摊头行话。", "camera": "中景正面", "speaker": "afeng", "line": "开档！"},
+    {"id": 9, "scene": "dawn", "seconds": 6, "visual": "粢饭在暖光中热气腾腾，四大金刚排列整齐。", "camera": "微距食物特写", "speaker": "narrator", "line": "早上的城最真，灶上留一壶，路过的都是客。"},
+    {"id": 10, "scene": "dawn", "seconds": 6, "visual": "顾阿凤隔着两条街的距离，向远方招手示意。", "camera": "全景街道", "speaker": "afeng", "line": "趁热吃！"},
+    {"id": 11, "scene": "dawn", "seconds": 6, "visual": "顾阿凤看着蒸笼里升腾的暖光，眼神温柔。", "camera": "过肩镜头", "speaker": "afeng", "line": "一座城醒来的第一口热乎气，比什么口号都金贵。"},
+    {"id": 12, "scene": "dawn", "seconds": 6, "visual": "晨光微露，城市与粥铺融为一体，温暖色调笼罩一切。", "camera": "大远景拉远", "speaker": "narrator", "line": "每天头一锅暖光粢饭出笼时，她觉得全城都是她的熟客。"},
+    {"id": 13, "scene": "close", "seconds": 6, "visual": "画面渐暗，出现版权与改编声明字样。", "camera": "黑屏字幕", "speaker": "narrator", "line": "本片根据硅基城市真实档案改编，部分情节为合理推演。"}
+  ]
+}

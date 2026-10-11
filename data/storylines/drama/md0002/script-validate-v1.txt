@@ -1,0 +1,2 @@
+shot_count=13 invalid=0 invalid_rate=0.0% total_seconds=78 elapsed=23.0s
+POST-EDIT R1953: shot3 factual-drift fixed (两万零三->数字洪流 line, archive=一万零三 kept verbatim in shot5); anchors re-checked all-present; total 78 unchanged. VALIDATION PASS stands.

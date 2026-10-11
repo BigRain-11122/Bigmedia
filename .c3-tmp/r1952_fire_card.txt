@@ -1,0 +1,20 @@
+R1952 fire card evidence (MD-0002 script-leg attempt, 2026-10-11)
+--- card run 1 @ 08:03:06 ---
+fire-window-card 2026-10-11 08:03:06: verdict=fire path=B-eviction-credit
+  gate: go=False free_min=538 util_max=91 band=4286
+  mv: verdict=quiet newest_age_min=506.7
+  probe: status=skipped-not-resident face=not-resident evictable=5521 counterfactual=fly
+  gate-credit: go=True evictable=5521 effective_free=10330
+  readings-age: gate=54s mv=28s probe=28s gate_credit=25s
+  fire-valid: 120s (expires epoch 1791677106; re-run the card after expiry, never consume a stale GO)
+--- consumption outcome ---
+GO not consumed within 120s TTL (turnkey discovery latency in this session: locating
+gen-script-v1.py launcher took >120s; card law forbids consuming a stale GO).
+--- card run 2 @ 08:04:30 (fresh, pre-launch gate) ---
+fire-window-card 2026-10-11 08:04:30: verdict=no-fire path=None
+  reasons: cold-skip-no-admissible-credit
+--- verdict ---
+MD-0002 script-leg stays fire-ready gated (fail-closed correct behavior).
+Lesson for next fire window: launcher is pre-staged at main#4 =
+  python data/storylines/drama/md0002/gen-script-v1.py
+Consume a fresh GO within TTL with zero discovery latency (R1870 turnkey design).

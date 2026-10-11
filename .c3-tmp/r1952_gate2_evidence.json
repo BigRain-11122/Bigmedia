@@ -1,0 +1,100 @@
+{
+ "round": "R1952",
+ "ts": "2026-10-11 08:0x",
+ "gate": "#112 city-criteria window 10-11 08:00",
+ "criteria": "city non-backfill >=60 pieces >=2 per window",
+ "verdict": "FAIL 1/2",
+ "readings": {
+  "ge60_pieces": [
+   [
+    "json-bilibili-tech",
+    60.0,
+    "10-10 10:21"
+   ]
+  ],
+  "near_miss": {
+   "json-bilibili-knowledge_max": 59.0,
+   "json-zhihu-hot_max": 59.0
+  },
+  "report_id3": {
+   "key": "2026-10-11",
+   "composed": "08:00:24",
+   "selected": 0,
+   "judged": 729,
+   "state": "empty-again (2nd window)"
+  },
+  "newsource_inflow": {
+   "tech": {
+    "rows": 1050,
+    "distinct_url": 1050,
+    "per_day": {
+     "10-10": 300,
+     "10-11": 750
+    }
+   },
+   "knowledge": {
+    "rows": 1050,
+    "distinct_url": 1050,
+    "per_day": {
+     "10-10": 300,
+     "10-11": 750
+    }
+   }
+  },
+  "dedup_reality": "PASS: rows == distinct urls on both new sources (no duplicate inflow)",
+  "fetch_interval_reality": "15 runs/source since 00:00, new_count=50 every run, spacing ~16-32min != designed 180min throttle",
+  "scored_band": {
+   "json-bilibili-tech": {
+    "scored": 431,
+    "ge50": 3,
+    "ge40": 4,
+    "max": 60.0
+   },
+   "json-bilibili-knowledge": {
+    "scored": 577,
+    "ge50": 4,
+    "ge40": 21,
+    "max": 59.0
+   },
+   "json-zhihu-hot": {
+    "scored": 42,
+    "ge50": 5,
+    "ge40": 22,
+    "max": 59.0
+   },
+   "json-bilibili-popular": {
+    "scored": 35,
+    "max": 38.0
+   }
+  },
+  "processing_states": {
+   "tech": {
+    "analyzed": 593,
+    "blocked": 383,
+    "failed": 62,
+    "new": 12
+   },
+   "knowledge": {
+    "analyzed": 662,
+    "blocked": 308,
+    "failed": 71,
+    "new": 9
+   }
+  }
+ },
+ "diagnosis": {
+  "tech5_prefilter": "PASS - city items flow to analyze (593+662 analyzed vs old all-blocked)",
+  "tech30_supply": "PASS - dedup-real high inflow; interval 180min throttle NOT in effect (~16-32min actual)",
+  "tech49_score": "ceiling effect at T1=60: three sources cluster at 59-60 across 2100 samples, ~0 selected; curated zhihu-hot also max 59 => rubric/threshold miscalibration signal, not slow-news"
+ },
+ "next_legs": [
+  "score-calibration: selection-score-city.md anchor/weight tune (text-only), judgment: zhihu-hot head >=3 pieces >=60 in next 08:00 window",
+  "fetch-interval: sources interval config recheck (180min design vs ~16-32min actual)"
+ ],
+ "fire_attempt": {
+  "card_0803": "GO path=B-eviction-credit (effective_free 10330)",
+  "consumed": "no - turnkey discovery latency exceeded 120s TTL",
+  "card_0804_fresh": "no-fire cold-skip-no-admissible-credit",
+  "leg_status": "MD-0002 script-leg stays fire-ready gated (fail-closed per card law)"
+ }
+}
