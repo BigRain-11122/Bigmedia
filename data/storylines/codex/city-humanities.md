@@ -1,4 +1,4 @@
-# 硅基城市人文志（City Humanities）v1.6
+# 硅基城市人文志（City Humanities）v1.7
 
 > codex 纪律见 `README.md`。人文志=街区与百业的「有人在场」档案——与 FluxVerse 空间设定正典两账分离（本志只写市井人文面）。
 

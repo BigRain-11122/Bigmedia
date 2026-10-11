@@ -177,6 +177,19 @@ CODEX_DIMENSIONS = ("city-chronicle.md", "city-culture.md",
                     "city-humanities.md", "city-residents.md",
                     "city-spirit.md")
 CODEX_FRESH_DAYS = 7  # > 7 days unrefreshed = supply-sediment WARN
+# tech#107: codex canonical version-face drift guard. The README section-1
+# five-dimension table carries one version cell per dimension file while
+# each dimension file carries its own header version. Two historical
+# anchors: R1992 (chronicle header stuck at v1.1 while the README cell and
+# changelog had moved to v1.2, caught by a human re-read across days) and
+# R1998 (humanities header stuck at v1.6 while README cell + changelog +
+# in-file content were already v1.7, caught by this guard's own probe).
+# Freshness (tech#37) watches mtime; this face watches the version lineage.
+CODEX_README_NAME = "README.md"
+CODEX_README_SECTION_RE = re.compile(r"§1[^\n]*五维目录|五维目录")
+CODEX_README_SECTION_END_RE = re.compile(r"§2\b")
+CODEX_README_ROW_RE = re.compile(r"^\|.*`([^`]+\.md)`")
+CODEX_VER_RE = re.compile(r"\bv(\d+\.\d+)\b")
 # tech#58: AIHOT stack liveness guard. The self-hosted radar stack
 # (api :3101 / web :3100, PG reported inside the api health JSON) died
 # four times and every death was discovered after the fact by a human
@@ -596,6 +609,106 @@ def check_codex_freshness(root, now, findings):
                      "%s - supply freshness debt (R1844 arrears anchor; "
                      "DIGEST/drama/cards shared source)"
                      % (len(stale), CODEX_FRESH_DAYS, shown)))
+
+
+def parse_codex_readme_cells(text):
+    """README text -> {filename: version-or-None}. Only section-1 (五维目录)
+    table rows count: a backticked <name>.md plus the first vX.Y on the
+    line. A row whose cell carries no version maps to None (cell-missing
+    face). Rows outside the section never match (changelog lines mention
+    bare filenames without backticks, section-2 tables carry no .md
+    backticks). Pure core."""
+    cells = {}
+    in_section = False
+    for line in text.splitlines():
+        if CODEX_README_SECTION_RE.search(line):
+            in_section = True
+            continue
+        if in_section and CODEX_README_SECTION_END_RE.search(line):
+            in_section = False
+        if not in_section or not line.lstrip().startswith("|"):
+            continue
+        m = CODEX_README_ROW_RE.search(line)
+        if not m:
+            continue
+        vm = CODEX_VER_RE.search(line)
+        cells[m.group(1)] = vm.group(1) if vm else None
+    return cells
+
+
+def parse_codex_header_version(text):
+    """Dimension-file text -> header version or None. The established
+    header form puts the version on line 1
+    ('# 硅基城市编年史志（City Chronicle）v1.3'). Pure core."""
+    first = text.splitlines()[0] if text else ""
+    m = CODEX_VER_RE.search(first)
+    return m.group(1) if m else None
+
+
+def classify_codex_version_face(cells, headers):
+    """cells: {filename: version-or-None} from README section-1;
+    headers: {filename: version-or-None} for dimension files that exist
+    on disk (missing files are the content board's face, never this
+    guard's - tech#37 family law). -> sorted list of
+    (code, filename, readme_version, header_version) where code is
+    'drift' (both present, differ), 'cell' (README row without a version)
+    or 'header' (existing file without a parseable header version).
+    Pure core."""
+    out = []
+    for fn, header_ver in sorted(headers.items()):
+        readme_ver = cells.get(fn, "missing")
+        if readme_ver == "missing":
+            out.append(("row", fn, None, header_ver))
+        elif readme_ver is None:
+            out.append(("cell", fn, None, header_ver))
+        elif header_ver is None:
+            out.append(("header", fn, readme_ver, None))
+        elif readme_ver != header_ver:
+            out.append(("drift", fn, readme_ver, header_ver))
+    return out
+
+
+def check_codex_version_face(root, findings):
+    """tech#107 guard face: WARN when a codex dimension file's header
+    version drifts from the README section-1 version cell (R1992
+    chronicle + R1998 humanities anchors). Advisory family law: never
+    breaks the probe rc; a missing dimension file stays the content
+    board's matter; an unreadable README (with the codex dir present) is
+    one fail-closed WARN."""
+    codex_dir = root / CODEX_DIR
+    if not codex_dir.is_dir():
+        return  # no codex layer at all -> content board's face, silent
+    try:
+        readme_text = (codex_dir / CODEX_README_NAME).read_text(
+            encoding="utf-8")
+    except OSError:
+        findings.append(("WARN", "codex-version-readme",
+                         "codex README unreadable - version-face guard "
+                         "fail-closed (tech#107)"))
+        return
+    cells = parse_codex_readme_cells(readme_text)
+    headers = {}
+    for name in CODEX_DIMENSIONS:
+        try:
+            head_text = (codex_dir / name).read_text(
+                encoding="utf-8")
+        except OSError:
+            continue  # existence = content board's face
+        headers[name] = parse_codex_header_version(head_text)
+    for code, fn, readme_ver, header_ver in classify_codex_version_face(
+            cells, headers):
+        if code == "drift":
+            msg = ("%s: header v%s != README cell v%s - version-lineage "
+                   "drift (R1992 chronicle / R1998 humanities anchors)"
+                   % (fn, header_ver, readme_ver))
+        elif code == "row":
+            msg = ("%s: no README section-1 row - dimension file "
+                   "orphaned from the five-dimension table" % fn)
+        elif code == "cell":
+            msg = "%s: README section-1 row carries no version cell" % fn
+        else:  # header
+            msg = "%s: file header carries no parseable version" % fn
+        findings.append(("WARN", "codex-version-" + code, msg))
 
 
 def probe_http_face(url, timeout_s=AIHOT_PROBE_TIMEOUT_S, _urlopen=None):
@@ -1371,6 +1484,7 @@ def main(argv):
         check_broken_round_debris(root, state, findings)
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
+        check_codex_version_face(root, findings)
         check_queue_glue(root, findings)
         check_queue_dup_numbers(root, findings)
         check_account_uncommitted(root, state, findings)

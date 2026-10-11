@@ -720,6 +720,167 @@ class CodexFreshnessTests(unittest.TestCase):
         self.assertEqual(rc, 0)  # WARN verdict, never a probe-break FAIL
 
 
+class CodexVersionFaceTests(unittest.TestCase):
+    """tech#107: codex version-lineage drift guard (R1992 chronicle +
+    R1998 humanities anchors - README section-1 version cell vs each
+    dimension file's own header version). Advisory family law: WARN
+    never breaks the probe; missing files stay the content board's."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    README_BODY = (
+        "# City Codex\n\n"
+        "## section zero\n\nintro text\n\n"
+        "## §1 五维目录\n\n"
+        "| 维 | 文件 | 内容 | 状态 |\n"
+        "|---|---|---|---|\n"
+        "| 历史 | `city-chronicle.md` | chronicle | v1.3 batch3 |\n"
+        "| 文化 | `city-culture.md` | culture | v1.1 batch |\n"
+        "| 人文 | `city-humanities.md` | humanities | v1.7 batch |\n"
+        "| 居民 | `city-residents.md` | residents | v1.3 batch |\n"
+        "| 精神 | `city-spirit.md` | spirit | v1.5 batch |\n\n"
+        "## §2 积累计数台账\n\n"
+        "| 批 | 日期 | 执行 |\n"
+        "|---|---|---|\n"
+        "| fake | 2026-10-11 | `not-a-face.md` v9.9 |\n\n"
+        "- changelog line mentioning city-spirit.md v0.1 bare name\n"
+    )
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=2), BOARD)
+
+    def _codex(self, root, readme=None):
+        d = root / "data" / "storylines" / "codex"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "README.md").write_text(
+            readme if readme is not None else self.README_BODY,
+            encoding="utf-8")
+        return d
+
+    def _dim(self, d, name, version):
+        p = d / name
+        p.write_text("# City dimension file v%s\n\nbody\n" % version,
+                     encoding="utf-8")
+        return p
+
+    def test_parse_readme_cells_section_scoped(self):
+        cells = loop_health.parse_codex_readme_cells(self.README_BODY)
+        self.assertEqual(cells, {
+            "city-chronicle.md": "1.3", "city-culture.md": "1.1",
+            "city-humanities.md": "1.7", "city-residents.md": "1.3",
+            "city-spirit.md": "1.5"})
+        # §2 fake row and bare changelog names never match the face
+        self.assertNotIn("not-a-face.md", cells)
+
+    def test_parse_readme_cell_without_version_is_none(self):
+        body = self.README_BODY.replace(
+            "| 精神 | `city-spirit.md` | spirit | v1.5 batch |",
+            "| 精神 | `city-spirit.md` | spirit | draft |")
+        self.assertEqual(
+            loop_health.parse_codex_readme_cells(body)["city-spirit.md"],
+            None)
+
+    def test_parse_header_version_and_missing(self):
+        self.assertEqual(
+            loop_health.parse_codex_header_version(
+                "# 硅基城市人文志（City Humanities）v1.7\n"), "1.7")
+        self.assertEqual(
+            loop_health.parse_codex_header_version("# no version here\n"),
+            None)
+        self.assertEqual(loop_health.parse_codex_header_version(""), None)
+
+    def test_classify_drift_match_and_absent_faces(self):
+        cells = {"city-chronicle.md": "1.3", "city-culture.md": "1.1",
+                 "city-humanities.md": "1.7", "city-residents.md": "1.3",
+                 "city-spirit.md": "1.5"}
+        # R1998 humanities anchor shape: header stuck one bump behind
+        headers = {"city-chronicle.md": "1.3", "city-culture.md": "1.1",
+                   "city-humanities.md": "1.6", "city-residents.md": "1.3",
+                   "city-spirit.md": "1.5"}
+        self.assertEqual(
+            loop_health.classify_codex_version_face(cells, headers),
+            [("drift", "city-humanities.md", "1.7", "1.6")])
+        # full agreement -> silent
+        self.assertEqual(
+            loop_health.classify_codex_version_face(
+                cells, dict(cells)), [])
+        # cell without version / header without version / no README row
+        self.assertEqual(
+            loop_health.classify_codex_version_face(
+                {"city-spirit.md": None}, {"city-spirit.md": "1.5"}),
+            [("cell", "city-spirit.md", None, "1.5")])
+        self.assertEqual(
+            loop_health.classify_codex_version_face(
+                {"city-spirit.md": "1.5"}, {"city-spirit.md": None}),
+            [("header", "city-spirit.md", "1.5", None)])
+        self.assertEqual(
+            loop_health.classify_codex_version_face(
+                {}, {"city-spirit.md": "1.5"}),
+            [("row", "city-spirit.md", None, "1.5")])
+
+    def test_check_names_drift_and_skips_missing_file(self):
+        root = self._repo()
+        d = self._codex(root)
+        self._dim(d, "city-chronicle.md", "1.3")
+        self._dim(d, "city-culture.md", "1.1")
+        self._dim(d, "city-humanities.md", "1.6")  # drift vs cell v1.7
+        # residents + spirit absent on disk: existence = content board face
+        findings = []
+        loop_health.check_codex_version_face(root, findings)
+        self.assertEqual(warn_codes(findings), {"codex-version-drift"})
+        self.assertIn("city-humanities.md", findings[0][2])
+        self.assertIn("v1.6", findings[0][2])
+        self.assertIn("v1.7", findings[0][2])
+        self.assertNotIn("city-residents.md", findings[0][2])
+
+    def test_check_clean_after_fix(self):
+        root = self._repo()
+        d = self._codex(root)
+        for name, ver in (("city-chronicle.md", "1.3"),
+                          ("city-culture.md", "1.1"),
+                          ("city-humanities.md", "1.7"),
+                          ("city-residents.md", "1.3"),
+                          ("city-spirit.md", "1.5")):
+            self._dim(d, name, ver)
+        findings = []
+        loop_health.check_codex_version_face(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_readme_unreadable_fail_closed(self):
+        root = self._repo()
+        d = self._codex(root, readme=None)
+        (d / "README.md").write_text("", encoding="utf-8")
+        (d / "README.md").unlink()  # unreadable face, not silent
+        self._dim(d, "city-spirit.md", "1.5")
+        findings = []
+        loop_health.check_codex_version_face(root, findings)
+        self.assertEqual(warn_codes(findings), {"codex-version-readme"})
+
+    def test_check_silent_without_codex_dir(self):
+        root = self._repo()  # no codex layer at all -> content board's face
+        findings = []
+        loop_health.check_codex_version_face(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_warn_not_fail(self):
+        root = self._repo()
+        d = self._codex(root)
+        self._dim(d, "city-humanities.md", "1.6")  # drift vs cell v1.7
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("codex-version-drift", buf.getvalue())
+        self.assertEqual(rc, 0)
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 2: in the real repo (post humanities
+        v1.7 fix) all five dimension headers agree with the README
+        section-1 version cells - zero findings, read-only."""
+        findings = []
+        loop_health.check_codex_version_face(REPO, findings)
+        self.assertEqual(findings, [])
+
+
 class AihotStackTests(unittest.TestCase):
     """tech#58: AIHOT stack liveness guard - probe, classify and CLI
     wiring. Real HTTP never runs inside the suite (module-level stub);
