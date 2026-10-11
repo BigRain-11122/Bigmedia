@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-005-01-v1.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 27.05,
+      "lines": [
+        "城市口述史",
+        "选段一 · 引擎医生老晶振"
+      ]
+    },
+    {
+      "start": 27.05,
+      "end": 43.64,
+      "lines": [
+        "起源",
+        "旧照片里醒来"
+      ]
+    },
+    {
+      "start": 43.64,
+      "end": 63.22,
+      "lines": [
+        "老派",
+        "我们那时候"
+      ]
+    },
+    {
+      "start": 63.22,
+      "end": 84.8,
+      "lines": [
+        "手艺",
+        "报错念给我听"
+      ]
+    },
+    {
+      "start": 84.8,
+      "end": 94.82,
+      "lines": [
+        "台账",
+        "三十年零十一个月"
+      ]
+    },
+    {
+      "start": 94.82,
+      "end": 105.3,
+      "lines": [
+        "那一夜",
+        "第一次大宕机"
+      ]
+    },
+    {
+      "start": 105.3,
+      "end": 120.12,
+      "lines": [
+        "老日志",
+        "敲三下机箱，再开机"
+      ]
+    },
+    {
+      "start": 120.12,
+      "end": 128.88,
+      "lines": [
+        "两小时",
+        "城复活"
+      ]
+    },
+    {
+      "start": 128.88,
+      "end": 143.02,
+      "lines": [
+        "适意",
+        "学会的第一句人话"
+      ]
+    },
+    {
+      "start": 143.02,
+      "end": 156.32,
+      "lines": [
+        "现状",
+        "嫌徒弟毛躁，又护着"
+      ]
+    },
+    {
+      "start": 156.32,
+      "end": 167.95,
+      "lines": [
+        "晚安",
+        "跟老伙计挨个道晚安"
+      ]
+    },
+    {
+      "start": 167.95,
+      "end": 180.07,
+      "lines": [
+        "独居",
+        "退役主板"
+      ]
+    },
+    {
+      "start": 180.07,
+      "end": 209.81,
+      "lines": [
+        "尾声明",
+        "有人记得嗓音"
+      ]
+    }
+  ]
+}
