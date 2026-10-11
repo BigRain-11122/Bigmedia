@@ -1509,6 +1509,131 @@ class C3TmpStaleTests(unittest.TestCase):
         self.assertNotIn("c3tmp-stale", fail_codes(findings))
 
 
+class AudioTmpResidueTests(unittest.TestCase):
+    """tech#114: audio TTS tmp working-dir residue guard - pure core,
+    check face and CLI wiring. The R2005 anchor form (untracked file
+    under data/storylines/audio/*-tmp/) must be named within one round;
+    loose audio-root files, the cards domain (pre-registered scope law)
+    and every unreadable side stay silent."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo(self):
+        return make_repo(self, self.BEAT_SPEC, make_state(tick=1897), BOARD)
+
+    def _git_repo(self):
+        """Real-git fixture reproducing the R2005 form plus the
+        ignore-face exclusion: one tmp working file committed (in the
+        account, never flags), one UNTRACKED tmp file (the residue
+        form), one untracked-but-gitignored tmp file (out of the
+        account, never a residue)."""
+        root = self._repo()
+        (root / ".gitignore").write_text("*.wav\n", encoding="utf-8")
+        tmp = root / "data/storylines/audio/sc005-05-v1-tmp"
+        tmp.mkdir(parents=True)
+        (tmp / "settled.txt").write_text("in the account", encoding="utf-8")
+        (tmp / "subs.srt").write_text("residue", encoding="utf-8")
+        (tmp / "amb-bed.wav").write_text("ignored asset", encoding="utf-8")
+        env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
+                   GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+        for args in (["init", "-q"],
+                     ["add", ".gitignore",
+                      "data/storylines/audio/sc005-05-v1-tmp/settled.txt"],
+                     ["commit", "-q", "-m", "x"]):
+            p = subprocess.run(["git"] + args, cwd=str(root), env=env,
+                               capture_output=True, timeout=30)
+            if p.returncode != 0:
+                self.skipTest(
+                    "git fixture unavailable: %.60s"
+                    % p.stderr.decode("utf-8", "replace"))
+        return root  # subs.srt untracked (residue); amb-bed.wav ignored
+
+    def test_pure_core_names_anchor_form(self):
+        rows = loop_health.classify_audio_tmp_residue([
+            "data/storylines/audio/sc005-05-v1-tmp/audio.mp3",   # anchor
+            "data/storylines/audio/sc005-06-v1-tmp/subs.srt",    # anchor 2
+            "data/storylines/audio/loose.mp3",                   # root file
+            "data/storylines/cards/MC-tmp/e4-material.md",       # cards: scope law
+            "src/os/state.json",                                  # outside domain
+            "data/storylines/audio/sc005-05-tmp",                # root-level name
+            None, "",                                             # unreadable sides
+        ])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][0], "WARN")
+        self.assertEqual(rows[0][1], "audio-tmp-residue")
+        self.assertIn("2 untracked", rows[0][2])
+        self.assertIn("sc005-05-v1-tmp/audio.mp3", rows[0][2])
+        self.assertIn("R2005", rows[0][2])
+
+    def test_pure_core_single_row_cap_and_fold(self):
+        hits = ["data/storylines/audio/t%d-tmp/f%d.mp3" % (i, i)
+                for i in range(5)]
+        rows = loop_health.classify_audio_tmp_residue(hits)
+        self.assertEqual(len(rows), 1)            # one WARN per repo, not per file
+        self.assertIn("5 untracked", rows[0][2])
+        self.assertIn("(+2 more)", rows[0][2])   # cap 3 of 5
+        self.assertNotIn("t3-tmp/f3.mp3", rows[0][2])  # capped example dropped
+        rows = loop_health.classify_audio_tmp_residue(hits[:3])
+        self.assertEqual(len(rows), 1)
+        self.assertNotIn("(+", rows[0][2])       # exactly at cap -> no fold
+
+    def test_pure_core_backslash_normalization(self):
+        rows = loop_health.classify_audio_tmp_residue(
+            ["data\\storylines\\audio\\sc005-05-v1-tmp\\audio.mp3"])
+        self.assertEqual(len(rows), 1)
+
+    def test_check_face_git_failure_silent(self):
+        root = self._repo()
+
+        def dead(_args, **_kw):
+            raise OSError("no git")
+        findings = []
+        loop_health.check_audio_tmp_residue(root, findings, _run=dead)
+        self.assertEqual(findings, [])
+
+    def test_check_face_non_git_tree_silent(self):
+        # no .git: untracked list yields [] -> advisory skip
+        root = self._repo()
+        tmp = root / "data/storylines/audio/sc005-05-v1-tmp"
+        tmp.mkdir(parents=True)
+        (tmp / "audio.mp3").write_text("x", encoding="utf-8")
+        findings = []
+        loop_health.check_audio_tmp_residue(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_git_fixture_r2005_form_named(self):
+        # judgement criterion: the anchor residue form is named at the
+        # check-face level; the committed tmp file stays silent and the
+        # gitignored tmp asset stays out of the account (exclude-standard)
+        root = self._git_repo()
+        findings = []
+        loop_health.check_audio_tmp_residue(root, findings)
+        self.assertEqual(warn_codes(findings), {"audio-tmp-residue"})
+        self.assertEqual(len(findings), 1)
+        self.assertIn("1 untracked", findings[0][2])
+        self.assertIn("sc005-05-v1-tmp/subs.srt", findings[0][2])
+        self.assertNotIn("amb-bed.wav", findings[0][2])
+        self.assertNotIn("audio-tmp-residue", fail_codes(findings))
+
+    def test_cli_wired_on_git_fixture(self):
+        root = self._git_repo()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("audio-tmp-residue", buf.getvalue())
+        self.assertEqual(rc, 0)  # WARN-level face never fails the probe
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 1 (real-repo false-positive face): the
+        real repo's audio tmp working dirs are fully committed per the
+        sc001/sc005 full-commit precedent (R2005 residue close), so the
+        guard must stay silent on the committed baseline. Read-only."""
+        findings = []
+        loop_health.check_audio_tmp_residue(REPO, findings)
+        self.assertNotIn("audio-tmp-residue", fail_codes(findings))
+        self.assertNotIn("audio-tmp-residue", warn_codes(findings))
+
+
 class BrokenRoundDebrisTests(unittest.TestCase):
     """tech#66: broken-round prior-body debris guard - untracked .c3-tmp
     middleware whose round anchor N sits outside [tick, tick+1] gets

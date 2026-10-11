@@ -243,13 +243,33 @@ STATE_REL = "src/os/state.json"
 # naturally fresh (written this round), so an untracked .c3-tmp file
 # with mtime > 48h is a leftover by definition. One WARN per file,
 # advisory per the guard family law (tech#22/#31/#37/#58/#60/#61/#62).
-# Boundary note: ls-files --others respects .gitignore, so an ignored
-# .c3-tmp would go silently blind - committed evidence files are the
-# repo's account, keep the dir out of .gitignore.
+# Boundary note (tech#114 correction): the listing seam passes
+# --exclude-standard, so .gitignore IS applied - an ignored .c3-tmp
+# would go silently blind, and committed evidence files are the
+# repo's account, keep the dir out of .gitignore. (The pre-114 note
+# claimed the bare ls-files already respected .gitignore; it did not -
+# kept on record as the correction anchor.)
 C3TMP_DIR_PREFIX = ".c3-tmp/"
 C3TMP_STALE_HOURS = 48.0
 # Round-numbered middleware name convention: r<N>_<rest> under .c3-tmp/
 ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
+# tech#114: audio-line TTS tmp working-dir residue guard. R2005 anchor:
+# 75 untracked TTS intermediates (10.59 MB) sat across rounds under
+# data/storylines/audio/sc005-0X-v1-tmp/ because every hand-built close
+# list committed only the hand-off faces (s1/e4-material/beats) and
+# missed the tmp working-dir face - the round-end cleanup hook
+# (C-20261009-02 order 3) failed twice (R1895 .c3-tmp first case,
+# R2005 audio tmp second case), so per the 2026-10-10 13:07 CEO order
+# (recurrence = gate failure = escalate: checklist -> script assertion)
+# the residue face gets a machine guard. Close action = batch-commit the
+# tmp dir (sc001/sc005-01..03 full-commit precedent; .gitignore L24
+# covers only audio root *.mp3, tmp subdir files are committable).
+# Ignored artifacts (*.wav bed assets, *.pyc) are deliberately out of
+# the git account and never read as residue - the listing seam applies
+# .gitignore (tech#114 correction above).
+AUDIO_DOMAIN_PREFIX = "data/storylines/audio/"
+AUDIO_TMP_DIR_SUFFIX = "-tmp"
+AUDIO_TMP_LIST_CAP = 3
 # tech#68: status-export contract guard. R1901 anchor: the CEO-facing
 # docs/status-export.json drifted silently for ~1700 rounds - "do" grew
 # into a 3406-char paragraph (product-priority law section 5 wants a
@@ -882,14 +902,22 @@ def check_queue_dup_numbers(root, findings):
 
 
 def _git_untracked_files(root, _run=None):
-    """`git ls-files --others` stdout -> [relpath] (untracked only, in
-    git's forward-slash form). Any git failure - not a work tree, git
-    missing, timeout - yields []: this face is advisory and never
-    breaks the probe. _run is the injection seam for tests."""
+    """`git ls-files --others --exclude-standard` stdout -> [relpath]
+    (untracked only, git's forward-slash form, .gitignore APPLIED).
+    Any git failure - not a work tree, git missing, timeout - yields
+    []: this face is advisory and never breaks the probe. _run is the
+    injection seam for tests. tech#114 correction: the bare --others
+    form does NOT apply .gitignore (the tech#64 note claiming it did
+    was wrong - the R1900 *.pyc catch and the sc001-01-v4-tmp *.wav
+    assets both surfaced only because exclusions were off); passing
+    --exclude-standard makes ignored files - deliberately out of the
+    git account - never read as residue for any consumer of this
+    seam (tech#64/#66/#114)."""
     if _run is None:
         _run = subprocess.run
     try:
-        p = _run(["git", "ls-files", "--others", "-z"],
+        p = _run(["git", "ls-files", "--others", "--exclude-standard",
+                  "-z"],
                  cwd=str(root), capture_output=True, timeout=GIT_TIMEOUT_S)
     except (OSError, subprocess.TimeoutExpired):
         return []
@@ -943,6 +971,61 @@ def check_c3tmp_stale(root, now, findings):
                          "round; cleanup hook C-20261009-02 order 3) - "
                          "batch-commit or delete at round end"
                          % (rel, age_h, C3TMP_STALE_HOURS)))
+
+
+def classify_audio_tmp_residue(relpaths, domain_prefix=AUDIO_DOMAIN_PREFIX,
+                                list_cap=AUDIO_TMP_LIST_CAP):
+    """untracked paths under data/storylines/audio/*-tmp/ -> one WARN
+    row or none (pure core). A file counts only inside a tmp WORKING
+    DIR (a directory component ending in -tmp below the domain
+    prefix): loose audio-root files are their own face, and the cards
+    domain (data/storylines/cards/*-tmp/) is deliberately out of scope -
+    this guard's anchor is the audio TTS face; cards stays on the
+    hand-built close lists until it produces its own case. Backslashes
+    normalize to git's forward-slash form. One WARN per repo (not per
+    file): count + capped examples + the tech#60 "+N more" fold."""
+    rows = []
+    hits = []
+    for rel in relpaths:
+        if not rel:
+            continue
+        norm = rel.replace("\\", "/")
+        if not norm.startswith(domain_prefix):
+            continue
+        parts = norm[len(domain_prefix):].split("/")
+        # last part is always the file name; any deeper directory
+        # component naming a tmp working dir puts the file in scope
+        if any(p.endswith(AUDIO_TMP_DIR_SUFFIX) for p in parts[:-1]):
+            hits.append(norm)
+    if not hits:
+        return rows
+    hits.sort()
+    shown = ", ".join(hits[:list_cap])
+    extra = len(hits) - min(len(hits), list_cap)
+    fold = " (+%d more)" % extra if extra > 0 else ""
+    rows.append(("WARN", "audio-tmp-residue",
+                 "%d untracked file(s) under audio tmp working dirs: %s%s"
+                 " - TTS intermediates outside the close list (R2005 "
+                 "anchor: 75 files / 10.59 MB sat 9+ rounds; sc001/sc005 "
+                 "full-commit precedent) - batch-commit or delete the "
+                 "tmp dir at the piece's closing round"
+                 % (len(hits), shown, fold)))
+    return rows
+
+
+def check_audio_tmp_residue(root, findings, _run=None):
+    """tech#114 guard face: name untracked audio-line TTS tmp working
+    files left outside every hand-built close list. Fires on ANY
+    untracked count - a fresh in-flight batch reads as advisory
+    pressure to commit its hand-off faces promptly, while committed tmp
+    dirs stay silent per the sc001/sc005 full-commit precedent. A
+    non-git tree or any git failure stays silent (advisory face, never
+    breaks the probe). Enforced every round by the routine probe
+    consumption - an R2005-form residue is named within one round
+    instead of at the next round's manual git status read. _run is the
+    injection seam for tests."""
+    findings.extend(classify_audio_tmp_residue(
+        _git_untracked_files(root, _run)))
 
 
 def classify_broken_round_debris(relpaths, tick):
@@ -1481,6 +1564,7 @@ def main(argv):
         findings += f
         check_root_litter(root, findings)
         check_c3tmp_stale(root, datetime.now(), findings)
+        check_audio_tmp_residue(root, findings)
         check_broken_round_debris(root, state, findings)
         check_stale_dirty(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
