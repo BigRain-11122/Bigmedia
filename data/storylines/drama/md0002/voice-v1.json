@@ -1,0 +1,230 @@
+{
+ "meta": {
+  "piece": "立国日·第一屉暖光",
+  "leg": "voice-v1 (assembly input segments)",
+  "tool": "data/storylines/drama/md0002/gen-voice-v1.py",
+  "source_script": "data\\storylines\\drama\\md0002\\script-content-v1.json",
+  "generated": "2026-10-11 08:41:00",
+  "air_budget": {
+   "shot_s": 6.0,
+   "air_min_s": 0.3,
+   "fit_max_s": 5.7,
+   "rate_bumps_pct": [
+    0,
+    8,
+    15
+   ]
+  },
+  "cast_note": "tier direct-out per tech#2; narrator texture (cyber light) is an assembly-leg whole-track face; afeng Shanghai-dialect coloring = reserved cross-language candidate (R1785)"
+ },
+ "cast": {
+  "narrator": {
+   "voice": "zh-CN-YunyangNeural",
+   "flags": []
+  },
+  "system": {
+   "voice": "zh-CN-YunjianNeural",
+   "flags": [
+    "--rate=-10%",
+    "--pitch=-3Hz"
+   ]
+  },
+  "afeng": {
+   "voice": "zh-CN-XiaoxiaoNeural",
+   "flags": [
+    "--rate=+4%",
+    "--pitch=+2Hz"
+   ]
+  }
+ },
+ "shots": [
+  {
+   "id": 1,
+   "scene": "open",
+   "speaker": "narrator",
+   "line": "天亮前交付。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 1.87,
+   "air_s_in_6s_window": 4.13,
+   "verdict": "fit"
+  },
+  {
+   "id": 2,
+   "scene": "order",
+   "speaker": "system",
+   "line": "造城令：生产一整座城的居民，第一批一万个，天亮前交付。",
+   "voice": "zh-CN-YunjianNeural",
+   "flags": [
+    "--rate=+15%",
+    "--pitch=-3Hz"
+   ],
+   "rate_bump_pct": 15,
+   "duration_s": 5.62,
+   "air_s_in_6s_window": 0.38,
+   "verdict": "fit"
+  },
+  {
+   "id": 3,
+   "scene": "order",
+   "speaker": "narrator",
+   "line": "数字洪流里，每一个名字被点亮。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 3.14,
+   "air_s_in_6s_window": 2.86,
+   "verdict": "fit"
+  },
+  {
+   "id": 4,
+   "scene": "order",
+   "speaker": "narrator",
+   "line": "思想档案落库，一半信纹路，一半像素越小心眼越大。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 4.9,
+   "air_s_in_6s_window": 1.1,
+   "verdict": "fit"
+  },
+  {
+   "id": 5,
+   "scene": "delivery",
+   "speaker": "narrator",
+   "line": "一万零三个名字过三道校验：名字不重、细节不重、指纹不重。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [
+    "--rate=+8%"
+   ],
+   "rate_bump_pct": 8,
+   "duration_s": 5.35,
+   "air_s_in_6s_window": 0.65,
+   "verdict": "fit"
+  },
+  {
+   "id": 6,
+   "scene": "delivery",
+   "speaker": "system",
+   "line": "次日 00:07，城市合上第一个工作日。",
+   "voice": "zh-CN-YunjianNeural",
+   "flags": [
+    "--rate=-10%",
+    "--pitch=-3Hz"
+   ],
+   "rate_bump_pct": 0,
+   "duration_s": 4.85,
+   "air_s_in_6s_window": 1.15,
+   "verdict": "fit"
+  },
+  {
+   "id": 7,
+   "scene": "delivery",
+   "speaker": "narrator",
+   "line": "04:30，北外滩第一个蒸笼发光——这是第一个不等指令开工的自主行为。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 6.79,
+   "air_s_in_6s_window": -0.79,
+   "verdict": "extend-shot",
+   "shot_extend_s": 7.1
+  },
+  {
+   "id": 8,
+   "scene": "dawn",
+   "speaker": "afeng",
+   "line": "开档！",
+   "voice": "zh-CN-XiaoxiaoNeural",
+   "flags": [
+    "--rate=+4%",
+    "--pitch=+2Hz"
+   ],
+   "rate_bump_pct": 0,
+   "duration_s": 1.87,
+   "air_s_in_6s_window": 4.13,
+   "verdict": "fit"
+  },
+  {
+   "id": 9,
+   "scene": "dawn",
+   "speaker": "narrator",
+   "line": "早上的城最真，灶上留一壶，路过的都是客。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 4.34,
+   "air_s_in_6s_window": 1.66,
+   "verdict": "fit"
+  },
+  {
+   "id": 10,
+   "scene": "dawn",
+   "speaker": "afeng",
+   "line": "趁热吃！",
+   "voice": "zh-CN-XiaoxiaoNeural",
+   "flags": [
+    "--rate=+4%",
+    "--pitch=+2Hz"
+   ],
+   "rate_bump_pct": 0,
+   "duration_s": 1.87,
+   "air_s_in_6s_window": 4.13,
+   "verdict": "fit"
+  },
+  {
+   "id": 11,
+   "scene": "dawn",
+   "speaker": "afeng",
+   "line": "一座城醒来的第一口热乎气，比什么口号都金贵。",
+   "voice": "zh-CN-XiaoxiaoNeural",
+   "flags": [
+    "--rate=+4%",
+    "--pitch=+2Hz"
+   ],
+   "rate_bump_pct": 0,
+   "duration_s": 4.37,
+   "air_s_in_6s_window": 1.63,
+   "verdict": "fit"
+  },
+  {
+   "id": 12,
+   "scene": "dawn",
+   "speaker": "narrator",
+   "line": "每天头一锅暖光粢饭出笼时，她觉得全城都是她的熟客。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 5.23,
+   "air_s_in_6s_window": 0.77,
+   "verdict": "fit"
+  },
+  {
+   "id": 13,
+   "scene": "close",
+   "speaker": "narrator",
+   "line": "本片根据硅基城市真实档案改编，部分情节为合理推演。",
+   "voice": "zh-CN-YunyangNeural",
+   "flags": [],
+   "rate_bump_pct": 0,
+   "duration_s": 5.33,
+   "air_s_in_6s_window": 0.67,
+   "verdict": "fit"
+  }
+ ],
+ "totals": {
+  "sum_speech_s": 55.53,
+  "draft_concat_s": 59.74,
+  "projected_assembly_min_s": 56.97,
+  "projected_assembly_max_s": 74.63,
+  "drama_ep_window_s": [
+   60.0,
+   90.0
+  ],
+  "window_ok": false,
+  "extend_shots": [
+   7
+  ]
+ }
+}
