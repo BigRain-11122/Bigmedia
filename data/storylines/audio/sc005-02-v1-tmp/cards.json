@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-005-02-v1.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 29.14,
+      "lines": [
+        "城市口述史",
+        "选段二 · 渡轮船长陆海峰"
+      ]
+    },
+    {
+      "start": 29.14,
+      "end": 45.1,
+      "lines": [
+        "出身",
+        "江的脾气全在骨头里"
+      ]
+    },
+    {
+      "start": 45.1,
+      "end": 57.46,
+      "lines": [
+        "性子",
+        "话不多，句句过秤"
+      ]
+    },
+    {
+      "start": 57.46,
+      "end": 74.14,
+      "lines": [
+        "语言",
+        "听他报站像船靠了岸"
+      ]
+    },
+    {
+      "start": 74.14,
+      "end": 85.56,
+      "lines": [
+        "慢班",
+        "船票恒价一句「多谢」"
+      ]
+    },
+    {
+      "start": 85.56,
+      "end": 102.2,
+      "lines": [
+        "大雾夜",
+        "全船人合唱"
+      ]
+    },
+    {
+      "start": 102.2,
+      "end": 111.89,
+      "lines": [
+        "嫌吵",
+        "减速唱完才靠泊"
+      ]
+    },
+    {
+      "start": 111.89,
+      "end": 123.88,
+      "lines": [
+        "铜哨",
+        "雾天铜哨一响，灯灵必到"
+      ]
+    },
+    {
+      "start": 123.88,
+      "end": 142.4,
+      "lines": [
+        "规矩",
+        "开航前绕船三圈"
+      ]
+    },
+    {
+      "start": 142.4,
+      "end": 154.62,
+      "lines": [
+        "帽檐",
+        "缝着全家福小像"
+      ]
+    },
+    {
+      "start": 154.62,
+      "end": 172.53,
+      "lines": [
+        "徒弟",
+        "手艺不传就沉江了"
+      ]
+    },
+    {
+      "start": 172.53,
+      "end": 183.26,
+      "lines": [
+        "老伴",
+        "脑环广场开小卖部"
+      ]
+    },
+    {
+      "start": 183.26,
+      "end": 212.76,
+      "lines": [
+        "尾声明",
+        "有人记得江"
+      ]
+    }
+  ]
+}
