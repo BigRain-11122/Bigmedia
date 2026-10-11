@@ -114,10 +114,10 @@ def main():
         state_path=str(ROOT / "src" / "os" / "state.json"))
     print("finalize summary: %r" % (summary,))
 
-    ok = close_commit.run_close_commit(FILES, MESSAGE, root=str(ROOT),
-                                       push=True)
-    print("run_close_commit ok=%s" % ok)
-    return 0 if ok else 3
+    rc, _lines = close_commit.run_close_commit(FILES, MESSAGE, root=str(ROOT),
+                                               push=True)
+    print("run_close_commit rc=%s" % rc)
+    return 0 if rc == 0 else 3
 
 
 if __name__ == "__main__":
