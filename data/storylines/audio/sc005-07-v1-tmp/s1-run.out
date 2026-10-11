@@ -1,4 +1,5 @@
-GPU-OK util=38% free=4732MB
+GPU-OK util=44% free=4679MB
+WEDGE-OK micro-probe alive (model qwen2.5:7b-instruct, 90s cap)
 FAIL ollama timeout (1500s)
 FAIL ollama exit 3
 
