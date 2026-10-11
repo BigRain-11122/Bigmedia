@@ -22,8 +22,18 @@ relying on per-round memory:
     day they are dropped so a run that leaves both surfaces is never
     double-counted (epoch-day pre-hook runs undercount honestly).
 
+  - Direct-call A/B surface (tech#119): data/pipeline/ollama-ab-ledger.jsonl
+    rows appended via src/os/ollama_ab_ledger.append_ab_row by ad-hoc A/B
+    probe scripts (r1877/r1880/r1956 family) - one row per direct
+    ``ollama run`` / API call; rc==0 counts as produced, non-zero as
+    attempted-no-output (same caliber as the ollama face). This closes the
+    structural blind spot behind the meter-vs-manual divergence family
+    (R2011: 10-02 +59 / 09-25 +34 / 10-11 +6); the manual state.json line
+    stays the single truth (tech#24 caliber kept).
+
 Not auto-countable (hand-note only): direct ``ollama run`` warm-ups and
-whisper calibration runs that leave no ledger row.
+whisper calibration runs that leave no ledger row (A/B calls that DO
+append via ollama_ab_ledger are counted through the ab surface above).
 
 Chain position: the state.json log line stays the single truth consumed by
 src/os/local_rate_report.py; this probe only supplies the number. Pure
@@ -43,6 +53,7 @@ REPO = __file__.replace("\\", "/").rsplit("/src/os/", 1)[0]
 EXPERT_CALLS_PATH = REPO + "/docs/reviews/expert-calls.md"
 STATION_REVIEWS_PATH = REPO + "/docs/reviews/station-reviews.md"
 WHISPER_LEDGER_PATH = REPO + "/data/pipeline/whisper-ledger.jsonl"
+AB_LEDGER_PATH = REPO + "/data/pipeline/ollama-ab-ledger.jsonl"
 
 # expert-calls row: | 2026-10-09 07:17 | S1-script | … | material | 0 | … |
 EC_ROW_RE = re.compile(r"^\|\s*(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})\s*\|")
@@ -108,6 +119,13 @@ def parse_whisper_ledger(text):
     return rows
 
 
+def parse_ab_ledger(text):
+    """Yield (datetime, rc) per direct-call A/B JSONL row (tech#119).
+    Row contract is shared with the whisper ledger (ts + rc), so the
+    tolerant best-effort parser is reused verbatim."""
+    return parse_whisper_ledger(text)
+
+
 def _is_produced(exit_token):
     """True when the row represents a model call that produced a verdict.
 
@@ -122,19 +140,27 @@ def _is_produced(exit_token):
     return True
 
 
-def meter(expert_rows, asr_rows, since, ledger_rows=None):
+def meter(expert_rows, asr_rows, since, ledger_rows=None, ab_rows=None):
     """Window-filter and classify; returns a readout dict.
 
     ledger_rows (tech#19): when provided, the exact whisper-ledger
     surface owns the epoch day onward and station-reviews asr rows
-    stay only as pre-epoch history (no double counting)."""
+    stay only as pre-epoch history (no double counting).
+    ab_rows (tech#119): direct-call A/B ledger rows; rc==0 counts as
+    produced and adds into tokens_local, non-zero is reported
+    separately as attempted-no-output (never into the total)."""
     ok_rows = [r for r in expert_rows if r[0] >= since]
     attempted = [r for r in ok_rows if not _is_produced(r[1])]
     produced = [r for r in ok_rows if _is_produced(r[1])]
+    ab_win = [r for r in (ab_rows or []) if r[0] >= since]
+    ab_produced = [r for r in ab_win if r[1] == 0]
+    ab_attempted = [r for r in ab_win if r[1] != 0]
     base = {
         "since": since.strftime("%Y-%m-%d %H:%M"),
         "ollama_produced": len(produced),
         "ollama_attempted_noproduct": len(attempted),
+        "ab_direct_produced": len(ab_produced),
+        "ab_direct_attempted_noproduct": len(ab_attempted),
     }
     if ledger_rows:
         epoch = min(r[0] for r in ledger_rows)
@@ -149,7 +175,8 @@ def meter(expert_rows, asr_rows, since, ledger_rows=None):
             "whisper_exact_produced": len(ex_produced),
             "whisper_exact_attempted": len(ex_attempted),
             "whisper_rows": len(apprx) + len(exact),
-            "tokens_local": len(produced) + len(apprx) + len(ex_produced),
+            "tokens_local": (len(produced) + len(apprx) + len(ex_produced)
+                             + len(ab_produced)),
         })
         return base
     asr = [d for d in asr_rows if d >= since]
@@ -158,7 +185,7 @@ def meter(expert_rows, asr_rows, since, ledger_rows=None):
         "whisper_exact_produced": 0,
         "whisper_exact_attempted": 0,
         "whisper_rows": len(asr),
-        "tokens_local": len(produced) + len(asr),
+        "tokens_local": len(produced) + len(asr) + len(ab_produced),
     })
     return base
 
@@ -173,11 +200,13 @@ def read_text(path):
 
 def build_readout(since, expert_path=EXPERT_CALLS_PATH,
                   station_path=STATION_REVIEWS_PATH,
-                  ledger_path=WHISPER_LEDGER_PATH):
+                  ledger_path=WHISPER_LEDGER_PATH,
+                  ab_path=AB_LEDGER_PATH):
     return meter(parse_expert_calls(read_text(expert_path)),
                  parse_station_asr(read_text(station_path)), since,
                  ledger_rows=parse_whisper_ledger(read_text(ledger_path))
-                 or None)
+                 or None,
+                 ab_rows=parse_ab_ledger(read_text(ab_path)))
 
 
 def main(argv=None):
@@ -209,7 +238,9 @@ def main(argv=None):
         sys.stdout.write(
             "tokens:local={tokens_local} since {since} "
             "(ollama produced {ollama_produced} / attempted-no-output "
-            "{ollama_attempted_noproduct}; whisper runs {whisper_rows} "
+            "{ollama_attempted_noproduct}; ab direct produced "
+            "{ab_direct_produced} / attempted-no-output "
+            "{ab_direct_attempted_noproduct}; whisper runs {whisper_rows} "
             "= approx {whisper_apprx_rows} + exact produced "
             "{whisper_exact_produced} / attempted-no-output "
             "{whisper_exact_attempted})\n".format(**readout))

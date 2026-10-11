@@ -3,6 +3,7 @@
 
 import datetime
 import io
+import json
 import os
 import sys
 import tempfile
@@ -94,19 +95,97 @@ class TestBuildReadoutCli(unittest.TestCase):
             # ledger_path must be injected: the real repo whisper ledger
             # grows with live concurrent-session runs (untracked file),
             # which would leak in-window rows into this hermetic test.
+            # Same for ab_path (tech#119, R1865 isolation family).
             out = tlm.build_readout(since, expert_path=path,
                                     station_path=path,
                                     ledger_path=os.path.join(
-                                        "no", "such", "ledger.jsonl"))
+                                        "no", "such", "ledger.jsonl"),
+                                    ab_path=os.path.join(
+                                        "no", "such", "ab.jsonl"))
             # station parsing finds no dated asr rows in the EC fixture.
             self.assertEqual(out["ollama_produced"], 2)
             self.assertEqual(out["whisper_rows"], 0)
+            self.assertEqual(out["ab_direct_produced"], 0)
         finally:
             os.unlink(path)
 
     def test_main_since_json(self):
         out = tlm.main(["--since", "2026-09-01", "--json"])
         self.assertEqual(out, 0)
+
+
+AB_LEDGER_FIXTURE = "\n".join([
+    json.dumps({"ts": "2026-10-11 09:14:02", "purpose": "score-ab",
+                "model": "qwen2.5:14b-8k", "rc": 0, "n": 1}),
+    json.dumps({"ts": "2026-10-11 09:15:41", "purpose": "score-ab",
+                "model": "qwen2.5:14b-8k", "rc": 3, "n": 2}),
+    json.dumps({"ts": "2026-10-12 03:00:00", "purpose": "prefilter-ab",
+                "model": "qwen2.5:7b-instruct", "rc": 0, "n": 1}),
+    "",  # trailing blank tolerated
+    "not json at all",  # malformed line skipped best-effort
+])
+
+
+class TestAbFace(unittest.TestCase):
+    """tech#119: direct-call A/B ledger face in the meter."""
+
+    def setUp(self):
+        self.expert = tlm.parse_expert_calls(EC_FIXTURE)
+        self.asr = tlm.parse_station_asr(SR_FIXTURE)
+        self.ab = tlm.parse_ab_ledger(AB_LEDGER_FIXTURE)
+
+    def test_parse_ab_delegation_tolerant(self):
+        # Same (datetime, rc) contract as the whisper ledger; malformed
+        # rows skipped, two formats accepted.
+        self.assertEqual(len(self.ab), 3)
+        self.assertEqual(self.ab[0],
+                         (datetime.datetime(2026, 10, 11, 9, 14, 2), 0))
+        self.assertEqual(self.ab[1][1], 3)
+
+    def test_window_filter_and_classification(self):
+        since = datetime.datetime(2026, 10, 12, 0, 0)
+        out = tlm.meter(self.expert, self.asr, since, ab_rows=self.ab)
+        self.assertEqual(out["ab_direct_produced"], 1)
+        self.assertEqual(out["ab_direct_attempted_noproduct"], 0)
+        # produced ab call lands in the total (divergence made readable).
+        self.assertEqual(out["tokens_local"],
+                         out["ollama_produced"] + out["whisper_rows"]
+                         + 1)
+
+    def test_attempted_not_in_total(self):
+        since = datetime.datetime(2026, 10, 11, 0, 0)
+        out = tlm.meter(self.expert, self.asr, since, ab_rows=self.ab)
+        # 2 rc==0 rows (10-11 09:14 + 10-12 03:00), 1 rc!=0 row.
+        self.assertEqual(out["ab_direct_produced"], 2)
+        self.assertEqual(out["ab_direct_attempted_noproduct"], 1)
+        # rc!=0 rows are reported separately, never counted as tokens.
+        self.assertEqual(out["tokens_local"], 2)
+        self.assertEqual(out["ollama_produced"], 0)
+        self.assertEqual(out["whisper_rows"], 0)
+
+    def test_absent_surface_reads_zero(self):
+        out = tlm.meter(self.expert, self.asr,
+                        datetime.datetime(2026, 10, 12, 0, 0),
+                        ab_rows=tlm.parse_ab_ledger(""))
+        self.assertEqual(out["ab_direct_produced"], 0)
+        self.assertEqual(out["ab_direct_attempted_noproduct"], 0)
+
+    def test_build_readout_with_injected_ab_path(self):
+        fd, path = tempfile.mkstemp(suffix=".jsonl")
+        os.close(fd)
+        with io.open(path, "w", encoding="utf-8") as fh:
+            fh.write(AB_LEDGER_FIXTURE)
+        try:
+            out = tlm.build_readout(
+                datetime.datetime(2026, 10, 12, 0, 0),
+                expert_path=os.path.join("no", "such", "ec.md"),
+                station_path=os.path.join("no", "such", "sr.md"),
+                ledger_path=os.path.join("no", "such", "wl.jsonl"),
+                ab_path=path)
+            self.assertEqual(out["ab_direct_produced"], 1)
+            self.assertEqual(out["tokens_local"], 1)
+        finally:
+            os.unlink(path)
 
 
 if __name__ == "__main__":
