@@ -880,6 +880,75 @@ class CodexVersionFaceTests(unittest.TestCase):
         loop_health.check_codex_version_face(REPO, findings)
         self.assertEqual(findings, [])
 
+    CHANGELOG_BODY = README_BODY + (
+        "\n## 变更记录\n\n"
+        "- 2026-10-10: 续采批入账——city-chronicle v1.2 大事记续表\n"
+        "- 2026-10-11: 续采批三入账——city-chronicle v1.3 + "
+        "city-humanities v1.7\n"
+        "- 2026-10-12: 假想批——city-humanities v1.8\n"
+    )
+
+    def test_parse_changelog_versions_section_scoped(self):
+        # last mention per dimension wins; the block starts at the
+        # 变更记录 header and a later '#' section would close it
+        cl = loop_health.parse_codex_changelog_versions(
+            self.CHANGELOG_BODY)
+        self.assertEqual(cl, {"city-chronicle.md": "1.3",
+                              "city-humanities.md": "1.8"})
+        # no 变更记录 header at all -> section-scoped silence (the
+        # bare 'city-spirit.md v0.1' fixture line must never leak in)
+        self.assertEqual(
+            loop_health.parse_codex_changelog_versions(self.README_BODY),
+            {})
+
+    def test_classify_changelog_leads_both_faces(self):
+        cells = {"city-chronicle.md": "1.3", "city-humanities.md": "1.7"}
+        headers = {"city-chronicle.md": "1.3", "city-humanities.md": "1.7"}
+        cl = {"city-chronicle.md": "1.3", "city-humanities.md": "1.8"}
+        self.assertEqual(
+            loop_health.classify_codex_changelog_face(cells, headers, cl),
+            [("city-humanities.md", "1.8", "1.7", "1.7")])
+        # full three-face agreement -> silent
+        self.assertEqual(
+            loop_health.classify_codex_changelog_face(
+                cells, headers, {"city-chronicle.md": "1.3",
+                                  "city-humanities.md": "1.7"}),
+            [])
+
+    def test_classify_changelog_numeric_compare(self):
+        # v1.10 leads v1.9 numerically; lexical string compare would
+        # miss it ('1.10' < '1.9' as text)
+        cells = headers = {"city-spirit.md": "1.9"}
+        self.assertEqual(
+            loop_health.classify_codex_changelog_face(
+                cells, headers, {"city-spirit.md": "1.10"}),
+            [("city-spirit.md", "1.10", "1.9", "1.9")])
+
+    def test_classify_changelog_defers_to_absent_face_reports(self):
+        # a side with no version is the cell/header face's report,
+        # never the changelog face's - zero noise overlap
+        self.assertEqual(
+            loop_health.classify_codex_changelog_face(
+                {"city-spirit.md": None}, {"city-spirit.md": "1.5"},
+                {"city-spirit.md": "1.7"}), [])
+        # changelog tied with one side -> the drift face owns it
+        self.assertEqual(
+            loop_health.classify_codex_changelog_face(
+                {"city-spirit.md": "1.5"}, {"city-spirit.md": "1.6"},
+                {"city-spirit.md": "1.5"}), [])
+
+    def test_check_wires_changelog_third_face(self):
+        root = self._repo()
+        d = self._codex(root, readme=self.CHANGELOG_BODY)
+        # both faces stuck at v1.7 while the changelog tail says v1.8
+        self._dim(d, "city-chronicle.md", "1.3")
+        self._dim(d, "city-humanities.md", "1.7")
+        findings = []
+        loop_health.check_codex_version_face(root, findings)
+        self.assertEqual(warn_codes(findings), {"codex-version-changelog"})
+        self.assertIn("city-humanities.md", findings[0][2])
+        self.assertIn("v1.8", findings[0][2])
+
 
 class AihotStackTests(unittest.TestCase):
     """tech#58: AIHOT stack liveness guard - probe, classify and CLI

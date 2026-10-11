@@ -190,6 +190,16 @@ CODEX_README_SECTION_RE = re.compile(r"§1[^\n]*五维目录|五维目录")
 CODEX_README_SECTION_END_RE = re.compile(r"§2\b")
 CODEX_README_ROW_RE = re.compile(r"^\|.*`([^`]+\.md)`")
 CODEX_VER_RE = re.compile(r"\bv(\d+\.\d+)\b")
+# tech#111: the changelog tail is the batch-first surface - R1992 and
+# R1998 both wrote the 变更记录 line first, so a batch that bumps the
+# changelog but leaves BOTH the section-1 cell and the file header
+# behind reads as a false two-face agreement. Third face of the same
+# guard: only names the changelog-alone-leads shape, numeric compare
+# (v1.10 > v1.9), section-scoped to the 变更记录 block.
+CODEX_CHANGELOG_SECTION_RE = re.compile(r"变更记录")
+CODEX_CHANGELOG_ENTRY_RE = re.compile(
+    r"(city-chronicle|city-culture|city-humanities|"
+    r"city-residents|city-spirit)\s+v(\d+\.\d+)")
 # tech#58: AIHOT stack liveness guard. The self-hosted radar stack
 # (api :3101 / web :3100, PG reported inside the api health JSON) died
 # four times and every death was discovered after the fact by a human
@@ -688,6 +698,54 @@ def classify_codex_version_face(cells, headers):
     return out
 
 
+def parse_codex_changelog_versions(text):
+    """README text -> {filename.md: latest version} from the 变更记录
+    section. Section-scoped like the section-1 cell parser (bare names
+    outside the block never match); inside the block each line may
+    mention one or more 'city-<dim> vX.Y' and the LAST mention per
+    dimension wins (newest batch lines sit at the tail). Pure core."""
+    versions = {}
+    in_section = False
+    for line in text.splitlines():
+        if CODEX_CHANGELOG_SECTION_RE.search(line):
+            in_section = True
+            continue
+        if in_section and line.startswith("#"):
+            in_section = False  # a later section closes the block
+        if not in_section:
+            continue
+        for m in CODEX_CHANGELOG_ENTRY_RE.finditer(line):
+            versions[m.group(1) + ".md"] = m.group(2)
+    return versions
+
+
+def codex_version_tuple(v):
+    """'1.10' -> (1, 10) so the leads-test compares numerically, never
+    lexically ('1.10' > '1.9' as strings would say False). Pure core."""
+    return tuple(int(part) for part in v.split("."))
+
+
+def classify_codex_changelog_face(cells, headers, changelog):
+    """-> sorted [(filename, changelog_ver, readme_ver, header_ver)]
+    for dimensions whose changelog tail version leads BOTH faces that
+    hold a version. The two-sided face above already names cell/header
+    drift and the absent-version faces name missing cells/headers, so
+    this third face only fires on the tech#111 gap shape: changelog
+    moved, both faces stuck (false agreement). Pure core."""
+    out = []
+    for fn, cl_ver in sorted(changelog.items()):
+        readme_ver = cells.get(fn)
+        header_ver = headers.get(fn)
+        if not (readme_ver and header_ver):
+            continue  # absent/versionless sides belong to the cell/header
+            # (or content-board) faces - never noise-overlap here
+        cl_t = codex_version_tuple(cl_ver)
+        if (cl_t > codex_version_tuple(readme_ver)
+                and cl_t > codex_version_tuple(header_ver)):
+            out.append((fn, cl_ver, readme_ver, header_ver))
+    return out
+
+
 def check_codex_version_face(root, findings):
     """tech#107 guard face: WARN when a codex dimension file's header
     version drifts from the README section-1 version cell (R1992
@@ -729,6 +787,17 @@ def check_codex_version_face(root, findings):
         else:  # header
             msg = "%s: file header carries no parseable version" % fn
         findings.append(("WARN", "codex-version-" + code, msg))
+    changelog = parse_codex_changelog_versions(readme_text)
+    for fn, cl_ver, readme_ver, header_ver in classify_codex_changelog_face(
+            cells, headers, changelog):
+        r_txt = "v" + readme_ver if readme_ver else "absent"
+        h_txt = "v" + header_ver if header_ver else "absent"
+        findings.append(("WARN", "codex-version-changelog",
+                         "%s: changelog tail v%s leads README cell %s and "
+                         "header %s - batch wrote the changelog line but "
+                         "bumped neither face (tech#111 third face; "
+                         "R1992/R1998 batch-first anchors)"
+                         % (fn, cl_ver, r_txt, h_txt)))
 
 
 def probe_http_face(url, timeout_s=AIHOT_PROBE_TIMEOUT_S, _urlopen=None):
