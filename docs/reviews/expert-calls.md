@@ -117,3 +117,5 @@
 | 2026-10-11 11:17 | S1-script | S1 编剧官（内容生产部） | data\storylines\audio\SC-005-03-v1-s1-material.md | 0 | 全文=expert-verdicts/20261011-111754-S1-script.md ｜ ### 违律清单 |
 | 2026-10-11 11:32 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | data\storylines\audio\sc005-03-v1-tmp\e4-material.md | 0 | 全文=expert-verdicts/20261011-113252-E4-audience.md ｜ 1) **观看体验与评分** |
 | 2026-10-11 11:51 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | data\storylines\cards\MC-20261011-REACT-v14-tmp\e4-material.md | 0 | 全文=expert-verdicts/20261011-115151-E4-audience.md ｜ 1. **是否停下来看完及后续行为** |
+| 2026-10-11 19:08 | S1-script | S1 编剧官（内容生产部） | data\storylines\audio\SC-005-04-v1-s1-material.md | 0 | 全文=expert-verdicts/20261011-190801-S1-script.md ｜ ### 违律清单 |
+| 2026-10-11 19:13 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | data\storylines\audio\sc005-04-v1-tmp\e4-material.md | 0 | 全文=expert-verdicts/20261011-191359-E4-audience.md ｜ 1) 刷到这件作品我会看完，因为它有一个吸引人的标题和一段引人入胜的介绍。节目 |

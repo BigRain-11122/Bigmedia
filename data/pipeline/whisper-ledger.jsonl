@@ -5,3 +5,4 @@
 {"ts": "2026-10-11 10:34:46", "purpose": "final-track-qc", "model": "medium-int8", "audio": "data\\storylines\\audio\\SC-005-01-v1.mp3", "rc": 2, "duration_s": null, "cues": null}
 {"ts": "2026-10-11 10:38:31", "purpose": "final-track-qc", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-01-v1.mp3", "rc": 0, "duration_s": 209.83, "cues": 42}
 {"ts": "2026-10-11 11:01:24", "purpose": "untagged", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-02-v1.mp3", "rc": 0, "duration_s": 212.782, "cues": 46}
+{"ts": "2026-10-11 19:16:33", "purpose": "final-track-qc", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-04-v1.mp3", "rc": 0, "duration_s": 224.734, "cues": 45}
