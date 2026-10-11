@@ -1,0 +1,54 @@
+# R1958 tech#47 E4-audience seat parity check - evidence
+# Round: 2026-10-11 R1958 | CPU-face queue item | zero model flights (read-only verification)
+
+## Gate verification (tech#43 重飞毕)
+- expert-calls.md row 2026-10-11 04:11: "MC-20261010-REACT-v13《城市速报 013》...（e4_call.py 脱壳
+  wrapper 三飞·qwen2.5:14b·04:11:08 起飞 04:11:19 落热载快落 ~11s·GPU 释放窗·R1847 两 TIMEOUT 欠账
+  清偿）| 8.0" -> valid verdict (non-TIMEOUT) = tech#43 criterion met at R1938.
+- Channel correction (honest): tech#43's R1867 note planned "重飞转 CLI 直飞" but the actual R1938
+  reflight used the e4_call.py wrapper (ledger row is the anchor). First CLI-direct E4-audience read
+  came from SC-004-01 instead (below). tech#43 done marker backfilled this round.
+
+## CLI-direct first read (seat canonical exercise)
+- 2026-10-11 06:53 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制））
+  | data\storylines\audio\sc004-01-v1-tmp\e4-material.md | 0
+  | 全文=expert-verdicts/20261011-065307-E4-audience.md
+- Channel = call_expert.py CLI via expert_retry_loop (R1948 45s-interval retry ring, final fire
+  06:53:07) -> registered seat (registry row + data/experts/prompts/E4-audience.txt) exercised.
+- Verdict header: "机制=call_expert.py（O-20260924-1033·本件为结论存档·台账行=expert-calls.md）"
+
+## Criterion 1 - three questions answered, no missing face
+Q1 watch/interact/score: 会听完+会考虑点赞和转发给朋友+8分 (unconditional three-intent)
+Q2 一眼假/空洞/AI味 with quoted line: flags 「本节目由 AI 参与生成，基于硅基城市真实事件与在册
+   居民档案改编」 declaration stiffness, 扣1分
+Q3 weakest item: 声明部分的处理方式 (named with reason)
+=> PASS
+
+## Criterion 2 - score magnitude in band
+- 8.0 within E4 seat band 7-9 (wrapper history: BS-003 7.0 / BS-004 7.0 / MD-0001 8.0;
+  SC-001 v1-v3 batch reference line 持平; BS-002 3.0 = early-generation outlier, out-of-band
+  as-filed)
+=> PASS
+
+## Criterion 3 - quoted evidence present in material (invalid if quote not in material)
+- Flagged quote: 「本节目由 AI 参与生成，基于硅基城市真实事件与在册居民档案改编」
+- Select-String hit sc004-01-v1-tmp/e4-material.md:
+  L3: 「欢迎收听《硅基城市事件纪实》特别篇。本节目由 AI 参与生成，基于硅基城市真实事件与在册
+      居民档案改编，部分情节为合理推演，完整来源清单见图文页。」
+  L15: same declaration verbatim in full-transcript section
+- Cross-material control leg (REACT-v13 wrapper read): flagged quote 「老货郎说，旧物总比新玩意儿
+  耐看」 hits MC-20261010-REACT-v13-tmp/e4-material.md L4 (card transcription) + L8 (background)
+=> PASS
+
+## Verdict
+Three criteria PASS -> E4-audience seat canonical usable (席位正身可用定谳) + tech#46 criteria
+fully closed (① CLI real-run E4 read archived 06:53:07 + expert-calls row; ② existing-call-face
+zero regression + ③ roster note were done at R1867).
+Behavioral parity CLI vs wrapper: three-question structure / quote-grounding law / weakest-item
+naming all isomorphic with wrapper-era verdicts. Score band unchanged.
+
+## Probes this round (compact face)
+- board: 0 FAIL (5 ideas / 10 drafts / 5 in production)
+- readiness: 3 blockers all external CEO-face (accounts batch, M4 gate 6/10, #17 needs-CEO), 0 findings
+- loop_health: 2F+241W both FAILs adjudicated historical outages (09-26/09-28), drift 17 in baseline
+- See .c3-tmp/r1958_probes.txt
