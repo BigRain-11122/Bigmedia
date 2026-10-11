@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Hermetic tests for src/os/e4_launcher_gen.py (tech#113)."""
 import io
+import json
 import os
 import subprocess
 import sys
@@ -172,6 +173,198 @@ class CliTests(unittest.TestCase):
         before = sorted(os.listdir(self.tmp))
         _run_cli('--body', body, '--label', 'L')
         self.assertEqual(sorted(os.listdir(self.tmp)), before)
+
+
+class _FakeProc(object):
+    def __init__(self, stdout=b'', returncode=0):
+        self.stdout = stdout
+        self.returncode = returncode
+
+
+class PreflightRenderTests(unittest.TestCase):
+    """tech#123: the preflight three-piece must be baked into every
+    generated launcher (R2025 flight-3 burn family)."""
+
+    def setUp(self):
+        self.src = gen.render_launcher(
+            u'body', u'L', 'qwen2.5:14b', 1500)
+
+    def test_compiles(self):
+        compile(self.src, 'e4_call.py', 'exec')
+
+    def test_preflight_markers_present(self):
+        for marker in (
+                "RC_WINDOW_FLIP = 4",
+                "RC_SLOW_WINDOW = 7",
+                "UTIL_FLIP_PCT = 60",
+                "SEAT_PROBE_CAP_S = 240",
+                "SEAT_PROBE_SLOW_S = 150",
+                'SEAT_PROBE_PROMPT = "Reply with exactly two chars: OK"',
+                # seat probe runs the REAL seat model (R2025 blind-spot fix)
+                '"ollama", "run", MODEL], SEAT_PROBE_CAP_S',
+                "PREFLIGHT-BAIL rc=%d",
+                "no e4-result.json written",
+                "RELIEF stopped idle resident",
+                "DEFER window flipped after card"):
+            self.assertIn(marker, self.src, marker)
+
+    def test_rc_contract_line_in_header(self):
+        self.assertIn('| 4 = window-flip defer (NO result', self.src)
+        self.assertIn('| 7 = slow-window bail (NO result file', self.src)
+
+    def test_wedge_probe_absent_by_design(self):
+        # The 7b wedge probe (tech#120) is NOT ported here: the seat
+        # rate probe on the REAL seat model is its strict superset
+        # (R2025: 7b passed while the 14b seat burned). Lock the
+        # decision + its rationale so it cannot silently drift.
+        self.assertNotIn('wedge-probe', self.src)
+        self.assertIn('7b wedge probe is deliberately absent', self.src)
+
+
+class PreflightBehaviorTests(unittest.TestCase):
+    """Exec the generated launcher with faked subprocess/time: rc 4/7
+    bails write NO e4-result.json; GO path writes the verdict."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix='e4gen_pf_')
+        self.saved = {k: sys.modules.get(k) for k in ('subprocess', 'time')}
+        self.path = os.path.join(self.tmp, 'e4_call.py')
+        self.src = gen.render_launcher(u'E4 body', 'L', 'qwen2.5:14b', 1500)
+        with io.open(self.path, 'w', encoding='utf-8') as fh:
+            fh.write(self.src)
+
+    def tearDown(self):
+        for key, mod in self.saved.items():
+            if mod is None:
+                sys.modules.pop(key, None)
+            else:
+                sys.modules[key] = mod
+
+    def _exec(self):
+        import contextlib
+        buf = io.StringIO()
+        code = compile(self.src, self.path, 'exec')
+        rc = 0
+        ns = {'__file__': self.path, '__name__': 'e4_call_under_test'}
+        with contextlib.redirect_stdout(buf):
+            try:
+                exec(code, ns)
+            except SystemExit as exc:
+                rc = exc.code
+        return rc, buf.getvalue()
+
+    def _install_fakes(self, handler, step=1.0):
+        import types
+        sub = types.ModuleType('subprocess')
+        sub.PIPE = subprocess.PIPE
+        sub.STDOUT = subprocess.STDOUT
+        sub.TimeoutExpired = subprocess.TimeoutExpired
+        sub.run = handler
+        tim = types.ModuleType('time')
+        state = {'t': 1000000.0}
+        tim.time = lambda: (state.__setitem__('t', state['t'] + step)
+                            or state['t'])
+        tim.strftime = lambda fmt, *a: '2026-10-12 00:00:00'
+        sys.modules['subprocess'] = sub
+        sys.modules['time'] = tim
+        return sub
+
+    def test_flip_bail_rc4_no_result_file(self):
+        def handler(cmd, **kw):
+            return _FakeProc(stdout=b'99, 4000')  # nvidia-smi util=99
+        self._install_fakes(handler)
+        rc, out = self._exec()
+        self.assertEqual(rc, 4)
+        self.assertIn('DEFER window flipped after card', out)
+        self.assertIn('PREFLIGHT-BAIL rc=4', out)
+        self.assertFalse(os.path.exists(
+            os.path.join(self.tmp, 'e4-result.json')))
+
+    def test_slow_seat_bail_rc7_no_result_file(self):
+        calls = []
+
+        def handler(cmd, **kw):
+            if cmd[0] == 'nvidia-smi':
+                return _FakeProc(stdout=b'30, 8000')
+            if cmd[:2] == ['ollama', 'ps']:
+                return _FakeProc(stdout=b'qwen2.5:14b    abc123    '
+                                         b'100% GPU    9.4 GB')
+            if cmd[:2] == ['ollama', 'stop']:
+                return _FakeProc(stdout=b'')
+            if cmd[:2] == ['ollama', 'run']:
+                calls.append(kw.get('input'))
+                return _FakeProc(stdout=b'OK')
+            raise AssertionError(cmd)
+        self._install_fakes(handler, step=200.0)  # each time() +200s
+        rc, out = self._exec()
+        self.assertEqual(rc, 7)
+        self.assertIn('RATE-FAIL seat probe 200s > 150s', out)
+        self.assertIn('CPU-offload', out)
+        # only the seat probe ran; the main 1500s call never launched
+        self.assertEqual(calls, [b'Reply with exactly two chars: OK'])
+        self.assertFalse(os.path.exists(
+            os.path.join(self.tmp, 'e4-result.json')))
+
+    def test_seat_timeout_bail_rc7_no_result_file(self):
+        def handler(cmd, **kw):
+            if cmd[0] == 'nvidia-smi':
+                return _FakeProc(stdout=b'30, 8000')
+            if cmd[:2] == ['ollama', 'ps']:
+                return _FakeProc(stdout=b'NAME    ID    PROCESSOR')
+            if cmd[:2] == ['ollama', 'run']:
+                raise subprocess.TimeoutExpired(cmd, 240)
+            raise AssertionError(cmd)
+        self._install_fakes(handler)
+        rc, out = self._exec()
+        self.assertEqual(rc, 7)
+        self.assertIn('RATE-FAIL seat probe timed out (240s cap', out)
+        self.assertFalse(os.path.exists(
+            os.path.join(self.tmp, 'e4-result.json')))
+
+    def test_go_path_relief_probe_then_verdict(self):
+        calls = []
+
+        def handler(cmd, **kw):
+            if cmd[0] == 'nvidia-smi':
+                return _FakeProc(stdout=b'25, 9000')
+            if cmd[:2] == ['ollama', 'ps']:
+                return _FakeProc(stdout=b'qwen2.5:14b    abc123    '
+                                         b'100% GPU    9.4 GB')
+            if cmd[:2] == ['ollama', 'stop']:
+                return _FakeProc(stdout=b'')
+            if cmd[:2] == ['ollama', 'run']:
+                calls.append(kw.get('input'))
+                if kw.get('input') == b'Reply with exactly two chars: OK':
+                    return _FakeProc(stdout=b'OK')
+                return _FakeProc(stdout=b'7.0\naudience verdict line')
+            raise AssertionError(cmd)
+        self._install_fakes(handler, step=1.0)
+        rc, out = self._exec()
+        self.assertEqual(rc, 0)
+        self.assertIn('RELIEF stopped idle resident qwen2.5:14b', out)
+        self.assertIn('RATE-OK seat probe 1s', out)
+        self.assertIn('DONE', out)
+        self.assertEqual(len(calls), 2)  # probe + main
+        with io.open(os.path.join(self.tmp, 'e4-result.json'), 'r',
+                     encoding='utf-8') as fh:
+            result = json.load(fh)
+        self.assertEqual(result['model'], 'qwen2.5:14b')
+        self.assertEqual(result['material'], 'L')
+        self.assertIn('7.0', result['verdict'])
+
+    def test_unguarded_when_nvidia_smi_unreadable(self):
+        def handler(cmd, **kw):
+            if cmd[0] == 'nvidia-smi':
+                return _FakeProc(stdout=b'', returncode=1)
+            if cmd[:2] == ['ollama', 'run']:
+                return _FakeProc(stdout=b'OK\nverdict')
+            raise AssertionError(cmd)
+        self._install_fakes(handler)
+        rc, out = self._exec()
+        self.assertEqual(rc, 0)
+        self.assertIn('nvidia-smi unreadable - proceeding unguarded', out)
+        self.assertTrue(os.path.exists(
+            os.path.join(self.tmp, 'e4-result.json')))
 
 
 if __name__ == '__main__':

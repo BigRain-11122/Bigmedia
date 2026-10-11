@@ -4,8 +4,15 @@
 # regenerate from the body file instead. Machinery = v17/v18 lineage
 # (R1536/R1938/R2001): UTF-8 stdin pipe + ANSI strip + braille strip
 # (R189 U+2800 lesson) + e4-result.json next to this file.
+# Pre-flight three-piece (tech#122/123 port, R2025 flight-3 burn):
+# util-flip rc 4 / idle-resident relief / seat rate probe rc 7. The
+# 7b wedge probe is deliberately absent -- the seat rate probe on the
+# REAL seat model is its strict superset (R2025: 7b passed while the
+# 14b seat burned; probe model != seat model).
 # Staged launcher per tech#112: fire_consume.py dispatches THIS file
 # the moment the fire card says fire.
+# rc: 0 = verdict in e4-result.json | 4 = window-flip defer (NO result
+# file) | 7 = slow-window bail (NO result file; re-dispatch next one).
 import io, json, os, re, subprocess, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -13,6 +20,93 @@ MODEL = 'qwen2.5:14b'
 TIMEOUT = 1500
 MATERIAL = 'MC-20261012-REACT-v15 static card (cards.json + render output + e4-material.md)'
 prompt = '你是一名刷公众号图文/信息流的普通读者，看到下面这张静态速报卡《城市速报 015》\n（1080×1080 方图·黑底；左上角小字「[AIGC·AI 生成内容]」；顶部大标题「城市速报 015」）。\n图上写着：\n「今日热点 · 知乎热榜 2026-10-12」；\n「大二专科生自述靠切片三年赚七百万，」；\n「直播切片究竟是怎么赚钱的？这种赚钱模式能复制吗？」——这两行是知乎热榜第 2 条热点标题原文；\n「侠气轴：「交易所一响，黄金万两」」；\n「求新轴：「看看别人怎么玩，我也来凑个热闹」」；\n「烟火轴：「小本生意也要精」」——这三行是虚构硅基城市居民的三句反应；\n「主播信条：「流量像潮水，我是灯塔不是渔船。」」——这是虚构城市里一位主播的信条。\n图内底部声明行「热点转述自知乎热榜·反应与信条皆取自虚构城市档案」。\n背景：硅基城市是一家由 AI 全自主运转的公司集团（只有一个人类老板，其余成员全是 AI）。\n「城市速报」系列是集团旗下媒体公司出品的热点反应卡——把当天真实热榜话题原样转述，\n再用虚构城市居民的台词和信条做出反应，所以底部声明行写明热点是现实转述、反应是虚构档案。\n本卡的热点是：知乎热榜 2026-10-12 第 2 条（728 万热度）——一位大二专科生自述靠直播切片三年赚了七百万，\n大家都在讨论这种赚钱模式能不能复制。城市反应三句分别对应热点的三个面：\n黄金万两=听暴富神话的会心俗语；凑热闹=跟风复制之问的诚实自白；小本生意也要精=切片是手艺活的城市正身；\n主播信条收束=作为切片源头的直播内容者本人，对流量变现之问的职业答卷。\n请回答三个问题，每题一段，直说不委婉：\n1) 刷到这张卡你会停下来看吗？会保存或转发给朋友吗？打几分（0-10）？为什么？\n2) 有没有一眼假、空洞套话的地方？有的话扣几分、指出原句？\n3) 最弱的一项是什么？'
+
+RC_WINDOW_FLIP = 4
+RC_SLOW_WINDOW = 7
+UTIL_FLIP_PCT = 60          # preflight flip line (card gate is 80)
+SEAT_PROBE_CAP_S = 240      # hard cap for the tiny seat generation
+SEAT_PROBE_SLOW_S = 150     # elapsed above this = CPU-offload face
+SEAT_PROBE_PROMPT = "Reply with exactly two chars: OK"
+
+
+def _run(cmd, timeout, input_bytes=None):
+    return subprocess.run(cmd, input=input_bytes, capture_output=True,
+                          timeout=timeout)
+
+
+def _gpu_headroom():
+    """(util_pct, free_mb) or None - probe face, never raises."""
+    try:
+        p = _run(["nvidia-smi",
+                  "--query-gpu=utilization.gpu,memory.free",
+                  "--format=csv,noheader,nounits"], 15)
+        first = p.stdout.decode("utf-8", "replace").strip().splitlines()[0]
+        util_s, free_s = first.split(",")[:2]
+        return int(util_s.strip()), int(free_s.strip())
+    except Exception:
+        return None
+
+
+def preflight():
+    """Relief + seat rate probe. Returns (ok, rc, evidence lines)."""
+    ev = []
+    h = _gpu_headroom()
+    if h is None:
+        ev.append("PREFLIGHT nvidia-smi unreadable - proceeding unguarded")
+        return True, 0, ev
+    util, free = h
+    ev.append("PREFLIGHT util=%d%% free=%dMB" % (util, free))
+    if util >= UTIL_FLIP_PCT:
+        ev.append("DEFER window flipped after card (util %d%% >= %d%%)"
+                 % (util, UTIL_FLIP_PCT))
+        return False, RC_WINDOW_FLIP, ev
+    # relief: stop idle ollama residents (safe - util just read < 60;
+    # keep-warm self-heals, R2011 precedent: zero service debt)
+    try:
+        ps = _run(["ollama", "ps"], 15)
+        names = [ln.split()[0] for ln in
+                 ps.stdout.decode("utf-8", "replace").strip().splitlines()
+                 if ln.strip() and not ln.lstrip().lower().startswith("name")]
+        for name in names:
+            _run(["ollama", "stop", name], 30)
+            ev.append("RELIEF stopped idle resident %s" % name)
+    except Exception as exc:
+        ev.append("RELIEF skip (ollama ps/stop unavailable: %s)" % exc)
+    h2 = _gpu_headroom()
+    if h2:
+        ev.append("RELIEF free now %dMB" % h2[1])
+    # seat rate probe: tiny generation on the REAL seat model
+    t0 = time.time()
+    try:
+        p = _run(["ollama", "run", MODEL], SEAT_PROBE_CAP_S,
+                 input_bytes=SEAT_PROBE_PROMPT.encode("utf-8"))
+    except subprocess.TimeoutExpired:
+        ev.append("RATE-FAIL seat probe timed out (%ds cap, model %s) - "
+                  "slow window; re-dispatch next fire window"
+                  % (SEAT_PROBE_CAP_S, MODEL))
+        return False, RC_SLOW_WINDOW, ev
+    elapsed = time.time() - t0
+    if p.returncode != 0:
+        ev.append("RATE-FAIL seat probe exit %d (model %s) - server face"
+                 % (p.returncode, MODEL))
+        return False, RC_SLOW_WINDOW, ev
+    if elapsed > SEAT_PROBE_SLOW_S:
+        ev.append("RATE-FAIL seat probe %ds > %ds (model %s) - CPU-offload"
+                 " face; do not burn %ds on a slow window"
+                  % (int(elapsed), SEAT_PROBE_SLOW_S, MODEL, TIMEOUT))
+        return False, RC_SLOW_WINDOW, ev
+    ev.append("RATE-OK seat probe %ds (model %s, %ds cap) - GO"
+              % (int(elapsed), MODEL, SEAT_PROBE_CAP_S))
+    return True, 0, ev
+
+
+_ok, _rc, _ev = preflight()
+for _line in _ev:
+    print(_line, flush=True)
+if not _ok:
+    print("PREFLIGHT-BAIL rc=%d (no e4-result.json written; "
+          "re-dispatch next fire window)" % _rc, flush=True)
+    raise SystemExit(_rc)
 
 result = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'model': MODEL, 'material': MATERIAL}
 try:
