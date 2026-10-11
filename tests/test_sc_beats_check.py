@@ -131,6 +131,54 @@ class BuildReportTests(unittest.TestCase):
         self.assertTrue(any(l.startswith("leak_face=SKIP") for l in lines))
 
 
+class AsrDiffTests(unittest.TestCase):
+    """tech#108 --asr-diff face: canonical drift readout (advisory, never fails rc)."""
+
+    def test_fullwidth_punct_zero_ops_r1995_regredge(self):
+        # R1995 op-red regression lock: U+FF0C and friends must never produce
+        # phantom delete ops (ad-hoc first calc missed U+FF0C -> +4.7pp fake).
+        src = "\u4e00\u4e8c\uff0c\u4e09\u3002"
+        header, details = sbc.asr_diff_face(src, "\u4e00\u4e8c\uff0c\u4e09\u3002")
+        self.assertIn("diff_sites=0", header)
+        self.assertIn("charpos=0.0%", header)
+        self.assertEqual(details, [])
+
+    def test_substitution_counts_site_and_chars(self):
+        src = "\u57ce\u5e02\u4e0d\u4f1a\u5fd8\u8bb0"      # city will not forget
+        asr = "\u57ce\u5e02\u4e0d\u4f1a\u5fd8\u8bb0".replace("\u8bb0", "\u7eaa")  # -> ji
+        header, details = sbc.asr_diff_face(src, asr)
+        self.assertIn("src_chars=6", header)
+        self.assertIn("diff_sites=1", header)
+        self.assertIn("diff_chars=1", header)
+        self.assertIn("charpos=16.7%", header)
+        self.assertTrue(details and details[0].startswith("replace"))
+
+    def test_srt_parser_skips_numbers_and_timestamps(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = os.path.join(td, "a.srt")
+            _write(p, "1\n00:00:01,000 --> 00:00:02,000\n\u7ea2\u706f\n\n2\n00:00:02,000 --> 00:00:03,000\n\u4eae\u7740\n")
+            self.assertEqual(sbc.load_srt_text(p), "\u7ea2\u706f\u4eae\u7740")
+
+    def test_compose_spoken_src_from_beats(self):
+        src = sbc.compose_spoken_src(BEATS_OK)
+        self.assertEqual(src, ("\u7531 AI \u53c2\u4e0e\u751f\u6210\uff0c\u57fa\u4e8e\u771f\u5b9e\u4e8b\u4ef6\u3002"
+                               "\u4fe1\u6761\u53e5\u300c\u706f\u4e0d\u95ee\u6765\u8def\u300d\u5168\u5728\u3002"
+                               "\u7ed3\u5c3e\u4e3a\u5408\u7406\u63a8\u6f14\u3002"))
+
+    def test_advisory_high_drift_stays_rc0(self):
+        rc, lines = sbc.build_report(BEATS_OK, None, None, None, None, [],
+                                     asr_diff=("\u4e00\u4e8c\u4e09\u56db\u4e94", "\u5168\u662f\u5e7b\u89c9"))
+        self.assertEqual(rc, 0)
+        self.assertTrue(lines[-1].startswith("SC-CHECK GREEN"))
+        self.assertTrue(any(l.startswith("asr_diff: src_chars=5") for l in lines))
+        self.assertTrue(any("ADVISORY" in l for l in lines))
+
+    def test_face_skipped_when_absent(self):
+        rc, lines = sbc.build_report(BEATS_OK, None, None, None, None, [])
+        self.assertEqual(rc, 0)
+        self.assertTrue(any(l.startswith("asr_diff=SKIP") for l in lines))
+
+
 class CliTests(unittest.TestCase):
     def _run(self, args):
         return subprocess.run(
@@ -175,6 +223,31 @@ class CliTests(unittest.TestCase):
             b = os.path.join(td, "b.txt"); _write(b, BEATS_OK)
             c = os.path.join(td, "c.md"); _write(c, "x")
             r = self._run(["--beats", b, "--card", c])
+            self.assertEqual(r.returncode, 2)
+
+    def test_cli_asr_diff_report_and_out(self):
+        with tempfile.TemporaryDirectory() as td:
+            b = os.path.join(td, "b.txt"); _write(b, BEATS_OK)
+            srt = os.path.join(td, "asr.srt")
+            _write(srt, "1\n00:00:01,000 --> 00:00:02,000\n\u5408\u7406\u63a8\u6f14\n")
+            out = os.path.join(td, "evidence.txt")
+            r = self._run(["--beats", b, "--asr-diff", srt, "--out", out])
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            body = open(out, "rb").read().decode("utf-8")
+            self.assertIn("asr_diff: src_chars=", body)
+            self.assertIn("SC-CHECK GREEN", body)
+
+    def test_cli_src_text_only_without_asr_diff_rc2(self):
+        with tempfile.TemporaryDirectory() as td:
+            b = os.path.join(td, "b.txt"); _write(b, BEATS_OK)
+            s = os.path.join(td, "v.txt"); _write(s, "x")
+            r = self._run(["--beats", b, "--src-text", s])
+            self.assertEqual(r.returncode, 2)
+
+    def test_cli_missing_srt_rc2(self):
+        with tempfile.TemporaryDirectory() as td:
+            b = os.path.join(td, "b.txt"); _write(b, BEATS_OK)
+            r = self._run(["--beats", b, "--asr-diff", "no-such.srt"])
             self.assertEqual(r.returncode, 2)
 
     def test_cli_out_evidence_utf8_no_bom(self):
