@@ -1,0 +1,4 @@
+attempt 1/24 non-defer rc=3
+GPU-OK util=28% free=4716MB
+FAIL ollama timeout (1500s)
+FAIL ollama exit 3
