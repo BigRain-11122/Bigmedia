@@ -1,0 +1,12 @@
+em-check-r2009 (REACT-v15 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em  ladder: 40档 budget 23.00em 驱动行 24.00em EXCLUDED (over-budget)
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-12
+OK 17.00em margin +8.56  大二专科生自述靠切片三年赚七百万，
+OK 24.00em margin +1.56  直播切片究竟是怎么赚钱的？这种赚钱模式能复制吗？
+OK 16.00em margin +9.56  侠气轴：「交易所一响，黄金万两」
+OK 21.00em margin +4.56  求新轴：「看看别人怎么玩，我也来凑个热闹」
+OK 13.00em margin +12.56  烟火轴：「小本生意也要精」
+OK 22.00em margin +3.56  主播信条：「流量像潮水，我是灯塔不是渔船。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=803px subs_top=932px gap=129px OK (assert >=20)
+ALL-HORIZ: P

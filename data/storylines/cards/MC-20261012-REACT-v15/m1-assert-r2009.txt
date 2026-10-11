@@ -1,0 +1,6 @@
+ASSERT1 pool verbatim x3 (xiaqi/qiuxin/yanhuo @ market_open) OK
+ASSERT2 anchor creed verbatim (C-00022) OK
+ASSERT3 daily hot title verbatim (zhihu #2 2026-10-12) OK
+ASSERT4 hot split integrity OK
+ASSERT5 R1010 fleet exact-line probe x3 CLEAN OK
+ASSERT6 C-00022 creed REACT-closing first-use OK
