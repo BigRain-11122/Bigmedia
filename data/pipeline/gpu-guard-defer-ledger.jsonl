@@ -8,3 +8,6 @@
 {"ts": "2026-10-11 07:12:23", "event": "defer", "expert": "E4-audience", "material": "data\\storylines\\audio\\sc004-01-v1-tmp\\e4-material.md", "reason": "gpu free 286MB < 2048MB", "util_pct": 44, "free_mb": 286, "rc": 5}
 {"ts": "2026-10-11 11:25:08", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 202MB < 2048MB", "util_pct": 45, "free_mb": 202, "rc": 5}
 {"ts": "2026-10-11 11:26:38", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 202MB < 2048MB", "util_pct": 44, "free_mb": 202, "rc": 5}
+{"ts": "2026-10-11 11:28:08", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 195MB < 2048MB", "util_pct": 42, "free_mb": 195, "rc": 5}
+{"ts": "2026-10-11 11:29:38", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 190MB < 2048MB", "util_pct": 41, "free_mb": 190, "rc": 5}
+{"ts": "2026-10-11 11:31:09", "event": "defer", "expert": "E4-audience", "material": "data/storylines/audio/sc005-03-v1-tmp/e4-material.md", "reason": "gpu free 250MB < 2048MB", "util_pct": 33, "free_mb": 250, "rc": 5}

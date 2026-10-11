@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\expert_retry_loop.py", line 121, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\expert_retry_loop.py", line 114, in main
+    rc = retry_loop(
+        args.expert, args.material, args.timeout, args.interval, args.max_attempts,
+    )
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\expert_retry_loop.py", line 85, in retry_loop
+    log(out.rstrip())
+    ~~~^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\src\os\expert_retry_loop.py", line 74, in <lambda>
+    log = lambda line: print(line, flush=True)  # noqa: E731
+                       ~~~~~^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'gbk' codec can't encode character '\ufffd' in position 44: illegal multibyte sequence
