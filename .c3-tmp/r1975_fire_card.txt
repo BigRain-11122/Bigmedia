@@ -1,0 +1,6 @@
+﻿fire-window-card 2026-10-11 13:47:59: verdict=no-fire path=None
+  reasons: mv-active
+  gate: go=False free_min=430 util_max=100 band=6
+  mv: verdict=active newest_age_min=60.3
+  probe: status=error face=busy-contended evictable=0 counterfactual=None
+  readings-age: gate=90s mv=64s probe=64s (oldest=90s vs fire TTL 120s -- count reading staleness against the TTL, the verdict-ts clock starts the window)
