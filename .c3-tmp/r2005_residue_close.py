@@ -50,9 +50,8 @@ st = subprocess.run(
     cwd=str(ROOT), capture_output=True)
 reported = set()
 for tok in st.stdout.decode("utf-8", "replace").split("\0"):
-    tok = tok.strip()
-    if tok:
-        reported.add(tok[3:] if tok[1] == " " else tok[2:])
+    if len(tok) >= 4 and tok[2] == " ":
+        reported.add(tok[3:])
 untracked = []
 for p in residue:
     rel = str(Path(p).relative_to(ROOT)).replace("\\", "/")

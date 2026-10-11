@@ -1,0 +1,144 @@
+{
+  "meta": {
+    "topic": "v3-emotive",
+    "variant": "shipinhao 60s card cut (9:16)",
+    "tool": "src/render/emotive_tts.py",
+    "voice": "zh-CN-YunyangNeural",
+    "beats": "data\\storylines\\audio\\SC-005-05-v1.beats.txt",
+    "order": "O-20260923-1918-bm-a (emotive voice + beat-aligned cuts)",
+    "cyber": {
+      "level": "light",
+      "chain": "highpass=f=110,lowpass=f=7800,vibrato=f=30:d=0.10,acrusher=bits=10:mode=log:aa=0.15:mix=0.50,alimiter=limit=0.95"
+    },
+    "human": {
+      "seed": 42,
+      "gap_base_s": 0.3,
+      "gap_spread_s": 0.18,
+      "breath_after_s": 4.2,
+      "breath_prob": 0.5,
+      "roomtone_amp": 0.006
+    }
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "bg": "black"
+  },
+  "font": {
+    "file": "C:/Windows/Fonts/msyh.ttc",
+    "cards_size": 60,
+    "subs_size": 44,
+    "aigc_size": 30,
+    "subs_bottom": 300,
+    "line_spacing": 14
+  },
+  "aigc_notice": "[AIGC·AI 生成内容]",
+  "tail": 0.8,
+  "cards": [
+    {
+      "start": 0.0,
+      "end": 31.64,
+      "lines": [
+        "城市口述史",
+        "选段五 · 风控官陈雅雯"
+      ]
+    },
+    {
+      "start": 31.64,
+      "end": 41.12,
+      "lines": [
+        "信条",
+        "红灯是为所有人亮的"
+      ]
+    },
+    {
+      "start": 41.12,
+      "end": 56.36,
+      "lines": [
+        "语言",
+        "过、不过、理由三条"
+      ]
+    },
+    {
+      "start": 56.36,
+      "end": 66.32,
+      "lines": [
+        "双栖",
+        "两份踏实"
+      ]
+    },
+    {
+      "start": 66.32,
+      "end": 78.53,
+      "lines": [
+        "性格",
+        "把关、稳、防微杜渐"
+      ]
+    },
+    {
+      "start": 78.53,
+      "end": 94.81,
+      "lines": [
+        "规矩面前无师徒",
+        "拦下师父的一单"
+      ]
+    },
+    {
+      "start": 94.81,
+      "end": 107.88,
+      "lines": [
+        "奖赏",
+        "没发生的事"
+      ]
+    },
+    {
+      "start": 107.88,
+      "end": 122.9,
+      "lines": [
+        "服装",
+        "断电也不影响我上班"
+      ]
+    },
+    {
+      "start": 122.9,
+      "end": 134.16,
+      "lines": [
+        "行为",
+        "第一个到岗的人"
+      ]
+    },
+    {
+      "start": 134.16,
+      "end": 143.89,
+      "lines": [
+        "一句话理由",
+        "像上了堂课"
+      ]
+    },
+    {
+      "start": 143.89,
+      "end": 161.85,
+      "lines": [
+        "关系",
+        "光桥上的「爸爸们」"
+      ]
+    },
+    {
+      "start": 161.85,
+      "end": 186.14,
+      "lines": [
+        "现状",
+        "先学会说不过"
+      ]
+    },
+    {
+      "start": 186.14,
+      "end": 213.77,
+      "lines": [
+        "尾声明",
+        "红灯还闪烁"
+      ]
+    }
+  ]
+}
