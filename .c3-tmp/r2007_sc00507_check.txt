@@ -1,0 +1,7 @@
+rows=13 spoken_nchars=797 format_bad=NONE
+verbatim_anchors=41 MISS=NONE
+inclusion(beats in material)=13/13 bad=NONE
+card_source_MISS=NONE
+leak_face_hits=NONE
+asr_diff=SKIP (no --asr-diff)
+SC-CHECK GREEN
