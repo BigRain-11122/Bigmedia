@@ -1,0 +1,12 @@
+em-check-r1967 (REACT-v14 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em  H1=6.15em  ladder: 40档 budget 23.00em 驱动行 25.55em EXCLUDED (over-budget)
+OK 15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-11
+OK 23.65em margin +1.91  日媒曝黑客黑掉软银旗下云平台后留下225封勒索信，
+OK 25.55em margin +0.01  结果运维找7小时没发现勒索信只是一味重启，如何看待？
+OK 17.00em margin +8.56  秩序轴：「灯火通明，咱也得紧绷着」
+OK 20.00em margin +5.56  侠气轴：「值夜岗上风凉快，但别忘了巡逻」
+OK 17.00em margin +8.56  求新轴：「值夜巡逻时，心中满是安」
+OK 23.00em margin +2.56  感知塔站值守员信条：「台风天的日志最见人品。」
+subs 23.55em < 24.21em budget OK
+VERT: est bottom=803px subs_top=932px gap=129px OK (assert >=20)
+ALL-HORIZ: P
