@@ -21,7 +21,10 @@ prompt / material data files.
 Exit codes: 0 ok; 2 bad args / unknown expert / missing files;
             3 ollama call failed; 4 ledger append failed (verdict kept);
             5 GPU guard defer (only with --gpu-guard; advisory, see
-              read_gpu_headroom / defer_decision).
+              read_gpu_headroom / defer_decision);
+            6 wedge probe fast-fail (only with --wedge-probe; the
+              ollama generation face is wedged/contended - bail BEFORE
+              the long flight burns, see WEDGE_PROBE_* below).
 
 GPU pre-flight guard (tech#44): two E4 reference flights burned 2x1500s
 to TIMEOUT during a jman-LoRA training window with zero verdicts (R1847).
@@ -67,6 +70,15 @@ DEFAULT_TIMEOUT = 300
 # free VRAM is too tight for a local LLM seat.
 GPU_DEFER_UTIL_PCT = 80
 GPU_DEFER_FREE_MB = 2048
+# tech#120 wedge fast-fail probe: two 1500s S1 flights burned through
+# wedged/contended ollama windows with zero verdicts (R2012 flight-1 /
+# R2013 flight-2 anchor). A tiny generation on a small model either
+# returns in seconds (healthy seat) or burns the cap (wedged seat) ->
+# bail with rc 6 BEFORE the main long flight. The probe itself never
+# lands in expert-calls (verdict/ledger writes only happen on the
+# main call path).
+WEDGE_PROBE_MODEL = "qwen2.5:7b-instruct"
+WEDGE_PROBE_CAP = 90
 # ollama streams ANSI line-erase codes on slow generations (cold-load
 # case); without stripping they land verbatim in verdict archives
 # (2026-09-24 BS-003 S1 case). Braille spinner glyphs (U+2800 block)
@@ -230,7 +242,7 @@ def save_verdict(out_dir, file_name, expert_id, role, dept, model,
 
 def main(argv):
     expert_id = material = timeout_raw = None
-    gpu_guard = gpu_force = False
+    gpu_guard = gpu_force = wedge_probe = False
     i = 1
     while i < len(argv):
         if argv[i] == "--expert":
@@ -247,12 +259,14 @@ def main(argv):
             timeout_raw = argv[i]
         elif argv[i] == "--gpu-guard":
             gpu_guard = True
+        elif argv[i] == "--wedge-probe":
+            wedge_probe = True
         elif argv[i] == "--gpu-force":
             gpu_force = True
         i += 1
     if not (expert_id and material):
         print("usage: call_expert.py --expert ID --material FILE "
-              "[--timeout S] [--gpu-guard] [--gpu-force]")
+              "[--timeout S] [--gpu-guard] [--wedge-probe] [--gpu-force]")
         return 2
     timeout_s = DEFAULT_TIMEOUT
     if timeout_raw is not None:
@@ -309,6 +323,29 @@ def main(argv):
         else:
             print("GPU-OK util=%d%% free=%dMB"
                   % (reading["util_pct"], reading["free_mb"]))
+    if wedge_probe:
+        # tech#120 fast-fail: micro generation on a small model under a
+        # hard cap. Wedged/contended ollama burns the cap -> rc 6
+        # BEFORE the main (possibly 1500s) flight. Guard runs first
+        # (cheaper probe); probe failure is a hard bail, not advisory -
+        # a wedged window produced two zero-verdict 1500s burns
+        # (R2012/R2013) and a third would be the same loss.
+        try:
+            wcode, _ = call_model(WEDGE_PROBE_MODEL,
+                                  "Reply with the single word OK",
+                                  timeout=WEDGE_PROBE_CAP)
+        except subprocess.TimeoutExpired:
+            print("WEDGE-FAIL ollama micro-probe timed out (%ds cap,"
+                  " model %s) - wedged/contended window; re-dispatch"
+                  " in a healthy window"
+                  % (WEDGE_PROBE_CAP, WEDGE_PROBE_MODEL))
+            return 6
+        if wcode != 0:
+            print("WEDGE-FAIL ollama micro-probe exit %d - server"
+                  " unhealthy; re-dispatch in a healthy window" % wcode)
+            return 6
+        print("WEDGE-OK micro-probe alive (model %s, %ds cap)"
+              % (WEDGE_PROBE_MODEL, WEDGE_PROBE_CAP))
     prompt = build_prompt(prompt_path.read_text(encoding="utf-8"),
                           material_path.read_text(encoding="utf-8"))
     try:

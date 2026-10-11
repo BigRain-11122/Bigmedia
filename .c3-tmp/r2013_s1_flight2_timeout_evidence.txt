@@ -1,0 +1,40 @@
+R2013 SC-005-07 S1 flight-2 timeout evidence (R2012 flight-1 same-signature second case)
+
+s1-run.out (02:36:19, 80 bytes, verbatim):
+----------------------------------------
+GPU-OK util=38% free=4732MB
+FAIL ollama timeout (1500s)
+FAIL ollama exit 3
+----------------------------------------
+
+Timeline (all timestamps local 2026-10-12):
+- 02:11:19  fire_consume dispatches flight-2 (launcher pid 79084 = call_expert child)
+- 02:11:19  GPU guard at dispatch: util=38% free=4732MB -> window declared viable
+- 02:11:21  llama-server pid 69036 loads 14b (ollama model load for the call)
+- 02:30:2x  mid-flight reality check: nvidia-smi 11830MiB/12282MiB, util 98%
+            compute apps: ComfyUI python pid 58200 (MV sprint session, started
+            10-10 22:55, cumulative CPU 3478s = actively rendering) at full tilt
+- 02:36:19  call_expert hits full 1500s timeout, exit 3, ZERO verdict written
+            (no expert-verdicts file, no expert-calls line)
+- 02:38:37  new llama-server pid 23004 = keep-warm self-heal reload (post-mortem
+            artifact, not a window fact)
+
+Diagnosis: window flipped MID-FLIGHT. 14b (9-10GB) + Krea2 fp8 (12.5GB) cannot
+co-reside on the 12GB card; with MV sprint ComfyUI rendering at 98% util the
+ollama generation stalls (VRAM thrash, zero effective progress) -> both flights
+(01:38 flight-1 / 02:11 flight-2) burned the full 1500s producing nothing.
+Same family as R1995 first-window loss; a 1500s-long call is structurally
+fragile against window flips.
+
+Decision (per R2012 pre-declared law): flight-3 is NOT re-dispatched in-place
+(current window decisively no-fire: GPU 98% saturated by MV sprint = CEO
+priority line, tech#75 yield discipline). Re-dispatch is queued on the
+tech#112 fire_consume channel: launcher + material + e4/asr pre-stages all in
+place, next true fire window = single-command dispatch. tech#120 (ollama
+slow-state observation probe, R2012 seed) now has a second hard anchor:
+flight-1+flight-2 = 1500s full-timeout family, squeezer = MV sprint ComfyUI
+(not slow-state alone).
+
+Poll/verify method: this round polled verdict landing 02:30-02:40 (13+12
+samples), confirmed no verdict file, no expert-calls line, call_expert process
+gone at 02:40, s1-run.out = timeout message verbatim above.

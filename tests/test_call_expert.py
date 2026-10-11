@@ -9,6 +9,8 @@ Run:
     python tests/test_call_expert.py
 """
 import json
+import re
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -282,6 +284,140 @@ class TestGpuGuardCli(unittest.TestCase):
             {"util_pct": 87, "free_mb": 1400}, (True, "busy"))
         self.assertEqual(0, rc)
         self.assertEqual([], self.defer_rows)
+
+
+class TestWedgeProbeCli(unittest.TestCase):
+    """tech#120 wiring face: --wedge-probe micro-bails BEFORE the main
+    flight when the ollama generation face is wedged; probe itself
+    never lands in expert-calls; flag off = existing surface unchanged.
+    Everything injected - no ollama, no real registry/ledger writes."""
+
+    def _run_main(self, argv, probe_behavior):
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            (repo / "prompts").mkdir()
+            (repo / "prompts" / "p.txt").write_text("prompt", encoding="utf-8")
+            mat = repo / "material.md"
+            mat.write_text("material body", encoding="utf-8")
+            calls = []
+
+            def fake_call_model(model, prompt, timeout=ce.DEFAULT_TIMEOUT):
+                calls.append((model, timeout))
+                if model == ce.WEDGE_PROBE_MODEL:
+                    return probe_behavior()
+                return 0, "verdict line"
+
+            patches = [
+                mock.patch.object(ce, "REPO", repo),
+                mock.patch.object(
+                    ce, "load_registry",
+                    lambda path=None: ("m", {"hot-intel": {
+                        "id": "hot-intel", "dept": "d", "role": "r",
+                        "prompt_file": "prompts/p.txt", "model": "m"}})),
+                mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
+                mock.patch.object(ce, "DEFER_LEDGER",
+                                  repo / "defer-ledger.jsonl"),
+                mock.patch.object(ce, "call_model", fake_call_model),
+            ]
+            import io
+            import contextlib
+            buf = io.StringIO()
+            with patches[0], patches[1], patches[2], patches[3], \
+                    patches[4], patches[5]:
+                with contextlib.redirect_stdout(buf):
+                    rc = ce.main(["call_expert.py", "--expert", "hot-intel",
+                                  "--material", str(mat)] + argv)
+            ledger_rows = 0
+            lg = repo / "ledger.md"
+            if lg.exists():
+                for ln in lg.read_text(encoding="utf-8").splitlines():
+                    if re.match(r"^\| \d{4}-\d{2}-\d{2} ", ln):
+                        ledger_rows += 1
+            return rc, calls, buf.getvalue(), ledger_rows
+
+    def test_wedge_timeout_bails_fast(self):
+        # R2012/R2013 anchor: a wedged ollama burns the whole cap with
+        # zero verdicts; the probe converts that into a <=90s bail.
+        def timeout_probe():
+            raise subprocess.TimeoutExpired(
+                cmd="ollama", timeout=ce.WEDGE_PROBE_CAP)
+        rc, calls, out, rows = self._run_main(
+            ["--wedge-probe"], timeout_probe)
+        self.assertEqual(6, rc)
+        self.assertEqual([(ce.WEDGE_PROBE_MODEL, ce.WEDGE_PROBE_CAP)],
+                         calls)  # zero main flights burned
+        self.assertIn("WEDGE-FAIL", out)
+        # audit purity: probe never lands in expert-calls
+        self.assertEqual(0, rows)
+
+    def test_wedge_probe_nonzero_rc_bails(self):
+        rc, calls, out, rows = self._run_main(
+            ["--wedge-probe"], lambda: (1, "boom"))
+        self.assertEqual(6, rc)
+        self.assertEqual([(ce.WEDGE_PROBE_MODEL, ce.WEDGE_PROBE_CAP)],
+                         calls)
+        self.assertIn("WEDGE-FAIL", out)
+        self.assertEqual(0, rows)
+
+    def test_wedge_probe_ok_then_main_flight(self):
+        rc, calls, out, rows = self._run_main(
+            ["--wedge-probe"], lambda: (0, "OK"))
+        self.assertEqual(0, rc)
+        self.assertEqual([(ce.WEDGE_PROBE_MODEL, ce.WEDGE_PROBE_CAP),
+                          ("m", ce.DEFAULT_TIMEOUT)], calls)
+        self.assertIn("WEDGE-OK", out)
+        self.assertEqual(1, rows)  # main call landed, probe did not
+
+    def test_flag_off_zero_probe_flights(self):
+        rc, calls, out, rows = self._run_main([], lambda: (0, "OK"))
+        self.assertEqual(0, rc)
+        self.assertEqual([("m", ce.DEFAULT_TIMEOUT)], calls)
+        self.assertNotIn("WEDGE-", out)
+
+    def test_wedge_probe_respects_custom_main_timeout(self):
+        # staged launchers fly --timeout 1500; the probe cap must stay
+        # at WEDGE_PROBE_CAP (90s), not inherit the main cap.
+        import tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            (repo / "prompts").mkdir()
+            (repo / "prompts" / "p.txt").write_text("p", encoding="utf-8")
+            mat = repo / "m.md"
+            mat.write_text("body", encoding="utf-8")
+            seen = []
+
+            def fake(model, prompt, timeout=ce.DEFAULT_TIMEOUT):
+                seen.append((model, timeout))
+                return 0, "OK"
+
+            patches = [
+                mock.patch.object(ce, "REPO", repo),
+                mock.patch.object(
+                    ce, "load_registry",
+                    lambda path=None: ("m", {"hot-intel": {
+                        "id": "hot-intel", "dept": "d", "role": "r",
+                        "prompt_file": "prompts/p.txt", "model": "m"}})),
+                mock.patch.object(ce, "LEDGER", repo / "l.md"),
+                mock.patch.object(ce, "VERDICT_DIR", repo / "v"),
+                mock.patch.object(ce, "DEFER_LEDGER", repo / "d.jsonl"),
+                mock.patch.object(ce, "call_model", fake),
+            ]
+            import io
+            import contextlib
+            buf = io.StringIO()
+            with patches[0], patches[1], patches[2], patches[3], \
+                    patches[4], patches[5]:
+                with contextlib.redirect_stdout(buf):
+                    rc = ce.main(["call_expert.py", "--expert", "hot-intel",
+                                  "--material", str(mat), "--timeout", "1500",
+                                  "--wedge-probe"])
+            self.assertEqual(0, rc)
+            self.assertEqual([(ce.WEDGE_PROBE_MODEL, ce.WEDGE_PROBE_CAP),
+                              ("m", 1500)], seen)
 
 
 class TestDeferLedger(unittest.TestCase):

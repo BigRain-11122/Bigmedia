@@ -9,7 +9,11 @@ Flight: S1-script v1.5 gate on the SC-005-07 s1-material (C-00012
 沈佩兰 season-2 opener, R2007 preload, F-180 pre-registered).
 --gpu-guard defers cheaply if the window flips after dispatch (R1986
 verdict-void law: an in-flight call that hit a flipped window is
-discarded and re-dispatched, never trusted). Verdict auto-archives to
+discarded and re-dispatched, never trusted). --wedge-probe (tech#120,
+R2012/R2013 anchor: two 1500s flights burned zero-verdict in wedged
+ollama windows) micro-probes the generation face first: a wedged
+server bails in <=90s with rc 6 instead of burning the full cap.
+Verdict auto-archives to
 docs/reviews/expert-verdicts/<ts>-S1-script.md + expert-calls.md line
 (call_expert single-writer).
 """
@@ -33,7 +37,7 @@ with OUT.open("wb") as fo, ERR.open("wb") as fe:
         [sys.executable, "src/call_expert.py",
          "--expert", "S1-script",
          "--material", MATERIAL,
-         "--timeout", TIMEOUT_S, "--gpu-guard"],
+         "--timeout", TIMEOUT_S, "--gpu-guard", "--wedge-probe"],
         cwd=str(REPO), stdout=fo, stderr=fe,
         creationflags=DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP)
 print("SC-005-07 S1 flight dispatched pid=%d" % proc.pid)
