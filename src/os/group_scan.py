@@ -17,6 +17,16 @@ Faces:
             are never reported as new)
   LEDGER     transfer-marker line anchors (@BigStream family + the
             @七线全司/@全司/@六司/@八线全量 patrol markers)
+  ORDERS     HQ orders.md row watermark (tech#103): |-row count + last-row
+            first-cell fingerprint vs state.json orders_row_watermark
+            {rows, tail_key}; any deviation breaks silence (rc 1); a
+            MISSING watermark is first-run rc 1 with a watermark-missing
+            note (consume-then-store once). Root fix: R1975-R1977 rounds
+            judged the orders face quiet by mtime-anchor MEMORY comparison
+            while three new CEO rows had not yet landed in the local tree
+            -- the orders face had no content-addressing judgment at all
+            (structural second-class citizen vs the decisions dnum
+            watermark).
   MTIME      HQ orders/decisions/ledger anchors + own orders newest file
 
 Usage:
@@ -108,6 +118,59 @@ def load_watermark(state_path):
     return list(data.get("decisions_watermark", {}).get("dnums", []))
 
 
+def load_orders_watermark(state_path):
+    """{rows, tail_key} from state.json; missing/bad shape -> None.
+
+    None is the loud side: face_orders then reports watermark-missing and
+    breaks silence (first-run consume-then-store semantics, tech#103).
+    """
+    with io.open(str(state_path), encoding="utf-8") as fh:
+        data = json.load(fh)
+    wm = data.get("orders_row_watermark")
+    if not isinstance(wm, dict) or "rows" not in wm or "tail_key" not in wm:
+        return None
+    return {"rows": wm.get("rows"), "tail_key": wm.get("tail_key")}
+
+
+def _orders_first_cell(line):
+    """First cell of a |-row (caller guarantees the leading '|')."""
+    rest = line.strip()[1:]
+    nxt = rest.find("|")
+    cell = rest if nxt < 0 else rest[:nxt]
+    return cell.strip()
+
+
+def orders_row_stats(text):
+    """(rows, tail_key) over the |-row family (tech#103 fingerprint).
+
+    rows counts every line whose first non-space char is '|'; tail_key is
+    the first cell of the LAST such row. Appends bump rows and (almost
+    always) move tail_key; removals bump rows down; last-row edits move
+    tail_key. Any deviation from the stored watermark breaks silence
+    (fail-closed direction, tech#50 philosophy).
+    """
+    rows = 0
+    tail_key = ""
+    for line in text.splitlines():
+        if line.lstrip().startswith("|"):
+            rows += 1
+            tail_key = _orders_first_cell(line)
+    return rows, tail_key
+
+
+def current_orders_watermark(hq_orders_path=None):
+    """Turnkey {rows, tail_key} for the close step (consumption anchor).
+
+    The close script calls this and passes the result to
+    close_commit.finalize_state(orders_watermark=...) so the baseline
+    update flows through the single state writer (tech#76 law).
+    """
+    path = Path(hq_orders_path) if hq_orders_path else DEFAULTS["hq_orders"]
+    text, _, _ = read_text(path)
+    rows, tail_key = orders_row_stats(text)
+    return {"rows": rows, "tail_key": tail_key}
+
+
 def scan_ledger(text):
     """{marker: (lines, occurrences)} plus last @BigStream line preview."""
     stats = {}
@@ -184,6 +247,44 @@ def face_decisions(paths):
     if wm_only:
         lines.append("wm_only: " + ", ".join(wm_only))
     return (RC_NEW if truly_new else RC_QUIET), "\n".join(lines)
+
+
+def face_orders(paths):
+    """Face: ORDERS row watermark (tech#103, decisions_watermark sibling).
+
+    rc 0 quiet (watermark matches) / 1 new-or-missing (breaks silence) /
+    3 read error. A missing watermark is first-run rc 1 with the
+    watermark-missing note so the body must consume-then-store once --
+    never read quiet on a missing baseline (false-quiet direction lock).
+    """
+    try:
+        text, mtime, size = read_text(paths["hq_orders"])
+    except OSError as exc:
+        return RC_READ_FAIL, "read-fail: hq-orders %r" % (exc,)
+    try:
+        stored = load_orders_watermark(paths["state"])
+    except (OSError, ValueError) as exc:
+        return RC_READ_FAIL, "read-fail: state %r" % (exc,)
+
+    rows, tail_key = orders_row_stats(text)
+    cur = {"rows": rows, "tail_key": tail_key}
+    lines = [
+        "file: %s | mtime %s | %d B" % (paths["hq_orders"], mtime, size),
+        "current: rows=%d tail_key=%r" % (rows, tail_key),
+    ]
+    if stored is None:
+        lines.append("stored: watermark-missing (first-run: consume then "
+                     "store {rows, tail_key})")
+        lines.append("ORDERS-NEW: watermark-missing")
+        return RC_NEW, "\n".join(lines)
+    lines.append("stored: rows=%r tail_key=%r" % (stored["rows"],
+                                                  stored["tail_key"]))
+    if stored == cur:
+        lines.append("ORDERS: quiet (watermark matches)")
+        return RC_QUIET, "\n".join(lines)
+    lines.append("ORDERS-NEW: rows %r->%r | tail_key %r->%r"
+                 % (stored["rows"], rows, stored["tail_key"], tail_key))
+    return RC_NEW, "\n".join(lines)
 
 
 def face_ledger(paths):
@@ -300,6 +401,7 @@ def main(argv):
     faces = [
         ("DECISIONS", *face_decisions(paths)),
         ("LEDGER", *face_ledger(paths)),
+        ("ORDERS", *face_orders(paths)),
         ("MTIME", *face_mtime(paths)),
     ]
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

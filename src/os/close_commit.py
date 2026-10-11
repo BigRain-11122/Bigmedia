@@ -191,7 +191,8 @@ def derive_task(log_line):
 
 
 def finalize_state(log_line, ts=None, focus=None, tick=None,
-                   watermark_add=None, state_path=None, now=None):
+                   watermark_add=None, orders_watermark=None, state_path=None,
+                   now=None):
     """Single-writer state.json accounting step (tech#76, R1920 anchor).
 
     R1920 root cause: that round's log line lived in an external template
@@ -212,7 +213,8 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     load state -> tick guard (explicit tick must equal on-disk tick+1;
     default = auto-increment) -> append log line -> stamp ts/task ->
     optional focus overwrite -> optional decisions_watermark.dnums append
-    (dedup, order-preserving) -> atomic write (temp + os.replace,
+    (dedup, order-preserving) -> optional orders_row_watermark overwrite
+    (tech#103 consumption anchor) -> atomic write (temp + os.replace,
     indent=1, UTF-8, no BOM - the on-disk house format).
 
     Args:
@@ -224,10 +226,15 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             must equal tick-1); None = auto-increment from on-disk tick.
         watermark_add: optional iterable of decision/council ids appended
             to decisions_watermark.dnums (dedup, order-preserving).
+        orders_watermark: optional {"rows": int >= 1, "tail_key": non-empty
+            str} stored verbatim at state.json orders_row_watermark after
+            the body consumes the new HQ orders rows (tech#103; compute
+            turnkey via group_scan.current_orders_watermark()).
         state_path: default = state.json next to this module.
         now: injectable clock (needs strftime) for tests.
 
-    Returns: summary dict {tick, ts, task, wm_added, log_len}.
+    Returns: summary dict {tick, ts, task, wm_added, orders_wm_rows,
+    log_len} (orders_wm_rows None when no orders watermark was given).
     Raises: ValueError on any usage error - loud, zero partial writes
     (validation happens before the first disk mutation; the atomic
     replace makes the write itself all-or-nothing).
@@ -280,12 +287,27 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
                 dnums.append(d)
                 wm_added += 1
 
+    orders_wm_stored = None
+    if orders_watermark is not None:
+        if (not isinstance(orders_watermark, dict)
+                or not isinstance(orders_watermark.get("rows"), int)
+                or orders_watermark["rows"] < 1
+                or not isinstance(orders_watermark.get("tail_key"), str)
+                or not orders_watermark["tail_key"].strip()):
+            raise ValueError(
+                "orders_watermark must be {'rows': int >= 1, "
+                "'tail_key': non-empty str} (got %r)" % (orders_watermark,))
+        orders_wm_stored = {"rows": orders_watermark["rows"],
+                            "tail_key": orders_watermark["tail_key"]}
+
     data["tick"] = new_tick
     data["log"].append(log_line)
     data["ts"] = ts
     data["task"] = task
     if focus is not None:
         data["focus"] = focus
+    if orders_wm_stored is not None:
+        data["orders_row_watermark"] = orders_wm_stored
 
     payload = json.dumps(data, ensure_ascii=False, indent=1)
     tmp = state_path + ".tmp_final"
@@ -294,10 +316,14 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     os.replace(tmp, state_path)
     # ASCII-only evidence line (encoding law; task/ts contain CJK digits text)
     print("STATE-FINALIZED tick=%s ts=%s task_len=%d focus_set=%s "
-          "wm_added=%d log_len=%d" % (
-              new_tick, ts, len(task), focus is not None, wm_added, len(log_line)))
+          "wm_added=%d orders_wm_rows=%s log_len=%d" % (
+              new_tick, ts, len(task), focus is not None, wm_added,
+              orders_wm_stored["rows"] if orders_wm_stored else "-",
+              len(log_line)))
     return {"tick": new_tick, "ts": ts, "task": task,
-            "wm_added": wm_added, "log_len": len(log_line)}
+            "wm_added": wm_added, "log_len": len(log_line),
+            "orders_wm_rows": (orders_wm_stored["rows"]
+                               if orders_wm_stored else None)}
 
 
 def autodetect_close_script(root, state_path=None):

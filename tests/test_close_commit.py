@@ -606,6 +606,43 @@ class TestFinalizeState(unittest.TestCase):
             cc.finalize_state(self.LINE, state_path=fx.path)
         self.assertEqual(mid, fx.raw_bytes())  # writer touched nothing
 
+    def test_orders_watermark_stored(self):
+        # tech#103: consumption anchor flows through the single writer.
+        fx = self._fx()
+        summary = cc.finalize_state(
+            self.LINE, state_path=fx.path,
+            orders_watermark={"rows": 1412, "tail_key": "10-11 13:4x"})
+        self.assertEqual(1412, summary["orders_wm_rows"])
+        self.assertEqual({"rows": 1412, "tail_key": "10-11 13:4x"},
+                         fx.read()["orders_row_watermark"])
+        # unrelated fields preserved by the round-trip
+        self.assertEqual(28, fx.read()["decisions_watermark"]["board_rows"])
+
+    def test_orders_watermark_bad_shape_rejected_before_write(self):
+        fx = self._fx()
+        before = fx.raw_bytes()
+        bad_shapes = (
+            {"rows": 0, "tail_key": "x"},      # rows must be >= 1
+            {"rows": -3, "tail_key": "x"},    # negative
+            {"rows": "12", "tail_key": "x"},  # rows not an int
+            {"rows": 12, "tail_key": "  "},   # empty/blank tail_key
+            {"rows": 12, "tail_key": 5},      # tail_key not a str
+            {"rows": 12},                     # missing tail_key
+            [12, "x"],                        # not a dict
+            "1412",                           # scalar
+        )
+        for bad in bad_shapes:
+            with self.assertRaises(ValueError):
+                cc.finalize_state(self.LINE, state_path=fx.path,
+                                  orders_watermark=bad)
+        self.assertEqual(before, fx.raw_bytes())  # zero partial writes
+
+    def test_orders_watermark_none_leaves_field_untouched(self):
+        fx = self._fx()
+        summary = cc.finalize_state(self.LINE, state_path=fx.path)
+        self.assertIsNone(summary["orders_wm_rows"])
+        self.assertNotIn("orders_row_watermark", fx.read())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -157,6 +157,88 @@ def _write(path, content):
         fh.write(content)
 
 
+class OrdersRowStatsTests(unittest.TestCase):
+    """tech#103 pure core: |-row count + last-row first-cell fingerprint."""
+
+    def test_counts_pipe_rows_only(self):
+        text = ("intro line\n"
+                "| 10-09 09:0x | a |\n"
+                "| --- | --- |\n"
+                "  | 10-09 11:0x | indented |\n"
+                "plain\n")
+        rows, tail = gs.orders_row_stats(text)
+        self.assertEqual(3, rows)
+        self.assertEqual("10-09 11:0x", tail)
+
+    def test_single_pipe_row_last_wins(self):
+        rows, tail = gs.orders_row_stats("| only-cell\n")
+        self.assertEqual((1, "only-cell"), (rows, tail))
+
+    def test_empty_text(self):
+        self.assertEqual((0, ""), gs.orders_row_stats(""))
+
+
+class OrdersFaceTests(unittest.TestCase):
+    """tech#103 face: the four spec cases (R1978 blind-window root-fix).
+
+    R1975-R1977 judged the orders face quiet by mtime-anchor MEMORY
+    comparison while three new CEO rows had not yet landed locally; the
+    face now carries its own content-addressing watermark judgment.
+    """
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        root = self.tmp.name
+        self.paths = {"hq_orders": os.path.join(root, "orders.md"),
+                      "state": os.path.join(root, "state.json")}
+
+    def _write_orders(self, text):
+        _write(self.paths["hq_orders"], text)
+
+    def _write_state_wm(self, rows, tail_key):
+        _write(self.paths["state"], json.dumps(
+            {"orders_row_watermark": {"rows": rows, "tail_key": tail_key}}))
+
+    def test_new_row_breaks_silence(self):
+        self._write_orders("| 10-11 13:2x | first |\n| 10-11 13:4x | second |\n")
+        self._write_state_wm(1, "10-11 13:2x")
+        rc, text = gs.face_orders(self.paths)
+        self.assertEqual(gs.RC_NEW, rc)
+        self.assertIn("ORDERS-NEW: rows 1->2", text)
+        self.assertIn("tail_key '10-11 13:2x'->'10-11 13:4x'", text)
+
+    def test_watermark_match_is_quiet(self):
+        self._write_orders("| 10-11 13:4x | tail |\n")
+        self._write_state_wm(1, "10-11 13:4x")
+        rc, text = gs.face_orders(self.paths)
+        self.assertEqual(gs.RC_QUIET, rc)
+        self.assertIn("ORDERS: quiet (watermark matches)", text)
+
+    def test_missing_watermark_first_run_is_new_not_quiet(self):
+        # first-run semantics: no stored baseline must never read quiet
+        self._write_orders("| 10-11 13:4x | tail |\n")
+        _write(self.paths["state"], json.dumps({}))
+        rc, text = gs.face_orders(self.paths)
+        self.assertEqual(gs.RC_NEW, rc)
+        self.assertIn("watermark-missing", text)
+        self.assertIn("ORDERS-NEW: watermark-missing", text)
+
+    def test_read_fail_hq_orders(self):
+        _write(self.paths["state"], json.dumps({}))
+        rc, text = gs.face_orders(self.paths)  # orders.md absent
+        self.assertEqual(gs.RC_READ_FAIL, rc)
+        self.assertIn("read-fail: hq-orders", text)
+
+    def test_shrink_also_breaks_silence(self):
+        # removal/re-layout direction is a deviation too (fail-closed)
+        self._write_orders("| 10-09 09:0x | only row |\n")
+        self._write_state_wm(2, "10-09 10:0x")
+        rc, text = gs.face_orders(self.paths)
+        self.assertEqual(gs.RC_NEW, rc)
+        self.assertIn("ORDERS-NEW: rows 2->1", text)
+
+
 class MainFixtureTests(unittest.TestCase):
     """Hermetic CLI integration over a fixture group tree."""
 
@@ -175,11 +257,14 @@ class MainFixtureTests(unittest.TestCase):
                "- D-20260930-19 known row\nrefer C-20260909-05 inline\n")
         _write(self.paths["ledger"],
                "@BigStream old line\n@BigStream old line again\n")
-        _write(self.paths["hq_orders"], "hq order file\n\n")
+        _write(self.paths["hq_orders"],
+               "| 10-09 09:0x | seed row |\n| 10-09 10:0x | seed tail |\n")
         _write(os.path.join(self.paths["own_orders_dir"], "O-1.md"), "one\n")
         _write(self.paths["state"], json.dumps(
             {"decisions_watermark": {"dnums": ["D-20260930-19",
-                                               "C-20260909-05"]}}))
+                                               "C-20260909-05"]},
+             "orders_row_watermark": {"rows": 2,
+                                      "tail_key": "10-09 10:0x"}}))
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -211,6 +296,17 @@ class MainFixtureTests(unittest.TestCase):
         self.assertEqual(rc, gs.RC_NEW)
         self.assertIn("TRULY_NEW: D-20261010-01 [row]", out)
 
+    def test_orders_new_row_breaks_silence_overall(self):
+        # tech#103 CLI wiring: a new orders table row must break the whole
+        # probe's silence even when the decisions face stays quiet.
+        with io.open(self.paths["hq_orders"], "a", encoding="utf-8") as fh:
+            fh.write("| 10-11 13:4x | fresh |\n")
+        rc, out = self._run()
+        self.assertEqual(gs.RC_NEW, rc)
+        self.assertIn("truly_new=0", out)          # decisions face quiet
+        self.assertIn("ORDERS-NEW: rows 2->3", out)
+        self.assertIn("tail_key '10-09 10:0x'->'10-11 13:4x'", out)
+
     def test_new_inline_annotated(self):
         with io.open(self.paths["decisions"], "a", encoding="utf-8") as fh:
             fh.write("see D-20261010-02 cited inside prose\n")
@@ -223,7 +319,9 @@ class MainFixtureTests(unittest.TestCase):
         _write(self.paths["state"], json.dumps(
             {"decisions_watermark": {"dnums": ["D-20260930-19",
                                                "C-20260909-05",
-                                               "D-20260101-09"]}}))
+                                               "D-20260101-09"]},
+             "orders_row_watermark": {"rows": 2,
+                                      "tail_key": "10-09 10:0x"}}))
         rc, out = self._run()
         self.assertEqual(rc, gs.RC_QUIET)
         self.assertIn("wm_only=1", out)
@@ -300,6 +398,14 @@ class LiveRepoTests(unittest.TestCase):
     def test_live_watermark_present(self):
         wm = gs.load_watermark(gs.DEFAULTS["state"])
         self.assertTrue(wm, "watermark missing/empty")
+
+    def test_live_orders_rows_positive(self):
+        # tech#103 live shape lock: the real HQ orders.md is a pipe-row
+        # table; a shape change (rows collapsing to 0) must fail here.
+        text, _, _ = gs.read_text(gs.DEFAULTS["hq_orders"])
+        rows, tail_key = gs.orders_row_stats(text)
+        self.assertGreater(rows, 0)
+        self.assertTrue(tail_key)
 
 
 if __name__ == "__main__":
