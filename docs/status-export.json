@@ -1,5 +1,5 @@
 {
- "export_ts": "2026-10-13 06:03:00",
+ "export_ts": "2026-10-13 06:12:37",
  "do": "死线窗值守中；本轮实物=给评审点火流程装上「速度预探针」（点火前 90 秒实测模型出字速度，太慢自动顺延，不再白烧 25 分钟）",
  "depts": [
   {
@@ -73,7 +73,18 @@
   [
    "2116",
    "OS 轮次"
-  ]
+  ],
+  {
+   "ts": "2026-10-13 06:12:37",
+   "round": "R2117",
+   "what": "REACT-v16 CPU leg complete (F-183 pre-indicated, fire-ready staged): zhihu #1 AI-short-drama token topic verbatim + night-bucket three-axis reaction + C-00024 subtitle-master creed closing; M0 7/8 + M1 9-assert PASS + M2 poster exit 0 (em 36档, VERT +114px) + 验图五检 5/5 first-pass; E4 launcher staged for next fire window",
+   "files": [
+    "data/storylines/cards/MC-20261013-REACT-v16/MC-20261013-REACT-v16.png",
+    "data/storylines/cards/MC-20261013-REACT-v16/cards.json",
+    "data/storylines/cards/README.md"
+   ],
+   "next": "MV deadline watch until 08:30 (main#27 收口判读三连: MV 收口判据 → 撤旗+worker-restart → F-180~183 fire 接力 + tech#92 顺延窗重定)"
+  }
  ],
  "live": [
   "当前活：死线窗值守——MV 线占机让路中（F 三件评审排队等 08:30 成片后接力）；本轮已把接力要用的「速度预探针」装好",

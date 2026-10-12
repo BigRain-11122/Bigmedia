@@ -1,0 +1,13 @@
+em-check-r2117 (REACT-v16 M2 front-fit + VERT R381)
+h2_size=36 budget=25.56em
+OK   15.55em margin +10.01  今日热点 · 知乎热榜 2026-10-13
+OK   21.50em margin + 4.06  中文在线称，中国55%的token消耗指向AI短剧，
+OK    9.00em margin +16.56  如何看待这一现象？
+OK   22.00em margin + 3.56  侠气轴：「酒馆里故事多，今夜谁又成了英雄？」
+OK   17.00em margin + 8.56  求新轴：「夜深人不静，创意不停歇」
+OK   20.00em margin + 5.56  烟火轴：「熬了大半夜的锅，汤汁才够味儿」
+OK   24.00em margin + 1.56  字幕君信条：「字幕慢半帧，都是对说话人的辜负。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+ALL-HORIZ: P
+VERT: est bottom=803px subs_top=918px gap=114px (assert >=20) OK
