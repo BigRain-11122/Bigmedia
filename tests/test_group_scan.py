@@ -16,6 +16,7 @@ import sys
 import tempfile
 import time
 import unittest
+from datetime import date, datetime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "src", "os"))
@@ -365,6 +366,214 @@ class MainFixtureTests(unittest.TestCase):
         self.assertEqual(self._run(["--bogus"])[0], gs.RC_USAGE)
 
 
+class DigestSupplyFaceTests(unittest.TestCase):
+    """tech#129: DIGEST 史源 supply-gap advisory face (R2050 seed).
+
+    Five manual supply-blindspot corrections on record
+    (R870/R1095/R1303/R1536/R2050) -- this face is the machine hint: an
+    unconsumed orders cluster newer than the latest DIGEST card surfaces
+    as a per-round advisory line, and breaks silence (WARN) once it has
+    sat >2 days. Creative judgment (A-grade + number-density grading)
+    stays with the loop body; the face is a backstop, not an auto-trigger.
+    """
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        root = self.tmp.name
+        self.orders = os.path.join(root, "orders.md")
+        self.cards = os.path.join(root, "cards")
+        os.makedirs(os.path.join(self.cards, "MC-20261011-DIGEST-v18"))
+        _write(self.orders, "| 10-11 11:3x | covered |\n")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_row_dates_both_live_shapes(self):
+        text = ("| 10-12 13:5x | a |\n"
+                "| 2026-09-28 18:1x | b |\n"
+                "| 10-09 ~12:2x | c |\n"
+                "| 时间 | header |\n"
+                "|---|---|\n")
+        self.assertEqual(gs.orders_row_dates(text, year=2026),
+                         {date(2026, 10, 12), date(2026, 9, 28),
+                          date(2026, 10, 9)})
+
+    def test_latest_digest_prefers_non_tmp_at_same_date(self):
+        os.makedirs(os.path.join(self.cards, "MC-20261011-DIGEST-v18-tmp"))
+        os.makedirs(os.path.join(self.cards, "MC-20261010-DIGEST-v17"))
+        latest = gs.latest_digest_card(self.cards)
+        self.assertEqual((latest[0], latest[1]),
+                         (date(2026, 10, 11), "MC-20261011-DIGEST-v18"))
+
+    def test_latest_digest_missing_dir_is_none(self):
+        self.assertIsNone(gs.latest_digest_card(
+            os.path.join(self.tmp.name, "no-such-dir")))
+
+    def test_quiet_when_latest_card_covers_rows(self):
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 10, 11), date(2026, 10, 12)}, date(2026, 10, 12),
+            date(2026, 10, 14))
+        self.assertEqual(verdict["status"], "quiet")
+
+    def test_advisory_when_cluster_fresh(self):
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 10, 13)}, date(2026, 10, 12), date(2026, 10, 13))
+        self.assertEqual(verdict["status"], "advisory")
+        self.assertEqual(verdict["age_days"], 0)
+
+    def test_v19_window_shape_gap_warn(self):
+        # R2050 criterion "10-12 簇落账→若 v19 未产应点名", clock advanced
+        # past the 2d threshold: v18 covers 10-11, the 10-12 cluster sat
+        # unconsumed, on 10-15 the backstop fires.
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 10, 11), date(2026, 10, 12)}, date(2026, 10, 11),
+            date(2026, 10, 15))
+        self.assertEqual(verdict["status"], "gap")
+        self.assertEqual(verdict["unconsumed"], 1)
+        self.assertEqual(verdict["oldest"], date(2026, 10, 12))
+
+    def test_r870_family_blindspot_shape(self):
+        # R870-shape chronic window: v10 covers 09-29; 09-30/10-01 rows
+        # unconsumed; on 10-03 the backstop fires (the real R870 window
+        # resolved by hand inside ~2d -- below the WARN line, which is
+        # exactly the honest resolution boundary of this face).
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 9, 30), date(2026, 10, 1)}, date(2026, 9, 29),
+            date(2026, 10, 3))
+        self.assertEqual(verdict["status"], "gap")
+        self.assertEqual(verdict["age_days"], 3)
+
+    def test_face_quiet_when_covered(self):
+        rc, out = gs.face_digest_supply(
+            {"cards_dir": self.cards, "hq_orders": self.orders},
+            today=date(2026, 10, 14))
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("DIGEST-SUPPLY: quiet", out)
+
+    def test_face_gap_breaks_silence(self):
+        _write(self.orders, "| 10-12 12:4x | fresh cluster |\n")
+        rc, out = gs.face_digest_supply(
+            {"cards_dir": self.cards, "hq_orders": self.orders},
+            today=date(2026, 10, 15))
+        self.assertEqual(rc, gs.RC_NEW)
+        self.assertIn("DIGEST-SUPPLY-GAP:", out)
+        self.assertIn("age 3d", out)
+
+    def test_face_inactive_when_cards_dir_missing(self):
+        rc, out = gs.face_digest_supply(
+            {"cards_dir": os.path.join(self.tmp.name, "nope"),
+             "hq_orders": self.orders},
+            today=date(2026, 10, 15))
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("DIGEST-SUPPLY: inactive", out)
+
+    def test_face_read_fail_hq_orders(self):
+        rc, out = gs.face_digest_supply(
+            {"cards_dir": self.cards,
+             "hq_orders": os.path.join(self.tmp.name, "nope.md")},
+            today=date(2026, 10, 15))
+        self.assertEqual(rc, gs.RC_READ_FAIL)
+        self.assertIn("read-fail: hq-orders", out)
+
+
+class DigestSupplyCliTests(unittest.TestCase):
+    """CLI wiring: gap WARN breaks the whole probe's silence; advisory
+    does not. Dates are computed against the real clock for determinism."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        root = self.tmp.name
+        self.paths = {
+            "decisions": os.path.join(root, "decisions.md"),
+            "hq_orders": os.path.join(root, "orders.md"),
+            "ledger": os.path.join(root, "ledger.md"),
+            "own_orders_dir": os.path.join(root, "own_orders"),
+            "state": os.path.join(root, "state.json"),
+            "cards_dir": os.path.join(root, "cards"),
+        }
+        os.makedirs(self.paths["own_orders_dir"])
+        os.makedirs(self.paths["cards_dir"])
+        _write(self.paths["decisions"],
+               "- D-20260930-19 known row\nrefer C-20260909-05 inline\n")
+        _write(self.paths["ledger"], "@BigStream old line\n")
+        _write(os.path.join(self.paths["own_orders_dir"], "O-1.md"), "one\n")
+        _write(self.paths["state"], json.dumps(
+            {"decisions_watermark": {"dnums": ["D-20260930-19",
+                                               "C-20260909-05"]},
+             "orders_row_watermark": {"rows": 1,
+                                      "tail_key": "seed"}}))
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _run(self):
+        argv = ["group_scan"]
+        for key in ("decisions", "hq_orders", "ledger", "own_orders_dir",
+                    "state", "cards_dir"):
+            argv += ["--" + key.replace("_", "-"), self.paths[key]]
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = gs.main(argv)
+        return rc, buf.getvalue()
+
+    @staticmethod
+    def _card_name(day):
+        return "MC-%s-DIGEST-v99" % day.strftime("%Y%m%d")
+
+    def test_gap_breaks_overall_rc(self):
+        today = datetime.now().date()
+        os.makedirs(os.path.join(
+            self.paths["cards_dir"], self._card_name(today - timedelta(days=5))))
+        row_day = today - timedelta(days=3)
+        tail_key = row_day.strftime("%m-%d") + " 09:0x"
+        _write(self.paths["hq_orders"],
+               "| %s | cluster |\n" % tail_key)
+        _write(self.paths["state"], json.dumps(
+            {"decisions_watermark": {"dnums": ["D-20260930-19",
+                                               "C-20260909-05"]},
+             "orders_row_watermark": {"rows": 1,
+                                      "tail_key": tail_key}}))
+        rc, out = self._run()
+        self.assertEqual(rc, gs.RC_NEW)
+        self.assertIn("DIGEST-SUPPLY-GAP:", out)
+        self.assertIn("=== DIGEST-SUPPLY (rc=1)", out)
+
+    def test_advisory_keeps_overall_quiet(self):
+        today = datetime.now().date()
+        os.makedirs(os.path.join(
+            self.paths["cards_dir"], self._card_name(today - timedelta(days=5))))
+        row_day = today - timedelta(days=1)
+        tail_key = row_day.strftime("%m-%d") + " 09:0x"
+        _write(self.paths["hq_orders"],
+               "| %s | cluster |\n" % tail_key)
+        _write(self.paths["state"], json.dumps(
+            {"decisions_watermark": {"dnums": ["D-20260930-19",
+                                               "C-20260909-05"]},
+             "orders_row_watermark": {"rows": 1,
+                                      "tail_key": tail_key}}))
+        rc, out = self._run()
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("DIGEST-SUPPLY: 1 unconsumed orders row-date(s)",
+                      out)
+        self.assertIn("advisory", out)
+
+    def test_covered_cluster_face_silent(self):
+        today = datetime.now().date()
+        os.makedirs(os.path.join(
+            self.paths["cards_dir"], self._card_name(today)))
+        tail_key = today.strftime("%m-%d") + " 09:0x"
+        _write(self.paths["hq_orders"],
+               "| %s | cluster |\n" % tail_key)
+        _write(self.paths["state"], json.dumps(
+            {"decisions_watermark": {"dnums": ["D-20260930-19",
+                                               "C-20260909-05"]},
+             "orders_row_watermark": {"rows": 1,
+                                      "tail_key": tail_key}}))
+        rc, out = self._run()
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("DIGEST-SUPPLY: quiet", out)
+
+
 @unittest.skipUnless(
     os.path.exists(str(gs.DEFAULTS["decisions"]))
     and os.path.exists(str(gs.DEFAULTS["state"]))
@@ -406,6 +615,14 @@ class LiveRepoTests(unittest.TestCase):
         rows, tail_key = gs.orders_row_stats(text)
         self.assertGreater(rows, 0)
         self.assertTrue(tail_key)
+
+    def test_live_digest_supply_face_present(self):
+        # tech#129 live wiring: the face runs against the real cards dir;
+        # today's rows are covered by the staged v19 card -> quiet (zero
+        # false-touch on an in-batch/consumed round, the seed criterion).
+        rc, out = self._run_live()
+        self.assertIn("=== DIGEST-SUPPLY (rc=", out)
+        self.assertIn(rc, (gs.RC_QUIET, gs.RC_NEW))
 
 
 if __name__ == "__main__":

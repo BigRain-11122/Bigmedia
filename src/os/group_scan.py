@@ -27,6 +27,21 @@ Faces:
             -- the orders face had no content-addressing judgment at all
             (structural second-class citizen vs the decisions dnum
             watermark).
+  DIGEST-SUPPLY  supply-gap advisory backstop for the DIGEST 史源 trigger
+            law (#67, tech#129): orders-row dates NEWER than the latest
+            DIGEST card date that have sat unconsumed for >2 days break
+            silence as a WARN. Historical root: R870/R1095/R1303/R1536/
+            R2050 -- five manual "supply-blindspot correction" rounds
+            where a new CEO-order cluster dropped and no round re-derived
+            it into the DIGEST pool. Machine = hint surface only; the
+            creative judgment (A-grade + number-density grading) stays
+            with the loop body (no-auto-trigger law). Day-granularity
+            note: same-day-evening clusters (e.g. 10-11 晚 vs v18 10-11)
+            are below this face's resolution -- the >2d WARN is the
+            chronic-blindness backstop, the age<=2d advisory line keeps
+            the unconsumed cluster in per-round view. Cards dir missing =
+            face inactive (quiet) -- the DIGEST production line itself is
+            absent then.
   MTIME      HQ orders/decisions/ledger anchors + own orders newest file
 
 Usage:
@@ -43,7 +58,7 @@ import io
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -53,6 +68,16 @@ GROUP_ROOT = REPO.parent.parent
 # 2-digit-month face) both under-matched real dnums; this one is locked by
 # tests/test_group_scan.py regression cases.
 DNUM_RE = re.compile(r"\b[DC]-20\d{6}-\d{1,3}(?!\d)")
+# Orders first-cell date shapes: "10-12 13:5x" (MM-DD, current year assumed)
+# and the full-date "2026-09-28 18:1x" family (6 live rows). Full-date arm
+# first so the 2-digit face cannot steal a slice of it.
+ORDERS_CELL_DATE_RE = re.compile(
+    r"^(20\d{2})-(\d{2})-(\d{2})(?!\d)|^(\d{2})-(\d{2})(?!\d)")
+# DIGEST card dir name: MC-YYYYMMDD-DIGEST-vNN[-tmp]. -tmp staging dirs are a
+# legitimate consumption signal (CPU pre-stage counts -- the cluster has been
+# derived even while the F-registration waits for a GPU fire window).
+DIGEST_CARD_RE = re.compile(r"^MC-(20\d{2})(\d{2})(\d{2})-DIGEST-v\d+")
+DIGEST_SUPPLY_GAP_DAYS = 2
 # Only whitespace / list / heading markers may precede a row-anchored token.
 ANCHOR_PREFIX_RE = re.compile(r"^(?:\s|[-*#>]+|\d{1,3}[.)])*$")
 LEDGER_MARKERS = ("@BigStream", "@七线全司", "@全司", "@六司", "@八线全量")
@@ -61,7 +86,7 @@ PREVIEW_LEN = 110
 RC_QUIET, RC_NEW, RC_USAGE, RC_READ_FAIL = 0, 1, 2, 3
 USAGE = ("usage: python src/os/group_scan.py [--out FILE] [--echo] "
          "[--decisions P] [--hq-orders P] [--ledger P] "
-         "[--own-orders-dir P] [--state P]")
+         "[--own-orders-dir P] [--state P] [--cards-dir P]")
 
 DEFAULTS = {
     "decisions": GROUP_ROOT / "docs" / "decisions.md",
@@ -69,6 +94,7 @@ DEFAULTS = {
     "ledger": GROUP_ROOT / "cph4" / "evolution-ledger.md",
     "own_orders_dir": REPO / "orders",
     "state": REPO / "src" / "os" / "state.json",
+    "cards_dir": REPO / "data" / "storylines" / "cards",
 }
 
 
@@ -169,6 +195,132 @@ def current_orders_watermark(hq_orders_path=None):
     text, _, _ = read_text(path)
     rows, tail_key = orders_row_stats(text)
     return {"rows": rows, "tail_key": tail_key}
+
+
+def orders_row_dates(text, year=None):
+    """Set of dates parsed from orders |-row first cells (tech#129 face).
+
+    Both live shapes: "10-12 13:5x" (MM-DD, ``year`` assumed = current
+    year -- the orders file is a rolling 2026 ledger) and the full-date
+    "2026-09-28 18:1x" family. Non-date cells (header/separator) yield
+    nothing.
+    """
+    if year is None:
+        year = datetime.now().year
+    found = set()
+    for line in text.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        cell = _orders_first_cell(line)
+        match = ORDERS_CELL_DATE_RE.match(cell)
+        if not match:
+            continue
+        if match.group(1):
+            found.add(date(int(match.group(1)), int(match.group(2)),
+                           int(match.group(3))))
+        else:
+            found.add(date(year, int(match.group(4)), int(match.group(5))))
+    return found
+
+
+def latest_digest_card(cards_dir):
+    """(date, dir_name) of the newest MC-YYYYMMDD-DIGEST-vNN card, or None.
+
+    Staging dirs (``-tmp`` suffix) are valid consumption signal; at equal
+    dates the non-tmp name wins for reporting.
+    """
+    cards_dir = Path(cards_dir)
+    best = None
+    try:
+        entries = list(cards_dir.iterdir())
+    except OSError:
+        return None
+    for entry in entries:
+        match = DIGEST_CARD_RE.match(entry.name)
+        if not match:
+            continue
+        when = date(int(match.group(1)), int(match.group(2)),
+                    int(match.group(3)))
+        is_tmp = entry.name.endswith("-tmp")
+        if best is None or when > best[0] or (when == best[0] and
+                                              is_tmp < best[2]):
+            best = (when, entry.name, is_tmp)
+    if best is None:
+        return None
+    return best[0], best[1]
+
+
+def classify_digest_supply_gap(orders_dates, latest, today,
+                               threshold_days=DIGEST_SUPPLY_GAP_DAYS):
+    """Pure core for the DIGEST supply-gap advisory face (tech#129).
+
+    Returns a dict: status inactive|quiet|advisory|gap + reading fields.
+    - unconsumed = row dates strictly newer than the latest DIGEST card
+      (day granularity; same-day clusters are below face resolution)
+    - advisory: unconsumed exists but oldest age <= threshold (per-round
+      hint line, silence NOT broken)
+    - gap: oldest unconsumed age > threshold -> WARN breaks silence (the
+      chronic-blindness backstop for the R870/R1095/R1303/R1536/R2050
+      manual-correction family). Creative judgment stays with the body.
+    """
+    if latest is None and not orders_dates:
+        return {"status": "quiet", "unconsumed": 0, "oldest": None,
+                "age_days": None, "threshold": threshold_days}
+    unconsumed = sorted(d for d in orders_dates
+                        if latest is None or d > latest)
+    if not unconsumed:
+        return {"status": "quiet", "unconsumed": 0, "oldest": None,
+                "age_days": None, "threshold": threshold_days}
+    oldest = unconsumed[0]
+    age_days = (today - oldest).days
+    status = "gap" if age_days > threshold_days else "advisory"
+    return {"status": status, "unconsumed": len(unconsumed),
+            "oldest": oldest, "age_days": age_days,
+            "threshold": threshold_days}
+
+
+def face_digest_supply(paths, today=None):
+    """Face: DIGEST 史源 supply-gap advisory backstop (#67 trigger law).
+
+    rc 0 quiet/advisory/inactive / 1 gap WARN (breaks silence) / 3 read
+    error. Cards dir missing = face inactive (the DIGEST production line
+    itself is absent) -- never a read failure.
+    """
+    cards = Path(paths["cards_dir"])
+    latest = latest_digest_card(cards)
+    if latest is None:
+        return RC_QUIET, ("cards: %s | (no DIGEST card dir)\n"
+                          "DIGEST-SUPPLY: inactive (no cards dir)"
+                          % (cards,))
+    try:
+        text, mtime, size = read_text(paths["hq_orders"])
+    except OSError as exc:
+        return RC_READ_FAIL, "read-fail: hq-orders %r" % (exc,)
+    if today is None:
+        today = datetime.now().date()
+    dates = orders_row_dates(text)
+    verdict = classify_digest_supply_gap(dates, latest[0], today)
+    lines = ["cards: %s | latest DIGEST card %s (%s) | orders rows "
+             "mtime %s | row-dates=%d"
+             % (cards, latest[0].isoformat(), latest[1], mtime, len(dates))]
+    if verdict["status"] == "quiet":
+        lines.append("DIGEST-SUPPLY: quiet (orders rows covered by "
+                     "latest DIGEST card %s)" % latest[0].isoformat())
+        return RC_QUIET, "\n".join(lines)
+    detail = ("%d unconsumed orders row-date(s) after latest DIGEST card "
+              "%s (oldest %s, age %dd)"
+              % (verdict["unconsumed"], latest[0].isoformat(),
+                 verdict["oldest"].isoformat(), verdict["age_days"]))
+    if verdict["status"] == "advisory":
+        lines.append("DIGEST-SUPPLY: %s -- advisory (age <= %dd; "
+                     "judgment stays with the loop)" % (detail,
+                                                       verdict["threshold"]))
+        return RC_QUIET, "\n".join(lines)
+    lines.append("DIGEST-SUPPLY-GAP: %s -- WARN (age > %dd): supply "
+                  "blindspot backstop (R870/R1095/R1303/R1536/R2050 "
+                  "manual-correction family; derive-into-pool evaluation "
+                  "due)" % (detail, verdict["threshold"]))
+    return RC_NEW, "\n".join(lines)
 
 
 def scan_ledger(text):
@@ -382,7 +534,7 @@ def main(argv):
     while i < len(args):
         key = args[i]
         if key in ("--decisions", "--hq-orders", "--ledger", "--own-orders-dir",
-                   "--state"):
+                   "--state", "--cards-dir"):
             if i + 1 >= len(args):
                 print(USAGE)
                 return RC_USAGE
@@ -402,6 +554,7 @@ def main(argv):
         ("DECISIONS", *face_decisions(paths)),
         ("LEDGER", *face_ledger(paths)),
         ("ORDERS", *face_orders(paths)),
+        ("DIGEST-SUPPLY", *face_digest_supply(paths)),
         ("MTIME", *face_mtime(paths)),
     ]
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
