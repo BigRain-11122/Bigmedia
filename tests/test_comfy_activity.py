@@ -214,6 +214,64 @@ class OutputFaceTests(unittest.TestCase):
             face = probe.read_output_face(td, recency_s=900, now=self.NOW)
             self.assertEqual(face["recent"], 1)
 
+    def _stamp(self, path, age_s):
+        stamp = self.NOW.timestamp() - age_s
+        os.utime(path, (stamp, stamp))
+
+    def test_two_deep_fresh_dir_top_cold_attests(self):
+        # tech#138 live shape (MV i2v lane): output/<a>/<b>/file bumps
+        # only <b>; top-level <a> stays cold -- one-level descent into
+        # cold top dirs recovers the wave signal
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self._touch(root / "old_top.png", 7200)
+            a = root / "bmc"; a.mkdir()
+            b = a / "i2v"; b.mkdir()
+            (b / "clip_01.mp4").write_text("x", encoding="utf-8")
+            self._stamp(a, 7200)
+            self._stamp(b, 300)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["status"], "ok")
+            self.assertEqual(face["recent"], 1)
+            self.assertEqual(face["newest_age_s"], 300.0)
+
+    def test_two_deep_fresh_file_under_cold_dir_attests(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            a = root / "wave"; a.mkdir()
+            (a / "shot_07.png").write_text("x", encoding="utf-8")
+            self._stamp(a, 7200)
+            self._stamp(a / "shot_07.png", 240)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["status"], "ok")
+            self.assertEqual(face["recent"], 1)
+            self.assertEqual(face["newest_age_s"], 240.0)
+
+    def test_two_deep_all_cold_no_recent(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            a = root / "bmc"; a.mkdir()
+            b = a / "i2v"; b.mkdir()
+            self._stamp(b, 3600)
+            self._stamp(a, 5000)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["recent"], 0)
+            self.assertEqual(face["newest_age_s"], 3600.0)
+
+    def test_fresh_top_dir_not_descended_regression_lock(self):
+        # design lock (tech#138): a FRESH top-level dir attests on its
+        # own mtime and is not descended (wave-time cost cap) -- a
+        # fresher child must not change the read
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            sub = root / "kf_bma"; sub.mkdir()
+            (sub / "shot_01.png").write_text("x", encoding="utf-8")
+            self._stamp(sub, 300)
+            self._stamp(sub / "shot_01.png", 60)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["recent"], 1)
+            self.assertEqual(face["newest_age_s"], 300.0)
+
 
 class VerdictTests(unittest.TestCase):
     def _q(self, status="ok", running=0, pending=0):

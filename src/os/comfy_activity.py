@@ -233,8 +233,14 @@ def read_output_face(output_dir, recency_s=DEFAULT_OUTPUT_RECENCY_S,
     Directory entries count too: creating a file inside a subdirectory
     bumps that subdirectory's own mtime (live evidence: the KF batch
     writes output/kf_bma/*.png while output/*.png stays cold), so the
-    dir mtimes carry the wave signal. Only the TOP level is scanned --
-    a 288-file output dir stays a ~300-entry scandir, no rglob blowup.
+    dir mtimes carry the wave signal. Depth is bounded at TWO levels:
+    a depth-2 batch write (output/<a>/<b>/file -- live shape: the MV
+    i2v lane) bumps only <b>'s mtime while top-level <a> stays cold,
+    so COLD top-level dirs get one extra scandir of their immediate
+    children (tech#138). Fresh top-level dirs are NOT descended: they
+    already attest the wave, and skipping them caps the descent cost
+    during active waves. No rglob -- cost stays ~top-level entries +
+    one scandir per cold top-level dir.
 
     -> {'status': 'ok', 'recent': N, 'newest_age_s': X} with
     newest_age_s=None when the tree is empty/cold; {'status':
@@ -250,16 +256,38 @@ def read_output_face(output_dir, recency_s=DEFAULT_OUTPUT_RECENCY_S,
         return {"status": "unreadable"}
     recent = 0
     newest_age = None
+
+    def _consider(age):
+        nonlocal recent, newest_age
+        if newest_age is None or age < newest_age:
+            newest_age = age
+        if age <= recency_s:
+            recent += 1
+
     for entry in entries:
         try:
             mtime = entry.stat().st_mtime
         except OSError:
             continue
         age = max(0.0, now_dt.timestamp() - mtime)
-        if newest_age is None or age < newest_age:
-            newest_age = age
+        _consider(age)
+        # tech#138: only COLD top-level dirs are descended (fresh ones
+        # already attest; see docstring).
         if age <= recency_s:
-            recent += 1
+            continue
+        try:
+            if not entry.is_dir(follow_symlinks=False):
+                continue
+            children = list(os.scandir(entry.path))
+        except OSError:
+            continue
+        for child in children:
+            try:
+                child_age = max(0.0, now_dt.timestamp()
+                                - child.stat().st_mtime)
+            except OSError:
+                continue
+            _consider(child_age)
     return {"status": "ok", "recent": recent,
             "newest_age_s": (round(newest_age, 1)
                              if newest_age is not None else None)}
