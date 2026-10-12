@@ -22,6 +22,13 @@ _SPEC.loader.exec_module(fwc)
 GATE_GO = {"go": True, "reasons": [], "free_min_mb": 5650,
            "free_max_mb": 5660, "band_mb": 10, "util_max": 2,
            "min_free_mb": 2048}
+# tech#140: static GO + free_min >= the 14b class load -- the genuine
+# path-A fire fixture (the old 5650 fixture now reads class-starved:
+# BASE 14b cold-loads ~9.4GB and would partial-offload crawl there,
+# the R2012/R2013/R2025 burn family).
+GATE_GO_BIG = {"go": True, "reasons": [], "free_min_mb": 10650,
+               "free_max_mb": 10660, "band_mb": 10, "util_max": 2,
+               "min_free_mb": 2048}
 GATE_NOGO_UTIL = {"go": False, "reasons": [
     "util-face: worst-case util 100% > gate 80%"],
     "free_min_mb": 5669, "free_max_mb": 5686, "band_mb": 17,
@@ -52,6 +59,13 @@ CREDIT_GO = {"go": True, "reasons": [], "free_min_mb": 5669,
              "free_max_mb": 5674, "band_mb": 5, "util_max": 40,
              "min_free_mb": 2048, "evictable_mb": 4888,
              "effective_free_mb": 10557}
+# tech#140: credit GO whose validated effective free cannot fund the
+# consuming leg's cold class load (5000 < 8704) -- the path-B
+# load-class demotion fixture.
+CREDIT_GO_SMALL = {"go": True, "reasons": [], "free_min_mb": 2600,
+                   "free_max_mb": 2610, "band_mb": 10, "util_max": 40,
+                   "min_free_mb": 2048, "evictable_mb": 2400,
+                   "effective_free_mb": 5000}
 CREDIT_NOGO = {"go": False, "reasons": [
     "util-face: worst-case util 100% > gate 80%"],
     "free_min_mb": 5669, "free_max_mb": 5674, "band_mb": 5,
@@ -62,10 +76,29 @@ CREDIT_NOGO = {"go": False, "reasons": [
 class ClassifyFireTests(unittest.TestCase):
     def test_path_a_fire(self):
         verdict, path, reasons = fwc.classify_fire(
-            GATE_GO, MV_QUIET, PROBE_OK)
+            GATE_GO_BIG, MV_QUIET, PROBE_OK)
         self.assertEqual(verdict, "fire")
         self.assertEqual(path, "A-hot-resident")
         self.assertEqual(reasons, [])
+
+    def test_path_a_fire_legacy_when_face_disabled(self):
+        # tech#140 opt-out: 0 disables the face -- a future leg that
+        # reuses the probe's hot tag keeps the pre-tech#140 contract.
+        verdict, path, reasons = fwc.classify_fire(
+            GATE_GO, MV_QUIET, PROBE_OK, load_class_mb=0)
+        self.assertEqual(verdict, "fire")
+        self.assertEqual(path, "A-hot-resident")
+        self.assertEqual(reasons, [])
+
+    def test_path_a_demoted_load_class_starved(self):
+        # tech#140 anchor: static GO at free 5650 said fire pre-#140,
+        # but the S1 BASE 14b cold load (~8704MB) partial-offloads and
+        # crawls there (R2012/R2013/R2025 burn family) -> demote.
+        verdict, path, reasons = fwc.classify_fire(
+            GATE_GO, MV_QUIET, PROBE_OK)
+        self.assertEqual(verdict, "no-fire")
+        self.assertIsNone(path)
+        self.assertEqual(reasons, [fwc.LOAD_CLASS_REASON])
 
     def test_path_a_gate_no_go(self):
         verdict, path, reasons = fwc.classify_fire(
@@ -91,13 +124,15 @@ class ClassifyFireTests(unittest.TestCase):
         verdict, _, reasons = fwc.classify_fire(
             GATE_GO, MV_QUIET, PROBE_SATURATED)
         self.assertEqual(verdict, "no-fire")
-        self.assertEqual(reasons, ["probe-face-saturated-busy"])
+        self.assertEqual(reasons, ["probe-face-saturated-busy",
+                                   fwc.LOAD_CLASS_REASON])
 
     def test_probe_busy_no_fire(self):
         verdict, _, reasons = fwc.classify_fire(
             GATE_GO, MV_QUIET, PROBE_BUSY)
         self.assertEqual(verdict, "no-fire")
-        self.assertEqual(reasons, ["probe-face-busy-contended"])
+        self.assertEqual(reasons, ["probe-face-busy-contended",
+                                   fwc.LOAD_CLASS_REASON])
 
     def test_path_b_fire(self):
         verdict, path, reasons = fwc.classify_fire(
@@ -106,17 +141,39 @@ class ClassifyFireTests(unittest.TestCase):
         self.assertEqual(path, "B-eviction-credit")
         self.assertEqual(reasons, [])
 
+    def test_path_b_fire_uses_credit_validated_free(self):
+        # tech#140: on the credit path the class gate reads the credit
+        # re-run's VALIDATED effective_free (10557), not the starved
+        # static band (5669) -- the credit machinery stays the only
+        # admissible unlock, and a funded eviction window still fires.
+        face = fwc.evaluate_load_class(GATE_NOGO_UTIL, CREDIT_GO,
+                                       fwc.DEFAULT_LOAD_CLASS_MB)
+        self.assertTrue(face["ok"])
+        self.assertTrue(face["credit_validated"])
+        self.assertEqual(face["free_for_class_mb"], 10557)
+
+    def test_path_b_demoted_load_class_starved(self):
+        # tech#140: credit GO at effective 5000 funds the old 2048
+        # static gate but not the consuming leg's cold class load.
+        verdict, path, reasons = fwc.classify_fire(
+            GATE_NOGO_UTIL, MV_QUIET, PROBE_SKIP_FLY, CREDIT_GO_SMALL)
+        self.assertEqual(verdict, "no-fire")
+        self.assertIsNone(path)
+        self.assertEqual(reasons, [fwc.LOAD_CLASS_REASON])
+
     def test_path_b_counterfactual_not_fly(self):
         verdict, _, reasons = fwc.classify_fire(
             GATE_NOGO_UTIL, MV_QUIET, PROBE_SKIP_NOCREDIT)
         self.assertEqual(verdict, "no-fire")
-        self.assertEqual(reasons, ["cold-skip-no-admissible-credit"])
+        self.assertEqual(reasons, ["cold-skip-no-admissible-credit",
+                                   fwc.LOAD_CLASS_REASON])
 
     def test_path_b_credit_window_closed(self):
         verdict, _, reasons = fwc.classify_fire(
             GATE_NOGO_UTIL, MV_QUIET, PROBE_SKIP_FLY, None)
         self.assertEqual(verdict, "no-fire")
-        self.assertEqual(reasons, ["credit-window-closed"])
+        self.assertEqual(reasons, ["credit-window-closed",
+                                   fwc.LOAD_CLASS_REASON])
 
     def test_path_b_credit_no_go(self):
         verdict, _, reasons = fwc.classify_fire(
@@ -129,7 +186,45 @@ class ClassifyFireTests(unittest.TestCase):
         verdict, _, reasons = fwc.classify_fire(
             GATE_GO, MV_QUIET, {"status": "error", "face": None})
         self.assertEqual(verdict, "no-fire")
-        self.assertEqual(reasons, ["probe-status-error"])
+        self.assertEqual(reasons, ["probe-status-error",
+                                   fwc.LOAD_CLASS_REASON])
+
+    def test_missing_free_skips_load_class_face(self):
+        # a missing reading must not read as starved (nor as funded):
+        # the face skips silently; the wedge-probe backstop still
+        # guards the leg.
+        gate = {"go": False, "reasons": ["free-face: unreadable"],
+                "free_min_mb": None}
+        verdict, _, reasons = fwc.classify_fire(
+            gate, MV_QUIET, PROBE_OK)
+        self.assertEqual(verdict, "no-fire")
+        self.assertIn("gate-static-no-go", reasons)
+        self.assertNotIn(fwc.LOAD_CLASS_REASON, reasons)
+
+    def test_mv_yields_never_get_load_class_face(self):
+        # the yield reason dominates -- no face evaluation, no noise.
+        for mv in (MV_ACTIVE, MV_ERROR):
+            verdict, _, reasons = fwc.classify_fire(
+                GATE_GO, mv, PROBE_OK, CREDIT_GO)
+            self.assertEqual(verdict, "no-fire")
+            self.assertNotIn(fwc.LOAD_CLASS_REASON, reasons)
+
+    def test_krea2_resident_window_surfaces_load_class(self):
+        # tech#140 acceptance: the Krea2-resident window (free ~2.9GB,
+        # no ollama model can be resident -> cold-skip, no evictable
+        # credit) reads no-fire with load-class among the reasons.
+        gate_krea = {"go": True, "reasons": [], "free_min_mb": 2900,
+                     "free_max_mb": 2950, "band_mb": 50, "util_max": 5,
+                     "min_free_mb": 2048}
+        probe_skip_no_evict = {"rc": 2, "status": "skipped-not-resident",
+                               "face": "not-resident", "gpu_free_mb": 2900,
+                               "evictable_mb": None,
+                               "eviction_aware_verdict": "skip"}
+        verdict, _, reasons = fwc.classify_fire(
+            gate_krea, MV_QUIET, probe_skip_no_evict)
+        self.assertEqual(verdict, "no-fire")
+        self.assertIn("cold-skip-no-admissible-credit", reasons)
+        self.assertIn(fwc.LOAD_CLASS_REASON, reasons)
 
 
 class OrchestrateTests(unittest.TestCase):
@@ -174,7 +269,7 @@ class OrchestrateTests(unittest.TestCase):
 
     def test_path_a_no_credit_rerun(self):
         card = fwc.orchestrate(
-            self._fake_gate(GATE_GO), self._fake_mv(MV_QUIET),
+            self._fake_gate(GATE_GO_BIG), self._fake_mv(MV_QUIET),
             self._fake_probe(PROBE_OK), self._fake_credit(CREDIT_GO))
         self.assertEqual(card["verdict"], "fire")
         self.assertEqual(card["path"], "A-hot-resident")
@@ -194,6 +289,25 @@ class OrchestrateTests(unittest.TestCase):
                          4888)
         self.assertEqual(card["readings"]["gate_credit"]
                          ["effective_free_mb"], 10557)
+        # tech#140: the funded credit window clears the class gate too
+        self.assertTrue(card["readings"]["load_class"]["ok"])
+        self.assertTrue(card["readings"]["load_class"]
+                        ["credit_validated"])
+
+    def test_orchestrate_demotes_starved_fire(self):
+        # tech#140 orchestrate wiring: the face participates through
+        # classify_fire and its reading lands in the card ledger line.
+        card = fwc.orchestrate(
+            self._fake_gate(GATE_GO), self._fake_mv(MV_QUIET),
+            self._fake_probe(PROBE_OK), self._fake_credit(CREDIT_GO))
+        self.assertEqual(card["verdict"], "no-fire")
+        self.assertEqual(card["reasons"], [fwc.LOAD_CLASS_REASON])
+        face = card["readings"]["load_class"]
+        self.assertFalse(face["ok"])
+        self.assertFalse(face["credit_validated"])
+        self.assertEqual(face["free_for_class_mb"], 5650)
+        self.assertEqual(face["required_mb"], fwc.S1_14B_LOAD_MB)
+        self.assertEqual(face["required_mb"], 8704)
 
     def test_credit_rerun_blocked_when_mv_active(self):
         card = fwc.orchestrate(
@@ -202,7 +316,6 @@ class OrchestrateTests(unittest.TestCase):
         self.assertNotIn("gate-credit", card["sequence"])
         self.assertEqual(card["verdict"], "no-fire")
         self.assertEqual(card["reasons"], ["mv-active"])
-
     def test_credit_rerun_blocked_when_counterfactual_skip(self):
         card = fwc.orchestrate(
             self._fake_gate(GATE_NOGO_UTIL), self._fake_mv(MV_QUIET),
@@ -211,7 +324,8 @@ class OrchestrateTests(unittest.TestCase):
         self.assertNotIn("gate-credit", card["sequence"])
         self.assertEqual(card["verdict"], "no-fire")
         self.assertEqual(card["reasons"],
-                         ["cold-skip-no-admissible-credit"])
+                         ["cold-skip-no-admissible-credit",
+                          fwc.LOAD_CLASS_REASON])
 
     def test_credit_rerun_blocked_when_evictable_missing(self):
         card = fwc.orchestrate(
@@ -220,7 +334,9 @@ class OrchestrateTests(unittest.TestCase):
             self._fake_credit(CREDIT_GO))
         self.assertNotIn("gate-credit", card["sequence"])
         self.assertEqual(card["verdict"], "no-fire")
-        self.assertEqual(card["reasons"], ["credit-window-closed"])
+        self.assertEqual(card["reasons"],
+                         ["credit-window-closed",
+                          fwc.LOAD_CLASS_REASON])
 
     def test_card_shape_and_slim_readings(self):
         card = fwc.orchestrate(
@@ -235,6 +351,7 @@ class OrchestrateTests(unittest.TestCase):
         self.assertEqual(card["readings"]["probe"]["evictable_mb"], 4888)
         self.assertEqual(card["readings"]["probe"]
                          ["eviction_aware_verdict"], "fly")
+        self.assertIn("load_class", card["readings"])
 
 
 class FireFreshnessTests(unittest.TestCase):
@@ -250,13 +367,22 @@ class FireFreshnessTests(unittest.TestCase):
             lambda *a: credit, now=self.NOW)
 
     def test_path_a_fire_carries_freshness_fields(self):
-        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        card = self._card(GATE_GO_BIG, PROBE_OK, CREDIT_GO)
         self.assertEqual(card["verdict"], "fire")
         self.assertEqual(card["fired_at"],
                          int(self.NOW.timestamp()))
         self.assertEqual(card["valid_s"], fwc.FIRE_VALID_S)
         self.assertEqual(card["expires_at"],
                          card["fired_at"] + fwc.FIRE_VALID_S)
+
+    def test_load_class_demote_omits_freshness_fields(self):
+        # tech#140: a demoted GO is a no-fire -- it must not carry a
+        # fire TTL a consumer could mistake for an open window.
+        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        self.assertEqual(card["verdict"], "no-fire")
+        self.assertEqual(card["reasons"], [fwc.LOAD_CLASS_REASON])
+        for key in ("fired_at", "valid_s", "expires_at"):
+            self.assertNotIn(key, card)
 
     def test_path_b_fire_carries_freshness_fields(self):
         card = self._card(GATE_NOGO_UTIL, PROBE_SKIP_FLY, CREDIT_GO)
@@ -272,7 +398,7 @@ class FireFreshnessTests(unittest.TestCase):
             self.assertNotIn(key, card)
 
     def test_human_render_carries_fire_valid_line(self):
-        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        card = self._card(GATE_GO_BIG, PROBE_OK, CREDIT_GO)
         text = fwc._render_human(card)
         self.assertIn("fire-valid:", text)
         self.assertIn(str(fwc.FIRE_VALID_S), text)
@@ -295,7 +421,7 @@ class CliTests(unittest.TestCase):
 
     def test_json_fire_rc0(self):
         rc, out = self._run_main(["--json"], {
-            "real_gate_static": lambda *a: GATE_GO,
+            "real_gate_static": lambda *a: GATE_GO_BIG,
             "real_mv_probe": lambda: MV_QUIET,
             "real_ollama_probe": lambda: PROBE_OK,
             "real_gate_credit": lambda *a: CREDIT_GO,
@@ -304,6 +430,36 @@ class CliTests(unittest.TestCase):
         payload = json.loads(out.strip().splitlines()[-1])
         self.assertEqual(payload["verdict"], "fire")
         self.assertEqual(payload["path"], "A-hot-resident")
+
+    def test_json_load_class_demote_rc1(self):
+        # tech#140 default-on: the starved static-GO window reads
+        # no-fire with the load-class reason and the face ledger field.
+        rc, out = self._run_main(["--json"], {
+            "real_gate_static": lambda *a: GATE_GO,
+            "real_mv_probe": lambda: MV_QUIET,
+            "real_ollama_probe": lambda: PROBE_OK,
+            "real_gate_credit": lambda *a: CREDIT_GO,
+        })
+        self.assertEqual(rc, 1)
+        payload = json.loads(out.strip().splitlines()[-1])
+        self.assertEqual(payload["verdict"], "no-fire")
+        self.assertEqual(payload["reasons"], [fwc.LOAD_CLASS_REASON])
+        face = payload["readings"]["load_class"]
+        self.assertFalse(face["ok"])
+        self.assertEqual(face["required_mb"], fwc.S1_14B_LOAD_MB)
+        self.assertEqual(face["free_for_class_mb"], 5650)
+
+    def test_json_load_class_zero_legacy_rc0(self):
+        rc, out = self._run_main(["--json", "--load-class-mb", "0"], {
+            "real_gate_static": lambda *a: GATE_GO,
+            "real_mv_probe": lambda: MV_QUIET,
+            "real_ollama_probe": lambda: PROBE_OK,
+            "real_gate_credit": lambda *a: CREDIT_GO,
+        })
+        self.assertEqual(rc, 0)
+        payload = json.loads(out.strip().splitlines()[-1])
+        self.assertEqual(payload["verdict"], "fire")
+        self.assertIsNone(payload["readings"]["load_class"])
 
     def test_json_no_fire_rc1(self):
         rc, out = self._run_main(["--json"], {
@@ -334,6 +490,8 @@ class CliTests(unittest.TestCase):
         rc, _ = self._run_main(["--samples", "0"], {})
         self.assertEqual(rc, 2)
         rc, _ = self._run_main(["--util-max", "-1"], {})
+        self.assertEqual(rc, 2)
+        rc, _ = self._run_main(["--load-class-mb", "-1"], {})
         self.assertEqual(rc, 2)
 
 
@@ -376,7 +534,7 @@ class ReadingsTimestampTests(unittest.TestCase):
 
     def test_age_math_deterministic_path_a_no_credit(self):
         # clock calls: gate@0s mv@10s probe@20s verdict@30s (no credit)
-        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        card = self._card(GATE_GO_BIG, PROBE_OK, CREDIT_GO)
         self.assertEqual(card["verdict"], "fire")
         self.assertEqual(card["readings"]["gate"]["age_s_at_verdict"],
                          30)
@@ -419,10 +577,29 @@ class ReadingsTimestampTests(unittest.TestCase):
         self.assertIn(str(fwc.FIRE_VALID_S), text)
 
     def test_human_render_path_a_omits_credit_age(self):
-        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        card = self._card(GATE_GO_BIG, PROBE_OK, CREDIT_GO)
         text = fwc._render_human(card)
         self.assertIn("gate=30s", text)
         self.assertNotIn("gate_credit=", text)
+
+    def test_human_render_load_class_line(self):
+        # tech#140: the human face renders the class reading so the
+        # 00:00 dispatch reader sees WHY the window will not fund the
+        # S1 cold load, next to the probe/gate lines it already reads.
+        card = self._card(GATE_GO, PROBE_OK, CREDIT_GO)
+        self.assertEqual(card["verdict"], "no-fire")
+        text = fwc._render_human(card)
+        self.assertIn("load-class:", text)
+        self.assertIn("required=%s" % fwc.S1_14B_LOAD_MB, text)
+        self.assertIn("free_for_class=5650", text)
+        self.assertIn("ok=False", text)
+
+    def test_human_render_funded_class_line(self):
+        card = self._card(GATE_GO_BIG, PROBE_OK, CREDIT_GO)
+        text = fwc._render_human(card)
+        self.assertIn("load-class:", text)
+        self.assertIn("free_for_class=10650", text)
+        self.assertIn("ok=True", text)
 
     def test_no_fire_path_carries_ages_too(self):
         # freshness face is read-side, not verdict-side: a no-fire card

@@ -30,6 +30,21 @@ Verdict core (classify_fire, pure):
   a missing reading must never read as quiet, and the card never fires
   on it.
 
+Load-class face (tech#140, conservative one-way): the review legs
+CONSUME a cold BASE qwen2.5:14b load (S1/E4 registry ~9.4GB full-VRAM
+挤态族, R2025/tech#122), while the probe flies the 14b-8k tag (9000MB
+envelope) -- residency or flight of THAT tag never proves the
+consuming leg's load class. The old static gate (2048MB) said GO in
+windows (free 2.9-5.6GB) where the S1 BASE load partial-offloads and
+crawls (R2012/R2013/R2025 1500s burn family) and the launcher
+wedge-probe rc6s -- the GO-then-wedge loop. The face demotes a fire
+whose window cannot fund the class load (path A: static free_min; path
+B: the credit re-run's validated effective_free -- never a hand-rolled
+sum) and surfaces load-class-starved on quiet-window no-fires. It only
+ever adds a no-fire reason, never forces GO; a missing free reading
+skips the face silently (the wedge-probe backstop still guards); the
+mv-yield paths never get the face (the yield reason dominates).
+
 rc contract (consumers gate on rc, not on parsing):
   0 = fire window open (verdict "fire")
   1 = no-fire (verdict "no-fire", reasons cited)
@@ -39,6 +54,7 @@ rc contract (consumers gate on rc, not on parsing):
 Usage:
   python src/os/fire_window_card.py [--json] [--samples N]
       [--sample-interval S] [--min-free-mb M] [--util-max U]
+      [--load-class-mb C]
 """
 
 import argparse
@@ -79,9 +95,19 @@ PROBE_SKIP_STATUS = "skipped-not-resident"
 PATH_A = "A-hot-resident"
 PATH_B = "B-eviction-credit"
 
+# tech#140: consuming-leg load-class threshold. The review legs (S1/E4)
+# cold-load BASE qwen2.5:14b (~9.4GB full-VRAM挤态族, R2025/tech#122;
+# 8704MB = the conservative in-VRAM footprint band) while the probe
+# flies the 14b-8k tag -- the class gate must reflect the CONSUMING
+# leg, not the probe's tag. 0 disables the face (a future leg that
+# reuses the probe's hot tag passes 0).
+S1_14B_LOAD_MB = 8704
+DEFAULT_LOAD_CLASS_MB = S1_14B_LOAD_MB
+LOAD_CLASS_REASON = "load-class-starved"
+
 USAGE = ("usage: python src/os/fire_window_card.py [--json] "
          "[--samples N] [--sample-interval S] [--min-free-mb M] "
-         "[--util-max U]")
+         "[--util-max U] [--load-class-mb C]")
 
 
 class CardChildError(Exception):
@@ -151,18 +177,64 @@ def real_ollama_probe():
     return _run_json([OLLAMA_PROBE_SCRIPT, "--json"])
 
 
-def classify_fire(gate, mv, probe, gate_credit=None):
+def evaluate_load_class(gate, gate_credit, load_class_mb):
+    """Pure core (tech#140). Returns the face dict, or None when the
+    face is disabled (<=0) or the free reading is missing.
+
+    Path B's admissible credit is the credit re-run's validated
+    effective_free (existing SOP machinery) -- never a hand-rolled
+    free + evictable sum. A missing effective_free on a credit path
+    skips the face (the wedge-probe backstop still guards the leg)."""
+    if not isinstance(load_class_mb, (int, float)) or load_class_mb <= 0:
+        return None
+    if gate_credit is not None:
+        free_for_class = (gate_credit or {}).get("effective_free_mb")
+        credit_validated = True
+    else:
+        free_for_class = (gate or {}).get("free_min_mb")
+        credit_validated = False
+    if not isinstance(free_for_class, (int, float)):
+        return None
+    return {
+        "required_mb": load_class_mb,
+        "free_for_class_mb": free_for_class,
+        "credit_validated": credit_validated,
+        "ok": free_for_class >= load_class_mb,
+    }
+
+
+def classify_fire(gate, mv, probe, gate_credit=None,
+                  load_class_mb=DEFAULT_LOAD_CLASS_MB):
     """Pure core -> (verdict, path, reasons).
 
     The mv face gates both paths: "quiet" is required, "active" blocks
     (yield discipline), anything else (None/error) is fail-closed. The
     credit re-run reading participates only through path B; the static
-    gate is cited in the reasons on a path A miss."""
+    gate is cited in the reasons on a path A miss.
+
+    tech#140 load-class face (mv-quiet windows only, conservative
+    one-way): a fire whose window cannot fund the consuming leg's cold
+    class load is demoted with LOAD_CLASS_REASON; a quiet-window
+    no-fire that is ALSO class-starved carries the reason appended
+    (auditability -- the Krea2-resident window reads load-class among
+    its reasons). The face never upgrades a no-fire to fire and never
+    touches the mv-yield paths."""
     mv_verdict = (mv or {}).get("verdict")
     if mv_verdict != "quiet":
         tag = "mv-active" if mv_verdict == "active" \
             else "mv-unreadable-fail-closed"
         return "no-fire", None, [tag]
+    verdict, path, reasons = _classify_probe_face(gate, probe, gate_credit)
+    face = evaluate_load_class(gate, gate_credit, load_class_mb)
+    if face is not None and not face["ok"]:
+        if verdict == "fire":
+            return "no-fire", None, [LOAD_CLASS_REASON]
+        reasons = list(reasons) + [LOAD_CLASS_REASON]
+    return verdict, path, reasons
+
+
+def _classify_probe_face(gate, probe, gate_credit):
+    """Probe-status branch of the verdict core (mv already quiet)."""
     status = (probe or {}).get("status")
     if status == "ok":
         # GEN-OK: resident/hot service confirmed by the probe flight.
@@ -226,7 +298,7 @@ def _slim_probe(p):
 def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
                 samples=DEFAULT_SAMPLES, interval=DEFAULT_INTERVAL,
                 min_free=REVIEW_MIN_FREE_MB, util_max=REVIEW_UTIL_MAX,
-                now=None, clock=None):
+                load_class_mb=DEFAULT_LOAD_CLASS_MB, now=None, clock=None):
     """Run the three readings in sequence-law order, attempt the credit
     re-run only per the SOP, and compose the one-line card dict.
 
@@ -258,7 +330,8 @@ def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
             gate_credit = gate_credit_fn(credit_mb, samples, interval,
                                          min_free, util_max)
 
-    verdict, path, reasons = classify_fire(gate, mv, probe, gate_credit)
+    verdict, path, reasons = classify_fire(gate, mv, probe, gate_credit,
+                                           load_class_mb=load_class_mb)
     now_dt = now or clock()
     card = {
         "card": "fire_window_card",
@@ -272,6 +345,8 @@ def orchestrate(gate_static_fn, mv_fn, probe_fn, gate_credit_fn,
             "mv": _slim_mv(mv),
             "probe": _slim_probe(probe),
             "gate_credit": _slim_gate(gate_credit),
+            "load_class": evaluate_load_class(gate, gate_credit,
+                                              load_class_mb),
         },
     }
     stamps = {"gate": gate_at, "mv": mv_at, "probe": probe_at,
@@ -312,6 +387,14 @@ def _render_human(card):
                  % (probe.get("status"), probe.get("face"),
                     probe.get("evictable_mb"),
                     probe.get("eviction_aware_verdict")))
+    load_class = card["readings"].get("load_class")
+    if load_class:
+        lines.append("  load-class: required=%s free_for_class=%s "
+                     "credit_validated=%s ok=%s"
+                     % (load_class.get("required_mb"),
+                        load_class.get("free_for_class_mb"),
+                        load_class.get("credit_validated"),
+                        load_class.get("ok")))
     credit = card["readings"]["gate_credit"]
     if credit:
         lines.append("  gate-credit: go=%s evictable=%s effective_free=%s"
@@ -362,10 +445,17 @@ def main(argv=None):
     parser.add_argument("--util-max", type=int, default=REVIEW_UTIL_MAX,
                         help="review-leg compute gate worst-case util cap "
                              "(default %d)" % REVIEW_UTIL_MAX)
+    parser.add_argument("--load-class-mb", type=int,
+                        default=DEFAULT_LOAD_CLASS_MB,
+                        help="consuming-leg cold-load class threshold in "
+                             "MB (tech#140; default %d = S1/E4 BASE "
+                             "14b; 0 disables the face)"
+                             % DEFAULT_LOAD_CLASS_MB)
     args = parser.parse_args(argv)
 
     if args.samples < 1 or args.sample_interval < 1 \
-            or args.util_max < 0 or args.min_free_mb < 0:
+            or args.util_max < 0 or args.min_free_mb < 0 \
+            or args.load_class_mb < 0:
         print(USAGE)
         return 2
 
@@ -375,7 +465,8 @@ def main(argv=None):
                            samples=args.samples,
                            interval=args.sample_interval,
                            min_free=args.min_free_mb,
-                           util_max=args.util_max)
+                           util_max=args.util_max,
+                           load_class_mb=args.load_class_mb)
     except CardChildError as exc:
         payload = {"card": "fire_window_card", "verdict": "error",
                    "path": None, "reasons": [str(exc)],
