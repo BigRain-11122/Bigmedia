@@ -1,0 +1,48 @@
+{
+  "round": "R2046",
+  "date": "2026-10-12",
+  "leg": "tech#126 night-window calibration smoke + city-source failed pool requeue (tech#92 10-13 08:00 re-judgment pre-window evidence)",
+  "broken_round_absorb": {
+    "prior_body_window": "10:34-10:55",
+    "event": "AIHOT stack node-kill family case #4: api 73084 + proxy 65752 + worker 4576 all dead between 08:59 (aihot_procs complete) and 10:34 (loop_health WARN api+web WinError 10061)",
+    "pg_survived": true,
+    "pg_evidence": "pg.log 10:54:17 connection forcibly closed x4 = node restart side-evidence; no 0x40010004 PG kill traces",
+    "recovery": "prior body per R1891 runbook: PG verify + api-restart.bat (tech#125 companion first battle) + worker restart",
+    "recovery_ledger": [
+      {"ts": "2026-10-12 08:59:16", "verdict": "complete", "api": 73084, "worker": 4576, "proxy": 65752},
+      {"ts": "2026-10-12 10:51:57", "verdict": "missing-worker", "api": 56724, "worker": null, "proxy": 56520},
+      {"ts": "2026-10-12 10:55:28", "verdict": "complete", "api": 56724, "worker": 60380, "proxy": 56520}
+    ],
+    "post_recovery_verify": "aihot_procs complete rc0 (this body 11:02:58) + api health {ok,db:ok,ms:108} + web 200"
+  },
+  "precondition": {
+    "gate": "fire GO or nvidia-smi util < 60",
+    "read": "util 39%, 11762 MiB (first sub-60 since R2040-R2044 all 98-99%)",
+    "met": true
+  },
+  "channel_smoke_since_1055_restart": {
+    "prefilter_article_completed": 122,
+    "score_article_completed": 190,
+    "structure_article_completed": 95,
+    "summarize_article_completed": 72,
+    "note": "R2038/R2039 eval-segment stall (score completion flow = 0 since 10-11 21:11) cleared in quiet window"
+  },
+  "early_score_band_pre_requeue_sample": {
+    "sample_size": 103,
+    "json-bilibili-knowledge": {"scored": 53, "max": 41, "ge60": 0},
+    "json-bilibili-tech": {"scored": 46, "max": 30, "ge60": 0},
+    "json-zhihu-hot": {"scored": 4, "max": 52, "ge60": 0},
+    "nonbf_ge60_total_unchanged": 11,
+    "zhihu_ge60": 0,
+    "reading": "ceiling band shifted DOWN vs R1952 old band 59-60 -> threshold-stratification fallback (T1 60->55) hypothesis strengthened; final read at 10-13 08:00 window"
+  },
+  "requeue": {
+    "method": "admin API POST /api/admin/processing/requeue group=null (R1887 craft, reason updated)",
+    "client_timeout_30s": "read timeout only; server-side effective",
+    "failed_pool_before": {"total": 790, "nonbf": 775, "bf": 15, "city": 743, "city_breakdown": {"json-bilibili-tech": 330, "json-bilibili-knowledge": 313, "json-bilibili-popular": 61, "json-zhihu-hot": 39}},
+    "failed_pool_after": 0,
+    "post_state": {"new_pool": 2340, "queue_created": 2118, "queue_active": 7},
+    "note": "requeued pool grinding under anchor-example rubric (worker 60380 started 10:55 > selection-score-city.md mtime 10-11 08:23)"
+  },
+  "final_readout_due": "2026-10-13 08:00 tech#92 pre-registered criterion: zhihu-hot head >=3 items >=60 = PASS text-leg close; else threshold-stratification fallback leg T1 60->55"
+}

@@ -1,1 +1,4 @@
 {"ts": "2026-10-12 08:59:16", "verdict": "complete", "rc": 0, "api_pid": 73084, "worker_pid": 4576, "proxy_pid": 65752}
+{"ts": "2026-10-12 10:51:57", "verdict": "missing-worker", "rc": 1, "api_pid": 56724, "worker_pid": null, "proxy_pid": 56520}
+{"ts": "2026-10-12 10:55:28", "verdict": "complete", "rc": 0, "api_pid": 56724, "worker_pid": 60380, "proxy_pid": 56520}
+{"ts": "2026-10-12 11:02:58", "verdict": "complete", "rc": 0, "api_pid": 56724, "worker_pid": 60380, "proxy_pid": 56520}
