@@ -1,0 +1,1 @@
+usage: python src/os/group_scan.py [--out FILE] [--echo] [--decisions P] [--hq-orders P] [--ledger P] [--own-orders-dir P] [--state P] [--cards-dir P]

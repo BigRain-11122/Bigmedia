@@ -1,0 +1,1 @@
+135. [R2067 补货·§D P-7 pilot 腿] fire 卡吞吐预探 pilot（P-7 承接：fire_consume 发射前龟速带预探 ≤90s〔wedge-probe tech#120 同型〕→ETA>1200s 龟速带=卡记 no-fire reason=throughput-starved 顺延下一窗·F-180 flight-4 起自然试点位·判据三问随 §D P-7 预注册：①龟速窗零烧穿 ②真窗判词落地率不降 ③预探 ≤90s 零额外成本）——gated（双前置=src/os/fire_consume.py 他窗在飞收口〔R1893 脏面两分律·mtime 16:13〕+flight-4 夜窗试点位）——按认领制随轮领做

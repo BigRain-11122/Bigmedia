@@ -1,0 +1,3 @@
+{"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-12 20:03:44", "rc": 1}
+{"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-12 20:14:39", "rc": 1}
+{"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-12 20:33:24", "rc": 1}
