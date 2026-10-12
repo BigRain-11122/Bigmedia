@@ -1,0 +1,19 @@
+PASS A1 fourteen cluster order labels
+PASS A1b 10-11 evening rows (19:xx-23:xx) == 10
+PASS A1c 10-12 rows total 12
+PASS A1d cluster total == 22 (10 evening + 12 day)
+PASS A2a quote 11:3x director verbatim
+PASS A2b quote 09:2x top-level verbatim
+PASS A2c quote 11:1x ceo-work verbatim
+PASS A2d quote 12:3x parallel verbatim
+PASS A2g deck quote == verbatim
+PASS A3a C-20261012-01 bill present
+PASS A3b MV-PREPRO-MASTER present
+PASS A3c AUDIENCE-VOICE present
+PASS A3d DIRECTOR-RULING present
+PASS A4a C-20261012-01 in decisions
+PASS A4b F-179 tail registration
+PASS A5a h1 fits budget
+PASS A5b h2 lines fit budget
+PASS A5c deck line count == 7 (v18 parity)
+em costs: 18.40, 13.00, 20.00, 20.80, 16.05, 19.30, 19.05 budget 23.00
