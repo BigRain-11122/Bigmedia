@@ -1,10 +1,10 @@
-tick=2091 ts=2026-10-13 01:14:41
-task=死线窗值守声明轮（O-2305 成片死线 08:30 在执·MV CEO 优先线独占·R2090 承接·五查静+探针带内
+tick=2092 ts=2026-10-13 01:28:04
+task=死线窗值守声明轮（O-2305 成片死线 08:30 在执·MV CEO 优先线独占·R2091 承接·五查静+探针带内
 production=open
-log_len=2127
-LOGTAIL>> 2026-10-13 00:58x R2089: 死线窗值守轮+P3 回访判读取活（O-2305 成片死线 08:30 在执·MV CEO 优先线独占·R2088 承接·等待窗内照取 P3 可执行项=O-20261009-1246 项 c 执法）——①轮首五查全静=own orders 顶 O-20261008-1105 mtime 12:08:14==锚零新令+origin_gap_check QUIET ahead0 behind0+group_scan 六面 fresh 00:53（decisions truly_new=0 水位 154+ledger @BigStream 5 行==值守锚零新转办+ORDERS rows=338 tail '10-12 23:5x'==stored 水位静+DIGEST-SUPPLY quiet+ORIGIN-DELTA quiet delta=0）+无 index.lock+树态=MV sprint 会话域在飞件+watchdog 双 M=PT5M 自巡预期态零接触（R1745 承继）；②三探针带内=board 0 FAIL（5 题 10 稿·5 in production）/readiness 3 阻塞皆外部 CEO 面（账号批次①+M4 GATE 6/10+#17）0 发现/loop_health 3F+282W 皆在案史实（09-2
+log_len=2128
 LOGTAIL>> 2026-10-13 01:06 R2090: 死线窗值守声明轮（O-2305 成片死线 08:30 在执·MV CEO 优先线独占·R2089 承接·五查静+探针带内）——①轮首五查全静=own orders 顶 O-20261008-1105 mtime 12:08:14==锚零新令+origin_gap_check QUIET ahead0 behind0（R1500 前置位）+group_scan 六面 fresh 01:03（decisions truly_new=0 水位 154 维持+ledger @BigStream 5 行==值守锚零新转办+ORDERS rows=338 tail '10-12 23:5x'==stored 水位静+DIGEST-SUPPLY quiet〔v19 staged 卡覆盖〕+ORIGIN-DELTA quiet delta=0）+无 index.lock+树态=MV sprint 会话域在飞件+watchdog 伴生 M 零接触（R1745 承继）；②死线窗读数三面=release/ 无 234s 成片（最新=样片v2 10-08 13:37）×comfy quiet（queue 0/0+output 尾件 10-10 23:35=KF 批烧毕 R2085 锚续证）×cloudv2 波续落（D08_world_flip.mp4 00:
 LOGTAIL>> 2026-10-13 01:14 R2091: 死线窗值守声明轮（O-2305 成片死线 08:30 在执·MV CEO 优先线独占·R2090 承接·五查静+探针带内）——①轮首五查全静=own orders 顶 O-20261008-1105 mtime 12:08:14==锚零新令+origin_gap_check QUIET ahead0 behind0（R1500 前置位）+group_scan 六面 fresh 01:12（decisions truly_new=0 水位 154 维持+ledger @BigStream 5 行==值守锚零新转办+ORDERS rows=338 tail '10-12 23:5x'==stored 水位静+DIGEST-SUPPLY quiet〔v19 staged 卡覆盖〕+ORIGIN-DELTA quiet delta=0）+无 index.lock+树态=MV sprint 会话域在飞件（tracked 面 10-08 陈旧非热写+untracked mv001 批件）+watchdog 双 M=PT5M 自巡预期态零接触（R1745 承继）；②死线窗读数三面=release/ 无 234s 成片（最新=样片v2 10-08 13:37==锚）×comfy quiet（queue 0/0+output newest_age 76
+LOGTAIL>> 2026-10-13 01:28 R2092: 死线窗值守声明轮（O-2305 成片死线 08:30 在执·MV CEO 优先线独占·R2091 承接·五查静+探针带内+fire 消费序执法）——①轮首五查全静=own orders 顶 O-20261008-1105 mtime 12:08:14==锚零新令+origin_gap_check QUIET ahead0 behind0（R1500 前置位）+group_scan 六面 fresh 01:25（DECISIONS rc0 水位 154 维持+LEDGER @BigStream 值守锚+ORDERS rows=338 tail '10-12 23:5x'==stored 静+DIGEST-SUPPLY quiet+ORIGIN-DELTA quiet delta=0+MTIME ok）+无 index.lock+树态=MV sprint 会话域在飞件〔mv0001/mv001 M+??·release/ 新现=样片区〕零接触（R1745 承继）；②死线窗读数四面=release/（mv0001/release）实读=样片v2 10-08 13:37 最新·无 234s 成片（R2091 锚一致）×cloudv2 CLOUDWAVE-2 波续落（D08_world_flip.mp4 47.6min=落件间隔渐宽·MV 会话
 watermark_dnums_count=154
 watermark_last={"dnums": ["C-20260927-01", "C-20260927-02", "C-20260928-02", "C-20260929-01", "C-20260929-02", "C-20260929-03", "C-20260930-04", "C-20260930-05", "C-20260930-06", "C-20261001-01", "C-20261001-03", "C-20261002-01", "C-20261007-04", "C-20261007-05", "C-20261008-04", "C-20261008-05", "C-20261008-06", "C-20261008-14", "C-20261009-01", "C-20261009-02", "C-20261009-03", "C-20261009-04", "C-20261010-01"
 BACKLOG-TOP0>> 111. **《爱在西元前》MV 改编·L-剧线首个实弹件（CEO 直令最高优先·P-2026-10-08-05·O-20261008-1105）**（硬约束=非写实〔禁 photoreal〕+创意优先+风格多元化分段+不用高清〔480P/720P 草稿〕+尽快出片）：全流程自动化链=**待研究双波归位起跑**（`cph4/research/R-20261008-mv-directors-01.md` 风格转译表+`R-20261008-mv-fandemand-01.md` 粉丝需求谱·防线二验讫后消费）→qwen 立意 2-3 案（多元风格分段设计·各段带 SDXL 提示词要素+调色方向·
@@ -12,14 +12,15 @@ BACKLOG-TOP1>> 112. **雷达日报（AIHOT 自托管 PoC 转产品线）运维�
 BACKLOG-TOP2>> 106. **「板块十年」续集备位池·lane 常备 ≥2 补位评估定谳（gated 留痕行·不占备货数·无可领面=跳过取下一条）**（R1694 评估轮落板·R1693 next 指针兑现·R-20261001-bigstream-01 §4 选题池盘点：可先行五行已全消费〔#2/#4/#6/#7/#8→F-160 立国日/F-161 灯亮起来那天/F-162 这条街的口头禅/F-163 台风夜之后/F-164 第一块砖·R1677→R1693 五件连续交付零断洞〕→**余三行素材面全 gated**：①#1《第一个安家的人》〔Q2 首户层/形态 B·M0 预打分 7/8 A〕=BigHou
 orders_latest=O-20261008-1105-bm-a.md mtime=1791432494.0895643
 git_status rc=0
-git_status_lines=18
+git_status_lines=19
 GIT>> M data/pipeline/aihot-watchdog-ledger.jsonl
 GIT>>  M data/pipeline/aihot-watchdog-state.json
 GIT>>  M data/pipeline/fire-consume-ledger.jsonl
 GIT>>  M data/storylines/drama/mv0001/PRODUCTION.md
 GIT>>  M data/storylines/drama/mv0001/SCRIPT-v1.md
 GIT>>  M data/storylines/drama/mv0001/style-tests/README.md
-GIT>> ?? .c3-tmp/quick_check.py
+GIT>> ?? .c3-tmp/r2093_groupscan.txt
+GIT>> ?? .c3-tmp/r2093_probes.txt
 GIT>> ?? data/sources/mv001/era-ref/
 GIT>> ?? data/sources/mv001/lyrics-draft.srt
 GIT>> ?? data/sources/mv001/original-mv/
@@ -27,7 +28,6 @@ GIT>> ?? data/sources/mv001/structure.json
 GIT>> ?? data/sources/mv001/whisper_lines.json
 GIT>> ?? "data/sources/mv001/周杰伦 - 爱在西元前.ape"
 GIT>> ?? data/storylines/drama/mv0001/BRIEF-v2.md
-GIT>> ?? data/storylines/drama/mv0001/full_mv_v2.py
 index_lock=False
 ledger_at_count=6
 LEDGER-TAIL>> - **值守轮 2026-10-09（夜班 03:07）**：①水位=盘余 630.2GB（retention 实测·环比 …686.2→674.2→665.2〔10-08 15:07〕→630.2·本班对前班 -35.0GB·近24h -44GB **首越 20GB 日燃线**——§11.8 连续 2 班越线即点名管线 owner 呈减负案·本班=预警行+主因注记：retention 域内 media +16GB〔MV 产线落件〕+.codely-cli 110GB 热点在册〔Class-B 
