@@ -1,0 +1,1 @@
+{"event": "skip-pause", "pg_ok": true, "note": "worker missing + CEO pause flag: skip restart (O-20261012-1115 CEO yield pause (R2047 stopped worker + unloaded 14b-8k))", "ts": "2026-10-12 12:38:02"}

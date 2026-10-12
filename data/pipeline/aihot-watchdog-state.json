@@ -1,0 +1,10 @@
+{
+ "pause": {
+  "reason": "O-20261012-1115 CEO yield pause (R2047 stopped worker + unloaded 14b-8k)",
+  "resume_step": "remove pause object (or set worker_restart_paused=false) + run data/assets/aihot-poc/worker-restart.bat (main#21)",
+  "set_by": "R2048 tech#127 delivery",
+  "worker_restart_paused": true,
+  "ts": "2026-10-12 12:37:48"
+ },
+ "last_pause_log": "2026-10-12 12:38:02"
+}
