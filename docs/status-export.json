@@ -1,5 +1,5 @@
 {
- "export_ts": "2026-10-12 21:41:59",
+ "export_ts": "2026-10-12 22:49:56",
  "do": "R2078 hold: card no-fire mv-active 15th read; MV KF dual-probe; tech#140 seed (card 14b VRAM face); next 00:00 F-180",
  "depts": [
   {
@@ -76,8 +76,8 @@
   ]
  ],
  "live": [
-  "当前活：夜窗 KF 资源分工窗——tech#138 wave-gap 面 2 层深覆盖已交付·F 三件 yield 维持（card 流达 mv-active·orders 水位 320 对齐）",
-  "最近实物：src/os/comfy_activity.py read_output_face 两层深覆盖（冷顶层下探一层）+4 新回归锁测试（60 测全绿·全套 1265 绿），2026-10-12 21:26:30",
-  "下个里程碑：夜窗 00:00 F-180 派发窗（MV KF 线收口判据：撤旗+worker-restart+fire 三件）·tech#92 雷达标定权威窗 10-13 08:00"
+  "当前活：夜窗值守——MV KF v3 线未收口（comfy output 闲 16min<30min·MV 会话 9min 前活跃），F-180/181/182 让位结转；集团 orders 六新行已消费（水位 331）",
+  "最近实物：src/os/comfy_activity.py wave-gap output face 两层深覆盖+4 回归测试（60 例全绿·全套 1265 例）2026-10-12 21:26:30",
+  "下个里程碑：MV KF 线收口（output 持续闲 ≥30min 或显式收口）→撤旗+worker-restart main#21+F-180 派发；tech#92 权威窗 10-13 08:00"
  ]
 }
