@@ -1,1 +1,3 @@
 {"event": "skip-pause", "pg_ok": true, "note": "worker missing + CEO pause flag: skip restart (O-20261012-1115 CEO yield pause (R2047 stopped worker + unloaded 14b-8k))", "ts": "2026-10-12 12:38:02"}
+{"event": "heal", "actions": ["pg", "api"], "before": {"verdict": "missing-api", "rc": 1, "pg_ok": false}, "after": {"verdict": "missing-proxy", "rc": 1, "pg_ok": true}, "ts": "2026-10-12 14:30:31"}
+{"event": "heal", "actions": ["proxy"], "before": {"verdict": "missing-proxy", "rc": 1, "pg_ok": true}, "after": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "ts": "2026-10-12 14:35:29"}

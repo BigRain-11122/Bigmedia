@@ -244,6 +244,153 @@ class TestRunOnce(TmpBase):
         self.assertEqual(rc, 0)  # nothing spawned -> no wait/verify branch
 
 
+class TestSupplementLoop(unittest.TestCase):
+    """tech#131: same-round multi-node heal compression (R2055 case-6
+    anchor: [pg,api] then a full extra PT5M cycle for [proxy])."""
+
+    def setUp(self):
+        import tempfile
+        import shutil
+        self.tmp = Path(tempfile.mkdtemp(prefix="wd-t131-"))
+        self.state_path = self.tmp / "state.json"
+        self.ledger_path = self.tmp / "ledger.jsonl"
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
+        self.pause = {"pause": {"worker_restart_paused": True,
+                                "ts": "2026-10-12 11:40:00",
+                                "reason": "O-20261012-1115 CEO yield pause"}}
+
+    def run_seq(self, topos, pgs, pause=False, spawn=None):
+        if pause:
+            self.state_path.write_text(
+                json.dumps(self.pause, ensure_ascii=True), encoding="ascii")
+        topo_iter = iter(topos)
+        pg_iter = iter(pgs)
+        calls = {"spawned": []}
+
+        def fake_spawn(bat):
+            calls["spawned"].append(Path(bat).name)
+            return True
+
+        rc = wd.run_once(
+            topology_runner=lambda: next(topo_iter),
+            pg_runner=lambda: next(pg_iter),
+            spawn=spawn or fake_spawn,
+            state_path=self.state_path, ledger_path=self.ledger_path,
+            clock=FakeClock(), wait=lambda s: None)
+        return rc, calls["spawned"]
+
+    def read_rows(self):
+        if not self.ledger_path.exists():
+            return []
+        return [json.loads(l) for l in
+                self.ledger_path.read_text(encoding="utf-8").splitlines()
+                if l.strip()]
+
+    def test_case6_shape_one_cycle_three_roles(self):
+        # case-6 anchor: pg+api+proxy down -> previously two PT5M
+        # cycles; now one cycle, one ledger row, three role keys.
+        rc, spawned = self.run_seq(
+            [topo_result(1, "missing-api"),
+             topo_result(1, "missing-proxy"),
+             topo_result(0, "complete")],
+            [False, True, True])
+        self.assertEqual(rc, 0)
+        self.assertEqual(spawned,
+                         ["pg-restart.bat", "api-restart.bat",
+                          "web-restart.bat"])
+        rows = [r for r in self.read_rows() if r["event"] == "heal"]
+        self.assertEqual(len(rows), 1)  # single-row judgement criterion
+        self.assertEqual(rows[0]["actions"], ["pg", "api", "proxy"])
+        self.assertEqual(rows[0]["passes"], 2)
+        self.assertEqual(rows[0]["before"]["verdict"], "missing-api")
+        self.assertFalse(rows[0]["before"]["pg_ok"])
+        self.assertEqual(rows[0]["after"]["verdict"], "complete")
+        self.assertTrue(rows[0]["after"]["pg_ok"])
+
+    def test_supplement_dedupe_stops_flapping(self):
+        # api bat already fired this run -> never re-fire it, even if
+        # the verdict keeps reading missing-api.
+        rc, spawned = self.run_seq(
+            [topo_result(1, "missing-api"),
+             topo_result(1, "missing-api"),
+             topo_result(1, "missing-api")],
+            [True, True, True])
+        self.assertEqual(rc, 1)
+        self.assertEqual(spawned, ["api-restart.bat"])  # fired exactly once
+
+    def test_supplement_stops_when_pg_still_down(self):
+        # pg down + api missing -> pass 1 heals both; re-probe still
+        # shows pg down -> no further node supplements this cycle.
+        rc, spawned = self.run_seq(
+            [topo_result(1, "missing-api"),
+             topo_result(1, "missing-api")],
+            [False, False])
+        self.assertEqual(rc, 1)
+        self.assertEqual(spawned, ["pg-restart.bat", "api-restart.bat"])
+        rows = [r for r in self.read_rows() if r["event"] == "heal"]
+        self.assertEqual(rows[0]["actions"], ["pg", "api"])
+        self.assertEqual(rows[0]["passes"], 1)
+
+    def test_supplement_stops_on_probe_error_midloop(self):
+        # fail-closed mid-loop: honest after face, no further actions.
+        rc, spawned = self.run_seq(
+            [topo_result(1, "missing-api"), topo_result(2, None)],
+            [True, True])
+        self.assertEqual(rc, 1)
+        self.assertEqual(spawned, ["api-restart.bat"])
+        rows = [r for r in self.read_rows() if r["event"] == "heal"]
+        self.assertEqual(rows[0]["after"]["rc"], 2)
+
+    def test_pause_terminal_counts_clean_after_multiheal(self):
+        # case-7 shape during a CEO pause: api+proxy restored in one
+        # cycle, worker absence left as the pause terminal -> rc 0
+        # (mirrors skip-pause semantics), row records it honestly.
+        rc, spawned = self.run_seq(
+            [topo_result(1, "missing-api"),
+             topo_result(1, "missing-proxy"),
+             topo_result(1, "missing-worker")],
+            [True, True, True], pause=True)
+        self.assertEqual(rc, 0)
+        self.assertEqual(spawned, ["api-restart.bat", "web-restart.bat"])
+        rows = [r for r in self.read_rows() if r["event"] == "heal"]
+        self.assertEqual(rows[0]["actions"], ["api", "proxy"])
+        self.assertEqual(rows[0]["passes"], 2)
+        self.assertEqual(rows[0]["after"]["verdict"], "missing-worker")
+
+    def test_worker_missing_without_pause_after_heal_is_rc1(self):
+        # no pause flag: worker absence after a heal is a real gap ->
+        # next cadence heals it (not the pause terminal).
+        rc, _ = self.run_seq(
+            [topo_result(1, "missing-api"),
+             topo_result(1, "missing-worker")],
+            [True, True], pause=False)
+        self.assertEqual(rc, 1)
+
+    def test_pg_heals_under_pause_flag(self):
+        # tech#131 precedence fix: pause branch gates the WORKER only;
+        # pg down + missing-worker + pause -> pg heals, worker does not.
+        rc, spawned = self.run_seq(
+            [topo_result(1, "missing-worker"),
+             topo_result(1, "missing-worker")],
+            [False, True], pause=True)
+        self.assertEqual(rc, 0)
+        self.assertEqual(spawned, ["pg-restart.bat"])  # no worker bat
+        events = [r["event"] for r in self.read_rows()]
+        self.assertEqual(events, ["heal", "skip-pause"])
+        heal = [r for r in self.read_rows() if r["event"] == "heal"][0]
+        self.assertEqual(heal["actions"], ["pg"])
+        self.assertFalse(heal["before"]["pg_ok"])
+        self.assertTrue(heal["after"]["pg_ok"])
+
+    def test_pass_cap_constant(self):
+        # cap = initial heal + up to 2 supplements; dedupe makes the
+        # 3rd pass unreachable today (only 2 supplementable roles), so
+        # the cap is a belt-and-suspenders flapping guard.
+        self.assertEqual(wd.MAX_HEAL_PASSES, 3)
+        self.assertEqual(wd.SUPPLEMENT_VERDICTS,
+                         ("missing-api", "missing-proxy"))
+
+
 class TestRepoReality(unittest.TestCase):
     def test_canonical_bats_exist(self):
         for bat in (wd.PG_BAT, wd.ROLE_BATS["api"],

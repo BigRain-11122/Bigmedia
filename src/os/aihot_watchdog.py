@@ -19,7 +19,20 @@ Design laws baked in:
   Fail-closed: an unparseable flag file counts as paused.
 - Light services (PG 55432 / api / proxy-web) are the "standing
   light footprint" the yield order keeps alive, so their heal
-  branches are NOT gated by the pause flag.
+  branches are NOT gated by the pause flag. This includes the
+  pg-down + missing-worker + pause combination: the worker restart
+  is skipped, the PG heal still fires (tech#131 precedence fix).
+- tech#131 (R2055 case-6): a multi-node kill healed across two PT5M
+  cycles because aihot_procs reports a single-enum verdict (api
+  outranks proxy outranks worker). run_once now runs a capped
+  supplement loop -- heal, re-probe, patch the remaining
+  missing-api/missing-proxy role within the SAME cycle -- so one
+  ledger row carries actions=[pg,api,proxy]. Guards: pass cap
+  MAX_HEAL_PASSES (bat flapping), per-role dedupe (never fire the
+  same bat twice in one run), worker absence is the pause-law
+  terminal and never triggers a supplement. A heal that ends on
+  missing-worker + pause flag counts as the admissible terminal
+  (rc 0), mirroring the skip-pause branch semantics.
 - Silence law (U060): the scheduled task runs this script under
   pythonw.exe (GUI subsystem, no console). Every console-subsystem
   child (python/netstat/powershell/cmd) is spawned with
@@ -31,9 +44,10 @@ Consumption law: ledger = data/pipeline/aihot-watchdog-ledger.jsonl
 skip-pause (worker missing + pause flag; 1/6h), probe-error (1/h),
 heal (every action, with before/after verdicts), lock-skip.
 
-rc contract: 0 = clean run (heartbeat, skip, or full heal),
-1 = heal attempted but post-heal verify still not complete,
-2 = topology probe error face (fail-closed -- never acts on nodes).
+rc contract: 0 = clean run (heartbeat, skip, full heal, or heal that
+ended on the pause terminal), 1 = heal attempted but post-heal verify
+still not complete, 2 = topology probe error face (fail-closed --
+never acts on nodes).
 """
 import datetime
 import json
@@ -55,6 +69,13 @@ PG_PROBE_TIMEOUT_S = 3
 TOPO_TIMEOUT_S = 90
 POST_HEAL_WAIT_S = 25
 LOCK_STALE_S = 600
+# tech#131: same-round multi-node heal compression (R2055 case-6:
+# proxy lagged one full PT5M cadence behind pg/api because
+# aihot_procs reports a single-enum verdict). Supplement passes
+# patch the remaining role within the SAME cycle; the cap plus the
+# per-role dedupe guard against bat flapping.
+MAX_HEAL_PASSES = 3
+SUPPLEMENT_VERDICTS = ("missing-api", "missing-proxy")
 HEARTBEAT_PERIOD = "day"
 PAUSE_LOG_THROTTLE_S = 6 * 3600
 ERR_LOG_THROTTLE_S = 3600
@@ -267,6 +288,25 @@ def run_once(topology_runner=None, pg_runner=None, spawn=None,
             state["last_err_log"] = now().strftime("%Y-%m-%d %H:%M:%S")
         rc = 2
     elif skip_note == "pause":
+        # The pause flag gates the WORKER restart only. The documented
+        # law keeps light-service heals ungated, so a down PG heals
+        # here too (tech#131 precedence fix: previously this branch
+        # swallowed the pg action when the single-enum verdict read
+        # missing-worker).
+        if not pg_ok:
+            if do_spawn(PG_BAT):
+                do_wait(POST_HEAL_WAIT_S)
+                pg2 = run_pg()
+                append_row({"event": "heal",
+                            "actions": ["pg"],
+                            "passes": 1,
+                            "before": {"verdict": (topo or {}).get("verdict"),
+                                       "rc": (topo or {}).get("rc"),
+                                       "pg_ok": pg_ok},
+                            "after": {"verdict": (topo or {}).get("verdict"),
+                                      "rc": (topo or {}).get("rc"),
+                                      "pg_ok": pg2}},
+                           ledger_path)
         last = parse_ts(state.get("last_pause_log"))
         fresh = last is not None and (now() - last).total_seconds() < PAUSE_LOG_THROTTLE_S
         if not fresh:
@@ -289,22 +329,52 @@ def run_once(topology_runner=None, pg_runner=None, spawn=None,
         for kind, bat in actions:
             if do_spawn(bat):
                 spawned.append(kind)
+        # tech#131 supplement loop: after the post-heal re-probe, a
+        # fresh missing-api/missing-proxy verdict with PG up gets
+        # patched within THIS cycle (R2055 case-6 needed a second full
+        # PT5M cadence for the leftover role). Guards: pass cap,
+        # per-role dedupe (same bat never fires twice in one run),
+        # worker absence is the pause-law terminal -- never supplements.
+        cur_topo, cur_pg = topo, pg_ok
+        passes = 0
         if spawned:
+            passes = 1
             do_wait(POST_HEAL_WAIT_S)
-            topo2 = run_topo()
-            pg2 = run_pg()
+            cur_topo = run_topo()
+            cur_pg = run_pg()
+            while passes < MAX_HEAL_PASSES:
+                verdict = (cur_topo or {}).get("verdict")
+                if cur_topo is None or cur_topo.get("rc") == 2:
+                    break  # probe-error face: fail-closed, next cadence owns it
+                if not (cur_pg and verdict in SUPPLEMENT_VERDICTS):
+                    break  # complete / worker-terminal / pg still down
+                role = verdict.replace("missing-", "")
+                if role in spawned:
+                    break  # dedupe: this bat already fired this run
+                if not do_spawn(ROLE_BATS[role]):
+                    break
+                spawned.append(role)
+                passes += 1
+                do_wait(POST_HEAL_WAIT_S)
+                cur_topo = run_topo()
+                cur_pg = run_pg()
             append_row({"event": "heal",
                         "actions": spawned,
+                        "passes": passes,
                         "before": {"verdict": (topo or {}).get("verdict"),
                                    "rc": (topo or {}).get("rc"),
                                    "pg_ok": pg_ok},
-                        "after": {"verdict": (topo2 or {}).get("verdict"),
-                                  "rc": (topo2 or {}).get("rc"),
-                                  "pg_ok": pg2}},
+                        "after": {"verdict": (cur_topo or {}).get("verdict"),
+                                  "rc": (cur_topo or {}).get("rc"),
+                                  "pg_ok": cur_pg}},
                        ledger_path)
-            complete = (topo2 is not None and topo2.get("rc") == 0
-                        and topo2.get("verdict") == "complete" and pg2)
-            rc = 0 if complete else 1
+            complete = (cur_topo is not None and cur_topo.get("rc") == 0
+                        and cur_topo.get("verdict") == "complete" and cur_pg)
+            pause_terminal = (pause_active and cur_topo is not None
+                              and cur_topo.get("rc") != 2
+                              and cur_topo.get("verdict") == "missing-worker")
+            rc = 0 if (complete or pause_terminal) else 1
+        # spawned empty: nothing fired -> no wait/verify branch (legacy law)
 
     state.pop("lock_ts", None)
     save_state(state, state_path)
