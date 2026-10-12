@@ -1,5 +1,5 @@
 {
- "export_ts": "2026-10-13 06:49:44",
+ "export_ts": "2026-10-13 07:34:23",
  "do": "MV 死线窗值守中（08:30 全曲成片待 MV 会话呈报）；本轮实物=tech#145 三队紧凑读数器 queue_status.py（5 行读数替代全文件 dump+--item 单件全行取件 fail-closed）",
  "depts": [
   {
@@ -77,7 +77,18 @@
   [
    "R2120",
    "队列紧凑读数器交付"
-  ]
+  ],
+  {
+   "ts": "2026-10-13 07:34:23",
+   "round": "R2124",
+   "what": "tech#146 delivered: queue_status.py gains the backlog face (P1 board in the compact readout) + [needs-CEO] gated-bucket split; 27 tests green, 1321 suite green, live dogfood backlog 114|done 96|gated 9(+2 ceo)|claimable 9 head #109; death-line watch continues (release no 234s film at 07:34, 08:30 deadline, main#27 after)",
+   "files": [
+    "src/os/queue_status.py",
+    "tests/test_queue_status.py",
+    "state/queue/tech.md"
+   ],
+   "next": "death-line guard until 08:30, then main#27 close-out trilogy: MV film check -> unpause AIHOT flag + worker-restart (main#21) -> F-180~183 fire relay + tech#92 re-judgment window reset"
+  }
  ],
  "live": [
   "当前活：死线窗值守——MV 线占机让路中（F-180~183 评审件排队等 08:30 成片收口后 fire 接力）；本轮把三队消费面装上紧凑读数器（5 行读数替代全文件 dump）",

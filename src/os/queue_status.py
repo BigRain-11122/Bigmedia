@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""BigStream OS-loop queue compact readout (tech#145, R2119 seed).
+"""BigStream OS-loop queue compact readout (tech#145, R2119 seed;
+backlog face tech#146, R2124).
 
 Gap anchor (R2119 incident): the three self-drive queues are single-long-
 line ledgers (tech.md items run ~1700 chars on one physical line). Round
@@ -32,10 +33,18 @@ Pure-parse helpers (parse_items / classify_item / classify_queue /
 render / build_json) are unit-tested offline; no git, no network.
 
 Usage:
-    python src/os/queue_status.py                 # compact 3-queue face
+    python src/os/queue_status.py                 # compact 4-face readout
     python src/os/queue_status.py --item 145      # tech #145 full text
     python src/os/queue_status.py --queue main --item 27
+    python src/os/queue_status.py --queue backlog --item 111
     python src/os/queue_status.py --json          # machine face
+
+tech#146 (R2124): the P1 board (src/os/backlog.md) joins the readout as
+a fourth face - same single-long-line shape, same full-text done law,
+plus the P1-only [needs-CEO] family: those items park on the CEO and
+classify into the gated bucket (split shown as "(+needs-CEO N)"). The
+claimable-head line doubles as the fast-path "backlog top uncompleted
+item" determination, no more full-file dumps.
 """
 
 import argparse
@@ -49,6 +58,10 @@ QUEUE_FILES = {
     "main": "state/queue/main.md",
     "tech": "state/queue/tech.md",
     "explore": "state/queue/explore.md",
+    "backlog": "src/os/backlog.md",  # tech#146: P1 board shares the
+    # single-long-line shape (~81% done); P1-only state family: items
+    # marked [needs-CEO] are ~gated semantics (waiting on CEO) and must
+    # land in the gated bucket, never claimable.
 }
 DEFAULT_QUEUE = "tech"
 HEAD_PREVIEW_CHARS = 90
@@ -68,6 +81,9 @@ _DONE_RE = re.compile(r"\[[^\[\]]*\bdone\s+(\d{4}-\d{2}-\d{2})[^\[\]]*\]")
 # ("不达=判负留痕"), so machine detection would misclassify; the
 # preview line surfaces the verdict and the loop still judges.
 _GATED_RE = re.compile(r"gated|观察位|到点执行|GPU 独占窗|窗到即领")
+# tech#146: P1-board-only gated family - items parked on the CEO (P1
+# proposals, sign-off waits). Matches the readiness NEEDS_CEO_RE shape.
+NEEDS_CEO_RE = re.compile(r"\[needs-CEO[^\]]*\]")
 
 
 def parse_items(text):
@@ -94,25 +110,36 @@ def classify_item(item):
     """Return ('done'|'gated'|'claimable', marker_or_None).
 
     Done determination runs the regex over the FULL item text (never a
-    truncated view) - R2119 fail-closed doctrine.
+    truncated view) - R2119 fail-closed doctrine. tech#146: [needs-CEO]
+    items classify into the gated bucket (reported via the needs-ceo
+    sub-count so the compact face can show the split).
     """
     m = _DONE_RE.search(item["text"])
     if m:
         return "done", m.group(0)
+    if NEEDS_CEO_RE.search(item["text"]):
+        return "gated", None
     if _GATED_RE.search(item["text"]):
         return "gated", None
     return "claimable", None
 
 
 def classify_queue(items):
-    """Bucket items into done/gated/claimable; keep file order."""
+    """Bucket items into done/gated/claimable; keep file order.
+
+    tech#146: also returns the needs-CEO sub-set (nums) - those items
+    sit in the gated bucket, gated semantics, with a reported split.
+    """
     buckets = {"done": [], "gated": [], "claimable": []}
     markers = {}
+    needs_ceo = {}
     for it in items:
         state, marker = classify_item(it)
         buckets[state].append(it)
         markers[it["num"]] = marker
-    return buckets, markers
+        if NEEDS_CEO_RE.search(it["text"]) and state == "gated":
+            needs_ceo[it["num"]] = True
+    return buckets, markers, needs_ceo
 
 
 def head_preview(item, limit=HEAD_PREVIEW_CHARS):
@@ -146,12 +173,13 @@ def build_report(root, names):
         if items is None:
             report[name] = {"missing": True}
             continue
-        buckets, markers = classify_queue(items)
+        buckets, markers, needs_ceo = classify_queue(items)
         report[name] = {
             "missing": False,
             "total": len(items),
             "done": len(buckets["done"]),
             "gated": len(buckets["gated"]),
+            "needs_ceo": len(needs_ceo),
             "claimable": len(buckets["claimable"]),
             "claimable_head": (buckets["claimable"][0]
                                if buckets["claimable"] else None),
@@ -171,12 +199,15 @@ def render(report):
             continue
         for k in tot:
             tot[k] += face[k]
+        ceo_n = face.get("needs_ceo", 0)
+        gated_txt = ("%d" % face["gated"] if ceo_n == 0 else
+                     "%d (+needs-CEO %d)" % (face["gated"], ceo_n))
         head = face["claimable_head"]
         head_txt = ("head #%d: %s" % (head["num"], head_preview(head))
                     if head else "head: (none claimable)")
-        lines.append("%-7s: %d items | done %d | gated %d | claimable %d | %s"
-                     % (name, face["total"], face["done"], face["gated"],
-                        face["claimable"], head_txt))
+        lines.append("%-7s: %d items | done %d | gated %s | claimable %d | %s"
+                     % (name, face["total"], face["done"],
+                        gated_txt, face["claimable"], head_txt))
     lines.append("total  : done %d | gated %d | claimable %d"
                  % (tot["done"], tot["gated"], tot["claimable"]))
     return lines
@@ -208,6 +239,7 @@ def build_json(report):
             "total": face["total"],
             "done": face["done"],
             "gated": face["gated"],
+            "needs_ceo": face.get("needs_ceo", 0),
             "claimable": face["claimable"],
             "claimable_head_num": head["num"] if head else None,
         }
@@ -235,7 +267,7 @@ def main(argv=None):
             print("queue %s unreadable - fail-closed" % args.queue,
                   file=sys.stderr)
             return 2
-        face = classify_queue(items)
+        face = classify_queue(items)  # buckets/markers/needs-ceo unused here
         report_face = {"items": items}
         out, code = render_item(report_face, args.item)
         for line in out:
