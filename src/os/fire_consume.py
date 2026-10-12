@@ -27,7 +27,8 @@ future re-plumbings that would cache the card line).
 
 rc contract (mirrors the card; consumers gate on rc):
   0 = fire consumed, staged launch dispatched
-  1 = no-fire (window closed or stale verdict; card cited)
+  1 = no-fire (window closed, stale verdict, or bm-a workday-hours
+      dispatch block; card cited)
   2 = usage/tooling error (fail-closed; NEVER launches)
 
 Usage:
@@ -54,6 +55,31 @@ CARD_TIMEOUT_S = 300
 
 DETACHED_PROCESS = 0x00000008
 CREATE_NEW_PROCESS_GROUP = 0x00000200
+
+# bm-a standing rule (CEO order 2026-10-12 15:0x, the machine-loading
+# order): this machine gets ZERO job dispatch during workday working
+# hours. Eligible dispatch windows: nightly 00:00-07:59 plus weekends.
+# Escalated to a script assertion per the recurrence-escalation law:
+# the rule must hold structurally, not as a round-log checklist note.
+# The card is not even read while the block is active -- dispatch is
+# illegal regardless of GPU state, so probing it is moot.
+WORKDAY_BLOCK_START_HOUR = 8
+
+# tech#137 reconciliation (CEO order O-20261012-2025 family): a newer
+# CEO order declaring "CEO off work" opens the night window EARLY --
+# newer order beats the 15:0x hardcode (new-order-overrides law).
+# The loop encodes such a consumption into a repo-local flag file
+# (same lifecycle pattern as the AIHOT pause flag): written when a
+# CEO-off-work order is consumed, deleted when the CEO returns / at
+# the morning self-heal. Freshness = same calendar date as the
+# declaration (an evening declaration covers the rest of that day;
+# 00:00-07:59 is already eligible via the standing rule). Missing /
+# malformed / stale flag NEVER lifts the block -- fail-closed.
+CEO_OFF_WORK_FLAG = REPO / "data" / "pipeline" / "ceo-off-work-flag.json"
+
+# Test seam: main()/flag math read the clock through this module
+# global (CLI tests must not depend on the wall-clock weekday).
+NOW_FN = datetime.datetime.now
 
 USAGE = ("usage: python src/os/fire_consume.py --launch "
         "<staged-launch.py> [--ledger F] [--json]")
@@ -121,6 +147,38 @@ def decide(card, now_epoch):
     return "launch", "fire-fresh", 0
 
 
+def read_ceo_off_work_flag(path=CEO_OFF_WORK_FLAG):
+    """Parse the CEO-off-work flag -> declared datetime or None.
+
+    Fail-closed: missing file, bad JSON, missing/malformed declared_ts
+    all read as None (the block stays). A malformed flag never lifts
+    the zero-dispatch rule."""
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        declared = datetime.datetime.strptime(
+            payload["declared_ts"], "%Y-%m-%d %H:%M:%S")
+    except (OSError, ValueError, KeyError, TypeError):
+        return None
+    return declared
+
+
+def workday_dispatch_blocked(dt, flag_declared=None):
+    """True when bm-a workday-hours zero-dispatch rule blocks flights.
+
+    Weekends (Sat/Sun) are always eligible; weekdays block from 08:00
+    through 23:59 -- EXCEPT when a fresh CEO-off-work flag (tech#137,
+    O-20261012-2025 family) declares the night window early-open:
+    same-date declaration lifts the block for the rest of that day.
+    Pure function -> trivially testable at boundaries."""
+    if dt.weekday() >= 5:  # 5=Sat, 6=Sun
+        return False
+    if dt.hour < WORKDAY_BLOCK_START_HOUR:
+        return False  # standing night window 00:00-07:59
+    if flag_declared is not None and flag_declared.date() == dt.date():
+        return False  # CEO declared off work today (early-open)
+    return True
+
+
 def real_launch(script_path):
     """Dispatch the staged launcher detached (U060 zero-window law).
 
@@ -177,6 +235,24 @@ def main(argv=None):
     if not launch.is_file() or launch.suffix != ".py":
         print(USAGE)
         return 2
+
+    now_dt = NOW_FN()
+    if workday_dispatch_blocked(now_dt,
+                                read_ceo_off_work_flag()):
+        # bm-a workday-hours zero-dispatch (CEO order 2026-10-12):
+        # refuse before any card run -- dispatch is illegal regardless
+        # of GPU state. Ledger keeps the one-row-per-run trace.
+        reason = "bm-a-workday-hours-zero-dispatch"
+        result = {"tool": "fire_consume", "action": "no-fire",
+                  "reason": reason, "launched": False,
+                  "launch_script": str(launch),
+                  "ts": now_dt.strftime("%Y-%m-%d %H:%M:%S"), "rc": 1}
+        if args.ledger:
+            append_ledger_row(args.ledger, result)
+        print(json.dumps(result, ensure_ascii=False) if args.json else
+              "fire-consume: card=blocked action=no-fire "
+              "launched=False reason=%s" % reason)
+        return 1
 
     try:
         card = real_run_card()

@@ -6,6 +6,7 @@ real_run_card/real_launch/append_ledger_row at module level (main()
 resolves them as module globals).
 """
 
+import datetime
 import importlib.util
 import json
 import os
@@ -28,6 +29,14 @@ def _fire_card(expires_at=9999999999):
     return {"card": "fire_window_card", "verdict": "fire",
             "path": "B-eviction-credit", "reasons": [],
             "expires_at": expires_at, "ts": "2026-10-11 20:34:07"}
+
+
+# Fixed wall-clock for CLI hermeticity: Sunday 2026-10-11 noon -- the
+# workday block is inactive on weekends, so card-flow tests exercise
+# their intended paths regardless of when the suite runs (the block
+# check would otherwise swallow every CLI test on a weekday).
+SUNDAY_NOON = datetime.datetime(2026, 10, 11, 12, 0, 0)
+MONDAY_NOON = datetime.datetime(2026, 10, 12, 12, 0, 0)
 
 
 class DecideTests(unittest.TestCase):
@@ -74,6 +83,63 @@ class DecideTests(unittest.TestCase):
         self.assertEqual(reason, "fire-fresh")
 
 
+class WorkdayBlockTests(unittest.TestCase):
+    """tech#137: bm-a workday-hours zero-dispatch + CEO-off-work flag
+    reconciliation (O-20261012-2025 early-open family)."""
+
+    def test_weekends_always_eligible(self):
+        saturday = datetime.datetime(2026, 10, 10, 14, 0, 0)
+        sunday = datetime.datetime(2026, 10, 11, 23, 59, 0)
+        self.assertFalse(consumer.workday_dispatch_blocked(saturday))
+        self.assertFalse(consumer.workday_dispatch_blocked(sunday))
+
+    def test_night_window_boundary_strict(self):
+        before = datetime.datetime(2026, 10, 12, 7, 59, 59)
+        at = datetime.datetime(2026, 10, 12, 8, 0, 0)
+        self.assertFalse(consumer.workday_dispatch_blocked(before))
+        self.assertTrue(consumer.workday_dispatch_blocked(at))
+
+    def test_weekday_evening_blocked_without_flag(self):
+        self.assertTrue(consumer.workday_dispatch_blocked(MONDAY_NOON))
+        self.assertTrue(consumer.workday_dispatch_blocked(
+            datetime.datetime(2026, 10, 12, 23, 59, 0)))
+
+    def test_same_date_flag_lifts_block(self):
+        declared = datetime.datetime(2026, 10, 12, 20, 50, 0)
+        self.assertFalse(consumer.workday_dispatch_blocked(
+            MONDAY_NOON, declared))
+
+    def test_yesterday_flag_does_not_lift(self):
+        declared = datetime.datetime(2026, 10, 11, 20, 50, 0)
+        self.assertTrue(consumer.workday_dispatch_blocked(
+            MONDAY_NOON, declared))
+
+    def test_flag_parse_valid(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "flag.json"
+            path.write_text(json.dumps(
+                {"declared_ts": "2026-10-12 20:50:00"}),
+                encoding="utf-8")
+            self.assertEqual(consumer.read_ceo_off_work_flag(path),
+                             datetime.datetime(2026, 10, 12, 20, 50, 0))
+
+    def test_flag_missing_corrupt_malformed_all_none(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            missing = Path(tmp) / "absent.json"
+            self.assertIsNone(consumer.read_ceo_off_work_flag(missing))
+            corrupt = Path(tmp) / "corrupt.json"
+            corrupt.write_text("{not json", encoding="utf-8")
+            self.assertIsNone(consumer.read_ceo_off_work_flag(corrupt))
+            malformed = Path(tmp) / "malformed.json"
+            malformed.write_text(
+                json.dumps({"declared_ts": "2026/10/12 20:50"}),
+                encoding="utf-8")
+            self.assertIsNone(consumer.read_ceo_off_work_flag(malformed))
+            empty = Path(tmp) / "empty.json"
+            empty.write_text("{}", encoding="utf-8")
+            self.assertIsNone(consumer.read_ceo_off_work_flag(empty))
+
+
 class LedgerRowTests(unittest.TestCase):
     def test_appends_jsonl_and_creates_parents(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -100,6 +166,10 @@ class CliTests(unittest.TestCase):
         self._real_card = consumer.real_run_card
         self._real_launch = consumer.real_launch
         self._real_append = consumer.append_ledger_row
+        self._real_now_fn = consumer.NOW_FN
+        self._real_flag_reader = consumer.read_ceo_off_work_flag
+        consumer.NOW_FN = lambda: SUNDAY_NOON
+        consumer.read_ceo_off_work_flag = lambda path=None: None
         self.tmp = tempfile.TemporaryDirectory()
         self.launch = Path(self.tmp.name) / "staged.py"
         self.launch.write_text("print('x')\n", encoding="utf-8")
@@ -112,12 +182,40 @@ class CliTests(unittest.TestCase):
         consumer.real_run_card = self._real_card
         consumer.real_launch = self._real_launch
         consumer.append_ledger_row = self._real_append
+        consumer.NOW_FN = self._real_now_fn
+        consumer.read_ceo_off_work_flag = self._real_flag_reader
         self.tmp.cleanup()
 
     def _run(self, extra=None):
         argv = ["--launch", str(self.launch),
                 "--ledger", str(self.ledger)] + (extra or [])
         return consumer.main(argv)
+
+    def test_workday_block_refuses_before_card_run(self):
+        consumer.NOW_FN = lambda: MONDAY_NOON
+        consumer.read_ceo_off_work_flag = lambda path=None: None
+
+        def must_not_run():
+            raise AssertionError("card must not run while blocked")
+        consumer.real_run_card = must_not_run
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        self.assertEqual(self.rows[0]["reason"],
+                         "bm-a-workday-hours-zero-dispatch")
+        self.assertFalse(self.rows[0]["launched"])
+
+    def test_ceo_off_work_flag_lifts_block_card_flow_reached(self):
+        consumer.NOW_FN = lambda: MONDAY_NOON
+        consumer.read_ceo_off_work_flag = lambda path=None: \
+            datetime.datetime(2026, 10, 12, 20, 50, 0)
+        consumer.real_run_card = lambda: {
+            "verdict": "no-fire", "reasons": ["gate-static-no-go"],
+            "ts": "t"}
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        # the card actually ran -> the block was lifted, no-fire came
+        # from the card itself, not from the dispatch block
+        self.assertIn("card-no-fire", self.rows[0]["reason"])
 
     def test_no_fire_rc1_no_launch_no_row(self):
         consumer.real_run_card = lambda: {

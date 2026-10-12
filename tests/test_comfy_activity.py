@@ -7,6 +7,7 @@ module globals).
 """
 
 import contextlib
+import datetime
 import importlib.util
 import io
 import json
@@ -143,6 +144,77 @@ class QueueFaceTests(unittest.TestCase):
                 fetcher=lambda u, t: (200, body))["status"], "unreadable")
 
 
+class OutputFaceTests(unittest.TestCase):
+    """tech#136 wave-gap face: fresh entries in the ComfyUI output
+    tree attest a live client iteration loop (R2075: queue 0/0 +
+    cpu-quiet at 20:44 while output took 34 files in three waves)."""
+
+    NOW = datetime.datetime(2026, 10, 12, 20, 44, 0)
+
+    def _touch(self, path, age_s):
+        path.write_text("x", encoding="utf-8")
+        stamp = self.NOW.timestamp() - age_s
+        os.utime(path, (stamp, stamp))
+
+    def test_fresh_file_attests_recent(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._touch(Path(td) / "kf_00045.png", 240)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["status"], "ok")
+            self.assertEqual(face["recent"], 1)
+            self.assertEqual(face["newest_age_s"], 240.0)
+
+    def test_cold_file_zero_recent_with_age(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._touch(Path(td) / "old.png", 3600)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["status"], "ok")
+            self.assertEqual(face["recent"], 0)
+            self.assertEqual(face["newest_age_s"], 3600.0)
+
+    def test_fresh_subdir_mtime_carries_wave_signal(self):
+        # live shape: batch writes output/kf_bma/*.png; the top-level
+        # files stay cold, the subdir mtime is what goes fresh
+        with tempfile.TemporaryDirectory() as td:
+            self._touch(Path(td) / "old_top.png", 7200)
+            sub = Path(td) / "kf_bma"
+            sub.mkdir()
+            (sub / "shot_01.png").write_text("x", encoding="utf-8")
+            # explicit dir-mtime stamp: the OS would stamp it with the
+            # real wall clock, but the face reads it against self.NOW
+            stamp = self.NOW.timestamp() - 300
+            os.utime(sub, (stamp, stamp))
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["status"], "ok")
+            self.assertEqual(face["recent"], 1)
+            self.assertEqual(face["newest_age_s"], 300.0)
+
+    def test_empty_dir_ok_recent_zero_no_age(self):
+        with tempfile.TemporaryDirectory() as td:
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["status"], "ok")
+            self.assertEqual(face["recent"], 0)
+            self.assertIsNone(face["newest_age_s"])
+
+    def test_missing_dir_unreadable(self):
+        face = probe.read_output_face(
+            Path(tempfile.gettempdir()) / "no-such-comfy-tree-xyz",
+            recency_s=900, now=self.NOW)
+        self.assertEqual(face["status"], "unreadable")
+
+    def test_none_dir_unreadable(self):
+        self.assertEqual(probe.read_output_face(None)["status"],
+                         "unreadable")
+
+    def test_recency_boundary_strict(self):
+        with tempfile.TemporaryDirectory() as td:
+            # exactly at recency -> fresh (<=); one second older -> not
+            self._touch(Path(td) / "a.png", 900)
+            self._touch(Path(td) / "b.png", 901)
+            face = probe.read_output_face(td, recency_s=900, now=self.NOW)
+            self.assertEqual(face["recent"], 1)
+
+
 class VerdictTests(unittest.TestCase):
     def _q(self, status="ok", running=0, pending=0):
         return {"status": status, "running": running, "pending": pending}
@@ -224,6 +296,51 @@ class VerdictTests(unittest.TestCase):
         v, _ = probe.compute_verdict(self._q(), self._c(delta=300.0))
         self.assertEqual(v, "active")
 
+    def _o(self, status="ok", recent=0):
+        return {"status": status, "recent": recent}
+
+    def test_fresh_output_flips_quiet_to_active_wave_gap(self):
+        # tech#136 live shape: queue 0/0 + cpu-quiet + fresh output =
+        # the client iteration loop is alive in a wave gap
+        v, notes = probe.compute_verdict(self._q(), self._c(delta=10.0),
+                                         output_face=self._o(recent=3))
+        self.assertEqual(v, "active")
+        self.assertEqual(notes, ["wave-gap-recent-output"])
+
+    def test_cold_output_keeps_two_face_quiet(self):
+        v, notes = probe.compute_verdict(self._q(), self._c(delta=10.0),
+                                         output_face=self._o(recent=0))
+        self.assertEqual(v, "quiet")
+        self.assertEqual(notes, [])
+
+    def test_unreadable_output_keeps_two_face_quiet(self):
+        # other-lane installs (no such output dir) must not fail-closed
+        v, _ = probe.compute_verdict(self._q(), self._c(delta=10.0),
+                                     output_face=self._o(status="unreadable"))
+        self.assertEqual(v, "quiet")
+
+    def test_none_output_face_keeps_two_face_quiet(self):
+        v, _ = probe.compute_verdict(self._q(), self._c(delta=10.0),
+                                     output_face=None)
+        self.assertEqual(v, "quiet")
+
+    def test_fresh_output_beats_server_down_empty_cpu(self):
+        # R1986 family: GO consumed at a server-down instant, wave
+        # re-ignited seconds later. Fresh output + cpu empty = the loop
+        # restarts its server mid-wave -> conservative active.
+        v, notes = probe.compute_verdict(
+            self._q(), {"status": "empty"},
+            output_face=self._o(recent=1))
+        self.assertEqual(v, "active")
+        self.assertEqual(notes, ["wave-gap-recent-output"])
+
+    def test_fresh_output_active_even_with_unreadable_cpu(self):
+        # single positive attestation stands alone (family law)
+        v, _ = probe.compute_verdict(
+            self._q(status="unreadable"), {"status": "unreadable"},
+            output_face=self._o(recent=2))
+        self.assertEqual(v, "active")
+
 
 class RunProbeTests(unittest.TestCase):
     def test_composition_and_rc(self):
@@ -237,6 +354,25 @@ class RunProbeTests(unittest.TestCase):
         self.assertEqual(result["probe"], "comfy_activity")
         self.assertIn("queue", result["faces"])
         self.assertIn("cpu", result["faces"])
+        # hermeticity: default output_dir=None never touches the real
+        # ComfyUI tree (a live MV batch would otherwise flip this
+        # verdict to active and make the suite flaky)
+        self.assertNotIn("output", result["faces"])
+
+    def test_output_dir_face_wired_when_passed(self):
+        with tempfile.TemporaryDirectory() as td:
+            fresh = Path(td) / "kf_00046.png"
+            fresh.write_text("x", encoding="utf-8")
+            result = probe.run_probe(
+                queue_fetcher=lambda u, t: (200, json.dumps(
+                    {"queue_running": [], "queue_pending": []}).encode()),
+                ps_runner=lambda cmd: (True, ""),
+                sleeper=lambda s: None,
+                output_dir=td)
+            self.assertIn("output", result["faces"])
+            self.assertEqual(result["faces"]["output"]["recent"], 1)
+            self.assertEqual(result["verdict"], "active")
+            self.assertIn("wave-gap-recent-output", result["notes"])
 
     def test_active_composition_rc(self):
         result = probe.run_probe(
@@ -270,11 +406,12 @@ class LedgerTests(unittest.TestCase):
             row = json.loads(path.read_text(encoding="utf-8").strip())
             self.assertEqual(sorted(row.keys()), sorted(
                 ["ts", "verdict", "rc", "running", "pending",
-                 "cpu_delta_ms", "pids"]))
+                 "cpu_delta_ms", "pids", "output_recent"]))
             self.assertEqual(row["verdict"], "quiet")
             self.assertEqual(row["rc"], 0)
             self.assertEqual(row["running"], 0)
             self.assertEqual(row["pids"], [])
+            self.assertIsNone(row["output_recent"])
 
     def test_error_row_still_lands_with_nulls(self):
         with tempfile.TemporaryDirectory() as td:
@@ -353,6 +490,13 @@ class CliTests(unittest.TestCase):
         with contextlib.redirect_stdout(buf), \
                 contextlib.redirect_stderr(io.StringIO()):
             rc = probe.main(["--sample-interval", "-1"])
+        self.assertEqual(rc, 2)
+
+    def test_bad_output_recency_rejected(self):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf), \
+                contextlib.redirect_stderr(io.StringIO()):
+            rc = probe.main(["--output-recency-s", "-5"])
         self.assertEqual(rc, 2)
 
     def test_human_output_notes_line(self):

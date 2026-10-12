@@ -1,0 +1,19 @@
+# -*- coding: utf-8 -*-
+import json, io
+
+t = "1261 测试全绿（97s）；S2 三门+守卫面 20+ 在役；fire 链三件套+comfy 波感探针（wave-gap 面）+CEO 下班旗调和全落位"
+assert len(t) <= 96, len(t)
+patch = {
+ "do": "R2076：tech#136/#137 双交付（wave-gap 面+CEO 下班旗调和·1261 测全绿）；F 三件 yield 维持；夜窗 00:00 派发窗+tech#92 窗 10-13 08:00",
+ "results": [["179", "成品库总数"], ["1261", "测试全绿"], ["2076", "OS 轮次"]],
+ "live": [
+  "当前活：夜窗 KF 资源分工窗——F 三件 yield 维持（comfy 波感探针+CEO 下班旗已实弹·orders 水位 320 对齐）",
+  "最近实物：src/os/comfy_activity.py wave-gap 第三面+src/os/fire_consume.py CEO 下班旗调和+31 新测（1261 全绿）+ceo-off-work-flag.json 实弹落旗，2026-10-12 21:07:31",
+  "下个里程碑：夜窗 00:00 F-180 派发窗（MV KF 线收口判据：撤旗+worker-restart+fire 三件）·tech#92 雷达标定权威窗 10-13 08:00"
+ ],
+ "depts": [{"n": "工程技术部", "t": t, "s": 1}],
+ "chips": [["1261 测绿", "live"]]
+}
+io.open(r"C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\.c3-tmp\r2076_export_patch.json", "w", encoding="utf-8", newline="").write(
+    json.dumps(patch, ensure_ascii=False, indent=1))
+print("patch written, t len =", len(t))

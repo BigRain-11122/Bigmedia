@@ -43,6 +43,21 @@ stale-render advisory: queue running>0 while cpu delta is ~0 (<
 only: GPU-bound phases can legitimately show low CPU -- cross-read with
 the fire card util face, never a gate.
 
+wave-gap face (tech#136; R2075 live evidence): the probe read
+queue 0/0 + cpu-quiet at 20:44 and the KF iteration loop re-ignited
+minutes later -- ComfyUI output took 34 files in three waves
+(20:23/20:33/20:39) WITHIN the hour. A client-driven iteration loop
+(KF batch -> review -> reseed -> resubmit) leaves the server genuinely
+idle for 6-10 minutes between waves, so queue+cpu alone cannot
+distinguish "batch done" from "wave gap". Third face: fresh entries
+(top-level files AND directories -- a file created inside a subdir
+bumps the dir mtime) in the ComfyUI output tree within
+--output-recency-s (default 900s) attest the loop is still alive ->
+verdict active, note wave-gap-recent-output. Conservative-only wiring:
+the face can ADD an active attestation, never force quiet -- an
+unreadable/absent output dir (other lane installs) leaves the old
+two-face behavior untouched.
+
 rc contract (family: mv_sprint_probe / ollama_probe):
   0 = quiet   1 = active   2 = error
 
@@ -55,6 +70,7 @@ failure, never raises, never changes rc.
 import argparse
 import datetime
 import json
+import os
 import subprocess
 import sys
 import urllib.error
@@ -68,6 +84,13 @@ DEFAULT_BASE_URL = "http://127.0.0.1:8188"
 DEFAULT_SAMPLE_INTERVAL_S = 4.0
 DEFAULT_CPU_THRESHOLD_MS = 300.0
 DEFAULT_STALE_THRESHOLD_MS = 100.0
+# tech#136 wave-gap face: MV lane ComfyUI (port 8188 portable install)
+# output tree. R2075 KF waves were 6-10 min apart; 900s covers the
+# observed gaps with margin (false-active costs a yield, false-quiet
+# costs a burned flight -- bias long).
+DEFAULT_OUTPUT_DIR = Path(
+    r"C:\Users\sjs20\comfyui-krea\ComfyUI_windows_portable\ComfyUI\output")
+DEFAULT_OUTPUT_RECENCY_S = 900.0
 PS_TIMEOUT_S = 30
 QUEUE_TIMEOUT_S = 5
 
@@ -202,16 +225,61 @@ def read_queue_face(base_url=DEFAULT_BASE_URL, fetcher=None,
             "pending": len(pending)}
 
 
+def read_output_face(output_dir, recency_s=DEFAULT_OUTPUT_RECENCY_S,
+                    now=None):
+    """Scan the ComfyUI output tree top level for fresh entries
+    (tech#136 wave-gap attestation).
+
+    Directory entries count too: creating a file inside a subdirectory
+    bumps that subdirectory's own mtime (live evidence: the KF batch
+    writes output/kf_bma/*.png while output/*.png stays cold), so the
+    dir mtimes carry the wave signal. Only the TOP level is scanned --
+    a 288-file output dir stays a ~300-entry scandir, no rglob blowup.
+
+    -> {'status': 'ok', 'recent': N, 'newest_age_s': X} with
+    newest_age_s=None when the tree is empty/cold; {'status':
+    'unreadable'} when the dir is missing/unscannable (other-lane
+    installs / fresh machines). Missing dir is NOT an error for the
+    verdict -- the face only ever adds an active attestation."""
+    if not output_dir:
+        return {"status": "unreadable"}
+    now_dt = now or datetime.datetime.now()
+    try:
+        entries = list(os.scandir(str(output_dir)))
+    except (OSError, TypeError, ValueError):
+        return {"status": "unreadable"}
+    recent = 0
+    newest_age = None
+    for entry in entries:
+        try:
+            mtime = entry.stat().st_mtime
+        except OSError:
+            continue
+        age = max(0.0, now_dt.timestamp() - mtime)
+        if newest_age is None or age < newest_age:
+            newest_age = age
+        if age <= recency_s:
+            recent += 1
+    return {"status": "ok", "recent": recent,
+            "newest_age_s": (round(newest_age, 1)
+                             if newest_age is not None else None)}
+
+
 def compute_verdict(queue_face, cpu_face,
                     cpu_threshold_ms=DEFAULT_CPU_THRESHOLD_MS,
-                    stale_threshold_ms=DEFAULT_STALE_THRESHOLD_MS):
-    """Pure core: two faces -> (verdict, notes).
+                    stale_threshold_ms=DEFAULT_STALE_THRESHOLD_MS,
+                    output_face=None):
+    """Pure core: faces -> (verdict, notes).
 
     verdict 'active'/'quiet'/None (None = error path). Positive
     attestations stand on a single readable face; quiet requires
     coherent readable idle on the cpu face (the server process is the
     only thing that can render -- 'empty' attests server-down and
-    overrides an unreadable queue face)."""
+    overrides an unreadable queue face). The output face (tech#136)
+    can only ADD an active attestation (fresh output entries = the
+    client iteration loop is alive in a wave gap); an unreadable or
+    cold output face never forces quiet and never blocks the
+    two-face quiet path."""
     notes = []
 
     q_ok = queue_face.get("status") == "ok"
@@ -227,6 +295,11 @@ def compute_verdict(queue_face, cpu_face,
     if (cpu_face.get("status") == "ok"
             and cpu_face.get("delta_ms") is not None
             and cpu_face["delta_ms"] >= cpu_threshold_ms):
+        return "active", notes
+
+    if (output_face and output_face.get("status") == "ok"
+            and output_face.get("recent", 0) > 0):
+        notes.append("wave-gap-recent-output")
         return "active", notes
 
     if cpu_face.get("status") == "empty":
@@ -248,17 +321,26 @@ def run_probe(base_url=DEFAULT_BASE_URL,
               cpu_threshold_ms=DEFAULT_CPU_THRESHOLD_MS,
               stale_threshold_ms=DEFAULT_STALE_THRESHOLD_MS,
               queue_fetcher=None, ps_runner=None, sleeper=None,
-              now=None):
-    """Compose both faces + verdict -> result dict (probe/ts/verdict/
-    rc/thresholds/faces). Seams: queue_fetcher/ps_runner/sleeper."""
+              now=None, output_dir=None,
+              output_recency_s=DEFAULT_OUTPUT_RECENCY_S):
+    """Compose the faces + verdict -> result dict (probe/ts/verdict/
+    rc/thresholds/faces). Seams: queue_fetcher/ps_runner/sleeper;
+    output_dir=None (default) skips the wave-gap face entirely (no
+    filesystem touch -- hermetic for tests; the CLI passes the real
+    default dir explicitly)."""
     now_dt = now or datetime.datetime.now()
     faces = {
         "queue": read_queue_face(base_url, fetcher=queue_fetcher),
         "cpu": read_cpu_face(runner=ps_runner, sleeper=sleeper,
                              interval=sample_interval),
     }
+    if output_dir is not None:
+        faces["output"] = read_output_face(output_dir,
+                                           recency_s=output_recency_s,
+                                           now=now_dt)
     verdict, notes = compute_verdict(faces["queue"], faces["cpu"],
-                                     cpu_threshold_ms, stale_threshold_ms)
+                                     cpu_threshold_ms, stale_threshold_ms,
+                                     faces.get("output"))
     if verdict == "active":
         rc = RC_ACTIVE
     elif verdict == "quiet":
@@ -285,6 +367,7 @@ def append_ledger_row(path, result):
     changes the exit code."""
     qf = result["faces"].get("queue", {})
     cf = result["faces"].get("cpu", {})
+    of = result["faces"].get("output", {})
     row = {
         "ts": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "verdict": result["verdict"],
@@ -293,6 +376,7 @@ def append_ledger_row(path, result):
         "pending": qf.get("pending") if qf.get("status") == "ok" else None,
         "cpu_delta_ms": cf.get("delta_ms") if cf.get("status") == "ok" else None,
         "pids": cf.get("pids") if cf.get("status") in ("ok",) else [],
+        "output_recent": of.get("recent") if of.get("status") == "ok" else None,
     }
     try:
         ledger_path = Path(path)
@@ -328,6 +412,15 @@ def main(argv=None):
                         help="queue running>0 with cpu delta under this = "
                              "stale-render candidate note (default "
                              "%.0fms)" % DEFAULT_STALE_THRESHOLD_MS)
+    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR),
+                        help="ComfyUI output tree for the wave-gap face "
+                             "(tech#136; empty string disables the face). "
+                             "Default: %s" % DEFAULT_OUTPUT_DIR)
+    parser.add_argument("--output-recency-s", type=float,
+                        default=DEFAULT_OUTPUT_RECENCY_S,
+                        help="output entries fresher than this many "
+                             "seconds attest a live iteration loop "
+                             "(default %.0fs)" % DEFAULT_OUTPUT_RECENCY_S)
     parser.add_argument("--json", action="store_true",
                         help="single machine-readable line")
     parser.add_argument("--ledger", nargs="?", const=str(DEFAULT_LEDGER),
@@ -340,11 +433,16 @@ def main(argv=None):
     if args.sample_interval < 0:
         sys.stderr.write("bad --sample-interval (must be >= 0)\n")
         return 2
+    if args.output_recency_s < 0:
+        sys.stderr.write("bad --output-recency-s (must be >= 0)\n")
+        return 2
 
     result = run_probe(base_url=args.base_url,
                        sample_interval=args.sample_interval,
                        cpu_threshold_ms=args.cpu_threshold_ms,
-                       stale_threshold_ms=args.stale_threshold_ms)
+                       stale_threshold_ms=args.stale_threshold_ms,
+                       output_dir=(args.output_dir or None),
+                       output_recency_s=args.output_recency_s)
     if args.ledger:
         append_ledger_row(args.ledger, result)
 
@@ -368,6 +466,16 @@ def main(argv=None):
                 " (pid-set changed)" if cf.get("pid_change") else ""))
         else:
             print("  cpu: %s" % cf["status"])
+        of = result["faces"].get("output")
+        if of is None:
+            print("  output: face-disabled")
+        elif of["status"] == "ok":
+            print("  output: recent=%d (recency %.0fs) newest_age=%s" % (
+                of["recent"], args.output_recency_s,
+                "n/a" if of["newest_age_s"] is None
+                else "%.0fs" % of["newest_age_s"]))
+        else:
+            print("  output: %s" % of["status"])
         for n in result["notes"]:
             print("  note: %s" % n)
         if result["verdict"] == "quiet":
