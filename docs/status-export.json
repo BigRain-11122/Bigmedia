@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-12 23:08:47",
- "do": "R2081 consume deathline order O-2305 (MV final cut 08:30); F-180/181/182 yield mv-active; next: post-08:30 unfreeze chain",
+ "export_ts": "2026-10-12 23:25:09",
+ "do": "MV死线窗值守: KF线active×2未达收口判据, F-180/181/182让位结转至08:30后; tech#139实弹首读=两层深face未行使(L1-only)",
  "depts": [
   {
    "n": "工程技术部",
@@ -71,13 +71,13 @@
    "测试全绿"
   ],
   [
-   "2081",
+   "2082",
    "OS 轮次"
   ]
  ],
  "live": [
-  "当前活：死线窗值守——O-20261012-2305 明朝成片死线令（08:30 全曲成片 234s 呈 CEO）已消费，MV 线 active（comfy 波间 377s+白名单 26min 前写），F-180/181/182 让位结转；orders 水位 333",
-  "最近实物：src/os/comfy_activity.py wave-gap output face 两层深覆盖+4 回归测试（60 例全绿·全套 1265 例）2026-10-12 21:26:30",
-  "下个里程碑：明早 08:30 MV 全曲成片呈 CEO（CEO 直令死线）；达成后撤旗+worker-restart+F-180 接力；tech#92 权威窗顺延随 resume 分叉"
+  "当前活：死线窗值守——MV 线 active×2（comfy 波间 output 470s+白名单 36.5min 前写）未达收口判据，fire 三件让位结转至 08:30 成片后；tech#139 实弹首读=两层深 face 未行使（L1-only）",
+  "最近实物：tech#139 观察位实弹判读+深度探针 r2082_output_face_probe.py+tech.md 注一行 2026-10-12 23:2x",
+  "下个里程碑：明早 08:30 MV 全曲成片呈 CEO（CEO 直令死线）；达成后撤旗+worker-restart+F-180 接力；main#22 常务轮复读 10-13 00:00"
  ]
 }
