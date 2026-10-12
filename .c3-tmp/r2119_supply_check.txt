@@ -1,0 +1,17 @@
+R2119 supply-gate + queue-health recheck evidence (2026-10-13 06:3x-07:0x)
+1) BigLife tai-ci pool unlock gate (R1848 one-command recheck, first since 10-10 R1848):
+   worktree unique strings = 1440 ; HEAD:cognition/pools.json unique = 1440 ; new-vs-HEAD = 0
+   gate (unique>1440 OR row-diff non-empty) = LOCKED -> main#12 gated stance holds, recheck note appended, next >= 10-17
+2) QUOTE supply (BigLife docs/CODEX.md sec.8 six-axis creed table):
+   rows = 6, all consumed by QUOTE-v1..v6 (F-013..F-018) -> QUOTE supply exhausted, zero-action honest note
+3) queue done-marker re-verify verdict: NO bookkeeping debt.
+   full-line regex finds done-marks in place: tech#26 [done R2005] / #31 [done R1839] / #84 [done R1936] /
+   #114 [done R2006] / #129 [done R2051] / #135 [done R2116] / #42 gate-note (R1951 W3 precondition closed).
+   R2119 initial misread (280-char truncated view judged them undelivered) -> r2119_backfill.py fail-closed
+   ANCHOR-MISS exit prevented a wrong write; 6 verify probes = the repeat-scan tax that seeds tech#145.
+4) fire_consume routine: no-fire rc1 reason=cold-skip-no-admissible-credit;load-class-starved
+   (F-180..183 four fire-ready items held; MV deadline-window yield = correct side)
+5) five-checks quiet: origin_gap QUIET (ahead0 behind0); group_scan six faces fresh 06:39
+   (DECISIONS truly_new=0 watermark=154; LEDGER @BigStream 5==anchor, @liu-si line = P-2026-10-09-01 historical;
+    ORDERS 341 tail 10-13 04:3x==stored; ORIGIN-DELTA 0). Probes in-band: loop_health 3F/284W all adjudicated
+   historical; readiness 3 blockers external CEO-side + render-unannot react-v16 expected in-chain red.
