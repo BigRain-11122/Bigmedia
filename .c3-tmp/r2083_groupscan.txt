@@ -1,0 +1,32 @@
+# group-scan 2026-10-12 23:35:14
+=== DECISIONS (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\docs\decisions.md | mtime 2026-10-12 15:22:39 | 209196 B | tokens=152
+watermark=152 | truly_new=0 | wm_only=0 (slim/inline-consumed family)
+TRULY_NEW: (none)
+=== LEDGER (rc=0) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\cph4\evolution-ledger.md | mtime 2026-10-12 15:22:39 | 173738 B
+@BigStream lines=5 occurrences=6
+@七线全司 lines=0 occurrences=0
+@全司 lines=0 occurrences=0
+@六司 lines=1 occurrences=1
+@八线全量 lines=0 occurrences=0
+last-@BigStream: **资源健康（resource-chain §三对照·retention 09:18 实测）**=盘余 C: 558.7GB ✓（夜班 561.4 环比 -2.7GB·燃烧率正常态·BigStream #112 减负案点 ...
+=== ORDERS (rc=1) ===
+file: C:\Users\sjs20\Desktop\FluxGroup\docs\orders.md | mtime 2026-10-12 23:30:57 | 492742 B
+current: rows=336 tail_key='10-12 23:2x'
+stored: rows=333 tail_key='10-12 23:0x'
+ORDERS-NEW: rows 333->336 | tail_key '10-12 23:0x'->'10-12 23:2x'
+=== DIGEST-SUPPLY (rc=0) ===
+cards: C:\Users\sjs20\Desktop\FluxGroup\media\BigStream\data\storylines\cards | latest DIGEST card 2026-10-12 (MC-20261012-DIGEST-v19) | orders rows mtime 2026-10-12 23:30:57 | row-dates=15
+DIGEST-SUPPLY: quiet (orders rows covered by latest DIGEST card 2026-10-12)
+=== ORDERS-ORIGIN-DELTA (rc=0) ===
+worktree rows=336 (mtime 2026-10-12 23:30:57) | origin source=origin/main
+origin rows=336 | delta=0
+ORDERS-ORIGIN-DELTA: quiet (origin == worktree rows)
+=== MTIME (rc=0) ===
+hq-orders | 2026-10-12 23:30:57 | 492742 B
+hq-orders-tail: | 10-12 23:2x | CEO 报：「内存我之前是128G但我趁高点卖了」（bm-a 128G→94G 来源揭盘+**DDR4 双轨行情判**·O-20261012-2320·承 O-20261012-2250  ...
+hq-decisions | 2026-10-12 15:22:39 | 209196 B
+hq-decisions-tail: | 2026-10-12 | D-20261012-03 BigDomain 回执清账+任务板补货（值守轮点名→派活一步化） | 值守轮 15:07 抽验三实锚：D-20261011-03 dispatched >24h ...
+ledger | 2026-10-12 15:22:39 | 173738 B
+own-orders-top | O-20261008-1105-bm-a.md | 2026-10-08 12:08:14 | 4698 B
