@@ -1,0 +1,25 @@
+R2081 orders evidence 2026-10-12 23:0x (group_scan ORDERS-NEW rows 331->333, tail '10-12 22:5x'->'10-12 23:0x', mtime 22:57:12)
+=== NEW ROW 332 (10-12 23:0x) O-20261012-2300 M1 Pro MacBook 32G evaluation ===
+CEO question: MacBook M1 Pro 32G usefulness. Council answered same window: split verdict -
+personal machine = 0 (09-24 positioning order stands, no compute pool, battery risk);
+idle machine = worth onboarding as power-sipping light-services node (LLM quantized host ~24G unified mem,
+8B Q4 13-26 tok/s / 14B Q4 11G resident; whisper.cpp Metal; ffmpeg VideoToolbox 10-30W);
+cannot run CUDA pipeline (Krea2 fp8 / H3 INT4-INT8 / Qwen-Edit INT8 / musubi fp8 all CUDA);
+buying = not worth (2nd-hand 4500-6500 CNY vs 3090 trigger <=4200); status=answered (council, same window).
+=== NEW ROW 333 (10-12 23:0x) O-20261012-2305 FINAL-CUT DEADLINE ORDER ===
+CEO verbatim: 什么玩意 明早我要看到最终成片！ Deadline = tomorrow 08:30, full-song cut 234s to CEO.
+Full-line sprint re-queue: @bm-c tonight single priority = i2v line (whitelist v1.2 7 frames INT8 768P
+-> INT2/4/5 (bm-a burns + pushes CDN, whitelist v1.3) -> 44-frame archive canon window ->
+06:30 not-landed segments = cloud H3 top-up (quota P0 MV bucket, CEO deadline = cloud exception grant,
+1 shot <= 1 task); every mp4 -> CDN + URL index appended to orders; 06:30 closure product list.
+@bm-a tonight: INT2/4/5 KF burn (new spec) -> director QC -> whitelist v1.3 -> CDN -> assembly-chain standby
+(build_full_mv v2 window mapping + new-shot intake + finishing v4.4 restrained + speed/interpolation +
+word-level beat lock + real-smoke composite standby table) -> 07:00 curl harvest -> assemble -> final gate
+(era-genre check / props-forensics check / constant-speed ban) -> cut to CEO before 08:30.
+Female-lead segments = archive stand-in shots; candidate face-lock batch -> background low priority (post-cut re-bake law).
+Bottom line: any segment not landed 07:30 -> neighbor stretch / repeat-family reuse; full 234s + song BGM untouched.
+This order = CEO direct order overriding dispatch lane law (dispatcher seat notified).
+=== BigStream OS loop share ===
+Viewing position ack only: execution is MV sprint session domain (@bm-c + @bm-a lanes).
+MV KF closure criteria still active at 23:03 (comfy wave-gap newest_age=377s; FRAME-GATE-WHITELIST-v1.md 26.4min).
+F-180/181/182 fire-ready deferred on mv-active yield; unfreeze chain queued main#27 (post-08:30).

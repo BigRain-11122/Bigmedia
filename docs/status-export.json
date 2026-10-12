@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-12 22:49:56",
- "do": "R2078 hold: card no-fire mv-active 15th read; MV KF dual-probe; tech#140 seed (card 14b VRAM face); next 00:00 F-180",
+ "export_ts": "2026-10-12 23:08:47",
+ "do": "R2081 consume deathline order O-2305 (MV final cut 08:30); F-180/181/182 yield mv-active; next: post-08:30 unfreeze chain",
  "depts": [
   {
    "n": "工程技术部",
@@ -71,13 +71,13 @@
    "测试全绿"
   ],
   [
-   "2077",
+   "2081",
    "OS 轮次"
   ]
  ],
  "live": [
-  "当前活：夜窗值守——MV KF v3 线未收口（comfy output 闲 16min<30min·MV 会话 9min 前活跃），F-180/181/182 让位结转；集团 orders 六新行已消费（水位 331）",
+  "当前活：死线窗值守——O-20261012-2305 明朝成片死线令（08:30 全曲成片 234s 呈 CEO）已消费，MV 线 active（comfy 波间 377s+白名单 26min 前写），F-180/181/182 让位结转；orders 水位 333",
   "最近实物：src/os/comfy_activity.py wave-gap output face 两层深覆盖+4 回归测试（60 例全绿·全套 1265 例）2026-10-12 21:26:30",
-  "下个里程碑：MV KF 线收口（output 持续闲 ≥30min 或显式收口）→撤旗+worker-restart main#21+F-180 派发；tech#92 权威窗 10-13 08:00"
+  "下个里程碑：明早 08:30 MV 全曲成片呈 CEO（CEO 直令死线）；达成后撤旗+worker-restart+F-180 接力；tech#92 权威窗顺延随 resume 分叉"
  ]
 }
