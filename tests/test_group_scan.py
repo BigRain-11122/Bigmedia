@@ -574,6 +574,149 @@ class DigestSupplyCliTests(unittest.TestCase):
         self.assertIn("DIGEST-SUPPLY: quiet", out)
 
 
+class _FakeProc:
+    def __init__(self, returncode=0, stdout=b""):
+        self.returncode = returncode
+        self.stdout = stdout
+
+
+class OrdersOriginDeltaTests(unittest.TestCase):
+    """tech#133 (R2059/R2064): origin-only rows must break silence."""
+
+    def test_classify_quiet_when_equal(self):
+        verdict = gs.classify_orders_origin_delta(310, 310)
+        self.assertEqual(verdict["status"], "quiet")
+        self.assertEqual(verdict["delta"], 0)
+
+    def test_classify_ahead_breaks_silence(self):
+        # R2064 live anchor: origin 312 vs worktree 311.
+        verdict = gs.classify_orders_origin_delta(312, 311)
+        self.assertEqual(verdict["status"], "ahead")
+        self.assertEqual(verdict["delta"], 1)
+
+    def test_classify_local_ahead_is_quiet(self):
+        # A push window (worktree ahead of origin) is NOT a blind spot.
+        verdict = gs.classify_orders_origin_delta(310, 312)
+        self.assertEqual(verdict["status"], "quiet")
+        self.assertEqual(verdict["delta"], -2)
+
+    def test_classify_degraded(self):
+        verdict = gs.classify_orders_origin_delta(None, 310)
+        self.assertEqual(verdict["status"], "degraded")
+        self.assertIsNone(verdict["origin"])
+
+    def test_resolve_git_skips_gitsilent(self):
+        # The PATH git on this machine is the stdout-swallowing gitsilent
+        # wrapper (R-1952): it must never be resolved for this face (0-row
+        # silent-kill family).
+        with tempfile.TemporaryDirectory() as td:
+            silent = os.path.join(td, "gitsilent", "git.exe")
+            os.makedirs(os.path.dirname(silent))
+            with io.open(silent, "wb"):
+                pass
+            self.assertIsNone(gs._resolve_git(silent))
+
+    def test_resolve_git_unresolved_when_absent(self):
+        self.assertIsNone(gs._resolve_git(r"C:\no\such\git.exe"))
+
+    def _rows_with_runner(self, runner, git_path):
+        return gs.orders_origin_rows(group_root=".", runner=runner,
+                                     git_path=git_path)
+
+    def test_orders_origin_rows_success(self):
+        calls = []
+
+        def fake_runner(argv):
+            calls.append(argv)
+            if "fetch" in argv:
+                return _FakeProc(0)
+            return _FakeProc(0, b"| 10-12 17:2x | a |\n| 10-12 17:4x | b |\n")
+
+        rows, source = self._rows_with_runner(
+            fake_runner, r"C:\Program Files\Git\cmd\git.exe")
+        self.assertEqual(rows, 2)
+        self.assertEqual(source, "origin/main")
+        self.assertEqual(len(calls), 2)  # fetch then show
+        self.assertIn("fetch", calls[0])
+        self.assertIn("show", calls[1])
+
+    def test_orders_origin_rows_fetch_fail_degrades(self):
+        rows, source = self._rows_with_runner(
+            lambda argv: _FakeProc(1), r"C:\Program Files\Git\cmd\git.exe")
+        self.assertIsNone(rows)
+        self.assertIn("fetch-failed", source)
+
+    def test_orders_origin_rows_show_fail_degrades(self):
+        def fake_runner(argv):
+            if "fetch" in argv:
+                return _FakeProc(0)
+            return _FakeProc(128, b"")
+
+        rows, source = self._rows_with_runner(
+            fake_runner, r"C:\Program Files\Git\cmd\git.exe")
+        self.assertIsNone(rows)
+        self.assertIn("show-failed", source)
+
+    def test_orders_origin_rows_fetch_exception_degrades(self):
+        def fake_runner(argv):
+            raise OSError("network down")
+
+        rows, source = self._rows_with_runner(
+            fake_runner, r"C:\Program Files\Git\cmd\git.exe")
+        self.assertIsNone(rows)
+        self.assertIn("fetch-error", source)
+
+    def test_orders_origin_rows_git_unresolved(self):
+        rows, source = self._rows_with_runner(
+            lambda argv: _FakeProc(0), r"C:\no\such\git.exe")
+        self.assertIsNone(rows)
+        self.assertIn("git-unresolved", source)
+
+    def _face_with(self, orders_text, origin_body, git_exists=True):
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write(orders_text)
+            paths = dict(gs.DEFAULTS)
+            paths["hq_orders"] = op
+
+            def fake_runner(argv):
+                if "fetch" in argv:
+                    return _FakeProc(0)
+                return _FakeProc(0, origin_body)
+
+            git_path = (r"C:\Program Files\Git\cmd\git.exe" if git_exists
+                        else r"C:\no\such\git.exe")
+            return gs.face_orders_origin_delta(paths, runner=fake_runner,
+                                               git_path=git_path)
+
+    def test_face_quiet_when_origin_matches(self):
+        rc, out = self._face_with("| a |\n| b |\n", b"| a |\n| b |\n")
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("ORDERS-ORIGIN-DELTA: quiet", out)
+        self.assertIn("worktree rows=2", out)
+
+    def test_face_ahead_breaks_silence(self):
+        rc, out = self._face_with("| a |\n", b"| a |\n| b |\n")
+        self.assertEqual(rc, gs.RC_NEW)
+        self.assertIn("ORDERS-ORIGIN-DELTA-WARN", out)
+        self.assertIn("1 origin-only row(s)", out)
+        self.assertIn("R2059/R2064 family", out)
+
+    def test_face_degraded_when_git_absent(self):
+        rc, out = self._face_with("| a |\n", b"| a |\n", git_exists=False)
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("ORDERS-ORIGIN-DELTA: degraded", out)
+        self.assertIn("worktree-only behavior", out)
+
+    def test_face_local_read_fail(self):
+        paths = dict(gs.DEFAULTS)
+        paths["hq_orders"] = os.path.join("Z:", "no", "such", "orders.md")
+        rc, out = gs.face_orders_origin_delta(paths)
+        self.assertEqual(rc, gs.RC_READ_FAIL)
+        self.assertIn("read-fail", out)
+
+
 @unittest.skipUnless(
     os.path.exists(str(gs.DEFAULTS["decisions"]))
     and os.path.exists(str(gs.DEFAULTS["state"]))
@@ -623,6 +766,17 @@ class LiveRepoTests(unittest.TestCase):
         rc, out = self._run_live()
         self.assertIn("=== DIGEST-SUPPLY (rc=", out)
         self.assertIn(rc, (gs.RC_QUIET, gs.RC_NEW))
+
+    def test_live_orders_origin_delta_face_present(self):
+        # tech#133 live wiring: the face runs a real fetch+show (or degrades
+        # on network failure -- quiet/degraded/WARN are all legal probe
+        # states, never rc 3). Live dogfood R2064: the WARN variant fired
+        # with origin 312 vs worktree 311 (the durable 15:2x stuck row).
+        rc, out = self._run_live()
+        self.assertIn("=== ORDERS-ORIGIN-DELTA (rc=", out)
+        self.assertTrue(
+            "ORDERS-ORIGIN-DELTA:" in out
+            or "ORDERS-ORIGIN-DELTA-WARN:" in out)
 
 
 if __name__ == "__main__":

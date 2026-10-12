@@ -42,6 +42,21 @@ Faces:
             the unconsumed cluster in per-round view. Cards dir missing =
             face inactive (quiet) -- the DIGEST production line itself is
             absent then.
+  ORDERS-ORIGIN-DELTA  origin-only rows advisory (tech#133, R2059/R2064):
+            git fetch + git show origin/main row count vs the worktree
+            count (D-20261001-03 read-only consumption canon). origin >
+            worktree = rows the canonical worktree face cannot see ->
+            WARN breaks silence (consume via git show NOW; D-13 SLA must
+            not wait for the FleetLink pull window). Root: R2059 caught
+            one origin-only row by manual luck; R2064 found the SAME row
+            still origin-only ~3h later (the "pull-in-flight ~40min"
+            hypothesis disproven -- durable worktree gap), plus the
+            17:4x 鬼相排查令 which the worktree face only gained minutes
+            after origin had it. Any git/network failure degrades to the
+            worktree-only behavior (pre-registered) -- never a probe
+            FAIL. Real git binary only: the PATH git on this machine is
+            the gitsilent stdout-swallowing wrapper, which would read as
+            0 rows and silently kill the face (R-1952 family).
   MTIME      HQ orders/decisions/ledger anchors + own orders newest file
 
 Usage:
@@ -82,6 +97,14 @@ DIGEST_SUPPLY_GAP_DAYS = 2
 ANCHOR_PREFIX_RE = re.compile(r"^(?:\s|[-*#>]+|\d{1,3}[.)])*$")
 LEDGER_MARKERS = ("@BigStream", "@七线全司", "@全司", "@六司", "@八线全量")
 PREVIEW_LEN = 110
+# tech#133 (R2059/R2064): real git binaries only -- the PATH git on this
+# machine is the gitsilent stdout-swallowing wrapper (R-1952), which would
+# read as 0 rows and silently kill the origin face.
+GIT_CANDIDATES = (
+    r"C:\Program Files\Git\cmd\git.exe",
+    r"C:\Program Files (x86)\Git\cmd\git.exe",
+)
+GIT_FETCH_TIMEOUT_S = 20
 
 RC_QUIET, RC_NEW, RC_USAGE, RC_READ_FAIL = 0, 1, 2, 3
 USAGE = ("usage: python src/os/group_scan.py [--out FILE] [--echo] "
@@ -323,6 +346,113 @@ def face_digest_supply(paths, today=None):
     return RC_NEW, "\n".join(lines)
 
 
+def _resolve_git(explicit=None):
+    """Real git binary path, or None.
+
+    An explicit path is an override, not a preference: if it is absent
+    (or a gitsilent wrapper) resolution FAILS -- never fall through to
+    the default candidates (hermetic-test contract: an explicit bogus
+    path must yield git-unresolved even on a machine where the real
+    candidates exist). With no explicit path the candidates are tried
+    in order; gitsilent wrappers are never used (R-1952 family).
+    """
+    if explicit:
+        if "gitsilent" not in explicit.lower() and Path(explicit).exists():
+            return str(explicit)
+        return None
+    for cand in GIT_CANDIDATES:
+        if "gitsilent" not in cand.lower() and Path(cand).exists():
+            return str(cand)
+    return None
+
+
+def _subprocess_run_git(argv, timeout=GIT_FETCH_TIMEOUT_S):
+    import subprocess
+    return subprocess.run(argv, capture_output=True, timeout=timeout)
+
+
+def orders_origin_rows(group_root=None, runner=None, git_path=None):
+    """(origin_rows, source) via git fetch + git show (D-20261001-03 canon).
+
+    Any failure -> (None, reason): the face degrades to the worktree-only
+    behavior (tech#133 pre-registered graceful degradation -- a network
+    face must never brick the probe).
+    """
+    root = Path(group_root) if group_root else GROUP_ROOT
+    git = _resolve_git(git_path)
+    if git is None:
+        return None, "git-unresolved"
+    run = runner or _subprocess_run_git
+    try:
+        fetch = run([git, "-C", str(root), "fetch", "origin"])
+    except Exception as exc:  # timeout / binary gone / etc.
+        return None, "fetch-error %r" % (exc,)
+    if getattr(fetch, "returncode", 1) != 0:
+        return None, "fetch-failed rc=%s" % getattr(fetch, "returncode", "?")
+    try:
+        show = run([git, "-C", str(root), "show",
+                    "origin/main:docs/orders.md"])
+    except Exception as exc:
+        return None, "show-error %r" % (exc,)
+    if getattr(show, "returncode", 1) != 0 or not show.stdout:
+        return None, "show-failed rc=%s" % getattr(show, "returncode", "?")
+    rows, _ = orders_row_stats(show.stdout.decode("utf-8", "replace"))
+    return rows, "origin/main"
+
+
+def classify_orders_origin_delta(origin_rows, local_rows):
+    """Pure core (tech#133): origin > local = origin-only rows exist.
+
+    ahead    -> WARN breaks silence (consume the origin-only rows via
+                git show now; D-13 SLA must not wait for the pull)
+    quiet    -> worktree sees everything origin sees (local ahead of
+                origin during a push window is NOT a blind spot)
+    degraded -> origin unreadable; worktree-only behavior (pre-registered)
+    """
+    if origin_rows is None:
+        return {"status": "degraded", "delta": None,
+                "origin": None, "local": local_rows}
+    delta = origin_rows - local_rows
+    status = "ahead" if delta > 0 else "quiet"
+    return {"status": status, "delta": delta,
+            "origin": origin_rows, "local": local_rows}
+
+
+def face_orders_origin_delta(paths, runner=None, git_path=None):
+    """Face: ORDERS origin-delta advisory (tech#133, R2059/R2064 family).
+
+    rc 0 quiet/degraded / 1 ahead WARN (breaks silence) / 3 local read
+    error only (the origin/network side never fails the probe --
+    pre-registered graceful degradation).
+    """
+    try:
+        text, mtime, size = read_text(paths["hq_orders"])
+    except OSError as exc:
+        return RC_READ_FAIL, "read-fail: hq-orders %r" % (exc,)
+    local_rows, _ = orders_row_stats(text)
+    origin_rows, source = orders_origin_rows(
+        group_root=Path(paths["hq_orders"]).parent.parent, runner=runner,
+        git_path=git_path)
+    verdict = classify_orders_origin_delta(origin_rows, local_rows)
+    lines = ["worktree rows=%d (mtime %s) | origin source=%s"
+             % (local_rows, mtime, source)]
+    if verdict["status"] == "degraded":
+        lines.append("ORDERS-ORIGIN-DELTA: degraded (%s) -- worktree-only "
+                     "behavior (tech#133 pre-registered)" % source)
+        return RC_QUIET, "\n".join(lines)
+    lines.append("origin rows=%s | delta=%s" % (verdict["origin"],
+                                                verdict["delta"]))
+    if verdict["status"] == "quiet":
+        lines.append("ORDERS-ORIGIN-DELTA: quiet (origin == worktree rows)")
+        return RC_QUIET, "\n".join(lines)
+    lines.append("ORDERS-ORIGIN-DELTA-WARN: origin %d vs worktree %d "
+                 "(%d origin-only row(s)) -- worktree-face blind spot "
+                 "(R2059/R2064 family); consume via git show origin/main "
+                 "now (D-13 SLA), FleetLink pull heals the worktree"
+                 % (verdict["origin"], verdict["local"], verdict["delta"]))
+    return RC_NEW, "\n".join(lines)
+
+
 def scan_ledger(text):
     """{marker: (lines, occurrences)} plus last @BigStream line preview."""
     stats = {}
@@ -555,6 +685,7 @@ def main(argv):
         ("LEDGER", *face_ledger(paths)),
         ("ORDERS", *face_orders(paths)),
         ("DIGEST-SUPPLY", *face_digest_supply(paths)),
+        ("ORDERS-ORIGIN-DELTA", *face_orders_origin_delta(paths)),
         ("MTIME", *face_mtime(paths)),
     ]
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
