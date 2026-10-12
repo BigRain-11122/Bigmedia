@@ -168,8 +168,15 @@ class CliTests(unittest.TestCase):
         self._real_append = consumer.append_ledger_row
         self._real_now_fn = consumer.NOW_FN
         self._real_flag_reader = consumer.read_ceo_off_work_flag
+        self._real_probe = consumer.real_throughput_probe
         consumer.NOW_FN = lambda: SUNDAY_NOON
         consumer.read_ceo_off_work_flag = lambda path=None: None
+        # tech#135: every CLI test gets a HEALTHY probe by default so
+        # no test ever touches the real ollama (a real probe would
+        # load 14b onto the GPU mid-window); probe-specific tests
+        # override this seam per-case.
+        consumer.real_throughput_probe = (
+            lambda model=None, cap_s=None: self._probe_ok())
         self.tmp = tempfile.TemporaryDirectory()
         self.launch = Path(self.tmp.name) / "staged.py"
         self.launch.write_text("print('x')\n", encoding="utf-8")
@@ -178,12 +185,18 @@ class CliTests(unittest.TestCase):
         consumer.append_ledger_row = \
             lambda path, row: self.rows.append(row)
 
+    @staticmethod
+    def _probe_ok():
+        return {"verdict": "ok", "model": "qwen2.5:14b",
+                "rate_tps": 30.0, "eta_s": 230, "cap_s": 90}
+
     def tearDown(self):
         consumer.real_run_card = self._real_card
         consumer.real_launch = self._real_launch
         consumer.append_ledger_row = self._real_append
         consumer.NOW_FN = self._real_now_fn
         consumer.read_ceo_off_work_flag = self._real_flag_reader
+        consumer.real_throughput_probe = self._real_probe
         self.tmp.cleanup()
 
     def _run(self, extra=None):
@@ -278,6 +291,197 @@ class CliTests(unittest.TestCase):
         payload = json.loads(buf.getvalue().strip())
         self.assertEqual(payload["tool"], "fire_consume")
         self.assertEqual(payload["card_verdict"], "no-fire")
+
+    # -- tech#135 (P-7 pilot): throughput pre-probe wiring ---------
+
+    def test_starved_probe_demotes_to_no_fire_rc1(self):
+        consumer.real_run_card = lambda: _fire_card(expires_at=10 ** 12)
+        consumer.real_throughput_probe = (
+            lambda model=None, cap_s=None:
+            {"verdict": "ok", "model": model, "rate_tps": 1.2,
+             "eta_s": 5750, "cap_s": 90})
+
+        def must_not_launch(script):
+            raise AssertionError("starved window must not dispatch")
+        consumer.real_launch = must_not_launch
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        row = self.rows[0]
+        self.assertFalse(row["launched"])
+        self.assertEqual(row["action"], "no-fire")
+        self.assertIn("throughput-starved", row["reason"])
+        self.assertIn("5750", row["reason"])
+        self.assertEqual(row["throughput_probe"]["eta_s"], 5750)
+        self.assertEqual(row["card_verdict"], "fire")
+
+    def test_probe_timeout_demotes_no_fire(self):
+        consumer.real_run_card = lambda: _fire_card(expires_at=10 ** 12)
+        consumer.real_throughput_probe = (
+            lambda model=None, cap_s=None:
+            {"verdict": "timeout", "model": model, "cap_s": 90,
+             "error": "timed out"})
+
+        def must_not_launch(script):
+            raise AssertionError("timeout window must not dispatch")
+        consumer.real_launch = must_not_launch
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        self.assertFalse(self.rows[0]["launched"])
+        self.assertIn("throughput-starved", self.rows[0]["reason"])
+        self.assertIn("timeout", self.rows[0]["reason"])
+
+    def test_probe_error_fail_closed_defers(self):
+        consumer.real_run_card = lambda: _fire_card(expires_at=10 ** 12)
+        consumer.real_throughput_probe = (
+            lambda model=None, cap_s=None:
+            {"verdict": "error", "model": model, "cap_s": 90,
+             "error": "ConnectionRefusedError: no ollama"})
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        self.assertFalse(self.rows[0]["launched"])
+        self.assertIn("throughput-probe-error",
+                      self.rows[0]["reason"])
+
+    def test_probe_pass_dispatches_and_ledgers_probe_row(self):
+        consumer.real_run_card = lambda: _fire_card(expires_at=10 ** 12)
+        consumer.real_throughput_probe = (
+            lambda model=None, cap_s=None:
+            {"verdict": "ok", "model": model, "rate_tps": 30.0,
+             "eta_s": 230, "cap_s": 90})
+        consumer.real_launch = lambda script: 4242
+        rc = self._run()
+        self.assertEqual(rc, 0)
+        row = self.rows[0]
+        self.assertTrue(row["launched"])
+        self.assertEqual(row["launch_pid"], 4242)
+        self.assertEqual(row["throughput_probe"]["eta_s"], 230)
+
+    def test_no_fire_card_never_runs_probe(self):
+        # zero-cost law: no-fire rounds must never pay for a probe
+        consumer.real_run_card = lambda: {
+            "verdict": "no-fire", "reasons": ["gate-static-no-go"],
+            "ts": "t"}
+
+        def must_not_probe(model=None, cap_s=None):
+            raise AssertionError("probe must not run on no-fire card")
+        consumer.real_throughput_probe = must_not_probe
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        self.assertNotIn("throughput_probe", self.rows[0])
+
+    def test_eta_starved_s_cli_override_lower_line_starves(self):
+        consumer.real_run_card = lambda: _fire_card(expires_at=10 ** 12)
+        consumer.real_launch = lambda script: 99
+
+        def must_not_launch(script):
+            raise AssertionError("lowered line must starve the GO")
+        consumer.real_launch = must_not_launch
+        rc = self._run(extra=["--eta-starved-s", "200"])
+        self.assertEqual(rc, 1)
+        self.assertIn("throughput-starved", self.rows[0]["reason"])
+
+    def test_post_probe_staleness_recheck_demotes(self):
+        # fire card expiring 4s out passes decide (margin 2s, even
+        # with a full-second slip) but a probe that eats 2s pushes the
+        # dispatch past expiry -- the post-probe re-check must catch
+        # it (staleness law). expires_at must be an int (card
+        # contract); the 4s/2s pair keeps both sides deterministic.
+        import time
+        now0 = int(datetime.datetime.now().timestamp())
+        soon = now0 + 4
+
+        def slow_probe(model=None, cap_s=None):
+            time.sleep(2.0)
+            return self._probe_ok()
+        consumer.real_run_card = lambda: _fire_card(expires_at=soon)
+        consumer.real_throughput_probe = slow_probe
+        consumer.real_launch = lambda script: 77
+        rc = self._run()
+        self.assertEqual(rc, 1)
+        self.assertFalse(self.rows[0]["launched"])
+        self.assertIn("expired-after-probe", self.rows[0]["reason"])
+
+
+class ThroughputProbeTests(unittest.TestCase):
+    """tech#135 (P-7): pure cores of the card-GO throughput probe.
+
+    The network seam (real_throughput_probe) is deliberately NOT
+    exercised here -- a real probe would load 14b onto the GPU
+    mid-window; the parse math is split into compute_rate so the
+    whole probe pipeline is covered without any network."""
+
+    def test_compute_rate_from_ollama_counters(self):
+        # 20 prompt + 96 gen tokens over 0.1s prefill + 2.8s decode
+        rate, eta = consumer.compute_rate({
+            "prompt_eval_count": 20, "eval_count": 96,
+            "prompt_eval_duration": 100_000_000,
+            "eval_duration": 2_800_000_000,
+        })
+        self.assertAlmostEqual(rate, 116 / 2.9, places=3)
+        self.assertAlmostEqual(
+            eta,
+            (consumer.ETA_PROMPT_TOKENS
+             + consumer.ETA_OUTPUT_TOKENS) * 2.9 / 116,
+            places=3)
+
+    def test_compute_rate_missing_or_zero_counters_none(self):
+        self.assertIsNone(consumer.compute_rate({}))
+        self.assertIsNone(consumer.compute_rate({
+            "prompt_eval_count": 0, "eval_count": 0,
+            "prompt_eval_duration": 10, "eval_duration": 10}))
+        self.assertIsNone(consumer.compute_rate({
+            "prompt_eval_count": 5, "eval_count": 7,
+            "prompt_eval_duration": 0, "eval_duration": 0}))
+
+    def test_classify_ok_under_line(self):
+        ok, reason = consumer.classify_throughput(
+            {"verdict": "ok", "rate_tps": 30.0, "eta_s": 230})
+        self.assertTrue(ok)
+        self.assertIn("throughput-ok", reason)
+        self.assertIn("230", reason)
+
+    def test_classify_eta_exactly_at_line_passes(self):
+        # boundary: eta == line is NOT starved (strictly greater is)
+        ok, _ = consumer.classify_throughput(
+            {"verdict": "ok", "rate_tps": 5.75, "eta_s": 1200})
+        self.assertTrue(ok)
+
+    def test_classify_eta_over_line_starved(self):
+        ok, reason = consumer.classify_throughput(
+            {"verdict": "ok", "rate_tps": 1.2, "eta_s": 5750})
+        self.assertFalse(ok)
+        self.assertIn("throughput-starved", reason)
+        self.assertIn("5750", reason)
+        self.assertIn("1.2", reason)
+
+    def test_classify_custom_line_respected(self):
+        ok, reason = consumer.classify_throughput(
+            {"verdict": "ok", "rate_tps": 30.0, "eta_s": 230},
+            eta_starved_s=200)
+        self.assertFalse(ok)
+        self.assertIn("throughput-starved", reason)
+
+    def test_classify_timeout_is_starved_hard_case(self):
+        ok, reason = consumer.classify_throughput(
+            {"verdict": "timeout", "cap_s": 90})
+        self.assertFalse(ok)
+        self.assertIn("throughput-starved", reason)
+        self.assertIn("timeout", reason)
+
+    def test_classify_error_fail_closed(self):
+        ok, reason = consumer.classify_throughput(
+            {"verdict": "error", "error": "URLError: refused"})
+        self.assertFalse(ok)
+        self.assertIn("throughput-probe-error", reason)
+        self.assertIn("URLError", reason)
+
+    def test_classify_malformed_and_missing_eta_fail_closed(self):
+        for bad in (None, {}, {"verdict": None}, {"verdict": "ok"},
+                    {"verdict": "ok", "eta_s": 0},
+                    {"verdict": "ok", "eta_s": "fast"}):
+            ok, reason = consumer.classify_throughput(bad)
+            self.assertFalse(ok, bad)
+            self.assertIn("throughput-probe-error", reason)
 
 
 class StagedLauncherContractTests(unittest.TestCase):

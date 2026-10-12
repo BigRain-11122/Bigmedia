@@ -27,8 +27,8 @@ future re-plumbings that would cache the card line).
 
 rc contract (mirrors the card; consumers gate on rc):
   0 = fire consumed, staged launch dispatched
-  1 = no-fire (window closed, stale verdict, or bm-a workday-hours
-      dispatch block; card cited)
+  1 = no-fire (window closed, stale verdict, bm-a workday-hours
+      dispatch block, or throughput-probe defer tech#135; card cited)
   2 = usage/tooling error (fail-closed; NEVER launches)
 
 Usage:
@@ -46,6 +46,7 @@ import json
 import os
 import subprocess
 import sys
+import urllib.request
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -86,6 +87,30 @@ USAGE = ("usage: python src/os/fire_consume.py --launch "
 
 LAUNCH_MARGIN_S = 2  # dispatch latency budget inside the TTL
 
+# tech#135 (P-7 pilot): throughput pre-probe before dispatch. Three
+# S1 flights burned their full 1500s hats in GPU-starved windows with
+# zero verdict (R2012 flight-1 / R2013 flight-2 / R2024 flight-3) --
+# the card's gates (VRAM / util / mv / load-class) say nothing about
+# ollama's ACHIEVABLE generation rate. The probe runs ONLY on a
+# card-GO (no-fire rounds stay zero-cost): one small non-streaming
+# generation against the local ollama gives a load-excluded effective
+# token rate, extrapolated to a full-verdict ETA. ETA over the
+# conservative starve line -> no-fire reason=throughput-starved,
+# deferred to the next window (a <=90s probe instead of a 1500s
+# burn). Conservative single-direction (tech#136 discipline): this
+# face can only demote a GO, never force one. Thresholds are
+# deliberately conservative initial values, calibrate from the
+# pilot readout (P-7 judge questions pre-registered in §D).
+PROBE_MODEL_DEFAULT = "qwen2.5:14b"
+PROBE_PROMPT = ("Reply with the numbers from one to twenty, "
+                "comma separated.")
+PROBE_TOKENS = 96          # num_predict of the micro-generation
+PROBE_CAP_S = 90           # P-7: probe budget <= 90s per attempt
+ETA_PROMPT_TOKENS = 6000   # conservative S1/E4 material size
+ETA_OUTPUT_TOKENS = 900     # conservative verdict size
+ETA_STARVED_S = 1200       # P-7: conservative initial starve line
+OLLAMA_GENERATE_URL = "http://localhost:11434/api/generate"
+
 
 class CardError(Exception):
     """The card could not run or its JSON line was unparseable."""
@@ -123,6 +148,12 @@ def real_run_card():
     return payload
 
 
+def _expired(expires_at, now_epoch):
+    """TTL math shared by the pre-launch and post-probe checks:
+    a verdict at/inside the margin is stale, never dispatched."""
+    return now_epoch + LAUNCH_MARGIN_S >= expires_at
+
+
 def decide(card, now_epoch):
     """Pure core -> (action, reason, rc).
 
@@ -142,7 +173,7 @@ def decide(card, now_epoch):
     expires_at = card.get("expires_at")
     if not isinstance(expires_at, int):
         return "error", "fire-verdict-without-expires_at-fail-closed", 2
-    if now_epoch + LAUNCH_MARGIN_S >= expires_at:
+    if _expired(expires_at, now_epoch):
         return "stale", "fire-verdict-expired-at-%d" % expires_at, 1
     return "launch", "fire-fresh", 0
 
@@ -177,6 +208,99 @@ def workday_dispatch_blocked(dt, flag_declared=None):
     if flag_declared is not None and flag_declared.date() == dt.date():
         return False  # CEO declared off work today (early-open)
     return True
+
+
+def compute_rate(body):
+    """Pure core: ollama generate response -> (rate_tps, eta_s) or
+    None.
+
+    Load time is deliberately excluded (prompt_eval_duration +
+    eval_duration only): a cold load is not starvation, and after the
+    probe the model stays resident for the flight (shared work, not
+    extra cost). The rate covers prefill+decode tokens over
+    prefill+decode time -- a conservative proxy for a full verdict
+    (whose prompt is ~6000 tokens, not 20). Missing/zero counters
+    read as None; callers treat that as probe-error fail-closed."""
+    prompt_count = body.get("prompt_eval_count") or 0
+    eval_count = body.get("eval_count") or 0
+    prompt_ns = body.get("prompt_eval_duration") or 0
+    eval_ns = body.get("eval_duration") or 0
+    elapsed_ns = prompt_ns + eval_ns
+    tokens = prompt_count + eval_count
+    if elapsed_ns <= 0 or tokens <= 0:
+        return None
+    rate_tps = tokens / (elapsed_ns / 1e9)
+    eta_s = (ETA_PROMPT_TOKENS + ETA_OUTPUT_TOKENS) / rate_tps
+    return rate_tps, eta_s
+
+
+def real_throughput_probe(model=PROBE_MODEL_DEFAULT,
+                          cap_s=PROBE_CAP_S):
+    """Network seam (injected in tests; never called on no-fire
+    paths): one small non-streaming ollama generation -> probe row.
+
+    verdict: ok (rate+eta computed) / timeout (cap exceeded -- the
+    starved hard case: PROBE_TOKENS did not finish inside cap_s, so
+    an ETA_OUTPUT_TOKENS verdict cannot land inside the 1500s flight
+    hat) / error (transport/HTTP/JSON failure -- fail-closed at the
+    caller for the same reason: an ollama that cannot answer a
+    96-token generation cannot deliver a verdict). The probe calls
+    ollama directly and NEVER writes expert-calls rows (same
+    discipline as the tech#120 wedge probe: probes never pollute
+    call accounting)."""
+    payload = json.dumps({
+        "model": model, "prompt": PROBE_PROMPT, "stream": False,
+        "options": {"num_predict": PROBE_TOKENS},
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        OLLAMA_GENERATE_URL, data=payload,
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=cap_s) as resp:
+            body = json.loads(resp.read().decode("utf-8", "replace"))
+    except Exception as exc:  # transport errors include the cap
+        text = "%s: %s" % (type(exc).__name__, exc)
+        verdict = ("timeout"
+                   if "timed out" in text.lower() else "error")
+        return {"verdict": verdict, "model": model, "cap_s": cap_s,
+                "error": text}
+    computed = compute_rate(body)
+    if computed is None:
+        return {"verdict": "error", "model": model, "cap_s": cap_s,
+                "error": "probe counters missing/zero",
+                "raw_keys": sorted(str(k) for k in body)}
+    rate_tps, eta_s = computed
+    return {"verdict": "ok", "model": model, "cap_s": cap_s,
+            "rate_tps": round(rate_tps, 3), "eta_s": int(eta_s),
+            "probe_tokens": PROBE_TOKENS}
+
+
+def classify_throughput(probe, eta_starved_s=ETA_STARVED_S):
+    """Pure core: probe row -> (ok_to_launch, reason).
+
+    Demotion is single-direction: a starved/timeout/error probe turns
+    a GO into no-fire rc1 (defer to the next window) -- it can never
+    upgrade a card verdict, never error out a valid window."""
+    if not isinstance(probe, dict) or not probe.get("verdict"):
+        return False, "throughput-probe-error: malformed probe result"
+    if probe["verdict"] == "ok":
+        eta = probe.get("eta_s")
+        if not isinstance(eta, (int, float)) or eta <= 0:
+            return False, "throughput-probe-error: ok without eta_s"
+        if eta > eta_starved_s:
+            return False, ("throughput-starved: eta %ss > %ss line "
+                           "(rate %s tok/s)" % (
+                               eta, eta_starved_s,
+                               probe.get("rate_tps", "n/a")))
+        return True, ("throughput-ok: eta %ss <= %ss line" % (
+            eta, eta_starved_s))
+    if probe["verdict"] == "timeout":
+        return False, ("throughput-starved: probe timeout > %ss cap "
+                       "(%s tokens unfinished)" % (
+                           probe.get("cap_s", PROBE_CAP_S),
+                           probe.get("probe_tokens", PROBE_TOKENS)))
+    return False, "throughput-probe-error: %s" % probe.get(
+        "error", probe.get("verdict"))
 
 
 def real_launch(script_path):
@@ -229,6 +353,14 @@ def main(argv=None):
                              "default %s)" % DEFAULT_LEDGER)
     parser.add_argument("--json", action="store_true",
                         help="single machine-readable line")
+    parser.add_argument("--probe-model", default=PROBE_MODEL_DEFAULT,
+                        help="ollama model for the throughput "
+                             "pre-probe (default %(default)s)")
+    parser.add_argument("--eta-starved-s", type=float,
+                        default=ETA_STARVED_S,
+                        help="verdict-ETA starve line in seconds "
+                             "(default %(default)s -- P-7 "
+                             "conservative initial value)")
     args = parser.parse_args(argv)
 
     launch = Path(args.launch)
@@ -269,11 +401,29 @@ def main(argv=None):
     now_epoch = int(datetime.datetime.now().timestamp())
     action, reason, rc = decide(card, now_epoch)
     launch_pid = None
+    probe_row = None
     if action == "launch":
-        try:
-            launch_pid = real_launch(launch)
-        except OSError as exc:
-            action, reason, rc = "error", "launch-failed: %s" % exc, 2
+        # tech#135 (P-7): throughput pre-probe -- the LAST gate before
+        # dispatch, and only on a GO (no-fire rounds never pay for
+        # it). Demotion is single-direction no-fire rc1.
+        probe_row = real_throughput_probe(args.probe_model)
+        ok, probe_reason = classify_throughput(
+            probe_row, args.eta_starved_s)
+        if not ok:
+            action, reason, rc = "no-fire", probe_reason, 1
+        elif _expired(card["expires_at"],
+                      int(datetime.datetime.now().timestamp())):
+            # the probe spent window TTL -- never dispatch a verdict
+            # at/after expiry (staleness law, defensive re-check)
+            action, reason, rc = (
+                "stale", "fire-verdict-expired-after-probe-at-%d"
+                % card["expires_at"], 1)
+        else:
+            try:
+                launch_pid = real_launch(launch)
+            except OSError as exc:
+                action, reason, rc = ("error", "launch-failed: %s"
+                                     % exc, 2)
 
     result = {
         "tool": "fire_consume",
@@ -289,6 +439,8 @@ def main(argv=None):
         "expires_at": card.get("expires_at"),
         "rc": rc,
     }
+    if probe_row is not None:
+        result["throughput_probe"] = probe_row
     if args.ledger:
         append_ledger_row(args.ledger, result)
     print(json.dumps(result, ensure_ascii=False) if args.json else
