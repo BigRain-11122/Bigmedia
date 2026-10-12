@@ -1,0 +1,12 @@
+SUITE_RC=0
+SUITE_RAN=Ran 28 tests in 0.835s
+SUITE_RESULT=OK
+SUITE_LOG_OUT=.c3-tmp\bs_t125_mod2.log.out
+SUITE_LOG_ERR=.c3-tmp\bs_t125_mod2.log.err
+SUITE_RESULT_FILE=.c3-tmp\bs_t125_mod2.log.result
+run_suite: last stderr lines:
+  ............................
+  ----------------------------------------------------------------------
+  Ran 28 tests in 0.835s
+  
+  OK
