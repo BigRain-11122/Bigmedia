@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 00:04:27",
- "do": "R2204 夜窗：Toonflow #110 LEG-2 收口（Ollama 供应商+3 模型 CDP 自动化落位·ollama serve 复活）；fire 四件候 MV 让位。",
+ "export_ts": "2026-10-14 00:32:44",
+ "do": "R2205 夜窗：DIGEST-v20《城市盘点 020》CPU 预置腿毕（机核 18 断言+验图 5/5）·F-184 预指·fire 五件候 MV 让位。",
  "depts": [
   {
    "n": "工程技术部",
@@ -63,25 +63,25 @@
  ],
  "results": [
   [
-   "orders 351-355",
-   "r2149"
+   "DIGEST-v20 预置腿毕",
+   "r2205"
   ],
   [
-   "fire no-fire x4",
+   "fire no-fire x5",
    "f180"
   ],
   [
-   "pause 旗重锚",
-   "aihot"
+   "row 382 ack",
+   "orders"
   ],
   [
-   "DIGEST-v20 入队",
+   "F-184 预指",
    "v20"
   ]
  ],
  "live": [
-  "当前活：夜窗装机器位——Toonflow #110 LEG-2 收口（供应商+3 模型落位）；L 卡四件 fire 候 MV sprint 让位（双门 no-go）。",
-  "最近实物：tools/toonflow_cdp.ts（CDP 自动化驱动正身·10-14 00:1x）+ Toonflow 供应商配置落位（Ollama Local·3 模型·ollama serve HTTP 200）。",
-  "下个里程碑：MV 让位后 F-180~183 fire 接力+DIGEST-v20（窗 ≤10-15）；10-14 08:00 tech#92/#126 权威窗读数。"
+  "当前活：DIGEST-v20 死线冲刺日数字盘点卡 CPU 预置腿毕（M0-M4+e4 trio staged）·评审腿 F-184 gated fire 窗（F-180~183 前序）。",
+  "最近实物：data/storylines/cards/MC-20261014-DIGEST-v20/MC-20261014-DIGEST-v20.png（10-14 00:5x·m1-assert 18 断言全绿+验图五检 5/5）。",
+  "下个里程碑：MV 让位后 F-180~184 fire 接力（窗 ≤10-15）；10-14 08:00 tech#92/#126 权威窗+晨窗回滚（MiniGameOllama 双任务 re-enable）。"
  ]
 }

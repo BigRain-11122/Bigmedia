@@ -1,0 +1,19 @@
+build_digest20 M1 assertions ALL GREEN (18 checks)
+PASS A1 rows==43 actual=43
+PASS A1b ceo_orders==18 actual=18
+PASS A2a qlaw_row_found n=1
+PASS A2a quote_verbatim_substring 
+PASS A2b v3_row_60fens n=1
+PASS A2c v3_nine_items has9=True has10=False
+PASS A2d row_90fen 
+PASS A2e row_9of9 
+PASS A2f row_41qu 
+PASS A2f2 sizhuan_grounded 
+PASS A2g O-20261013-2200 
+PASS A2g O-20261013-2215 
+PASS A2g O-20261013-2245 
+PASS A2h row_deadline 
+PASS A2i gate_over_deadline 
+PASS A2i2 production_system_law 
+PASS A4 face_has_43 
+PASS A4b face_has_18 
