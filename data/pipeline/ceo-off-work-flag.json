@@ -1,7 +1,0 @@
-{
-  "flag": "ceo-off-work",
-  "declared_ts": "2026-10-12 20:50:00",
-  "order": "O-20261012-2025",
-  "note": "CEO off-work declaration consumed R2074 (night window early-open); lifted at CEO return / morning self-heal; same-date freshness enforced by fire_consume.workday_dispatch_blocked (tech#137)",
-  "set_by": "R2076"
-}
