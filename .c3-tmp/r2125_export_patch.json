@@ -1,0 +1,29 @@
+{
+  "do": "MV 死线窗值守（08:30 成片待 MV 会话呈报）；本轮=导出面卫生修复 results 回四短对（R2124 ad-hoc 复发·探针两 WARN 清零）+tech#92 08:00 窗读",
+  "results": [
+    ["179", "成品库总数"],
+    ["1321", "测试全绿"],
+    ["2125", "OS 轮次"],
+    ["R2125", "最近交付"]
+  ],
+  "chips": [["1321 测绿", "live"]],
+  "depts": [
+    {"n": "工程技术部", "t": "1321 测试全绿；S2 三门+守卫面 20+ 在役；fire 链四件套（原子消费+CEO 下班旗+载类闸+吞吐预探）+comfy 波感探针全落位", "s": 1}
+  ],
+  "outs": [
+    ["雷达评分标定判读顺延 10-14 08:00（worker 夜窗缺席·main#21 复役后随窗）", "wait", "radar"],
+    ["MV 全曲成品线在跑（MV 会话域·循环查看位零接触）", "on", "mv0001"],
+    ["MD-0002 配音+装配预置毕·T2I 待 CEO 点头", "wait", "drama"],
+    ["meme V1《慢慢踩》生产在飞（设计闸 CERTIFIED）", "wait", "meme-v1"],
+    ["AIHOT 双新源换装（B站科技/知识端点·流量真实）", "on", "intel"],
+    ["SC-005 口述史第五件风控官陈雅雯收官=F-177 入库（B 批 04/05 毕·06 林之恒 fire-ready）", "on", "l-audio"],
+    ["磁盘减负执行（9.2GB+79MB+bonsai 6.14GB 已清·renders 冻结维持）", "on", "ops"],
+    ["REACT/CENSUS 图鉴系列量产线（供给门照守）", "on", "l-card"],
+    ["W42 周审件窗（10-12 起周内）", "on", "weekly"]
+  ],
+  "live": [
+    "当前活：死线窗值守到 08:30（MV 全曲成片装配中·MV 会话域零接触）；tech#92 08:00 权威窗读=顺延定谳（worker 夜窗缺席·pause 旗执法面）",
+    "最近实物：docs/status-export.json 导出面卫生修复——results 收敛回四短对齐约（R2124 手写 close 复发 dict 形态·探针 export-results/export-caps 两 WARN 清零·canonical writer 走门）",
+    "下个里程碑：08:30 MV 全曲成片呈 CEO（CEO 直令死线）→收口三连（撤 AIHOT pause 旗+worker-restart main#21+F-180~183 fire 接力序）"
+  ]
+}

@@ -1,16 +1,16 @@
 {
- "export_ts": "2026-10-13 07:34:23",
- "do": "MV 死线窗值守中（08:30 全曲成片待 MV 会话呈报）；本轮实物=tech#145 三队紧凑读数器 queue_status.py（5 行读数替代全文件 dump+--item 单件全行取件 fail-closed）",
+ "export_ts": "2026-10-13 07:46:57",
+ "do": "MV 死线窗值守（08:30 成片待 MV 会话呈报）；本轮=导出面卫生修复 results 回四短对（R2124 ad-hoc 复发·探针两 WARN 清零）+tech#92 08:00 窗读",
  "depts": [
   {
    "n": "工程技术部",
-   "t": "1294 测试全绿；S2 三门+守卫面 20+ 在役；fire 链四件套（原子消费+CEO 下班旗+载类闸+吞吐预探）+comfy 波感探针全落位",
+   "t": "1321 测试全绿；S2 三门+守卫面 20+ 在役；fire 链四件套（原子消费+CEO 下班旗+载类闸+吞吐预探）+comfy 波感探针全落位",
    "s": 1
   }
  ],
  "outs": [
   [
-   "雷达日报评分标定判读（10-13 08:00 权威窗·锚例版已上线·R2047 顺延律随行）",
+   "雷达评分标定判读顺延 10-14 08:00（worker 夜窗缺席·main#21 复役后随窗）",
    "wait",
    "radar"
   ],
@@ -57,7 +57,7 @@
  ],
  "chips": [
   [
-   "1294 测绿",
+   "1321 测绿",
    "live"
   ]
  ],
@@ -67,32 +67,21 @@
    "成品库总数"
   ],
   [
-   "1314",
+   "1321",
    "测试全绿"
   ],
   [
-   "2120",
+   "2125",
    "OS 轮次"
   ],
   [
-   "R2120",
-   "队列紧凑读数器交付"
-  ],
-  {
-   "ts": "2026-10-13 07:34:23",
-   "round": "R2124",
-   "what": "tech#146 delivered: queue_status.py gains the backlog face (P1 board in the compact readout) + [needs-CEO] gated-bucket split; 27 tests green, 1321 suite green, live dogfood backlog 114|done 96|gated 9(+2 ceo)|claimable 9 head #109; death-line watch continues (release no 234s film at 07:34, 08:30 deadline, main#27 after)",
-   "files": [
-    "src/os/queue_status.py",
-    "tests/test_queue_status.py",
-    "state/queue/tech.md"
-   ],
-   "next": "death-line guard until 08:30, then main#27 close-out trilogy: MV film check -> unpause AIHOT flag + worker-restart (main#21) -> F-180~183 fire relay + tech#92 re-judgment window reset"
-  }
+   "R2125",
+   "最近交付"
+  ]
  ],
  "live": [
-  "当前活：死线窗值守——MV 线占机让路中（F-180~183 评审件排队等 08:30 成片收口后 fire 接力）；本轮把三队消费面装上紧凑读数器（5 行读数替代全文件 dump）",
-  "最近实物：src/os/queue_status.py 三队紧凑读数器（--item 单件取件 fail-closed）+20 新测·全套 1314 绿 2026-10-13 06:4x",
-  "下个里程碑：08:30 MV 全曲成片呈 CEO（CEO 直令死线）；收口后撤 AIHOT pause 旗+worker-restart+F-180~183 fire 接力序+tech#92 判据窗读数"
+  "当前活：死线窗值守到 08:30（MV 全曲成片装配中·MV 会话域零接触）；tech#92 08:00 权威窗读=顺延定谳（worker 夜窗缺席·pause 旗执法面）",
+  "最近实物：docs/status-export.json 导出面卫生修复——results 收敛回四短对齐约（R2124 手写 close 复发 dict 形态·探针 export-results/export-caps 两 WARN 清零·canonical writer 走门）",
+  "下个里程碑：08:30 MV 全曲成片呈 CEO（CEO 直令死线）→收口三连（撤 AIHOT pause 旗+worker-restart main#21+F-180~183 fire 接力序）"
  ]
 }
