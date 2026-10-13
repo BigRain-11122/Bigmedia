@@ -349,6 +349,21 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
                                if orders_wm_stored else None)}
 
 
+def _path_is_gitignored(root, rel_path):
+    """True when git ignores rel_path (``git check-ignore -q`` advisory).
+
+    tech#157 guard: any git failure (missing binary, not a repo) reads as
+    "not ignored" so this helper can never fail a close on its own.
+    """
+    try:
+        proc = subprocess.run(
+            ["git", "-C", root, "check-ignore", "-q", rel_path],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return proc.returncode == 0
+    except OSError:
+        return False
+
+
 def autodetect_close_script(root, state_path=None):
     """tech#81: the round's own close script auto-includes itself.
 
@@ -365,6 +380,12 @@ def autodetect_close_script(root, state_path=None):
     the round-debris guard's business, tech#66). Advisory by design: an
     unreadable state, a non-int tick or a missing script all return None
     and never fail the close.
+
+    tech#157 retirement (R2229): when the anchored script path is
+    gitignored (the born-fix gitignore line ``.c3-tmp/``), the
+    self-include is retired - appending an ignored path would fail the
+    ``git add`` step, so an ignored close script returns None (advisory,
+    same as missing; the cleanup hook owns disk deletion).
     """
     if state_path is None:
         state_path = os.path.join(root, "src", "os", "state.json")
@@ -378,6 +399,8 @@ def autodetect_close_script(root, state_path=None):
         return None
     rel = ".c3-tmp/r%d_close.py" % tick
     if os.path.isfile(os.path.join(root, rel.replace("/", os.sep))):
+        if _path_is_gitignored(root, rel):
+            return None
         return rel
     return None
 

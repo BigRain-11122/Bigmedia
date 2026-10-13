@@ -426,6 +426,25 @@ class TestSelfIncludeIntegration(GitRepoCase):
             l.startswith("DRY-RUN git add") and ".c3-tmp/r41_close.py" in l
             for l in lines))
 
+    def test_gitignored_close_script_retired(self):
+        # tech#157 born-fix: a .gitignore line covering .c3-tmp/ retires
+        # the tech#81 self-include - an ignored close script must NOT ride
+        # the manifest (git add of an ignored path would fail the close).
+        self._seed_round(41)
+        (self.root / ".gitignore").write_text(".c3-tmp/\n", encoding="utf-8")
+        self.assertIsNone(cc.autodetect_close_script(str(self.root)))
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any("STEP self-include" in l for l in lines))
+        heads = self.head_files()
+        self.assertIn("a.txt", heads)
+        self.assertNotIn(".c3-tmp/r41_close.py", heads)
+        # ignored + still on disk = invisible to routine status (cleanup
+        # hook owns the disk deletion, never the close commit)
+        rc, out, _ = self._git(["status", "--porcelain", "--", ".c3-tmp"])
+        self.assertEqual("", out)
+
 
 class TestCLI(unittest.TestCase):
     """The main() face the close script shell-outs to (rc propagation)."""

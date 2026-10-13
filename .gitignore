@@ -19,6 +19,8 @@ logs/
 __pycache__/
 *.pyc
 *.log
+# session middleware never enters git (tech#157 born-fix; tech#81 self-include retired)
+.c3-tmp/
 .codely-cli/scheduled_tasks.json
 .codely-cli/auto-saves/
 data/storylines/audio/*.mp3
