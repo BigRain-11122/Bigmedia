@@ -1,5 +1,0 @@
-B first 2 cues: 欢迎收听城市口述使选段。 | 本节目由AI参与生成。
-A first 2 cues: 欢迎收听城市口述时选段本节目由AI参与生 | 成基于归基城市再策居民大案改编部分情节为
-A cue texts 46, B cue texts 50
-B contains full prompt decl verbatim: False
-A total chars 849, B total chars 858

@@ -1,3 +1,0 @@
-verbatim-check SC-005-01-v1
-beats=13 body_chars=927 anchors=39 miss=0
-RESULT: PASS (zero miss)

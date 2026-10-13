@@ -1,4 +1,0 @@
-cues=17 beats=17
-hook-triple-decl: ai-gen=True archive=True inference=True
-close-inference-decl: True
-SAME-TEXT miss=0

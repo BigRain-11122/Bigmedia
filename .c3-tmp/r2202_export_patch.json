@@ -1,8 +1,0 @@
-{
- "do": "R2202 rows 378-379 消费；夜窗提前开（CEO 下班令）：AIHOT worker 自愈复役+requeue 32；fire 四件候让位",
- "live": [
-  "当前活：夜窗提前开（CEO 下班令 21:0x）——AIHOT worker 自愈复役+failed 池 requeue 32·CPU 常设开放令生效",
-  "最近实物：watchdog heal [worker] 22:35:29+requeue 32（tech#126 夜窗腿）·commit e13a28e8",
-  "下个里程碑：10-14 08:00 tech#92/#126 权威窗读数+晨窗回滚（re-enable MiniGame ollama 双任务）"
- ]
-}
