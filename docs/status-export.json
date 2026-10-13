@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 03:14:59",
- "do": "R2213：tech#153 交付 import 子命令（幂等+--dry 三绿·CRLF 坑根修）；F-180~184 carried；main#32 维持",
+ "export_ts": "2026-10-14 03:34:31",
+ "do": "R2214：tech#154 交付 pick-model 子命令（切换验+还原验+判负留痕）·F-180~184 carried",
  "depts": [
   {
    "n": "工程技术部",
@@ -80,8 +80,8 @@
   ]
  ],
  "live": [
-  "当前活：夜窗收尾，Toonflow 适配器 import 子命令已固化（幂等+--dry 三绿），候 08:00 权重窗/VRAM 开窗接力。",
-  "最近实物：tools/toonflow_cdp.ts import 模式（对已装适配器 no-op 幂等·--dry 机制链 10126 字符实测），2026-10-14 03:1x。",
-  "下个里程碑：08:00 tech#92/#126 权重窗执行；fire 五件 F-180~184 候 util/VRAM 开窗发射；V3 成片 main#32 跟进。"
+  "当前活：夜窗 tech 产线：tech#154 pick-model 子命令交付毕（Toonflow 主界面模型选择器机械化·判负留痕）·fire 五件让位 VRAM 门",
+  "最近实物：tools/toonflow_cdp.ts pick-model 子命令+实测三绿（qwen3.5 切换验/qwen2.5 还原验/ComfyUI 判负留痕）·2026-10-14 03:3x",
+  "下个里程碑：08:00 tech#92/#126 权威窗读数（zhihu-hot 头部 ≥3 篇 ≥60 判据）；fire 接力 F-180~184 候 util/VRAM 门开"
  ]
 }
