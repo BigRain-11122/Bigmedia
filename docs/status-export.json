@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 03:34:31",
- "do": "R2214：tech#154 交付 pick-model 子命令（切换验+还原验+判负留痕）·F-180~184 carried",
+ "export_ts": "2026-10-14 03:58:36",
+ "do": "F-180 SC-005-07 flight-4 fired 03:56 (S1 seat in flight); F-181..184 relay queued; harvest + 08:00 window next round",
  "depts": [
   {
    "n": "工程技术部",
