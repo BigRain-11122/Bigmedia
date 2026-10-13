@@ -57,6 +57,17 @@ tech#76 (R1920 placeholder anchor) adds finalize_state(): the single-writer
 state.json accounting step. Import-only by design (no CLI): the ledger line
 is CJK prose, and CLI args are exactly the shell-quoting/GBK pit surface -
 close scripts pass it as an in-script UTF-8 string literal instead.
+
+tech#148 (R2124 relapse anchor) adds the canonical-export integration: a
+close that passes export_patch/export_do refreshes docs/status-export.json
+THROUGH export_refresh (tech#70 canonical writer) before the git steps, and
+the refreshed export rides the commit manifest automatically. This is the
+structural retirement of the hand-rolled json.dump close-script generation
+(R2124 wrote a 5-entry results face the writer would have refused; R2125
+re-fixed the instance, this encodes the class). Writer refusal (rc=2) is
+warn-only at the close level: the export stays byte-identical (the safe
+state) and the accounting commit still lands - the routine probe keeps
+flagging the stale face until a clean patch is passed.
 """
 
 import argparse
@@ -72,6 +83,12 @@ import sys
 RC_OK = 0
 RC_GIT = 1
 RC_USAGE = 2
+
+# export_refresh.RC_REFUSE (the canonical writer's refusal grade). The
+# sibling module is lazy-imported inside refresh_export_in_close, so the
+# value is pinned here; test_close_commit locks the alias to the writer's
+# own constant so drift is caught.
+RC_WRITER_REFUSE = 2
 
 MSG_MAX_SOFT = 500  # P-30 one-line convention; WARN only, never fails
 PYCACHE_DIRNAME = "__pycache__"
@@ -359,8 +376,32 @@ def autodetect_close_script(root, state_path=None):
     return None
 
 
-def run_close_commit(files, message, root=None, push=True, dry_run=False):
+def refresh_export_in_close(root, patch, do, now_fn=None, dry_run=False):
+    """tech#148: refresh docs/status-export.json through the canonical
+    writer (tech#70) as part of the close. Returns (rc, lines) with the
+    writer's own rc (0 written / 1 io / 2 refusal). Warn-only at the close
+    level: a refused write leaves the export byte-identical - the safe
+    state the R2124 hand-rolled dump bypassed."""
+    import export_refresh  # sibling module; lazy to keep CLI startup light
+    # DEFAULT_EXPORT_REL is already OS-native (built with os.path.join)
+    export_path = os.path.join(root, export_refresh.DEFAULT_EXPORT_REL)
+    kwargs = {"patch": patch, "do": do, "dry_run": dry_run}
+    if now_fn is not None:
+        kwargs["now_fn"] = now_fn
+    rc, lines, _violations = export_refresh.refresh_export(export_path, **kwargs)
+    return rc, lines
+
+
+def run_close_commit(files, message, root=None, push=True, dry_run=False,
+                     export_patch=None, export_do=None, export_now_fn=None):
     """Commit exactly `files` with `message`; push unless disabled.
+
+    tech#148: when export_patch (dict) and/or export_do (str) is given,
+    docs/status-export.json is refreshed through the canonical writer
+    (export_refresh) BEFORE the git steps and rides the manifest
+    automatically. Writer refusal is warn-only (see module docstring).
+    export_now_fn is a test-only clock injection for the writer's
+    live-clock stamp; None = the writer's real clock.
 
     Returns (rc, lines) where lines is the evidence-friendly ASCII log of
     every step taken. See the module docstring for the rc contract and the
@@ -398,6 +439,32 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False):
     else:
         rel_files.append(auto_self)
         lines.append("STEP self-include %s (tech#81)" % auto_self)
+
+    # --- tech#148: canonical export refresh (before the git steps so the
+    # refreshed export rides the same accounting commit). Refusal is
+    # warn-only: the export stays byte-identical and the close continues -
+    # an accounting close must never fail on the export face, and the
+    # routine probe keeps flagging a stale face until a clean patch lands. ---
+    if export_patch is not None or export_do is not None:
+        rc_x, xlines = refresh_export_in_close(
+            root, export_patch, export_do, now_fn=export_now_fn,
+            dry_run=dry_run)
+        lines.extend(xlines)
+        if dry_run:
+            lines.append("DRY-RUN manifest would include "
+                         "docs/status-export.json (tech#148)")
+        elif rc_x == RC_OK:
+            export_rel = "docs/status-export.json"
+            if export_rel not in rel_files:
+                rel_files.append(export_rel)
+                lines.append("STEP export %s rides manifest (tech#148)"
+                             % export_rel)
+        elif rc_x == RC_WRITER_REFUSE:
+            lines.append("WARN EXPORT-REFUSED rc=2 - export NOT refreshed, "
+                         "close continues (probe keeps flagging)")
+        else:
+            lines.append("WARN EXPORT-IOFAIL rc=%d - export NOT refreshed, "
+                         "close continues" % rc_x)
 
     plan_add = ["git", "add", "--"] + rel_files
     plan_commit = ["git", "commit", "-m", message, "--"] + rel_files
@@ -473,11 +540,32 @@ def main(argv=None):
                     help="repo root (default: this module's repo)")
     ap.add_argument("--no-push", action="store_true",
                     help="skip the push step (warn-only law still applies)")
+    ap.add_argument("--export-patch", default=None,
+                    help="JSON object file with a subset of "
+                         "do/depts/outs/chips/results/live - refreshed "
+                         "through the canonical writer before the commit "
+                         "(tech#148; hand-rolled json.dump is retired)")
+    ap.add_argument("--export-do", default=None,
+                    help='convenience: update the export "do" one-liner '
+                         "via the canonical writer (tech#148)")
     ap.add_argument("--dry-run", action="store_true",
                     help="print planned commands, execute nothing")
     args = ap.parse_args(argv)
+
+    export_patch = None
+    if args.export_patch:
+        try:
+            with open(args.export_patch, "r", encoding="utf-8-sig",
+                      errors="replace") as fh:
+                export_patch = json.load(fh)
+        except (OSError, ValueError) as exc:
+            print("USAGE-ERROR export patch file unreadable: %.80s" % exc)
+            return RC_USAGE
+
     rc, lines = run_close_commit(args.files, args.message, root=args.root,
-                                 push=not args.no_push, dry_run=args.dry_run)
+                                 push=not args.no_push, dry_run=args.dry_run,
+                                 export_patch=export_patch,
+                                 export_do=args.export_do)
     for line in lines:
         print(line)
     return rc

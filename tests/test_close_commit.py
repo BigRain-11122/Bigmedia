@@ -644,5 +644,113 @@ class TestFinalizeState(unittest.TestCase):
         self.assertNotIn("orders_row_watermark", fx.read())
 
 
+def clean_export_body():
+    """Minimal contract-clean export body (mirrors the tech#70 writer's
+    test fixture; export_ts is writer-owned)."""
+    return {
+        "do": "one line current activity",
+        "outs": [["kept item", "on", "tag"]],
+        "chips": [["kept chip", "live"]],
+        "results": [["42", "kept readout"]],
+        "live": ["live a", "live b", "live c"],
+    }
+
+
+class TestExportIntegration(GitRepoCase):
+    """tech#148 (R2124 relapse anchor): the close refreshes
+    docs/status-export.json THROUGH the canonical writer - never a
+    hand-rolled json.dump - and the refreshed export rides the accounting
+    commit manifest automatically. Writer refusal is warn-only."""
+
+    EXPORT_REL = os.path.join("docs", "status-export.json")
+
+    def setUp(self):
+        GitRepoCase.setUp(self)
+        (self.root / "docs").mkdir()
+        (self.root / self.EXPORT_REL).write_text(
+            json.dumps(clean_export_body(), ensure_ascii=False, indent=1)
+            + "\n", encoding="utf-8")
+
+    def _export(self):
+        return json.loads(
+            (self.root / self.EXPORT_REL).read_text(encoding="utf-8"))
+
+    def test_refresh_via_writer_rides_manifest(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False,
+                               export_do="r2127 close do line")
+        self.assertEqual(cc.RC_OK, rc, lines)
+        self.assertTrue(any("rides manifest" in l for l in lines), lines)
+        data = self._export()
+        self.assertEqual(data["do"], "r2127 close do line")
+        # live-clock law: export_ts is writer-stamped, second-precision ASCII
+        self.assertRegex(data["export_ts"],
+                         r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+        # unlisted keys carry over (incremental law through the close path)
+        self.assertEqual(data["results"], [["42", "kept readout"]])
+        # refreshed export rides the same accounting commit
+        head = self.head_files()
+        self.assertIn("a.txt", head)
+        self.assertIn("docs/status-export.json", head)
+
+    def test_patch_dict_through_close_updates_only_patched(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False,
+                               export_patch={"results": [["99", "new readout"]]})
+        self.assertEqual(cc.RC_OK, rc, lines)
+        data = self._export()
+        self.assertEqual(data["results"], [["99", "new readout"]])
+        self.assertEqual(data["do"], "one line current activity")
+        self.assertIn("docs/status-export.json", self.head_files())
+
+    def test_refused_patch_export_intact_close_still_commits(self):
+        """The R2124 defect class, replayed: a payload the writer must
+        refuse (export_ts smuggling) never lands; the accounting commit
+        is unaffected (warn-only law)."""
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        before = (self.root / self.EXPORT_REL).read_bytes()
+        rc, lines = self.close(["a.txt"], push=False,
+                               export_patch={"export_ts":
+                                             "1999-01-01 00:00:00"})
+        self.assertEqual(cc.RC_OK, rc, lines)  # warn-only, close lands
+        self.assertTrue(any("WARN EXPORT-REFUSED" in l for l in lines),
+                       lines)
+        self.assertTrue(any("writer-owned" in l for l in lines), lines)
+        self.assertEqual(before, (self.root / self.EXPORT_REL).read_bytes())
+        self.assertEqual(["a.txt"], self.head_files())  # no export in manifest
+
+    def test_no_export_params_zero_side_effects(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc, lines)
+        self.assertEqual(["a.txt"], self.head_files())
+        self.assertEqual(self._export()["do"], "one line current activity")
+
+    def test_dry_run_writes_nothing(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        before = (self.root / self.EXPORT_REL).read_bytes()
+        rc, lines = self.close(["a.txt"], push=False, dry_run=True,
+                               export_do="dry-run do")
+        self.assertEqual(cc.RC_OK, rc, lines)
+        self.assertTrue(any("DRY-RUN contract clean" in l for l in lines),
+                       lines)
+        self.assertEqual(before, (self.root / self.EXPORT_REL).read_bytes())
+        self.assertEqual(self.head0, self.head())
+
+    def test_export_already_in_manifest_not_duplicated(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rel = self.EXPORT_REL.replace(os.sep, "/")
+        rc, lines = self.close(["a.txt", rel], push=False,
+                               export_do="explicit listing")
+        self.assertEqual(cc.RC_OK, rc, lines)
+        # manifest dedup: the export appears exactly once in the commit
+        self.assertEqual(self.head_files().count(rel), 1)
+        self.assertEqual(self.head_files().count("a.txt"), 1)
+
+    def test_refuse_alias_pinned_to_writer_constant(self):
+        import export_refresh
+        self.assertEqual(cc.RC_WRITER_REFUSE, export_refresh.RC_REFUSE)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
