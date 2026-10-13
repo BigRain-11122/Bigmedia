@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 05:39:05",
- "do": "R2222 night waiting state: checks quiet, fire relay gated on VRAM; next=08:00 authority window + rollback",
+ "export_ts": "2026-10-14 07:27:21",
+ "do": "夜窗收尾：tech#157 .c3-tmp born-fix 交付；候 08:00 tech#92/#126 权威窗+晨窗回滚+VRAM 门开 fire 接力 F-180~184",
  "depts": [
   {
    "n": "工程技术部",
