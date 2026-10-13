@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 00:56:52",
- "do": "R2206 夜窗查看位轮：MV V3 r977 修复波四镜板多模态验真（真品确证）·#111 R2206 注记+main#32 呈片守望种子·fire 五件续候 MV 让位。",
+ "export_ts": "2026-10-14 02:30:55",
+ "do": "R2211 夜窗实活轮：Toonflow 图像后端调研交付（自定义供应商 .ts 导入路+ComfyUI 契约入档·内置三家全云端）+tech#152 适配器手写腿入队；VRAM 饿空 F-180~184 结转；main#32 未落位维持",
  "depts": [
   {
    "n": "工程技术部",
@@ -80,8 +80,8 @@
   ]
  ],
  "live": [
-  "当前活：MV V3 r977 修复波查看位验真毕（FRAME-GATE-WHITELIST v1.4+SIL/SING 四镜 HD 落位）·fire 五件 F-180~184 gated mv-active（真窗=card 唯一仲裁面）。",
-  "最近实物：src/os/backlog.md #111 R2206 查看位注记（MV V3-FIX3-BOARD-r977_q88.jpg 10-14 23:57 落位·多模态真品确证·C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\kf-demo-20261012\\bmc\\）。",
-  "下个里程碑：MV 全曲 V3 成片呈 CEO（10-14 时钟硬顶）+08:00 tech#92/#126 权威窗读数+晨窗回滚序（窗 ≤10-14 08:30）。"
+  "当前活：夜班算力让路中；本轮完成 Toonflow 画图后端调研，下步写本地出图适配文件",
+  "最近实物：图像后端调研报告（docs/research/R-20261014-bigstream-01）2026-10-14 02:4x",
+  "下个里程碑：今晚写完本地出图适配文件并导入 Toonflow；明早八点读城市日报评分结果"
  ]
 }
