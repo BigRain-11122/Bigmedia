@@ -46,7 +46,9 @@ Laws encoded (why this is safe in this shared tree):
   design: an unreadable state or a missing script never fails the close.
 
 rc: 0 = commit landed (push may have warned); 1 = a git add/commit step
-failed; 2 = usage error. Output lines are plain ASCII text, safe for
+failed; 2 = usage error; 3 = readback verify failed (tech#155 face 2:
+expect_tick passed and the on-disk ledger does not carry it - the commit
+stays landed, the next body absorbs the accounting). Output lines are plain ASCII text, safe for
 evidence capture files.
 
 CLI:
@@ -83,6 +85,10 @@ import sys
 RC_OK = 0
 RC_GIT = 1
 RC_USAGE = 2
+# tech#155 face 2 (R2214 anchor): post-close readback verify failure.
+# Only reachable when the caller passes expect_tick (zero change on the
+# legacy surface); the commit itself stays landed - it is real work.
+RC_VERIFY = 3
 
 # export_refresh.RC_REFUSE (the canonical writer's refusal grade). The
 # sibling module is lazy-imported inside refresh_export_in_close, so the
@@ -376,6 +382,60 @@ def autodetect_close_script(root, state_path=None):
     return None
 
 
+def read_disk_state_tick(root=None, state_path=None):
+    """On-disk state.json -> tick int or None (advisory read). Any
+    unreadable/malformed ledger stays None - the account faces own that
+    disease; this helper only answers "what tick does the disk ledger
+    carry right now"."""
+    if state_path is None:
+        if root is None:
+            root = os.path.abspath(
+                os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             "..", ".."))
+        state_path = os.path.join(root, "src", "os", "state.json")
+    try:
+        with io.open(state_path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return None
+    tick = data.get("tick") if isinstance(data, dict) else None
+    if isinstance(tick, int) and not isinstance(tick, bool):
+        return tick
+    return None
+
+
+def verify_state_tick(expect_tick, root=None, state_path=None):
+    """tech#155 face 2 (R2214 anchor): the post-close readback assertion.
+
+    The anchor: a prior body landed three round commits while its
+    narrative claimed the accounting was complete - finalize_state was
+    never called and state.json stayed a round behind; the successor
+    found the gap by manual git-log archaeology. The hand-written
+    readback at the end of the R2214 absorb close script is the
+    demonstration this encodes as the standing law: a round that
+    commits its work re-reads its own accounting before claiming
+    closure.
+
+    Returns (ok, line) - a loud ASCII verify line for the evidence
+    capture, never a silent skip. expect_tick = the tick the ledger is
+    expected to carry after THIS round's finalize; the helper re-reads
+    the on-disk ledger and compares (the caller's memory of calling
+    finalize is exactly what the anchor proved unreliable).
+    """
+    if (not isinstance(expect_tick, int) or isinstance(expect_tick, bool)
+            or expect_tick < 0):
+        return False, ("USAGE-ERROR expect_tick must be a non-negative int "
+                      "(got %r)" % (expect_tick,))
+    tick = read_disk_state_tick(root, state_path)
+    if tick == expect_tick:
+        return True, "VERIFY-OK state tick=%d (readback)" % expect_tick
+    got = tick if tick is not None else "unreadable"
+    return False, ("VERIFY-FAIL state tick=%s expected %d - the round "
+                  "claims accounting the ledger does not carry (R2214 "
+                  "anchor: commits landed, finalize never ran) - re-run "
+                  "the finalize before claiming closure" % (got, expect_tick))
+
+
 def refresh_export_in_close(root, patch, do, now_fn=None, dry_run=False):
     """tech#148: refresh docs/status-export.json through the canonical
     writer (tech#70) as part of the close. Returns (rc, lines) with the
@@ -393,7 +453,8 @@ def refresh_export_in_close(root, patch, do, now_fn=None, dry_run=False):
 
 
 def run_close_commit(files, message, root=None, push=True, dry_run=False,
-                     export_patch=None, export_do=None, export_now_fn=None):
+                     export_patch=None, export_do=None, export_now_fn=None,
+                     expect_tick=None):
     """Commit exactly `files` with `message`; push unless disabled.
 
     tech#148: when export_patch (dict) and/or export_do (str) is given,
@@ -403,9 +464,17 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
     export_now_fn is a test-only clock injection for the writer's
     live-clock stamp; None = the writer's real clock.
 
+    tech#155 face 2: when expect_tick (int) is given, the close ends
+    with a readback verify - the on-disk state.json is re-read AFTER the
+    commit steps and must carry expect_tick (the tick this round's
+    finalize wrote); a mismatch is the R2214 anchor shape (commits
+    landed, accounting never ran) and returns RC_VERIFY with a loud
+    VERIFY-FAIL line while the commit stays landed. None = legacy call
+    surface, zero behavioral change (zero regression law).
+
     Returns (rc, lines) where lines is the evidence-friendly ASCII log of
-    every step taken. See the module docstring for the rc contract and the
-    encoded laws.
+    every step taken. See the module docstring for the rc contract and
+    the encoded laws.
     """
     lines = []
     if root is None:
@@ -421,6 +490,12 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
     if len(message) > MSG_MAX_SOFT:
         lines.append("WARN-COMMIT-MSG-LEN %d>%d (P-30 soft bound)" % (
             len(message), MSG_MAX_SOFT))
+    if expect_tick is not None and (not isinstance(expect_tick, int)
+                                    or isinstance(expect_tick, bool)
+                                    or expect_tick < 0):
+        lines.append("USAGE-ERROR expect_tick must be a non-negative int "
+                     "when given (got %r)" % (expect_tick,))
+        return RC_USAGE, lines
     try:
         rel_files = resolve_files(root, files)
     except ValueError as exc:
@@ -526,6 +601,16 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
         lines.append("STEP push skipped (--no-push)")
 
     lines.append("CLOSE-COMMIT-OK %d file(s)" % len(rel_files))
+    # --- tech#155 face 2: post-close readback verify (R2214 anchor).
+    # Runs AFTER push (the commit is real work and must land regardless);
+    # the verify reads the ON-DISK ledger, not the caller's memory of
+    # calling finalize - the anchor proved exactly that memory unreliable.
+    # Only active when expect_tick was passed (legacy surface unchanged).
+    if expect_tick is not None:
+        ok, vline = verify_state_tick(expect_tick, root=root)
+        lines.append(vline)
+        if not ok:
+            return RC_VERIFY, lines
     return RC_OK, lines
 
 
@@ -550,6 +635,11 @@ def main(argv=None):
                          "via the canonical writer (tech#148)")
     ap.add_argument("--dry-run", action="store_true",
                     help="print planned commands, execute nothing")
+    ap.add_argument("--expect-tick", type=int, default=None,
+                    help="tech#155 face 2: after the commit, re-read the "
+                         "on-disk state.json and verify it carries this "
+                         "tick (the R2214 readback law); mismatch = rc 3 "
+                         "with a loud VERIFY-FAIL line")
     args = ap.parse_args(argv)
 
     export_patch = None
@@ -565,7 +655,8 @@ def main(argv=None):
     rc, lines = run_close_commit(args.files, args.message, root=args.root,
                                  push=not args.no_push, dry_run=args.dry_run,
                                  export_patch=export_patch,
-                                 export_do=args.export_do)
+                                 export_do=args.export_do,
+                                 expect_tick=args.expect_tick)
     for line in lines:
         print(line)
     return rc

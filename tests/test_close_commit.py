@@ -752,5 +752,129 @@ class TestExportIntegration(GitRepoCase):
         self.assertEqual(cc.RC_WRITER_REFUSE, export_refresh.RC_REFUSE)
 
 
+class VerifyStateRepoCase(unittest.TestCase, GitRepo):
+    """tech#155 fixture: GitRepo + src/os/state.json under test control.
+
+    The state ledger rides the repo but is deliberately NOT part of the
+    committed manifest in these tests - the readback verifies what the
+    DISK carries, not what the commit contains."""
+
+    def setUp(self):
+        GitRepo.__init__(self)
+        os.makedirs(self.root / "src" / "os", exist_ok=True)
+        self.state_path = self.root / "src" / "os" / "state.json"
+        self.write_state(2213)
+
+    def tearDown(self):
+        self.destroy()
+
+    def write_state(self, tick):
+        self.state_path.write_text(
+            json.dumps({"tick": tick}, ensure_ascii=True), encoding="utf-8")
+
+    def read_state(self):
+        return json.loads(self.state_path.read_text(encoding="utf-8"))
+
+    def close(self, files, message=MSG, **kw):
+        return cc.run_close_commit(files, message, root=str(self.root), **kw)
+
+
+class TestVerifyStateTickHelpers(unittest.TestCase):
+    """tech#155 face 2: the verify helper locks both readback states."""
+
+    def test_ok_line(self):
+        d = Path(tempfile.mkdtemp(prefix="verify_tick_"))
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        sp = d / "state.json"
+        sp.write_text(json.dumps({"tick": 2214}), encoding="utf-8")
+        ok, line = cc.verify_state_tick(2214, state_path=str(sp))
+        self.assertTrue(ok)
+        self.assertEqual(line, "VERIFY-OK state tick=2214 (readback)")
+
+    def test_fail_line_names_expected_and_anchor(self):
+        d = Path(tempfile.mkdtemp(prefix="verify_tick_"))
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        sp = d / "state.json"
+        sp.write_text(json.dumps({"tick": 2213}), encoding="utf-8")
+        ok, line = cc.verify_state_tick(2214, state_path=str(sp))
+        self.assertFalse(ok)
+        self.assertIn("VERIFY-FAIL state tick=2213 expected 2214", line)
+        self.assertIn("R2214 anchor", line)
+
+    def test_unreadable_ledger_fails_loud(self):
+        ok, line = cc.verify_state_tick(
+            2214, state_path=str(Path(tempfile.mkdtemp()) / "gone.json"))
+        self.assertFalse(ok)
+        self.assertIn("VERIFY-FAIL", line)
+        self.assertIn("unreadable", line)
+
+    def test_bad_expect_shape_is_usage_line(self):
+        for bad in ("2214", 1.5, True, -1):
+            ok, line = cc.verify_state_tick(bad)
+            self.assertFalse(ok)
+            self.assertTrue(line.startswith("USAGE-ERROR"), line)
+
+    def test_read_disk_tick_missing_and_malformed(self):
+        self.assertIsNone(cc.read_disk_state_tick(
+            state_path=str(Path(tempfile.mkdtemp()) / "gone.json")))
+        d = Path(tempfile.mkdtemp(prefix="verify_tick_"))
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        sp = d / "state.json"
+        sp.write_text("not json", encoding="utf-8")
+        self.assertIsNone(cc.read_disk_state_tick(state_path=str(sp)))
+        sp.write_text(json.dumps({"tick": "x"}), encoding="utf-8")
+        self.assertIsNone(cc.read_disk_state_tick(state_path=str(sp)))
+
+
+class TestVerifyStateTickInClose(VerifyStateRepoCase):
+    """tech#155 face 2 through run_close_commit: dual-state lock
+    (consistent -> VERIFY-OK / mismatch -> loud VERIFY-FAIL + rc 3)
+    plus the legacy-surface zero-regression contract (expect_tick=None
+    changes nothing)."""
+
+    def test_verify_ok_after_commit(self):
+        self.write_state(2214)  # the round's finalize already ran
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False, expect_tick=2214)
+        self.assertEqual(cc.RC_OK, rc, lines)
+        self.assertTrue(any(l.startswith("VERIFY-OK state tick=2214") 
+                            for l in lines), lines)
+        self.assertNotEqual(self.head0, self.head())  # commit landed
+
+    def test_verify_fail_rc3_commit_still_landed(self):
+        # the R2214 anchor shape: finalize never ran, the ledger still
+        # carries the old tick while the round's work commit lands -
+        # loud VERIFY-FAIL, rc 3, commit NOT rolled back (real work)
+        self.write_state(2213)
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False, expect_tick=2214)
+        self.assertEqual(cc.RC_VERIFY, rc, lines)
+        self.assertEqual(rc, 3)
+        self.assertTrue(any(l.startswith("VERIFY-FAIL state tick=2213 "
+                                         "expected 2214") for l in lines),
+                         lines)
+        self.assertNotEqual(self.head0, self.head())  # commit stays landed
+        self.assertEqual(self.read_state()["tick"], 2213)  # ledger untouched
+
+    def test_legacy_surface_no_expect_unchanged(self):
+        # zero-regression law: expect_tick=None -> no verify line, rc 0
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc, lines)
+        self.assertFalse(any("VERIFY-" in l for l in lines), lines)
+        self.assertTrue(any(l.startswith("CLOSE-COMMIT-OK") for l in lines))
+
+    def test_bad_expect_type_usage_before_git(self):
+        # a non-int expect_tick is a loud usage error BEFORE any git call
+        # (the validation block owns it; nothing lands)
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False, expect_tick="2214")
+        self.assertEqual(cc.RC_USAGE, rc, lines)
+        self.assertTrue(any("expect_tick" in l for l in lines), lines)
+        self.assertEqual(self.head0, self.head())  # zero side effects
+        rc, out, _ = self._git(["status", "--porcelain"])
+        self.assertIn(" M a.txt", out)  # nothing staged either
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

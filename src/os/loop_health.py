@@ -92,6 +92,11 @@ Findings:
                                    but the round died before the commit
                                    (R1893 anchor; the push-missing half
                                    is the origin_gap_check face; tech#61)
+  WARN  unaccounted-round-work  round-anchored commits (message head
+                                   "R<N>") ahead of the state tick - a
+                                   body landed round work whose
+                                   accounting never ran (R2214 anchor;
+                                   tech#155)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -318,6 +323,27 @@ EXPORT_CELL_MIN_TXT = 2    # shaper drops cells with text shorter than 2
 EXPORT_TS_FUTURE_TOL_MIN = 5.0   # mirror cross_check state-ts-future
 EXPORT_TS_STALE_COPY_MIN = 60.0  # ts far behind its own file write time
 EXPORT_TS_MAX_AGE_MIN = 1440.0   # P-61 export refresh law (<=24h)
+# tech#155: unaccounted-round-work guard. The R2214 anchor: a prior body
+# landed three round commits (delivery + export + fire receipt, every
+# message head-anchored "R2214:") while its narrative claimed the
+# accounting was complete - finalize_state was never called, state.json
+# stayed at tick 2213 with no R2214 ledger line, and the successor body
+# found the gap only by manual git-log archaeology. The beats-vs-tick
+# faces cannot see this shape at all (a body that dies before closing
+# writes no done beat either - the commits are the only trace). This
+# face reads recent commit subjects and names any head-anchored round
+# AHEAD of the state tick: work committed but never accounted. A subject
+# without an R-anchor is another window's commit (MV sprint session /
+# interactive session) and never counts; a git failure stays
+# advisory-silent (never breaks the probe). Two-segment middle state
+# (the legal transient): a live round's own intermediate commits
+# legitimately sit ahead of the tick between commit and close - that
+# window IS the work-ahead-of-accounting shape and reads WARN by
+# design (advisory); the next round-open probe after a healthy close
+# reads zero (anchored R == tick). WARN level per the guard family law
+# (tech#22/#31/#37/#58/#60/#61/#62/#64).
+COMMIT_ROUND_RE = re.compile(r"^R(\d{3,6})\b")
+GIT_LOG_SCAN_N = 12  # one broken round's whole commit trail fits
 
 
 def parse_beats(path):
@@ -1218,6 +1244,76 @@ def check_account_uncommitted(root, state, findings):
     findings.extend(classify_account_uncommitted(head_tick, tick, dirty))
 
 
+def _git_log_subjects(root, n=GIT_LOG_SCAN_N, _run=None):
+    """`git log -N --format=<sha>TAB<subject>` -> [(sha, subject)]
+    newest-first; [] on any git failure (not a work tree, git missing,
+    timeout) - advisory face, never breaks the probe. _run is the
+    injection seam for tests (subprocess.run signature)."""
+    if _run is None:
+        _run = subprocess.run
+    try:
+        p = _run(["git", "log", "-%d" % n, "--format=%h%x09%s"],
+                 cwd=str(root), capture_output=True, timeout=GIT_TIMEOUT_S)
+    except (OSError, subprocess.TimeoutExpired):
+        return []
+    if p.returncode != 0:
+        return []
+    rows = []
+    for line in p.stdout.decode("utf-8", "replace").splitlines():
+        if "\t" not in line:
+            continue
+        sha, subject = line.split("\t", 1)
+        rows.append((sha.strip(), subject.strip()))
+    return rows
+
+
+def classify_unaccounted_round_work(subjects, tick):
+    """[(sha, subject)] + tick -> findings (pure core). Only a subject
+    head-anchored R<N> counts as loop-round work (house commit
+    convention: the close/export/receipt commits all open with the
+    round anchor); any anchored round > tick is work committed whose
+    accounting never ran. One WARN per distinct round number with the
+    anchored shas shown (the R2214 anchor trail was three commits of
+    one round). Non-int tick yields nothing (state faces own that)."""
+    if not isinstance(tick, int) or isinstance(tick, bool):
+        return []
+    by_round = {}
+    for sha, subject in subjects:
+        if not isinstance(subject, str):
+            continue
+        m = COMMIT_ROUND_RE.match(subject)
+        if not m:
+            continue  # other-window commit (MV sprint / interactive session)
+        r = int(m.group(1))
+        if r > tick:
+            by_round.setdefault(r, []).append(sha)
+    findings = []
+    for r in sorted(by_round):
+        shas = by_round[r]
+        shown = ", ".join(shas[:4]) + (" ..." if len(shas) > 4 else "")
+        findings.append(("WARN", "unaccounted-round-work",
+                         "round R%d work committed (%s) but state tick=%d - a "
+                         "body landed round commits whose accounting never ran "
+                         "(R2214 anchor: delivery+export+fire-receipt commits "
+                         "landed, finalize_state never called, successor found "
+                         "the gap by manual git-log archaeology) - absorb the "
+                         "accounting under the round number" % (r, shown, tick)))
+    return findings
+
+
+def check_unaccounted_round_work(root, state, findings):
+    """tech#155 guard face: name committed-but-unaccounted round work.
+    Enforced every round by the routine probe consumption - the R2214
+    shape is named within one round instead of by successor
+    archaeology. A non-git tree or any git failure stays silent
+    (advisory face, never breaks the probe)."""
+    tick = state.get("tick") if isinstance(state, dict) else None
+    if not isinstance(tick, int) or isinstance(tick, bool):
+        return  # parse_state already FAILed the ledger
+    findings.extend(classify_unaccounted_round_work(
+        _git_log_subjects(root), tick))
+
+
 def _export_cell_preview(entry):
     """Compact shape description of a bad list entry for WARN text."""
     if isinstance(entry, str):
@@ -1641,6 +1737,7 @@ def main(argv):
         check_queue_glue(root, findings)
         check_queue_dup_numbers(root, findings)
         check_account_uncommitted(root, state, findings)
+        check_unaccounted_round_work(root, state, findings)
         check_export_face(root, findings)
         check_aihot_stack(findings)
     except OSError as e:

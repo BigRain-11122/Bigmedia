@@ -2191,5 +2191,158 @@ class ExportTsFaceTests(unittest.TestCase):
         self.assertEqual(warn_codes(findings), {"export-ts"})
 
 
+class UnaccountedRoundWorkTests(unittest.TestCase):
+    """tech#155 face 1: committed-but-unaccounted round work (R2214 anchor).
+
+    The anchor shape: a prior body landed round commits whose messages
+    all head-anchor R2214 while finalize_state never ran - state stayed
+    at tick 2213 and the successor found the gap only by manual
+    git-log archaeology. These tests lock the pure-core classifier, the
+    git-log seam, and the real-repo check face (anchor named + healthy
+    close silent)."""
+
+    def _git_repo(self):
+        root = make_dir(self, "unaccounted_")
+        env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
+                   GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+        subprocess.run(["git", "init", "-q"], cwd=str(root), env=env,
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       timeout=30)
+        return root, env
+
+    def _commit(self, root, env, name, message):
+        (root / name).write_text("x", encoding="utf-8")
+        subprocess.run(["git", "add", name], cwd=str(root), env=env,
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                       timeout=30)
+        p = subprocess.run(["git", "commit", "-q", "-m", message],
+                           cwd=str(root), env=env,
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                           timeout=30)
+        if p.returncode != 0:
+            self.skipTest("git fixture unavailable: %.60s"
+                          % p.stderr.decode("utf-8", "replace"))
+
+    def test_pure_core_anchor_trail_named(self):
+        # judgement criterion 1: the R2214 anchor trail (three commits of
+        # one round ahead of the tick) -> ONE WARN, every sha shown
+        subjects = [
+            ("1c6e9688", "R2214: fire receipt on-chain - no-fire rc1"),
+            ("26518ba0", "R2214: export segment - refreshed via writer"),
+            ("0adde47a", "R2214: active round - tech#154 delivered"),
+            ("e6f6fa23", "R2214: broken-round absorb - accounting done"),
+            ("ea094b0d", "R2213: debris close-out"),
+        ]
+        findings = loop_health.classify_unaccounted_round_work(subjects, 2213)
+        self.assertEqual(warn_codes(findings), {"unaccounted-round-work"})
+        self.assertEqual(len(findings), 1)  # one WARN per round number
+        for sha in ("1c6e9688", "26518ba0", "0adde47a"):
+            self.assertIn(sha, findings[0][2])
+        self.assertIn("R2214", findings[0][2])
+
+    def test_pure_core_settled_history_silent(self):
+        # judgement criterion 2: after a healthy close every anchored
+        # R <= tick - zero false-positive on a normal round
+        subjects = [
+            ("e6f6fa23", "R2214: broken-round absorb - accounting done"),
+            ("1c6e9688", "R2214: fire receipt on-chain"),
+            ("ea094b0d", "R2213: debris close-out"),
+        ]
+        self.assertEqual(
+            loop_health.classify_unaccounted_round_work(subjects, 2214), [])
+
+    def test_pure_core_other_window_subjects_skip(self):
+        # no head R-anchor = another window's commit (MV sprint session /
+        # interactive session) - never counts
+        subjects = [
+            ("aa111", "V3 fix batch two-round status + QC relay"),
+            ("bb222", "W2 dual-drama finalized (audience voice x2)"),
+        ]
+        self.assertEqual(
+            loop_health.classify_unaccounted_round_work(subjects, 2214), [])
+
+    def test_pure_core_body_mention_not_head_silent(self):
+        # an R-number inside the body (not anchored at the head) is a
+        # reference, not the round anchor - never counts
+        subjects = [
+            ("cc333", "debris sweep (R2210 close script deletion landed)"),
+            ("dd444", "REACT-v15 fire-ready carried"),
+        ]
+        self.assertEqual(
+            loop_health.classify_unaccounted_round_work(subjects, 2214), [])
+
+    def test_pure_core_bad_tick_silent(self):
+        for bad in (None, "2214", 1.5, True):
+            self.assertEqual(
+                loop_health.classify_unaccounted_round_work(
+                    [("ee555", "R2300: x")], bad), [])
+
+    def test_pure_core_two_rounds_two_warns(self):
+        subjects = [("ff666", "R2216: x"), ("ee555", "R2215: y")]
+        findings = loop_health.classify_unaccounted_round_work(subjects, 2214)
+        self.assertEqual(len(findings), 2)
+        self.assertIn("R2215", findings[0][2])
+        self.assertIn("R2216", findings[1][2])
+
+    def test_seam_parses_formatted_rows(self):
+        class P:
+            returncode = 0
+            stdout = b"abc1234\tR2215: x\ndef5678\tV3 fix batch"
+        rows = loop_health._git_log_subjects(
+            "ignored", _run=lambda a, **k: P())
+        self.assertEqual(rows, [("abc1234", "R2215: x"),
+                                ("def5678", "V3 fix batch")])
+
+    def test_seam_silent_on_failure_and_timeout(self):
+        class P:
+            returncode = 128
+            stdout = b""
+        self.assertEqual(
+            loop_health._git_log_subjects("r", _run=lambda a, **k: P()), [])
+
+        def boom(args, **kwargs):
+            raise subprocess.TimeoutExpired(args, 1)
+        self.assertEqual(
+            loop_health._git_log_subjects("r", _run=boom), [])
+
+    def test_check_face_git_fixture_names_anchor(self):
+        # check-face judgement criterion: a real repo whose ledger says
+        # tick 2213 while a committed round anchors R2214 -> the WARN
+        # names the round within one probe run (the successor
+        # archaeology the anchor needed, machine-enforced)
+        root, env = self._git_repo()
+        os.makedirs(root / "src" / "os")
+        (root / "src" / "os" / "state.json").write_text(
+            json.dumps(make_state(tick=2213)), encoding="utf-8")
+        self._commit(root, env, "base.txt", "base")
+        self._commit(root, env, "delivery.txt",
+                     "R2214: active round - tech#154 delivered [via bm-a]")
+        findings = []
+        loop_health.check_unaccounted_round_work(
+            root, json.loads((root / "src" / "os" / "state.json")
+                             .read_text(encoding="utf-8-sig",
+                                        errors="replace")), findings)
+        self.assertEqual(warn_codes(findings), {"unaccounted-round-work"})
+        self.assertEqual(len(findings), 1)
+        self.assertIn("R2214", findings[0][2])
+
+    def test_check_face_git_fixture_healthy_close_silent(self):
+        # check-face zero-false-positive: ledger tick caught up to the
+        # anchored round (the healthy absorb) -> silent
+        root, env = self._git_repo()
+        os.makedirs(root / "src" / "os")
+        (root / "src" / "os" / "state.json").write_text(
+            json.dumps(make_state(tick=2214)), encoding="utf-8")
+        self._commit(root, env, "base.txt", "base")
+        self._commit(root, env, "delivery.txt",
+                     "R2214: active round - tech#154 delivered [via bm-a]")
+        findings = []
+        loop_health.check_unaccounted_round_work(
+            root, json.loads((root / "src" / "os" / "state.json")
+                             .read_text(encoding="utf-8-sig",
+                                        errors="replace")), findings)
+        self.assertEqual(findings, [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
