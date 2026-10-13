@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 03:58:36",
- "do": "F-180 SC-005-07 flight-4 fired 03:56 (S1 seat in flight); F-181..184 relay queued; harvest + 08:00 window next round",
+ "export_ts": "2026-10-14 04:17:11",
+ "do": "tech#155 guard live (unaccounted-round probe + close readback verify); F-180 re-fire no-fire; next=08:00 window reads",
  "depts": [
   {
    "n": "工程技术部",

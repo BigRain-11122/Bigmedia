@@ -1,1 +1,4 @@
-SC-005-07 S1 flight dispatched pid=73948
+PREFLIGHT util=13% free=10673MB
+RELIEF free now 10683MB
+RATE-FAIL seat probe timed out (240s cap, model qwen2.5:14b) - slow window; re-dispatch next fire window
+PREFLIGHT-BAIL rc=7
