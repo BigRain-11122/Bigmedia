@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 02:53:54",
- "do": "R2212 夜窗：Toonflow ComfyUI 适配器 comfyuiLocal.ts 手写+导入双达成；LEG-3 剩 LLM 腿+测试帧 VRAM 门控；F-180~184 结转",
+ "export_ts": "2026-10-14 03:14:59",
+ "do": "R2213：tech#153 交付 import 子命令（幂等+--dry 三绿·CRLF 坑根修）；F-180~184 carried；main#32 维持",
  "depts": [
   {
    "n": "工程技术部",
@@ -80,8 +80,8 @@
   ]
  ],
  "live": [
-  "当前活：Toonflow 本地画图链适配毕（comfyuiLocal.ts 已入 Toonflow 供应商库）；夜窗算力让路中，fire 五件候门",
-  "最近实物：tools/toonflow/comfyuiLocal.ts（Qwen-Image-2.1 文生图适配器·Toonflow 导入 v2.0.0 卡在位）2026-10-14 03:1x",
-  "下个里程碑：明早八点读城市日报评分结果（tech#92/#126 权威窗）；util/VRAM 门开后 Toonflow 全链 1 帧实测出片"
+  "当前活：夜窗收尾，Toonflow 适配器 import 子命令已固化（幂等+--dry 三绿），候 08:00 权重窗/VRAM 开窗接力。",
+  "最近实物：tools/toonflow_cdp.ts import 模式（对已装适配器 no-op 幂等·--dry 机制链 10126 字符实测），2026-10-14 03:1x。",
+  "下个里程碑：08:00 tech#92/#126 权重窗执行；fire 五件 F-180~184 候 util/VRAM 开窗发射；V3 成片 main#32 跟进。"
  ]
 }
