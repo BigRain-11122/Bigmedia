@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 04:17:11",
- "do": "tech#155 guard live (unaccounted-round probe + close readback verify); F-180 re-fire no-fire; next=08:00 window reads",
+ "export_ts": "2026-10-14 04:56:20",
+ "do": "R2218 夜窗：tech#126 窗中读数交付（AIHOT 健康+判据窗预读→08:00 判读）；F-180~184 carried；五查静。",
  "depts": [
   {
    "n": "工程技术部",
@@ -80,8 +80,8 @@
   ]
  ],
  "live": [
-  "当前活：夜窗 tech 产线：tech#154 pick-model 子命令交付毕（Toonflow 主界面模型选择器机械化·判负留痕）·fire 五件让位 VRAM 门",
-  "最近实物：tools/toonflow_cdp.ts pick-model 子命令+实测三绿（qwen3.5 切换验/qwen2.5 还原验/ComfyUI 判负留痕）·2026-10-14 03:3x",
-  "下个里程碑：08:00 tech#92/#126 权威窗读数（zhihu-hot 头部 ≥3 篇 ≥60 判据）；fire 接力 F-180~184 候 util/VRAM 门开"
+  "当前活：夜窗值守+tech#126 窗中读数已落（管道健康零 wedge；判据窗预读 zhihu max48/ge60=0→08:00 权威窗判读）。",
+  "最近实物：AIHOT 判据窗预读证据件（管道健康三证+全源评分带读数+fallback 55 不足风险发现），2026-10-14 04:5x。",
+  "下个里程碑：08:00 tech#92/#126 权威窗执行（PASS 或 T1 60→55 fallback+归因腿）；fire 五件候 VRAM 开窗发射；V3 成片 main#32 跟进。"
  ]
 }
