@@ -184,3 +184,6 @@
 
 
 150. [R2187 收账轮发现位] **收账步任务书面缺 tech#149 正身指针（手写收账族复发根因·闸升级=任务书补律句）**（缺口锚=R2187 实读盘点：r2176_close.py→r2185_close.py 十轮连续手写 d[「log」].append+json.dump 直写 state——tech#149（R2136 定谬·R2137 实证·「声明/等待态轮收账一律走 finalize_state 正身」）后照旧复发·loop_health log-ts 闸只拒坏前缀=良构手写零检出·闸盲区如实注（R2134/R2135 坏档族后的良构族=同根第二形态）；根因=任务书收账步只律 export 面［tech#148 句在］未律 state 面·新会话 fast-path 判定不重读 tech 尾=处方结构性不可达）——处方=①任务书收账步补 tech#149 强制律一句（本轮已执行·src/os/iteration_prompt.txt·R2127 tech#148 同型先例）②本轮收账即走 finalize_state 示范（手写族退役承继）——判据=后续轮 close 脚本 grep `finalize_state` 命中=闸在位·手写族再复发 ≥2 轮=升裁 lint 面（close 脚本 static check 候选）。——[done 2026-10-13 R2188] ——已交付：**判据达成=R2188 收账正身实弹首证**（r2188_close.py 走 finalize_state 正身=任务书面 tech#149 句落位后首个后续轮 close 脚本 grep `finalize_state` 命中=闸在位·双载体闭环〔任务书面强制律+本轮正身示范〕·手写族 R2186 后零复发·复发 ≥2 轮升裁 lint 面条款本条目内常设承继）
+
+
+151. [R2204 补货·真种子] **Toonflow LEG-3：漫画工作台全链实测**（backlog #110 收尾腿·夜窗机器位线）：①Toonflow 内新建项目选 Ollama Local 供应商跑一次剧本/分镜生成（LLM 腿端到端·模型加载过 VRAM 门=fire_consume load-class 同门）②图像后端配置位调研（ComfyUI 网关=bm-c lane 预核·本机 8188=MV 会话共享域勿抢）③全链 1 条测试出片——判据=LLM 脚本生成返回非空+至少 1 帧图像产出；图像后端缺口=如实记录位不清零——驱动正身=tools/toonflow_cdp.ts（R2204 升格·app 存活 CDP 9222 可直连·若 app 已死按工具头注释重启带 CDP）——晨窗 08:00 CEO 复机前 LEG-3 未毕=回滚序注记收 app 窗口位
