@@ -120,3 +120,4 @@
 {"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-13 12:24:04", "rc": 1}
 {"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-13 12:53:42", "rc": 1}
 {"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-13 13:04:17", "rc": 1}
+{"tool": "fire_consume", "action": "no-fire", "reason": "bm-a-workday-hours-zero-dispatch", "launched": false, "launch_script": "data\\storylines\\audio\\sc005-07-v1-tmp\\s1_call.py", "ts": "2026-10-13 13:14:00", "rc": 1}
