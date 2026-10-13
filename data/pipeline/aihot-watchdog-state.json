@@ -1,12 +1,12 @@
 {
  "pause": {
-  "reason": "O-20261012-2025 night KF resource split: CEO off work, GPU -> Krea2 KF batch (MV sprint seeds 9012-9014 + E01c); llama-server + AIHOT worker same-stack stay down (supersedes O-20261012-1115 CEO-yield basis, yield condition gone)",
-  "resume_step": "at KF batch end / morning window: remove pause object (or set worker_restart_paused=false) + run data/assets/aihot-poc/worker-restart.bat (main#21); llama-server morning self-heal per O-20261012-2025 clause 1",
+  "reason": "CEO workday at-machine yield: O-20261012-1505(3) workday-hours zero-dispatch iron rule + CEO actively issuing orders (V3 rectification chain 10-13 11:3x-13:1x); superseded basis O-20261012-2025 night-KF split expired at KF batch end (comfy DOWN, GPU idle 4%). VRAM free ~6.1GB < 14b-8k load 8704MB = worker restart would thrash CEO foreground app group.",
+  "resume_step": "at night window 2026-10-14 00:00-08:00 (or CEO off-work flag same-date): remove pause object + run data/assets/aihot-poc/worker-restart.bat (main#21); tech#92 re-judge window shifts to first 08:00 compose after resume (= 10-14 08:00 per R2125); llama-server re-enable per machine-state domain.",
   "set_by": "R2048 tech#127 delivery",
-  "reanchored_by": "R2074 O-20261012-2025 consumption",
+  "reanchored_by": "R2149 main#27 close-out judgment",
   "worker_restart_paused": true,
   "ts": "2026-10-12 12:37:48",
-  "reanchored_ts": "2026-10-12 20:45:00"
+  "reanchored_ts": "2026-10-13 12:38:00"
  },
- "last_pause_log": "2026-10-13 06:40:02"
+ "last_pause_log": "2026-10-13 12:40:02"
 }
