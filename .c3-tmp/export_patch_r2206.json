@@ -1,0 +1,26 @@
+{
+ "do": "R2206 夜窗查看位轮：MV V3 r977 修复波四镜板多模态验真（真品确证）·#111 R2206 注记+main#32 呈片守望种子·fire 五件续候 MV 让位。",
+ "live": [
+  "当前活：MV V3 r977 修复波查看位验真毕（FRAME-GATE-WHITELIST v1.4+SIL/SING 四镜 HD 落位）·fire 五件 F-180~184 gated mv-active（真窗=card 唯一仲裁面）。",
+  "最近实物：src/os/backlog.md #111 R2206 查看位注记（MV V3-FIX3-BOARD-r977_q88.jpg 10-14 23:57 落位·多模态真品确证·C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\kf-demo-20261012\\bmc\\）。",
+  "下个里程碑：MV 全曲 V3 成片呈 CEO（10-14 时钟硬顶）+08:00 tech#92/#126 权威窗读数+晨窗回滚序（窗 ≤10-14 08:30）。"
+ ],
+ "results": [
+  [
+   "r977 viewlog ok",
+   "r2206"
+  ],
+  [
+   "v20 CPU leg done",
+   "r2205"
+  ],
+  [
+   "fire no-fire x5",
+   "f180"
+  ],
+  [
+   "row 382 ack",
+   "orders"
+  ]
+ ]
+}

@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 00:32:44",
- "do": "R2205 夜窗：DIGEST-v20《城市盘点 020》CPU 预置腿毕（机核 18 断言+验图 5/5）·F-184 预指·fire 五件候 MV 让位。",
+ "export_ts": "2026-10-14 00:56:52",
+ "do": "R2206 夜窗查看位轮：MV V3 r977 修复波四镜板多模态验真（真品确证）·#111 R2206 注记+main#32 呈片守望种子·fire 五件续候 MV 让位。",
  "depts": [
   {
    "n": "工程技术部",
@@ -63,7 +63,11 @@
  ],
  "results": [
   [
-   "DIGEST-v20 预置腿毕",
+   "r977 viewlog ok",
+   "r2206"
+  ],
+  [
+   "v20 CPU leg done",
    "r2205"
   ],
   [
@@ -73,15 +77,11 @@
   [
    "row 382 ack",
    "orders"
-  ],
-  [
-   "F-184 预指",
-   "v20"
   ]
  ],
  "live": [
-  "当前活：DIGEST-v20 死线冲刺日数字盘点卡 CPU 预置腿毕（M0-M4+e4 trio staged）·评审腿 F-184 gated fire 窗（F-180~183 前序）。",
-  "最近实物：data/storylines/cards/MC-20261014-DIGEST-v20/MC-20261014-DIGEST-v20.png（10-14 00:5x·m1-assert 18 断言全绿+验图五检 5/5）。",
-  "下个里程碑：MV 让位后 F-180~184 fire 接力（窗 ≤10-15）；10-14 08:00 tech#92/#126 权威窗+晨窗回滚（MiniGameOllama 双任务 re-enable）。"
+  "当前活：MV V3 r977 修复波查看位验真毕（FRAME-GATE-WHITELIST v1.4+SIL/SING 四镜 HD 落位）·fire 五件 F-180~184 gated mv-active（真窗=card 唯一仲裁面）。",
+  "最近实物：src/os/backlog.md #111 R2206 查看位注记（MV V3-FIX3-BOARD-r977_q88.jpg 10-14 23:57 落位·多模态真品确证·C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\kf-demo-20261012\\bmc\\）。",
+  "下个里程碑：MV 全曲 V3 成片呈 CEO（10-14 时钟硬顶）+08:00 tech#92/#126 权威窗读数+晨窗回滚序（窗 ≤10-14 08:30）。"
  ]
 }
