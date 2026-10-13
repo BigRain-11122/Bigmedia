@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 04:56:20",
- "do": "R2218 夜窗：tech#126 窗中读数交付（AIHOT 健康+判据窗预读→08:00 判读）；F-180~184 carried；五查静。",
+ "export_ts": "2026-10-14 05:39:05",
+ "do": "R2222 night waiting state: checks quiet, fire relay gated on VRAM; next=08:00 authority window + rollback",
  "depts": [
   {
    "n": "工程技术部",
