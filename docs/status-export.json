@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-13 07:46:57",
- "do": "MV 死线窗值守（08:30 成片待 MV 会话呈报）；本轮=导出面卫生修复 results 回四短对（R2124 ad-hoc 复发·探针两 WARN 清零）+tech#92 08:00 窗读",
+ "export_ts": "2026-10-13 08:23:50",
+ "do": "MV 死线 08:30 收口判读待下一轮；本轮=tech#148 交付（收账 export canonical writer 强制位·三候选全落）+1328 测试全绿",
  "depts": [
   {
    "n": "工程技术部",
-   "t": "1321 测试全绿；S2 三门+守卫面 20+ 在役；fire 链四件套（原子消费+CEO 下班旗+载类闸+吞吐预探）+comfy 波感探针全落位",
+   "t": "1328 测试全绿；S2 三门+守卫面 20+ 在役；fire 链四件套+comfy 波感探针+收账 export writer 收编（tech#148）全落位",
    "s": 1
   }
  ],
@@ -57,7 +57,7 @@
  ],
  "chips": [
   [
-   "1321 测绿",
+   "1328 测绿",
    "live"
   ]
  ],
@@ -67,21 +67,21 @@
    "成品库总数"
   ],
   [
-   "1321",
+   "1328",
    "测试全绿"
   ],
   [
-   "2125",
+   "2127",
    "OS 轮次"
   ],
   [
-   "R2125",
+   "R2127",
    "最近交付"
   ]
  ],
  "live": [
-  "当前活：死线窗值守到 08:30（MV 全曲成片装配中·MV 会话域零接触）；tech#92 08:00 权威窗读=顺延定谳（worker 夜窗缺席·pause 旗执法面）",
-  "最近实物：docs/status-export.json 导出面卫生修复——results 收敛回四短对齐约（R2124 手写 close 复发 dict 形态·探针 export-results/export-caps 两 WARN 清零·canonical writer 走门）",
-  "下个里程碑：08:30 MV 全曲成片呈 CEO（CEO 直令死线）→收口三连（撤 AIHOT pause 旗+worker-restart main#21+F-180~183 fire 接力序）"
+  "当前活：08:30 MV 死线收口判读在下一轮（成片呈报核→收口即撤 AIHOT 旗+worker-restart+F-180~183 接力）；本轮已交 tech#148 收账 export 守门件",
+  "最近实物：close_commit.py 收账 export 收编面（tech#70 canonical writer 强制位——手写 json.dump 直写 export 从此结构性不可能·拒写=保持原样；7 新测·1328 全回归绿）",
+  "下个里程碑：08:30 MV 全曲成片呈 CEO（CEO 直令死线）→收口三连+F-180~183 fire 接力（fire 真窗=10-14 夜窗或 CEO 下班旗）"
  ]
 }
