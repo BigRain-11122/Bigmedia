@@ -3,6 +3,7 @@
 //        bun tools/toonflow_cdp.ts evalfile <path-to-js>
 //        bun tools/toonflow_cdp.ts click '<selector>'
 //        bun tools/toonflow_cdp.ts import <adapter.ts> [--dry]
+//        bun tools/toonflow_cdp.ts pick-model '<model display name or substring>'
 //          One-command custom provider install (tech#153): reads the adapter
 //          .ts, opens the add-custom-media-provider dialog, switches to the
 //          paste-code tab, fills the textarea, confirms, and validates the
@@ -104,6 +105,57 @@ if (mode === "import") {
     return document.body.innerText.includes(ID + ".ts")
       ? "INSTALLED: " + ID + " (" + CONTENT.length + " chars)"
       : "WARN:install-not-confirmed-in-list id=" + ID;
+  } catch (e) { return "ERR:" + e; }
+})()`;
+} else if (mode === "pick-model") {
+  // tech#154: mechanize the main-interface model selector (composer footer
+  // modelButton -> agentModelPopover -> el-select). Scope note (R2214 live
+  // probe): this selector lists LANGUAGE models only (agent LLM); media
+  // models installed as custom providers do NOT appear here - their
+  // consumption point is the image-generation node inside a project
+  // workspace (LEG-3 ③ probe, VRAM-gated). This command serves the
+  // language-model domain and any future selector entry.
+  const want = process.argv[3] ?? "";
+  js = `(async function(){
+  const sleep=(ms)=>new Promise(r=>setTimeout(r,ms));
+  const WANT=${JSON.stringify(want)};
+  const fire=(el)=>["mousedown","mouseup","click"].forEach(t=>el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:window})));
+  const esc=()=>document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape",bubbles:true}));
+  try {
+    if (!WANT) return "ERR:no-model-name-arg";
+    // 1) fresh popover: close any stale one (Escape, then outside-click),
+    // reopen via the composer model button
+    if (document.querySelector(".agentModelPopover")) { esc(); await sleep(250); }
+    if (document.querySelector(".agentModelPopover")) { document.body.click(); await sleep(250); }
+    const btn0 = document.querySelector("button.modelButton");
+    if (!btn0) return "ERR:no-model-button";
+    if (btn0.innerText.includes(WANT) && !document.querySelector(".agentModelPopover")) return "no-op: already on " + WANT;
+    btn0.click(); await sleep(500);
+    const pop = document.querySelector(".agentModelPopover");
+    if (!pop) return "ERR:popover-did-not-open";
+    // 2) open the el-select dropdown (full mouse sequence; retry loop in
+    // case a toggle lands on an already-open menu)
+    const sel = pop.querySelector(".el-select__wrapper");
+    if (!sel) return "ERR:no-select-wrapper";
+    let dd = null;
+    for (let i = 0; i < 3 && !dd; i++) {
+      fire(sel); await sleep(400);
+      const dds = [...document.querySelectorAll(".el-select-dropdown")].filter(d => d.offsetParent && d.querySelector(".el-select-dropdown__item"));
+      if (dds.length) dd = dds[dds.length - 1];
+    }
+    if (!dd) return "ERR:dropdown-not-open";
+    const items = [...dd.querySelectorAll(".el-select-dropdown__item")];
+    const target = items.find(li => (li.innerText || "").trim().includes(WANT));
+    if (!target) return "ERR:not-in-list available=" + items.map(li => (li.innerText || "").trim()).join(",");
+    fire(target); await sleep(600);
+    // 3) verify the model button shows the target name, then close popover
+    const btn = document.querySelector("button.modelButton");
+    const now = btn ? (btn.innerText || "").replace(/\\n/g, "|").trim() : "";
+    const ok = btn && btn.innerText.includes(WANT);
+    esc(); await sleep(250);
+    if (document.querySelector(".agentModelPopover")) { document.body.click(); await sleep(250); }
+    const left = document.querySelector(".agentModelPopover") ? " (popover-still-open)" : "";
+    return (ok ? "PICKED: " : "WARN:button-not-updated ") + "button=[" + now + "] want=" + WANT + left;
   } catch (e) { return "ERR:" + e; }
 })()`;
 } else if (mode === "eval") {
