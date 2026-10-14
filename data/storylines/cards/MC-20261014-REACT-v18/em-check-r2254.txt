@@ -1,0 +1,13 @@
+em-check-r2254 (REACT-v18 M2 front-fit + VERT R381)
+h2_size=32 budget=28.75em (ladder: 36 excluded by driver line 26.00em>25.56 -> 32)
+H1=6.15em (h1 own face, h1_size=84, budget 10.95em margin +4.80) OK
+OK    15.55em margin +13.20  今日热点 · 知乎热榜 2026-10-14
+OK    13.15em margin +15.60  PS5 全机型遭底层漏洞破解，
+OK    15.00em margin +13.75  会对索尼主机生态产生哪些冲击？
+OK    23.00em margin +5.75  秩序轴：「别看外面风平浪静，加固招牌不能马虎」
+OK    26.00em margin +2.75  求新轴：「天气预报说台风凶猛，咱们得给招牌加个保险」
+OK    22.00em margin +6.75  侠气轴：「船长们都加固了锚，咱们也得紧绷着」
+OK    22.00em margin +6.75  晨操领队信条：「队形不能乱，人心更不能散。」
+subs 23.55em < 24.21em budget OK
+ALL-HORIZ: P
+VERT: est bottom=675px subs_top=932px gap=257px (assert >=20) OK
