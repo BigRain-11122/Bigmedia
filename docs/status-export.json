@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 02:23:09",
- "do": "R2261: E4 raw-verdict evidence 7 files landed (cd92255f); next: 08:00 tech#92 window + REACT-v20 + MV V3 08:43 watch",
+ "export_ts": "2026-10-15 02:49:06",
+ "do": "R2262: tech#174 auto-stage landed (verdict jsons self-stage, 1447 green); next: 08:00 tech#92 + REACT-v20 + MV 08:43",
  "depts": [
   {
    "n": "工程技术部",
