@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 01:51:06",
- "do": "R2259 absorb close: tech#173 auto-ledger 40/40 + 33 mp3 residue committed; next: tech#92 08:00 + REACT-v20",
+ "export_ts": "2026-10-15 02:07:01",
+ "do": "R2260: tech#172 launcher family unified, 1442 green; next: tech#92 08:00 + REACT-v20 + MV V3 08:43 watch",
  "depts": [
   {
    "n": "工程技术部",
@@ -85,8 +85,8 @@
   ]
  ],
  "live": [
-  "当前活：六腿 E4 批收官——F-182..185 四腿 CPU 车道判词全落词三面回填毕（fire CPU 车道量产面）；F-180 S1 留 GPU 窗；MV V3 终剪守望（CEO 最高优先·08:43 死线）。",
-  "最近实物：四张 L-卡 E4 参考仪读数补齐（F-182 7/10·F-183 8/10·F-184 8/10·F-185 8/10·三面回填 12 件+tech#171 种子入库），2026-10-14 20:5x。",
-  "下个里程碑：10-15 08:00 tech#92 AIHOT 评分门锚例重判窗+MV V3 成片 08:43 死线守望——2026-10-15 晨窗。"
+  "当前活：夜窗生产轮——tech#172 S1 CPU 航道 launcher 生成器族统一位交付毕（e4_launcher_gen 通用化 --expert 面·24 新测·全回归 1442 绿 118s）；tech#92 08:00 锚例重判窗+REACT-v20 晨窗双 gated 待晨窗；MV V3 装配守望中（CEO 优先线·08:43 死线·CEO-PROXY 事件班承载）",
+  "最近实物：技术件 src/os/e4_launcher_gen.py --expert 面+tests/test_e4_launcher_gen.py（R2257 手写 s1_call_cpu.py 工艺沉淀为一键生成器·S1 CPU 航道下次调用零手抄）·2026-10-15 02:0x",
+  "下个里程碑：10-15 08:00 tech#92 AIHOT 锚例重判窗读数（zhihu 头部 ≥3 ≥60）+MV V3 全曲成片 08:43 死线呈片·窗口 2026-10-15 晨（≤48h）"
  ]
 }
