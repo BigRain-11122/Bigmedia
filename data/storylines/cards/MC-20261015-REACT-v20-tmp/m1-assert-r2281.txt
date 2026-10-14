@@ -1,0 +1,11 @@
+m1-assert-r2281 (REACT-v20 M1 verbatim + fleet zero-conflict)
+HOT1+HOT2==HOT_FULL PASS (28+17 chars, '微信上线绿泡泡短剧，腾讯此前多次进军短剧市场都效'... )
+SPLIT-BASIS: first-comma tail=35 chars 35.00em vs 28-tier budget 32.86em -> INFEASIBLE (second-comma chosen)
+SPLIT-BASIS PASS: second comma-clause split is mechanically forced (35.00em > 32.86em)
+AXIS line4 秩序 verbatim-in-bucket PASS
+AXIS line5 求新 verbatim-in-bucket PASS
+AXIS line6 侠气 verbatim-in-bucket PASS
+CREED verbatim-in-anchor PASS (C-00020 非荣誉席 in-file check: True)
+FLEET-CONFLICT ZERO: 4 quoted strings absent from all prior REACT/DAILY card faces
+AVOID-TRAIL: #5 246万 political/Taiwan-strait face; #4 321万 unresolved civil dispute; #6 238万 criminal allegation unresolved; #2/#3 named-drama-IP weak mapping; #7 athlete+automaker marketing weak; #8-#10 mapping weaker than head; bilibili=named-UP format
+RESULT: ALL GREEN

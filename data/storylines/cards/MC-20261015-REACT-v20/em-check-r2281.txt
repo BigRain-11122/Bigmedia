@@ -1,0 +1,12 @@
+em-check-r2281 (REACT-v20 M2 front-fit, ladder even-steps, v19/v21 format)
+h2_size=32 budget=28.75em
+OK   15.55em margin +13.20  今日热点 · 知乎热榜 2026-10-15
+OK   28.00em margin  +0.75  微信上线绿泡泡短剧，腾讯此前多次进军短剧市场都效果平平，
+OK   17.00em margin +11.75  这次能成功吗？能撼动红果的地位吗？
+OK   17.00em margin +11.75  秩序轴：「市场风云多，规矩不能丢」
+OK   20.00em margin  +8.75  求新轴：「听说有个新玩法，得试一试才行」
+OK   25.00em margin  +3.75  侠气轴：「交易所一开锣，咱们得好好琢磨琢磨行情了」
+OK   22.00em margin  +6.75  关卡建筑师信条：「每个转角都该藏一个惊喜。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+ALL-HORIZ: PASS
