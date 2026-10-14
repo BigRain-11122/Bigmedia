@@ -19,8 +19,14 @@
 #   tools/run_suite.ps1                                   # full discovery (tests/)
 #   tools/run_suite.ps1 -Module tests.test_board_check    # one module
 #   tools/run_suite.ps1 -Module tests.test_x -Log C:\t\my.log [-ResultFile C:\t\r.txt]
-# Output (machine-readable): SUITE_RC / SUITE_RAN / SUITE_RESULT lines on
-#   stdout AND (canonical, NUL-free) in the result file next to the log.
+# Output (machine-readable): SUITE_RC / SUITE_RAN / SUITE_SECONDS /
+#   SUITE_RESULT lines on stdout AND (canonical, NUL-free) in the result
+#   file next to the log.
+# tech#168 (R2248): SUITE_SECONDS is parsed verbatim from unittest's own
+#   "Ran N tests in X.Ys" line - the runner's own clock is the single
+#   timing source, no wrapper-side stopwatch. Budget classification
+#   (>=120s WARN / >=180s FORCED-EVAL) lives in src/os/suite_budget.py
+#   (single truth; this wrapper never duplicates thresholds).
 # Exit code = real python/unittest exit code.
 
 param(
@@ -93,6 +99,11 @@ if (Test-Path $errLog) {
 
 $summary = @("SUITE_RC=" + $rc)
 if ($ranLine)    { $summary += ("SUITE_RAN=" + $ranLine) }
+# tech#168: surface the runner-reported duration as its own machine-readable
+# line (verbatim digits from the RAN line - no wrapper-side timing).
+$secLine = ""
+if ($ranLine -match 'in (\d+(?:\.\d+)?)s') { $secLine = $Matches[1] }
+if ($secLine) { $summary += ("SUITE_SECONDS=" + $secLine) }
 if ($resultLine) { $summary += ("SUITE_RESULT=" + $resultLine) }
 $summary += ("SUITE_LOG_OUT=" + $outLog)
 $summary += ("SUITE_LOG_ERR=" + $errLog)

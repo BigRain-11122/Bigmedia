@@ -53,6 +53,8 @@ class RunSuiteWrapperTests(unittest.TestCase):
         self.assertEqual(0, rc)
         self.assertIn("SUITE_RC=0", out)
         self.assertRegex(out, r"SUITE_RAN=Ran \d+ tests?")
+        # tech#168: the runner-reported duration has its own line
+        self.assertRegex(out, r"SUITE_SECONDS=\d+(?:\.\d+)?")
         self.assertRegex(out, r"SUITE_RESULT=OK")
 
     def test_failing_module_propagates_nonzero_rc(self):
@@ -107,6 +109,8 @@ class RunSuiteWrapperTests(unittest.TestCase):
             txt = raw.decode("utf-8")
             self.assertIn("SUITE_RC=0", txt)
             self.assertRegex(txt, r"SUITE_RAN=Ran \d+ tests?")
+            # tech#168: the canonical file carries the duration line too
+            self.assertRegex(txt, r"SUITE_SECONDS=\d+(?:\.\d+)?")
             self.assertRegex(txt, r"SUITE_RESULT=OK")
             # stdout advertises the canonical surface
             self.assertIn("SUITE_RESULT_FILE=", out)
