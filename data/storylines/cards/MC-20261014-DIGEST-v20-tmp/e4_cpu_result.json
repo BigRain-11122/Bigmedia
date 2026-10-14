@@ -1,0 +1,28 @@
+{
+  "ts": "2026-10-14 13:38:53",
+  "probe": "tech#164 E4 CPU-lane viability (single call)",
+  "model": "qwen2.5:14b",
+  "options": {
+    "num_gpu": 0,
+    "num_thread": 4,
+    "num_ctx": 8192
+  },
+  "latency_s": 2,
+  "q1_latency_viable": false,
+  "q1_line_s": 600,
+  "q2_gpu_zero_touch": true,
+  "gpu_before": {
+    "util_pct": 0,
+    "used_mb": 10992,
+    "free_mb": 1006
+  },
+  "gpu_after": {
+    "util_pct": 0,
+    "used_mb": 10992,
+    "free_mb": 1006
+  },
+  "q3_format_check": null,
+  "api_metrics": {},
+  "error": "<HTTPError 404: 'Not Found'>",
+  "verdict": null
+}

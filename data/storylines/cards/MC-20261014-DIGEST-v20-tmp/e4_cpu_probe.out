@@ -1,0 +1,4 @@
+2026-10-14 13:38:51 PROBE start tech#164 E4 CPU-lane single call (model=qwen2.5:14b num_gpu=0 num_thread=4 cap=1200s)
+2026-10-14 13:38:51 GPU-BEFORE {"util_pct": 0, "used_mb": 10992, "free_mb": 1006}
+2026-10-14 13:38:53 GPU-AFTER {"util_pct": 0, "used_mb": 10992, "free_mb": 1006}
+2026-10-14 13:38:53 DONE latency=2s q1=False q2=True q3=False error=<HTTPError 404: 'Not Found'> -> e4_cpu_result.json
