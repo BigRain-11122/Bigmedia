@@ -97,6 +97,10 @@ DIGEST_SUPPLY_GAP_DAYS = 2
 ANCHOR_PREFIX_RE = re.compile(r"^(?:\s|[-*#>]+|\d{1,3}[.)])*$")
 LEDGER_MARKERS = ("@BigStream", "@七线全司", "@全司", "@六司", "@八线全量")
 PREVIEW_LEN = 110
+# tech#165 (R2241 seed): origin-only rows echo a content anchor so the
+# consuming round quotes verbatim content, never a guessed identity.
+ORIGIN_ANCHOR_PREVIEW_LEN = 80
+ORIGIN_ANCHOR_CAP = 5
 # tech#133 (R2059/R2064): real git binaries only -- the PATH git on this
 # machine is the gitsilent stdout-swallowing wrapper (R-1952), which would
 # read as 0 rows and silently kill the origin face.
@@ -109,7 +113,8 @@ GIT_FETCH_TIMEOUT_S = 20
 RC_QUIET, RC_NEW, RC_USAGE, RC_READ_FAIL = 0, 1, 2, 3
 USAGE = ("usage: python src/os/group_scan.py [--out FILE] [--echo] "
          "[--decisions P] [--hq-orders P] [--ledger P] "
-         "[--own-orders-dir P] [--state P] [--cards-dir P]")
+         "[--own-orders-dir P] [--state P] [--cards-dir P] "
+         "[--check-anchor-file P]")
 
 DEFAULTS = {
     "decisions": GROUP_ROOT / "docs" / "decisions.md",
@@ -372,32 +377,40 @@ def _subprocess_run_git(argv, timeout=GIT_FETCH_TIMEOUT_S):
 
 
 def orders_origin_rows(group_root=None, runner=None, git_path=None):
-    """(origin_rows, source) via git fetch + git show (D-20261001-03 canon).
+    """(origin_rows, source, row_lines) via git fetch + git show
+    (D-20260901-03 canon).
 
-    Any failure -> (None, reason): the face degrades to the worktree-only
+    row_lines = the stripped |-row lines of the origin file (tech#165
+    content anchors); None when degraded. Any failure ->
+    (None, reason, None): the face degrades to the worktree-only
     behavior (tech#133 pre-registered graceful degradation -- a network
     face must never brick the probe).
     """
     root = Path(group_root) if group_root else GROUP_ROOT
     git = _resolve_git(git_path)
     if git is None:
-        return None, "git-unresolved"
+        return None, "git-unresolved", None
     run = runner or _subprocess_run_git
     try:
         fetch = run([git, "-C", str(root), "fetch", "origin"])
     except Exception as exc:  # timeout / binary gone / etc.
-        return None, "fetch-error %r" % (exc,)
+        return None, "fetch-error %r" % (exc,), None
     if getattr(fetch, "returncode", 1) != 0:
-        return None, "fetch-failed rc=%s" % getattr(fetch, "returncode", "?")
+        return None, "fetch-failed rc=%s" % getattr(fetch, "returncode",
+                                                     "?"), None
     try:
         show = run([git, "-C", str(root), "show",
                     "origin/main:docs/orders.md"])
     except Exception as exc:
-        return None, "show-error %r" % (exc,)
+        return None, "show-error %r" % (exc,), None
     if getattr(show, "returncode", 1) != 0 or not show.stdout:
-        return None, "show-failed rc=%s" % getattr(show, "returncode", "?")
-    rows, _ = orders_row_stats(show.stdout.decode("utf-8", "replace"))
-    return rows, "origin/main"
+        return None, "show-failed rc=%s" % getattr(show, "returncode",
+                                                    "?"), None
+    text = show.stdout.decode("utf-8", "replace")
+    rows, _ = orders_row_stats(text)
+    row_lines = [line.strip() for line in text.splitlines()
+                 if line.lstrip().startswith("|")]
+    return rows, "origin/main", row_lines
 
 
 def classify_orders_origin_delta(origin_rows, local_rows):
@@ -418,19 +431,54 @@ def classify_orders_origin_delta(origin_rows, local_rows):
             "origin": origin_rows, "local": local_rows}
 
 
+def origin_only_row_anchors(origin_lines, local_text,
+                            preview_len=ORIGIN_ANCHOR_PREVIEW_LEN,
+                            cap=ORIGIN_ANCHOR_CAP):
+    """Pure core (tech#165): content anchors for origin-only rows.
+
+    Rows present in origin but absent from the worktree, keyed by exact
+    stripped-line content. Consumption rounds quote the anchor verbatim
+    in log/commit instead of guessing row identity from cph4 commit
+    subjects (R2240 misidentification root fix: the two "consumed" O
+    numbers were commit subjects, not ledger rows, HITS=0).
+    Returns [{"row": <1-based origin index>, "cell": <first cell>,
+    "preview": <first preview_len chars>}] capped at ``cap``;
+    [] when origin_lines is None/empty or everything is present.
+    """
+    if not origin_lines:
+        return []
+    local_rows = set()
+    for line in local_text.splitlines():
+        if line.lstrip().startswith("|"):
+            local_rows.add(line.strip())
+    anchors = []
+    for idx, line in enumerate(origin_lines, 1):
+        if line.strip() in local_rows:
+            continue
+        anchors.append({"row": idx,
+                        "cell": _orders_first_cell(line),
+                        "preview": line.strip()[:preview_len]})
+        if len(anchors) >= cap:
+            break
+    return anchors
+
+
 def face_orders_origin_delta(paths, runner=None, git_path=None):
     """Face: ORDERS origin-delta advisory (tech#133, R2059/R2064 family).
 
     rc 0 quiet/degraded / 1 ahead WARN (breaks silence) / 3 local read
     error only (the origin/network side never fails the probe --
-    pre-registered graceful degradation).
+    pre-registered graceful degradation). tech#165: ahead echoes
+    origin-only row content anchors (row index + first cell + preview)
+    so the consuming round anchors on verbatim content, never on a
+    guessed identity.
     """
     try:
         text, mtime, size = read_text(paths["hq_orders"])
     except OSError as exc:
         return RC_READ_FAIL, "read-fail: hq-orders %r" % (exc,)
     local_rows, _ = orders_row_stats(text)
-    origin_rows, source = orders_origin_rows(
+    origin_rows, source, origin_lines = orders_origin_rows(
         group_root=Path(paths["hq_orders"]).parent.parent, runner=runner,
         git_path=git_path)
     verdict = classify_orders_origin_delta(origin_rows, local_rows)
@@ -445,10 +493,16 @@ def face_orders_origin_delta(paths, runner=None, git_path=None):
     if verdict["status"] == "quiet":
         lines.append("ORDERS-ORIGIN-DELTA: quiet (origin == worktree rows)")
         return RC_QUIET, "\n".join(lines)
+    anchors = origin_only_row_anchors(origin_lines, text)
+    for a in anchors:
+        lines.append("origin-only-anchor: row %d | %s | %s"
+                     % (a["row"], a["cell"], a["preview"]))
     lines.append("ORDERS-ORIGIN-DELTA-WARN: origin %d vs worktree %d "
                  "(%d origin-only row(s)) -- worktree-face blind spot "
                  "(R2059/R2064 family); consume via git show origin/main "
-                 "now (D-13 SLA), FleetLink pull heals the worktree"
+                 "now (D-13 SLA), anchor log/commit on the origin-only-"
+                 "anchor lines above (tech#165), FleetLink pull heals "
+                 "the worktree"
                  % (verdict["origin"], verdict["local"], verdict["delta"]))
     return RC_NEW, "\n".join(lines)
 
@@ -648,6 +702,38 @@ def write_report(path, text):
     return path
 
 
+def check_anchor_file(anchor_path, orders_path=None):
+    """tech#165 anti-collision assertion: a consumed origin-only row's
+    content anchor must be present as a worktree orders row (heal check).
+
+    The anchor prefix travels in a UTF-8 file (first non-empty line --
+    PS 5.1 CJK argv is a GBK shredder, never pass CJK on the CLI).
+    rc 0 = anchor landed in the worktree (consumed row == real row);
+    rc 1 = absent (consumed identity suspect -- re-verify via git show);
+    rc 2 = anchor file unreadable/empty.
+    """
+    path = Path(orders_path) if orders_path else DEFAULTS["hq_orders"]
+    try:
+        text_in = Path(anchor_path).read_text(encoding="utf-8")
+    except OSError as exc:
+        return RC_USAGE, "anchor-file unreadable: %r" % (exc,)
+    prefix = ""
+    for line in text_in.splitlines():
+        if line.strip():
+            prefix = line.strip()
+            break
+    if not prefix:
+        return RC_USAGE, "anchor-file has no non-empty line"
+    try:
+        text, _, _ = read_text(path)
+    except OSError as exc:
+        return RC_READ_FAIL, "read-fail: hq-orders %r" % (exc,)
+    for line in text.splitlines():
+        if line.lstrip().startswith("|") and line.strip().startswith(prefix):
+            return RC_QUIET, "ANCHOR-OK: %s" % prefix
+    return RC_NEW, "ANCHOR-ABSENT: %s" % prefix
+
+
 def overall_rc(faces):
     return max([rc for _, rc, _ in faces] + [RC_QUIET])
 
@@ -658,7 +744,7 @@ def main(argv):
     except Exception:
         pass
     paths = dict(DEFAULTS)
-    out_path, echo = None, False
+    out_path, echo, anchor_file = None, False, None
     args = argv[1:]
     i = 0
     while i < len(args):
@@ -676,9 +762,22 @@ def main(argv):
         elif key == "--echo":
             echo = True
             i += 1
+        elif key == "--check-anchor-file" and i + 1 < len(args):
+            anchor_file = args[i + 1]
+            i += 2
         else:
             print(USAGE)
             return RC_USAGE
+
+    if anchor_file is not None:
+        rc, msg = check_anchor_file(anchor_file,
+                                    orders_path=paths.get("hq_orders"))
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+        print(msg)
+        return rc
 
     faces = [
         ("DECISIONS", *face_decisions(paths)),

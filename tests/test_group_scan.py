@@ -632,18 +632,21 @@ class OrdersOriginDeltaTests(unittest.TestCase):
                 return _FakeProc(0)
             return _FakeProc(0, b"| 10-12 17:2x | a |\n| 10-12 17:4x | b |\n")
 
-        rows, source = self._rows_with_runner(
+        rows, source, row_lines = self._rows_with_runner(
             fake_runner, r"C:\Program Files\Git\cmd\git.exe")
         self.assertEqual(rows, 2)
         self.assertEqual(source, "origin/main")
+        self.assertEqual(row_lines, ["| 10-12 17:2x | a |",
+                                     "| 10-12 17:4x | b |"])
         self.assertEqual(len(calls), 2)  # fetch then show
         self.assertIn("fetch", calls[0])
         self.assertIn("show", calls[1])
 
     def test_orders_origin_rows_fetch_fail_degrades(self):
-        rows, source = self._rows_with_runner(
+        rows, source, row_lines = self._rows_with_runner(
             lambda argv: _FakeProc(1), r"C:\Program Files\Git\cmd\git.exe")
         self.assertIsNone(rows)
+        self.assertIsNone(row_lines)
         self.assertIn("fetch-failed", source)
 
     def test_orders_origin_rows_show_fail_degrades(self):
@@ -652,24 +655,27 @@ class OrdersOriginDeltaTests(unittest.TestCase):
                 return _FakeProc(0)
             return _FakeProc(128, b"")
 
-        rows, source = self._rows_with_runner(
+        rows, source, row_lines = self._rows_with_runner(
             fake_runner, r"C:\Program Files\Git\cmd\git.exe")
         self.assertIsNone(rows)
+        self.assertIsNone(row_lines)
         self.assertIn("show-failed", source)
 
     def test_orders_origin_rows_fetch_exception_degrades(self):
         def fake_runner(argv):
             raise OSError("network down")
 
-        rows, source = self._rows_with_runner(
+        rows, source, row_lines = self._rows_with_runner(
             fake_runner, r"C:\Program Files\Git\cmd\git.exe")
         self.assertIsNone(rows)
+        self.assertIsNone(row_lines)
         self.assertIn("fetch-error", source)
 
     def test_orders_origin_rows_git_unresolved(self):
-        rows, source = self._rows_with_runner(
+        rows, source, row_lines = self._rows_with_runner(
             lambda argv: _FakeProc(0), r"C:\no\such\git.exe")
         self.assertIsNone(rows)
+        self.assertIsNone(row_lines)
         self.assertIn("git-unresolved", source)
 
     def _face_with(self, orders_text, origin_body, git_exists=True):
@@ -715,6 +721,152 @@ class OrdersOriginDeltaTests(unittest.TestCase):
         rc, out = gs.face_orders_origin_delta(paths)
         self.assertEqual(rc, gs.RC_READ_FAIL)
         self.assertIn("read-fail", out)
+
+
+class OriginAnchorTests(unittest.TestCase):
+    """tech#165 (R2241 seed): origin-only rows echo content anchors.
+
+    R2240 misidentification root fix: the round claimed consumption of
+    O-20261014-1215/1245 (cph4 commit subjects, HITS=0 in orders.md)
+    while the real rows 398-399 were the O-1325 pair -- the face must
+    hand the consuming round verbatim content, never identity guesses.
+    """
+
+    def test_anchors_exclude_present_rows(self):
+        anchors = gs.origin_only_row_anchors(
+            ["| 10-12 17:2x | a |", "| 10-12 17:4x | b |"],
+            "| 10-12 17:2x | a |\n| noise\n")
+        self.assertEqual(len(anchors), 1)
+        self.assertEqual(anchors[0]["row"], 2)
+        self.assertEqual(anchors[0]["cell"], "10-12 17:4x")
+        self.assertTrue(anchors[0]["preview"].startswith("| 10-12 17:4x"))
+
+    def test_anchors_empty_when_all_present(self):
+        anchors = gs.origin_only_row_anchors(
+            ["| a |", "| b |"], "| b |\n| a |\n")
+        self.assertEqual(anchors, [])
+
+    def test_anchors_none_when_origin_missing(self):
+        self.assertEqual(gs.origin_only_row_anchors(None, "| a |\n"), [])
+        self.assertEqual(gs.origin_only_row_anchors([], "| a |\n"), [])
+
+    def test_anchors_cap_and_preview_len(self):
+        origin = ["| row %d | %s |" % (i, "x" * 200) for i in range(8)]
+        anchors = gs.origin_only_row_anchors(origin, "| nothing |",
+                                             preview_len=40, cap=3)
+        self.assertEqual(len(anchors), 3)
+        for a in anchors:
+            self.assertLessEqual(len(a["preview"]), 40)
+
+    def test_face_ahead_echoes_content_anchor(self):
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write("| 10-12 17:2x | shared |\n")
+            paths = dict(gs.DEFAULTS)
+            paths["hq_orders"] = op
+
+            def fake_runner(argv):
+                if "fetch" in argv:
+                    return _FakeProc(0)
+                return _FakeProc(
+                    0, b"| 10-12 17:2x | shared |\n"
+                       b"| 10-14 13:4x | NEW ROW |\n")
+
+            rc, out = gs.face_orders_origin_delta(
+                paths, runner=fake_runner,
+                git_path=r"C:\Program Files\Git\cmd\git.exe")
+            self.assertEqual(rc, gs.RC_NEW)
+            self.assertIn("origin-only-anchor: row 2 | 10-14 13:4x "
+                          "| | 10-14 13:4x | NEW ROW |", out)
+            self.assertIn("anchor log/commit on the origin-only-anchor "
+                          "lines above", out)
+
+    def test_face_quiet_has_no_anchor_lines(self):
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write("| a |\n")
+            paths = dict(gs.DEFAULTS)
+            paths["hq_orders"] = op
+
+            def fake_runner(argv):
+                if "fetch" in argv:
+                    return _FakeProc(0)
+                return _FakeProc(0, b"| a |\n")
+
+            rc, out = gs.face_orders_origin_delta(
+                paths, runner=fake_runner,
+                git_path=r"C:\Program Files\Git\cmd\git.exe")
+            self.assertEqual(rc, gs.RC_QUIET)
+            self.assertNotIn("origin-only-anchor", out)
+
+    def test_check_anchor_file_found(self):
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 13:4x | B站 |\n")
+            ap = os.path.join(td, "anchor.txt")
+            with io.open(ap, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 13:4x | B站 |\n")
+            rc, msg = gs.check_anchor_file(ap, orders_path=op)
+            self.assertEqual(rc, gs.RC_QUIET)
+            self.assertIn("ANCHOR-OK", msg)
+
+    def test_check_anchor_file_prefix_match(self):
+        # The consumer quotes the 80-char preview; a prefix of it must
+        # still verify (truncation-tolerant anchor).
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 13:4x | B站频道 |\n")
+            ap = os.path.join(td, "anchor.txt")
+            with io.open(ap, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 13:4x | B站\n")
+            rc, msg = gs.check_anchor_file(ap, orders_path=op)
+            self.assertEqual(rc, gs.RC_QUIET)
+
+    def test_check_anchor_file_absent_is_rc_new(self):
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write("| a |\n")
+            ap = os.path.join(td, "anchor.txt")
+            with io.open(ap, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 99:9x | GHOST |\n")
+            rc, msg = gs.check_anchor_file(ap, orders_path=op)
+            self.assertEqual(rc, gs.RC_NEW)
+            self.assertIn("ANCHOR-ABSENT", msg)
+
+    def test_check_anchor_file_unreadable(self):
+        rc, msg = gs.check_anchor_file(
+            os.path.join("Z:", "no", "such", "anchor.txt"))
+        self.assertEqual(rc, gs.RC_USAGE)
+        self.assertIn("unreadable", msg)
+
+    def test_check_anchor_file_empty(self):
+        with tempfile.TemporaryDirectory() as td:
+            ap = os.path.join(td, "anchor.txt")
+            with io.open(ap, "w", encoding="utf-8") as fh:
+                fh.write("\n \n")
+            rc, msg = gs.check_anchor_file(ap)
+            self.assertEqual(rc, gs.RC_USAGE)
+            self.assertIn("no non-empty line", msg)
+
+    def test_cli_check_anchor_flag(self):
+        buf = io.StringIO()
+        with tempfile.TemporaryDirectory() as td:
+            op = os.path.join(td, "orders.md")
+            with io.open(op, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 13:4x | B站 |\n")
+            ap = os.path.join(td, "anchor.txt")
+            with io.open(ap, "w", encoding="utf-8") as fh:
+                fh.write("| 10-14 13:4x | B站 |\n")
+            with contextlib.redirect_stdout(buf):
+                rc = gs.main(["group_scan", "--check-anchor-file", ap,
+                              "--hq-orders", op])
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("ANCHOR-OK", buf.getvalue())
 
 
 @unittest.skipUnless(
