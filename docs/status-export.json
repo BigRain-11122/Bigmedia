@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 03:06:47",
- "do": "GB v1.4 refresh landed (d803d45b); next: 08:00 tech#92 window + MV V3 08:43 watch",
+ "export_ts": "2026-10-15 03:26:30",
+ "do": "V3.5 preview landed 01:27 (540P, verify PASS); ack row 420; next 08:00 tech#92 + V3 768P final watch",
  "depts": [
   {
    "n": "工程技术部",
