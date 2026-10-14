@@ -407,7 +407,7 @@ class CpuLaneRenderTests(unittest.TestCase):
             src = self._render(cpu_lane)
             for marker in ('__LABEL__', '__MODEL__', '__TIMEOUT__',
                            '__LABEL_REPR__', '__PROMPT_REPR__',
-                           '__THREADS__'):
+                           '__THREADS__', '__AUTO_LEDGER_BLOCK__'):
                 self.assertNotIn(marker, src,
                                   'lane=%s leaked %s' % (cpu_lane, marker))
 
@@ -427,6 +427,185 @@ class CpuLaneRenderTests(unittest.TestCase):
                 src = fh.read()
             self.assertIn("num_gpu': 0", src)
             self.assertIn('CPU LANE', src)
+
+
+class AutoLedgerRenderTests(unittest.TestCase):
+    """tech#173: every generated launcher (either lane) self-logs its
+    expert-calls row + verdict archive at landing time; a ledger write
+    failure WARNs and never touches the verdict/rc (call_expert
+    contract)."""
+
+    def _render(self, cpu_lane):
+        return gen.render_launcher(u'body text', u'label-173',
+                                   u'qwen2.5:14b', 1500, cpu_lane=cpu_lane)
+
+    def test_auto_ledger_markers_both_lanes(self):
+        for cpu_lane in (True, False):
+            src = self._render(cpu_lane)
+            for marker in (
+                    "EXPERT_ID = 'E4-audience'",
+                    u"ROLE_DEPT = 'E4 直觉观众参考仪（评审参考席（非部门编制））'",
+                    'expert-calls.md',
+                    'expert-verdicts',
+                    'LEDGER-ROW %s (tech#173 auto-ledger)',
+                    'WARN auto-ledger failed: %s (verdict kept)',
+                    '_auto_ledger(result[\'verdict\'], MATERIAL, MODEL)'):
+                self.assertIn(marker, src,
+                              'lane=%s missing %s' % (cpu_lane, marker))
+
+    def test_note_separator_is_fullwidth_pipe(self):
+        # The ledger row's note uses the fullwidth ｜ (survives the
+        # halfwidth-pipe cleanup; hand-backfill rows use the same).
+        for cpu_lane in (True, False):
+            self.assertIn(u'｜', self._render(cpu_lane))
+
+    def test_both_lanes_compile(self):
+        compile(self._render(False), 'e4_call.py', 'exec')
+        compile(self._render(True), 'e4_call_cpu.py', 'exec')
+
+
+class AutoLedgerBehaviorTests(unittest.TestCase):
+    """tech#173 live behavior: the CPU-lane launcher appends the real
+    ledger row + writes the archive when a repo root sits above it,
+    and WARN-skips (rc still 0, verdict kept) when none does."""
+
+    def setUp(self):
+        # fake repo: <tmp>/repo/.git + launcher under
+        # <tmp>/repo/data/storylines/cards/x-tmp/
+        self.tmp = tempfile.mkdtemp(prefix='e4al_')
+        self.repo = os.path.join(self.tmp, 'repo')
+        self.launch_dir = os.path.join(
+            self.repo, 'data', 'storylines', 'cards', 'x-tmp')
+        os.makedirs(os.path.join(self.repo, '.git'))
+        os.makedirs(self.launch_dir)
+        self.path = os.path.join(self.launch_dir, 'e4_call_cpu.py')
+        src = gen.render_launcher(u'body', u'MC-X-173', 'qwen2.5:14b',
+                                  1500, cpu_lane=True)
+        with io.open(self.path, 'w', encoding='utf-8') as fh:
+            fh.write(src)
+        self.saved_urllib = sys.modules.get('urllib')
+
+    def tearDown(self):
+        if self.saved_urllib is None:
+            sys.modules.pop('urllib', None)
+        else:
+            sys.modules['urllib'] = self.saved_urllib
+
+    def _exec_with_fake_http(self):
+        import contextlib
+        import types
+
+        class _Resp(object):
+            @staticmethod
+            def read():
+                return b'{"response": "7.0\\nverdict line"}'
+
+        class _Req(object):
+            def __init__(self, *a, **k):
+                pass
+
+        urllib_mod = types.ModuleType('urllib')
+        request_mod = types.ModuleType('urllib.request')
+        request_mod.Request = _Req
+
+        @contextlib.contextmanager
+        def _urlopen(*a, **k):
+            yield _Resp()
+
+        request_mod.urlopen = _urlopen
+        urllib_mod.request = request_mod
+        sys.modules['urllib'] = urllib_mod
+        sys.modules['urllib.request'] = request_mod
+
+        buf = io.StringIO()
+        code = compile(io.open(self.path, encoding='utf-8').read(),
+                       self.path, 'exec')
+        rc = 0
+        ns = {'__file__': self.path, '__name__': 'e4_cpu_under_test'}
+        with contextlib.redirect_stdout(buf):
+            try:
+                exec(code, ns)
+            except SystemExit as exc:
+                rc = exc.code
+        return rc, buf.getvalue()
+
+    def test_ledger_row_and_archive_written(self):
+        rc, out = self._exec_with_fake_http()
+        self.assertEqual(rc, 0)
+        self.assertIn('LEDGER-ROW E4-audience', out)
+        self.assertIn('DONE', out)
+        # result json landed next to the launcher
+        with io.open(os.path.join(self.launch_dir, 'e4-result.json'),
+                     encoding='utf-8') as fh:
+            result = json.load(fh)
+        self.assertEqual(result['material'], 'MC-X-173')
+        # ledger row: table shape + label in material column
+        ledger = io.open(os.path.join(self.repo, 'docs', 'reviews',
+                                      'expert-calls.md'),
+                         encoding='utf-8').read()
+        self.assertIn('| E4-audience |', ledger)
+        self.assertIn('| MC-X-173 | 0 |', ledger)
+        self.assertIn(u'｜ 7.0', ledger)  # fullwidth-pipe note + first line
+        # archive: header + verbatim verdict
+        vdir = os.path.join(self.repo, 'docs', 'reviews',
+                            'expert-verdicts')
+        names = sorted(os.listdir(vdir))
+        self.assertEqual(len(names), 1)
+        self.assertTrue(names[0].endswith('-E4-audience.md'))
+        body = io.open(os.path.join(vdir, names[0]),
+                       encoding='utf-8').read()
+        self.assertIn(u'结论全文', body)
+        self.assertIn('7.0', body)
+        self.assertIn('tech#173', body)
+
+    def test_no_repo_root_warn_skip_verdict_kept(self):
+        # launcher outside any repo: WARN skip, rc 0, result still lands
+        orphan_dir = tempfile.mkdtemp(prefix='e4orphan_')
+        orphan = os.path.join(orphan_dir, 'e4_call_cpu.py')
+        src = gen.render_launcher(u'body', u'ORPHAN', 'qwen2.5:14b',
+                                  1500, cpu_lane=True)
+        with io.open(orphan, 'w', encoding='utf-8') as fh:
+            fh.write(src)
+        import contextlib
+        import types
+
+        class _Resp(object):
+            @staticmethod
+            def read():
+                return b'{"response": "8.0"}'
+
+        class _Req(object):
+            def __init__(self, *a, **k):
+                pass
+
+        urllib_mod = types.ModuleType('urllib')
+        request_mod = types.ModuleType('urllib.request')
+        request_mod.Request = _Req
+
+        @contextlib.contextmanager
+        def _urlopen(*a, **k):
+            yield _Resp()
+
+        request_mod.urlopen = _urlopen
+        urllib_mod.request = request_mod
+        sys.modules['urllib'] = urllib_mod
+        sys.modules['urllib.request'] = request_mod
+        buf = io.StringIO()
+        code = compile(io.open(orphan, encoding='utf-8').read(),
+                       orphan, 'exec')
+        rc = 0
+        ns = {'__file__': orphan, '__name__': 'orphan_under_test'}
+        with contextlib.redirect_stdout(buf):
+            try:
+                exec(code, ns)
+            except SystemExit as exc:
+                rc = exc.code
+        self.assertEqual(rc, 0)
+        self.assertIn('WARN auto-ledger skipped', buf.getvalue())
+        self.assertIn('DONE', buf.getvalue())
+        with io.open(os.path.join(orphan_dir, 'e4-result.json'),
+                     encoding='utf-8') as fh:
+            self.assertIn('8.0', fh.read())
 
 
 if __name__ == '__main__':

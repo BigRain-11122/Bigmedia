@@ -7,3 +7,4 @@
 {"ts": "2026-10-11 11:01:24", "purpose": "untagged", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-02-v1.mp3", "rc": 0, "duration_s": 212.782, "cues": 46}
 {"ts": "2026-10-11 19:16:33", "purpose": "final-track-qc", "model": "medium", "audio": "data\\storylines\\audio\\SC-005-04-v1.mp3", "rc": 0, "duration_s": 224.734, "cues": 45}
 {"ts": "2026-10-11 21:59:45", "purpose": "sc005-05-tradfix-ab-barm", "model": "medium", "audio": "data\\storylines\\audio\\sc005-05-v1-tmp\\audio.mp3", "rc": 0, "duration_s": 213.79, "cues": 50}
+{"ts": "2026-10-15 00:13:24", "purpose": "sc005-07-final", "model": "medium", "audio": "data\\storylines\\audio\\sc005-07-v1-tmp\\audio.mp3", "rc": 0, "duration_s": 207.166, "cues": 41}

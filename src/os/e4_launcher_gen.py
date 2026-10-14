@@ -60,6 +60,64 @@ CANONICAL_QUESTIONS = (
 
 QUESTION_MARKER = u'请回答三个问题'
 
+# tech#173 auto-ledger block: every landed verdict self-logs its
+# expert-calls row + full-verdict archive at landing time, aligning
+# with call_expert.py's audit behavior (before this, CPU-lane flights
+# landed with a zero-row ledger and the read-back round backfilled by
+# hand = daily drift face, R2258 anchor). Best effort by the
+# call_expert contract: a ledger write failure WARNs, it never changes
+# the verdict or the rc. Shared verbatim by both lane templates.
+AUTO_LEDGER_BLOCK = r'''
+# tech#173 auto-ledger: verdict self-logs its expert-calls row +
+# archive (best effort; a write failure WARNs, verdict/rc untouched).
+EXPERT_ID = 'E4-audience'
+ROLE_DEPT = 'E4 直觉观众参考仪（评审参考席（非部门编制））'
+
+def _repo_root():
+    d = HERE
+    while d and d != os.path.dirname(d):
+        if os.path.isdir(os.path.join(d, '.git')):
+            return d
+        d = os.path.dirname(d)
+    return None
+
+def _auto_ledger(verdict, material, model):
+    root = _repo_root()
+    if root is None:
+        print('WARN auto-ledger skipped (no repo root above %s)' % HERE,
+              flush=True)
+        return
+    try:
+        stamp = time.strftime('%Y-%m-%d %H:%M')
+        vname = time.strftime('%Y%m%d-%H%M%S') + '-' + EXPERT_ID + '.md'
+        vdir = os.path.join(root, 'docs', 'reviews', 'expert-verdicts')
+        if not os.path.isdir(vdir):
+            os.makedirs(vdir)
+        io.open(os.path.join(vdir, vname), 'w', encoding='utf-8').write(
+            '# %s - %s结论全文\n\n> 时间=%s · 模型=%s · 材料=%s\n'
+            '> 机制=generated launcher auto-ledger（tech#173·对齐 '
+            'call_expert.py O-20260924-1033·本件为结论存档·台账行='
+            'expert-calls.md）\n\n%s\n'
+            % (EXPERT_ID, ROLE_DEPT, stamp, model, material,
+               (verdict or '').strip() or '-'))
+        first_line = ((verdict or '').strip() or '-').splitlines()[0]
+        note = '全文=expert-verdicts/%s ｜ %s' % (vname, first_line)
+        note = note.replace('|', '/').replace('\n', ' ')[:160]
+        row = '| %s | %s | %s | %s | 0 | %s |\n' % (
+            stamp, EXPERT_ID, ROLE_DEPT, material, note)
+        with io.open(os.path.join(root, 'docs', 'reviews',
+                                  'expert-calls.md'), 'a',
+                     encoding='utf-8') as fh:
+            fh.write(row)
+        print('LEDGER-ROW %s (tech#173 auto-ledger)' % EXPERT_ID,
+              flush=True)
+    except OSError as exc:
+        print('WARN auto-ledger failed: %s (verdict kept)' % exc,
+              flush=True)
+
+_auto_ledger(result['verdict'], MATERIAL, MODEL)
+'''
+
 # Machinery template = verbatim v17/v18 lineage (R1536/R1938/R2001).
 # Raw string keeps the strip-regex literals byte-identical.
 TEMPLATE = r'''# -*- coding: utf-8 -*-
@@ -184,6 +242,7 @@ except subprocess.TimeoutExpired:
     result['verdict'] = 'TIMEOUT-%ds' % TIMEOUT
 io.open(os.path.join(HERE, 'e4-result.json'), 'w', encoding="utf-8").write(
     json.dumps(result, ensure_ascii=False, indent=2))
+__AUTO_LEDGER_BLOCK__
 print('DONE' if not result['verdict'].startswith('TIMEOUT') else 'TIMEOUT')
 '''
 
@@ -244,6 +303,7 @@ except Exception as exc:
         raise SystemExit(3)
 io.open(os.path.join(HERE, 'e4-result.json'), 'w', encoding='utf-8').write(
     json.dumps(result, ensure_ascii=False, indent=2))
+__AUTO_LEDGER_BLOCK__
 print('DONE' if not result['verdict'].startswith('TIMEOUT') else 'TIMEOUT')
 '''
 
@@ -270,8 +330,9 @@ def render_launcher(prompt, label, model, timeout, cpu_lane=False,
     """Pure: full turnkey launcher source (UTF-8 str).
 
     cpu_lane=True renders the tech#169 CPU variant (API flight with
-    num_gpu=0/num_thread=4, no GPU preflight); the GPU template is
-    byte-identical to the pre-tech#169 output when cpu_lane is off."""
+    num_gpu=0/num_thread=4, no GPU preflight); both lane templates
+    carry the tech#173 auto-ledger block (self-logging expert-calls
+    row + verdict archive at landing time)."""
     src = CPU_TEMPLATE if cpu_lane else TEMPLATE
     src = src.replace('__LABEL__', label.replace('\\', '\\\\'))
     src = src.replace('__MODEL__', repr(model))
@@ -279,6 +340,7 @@ def render_launcher(prompt, label, model, timeout, cpu_lane=False,
     src = src.replace('__LABEL_REPR__', repr(label))
     src = src.replace('__PROMPT_REPR__', repr(prompt))
     src = src.replace('__THREADS__', str(int(cpu_threads)))
+    src = src.replace('__AUTO_LEDGER_BLOCK__', AUTO_LEDGER_BLOCK)
     return src
 
 

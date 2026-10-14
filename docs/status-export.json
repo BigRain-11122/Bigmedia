@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 00:17:33",
- "do": "R2258: F-180 SC-005-07 registered #188; E4 8.0; next: tech#92 08:00 window + REACT-v20 + MV 08:43 watch",
+ "export_ts": "2026-10-15 01:51:06",
+ "do": "R2259 absorb close: tech#173 auto-ledger 40/40 + 33 mp3 residue committed; next: tech#92 08:00 + REACT-v20",
  "depts": [
   {
    "n": "工程技术部",

@@ -16,9 +16,9 @@ Assembly = call_expert.build_prompt parity: prompt.rstrip() +
 "\\n\\n\\u6750\\u6599\\n" - material verbatim (R2007 preload, R197 tail
 format anchor in file). Seat model + prompt file from
 data/experts/registry.json (never hardcoded, s1_call.py doctrine).
-Verdict -> s1-cpu-result.json in THIS dir. Next round: >=9 pass ->
-TTS light leg; <9 -> substantive revision; archival (expert-verdicts +
-expert-calls line) at readback (call_expert single-writer untouched).
+Verdict -> s1-cpu-result.json in THIS dir. tech#173 auto-ledger: the
+verdict self-logs its expert-calls row + full-verdict archive at
+landing time (read-back round no longer backfills by hand).
 rc: 0 = result json written (incl TIMEOUT/EMPTY verdicts) | 3 =
 transport/liveness error, NO result file (re-dispatch next window).
 """
@@ -52,12 +52,15 @@ except Exception as exc:
 reg = json.loads(io.open(REGISTRY, encoding="utf-8").read())
 seat = str(reg.get("model", "")) or "qwen2.5:14b"
 prompt_file = None
+role_dept = "S1 编剧官（内容生产部）"
 entries = reg.get("experts") or reg.get("roster") or []
 for e in entries:
     if str(e.get("id", "")) == EXPERT_ID:
         if e.get("model"):
             seat = str(e["model"])
         prompt_file = str(e.get("prompt_file") or "") or None
+        role_dept = "%s（%s）" % (e.get("role", "S1 编剧官"),
+                                  e.get("dept", "内容生产部"))
         break
 if not prompt_file:
     prompt_file = FALLBACK_PROMPT
@@ -94,4 +97,37 @@ except Exception as exc:
         raise SystemExit(3)
 io.open(os.path.join(HERE, "s1-cpu-result.json"), "w", encoding="utf-8").write(
     json.dumps(result, ensure_ascii=False, indent=2))
+
+# ---------- tech#173 auto-ledger: verdict self-logs its expert-calls
+# row + full-verdict archive at landing time (aligns with call_expert
+# audit behavior; read-back round no longer backfills by hand). Best
+# effort: write failure WARNs, never changes verdict/rc.
+def _auto_ledger():
+    try:
+        stamp = time.strftime("%Y-%m-%d %H:%M")
+        vname = time.strftime("%Y%m%d-%H%M%S") + "-" + EXPERT_ID + ".md"
+        vdir = os.path.join(ROOT, "docs", "reviews", "expert-verdicts")
+        if not os.path.isdir(vdir):
+            os.makedirs(vdir)
+        io.open(os.path.join(vdir, vname), "w", encoding="utf-8").write(
+            "# %s - %s结论全文\n\n> 时间=%s · 模型=%s · 材料=%s\n"
+            "> 机制=s1_call_cpu.py auto-ledger（tech#173·对齐 "
+            "call_expert.py O-20260924-1033·本件为结论存档·台账行="
+            "expert-calls.md）\n\n%s\n"
+            % (EXPERT_ID, role_dept, stamp, seat, MATERIAL_REL,
+               str(result["verdict"]).strip() or "-"))
+        first_line = (str(result["verdict"]).strip() or "-").splitlines()[0]
+        note = "全文=expert-verdicts/%s ｜ %s" % (vname, first_line)
+        note = note.replace("|", "/").replace("\n", " ")[:160]
+        row = "| %s | %s | %s | %s | 0 | %s |\n" % (
+            stamp, EXPERT_ID, role_dept, MATERIAL_REL, note)
+        with io.open(os.path.join(ROOT, "docs", "reviews",
+                                  "expert-calls.md"), "a",
+                     encoding="utf-8") as fh:
+            fh.write(row)
+        print("LEDGER-ROW %s (tech#173 auto-ledger)" % EXPERT_ID, flush=True)
+    except OSError as exc:
+        print("WARN auto-ledger failed: %s (verdict kept)" % exc, flush=True)
+
+_auto_ledger()
 print("DONE" if not str(result["verdict"]).startswith("TIMEOUT") else "TIMEOUT")
