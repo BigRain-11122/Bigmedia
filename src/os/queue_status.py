@@ -45,6 +45,13 @@ plus the P1-only [needs-CEO] family: those items park on the CEO and
 classify into the gated bucket (split shown as "(+needs-CEO N)"). The
 claimable-head line doubles as the fast-path "backlog top uncompleted
 item" determination, no more full-file dumps.
+
+tech#167 (R2245 seed): --json gains a claimable_nums array per queue
+(file order) - the audit/takeover consumer previously had to import
+the module and re-derive the list (4 API-signature trial-and-error
+calls in one round: load_queue root+name, classify_queue triple,
+render_item vs report). Pure additive field; consumers that only read
+the existing keys stay green.
 """
 
 import argparse
@@ -181,6 +188,7 @@ def build_report(root, names):
             "gated": len(buckets["gated"]),
             "needs_ceo": len(needs_ceo),
             "claimable": len(buckets["claimable"]),
+            "claimable_nums": [it["num"] for it in buckets["claimable"]],
             "claimable_head": (buckets["claimable"][0]
                                if buckets["claimable"] else None),
             "markers": markers,
@@ -241,6 +249,11 @@ def build_json(report):
             "gated": face["gated"],
             "needs_ceo": face.get("needs_ceo", 0),
             "claimable": face["claimable"],
+            # tech#167: full claimable number list (file order) - audit
+            # consumers take the array straight from --json instead of
+            # re-importing the module. .get default keeps hand-built
+            # report dicts (older callers/tests) green.
+            "claimable_nums": list(face.get("claimable_nums", [])),
             "claimable_head_num": head["num"] if head else None,
         }
     return data

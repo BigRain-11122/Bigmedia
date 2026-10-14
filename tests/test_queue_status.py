@@ -300,5 +300,69 @@ class TestMainCli(unittest.TestCase):
                                   qs.MAX_DEFAULT_LINES)
 
 
+class TestClaimableNums(unittest.TestCase):
+    """tech#167, R2245 seed: --json claimable_nums array (file order).
+
+    Gap anchor: the R2245 audit needed "which numbers are claimable per
+    queue" and had to import the module four times (signature guessing)
+    to derive the list. The array is a pure additive field - consumers
+    reading only the old keys must stay green.
+    """
+
+    def test_nums_file_order_and_length_agreement(self):
+        items = qs.parse_items(
+            "114. [done 2026-10-09 R1] closed\n"
+            "111. claimable thing\n"
+            "110. gated thing\n"
+            "109. claimable thing two\n")
+        buckets, markers, needs_ceo = qs.classify_queue(items)
+        face = {"missing": False, "total": 4, "done": 1, "gated": 1,
+                "needs_ceo": 0, "claimable": len(buckets["claimable"]),
+                "claimable_nums": [it["num"] for it in buckets["claimable"]],
+                "claimable_head": buckets["claimable"][0]}
+        data = qs.build_json({"backlog": face})
+        # file order preserved (109 sits after 111 in the file)
+        self.assertEqual([111, 109], data["backlog"]["claimable_nums"])
+        self.assertEqual(data["backlog"]["claimable"],
+                         len(data["backlog"]["claimable_nums"]))
+
+    def test_missing_field_defaults_to_empty(self):
+        # hand-built report dicts (older callers) lack the new key
+        report = {"tech": {"missing": False, "total": 3, "done": 1,
+                           "gated": 2, "needs_ceo": 0, "claimable": 0,
+                           "claimable_head": None}}
+        data = qs.build_json(report)
+        self.assertEqual([], data["tech"]["claimable_nums"])
+
+    def test_empty_claimable_gives_empty_array(self):
+        items = qs.parse_items("1. gated thing\n2. [done 2026-10-12 R1] x\n")
+        buckets, markers, needs_ceo = qs.classify_queue(items)
+        data = qs.build_json({"tech": {
+            "missing": False, "total": 2, "done": 1, "gated": 1,
+            "needs_ceo": 0, "claimable": 0,
+            "claimable_nums": [it["num"] for it in buckets["claimable"]],
+            "claimable_head": None}})
+        self.assertEqual([], data["tech"]["claimable_nums"])
+
+    def test_cli_json_face_carries_nums(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "state" / "queue").mkdir(parents=True)
+            (root / "state" / "queue" / "main.md").write_text(
+                "1. [R1845 done 2026-10-10] a\n2. open thing\n",
+                encoding="utf-8")
+            (root / "state" / "queue" / "tech.md").write_text(
+                "1. gated thing\n2. [done 2026-10-13 R1] done\n3. claim\n",
+                encoding="utf-8")
+            (root / "state" / "queue" / "explore.md").write_text(
+                "1. 观察位 later\n", encoding="utf-8")
+            rc, out = run_main_silent(["--root", str(root), "--json"])
+            self.assertEqual(0, rc)
+            data = json.loads(out)
+            self.assertEqual([2], data["main"]["claimable_nums"])
+            self.assertEqual([3], data["tech"]["claimable_nums"])
+            self.assertEqual([], data["explore"]["claimable_nums"])
+
+
 if __name__ == "__main__":
     unittest.main()
