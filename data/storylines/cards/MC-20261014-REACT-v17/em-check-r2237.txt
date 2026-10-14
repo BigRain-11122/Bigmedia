@@ -1,0 +1,13 @@
+em-check-r2237 (REACT-v17 M2 front-fit + VERT R381)
+h2_size=32 budget=28.75em (ladder: 36 excluded by driver line 26.00em>25.56 -> 32)
+H1=6.15em (h1 own face, h1_size=84, budget 10.95em margin +4.80) OK
+OK    15.55em margin +13.20  今日热点 · 知乎热榜 2026-10-14
+OK    24.30em margin +4.45  如何看待Andrej Karpathy提出「AI能力认知漏斗」，
+OK    16.00em margin +12.75  少数专业人士已开始有「眩晕感」？
+OK    18.00em margin +10.75  怀旧轴：「泡一杯茶，看这世界慢慢转」
+OK    27.00em margin +1.75  求新轴：「刚画完这幅，感觉跟过去那些不一样，挺有趣的」
+OK    18.00em margin +10.75  秩序轴：「校准了时间，才踏实过一天」
+OK    20.65em margin +8.10  归档者-07信条：「参数不收敛，天理难容。」
+subs 23.55em < 24.21em budget OK
+ALL-HORIZ: P
+VERT: est bottom=681px subs_top=932px gap=250px (assert >=20) OK

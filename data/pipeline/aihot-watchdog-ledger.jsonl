@@ -14,3 +14,8 @@
 {"event": "heal", "actions": ["pg", "api"], "passes": 1, "before": {"verdict": "missing-api", "rc": 1, "pg_ok": false}, "after": {"verdict": "missing-api", "rc": 1, "pg_ok": true}, "ts": "2026-10-14 10:50:30"}
 {"event": "heal", "actions": ["proxy"], "passes": 1, "before": {"verdict": "missing-proxy", "rc": 1, "pg_ok": true}, "after": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "ts": "2026-10-14 10:55:28"}
 {"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-14 11:00:28"}
+{"event": "heal", "actions": ["pg", "api", "proxy"], "passes": 2, "before": {"verdict": "missing-api", "rc": 1, "pg_ok": false}, "after": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "ts": "2026-10-14 11:30:55"}
+{"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-14 11:35:27"}
+{"event": "heal", "actions": ["pg", "api"], "passes": 1, "before": {"verdict": "missing-api", "rc": 1, "pg_ok": false}, "after": {"verdict": "missing-api", "rc": 1, "pg_ok": true}, "ts": "2026-10-14 11:45:30"}
+{"event": "heal", "actions": ["proxy"], "passes": 1, "before": {"verdict": "missing-proxy", "rc": 1, "pg_ok": true}, "after": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "ts": "2026-10-14 11:50:28"}
+{"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-14 11:55:28"}
