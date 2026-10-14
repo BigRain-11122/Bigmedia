@@ -52,6 +52,24 @@ the module and re-derive the list (4 API-signature trial-and-error
 calls in one round: load_queue root+name, classify_queue triple,
 render_item vs report). Pure additive field; consumers that only read
 the existing keys stay green.
+
+tech#176 (R2274 seed, note delivered R2276): claimable is a LITERAL
+classification - done/gated detection only reads the row text itself.
+A row whose true state is gated by an external threshold (VRAM machine
+gate, app-dead, GPU exclusive window) keeps reading claimable until
+the row is rewritten with the in-row gated word (leg-state write-back
+discipline: when a leg completes or gates, rewrite the row the same
+round). Consumers must not trust claimable alone for deep decisions -
+R2266-R2274 paid eight false-positive rounds plus a ~15 min deep
+audit because rows #78/#151 read claimable while truly gated.
+
+R2276 console hardening: --item crashed live with UnicodeEncodeError
+('gbk' codec can't encode '\\u226a') when an item carries characters
+outside the console codepage (tech#151's VRAM reading uses the CJK
+much-less-than sign). main() now reconfigures stdout/stderr with
+errors="replace": the codepage is kept (CJK still displays), the rare
+non-encodable character degrades to '?' instead of killing the
+readout. The --json face is ASCII-only payload, so it is unaffected.
 """
 
 import argparse
@@ -259,7 +277,29 @@ def build_json(report):
     return data
 
 
+def _harden_console_stdio():
+    """R2276: keep CLI printing alive on a GBK console.
+
+    Live crash anchor: `--item 151` raised UnicodeEncodeError ('gbk'
+    codec can't encode '\\u226a') because queue rows carry characters
+    outside the console codepage (the VRAM reading uses the CJK
+    much-less-than sign). errors="replace" keeps the codepage (CJK
+    still displays) and degrades the rare non-encodable char to '?'
+    instead of crashing the readout. Guards: pythonw None-stream skip
+    (tech#169 family) and the unittest harness (StringIO has no
+    reconfigure) both no-op via AttributeError.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        if stream is None:  # pythonw / detached: no console attached
+            continue
+        try:
+            stream.reconfigure(errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def main(argv=None):
+    _harden_console_stdio()
     ap = argparse.ArgumentParser(description="queue compact readout")
     ap.add_argument("--root", default=".",
                     help="repo root (default: cwd)")

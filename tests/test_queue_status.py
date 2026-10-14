@@ -18,6 +18,7 @@ Run:
 import contextlib
 import io
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -362,6 +363,38 @@ class TestClaimableNums(unittest.TestCase):
             self.assertEqual([2], data["main"]["claimable_nums"])
             self.assertEqual([3], data["tech"]["claimable_nums"])
             self.assertEqual([], data["explore"]["claimable_nums"])
+
+
+class TestConsoleHardening(unittest.TestCase):
+    """R2276: --item once crashed live on the GBK console
+    (UnicodeEncodeError: 'gbk' codec can't encode '\\u226a' - the
+    character sits inside tech#151's VRAM reading). The CLI must
+    degrade non-encodable characters instead of dying. Hermetic via
+    PYTHONIOENCODING=gbk so the crash reproduces on any host locale.
+    """
+
+    def test_item_print_survives_non_gbk_console(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "state" / "queue").mkdir(parents=True)
+            (root / "state" / "queue" / "tech.md").write_text(
+                "151. 门读数 free ~1.2G≪8704MB 硬关窗\n", encoding="utf-8")
+            env = dict(os.environ, PYTHONIOENCODING="gbk")
+            p = subprocess.run(
+                [sys.executable, str(REPO / "src" / "os" / "queue_status.py"),
+                 "--root", str(root), "--item", "151"],
+                capture_output=True, timeout=60, env=env)
+            self.assertEqual(0, p.returncode)
+            self.assertIn(b"#151 [CLAIMABLE]", p.stdout)
+            self.assertIn(b"8704MB", p.stdout)  # verbatim text survives
+
+    def test_harden_noop_on_stringio_streams(self):
+        # pythonw None-stream guard (tech#169 family) + the unittest
+        # harness (StringIO has no reconfigure) must both no-op.
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), \
+                contextlib.redirect_stderr(err):
+            self.assertIsNone(qs._harden_console_stdio())
 
 
 if __name__ == "__main__":
