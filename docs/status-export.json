@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 09:03:33",
- "do": "R2232 tech#158 v19 迁档+帧验补账毕（四件评审腿=fire 窗 F-181~184 序）·V3 成片未落位 v4fix 波 6/7 signed·fire 五件候位（工作日零排单）",
+ "export_ts": "2026-10-14 09:21:24",
+ "do": "tech#160 closed: group_scan already canonical (75/75 tests); task-book scan pointer added; fire no-fire workday",
  "depts": [
   {
    "n": "工程技术部",
