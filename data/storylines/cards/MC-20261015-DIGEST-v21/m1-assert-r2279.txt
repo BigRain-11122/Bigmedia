@@ -1,0 +1,19 @@
+build_digest21 M1 assertions ALL GREEN (18 checks)
+PASS A1 rows==35 actual=35 src=origin
+PASS A1b ceo_order_family_rows==18 actual=18 (机械令族计数·含通道引用行·CEO 直接令口径另注)
+PASS A2a ziteration_row n=1
+PASS A2a2 quote_verbatim_in_orders 
+PASS A2b 13seat_two_wave 
+PASS A2c 37_fixes 
+PASS A2d patrol_fleet_row 
+PASS A2d2 ten_domains 
+PASS A2d3 48scan_day 
+PASS A2e seven_layers 
+PASS A2e2 7min_chain 
+PASS A2f night_order 
+PASS A2f2 mv_top_priority 
+PASS A2f3 morning成品 
+PASS A4 face_has_35_and_day 
+PASS A4b face_numbers 
+PASS A4c face_quote_verbatim 
+PASS A5 window_bounds first_ts=10-14 10:3x last_ts=10-15 00:1x

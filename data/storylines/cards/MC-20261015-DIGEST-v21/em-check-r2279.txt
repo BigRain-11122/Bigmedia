@@ -1,0 +1,12 @@
+em-check-r2279 (DIGEST-v21 M2 front-fit, ladder even-steps, v20 format)
+h2_size=40 budget=23.00em
+OK   14.90em margin  +8.10  机制建设日（10-14·35 行令批）
+OK   13.00em margin +10.00  「你自己也要具备自我更新，
+OK   12.00em margin +11.00  迭代，整改，创新等能力」
+OK   17.40em margin  +5.60  主AGENT 十三席两波 · 37 修法零遗留
+OK   19.90em margin  +3.10  巡视舰队十域 · 48 扫/日 vs 枢纽 8 班/日
+OK   18.10em margin  +4.90  机制总图七层流水线 · 全链 7 分钟实测
+OK   18.70em margin  +4.30  全面开工夜令 · MV 最高优先 · 晨呈成品
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.00em < 24.21em budget OK
+ALL-HORIZ: PASS
