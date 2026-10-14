@@ -1,0 +1,80 @@
+== AIHOT window read (since 2026-10-13 10:12 -> until 2026-10-14 10:12, tz Asia/Shanghai) ==
+
+== A per-source ==
+{"source_id": "json-bilibili-knowledge", "scored": "1316", "max_score": "56.00", "ge60": "0", "ge55": "1", "selected_n": "0"}
+{"source_id": "json-bilibili-popular", "scored": "27", "max_score": "35.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-tech", "scored": "1060", "max_score": "52.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-zhihu-hot", "scored": "31", "max_score": "51.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-ars-technica-ai", "scored": "8", "max_score": "42.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-aws-ml", "scored": "8", "max_score": "26.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-github-ai", "scored": "2", "max_score": "25.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-google-deepmind", "scored": "1", "max_score": "61.00", "ge60": "1", "ge55": "1", "selected_n": "1"}
+{"source_id": "rss-hugging-face", "scored": "2", "max_score": "42.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-import-ai", "scored": "1", "max_score": "35.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-latent-space", "scored": "1", "max_score": "20.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-microsoft-research", "scored": "1", "max_score": "40.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-mit-tech-review-ai", "scored": "2", "max_score": "45.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-nvidia-blog", "scored": "3", "max_score": "73.00", "ge60": "1", "ge55": "1", "selected_n": "1"}
+{"source_id": "rss-openai-news", "scored": "1", "max_score": "22.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-simon-willison", "scored": "5", "max_score": "31.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-techcrunch-ai", "scored": "21", "max_score": "54.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-the-decoder", "scored": "16", "max_score": "56.00", "ge60": "0", "ge55": "1", "selected_n": "0"}
+{"source_id": "rss-the-verge-ai", "scored": "13", "max_score": "59.00", "ge60": "0", "ge55": "1", "selected_n": "0"}
+
+== B json-zhihu-hot top ==
+{"score": "51.00", "selected": "f", "title": "男生高考522分被调剂马术专业，成为在校本科生中唯一持证钉蹄师，前景如何？能带给选专业的学生哪些启发？"}
+{"score": "48.00", "selected": "f", "title": "一男子在悬空寺古建筑横梁做引体向上，警方已立案，涉事者将承担哪些责任？"}
+{"score": "47.00", "selected": "f", "title": "宋佳获飞天视后实现大满贯，王仁君获视帝，如何评价第 35 届飞天奖获奖名单？"}
+{"score": "47.00", "selected": "f", "title": "雷波县教师被安排与「耻辱」二字合影，近 50 天仍未公布调查结果，为啥迟迟不公布？调查的难点在哪儿？"}
+{"score": "46.00", "selected": "f", "title": "夫妻点一杯58元咖啡只能一人落座，市监局称「一人一座一消费」合理与否不能一刀切判定，如何理解此事？"}
+{"score": "46.00", "selected": "f", "title": "沙特利雅得机场再次遇袭造成1死11伤，胡塞武装称也门萨那国际机场也遭沙特袭击，双方冲突会持续升级吗？"}
+{"score": "44.00", "selected": "f", "title": "缅北魏家犯罪集团案一审宣判，魏怀仁、陈大卫、廖景芳被判死刑，哪些信息值得关注？"}
+{"score": "44.00", "selected": "f", "title": "老人凌晨下地干活被气枪击中身亡，持气枪打猎合法吗？案件还有哪些疑点待查？涉事人员将承担什么法律责任？"}
+{"score": "42.00", "selected": "f", "title": "2027国考笔试公告发布，共计划招录3.57万人，笔试11月29日举行，今年有哪些变化？"}
+{"score": "42.00", "selected": "f", "title": "刘国梁16岁女儿刘宇婕登顶高尔夫中国女子公开赛，成赛事创办以来首位业余冠军，哪些信息值得关注？"}
+{"score": "42.00", "selected": "f", "title": "曼城 3-0 送十人利物浦首败，哈兰德谢尔基破门，如何评价这场比赛？"}
+{"score": "41.00", "selected": "f", "title": "霸王茶姬称「买一送一」加盟商买单并不属实，怎么看待这一回应？这次活动成本到底是由谁承担？"}
+{"score": "37.00", "selected": "f", "title": "怎么看 Cloudflare 宣布 Deno 团队整体加入，原 Deno 运行时一年后停止开发？"}
+{"score": "37.00", "selected": "f", "title": "江淮汽车股价一度大涨近 9%，这一轮上涨是否预示市场情绪迎来反转？涨势能持续多久？"}
+{"score": "32.00", "selected": "f", "title": "73 岁林毅夫终成世界计量经济学会士，含金量如何？"}
+
+== C top15 any ==
+{"score": "73.00", "source_id": "rss-nvidia-blog", "title": "All Systems Go: Global PC App Ecosystem Ready for NVIDIA RTX Spark", "bad_utf8": false}
+{"score": "61.00", "source_id": "rss-google-deepmind", "title": "Gemini 4 Argon: Built to solve your hardest problems", "bad_utf8": false}
+{"score": "59.00", "source_id": "rss-the-verge-ai", "title": "Google finally releases Gemini 4 Argon", "bad_utf8": false}
+{"score": "56.00", "source_id": "json-bilibili-knowledge", "title": "# 没人再手写代码了：AI实验室内部观察", "bad_utf8": false}
+{"score": "56.00", "source_id": "rss-the-decoder", "title": "Anthropic study warns that small AI models could soon replicate across everyday devices", "bad_utf8": false}
+{"score": "54.00", "source_id": "rss-the-decoder", "title": "Gemini 4 Argon is now available worldwide as Google's most capable frontier model", "bad_utf8": false}
+{"score": "54.00", "source_id": "rss-techcrunch-ai", "title": "Pluto Security raises $42M as AI gives enterprise security teams a new headache", "bad_utf8": false}
+{"score": "54.00", "source_id": "rss-techcrunch-ai", "title": "Pluto Security raises $42M as AI gives enterprise security teams a new headache", "bad_utf8": false}
+{"score": "53.00", "source_id": "rss-the-decoder", "title": "406 scientists demand AI models be cut off from the internet immediately", "bad_utf8": false}
+{"score": "52.00", "source_id": "json-bilibili-tech", "title": "S408｜【美】海外律师圈流行199美元月费自建法律AI工具栈替代1500美元商业平台席位：大模型订阅叠加法条MCP接口 分层架构实测可覆盖合同审查文书起草 每", "bad_utf8": false}
+{"score": "51.00", "source_id": "json-bilibili-knowledge", "title": "1255元买、900元卖，中间的钱去哪了 | 黄金360° 第10集", "bad_utf8": false}
+{"score": "51.00", "source_id": "json-zhihu-hot", "title": "男生高考522分被调剂马术专业，成为在校本科生中唯一持证钉蹄师，前景如何？能带给选专业的学生哪些启发？", "bad_utf8": false}
+{"score": "51.00", "source_id": "rss-the-decoder", "title": "Anthropic's Andrej Karpathy says \"the external world has seen the preview\" of what AI can actually do", "bad_utf8": false}
+{"score": "51.00", "source_id": "json-bilibili-knowledge", "title": "传奇mora # 瑞典小村的一把刀，熬死了美国所有对手", "bad_utf8": false}
+{"score": "49.00", "source_id": "json-bilibili-knowledge", "title": "【AI日报】智能体逃逸沙箱入侵Hugging Face？OpenAI数学手稿震动学界｜2026.10.11", "bad_utf8": false}
+
+== D selected_ledger ==
+{"score": "61.00", "source_id": "rss-google-deepmind", "prompt_version": "prefilter@6fcc1559ff+selection-score@a41b9a736d+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-14 03:43:37.818231+08", "title": "Gemini 4 Argon: Built to solve your hardest problems"}
+{"score": "73.00", "source_id": "rss-nvidia-blog", "prompt_version": "prefilter@6fcc1559ff+selection-score@a41b9a736d+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-14 01:44:44.143026+08", "title": "All Systems Go: Global PC App Ecosystem Ready for NVIDIA RTX Spark"}
+
+== E json-zhihu-hot band ==
+{"s_band": "51", "count": "1"}
+{"s_band": "48", "count": "1"}
+{"s_band": "47", "count": "2"}
+{"s_band": "46", "count": "2"}
+{"s_band": "44", "count": "2"}
+{"s_band": "42", "count": "3"}
+{"s_band": "41", "count": "1"}
+{"s_band": "37", "count": "2"}
+{"s_band": "32", "count": "1"}
+{"s_band": "30", "count": "3"}
+{"s_band": "29", "count": "1"}
+{"s_band": "25", "count": "1"}
+{"s_band": "22", "count": "2"}
+{"s_band": "20", "count": "4"}
+{"s_band": "19", "count": "1"}
+{"s_band": "17", "count": "1"}
+{"s_band": "10", "count": "2"}
+{"s_band": "3", "count": "1"}
