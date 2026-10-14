@@ -1,0 +1,13 @@
+em-check-R2256 (REACT-v19 M2 front-fit + VERT R381)
+h2_size=28 budget=32.86em (ladder: 36/32 excluded by driver line 32.00em>25.56/28.75 -> 28 REACT 长热点标题档)
+H1=6.15em (h1 own face, h1_size=84, budget 10.95em margin +4.80) OK
+OK    15.55em margin +17.31  今日热点 · 知乎热榜 2026-10-14
+OK    16.10em margin +16.76  夫妻点一杯58元咖啡只能一人落座，
+OK    32.00em margin +0.86  市监局称「一人一座一消费」合理与否不能一刀切判定，如何理解此事？
+OK    24.00em margin +8.86  秩序轴：「别看这市场热闹，咱得守好规矩，才安稳」
+OK    13.00em margin +19.86  求新轴：「街角的咖啡还香」
+OK    20.00em margin +12.86  侠气轴：「阿姨劝大家，别为这点事儿争吵」
+OK    20.00em margin +12.86  选题官信条：「毙稿不毙人，选题选良心。」
+subs 23.55em < 24.21em budget OK
+ALL-HORIZ: P
+VERT: est bottom=647px subs_top=932px gap=285px (assert >=20) OK

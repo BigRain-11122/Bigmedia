@@ -1,0 +1,1 @@
+m1-assert-R2256: HOT1+HOT2==HOT_FULL P (brief zhihu #2 verbatim); market_close lines verbatim-by-index P (pools.json zhixu[4]/qiuxin[5]/xiaqi[5]); belief verbatim P (C-00023 非荣誉席·换锚注=C-00015 撞 REACT-v6 面 fleet 咬住); zero-conflict vs all card faces (fleet scan) P; driver=32.00em tier=28 margin=+0.86em; ALL P
