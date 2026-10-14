@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 02:58:22",
- "do": "tech#175 测试卫生修红落地（urllib 假模块双键复原+3 回归锁·1450 全回归绿 117s）；夜窗候 08:00 tech#92 锚例重判窗+REACT-v20 晨供+MV V3 08:43 死线守望",
+ "export_ts": "2026-10-15 03:06:47",
+ "do": "GB v1.4 refresh landed (d803d45b); next: 08:00 tech#92 window + MV V3 08:43 watch",
  "depts": [
   {
    "n": "工程技术部",
