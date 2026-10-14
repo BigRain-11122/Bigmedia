@@ -83,7 +83,7 @@ CEO_OFF_WORK_FLAG = REPO / "data" / "pipeline" / "ceo-off-work-flag.json"
 NOW_FN = datetime.datetime.now
 
 USAGE = ("usage: python src/os/fire_consume.py --launch "
-        "<staged-launch.py> [--ledger F] [--json]")
+        "<staged-launch.py> [--ledger F] [--json] [--cpu-lane]")
 
 LAUNCH_MARGIN_S = 2  # dispatch latency budget inside the TTL
 
@@ -110,6 +110,28 @@ ETA_PROMPT_TOKENS = 6000   # conservative S1/E4 material size
 ETA_OUTPUT_TOKENS = 900     # conservative verdict size
 ETA_STARVED_S = 1200       # P-7: conservative initial starve line
 OLLAMA_GENERATE_URL = "http://localhost:11434/api/generate"
+
+# tech#169 (CPU lane): O-20260913-2215 CEO standing order opens the
+# fleet CPU face 24/7 and explicitly repeals the workday zero-dispatch
+# rule's CPU portion ("工作日工作时间零排单"的 CPU 部分就此废止) --
+# new-order-overrides law (tech#137). The GPU 让路律 survives
+# untouched: a CPU-lane flight never touches the GPU (num_gpu=0
+# asserted inside the generated CPU-variant launcher), and the CEO 10%
+# CPU margin law survives as num_thread=4 (enforced both in the probe
+# below and in the launcher variant). The GPU card is not run on this
+# lane -- its VRAM/util/load-class readings gate a load class the
+# CPU-pinned flight never consumes (the R2251 structural backlog:
+# F-181..185 E4 legs parked behind a GPU gate while the legal CPU
+# lane sat idle). The lane verdict comes from ONE CPU-pinned
+# micro-generation: rate -> ETA -> the same single-direction
+# throughput demotion (tech#135 discipline preserved).
+CPU_LANE_THREADS = 4
+CPU_PROBE_CAP_S = 180     # cold-load margin; rate math excludes load
+CPU_LANE_NAME_MARK = "_cpu"  # mis-wiring guard: --cpu-lane launches
+#                           # only CPU-variant launchers (e.g.
+#                           # e4_call_cpu.py). A GPU launcher on the
+#                           # CPU lane would fly OUTSIDE every gate --
+#                           # the guard makes that wiring error loud.
 
 
 class CardError(Exception):
@@ -235,9 +257,14 @@ def compute_rate(body):
 
 
 def real_throughput_probe(model=PROBE_MODEL_DEFAULT,
-                          cap_s=PROBE_CAP_S):
+                          cap_s=PROBE_CAP_S, cpu_lane=False):
     """Network seam (injected in tests; never called on no-fire
     paths): one small non-streaming ollama generation -> probe row.
+
+    cpu_lane=True (tech#169) pins the probe to the CPU lane
+    (options num_gpu=0 + num_thread=4): the probe then measures the
+    lane the flight will actually fly, and its success IS the
+    zero-GPU-touch assertion in flight.
 
     verdict: ok (rate+eta computed) / timeout (cap exceeded -- the
     starved hard case: PROBE_TOKENS did not finish inside cap_s, so
@@ -248,9 +275,13 @@ def real_throughput_probe(model=PROBE_MODEL_DEFAULT,
     ollama directly and NEVER writes expert-calls rows (same
     discipline as the tech#120 wedge probe: probes never pollute
     call accounting)."""
+    options = {"num_predict": PROBE_TOKENS}
+    if cpu_lane:
+        options["num_gpu"] = 0
+        options["num_thread"] = CPU_LANE_THREADS
     payload = json.dumps({
         "model": model, "prompt": PROBE_PROMPT, "stream": False,
-        "options": {"num_predict": PROBE_TOKENS},
+        "options": options,
     }).encode("utf-8")
     request = urllib.request.Request(
         OLLAMA_GENERATE_URL, data=payload,
@@ -361,6 +392,13 @@ def main(argv=None):
                         help="verdict-ETA starve line in seconds "
                              "(default %(default)s -- P-7 "
                              "conservative initial value)")
+    parser.add_argument("--cpu-lane", action="store_true",
+                        help="tech#169 CPU lane: skip the GPU card and "
+                             "the workday block (O-20260913-2215 CPU-"
+                             "face repeal); gate on one CPU-pinned "
+                             "(num_gpu=0/num_thread=4) throughput probe; "
+                             "launch must be a CPU-variant launcher "
+                             "(name contains '%s')" % CPU_LANE_NAME_MARK)
     args = parser.parse_args(argv)
 
     launch = Path(args.launch)
@@ -369,6 +407,55 @@ def main(argv=None):
         return 2
 
     now_dt = NOW_FN()
+
+    if args.cpu_lane:
+        # tech#169 CPU lane: the workday zero-dispatch block is NOT
+        # applied here -- O-20260913-2215 explicitly repealed the
+        # rule's CPU portion (CPU face 24/7), and the GPU card is not
+        # run (its VRAM/util/load-class readings gate a load class a
+        # CPU-pinned flight never consumes). The lane verdict comes
+        # from one CPU-pinned throughput probe; demotion is
+        # single-direction (starved/timeout/error -> no-fire rc1).
+        if CPU_LANE_NAME_MARK not in launch.name:
+            print("USAGE: --cpu-lane requires a CPU-variant launcher "
+                  "(name contains '%s') -- a GPU launcher on the CPU "
+                  "lane would fly outside every gate"
+                  % CPU_LANE_NAME_MARK)
+            return 2
+        probe_row = real_throughput_probe(
+            args.probe_model, cap_s=CPU_PROBE_CAP_S, cpu_lane=True)
+        ok, probe_reason = classify_throughput(
+            probe_row, args.eta_starved_s)
+        action, reason, rc = "no-fire", probe_reason, 1
+        launch_pid = None
+        if ok:
+            try:
+                launch_pid = real_launch(launch)
+                action, reason, rc = "launch", "cpu-lane-fire-fresh", 0
+            except OSError as exc:
+                action, reason, rc = ("error", "launch-failed: %s"
+                                      % exc, 2)
+        result = {
+            "tool": "fire_consume",
+            "lane": "cpu",
+            "ts": datetime.datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"),
+            "action": action,
+            "reason": reason,
+            "launched": action == "launch",
+            "launch_script": str(launch),
+            "launch_pid": launch_pid,
+            "rc": rc,
+        }
+        result["throughput_probe"] = probe_row
+        if args.ledger:
+            append_ledger_row(args.ledger, result)
+        print(json.dumps(result, ensure_ascii=False) if args.json else
+              "fire-consume: lane=cpu action=%s launched=%s reason=%s%s"
+              % (action, result["launched"], reason,
+                 " pid=%s" % launch_pid if launch_pid else ""))
+        return rc
+
     if workday_dispatch_blocked(now_dt,
                                 read_ceo_off_work_flag()):
         # bm-a workday-hours zero-dispatch (CEO order 2026-10-12):

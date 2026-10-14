@@ -367,5 +367,67 @@ class PreflightBehaviorTests(unittest.TestCase):
             os.path.join(self.tmp, 'e4-result.json')))
 
 
+class CpuLaneRenderTests(unittest.TestCase):
+    """tech#169: --cpu-lane renders the CPU variant -- API flight with
+    the zero-GPU-touch assertion (num_gpu=0) + CEO 10% margin
+    (num_thread=4), no GPU preflight -- while the GPU template stays
+    byte-shaped as before (no CPU markers leak into it)."""
+
+    def _render(self, cpu_lane):
+        return gen.render_launcher(u'body text', u'label-x',
+                                   u'qwen2.5:14b', 1500, cpu_lane=cpu_lane)
+
+    def test_cpu_variant_carries_cpu_assertions(self):
+        src = self._render(True)
+        self.assertIn("num_gpu': 0", src)      # zero-GPU-touch assertion
+        self.assertIn('CPU_THREADS = 4', src)  # 10% margin law constant
+        self.assertIn("num_thread': CPU_THREADS", src)
+        self.assertIn('api/generate', src)     # API face (CLI has no
+                                               # num_gpu flag, tech#164)
+        self.assertIn('CPU LANE', src)
+        self.assertIn("LANE = 'cpu'", src)  # result auditability
+
+    def test_cpu_variant_has_no_gpu_faces(self):
+        src = self._render(True)
+        self.assertNotIn('nvidia-smi', src)            # never touches GPU
+        self.assertNotIn('preflight(', src)           # no GPU preflight
+        self.assertNotIn("['ollama', 'stop']", src)   # no relief face
+        self.assertNotIn('UTIL_FLIP', src)
+
+    def test_gpu_render_regression_no_cpu_markers(self):
+        src = self._render(False)
+        self.assertNotIn('num_gpu', src)
+        self.assertNotIn('num_thread', src)
+        self.assertNotIn('CPU LANE', src)
+        self.assertIn('preflight(', src)   # GPU three-piece intact
+        self.assertIn('nvidia-smi', src)
+
+    def test_no_placeholder_leftovers_either_lane(self):
+        for cpu_lane in (True, False):
+            src = self._render(cpu_lane)
+            for marker in ('__LABEL__', '__MODEL__', '__TIMEOUT__',
+                           '__LABEL_REPR__', '__PROMPT_REPR__',
+                           '__THREADS__'):
+                self.assertNotIn(marker, src,
+                                  'lane=%s leaked %s' % (cpu_lane, marker))
+
+    def test_cpu_variant_compiles(self):
+        compile(self._render(True), 'e4_call_cpu.py', 'exec')
+
+    def test_cli_cpu_lane_flag_writes_cpu_variant(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            body = os.path.join(tmp, 'e4-body.txt')
+            with io.open(body, 'w', encoding='utf-8') as fh:
+                fh.write(u'卡面内容叙述。')
+            out = os.path.join(tmp, 'e4_call_cpu.py')
+            proc = _run_cli('--body', body, '--label', 'L1',
+                            '--out', out, '--cpu-lane')
+            self.assertEqual(proc.returncode, 0, proc.stdout)
+            with io.open(out, encoding='utf-8') as fh:
+                src = fh.read()
+            self.assertIn("num_gpu': 0", src)
+            self.assertIn('CPU LANE', src)
+
+
 if __name__ == '__main__':
     unittest.main()

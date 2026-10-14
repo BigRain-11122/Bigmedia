@@ -505,5 +505,181 @@ class StagedLauncherContractTests(unittest.TestCase):
             self.LAUNCHER.resolve().parents[4].name, "BigStream")
 
 
+class _FakeHttpResp:
+    def __init__(self, body):
+        self._body = body
+
+    def read(self):
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class CpuLaneTests(unittest.TestCase):
+    """tech#169: --cpu-lane path. The workday zero-dispatch block is
+    NOT applied on this lane (O-20260913-2215 explicitly repealed the
+    rule's CPU portion -- CPU face 24/7, new-order-overrides tech#137),
+    the GPU card never runs, the gate is one CPU-pinned throughput
+    probe, and a GPU-wired launcher is refused loudly (a GPU launcher
+    on the CPU lane would fly outside every gate)."""
+
+    def setUp(self):
+        self._real_card = consumer.real_run_card
+        self._real_launch = consumer.real_launch
+        self._real_append = consumer.append_ledger_row
+        self._real_now_fn = consumer.NOW_FN
+        self._real_flag_reader = consumer.read_ceo_off_work_flag
+        self._real_probe = consumer.real_throughput_probe
+        consumer.NOW_FN = lambda: SUNDAY_NOON
+        consumer.read_ceo_off_work_flag = lambda path=None: None
+        self.probe_calls = []
+
+        def _probe(model=None, cap_s=None, cpu_lane=False):
+            self.probe_calls.append(
+                {"model": model, "cap_s": cap_s, "cpu_lane": cpu_lane})
+            return self.probe_row()
+
+        consumer.real_throughput_probe = _probe
+        self.tmp = tempfile.TemporaryDirectory()
+        self.launch_cpu = Path(self.tmp.name) / "e4_call_cpu.py"
+        self.launch_cpu.write_text("print('x')\n", encoding="utf-8")
+        self.launch_gpu = Path(self.tmp.name) / "staged.py"
+        self.launch_gpu.write_text("print('x')\n", encoding="utf-8")
+        self.ledger = Path(self.tmp.name) / "ledger.jsonl"
+        self.rows = []
+        consumer.append_ledger_row = \
+            lambda path, row: self.rows.append(row)
+        self.launched = []
+        consumer.real_launch = \
+            lambda p: (self.launched.append(str(p)) or 4242)
+
+    @staticmethod
+    def probe_row():
+        return {"verdict": "ok", "model": "qwen2.5:14b",
+                "rate_tps": 8.5, "eta_s": 812, "cap_s": 180}
+
+    def tearDown(self):
+        consumer.real_run_card = self._real_card
+        consumer.real_launch = self._real_launch
+        consumer.append_ledger_row = self._real_append
+        consumer.NOW_FN = self._real_now_fn
+        consumer.read_ceo_off_work_flag = self._real_flag_reader
+        consumer.real_throughput_probe = self._real_probe
+        self.tmp.cleanup()
+
+    def _run(self, launch, extra=None):
+        argv = ["--launch", str(launch), "--cpu-lane",
+                "--ledger", str(self.ledger)] + (extra or [])
+        return consumer.main(argv)
+
+    def test_workday_block_bypassed_card_never_runs(self):
+        # O-20260913-2215: weekday noon would hard-block the GPU path;
+        # the CPU lane must proceed to the probe and dispatch.
+        consumer.NOW_FN = lambda: MONDAY_NOON
+
+        def must_not_run():
+            raise AssertionError("GPU card must not run on the CPU lane")
+        consumer.real_run_card = must_not_run
+        rc = self._run(self.launch_cpu)
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(self.launched), 1)
+        self.assertEqual(self.rows[0]["lane"], "cpu")
+        self.assertEqual(self.rows[0]["action"], "launch")
+        self.assertTrue(self.rows[0]["launched"])
+
+    def test_miswired_gpu_launcher_refused_rc2(self):
+        rc = self._run(self.launch_gpu)
+        self.assertEqual(rc, 2)
+        self.assertEqual(self.probe_calls, [])  # refused before probing
+        self.assertEqual(self.launched, [])
+        self.assertEqual(self.rows, [])
+
+    def test_starved_probe_demotes_to_no_fire_rc1(self):
+        self.probe_row = staticmethod(lambda: {
+            "verdict": "ok", "model": "qwen2.5:14b",
+            "rate_tps": 2.0, "eta_s": 3450, "cap_s": 180})
+        rc = self._run(self.launch_cpu)
+        self.assertEqual(rc, 1)
+        self.assertEqual(self.launched, [])
+        self.assertFalse(self.rows[0]["launched"])
+        self.assertIn("throughput-starved", self.rows[0]["reason"])
+
+    def test_probe_error_fail_closed_no_fire_rc1(self):
+        self.probe_row = staticmethod(lambda: {
+            "verdict": "error", "model": "qwen2.5:14b",
+            "cap_s": 180, "error": "HTTP 404 model not found"})
+        rc = self._run(self.launch_cpu)
+        self.assertEqual(rc, 1)
+        self.assertEqual(self.launched, [])
+        self.assertIn("throughput-probe-error", self.rows[0]["reason"])
+
+    def test_probe_is_pinned_to_cpu_lane(self):
+        rc = self._run(self.launch_cpu)
+        self.assertEqual(rc, 0)
+        self.assertEqual(len(self.probe_calls), 1)
+        self.assertTrue(self.probe_calls[0]["cpu_lane"])
+        self.assertEqual(self.probe_calls[0]["cap_s"],
+                         consumer.CPU_PROBE_CAP_S)
+
+    def test_real_probe_cpu_payload_carries_zero_gpu_options(self):
+        # the zero-GPU-touch assertion lives in the probe payload:
+        # options num_gpu=0 + num_thread=4 (CEO 10% margin law).
+        captured = {}
+
+        def _fake_urlopen(request, timeout=None):
+            captured["data"] = json.loads(
+                request.data.decode("utf-8"))
+            captured["timeout"] = timeout
+            return _FakeHttpResp(json.dumps({
+                "prompt_eval_count": 48, "eval_count": 96,
+                "prompt_eval_duration": 4_000_000_000,
+                "eval_duration": 8_000_000_000,
+            }).encode("utf-8"))
+
+        orig_urlopen = consumer.urllib.request.urlopen
+        consumer.urllib.request.urlopen = _fake_urlopen
+        try:
+            # mirror main()'s call form: the CPU cap override is
+            # call-site-explicit (cap_s=CPU_PROBE_CAP_S, cpu_lane=True)
+            row = self._real_probe(cap_s=consumer.CPU_PROBE_CAP_S,
+                                   cpu_lane=True)
+        finally:
+            consumer.urllib.request.urlopen = orig_urlopen
+        self.assertEqual(row["verdict"], "ok")
+        self.assertEqual(captured["data"]["options"]["num_gpu"], 0)
+        self.assertEqual(captured["data"]["options"]["num_thread"],
+                         consumer.CPU_LANE_THREADS)
+        self.assertEqual(captured["timeout"],
+                         consumer.CPU_PROBE_CAP_S)
+
+    def test_real_probe_gpu_payload_has_no_cpu_options(self):
+        # regression lock: the GPU-path probe payload must not gain
+        # the CPU pinning options (that lane measures what it flies).
+        captured = {}
+
+        def _fake_urlopen(request, timeout=None):
+            captured["data"] = json.loads(
+                request.data.decode("utf-8"))
+            return _FakeHttpResp(json.dumps({
+                "prompt_eval_count": 48, "eval_count": 96,
+                "prompt_eval_duration": 4_000_000_000,
+                "eval_duration": 8_000_000_000,
+            }).encode("utf-8"))
+
+        orig_urlopen = consumer.urllib.request.urlopen
+        consumer.urllib.request.urlopen = _fake_urlopen
+        try:
+            row = self._real_probe()
+        finally:
+            consumer.urllib.request.urlopen = orig_urlopen
+        self.assertEqual(row["verdict"], "ok")
+        self.assertNotIn("num_gpu", captured["data"]["options"])
+        self.assertNotIn("num_thread", captured["data"]["options"])
+
+
 if __name__ == "__main__":
     unittest.main()
