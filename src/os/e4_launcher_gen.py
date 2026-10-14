@@ -3,6 +3,21 @@
 """E4 card-line launcher generator (tech#113): turn a hand-written
 prompt body into a turnkey e4_call.py in ONE command.
 
+tech#172 family unification: the --expert face (--expert <seat-id>
+--material <repo-relative path>) renders the registry-seat launcher
+(the R2257 hand-written s1_call_cpu.py lineage) from this same file:
+seat model + prompt file + role/dept are read from
+data/experts/registry.json AT FLIGHT TIME (never hardcoded, s1_call
+doctrine), prompt assembly = call_expert.build_prompt parity
+(===== 材料 ===== block, material verbatim), CPU-lane only (the
+adopted tech#169 dispatch design; the GPU S1 sibling s1_call.py stays
+hand-written per R2257). The landed F-180 s1_call_cpu.py stays
+untouched (tech#81 self-containment: in-flight artifacts are not
+retrofitted). The auto-ledger machinery (tech#173) is ONE block
+shared by all three rendered faces, parametrized on seat identity --
+the generator family exists to end hand-copy drift, so its own shared
+blocks must not fork per face (E4 GPU / E4 CPU / registry seat).
+
 Why: ~140 hand-copied e4_call.py launchers sit across storylines tmp
 dirs (sc001-* audio era + every MC-* card since); the recent card line
 alone is v16 (R1536 prototype) -> v17 (R1938) -> v18 (R2001), one
@@ -29,7 +44,10 @@ rc contract (consumers gate on rc):
   0 = launcher written
   2 = usage error (missing/empty body file, body already carries the
      question block, missing/empty --label, bad --timeout, --out is an
-     existing directory, unreadable --questions-file)
+     existing directory, unreadable --questions-file; tech#172 expert
+     face: unknown --expert id, registry seat without prompt_file,
+     missing --material file, --expert mixed with --body/--label/
+     --questions-file, one of --expert/--material without the other)
 
 The GENERATED launcher's own exit codes (tech#122/123 preflight port):
   0 = E4 verdict written to e4-result.json (including TIMEOUT verdicts)
@@ -46,6 +64,7 @@ from __future__ import unicode_literals
 
 import argparse
 import io
+import json
 import os
 import sys
 
@@ -66,12 +85,18 @@ QUESTION_MARKER = u'请回答三个问题'
 # landed with a zero-row ledger and the read-back round backfilled by
 # hand = daily drift face, R2258 anchor). Best effort by the
 # call_expert contract: a ledger write failure WARNs, it never changes
-# the verdict or the rc. Shared verbatim by both lane templates.
+# the verdict or the rc. Shared verbatim by ALL THREE rendered faces
+# (E4 GPU / E4 CPU / registry seat, tech#172) -- seat identity is
+# injected via __EXPERT_ID__ (repr'd literal) and __ROLE_DEPT_EXPR__
+# (repr'd literal for the E4 faces; the registry-seat face passes the
+# flight-time variable name `role_dept` so the dept text stays
+# registry-owned). The block must never fork per face -- a per-face
+# fork is the drift this generator family exists to end, one level up.
 AUTO_LEDGER_BLOCK = r'''
 # tech#173 auto-ledger: verdict self-logs its expert-calls row +
 # archive (best effort; a write failure WARNs, verdict/rc untouched).
-EXPERT_ID = 'E4-audience'
-ROLE_DEPT = 'E4 直觉观众参考仪（评审参考席（非部门编制））'
+EXPERT_ID = __EXPERT_ID__
+ROLE_DEPT = __ROLE_DEPT_EXPR__
 
 def _repo_root():
     d = HERE
@@ -117,6 +142,13 @@ def _auto_ledger(verdict, material, model):
 
 _auto_ledger(result['verdict'], MATERIAL, MODEL)
 '''
+
+# E4 seat identity for the two card faces (the registry-seat face
+# gets its identity from the CLI --expert id, resolved to registry
+# role/dept AT FLIGHT TIME). These two constants are what keeps the
+# rendered E4 output byte-identical to the pre-tech#172 literals.
+E4_EXPERT_ID = 'E4-audience'
+E4_ROLE_DEPT = u'E4 直觉观众参考仪（评审参考席（非部门编制））'
 
 # Machinery template = verbatim v17/v18 lineage (R1536/R1938/R2001).
 # Raw string keeps the strip-regex literals byte-identical.
@@ -308,6 +340,134 @@ print('DONE' if not result['verdict'].startswith('TIMEOUT') else 'TIMEOUT')
 '''
 
 
+# tech#172 registry-seat template: the --expert face renders the
+# R2257 hand-written s1_call_cpu.py lineage as a generated artifact.
+# Differences vs the E4 card faces are exactly the two the family
+# charter names -- the BODY (prompt comes from the registry prompt
+# file, not a hand body) and the MATERIAL position (verbatim material
+# under the 材料块) -- everything else is family law: CPU lane
+# (O-20260913-2215 24/7 + CEO 10% margin num_thread=4 + zero GPU
+# touch num_gpu=0, the assertion IS the flight), liveness /api/tags 2s
+# probe (rc 3 -- never burn the cap on a corpse), transport error
+# rc 3, TIMEOUT verdict rc 0, tech#173 auto-ledger. Seat model +
+# prompt file + role/dept are read from data/experts/registry.json AT
+# FLIGHT TIME (never hardcoded, s1_call doctrine R2257); the repo root
+# is walked from HERE (.git probe), so the launcher is
+# position-independent (better than the hand-written parents[4] pin).
+# Registry-seat face is CPU-LANE ONLY by adopted design (tech#169):
+# the GPU S1 sibling s1_call.py stays hand-written per R2257.
+EXPERT_TEMPLATE = r'''# -*- coding: utf-8 -*-
+# __EXPERT__ seat call (CPU LANE) - __MATERIAL__
+# GENERATED by src/os/e4_launcher_gen.py --expert (tech#172 registry-
+# seat face) -- do not hand-edit; regenerate instead. Family law: seat
+# model + prompt file + role/dept read from data/experts/registry.json
+# AT FLIGHT TIME (never hardcoded); prompt assembly =
+# call_expert.build_prompt parity (材料块, material verbatim). CPU
+# lane laws: O-20260913-2215 CPU face 24/7 + CEO 10% CPU margin
+# (num_thread=__THREADS__) + zero GPU touch (num_gpu=0 -- the
+# assertion IS the flight). Liveness = /api/tags 2s probe (dead
+# server -> rc 3, never burn the cap on a corpse). No GPU preflight:
+# the fire_consume.py --cpu-lane gate is this launcher's preflight.
+# tech#173 auto-ledger: the verdict self-logs its expert-calls row +
+# archive at landing time.
+# rc: 0 = result json written (incl TIMEOUT/EMPTY verdicts) | 3 =
+# liveness/transport/input error, NO result file (re-dispatch next
+# window).
+import io, json, os, time, urllib.request
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+EXPERT_ID = __EXPERT_ID__
+MATERIAL_REL = __MATERIAL_REPR__
+RESULT_NAME = __RESULT_REPR__
+TIMEOUT = __TIMEOUT__
+LANE = 'cpu'
+CPU_THREADS = __THREADS__      # CEO 10% CPU margin law (O-20260913-2215)
+TAGS_URL = 'http://localhost:11434/api/tags'
+GENERATE_URL = 'http://localhost:11434/api/generate'
+
+
+def _repo_root():
+    d = HERE
+    while d and d != os.path.dirname(d):
+        if os.path.isdir(os.path.join(d, '.git')):
+            return d
+        d = os.path.dirname(d)
+    return None
+
+
+ROOT = _repo_root()
+if ROOT is None:
+    print('FAIL no repo root above %s' % HERE, flush=True)
+    raise SystemExit(3)
+
+# ---------- liveness (2s cap; dead server never burns the window) ----------
+try:
+    urllib.request.urlopen(TAGS_URL, timeout=2).read()
+except Exception as exc:
+    print('LIVENESS-FAIL %s' % exc, flush=True)
+    raise SystemExit(3)
+
+# ---------- seat + prompt from registry (never hardcoded) ----------
+reg = json.loads(io.open(os.path.join(ROOT, 'data', 'experts',
+                                      'registry.json'),
+                         encoding='utf-8-sig').read())
+seat = str(reg.get('model', '')) or 'qwen2.5:14b'
+prompt_file = None
+role_dept = EXPERT_ID
+entries = reg.get('experts') or reg.get('roster') or []
+for e in entries:
+    if str(e.get('id', '')) == EXPERT_ID:
+        if e.get('model'):
+            seat = str(e['model'])
+        prompt_file = str(e.get('prompt_file') or '') or None
+        role_dept = '%s（%s）' % (e.get('role', EXPERT_ID),
+                                  e.get('dept', ''))
+        break
+if not prompt_file:
+    print('FAIL registry seat %s has no prompt_file' % EXPERT_ID,
+          flush=True)
+    raise SystemExit(3)
+prompt_path = os.path.join(ROOT, prompt_file)
+material_path = os.path.join(ROOT, MATERIAL_REL)
+if not (os.path.isfile(prompt_path) and os.path.isfile(material_path)):
+    print('FAIL input missing: prompt=%s material=%s'
+          % (prompt_path, material_path), flush=True)
+    raise SystemExit(3)
+
+prompt_text = io.open(prompt_path, encoding='utf-8-sig').read()
+material_text = io.open(material_path, encoding='utf-8-sig').read()
+# call_expert.build_prompt parity: prompt + 材料块, material verbatim
+prompt = (prompt_text.rstrip() + '\n\n===== 材料 =====\n' +
+          material_text.strip() + '\n')
+
+result = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'model': seat,
+          'material': MATERIAL_REL, 'lane': LANE, 'expert': EXPERT_ID}
+payload = json.dumps({'model': seat, 'prompt': prompt, 'stream': False,
+                      'options': {'num_gpu': 0,
+                                  'num_thread': CPU_THREADS}}).encode('utf-8')
+request = urllib.request.Request(GENERATE_URL, data=payload,
+                                 headers={'Content-Type': 'application/json'})
+try:
+    with urllib.request.urlopen(request, timeout=TIMEOUT) as resp:
+        body = json.loads(resp.read().decode('utf-8', 'replace'))
+    result['verdict'] = (body.get('response') or '').strip() or \
+        'EMPTY-RESPONSE'
+except Exception as exc:
+    text = '%s: %s' % (type(exc).__name__, exc)
+    if 'timed out' in text.lower() or 'timeout' in text.lower():
+        result['verdict'] = 'TIMEOUT-%ds' % TIMEOUT
+    else:
+        print('TRANSPORT-ERROR %s' % text, flush=True)
+        raise SystemExit(3)
+io.open(os.path.join(HERE, RESULT_NAME), 'w', encoding='utf-8').write(
+    json.dumps(result, ensure_ascii=False, indent=2))
+MATERIAL = MATERIAL_REL
+MODEL = seat
+__AUTO_LEDGER_BLOCK__
+print('DONE' if not result['verdict'].startswith('TIMEOUT') else 'TIMEOUT')
+'''
+
+
 class UsageError(Exception):
     """Loud usage error before any file is written (rc 2)."""
 
@@ -332,7 +492,8 @@ def render_launcher(prompt, label, model, timeout, cpu_lane=False,
     cpu_lane=True renders the tech#169 CPU variant (API flight with
     num_gpu=0/num_thread=4, no GPU preflight); both lane templates
     carry the tech#173 auto-ledger block (self-logging expert-calls
-    row + verdict archive at landing time)."""
+    row + verdict archive at landing time) with the E4 seat identity
+    (tech#172 parametrization keeps the E4 output byte-identical)."""
     src = CPU_TEMPLATE if cpu_lane else TEMPLATE
     src = src.replace('__LABEL__', label.replace('\\', '\\\\'))
     src = src.replace('__MODEL__', repr(model))
@@ -341,6 +502,34 @@ def render_launcher(prompt, label, model, timeout, cpu_lane=False,
     src = src.replace('__PROMPT_REPR__', repr(prompt))
     src = src.replace('__THREADS__', str(int(cpu_threads)))
     src = src.replace('__AUTO_LEDGER_BLOCK__', AUTO_LEDGER_BLOCK)
+    src = src.replace('__EXPERT_ID__', repr(E4_EXPERT_ID))
+    src = src.replace('__ROLE_DEPT_EXPR__', repr(E4_ROLE_DEPT))
+    return src
+
+
+def render_expert_launcher(expert_id, material_rel, result_name, timeout,
+                           cpu_threads=4):
+    """Pure: turnkey registry-seat launcher source (UTF-8 str).
+
+    tech#172 expert face: the R2257 hand-written s1_call_cpu.py
+    lineage as a generated artifact. Seat identity is baked as the
+    expert id; the seat model, prompt file, and role/dept text stay
+    registry-owned (read at flight time -- `role_dept` is the
+    variable the shared auto-ledger block references, so the ledger
+    row's dept column tracks the registry, not this file)."""
+    src = EXPERT_TEMPLATE
+    src = src.replace('__EXPERT__', expert_id.replace('\\', '\\\\'))
+    src = src.replace('__MATERIAL__', material_rel.replace('\\', '\\\\'))
+    src = src.replace('__MATERIAL_REPR__', repr(material_rel))
+    src = src.replace('__RESULT_REPR__', repr(result_name))
+    src = src.replace('__TIMEOUT__', str(int(timeout)))
+    src = src.replace('__THREADS__', str(int(cpu_threads)))
+    src = src.replace('__AUTO_LEDGER_BLOCK__', AUTO_LEDGER_BLOCK)
+    # seat-identity placeholders live INSIDE the block too -- both
+    # replaces must run AFTER the block insertion (one global pass
+    # covers the template constant line and the block's copy).
+    src = src.replace('__EXPERT_ID__', repr(expert_id))
+    src = src.replace('__ROLE_DEPT_EXPR__', 'role_dept')
     return src
 
 
@@ -349,53 +538,166 @@ def _read_text(path):
         return fh.read()
 
 
+def _repo_root():
+    """Repo root walked up from THIS file (.git probe)."""
+    d = os.path.dirname(os.path.abspath(__file__))
+    while d and d != os.path.dirname(d):
+        if os.path.isdir(os.path.join(d, '.git')):
+            return d
+        d = os.path.dirname(d)
+    return None
+
+
+def _find_registry_seat(root, expert_id):
+    """(seat dict or None, known id list) from the registry (pure read).
+
+    Generation-time typo guard: the generated launcher re-reads the
+    registry at flight time anyway (never hardcoded), so this check
+    only catches unknown ids / empty prompt_file EARLY, before a
+    staged fire card can die at flight time on a typo.
+    """
+    path = os.path.join(root, 'data', 'experts', 'registry.json')
+    try:
+        data = json.loads(io.open(path, encoding='utf-8-sig').read())
+    except (OSError, ValueError) as exc:
+        raise UsageError('registry unreadable: %s (%s)' % (path, exc))
+    entries = data.get('experts') or data.get('roster') or []
+    known = [str(e.get('id', '')) for e in entries]
+    for e in entries:
+        if str(e.get('id', '')) == expert_id:
+            return e, known
+    return None, known
+
+
+def _validate_timeout(value):
+    if value is None or int(value) <= 0:
+        raise UsageError('--timeout must be a positive integer')
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(
-        description='Generate a turnkey E4 card launcher (e4_call.py) '
-                    'from a hand-written prompt body (tech#113).')
-    ap.add_argument('--body', required=True,
-                    help='hand-written prompt body file (role + card lines + '
-                         'background; WITHOUT the question block)')
-    ap.add_argument('--label', required=True,
-                    help='material label for the result JSON + launcher header')
+        description='Launcher generator family (tech#113/#169/#172): '
+                    'E4 card face (--body + --label -> e4_call.py / '
+                    'e4_call_cpu.py) or registry-seat face (--expert + '
+                    '--material -> <id>_call_cpu.py, the s1_call_cpu '
+                    'lineage).')
+    ap.add_argument('--body',
+                    help='E4 card face: hand-written prompt body file '
+                         '(role + card lines + background; WITHOUT the '
+                         'question block)')
+    ap.add_argument('--label',
+                    help='E4 card face: material label for the result '
+                         'JSON + launcher header')
     ap.add_argument('--out',
-                    help='launcher output path (default: <body dir>/e4_call.py)')
+                    help='launcher output path (E4 default: <body dir>'
+                         '/e4_call.py; expert default: <material dir>'
+                         '/<id-lower>_call_cpu.py)')
     ap.add_argument('--model', default='qwen2.5:14b')
     ap.add_argument('--timeout', type=int, default=1500)
     ap.add_argument('--questions-file',
                     help='override the canonical question block (whole file '
                          'verbatim; e.g. seat-form adaptation)')
     ap.add_argument('--cpu-lane', action='store_true',
-                    help='render the tech#169 CPU-lane variant (API flight '
-                         'with num_gpu=0/num_thread=4, no GPU preflight; '
-                         'dispatch via fire_consume.py --cpu-lane)')
+                    help='E4 card face: render the tech#169 CPU-lane '
+                         'variant (API flight with num_gpu=0/'
+                         'num_thread=4, no GPU preflight; dispatch via '
+                         'fire_consume.py --cpu-lane)')
+    ap.add_argument('--expert',
+                    help='registry-seat face (tech#172): registry seat id '
+                         '(e.g. S1-script); renders the CPU-lane '
+                         'registry-seat launcher (seat/prompt/role are '
+                         'read from data/experts/registry.json at FLIGHT '
+                         'time)')
+    ap.add_argument('--material',
+                    help='registry-seat face: material file path '
+                         '(repo-relative in production; assembled '
+                         'verbatim under the 材料块)')
+    ap.add_argument('--result-name',
+                    help='registry-seat face: result json file name '
+                         '(default: <id-lower>-cpu-result.json)')
     args = ap.parse_args(argv)
 
     try:
-        if not os.path.isfile(args.body):
-            raise UsageError('body file not found: ' + args.body)
-        body = _read_text(args.body)
-        if not body.strip():
-            raise UsageError('body file is empty: ' + args.body)
-        if not args.label.strip():
-            raise UsageError('--label must be non-empty')
-        if args.timeout <= 0:
-            raise UsageError('--timeout must be a positive integer')
-        if args.questions_file:
-            if not os.path.isfile(args.questions_file):
-                raise UsageError('questions file not found: ' + args.questions_file)
-            questions = _read_text(args.questions_file)
-            if not questions.strip():
-                raise UsageError('questions file is empty: ' + args.questions_file)
+        _validate_timeout(args.timeout)
+        if args.expert or args.material:
+            # ---------- registry-seat face (tech#172) ----------
+            if args.body:
+                raise UsageError('--expert face and --body face are '
+                                 'exclusive (the registry owns the prompt; '
+                                 'a body belongs to the E4 card face)')
+            if args.label:
+                raise UsageError('--expert face does not take --label '
+                                 '(the ledger material column is the '
+                                 'material path)')
+            if args.questions_file:
+                raise UsageError('--expert face does not take '
+                                 '--questions-file (the registry '
+                                 'prompt_file is the prompt)')
+            if not (args.expert or '').strip():
+                raise UsageError('--expert requires a registry seat id '
+                                 '(e.g. S1-script)')
+            if not (args.material or '').strip():
+                raise UsageError('--expert face requires --material '
+                                 '(repo-relative material path)')
+            expert_id = args.expert.strip()
+            material_rel = args.material.strip()
+            root = _repo_root()
+            if root is None:
+                raise UsageError('no repo root above this generator -- '
+                                 'cannot validate the registry seat')
+            seat, known = _find_registry_seat(root, expert_id)
+            if seat is None:
+                raise UsageError('unknown expert id: %s (known: %s)'
+                                 % (expert_id, ', '.join(known)))
+            if not str(seat.get('prompt_file') or '').strip():
+                raise UsageError('registry seat %s has no prompt_file'
+                                 % expert_id)
+            if not os.path.isfile(os.path.join(root, material_rel)):
+                raise UsageError('material file not found (repo-relative '
+                                 'or absolute): ' + material_rel)
+            result_name = (args.result_name or '').strip() or (
+                expert_id.lower() + '-cpu-result.json')
+            out = args.out or os.path.join(
+                root, os.path.dirname(material_rel),
+                expert_id.lower() + '_call_cpu.py')
+            if os.path.isdir(out):
+                raise UsageError('--out points at an existing directory: '
+                                 + out)
+            src = render_expert_launcher(expert_id, material_rel,
+                                         result_name, args.timeout)
+            print('RESULT-FILE', result_name)
         else:
-            questions = CANONICAL_QUESTIONS
-        prompt = build_prompt(body, questions)
-        out = args.out or os.path.join(
-            os.path.dirname(os.path.abspath(args.body)), 'e4_call.py')
-        if os.path.isdir(out):
-            raise UsageError('--out points at an existing directory: ' + out)
-        src = render_launcher(prompt, args.label, args.model, args.timeout,
-                              cpu_lane=args.cpu_lane)
+            # ---------- E4 card face (tech#113/#169) ----------
+            if not args.body:
+                raise UsageError('either --body (E4 card face) or --expert '
+                                 '+ --material (registry-seat face) is '
+                                 'required')
+            if not args.label or not args.label.strip():
+                raise UsageError('--label must be non-empty (E4 card '
+                                 'face)')
+            if not os.path.isfile(args.body):
+                raise UsageError('body file not found: ' + args.body)
+            body = _read_text(args.body)
+            if not body.strip():
+                raise UsageError('body file is empty: ' + args.body)
+            if args.questions_file:
+                if not os.path.isfile(args.questions_file):
+                    raise UsageError('questions file not found: '
+                                     + args.questions_file)
+                questions = _read_text(args.questions_file)
+                if not questions.strip():
+                    raise UsageError('questions file is empty: '
+                                     + args.questions_file)
+            else:
+                questions = CANONICAL_QUESTIONS
+            prompt = build_prompt(body, questions)
+            out = args.out or os.path.join(
+                os.path.dirname(os.path.abspath(args.body)), 'e4_call.py')
+            if os.path.isdir(out):
+                raise UsageError('--out points at an existing directory: '
+                                 + out)
+            src = render_launcher(prompt, args.label, args.model,
+                                   args.timeout, cpu_lane=args.cpu_lane)
     except UsageError as exc:
         print('USAGE-ERROR:', exc)
         return 2

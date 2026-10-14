@@ -608,5 +608,348 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
             self.assertIn('8.0', fh.read())
 
 
+class ExpertFaceRenderTests(unittest.TestCase):
+    """tech#172: render_expert_launcher renders the R2257 s1_call_cpu
+    lineage -- registry-driven seat at flight time, call_expert
+    build_prompt parity, CPU lane laws, shared auto-ledger block
+    parametrized on the registry seat identity."""
+
+    def setUp(self):
+        self.src = gen.render_expert_launcher(
+            u'S1-script', u'data/storylines/audio/SC-005-08-s1-material.md',
+            u's1-script-cpu-result.json', 1500)
+
+    def test_compiles(self):
+        compile(self.src, 's1_call_cpu.py', 'exec')
+
+    def test_seat_identity_baked(self):
+        self.assertIn("EXPERT_ID = 'S1-script'", self.src)
+        self.assertIn('# S1-script seat call (CPU LANE)', self.src)
+        self.assertIn(
+            "MATERIAL_REL = 'data/storylines/audio/"
+            "SC-005-08-s1-material.md'", self.src)
+        self.assertIn("RESULT_NAME = 's1-script-cpu-result.json'", self.src)
+        self.assertIn('TIMEOUT = 1500', self.src)
+
+    def test_registry_read_at_flight_time(self):
+        # seat/prompt/role come from the registry AT FLIGHT TIME
+        for marker in ("'registry.json'",
+                      "str(reg.get('model', '')) or 'qwen2.5:14b'",
+                      "e.get('prompt_file')",
+                      "e.get('role', EXPERT_ID)",
+                      "e.get('dept', '')"):
+            self.assertIn(marker, self.src, marker)
+
+    def test_build_prompt_parity(self):
+        # call_expert.build_prompt assembly, verbatim material
+        self.assertIn("prompt_text.rstrip() + '\\n\\n===== 材料 =====\\n'",
+                      self.src)
+        self.assertIn("material_text.strip() + '\\n'", self.src)
+
+    def test_cpu_lane_laws(self):
+        self.assertIn("num_gpu': 0", self.src)       # zero-GPU assertion
+        self.assertIn('CPU_THREADS = 4', self.src)   # CEO 10% margin
+        self.assertIn("num_thread': CPU_THREADS", self.src)
+        self.assertIn("LANE = 'cpu'", self.src)
+
+    def test_liveness_and_rc3_semantics(self):
+        for marker in ("TAGS_URL = 'http://localhost:11434/api/tags'",
+                       'urllib.request.urlopen(TAGS_URL, timeout=2)',
+                       'LIVENESS-FAIL',
+                       'TRANSPORT-ERROR',
+                       'raise SystemExit(3)',
+                       "'TIMEOUT-%ds' % TIMEOUT"):
+            self.assertIn(marker, self.src, marker)
+
+    def test_auto_ledger_parametrized_on_registry_seat(self):
+        # shared block, seat identity injected: EXPERT_ID literal +
+        # ROLE_DEPT tracks the flight-time registry variable
+        self.assertIn("EXPERT_ID = 'S1-script'", self.src)
+        self.assertIn('ROLE_DEPT = role_dept', self.src)
+        self.assertIn('expert-calls.md', self.src)
+        self.assertIn('LEDGER-ROW %s (tech#173 auto-ledger)', self.src)
+        self.assertIn(u'｜', self.src)  # fullwidth-pipe note separator
+
+    def test_no_gpu_faces(self):
+        self.assertNotIn('nvidia-smi', self.src)
+        self.assertNotIn('preflight(', self.src)
+        self.assertNotIn("['ollama', 'stop']", self.src)
+        self.assertNotIn('UTIL_FLIP', self.src)
+
+    def test_no_placeholder_leftovers(self):
+        for marker in ('__EXPERT__', '__EXPERT_ID__', '__MATERIAL__',
+                       '__MATERIAL_REPR__', '__RESULT_REPR__',
+                       '__TIMEOUT__', '__THREADS__',
+                       '__AUTO_LEDGER_BLOCK__', '__ROLE_DEPT_EXPR__'):
+            self.assertNotIn(marker, self.src, marker)
+
+
+class ExpertFaceCliTests(unittest.TestCase):
+    """tech#172 CLI face: loud rc 2 guards (unknown id, half-invocation,
+    face exclusivity, missing material) + happy path against the REAL
+    registry (read-only)."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp(prefix='s1gen_')
+
+    def test_rc2_expert_without_material(self):
+        p = _run_cli('--expert', 'S1-script')
+        self.assertEqual(p.returncode, 2)
+        self.assertIn(b'--material', p.stdout)
+
+    def test_rc2_material_without_expert(self):
+        p = _run_cli('--material', 'data/x.md')
+        self.assertEqual(p.returncode, 2)
+        self.assertIn(b'--expert', p.stdout)
+
+    def test_rc2_expert_with_body(self):
+        body = os.path.join(self.tmp, 'body.txt')
+        with io.open(body, 'w', encoding='utf-8') as fh:
+            fh.write(u'x')
+        p = _run_cli('--expert', 'S1-script',
+                     '--material', 'data/x.md', '--body', body)
+        self.assertEqual(p.returncode, 2)
+        self.assertIn(b'exclusive', p.stdout)
+
+    def test_rc2_expert_with_label(self):
+        p = _run_cli('--expert', 'S1-script',
+                     '--material', 'data/x.md', '--label', 'L')
+        self.assertEqual(p.returncode, 2)
+        self.assertIn(b'--label', p.stdout)
+
+    def test_rc2_unknown_expert_id(self):
+        p = _run_cli('--expert', 'S9-nonexistent',
+                     '--material', 'data/x.md')
+        self.assertEqual(p.returncode, 2)
+        self.assertIn(b'unknown expert id', p.stdout)
+        self.assertIn(b'S1-script', p.stdout)  # known ids listed
+
+    def test_rc2_missing_material_file(self):
+        p = _run_cli('--expert', 'S1-script',
+                     '--material', 'data/nope/missing-material.md')
+        self.assertEqual(p.returncode, 2)
+        self.assertIn(b'material file not found', p.stdout)
+
+    def test_rc2_bad_timeout_expert_face(self):
+        mat = os.path.join(self.tmp, 'mat.md')
+        with io.open(mat, 'w', encoding='utf-8') as fh:
+            fh.write(u'material')
+        p = _run_cli('--expert', 'S1-script', '--material', mat,
+                     '--timeout', '0')
+        self.assertEqual(p.returncode, 2)
+
+    def test_happy_path_real_registry_writes_launcher(self):
+        mat = os.path.join(self.tmp, 'SC-005-08-s1-material.md')
+        with io.open(mat, 'w', encoding='utf-8') as fh:
+            fh.write(u'十二拍口述史材料。')
+        out = os.path.join(self.tmp, 's1_call_cpu.py')
+        p = _run_cli('--expert', 'S1-script', '--material', mat,
+                     '--out', out)
+        self.assertEqual(p.returncode, 0, p.stdout.decode('utf-8', 'replace'))
+        self.assertIn(b'RESULT-FILE s1-script-cpu-result.json', p.stdout)
+        self.assertIn(b'WROTE', p.stdout)
+        with io.open(out, encoding='utf-8') as fh:
+            src = fh.read()
+        self.assertFalse(src.startswith(u'\ufeff'))  # UTF-8 no BOM
+        self.assertIn("EXPERT_ID = 'S1-script'", src)
+        self.assertIn(repr(os.path.abspath(mat)), src)  # material abs path
+        self.assertIn("'registry.json'", src)
+
+    def test_no_writes_on_expert_usage_error(self):
+        before = sorted(os.listdir(self.tmp))
+        _run_cli('--expert', 'S1-script', '--material',
+                 os.path.join(self.tmp, 'nope.md'))
+        self.assertEqual(sorted(os.listdir(self.tmp)), before)
+
+
+class ExpertFaceBehaviorTests(unittest.TestCase):
+    """tech#172 live behavior in a fake repo: registry-driven seat +
+    verdict + auto-ledger row/archive; rc 3 liveness/transport paths
+    write NO result file; TIMEOUT verdict lands with rc 0."""
+
+    def setUp(self):
+        # fake repo: .git + registry + prompt + material; launcher under
+        # data/storylines/audio/x-tmp/ (any depth -- .git walk)
+        self.tmp = tempfile.mkdtemp(prefix='s1beh_')
+        self.repo = os.path.join(self.tmp, 'repo')
+        self.launch_dir = os.path.join(
+            self.repo, 'data', 'storylines', 'audio', 'x-tmp')
+        os.makedirs(os.path.join(self.repo, '.git'))
+        os.makedirs(os.path.join(self.repo, 'data', 'experts', 'prompts'))
+        os.makedirs(self.launch_dir)
+        with io.open(os.path.join(self.repo, 'data', 'experts',
+                                  'registry.json'), 'w',
+                     encoding='utf-8') as fh:
+            json.dump({'model': 'qwen2.5:14b', 'experts': [
+                {'id': 'S1-script', 'model': None,
+                 'prompt_file': 'data/experts/prompts/S1-script.txt',
+                 'role': 'S1 编剧官', 'dept': '内容生产部'}]}, fh,
+                ensure_ascii=False)
+        with io.open(os.path.join(self.repo, 'data', 'experts', 'prompts',
+                                  'S1-script.txt'), 'w',
+                     encoding='utf-8') as fh:
+            fh.write(u'你是编剧评审席。按违律扣分制审稿。')
+        mat_rel = os.path.join('data', 'storylines', 'audio',
+                               'x-s1-material.md')
+        with io.open(os.path.join(self.repo, mat_rel), 'w',
+                     encoding='utf-8') as fh:
+            fh.write(u'十二拍口述史稿。')
+        self.mat_rel = mat_rel.replace(os.sep, '/')
+        self.path = os.path.join(self.launch_dir, 's1_call_cpu.py')
+        src = gen.render_expert_launcher(u'S1-script', self.mat_rel,
+                                         u's1-script-cpu-result.json',
+                                         1500)
+        with io.open(self.path, 'w', encoding='utf-8') as fh:
+            fh.write(src)
+        self.saved_urllib = sys.modules.get('urllib')
+        self.result_path = os.path.join(self.launch_dir,
+                                        's1-script-cpu-result.json')
+
+    def tearDown(self):
+        if self.saved_urllib is None:
+            sys.modules.pop('urllib', None)
+        else:
+            sys.modules['urllib'] = self.saved_urllib
+
+    def _install_fake_urllib(self, liveness_exc=None, generate_exc=None,
+                             response=b'{"response": "10/10 PASS"}'):
+        import types
+
+        calls = []
+
+        class _Resp(object):
+            # dual-mode: direct .read() (liveness) AND with-statement
+            # (generate) -- the real urlopen return value does both.
+            def __init__(self, body):
+                self._body = body
+
+            def read(self):
+                return self._body
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        class _Req(object):
+            def __init__(self, *a, **k):
+                pass
+
+        def _urlopen(url, timeout=None):
+            calls.append(url)
+            if len(calls) == 1:
+                if liveness_exc is not None:
+                    raise liveness_exc
+                return _Resp(b'{}')
+            if generate_exc is not None:
+                raise generate_exc
+            return _Resp(response)
+
+        urllib_mod = types.ModuleType('urllib')
+        request_mod = types.ModuleType('urllib.request')
+        request_mod.Request = _Req
+        request_mod.urlopen = _urlopen
+        urllib_mod.request = request_mod
+        sys.modules['urllib'] = urllib_mod
+        sys.modules['urllib.request'] = request_mod
+        return calls
+
+    def _exec(self):
+        import contextlib
+        buf = io.StringIO()
+        code = compile(io.open(self.path, encoding='utf-8').read(),
+                       self.path, 'exec')
+        rc = 0
+        ns = {'__file__': self.path, '__name__': 's1_cpu_under_test'}
+        with contextlib.redirect_stdout(buf):
+            try:
+                exec(code, ns)
+            except SystemExit as exc:
+                rc = exc.code
+        return rc, buf.getvalue()
+
+    def test_registry_seat_verdict_and_auto_ledger(self):
+        calls = self._install_fake_urllib()
+        rc, out = self._exec()
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(len(calls), 2)  # liveness + generate
+        self.assertIn('DONE', out)
+        self.assertIn('LEDGER-ROW S1-script', out)
+        with io.open(self.result_path, encoding='utf-8') as fh:
+            result = json.load(fh)
+        self.assertEqual(result['model'], 'qwen2.5:14b')
+        self.assertEqual(result['expert'], 'S1-script')
+        self.assertEqual(result['material'], self.mat_rel)
+        self.assertEqual(result['lane'], 'cpu')
+        self.assertIn('10/10 PASS', result['verdict'])
+        ledger = io.open(os.path.join(self.repo, 'docs', 'reviews',
+                                      'expert-calls.md'),
+                         encoding='utf-8').read()
+        self.assertIn('| S1-script |', ledger)
+        # role/dept text comes from the FLIGHT-TIME registry read
+        self.assertIn(u'S1 编剧官（内容生产部）', ledger)
+        self.assertIn(u'｜ 10/10 PASS', ledger)
+        vdir = os.path.join(self.repo, 'docs', 'reviews',
+                            'expert-verdicts')
+        names = sorted(os.listdir(vdir))
+        self.assertEqual(len(names), 1)
+        self.assertTrue(names[0].endswith('-S1-script.md'))
+
+    def test_liveness_fail_rc3_no_result(self):
+        self._install_fake_urllib(
+            liveness_exc=ConnectionRefusedError('refused 111'))
+        rc, out = self._exec()
+        self.assertEqual(rc, 3)
+        self.assertIn('LIVENESS-FAIL', out)
+        self.assertFalse(os.path.exists(self.result_path))
+
+    def test_transport_error_rc3_no_result(self):
+        self._install_fake_urllib(
+            generate_exc=OSError('connection refused'))
+        rc, out = self._exec()
+        self.assertEqual(rc, 3)
+        self.assertIn('TRANSPORT-ERROR', out)
+        self.assertFalse(os.path.exists(self.result_path))
+        # a transport bail must not leave a ledger row either
+        self.assertFalse(os.path.exists(os.path.join(
+            self.repo, 'docs', 'reviews', 'expert-calls.md')))
+
+    def test_timeout_verdict_lands_rc0(self):
+        self._install_fake_urllib(
+            generate_exc=Exception('urlopen timed out on generate'))
+        rc, out = self._exec()
+        self.assertEqual(rc, 0)
+        self.assertIn('TIMEOUT', out)
+        with io.open(self.result_path, encoding='utf-8') as fh:
+            result = json.load(fh)
+        self.assertEqual(result['verdict'], 'TIMEOUT-1500s')
+
+    def test_flight_time_missing_material_rc3(self):
+        # material deleted AFTER generation: flight-time guard rc 3
+        os.remove(os.path.join(self.repo, self.mat_rel))
+        self._install_fake_urllib()
+        rc, out = self._exec()
+        self.assertEqual(rc, 3)
+        self.assertIn('FAIL input missing', out)
+        self.assertFalse(os.path.exists(self.result_path))
+
+    def test_seat_model_override_from_registry(self):
+        # a seat-scoped model in the registry wins over the default
+        with io.open(os.path.join(self.repo, 'data', 'experts',
+                                  'registry.json'), 'w',
+                     encoding='utf-8') as fh:
+            json.dump({'model': 'qwen2.5:14b', 'experts': [
+                {'id': 'S1-script', 'model': 'qwen3.8:27b',
+                 'prompt_file': 'data/experts/prompts/S1-script.txt',
+                 'role': 'S1 编剧官', 'dept': '内容生产部'}]}, fh,
+                ensure_ascii=False)
+        self._install_fake_urllib()
+        rc, out = self._exec()
+        self.assertEqual(rc, 0)
+        with io.open(self.result_path, encoding='utf-8') as fh:
+            self.assertEqual(json.load(fh)['model'], 'qwen3.8:27b')
+
+
 if __name__ == '__main__':
     unittest.main()
