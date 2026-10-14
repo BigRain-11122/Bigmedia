@@ -95,6 +95,8 @@ QUESTION_MARKER = u'请回答三个问题'
 AUTO_LEDGER_BLOCK = r'''
 # tech#173 auto-ledger: verdict self-logs its expert-calls row +
 # archive (best effort; a write failure WARNs, verdict/rc untouched).
+# tech#174 auto-stage: the raw result json self-stages into the repo
+# index on landing (best effort, same WARN contract).
 EXPERT_ID = __EXPERT_ID__
 ROLE_DEPT = __ROLE_DEPT_EXPR__
 
@@ -140,7 +142,39 @@ def _auto_ledger(verdict, material, model):
         print('WARN auto-ledger failed: %s (verdict kept)' % exc,
               flush=True)
 
+def _auto_stage_result():
+    # tech#174 auto-stage: the raw verdict json self-stages the
+    # moment it lands. R2261 found the CPU-lane legs' raw
+    # e4-result.json sitting untracked across 9 rounds while every
+    # derived face (verdict archive + ledger row) landed same-window.
+    # Symmetric with the archive above; best-effort -- an index
+    # contention (parallel window holds index.lock) WARNs, verdict
+    # and rc untouched (tech#173 contract).
+    root = _repo_root()
+    if root is None:
+        return
+    raw = os.path.join(HERE, 'e4-result.json')
+    if not os.path.isfile(raw):
+        return
+    try:
+        import subprocess
+        proc = subprocess.run(
+            ['git', 'add', '--', raw], cwd=root, timeout=30,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if proc.returncode == 0:
+            print('STAGED-RESULT %s (tech#174 auto-stage)'
+                  % os.path.relpath(raw, root), flush=True)
+        else:
+            print('WARN auto-stage failed rc=%d: %s (verdict kept)'
+                  % (proc.returncode,
+                     proc.stdout.decode('utf-8', 'replace').strip()),
+                  flush=True)
+    except Exception as exc:
+        print('WARN auto-stage failed: %s (verdict kept)' % exc,
+              flush=True)
+
 _auto_ledger(result['verdict'], MATERIAL, MODEL)
+_auto_stage_result()
 '''
 
 # E4 seat identity for the two card faces (the registry-seat face

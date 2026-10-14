@@ -463,6 +463,33 @@ class AutoLedgerRenderTests(unittest.TestCase):
         compile(self._render(False), 'e4_call.py', 'exec')
         compile(self._render(True), 'e4_call_cpu.py', 'exec')
 
+    def test_auto_stage_markers_both_lanes(self):
+        # tech#174: the raw result json self-stages on landing, same
+        # best-effort WARN contract as the ledger above.
+        for cpu_lane in (True, False):
+            src = self._render(cpu_lane)
+            for marker in (
+                    'def _auto_stage_result():',
+                    "os.path.join(HERE, 'e4-result.json')",
+                    "['git', 'add', '--', raw]",
+                    'STAGED-RESULT %s (tech#174 auto-stage)',
+                    'WARN auto-stage failed rc=%d: %s (verdict kept)',
+                    'WARN auto-stage failed: %s (verdict kept)',
+                    '_auto_ledger(result[\'verdict\'], MATERIAL, MODEL)\n'
+                    '_auto_stage_result()'):
+                self.assertIn(marker, src,
+                              'lane=%s missing %s' % (cpu_lane, marker))
+
+    def test_auto_stage_runs_after_ledger_not_before(self):
+        # order lock: the call sites are adjacent ledger-then-stage
+        # lines (the def line also contains the bare substring, so the
+        # compound marker is the reliable probe).
+        for cpu_lane in (True, False):
+            src = self._render(cpu_lane)
+            marker = ('_auto_ledger(result[\'verdict\'], MATERIAL, '
+                      'MODEL)\n_auto_stage_result()')
+            self.assertIn(marker, src, 'lane=%s order broke' % cpu_lane)
+
 
 class AutoLedgerBehaviorTests(unittest.TestCase):
     """tech#173 live behavior: the CPU-lane launcher appends the real
@@ -491,7 +518,8 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
         else:
             sys.modules['urllib'] = self.saved_urllib
 
-    def _exec_with_fake_http(self):
+    def _exec_with_fake_http(self, path=None):
+        path = path or self.path
         import contextlib
         import types
 
@@ -518,10 +546,10 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
         sys.modules['urllib.request'] = request_mod
 
         buf = io.StringIO()
-        code = compile(io.open(self.path, encoding='utf-8').read(),
-                       self.path, 'exec')
+        code = compile(io.open(path, encoding='utf-8').read(),
+                       path, 'exec')
         rc = 0
-        ns = {'__file__': self.path, '__name__': 'e4_cpu_under_test'}
+        ns = {'__file__': path, '__name__': 'e4_cpu_under_test'}
         with contextlib.redirect_stdout(buf):
             try:
                 exec(code, ns)
@@ -607,6 +635,54 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
                      encoding='utf-8') as fh:
             self.assertIn('8.0', fh.read())
 
+    def test_auto_stage_warn_on_broken_repo_verdict_kept(self):
+        # tech#174: the fake .git dir has no HEAD -> git add fails ->
+        # best-effort WARN, rc stays 0, verdict + raw json still land
+        # (stage-step symmetry with the tech#173 ledger WARN).
+        rc, out = self._exec_with_fake_http()
+        self.assertEqual(rc, 0)
+        self.assertIn('WARN auto-stage failed rc=', out)
+        self.assertIn('DONE', out)
+        self.assertTrue(os.path.isfile(os.path.join(self.launch_dir,
+                                                    'e4-result.json')))
+
+    def test_auto_stage_stages_result_json_in_real_repo(self):
+        # tech#174 born-level judgment: in a REAL git repo the raw
+        # verdict json self-stages into the index at landing -- the
+        # R2261 9-round untracked residue class dies here.
+        real = tempfile.mkdtemp(prefix='e4stage_')
+        try:
+            p = subprocess.run(
+                ['git', 'init', '-q', real], stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT, timeout=60)
+            self.assertEqual(p.returncode, 0, p.stdout)
+            launch_dir = os.path.join(real, 'data', 'storylines',
+                                      'cards', 'x-tmp')
+            os.makedirs(launch_dir)
+            path = os.path.join(launch_dir, 'e4_call_cpu.py')
+            src = gen.render_launcher(u'body', u'MC-X-174',
+                                      'qwen2.5:14b', 1500,
+                                      cpu_lane=True)
+            with io.open(path, 'w', encoding='utf-8') as fh:
+                fh.write(src)
+            rc, out = self._exec_with_fake_http(path)
+            self.assertEqual(rc, 0)
+            self.assertIn('DONE', out)
+            raw = os.path.join(launch_dir, 'e4-result.json')
+            self.assertIn('STAGED-RESULT %s (tech#174 auto-stage)'
+                          % os.path.relpath(raw, real), out)
+            ls = subprocess.run(
+                ['git', '-C', real, 'ls-files', '--cached'],
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                timeout=60)
+            self.assertEqual(ls.returncode, 0, ls.stdout)
+            listed = ls.stdout.decode('utf-8', 'replace')
+            self.assertIn('data/storylines/cards/x-tmp/e4-result.json',
+                          listed.replace('\r\n', '\n'))
+        finally:
+            import shutil
+            shutil.rmtree(real, ignore_errors=True)
+
 
 class ExpertFaceRenderTests(unittest.TestCase):
     """tech#172: render_expert_launcher renders the R2257 s1_call_cpu
@@ -669,6 +745,14 @@ class ExpertFaceRenderTests(unittest.TestCase):
         self.assertIn('expert-calls.md', self.src)
         self.assertIn('LEDGER-ROW %s (tech#173 auto-ledger)', self.src)
         self.assertIn(u'｜', self.src)  # fullwidth-pipe note separator
+
+    def test_auto_stage_in_shared_block(self):
+        # tech#174: the shared AUTO_LEDGER_BLOCK carries the stage step
+        # for the registry-seat face too (no per-face fork).
+        self.assertIn('def _auto_stage_result():', self.src)
+        self.assertIn("os.path.join(HERE, 'e4-result.json')", self.src)
+        self.assertIn("['git', 'add', '--', raw]", self.src)
+        self.assertIn('_auto_stage_result()', self.src)
 
     def test_no_gpu_faces(self):
         self.assertNotIn('nvidia-smi', self.src)

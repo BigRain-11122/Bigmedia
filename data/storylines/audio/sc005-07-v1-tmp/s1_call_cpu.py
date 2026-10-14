@@ -129,5 +129,30 @@ def _auto_ledger():
     except OSError as exc:
         print("WARN auto-ledger failed: %s (verdict kept)" % exc, flush=True)
 
+def _auto_stage_result():
+    # tech#174 auto-stage (generator AUTO_LEDGER_BLOCK parity): the
+    # raw verdict json self-stages into the repo index the moment it
+    # lands (R2261 9-round residue lesson); best-effort -- an index
+    # contention WARNs, verdict/rc untouched (tech#173 contract).
+    raw = os.path.join(HERE, "s1-cpu-result.json")
+    if not os.path.isfile(raw):
+        return
+    try:
+        import subprocess
+        proc = subprocess.run(
+            ["git", "add", "--", raw], cwd=ROOT, timeout=30,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if proc.returncode == 0:
+            print("STAGED-RESULT %s (tech#174 auto-stage)"
+                  % os.path.relpath(raw, ROOT), flush=True)
+        else:
+            print("WARN auto-stage failed rc=%d: %s (verdict kept)"
+                  % (proc.returncode,
+                     proc.stdout.decode("utf-8", "replace").strip()),
+                  flush=True)
+    except Exception as exc:
+        print("WARN auto-stage failed: %s (verdict kept)" % exc, flush=True)
+
 _auto_ledger()
+_auto_stage_result()
 print("DONE" if not str(result["verdict"]).startswith("TIMEOUT") else "TIMEOUT")
