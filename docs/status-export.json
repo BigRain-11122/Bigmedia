@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-14 14:54:37",
- "do": "工作日窗值守中：夜窗恢复 AI 评审席并发五件积压评审；MV 全曲成片装配今夜跟进",
+ "export_ts": "2026-10-14 17:16:16",
+ "do": "消费集团新令毕（MV V3 波2=装配站夜窗在飞·成片未落位守望续）；收养验收 tech#167 可领号列表面交付；夜窗待席位复活+fire 接力窗判断。",
  "depts": [
   {
    "n": "工程技术部",
@@ -68,20 +68,20 @@
  ],
  "results": [
   [
-   "anchor face live",
-   "r2242"
+   "orders 407 acked",
+   "r2247"
   ],
   [
-   "seat case A ok",
-   "r2242"
+   "decisions acked",
+   "r2247"
   ],
   [
-   "adapter imported",
-   "r2212"
+   "tech#167 live",
+   "r2247"
   ],
   [
-   "v20 CPU leg done",
-   "r2205"
+   "V3 cut pending",
+   "r2247"
   ]
  ],
  "live": [
