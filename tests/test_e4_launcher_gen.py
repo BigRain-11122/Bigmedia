@@ -16,6 +16,11 @@ PY = sys.executable or 'python'
 TOOL = os.path.join(os.path.dirname(__file__), '..', 'src', 'os',
                     'e4_launcher_gen.py')
 
+# tech#175: the real pre-run urllib faces, captured at module import --
+# the teardown-hygiene lock asserts they survive every test class.
+PRE_URLLIB = sys.modules.get('urllib')
+PRE_URLLIB_REQUEST = sys.modules.get('urllib.request')
+
 
 def _run_cli(*argv):
     return subprocess.run([PY, TOOL] + list(argv), stdout=subprocess.PIPE,
@@ -510,13 +515,19 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
                                   1500, cpu_lane=True)
         with io.open(self.path, 'w', encoding='utf-8') as fh:
             fh.write(src)
-        self.saved_urllib = sys.modules.get('urllib')
+        # tech#175: BOTH keys the fakes install must be saved/restored
+        # symmetrically -- the old 'urllib'-only restore left
+        # sys.modules['urllib.request'] pointing at the fake module
+        # (mock urlopen) for the rest of the process.
+        self.saved = {k: sys.modules.get(k)
+                      for k in ('urllib', 'urllib.request')}
 
     def tearDown(self):
-        if self.saved_urllib is None:
-            sys.modules.pop('urllib', None)
-        else:
-            sys.modules['urllib'] = self.saved_urllib
+        for key, mod in self.saved.items():
+            if mod is None:
+                sys.modules.pop(key, None)
+            else:
+                sys.modules[key] = mod
 
     def _exec_with_fake_http(self, path=None):
         path = path or self.path
@@ -885,15 +896,19 @@ class ExpertFaceBehaviorTests(unittest.TestCase):
                                          1500)
         with io.open(self.path, 'w', encoding='utf-8') as fh:
             fh.write(src)
-        self.saved_urllib = sys.modules.get('urllib')
+        # tech#175: symmetric save of both fake-installed keys (the
+        # 'urllib'-only restore leaked the fake urllib.request).
+        self.saved = {k: sys.modules.get(k)
+                      for k in ('urllib', 'urllib.request')}
         self.result_path = os.path.join(self.launch_dir,
                                         's1-script-cpu-result.json')
 
     def tearDown(self):
-        if self.saved_urllib is None:
-            sys.modules.pop('urllib', None)
-        else:
-            sys.modules['urllib'] = self.saved_urllib
+        for key, mod in self.saved.items():
+            if mod is None:
+                sys.modules.pop(key, None)
+            else:
+                sys.modules[key] = mod
 
     def _install_fake_urllib(self, liveness_exc=None, generate_exc=None,
                              response=b'{"response": "10/10 PASS"}'):
@@ -1033,6 +1048,57 @@ class ExpertFaceBehaviorTests(unittest.TestCase):
         self.assertEqual(rc, 0)
         with io.open(self.result_path, encoding='utf-8') as fh:
             self.assertEqual(json.load(fh)['model'], 'qwen3.8:27b')
+
+
+class TeardownHygieneTests(unittest.TestCase):
+    """tech#175: the fake urllib faces must not outlive their tests.
+
+    R2262 live finding: both behavior classes installed fake modules
+    under sys.modules['urllib'] AND sys.modules['urllib.request'], but
+    tearDown restored only the 'urllib' key -- after this module's 69
+    tests, sys.modules['urllib.request'] still pointed at the fake
+    module (mock urlopen), silently polluting any later consumer in
+    the same process.
+    """
+
+    def test_behavior_class_teardown_restores_both_keys(self):
+        # direct lock (ordering-independent): drive one fixture cycle
+        # of AutoLedgerBehaviorTests and prove the fake request module
+        # does not survive its tearDown.
+        case = AutoLedgerBehaviorTests('test_ledger_row_and_archive_written')
+        case.setUp()
+        try:
+            case._exec_with_fake_http()
+            self.assertIsNot(sys.modules.get('urllib.request'),
+                             PRE_URLLIB_REQUEST)
+        finally:
+            case.tearDown()
+        self.assertIs(sys.modules.get('urllib'), PRE_URLLIB)
+        self.assertIs(sys.modules.get('urllib.request'),
+                      PRE_URLLIB_REQUEST)
+
+    def test_expert_face_teardown_restores_both_keys(self):
+        # same direct lock for the ExpertFaceBehaviorTests fixture.
+        case = ExpertFaceBehaviorTests(
+            'test_registry_seat_verdict_and_auto_ledger')
+        case.setUp()
+        try:
+            case._install_fake_urllib()
+            self.assertIsNot(sys.modules.get('urllib.request'),
+                             PRE_URLLIB_REQUEST)
+        finally:
+            case.tearDown()
+        self.assertIs(sys.modules.get('urllib'), PRE_URLLIB)
+        self.assertIs(sys.modules.get('urllib.request'),
+                      PRE_URLLIB_REQUEST)
+
+    def test_process_clean_after_all_module_tests(self):
+        # aggregate criterion (tech#175): this class sorts after every
+        # behavior class, so by the time it runs the whole module's
+        # fixtures have cycled -- no fake urllib face may survive.
+        self.assertIs(sys.modules.get('urllib'), PRE_URLLIB)
+        self.assertIs(sys.modules.get('urllib.request'),
+                      PRE_URLLIB_REQUEST)
 
 
 if __name__ == '__main__':
