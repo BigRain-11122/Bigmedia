@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 03:26:30",
- "do": "V3.5 preview landed 01:27 (540P, verify PASS); ack row 420; next 08:00 tech#92 + V3 768P final watch",
+ "export_ts": "2026-10-15 05:52:33",
+ "do": "R2276 tech#176 收口+queue_status GBK 崩溃修（tech 可领 1→0·1452 绿）·下窗 08:00 tech#92+MV V3 08:43 守望",
  "depts": [
   {
    "n": "工程技术部",
