@@ -123,3 +123,12 @@
 | 2026-10-11 19:38 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | data\storylines\audio\sc005-05-v1-tmp\e4-material.md | 0 | 全文=expert-verdicts/20261011-193833-E4-audience.md ｜ ### 1) 对于这件作品，我可能会听完，但不会保存或转发。我会给它打6分。 |
 | 2026-10-11 20:54 | S1-script | S1 编剧官（内容生产部） | data\storylines\audio\SC-005-06-v1-s1-material.md | 0 | 全文=expert-verdicts/20261011-205438-S1-script.md ｜ ### 违律清单 |
 | 2026-10-11 20:58 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | data\storylines\audio\sc005-06-v1-tmp\e4-material.md | 0 | 全文=expert-verdicts/20261011-205853-E4-audience.md ｜ 1) 刷到这件作品我会看完，但不会停下来特别久。我会保存和点赞，但不太可能转发 |
+| 2026-10-14 22:53 | S1-script | S1 编剧官（内容生产部） | data\storylines\audio\SC-005-07-v1-s1-material.md | 0 | 全文=expert-verdicts/20261014-225340-S1-script.md ｜  ｜ ### 违律清单
+| 2026-10-14 20:08 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-200837-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261012-REACT-v15《城市速报 015·切片赚七百万之问》
+| 2026-10-14 20:37 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-203756-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261012-DIGEST-v19《城市盘点 019·顶层梳理日》
+| 2026-10-14 20:45 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-204553-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261013-REACT-v16《城市速报 016·AI 短剧 token 之问》
+| 2026-10-14 20:48 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-204833-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261014-DIGEST-v20《城市盘点 020·死线冲刺日》
+| 2026-10-14 20:51 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-205152-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261014-REACT-v17《城市速报 017·AI 能力认知漏斗之问》
+| 2026-10-14 21:13 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-211311-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261014-REACT-v18《城市速报 018·PS5 底层漏洞之问》
+| 2026-10-14 22:21 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | （CPU 航道净本·材料行见档） | 0 | 全文=expert-verdicts/20261014-222102-E4-audience.md ｜ # E4-audience 参考仪判词净本 · MC-20261014-REACT-v19《城市速报 019·58 元咖啡一人一座之问》
+| 2026-10-15 00:13 | E4-audience | E4 直觉观众参考仪（评审参考席（非部门编制）） | data\storylines\audio\sc005-07-v1-tmp\e4-material.md | 0 | 全文=expert-verdicts/20261015-001335-E4-audience.md ｜ 1) 对于这样一条音频帖，我会点开听，并且会听完

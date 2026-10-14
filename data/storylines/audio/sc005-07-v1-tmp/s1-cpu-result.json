@@ -1,0 +1,8 @@
+{
+  "ts": "2026-10-14 22:53:40",
+  "model": "qwen2.5:14b",
+  "material": "data/storylines/audio/SC-005-07-v1-s1-material.md",
+  "lane": "cpu",
+  "expert": "S1-script",
+  "verdict": "### 违律清单\n无\n\n### 总分\n10\n\n### 一句话总裁决\nPASS（无违律且亮点丰富）\n\n### 未测面\n无（文本已全面覆盖 copy-craft 文本视角要求，无额外未测面）"
+}

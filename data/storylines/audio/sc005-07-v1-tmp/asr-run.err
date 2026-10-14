@@ -1,0 +1,7 @@
+usage: whisper_to_srt.py [-h] --audio AUDIO --out OUT [--model MODEL]
+                         [--language LANGUAGE] [--max-chars MAX_CHARS]
+                         [--beam-size BEAM_SIZE] [--no-context]
+                         [--initial-prompt INITIAL_PROMPT]
+                         [--noise-dict NOISE_DICT] [--expect EXPECT]
+                         [--purpose PURPOSE] [--ledger LEDGER] [--no-ledger]
+whisper_to_srt.py: error: the following arguments are required: --audio

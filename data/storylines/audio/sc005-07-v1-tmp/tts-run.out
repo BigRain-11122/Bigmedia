@@ -1,0 +1,18 @@
+FAIL: edge-tts --voice zh-CN-YunyangNeural --rate=-6% --pitch=-5Hz --text 欢迎收听《城市口述史》选段。本节目由 AI 参与生成，基于硅基城市在册居民档案改编，部分情节为合理推演，完整来源清单见图文页。口述史这一段，讲给清晨最早亮起来的那支队伍。她叫沈佩兰，碳基市民，弄堂派，五十八岁，住在北外滩治理岸的脑环广场街区，半个队员都喊她「沈老师」。职业只有一行：晨操领队——广场舞的光带版——舞步踏出的是晨光涟漪。 --write-media data\storylines\audio\sc005-07-v1-tmp\seg00.mp3
+    ~~~~~~~~~~~~~~~~~~^
+        f"{WSS_URL}&ConnectionId={connect_id()}"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        ssl=_SSL_CTX,
+        ^^^^^^^^^^^^^
+    ) as websocket:
+    ^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\aiohttp\client.py", line 1693, in __aenter__
+    self._resp: _RetType_co = await self._coro
+                              ^^^^^^^^^^^^^^^^
+  File "C:\Users\sjs20\AppData\Local\Programs\Python\Python314\Lib\site-packages\aiohttp\client.py", line 1266, in _ws_connect
+    raise WSServerHandshakeError(
+    ...<5 lines>...
+    )
+aiohttp.client_exceptions.WSServerHandshakeError: 403, message='Invalid response status', url='wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D4EAFF4E9FB37E23D68491D6F4&ConnectionId=722eb5ca880748428f81b5dd2a89849e&Sec-MS-GEC=A65ECF53460CC15FC8B0B242A7840BA77139F60A3E2C96C17CB27C8B8997F07C&Sec-MS-GEC-Version=1-143.0.3650.75'
+
