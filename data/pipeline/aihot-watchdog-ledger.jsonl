@@ -10,3 +10,4 @@
 {"event": "heartbeat", "pg_ok": true, "verdict": "complete", "ts": "2026-10-13 22:40:04"}
 {"event": "probe-error", "pg_ok": true, "note": "topology face unreadable (fail-closed)", "ts": "2026-10-13 23:41:15"}
 {"event": "heartbeat", "pg_ok": true, "verdict": "complete", "ts": "2026-10-14 00:00:04"}
+{"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-14 08:25:30"}

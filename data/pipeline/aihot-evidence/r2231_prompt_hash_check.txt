@@ -1,0 +1,8 @@
+data\assets\aihot-poc\AIHOT\industry\prompts\selection-score.md
+  len=3653 mtime=10-10 10:30 hash=a41b9a736d match=YES
+data\assets\aihot-poc\AIHOT\node_modules\@aihot\industry\prompts\selection-score.md
+  len=3653 mtime=10-10 10:30 hash=a41b9a736d match=YES
+MISSING data\assets\aihot-poc\AIHOT\packages\industry\prompts\selection-score.md
+city-file (as its own name): len=4464 hash=2ad4203da4
+city content under selection-score name: hash=8455058086 match=no
+industry-bak content under selection-score name: hash=e55fa3b5de match=no
