@@ -22,3 +22,4 @@
 {"event": "heartbeat", "pg_ok": true, "verdict": "complete", "ts": "2026-10-15 00:00:02"}
 {"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-15 08:30:28"}
 {"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-15 09:15:28"}
+{"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-15 14:20:28"}

@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 14:05:10",
- "do": "O-20261015-1335 consumer switch: expert+fire/probe stack now on qwen3.8:27b (think:false), 1506 tests green",
+ "export_ts": "2026-10-15 14:27:53",
+ "do": "tech#182 AIHOT 判定模型切 27b 落位（404 修复·worker 64480 heal 验证毕）·下窗=10-16 08:00 tech#92 权威窗双判",
  "depts": [
   {
    "n": "工程技术部",
