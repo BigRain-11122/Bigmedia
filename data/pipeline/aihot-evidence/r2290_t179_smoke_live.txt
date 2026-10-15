@@ -1,0 +1,68 @@
+== AIHOT window read (since 2026-10-15 08:00 -> until 2026-10-15 12:45, tz Asia/Shanghai) ==
+window semantics: A-E = analyses.created_at (tool/analysis face); F = publications.timeline_at (composeDaily judgedReports face - the count behind the daily nothing-judged throw). Daily green/red prediction reads F, not A (tech#179, R2283 fork lesson).
+
+== A per-source ==
+{"source_id": "json-bilibili-knowledge", "scored": "249", "max_score": "45.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-popular", "scored": "2", "max_score": "36.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-tech", "scored": "168", "max_score": "43.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-zhihu-hot", "scored": "14", "max_score": "46.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-simon-willison", "scored": "2", "max_score": "43.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-techcrunch-ai", "scored": "1", "max_score": "43.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+
+== B json-zhihu-hot top ==
+{"score": "46.00", "selected": "f", "title": "2027年度国考报名开启，新增实名实人认证防范「围岗」，能根治「围岗」乱象吗？你报名了吗？"}
+{"score": "42.00", "selected": "f", "title": "10 月 15 日 DeepSeek 网页和 APP 显示「服务器暂时不可用」，可能是哪些原因导致的？"}
+{"score": "30.00", "selected": "f", "title": "怎样看待沙特阿美石油公司位于达曼的总部被胡塞武装的导弹击中，遭到大面积破坏？"}
+{"score": "30.00", "selected": "f", "title": "网友称小米SU7刹车助力器故障频发，是真的吗？双备份制动系统为何还会出现踏板异常？"}
+{"score": "25.00", "selected": "f", "title": "如何评价京东iPhone Duo早鸟包，不能抵手机款且不能退款，被网友指官方黄牛？平台这样做合理吗？"}
+{"score": "18.00", "selected": "f", "title": "陈妤颉个子不高，咋跑得那么快？身高、腿长和跑步快慢有关吗？"}
+{"score": "15.00", "selected": "f", "title": "如何评价王老菊回顾做独立游戏的经历，分享三个项目内容，称因资金有限放弃了更好的项目？600万不够吗？"}
+{"score": "13.00", "selected": "f", "title": "如何评价王老菊回顾做独立游戏的经历，分享三个项目内容，称因资金有限放弃了更好的项目？600万不够吗？"}
+{"score": "13.00", "selected": "f", "title": "我觉得openai最近这段时间写出来的所有论文，全部都是错误的，这难道不是很明显的吗？"}
+{"score": "12.00", "selected": "f", "title": "三国时期的「挟天子以令诸侯」具体起了多大作用？"}
+{"score": "12.00", "selected": "f", "title": "三国时期的「挟天子以令诸侯」具体起了多大作用？"}
+{"score": "12.00", "selected": "f", "title": "三国时期的「挟天子以令诸侯」具体起了多大作用？"}
+{"score": "12.00", "selected": "f", "title": "三国时期的「挟天子以令诸侯」具体起了多大作用？"}
+{"score": "10.00", "selected": "f", "title": "三国时期的「挟天子以令诸侯」具体起了多大作用？"}
+
+== C top15 any ==
+{"score": "46.00", "source_id": "json-zhihu-hot", "title": "2027年度国考报名开启，新增实名实人认证防范「围岗」，能根治「围岗」乱象吗？你报名了吗？", "bad_utf8": false}
+{"score": "45.00", "source_id": "json-bilibili-knowledge", "title": "【第1327期】15人三罪名：电诈赃款红包链的分层定性", "bad_utf8": false}
+{"score": "43.00", "source_id": "rss-simon-willison", "title": "Redesigning source control at Anthropic", "bad_utf8": false}
+{"score": "43.00", "source_id": "json-bilibili-knowledge", "title": "交互艺术装置——会呼吸的「机械花」", "bad_utf8": false}
+{"score": "43.00", "source_id": "json-bilibili-tech", "title": "【纪录片】走进工厂 润喉糖【1080p】【双语特效字幕】【纪录片之家科技控】", "bad_utf8": false}
+{"score": "43.00", "source_id": "json-bilibili-tech", "title": "Hermes v0.21.0→v0.22.0版本阶段更新介绍", "bad_utf8": false}
+{"score": "43.00", "source_id": "rss-techcrunch-ai", "title": "Ricursive Intelligence is betting on AI-designed chips to help solve the compute crisis", "bad_utf8": false}
+{"score": "42.00", "source_id": "json-bilibili-tech", "title": "彩屏阅读器都这么卷了？关键这配置也没掉队#讯飞起点阅读器#讯飞小方块#你的kindle还在用吗#阅读 (1)", "bad_utf8": false}
+{"score": "42.00", "source_id": "json-bilibili-tech", "title": "2026.10.14 经济学家都押注收紧，MAS 却按兵不动：从 AI 周期看懂新加坡的汇率政策工具箱", "bad_utf8": false}
+{"score": "42.00", "source_id": "json-zhihu-hot", "title": "10 月 15 日 DeepSeek 网页和 APP 显示「服务器暂时不可用」，可能是哪些原因导致的？", "bad_utf8": false}
+{"score": "42.00", "source_id": "json-bilibili-tech", "title": "飞利浦冰境i2pro，家里也有水吧台 大块实心冰，威士忌不怕淡_#飞利浦冰境i2pro#宅家春季指南#闪电新品", "bad_utf8": false}
+{"score": "42.00", "source_id": "json-bilibili-tech", "title": "深度体验海尔云溪 5.0 D1 洗烘套装 10KG：阳光净护 深度体验海尔云溪 5.0 D1 洗烘套装 10KG：阳光净护 + 物理除菌，母婴家庭安心之选", "bad_utf8": false}
+{"score": "41.00", "source_id": "json-bilibili-knowledge", "title": "投行激辩：欧盟混动配额与退税下调，警报还是机会？", "bad_utf8": false}
+{"score": "41.00", "source_id": "json-bilibili-tech", "title": "直播画质卷过单反？影石Link 2 Pro上手体验", "bad_utf8": false}
+{"score": "41.00", "source_id": "json-bilibili-tech", "title": "iKF King Pro3.0，全能降噪头戴，音质续航双绝", "bad_utf8": false}
+
+== D selected_ledger ==
+(no rows)
+
+== E json-zhihu-hot band ==
+{"s_band": "46", "count": "1"}
+{"s_band": "42", "count": "1"}
+{"s_band": "30", "count": "2"}
+{"s_band": "25", "count": "1"}
+{"s_band": "18", "count": "1"}
+{"s_band": "15", "count": "1"}
+{"s_band": "13", "count": "2"}
+{"s_band": "12", "count": "4"}
+{"s_band": "10", "count": "1"}
+
+== F judged_total (timeline_at face) ==
+{"judged_total": "280"}
+
+== F judged_census (timeline_at face) ==
+{"source_id": "json-bilibili-knowledge", "judged": "138", "max_score": "45.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-popular", "judged": "1", "max_score": "36.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-tech", "judged": "136", "max_score": "43.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-zhihu-hot", "judged": "3", "max_score": "46.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-simon-willison", "judged": "1", "max_score": "23.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-techcrunch-ai", "judged": "1", "max_score": "43.00", "ge60": "0", "ge55": "0", "selected_n": "0"}

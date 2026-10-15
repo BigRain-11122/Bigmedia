@@ -24,12 +24,22 @@ Channel laws baked in:
   naive row parsing (R2235 false-positive census lesson).
 - Read-only face: SELECT-only queries; the worker/stack is never touched.
 
-Sections (all window-filtered on analyses.created_at, tz Asia/Shanghai):
-  A per-source scored/max/ge60/ge55/selected census
-  B focus-source top-N (score, selected, title)
-  C top-N any-source (score, source, title)  <- the previously broken read
-  D selected ledger (+ prompt_version = tech#92 anchor-version evidence)
-  E focus-source score bands
+Sections (A-E window on analyses.created_at; F windows on publications.timeline_at,
+the column composeDaily judgedReports actually consults; tz Asia/Shanghai):
+  A per-source scored/max/ge60/ge55/selected census           (created_at face)
+  B focus-source top-N (score, selected, title)                (created_at face)
+  C top-N any-source (score, source, title)  <- previously broken read (created_at face)
+  D selected ledger (+ prompt_version = tech#92 anchor-version evidence) (created_at face)
+  E focus-source score bands                                   (created_at face)
+  F judged-window total + per-source census (timeline_at face; tech#179)
+
+tech#179 semantics law: A-E measure the analysis pipeline face (when analyses
+rows were created). F mirrors judgedReports in reports/edition.ts exactly —
+publications p WHERE visibility='public' AND eligible AND (NOT selected OR
+visible_after <= end) AND score IS NOT NULL AND NOT backfill AND
+timeline_at in [start,end). It is the count behind the daily
+"nothing judged in its window" throw. Predicting daily green/red from A
+caused the R2283 forecast/empiricism fork; consumers must read F for that.
 
 rc contract: 0 = all sections ran (bad_utf8 markers are data annotations,
 not failures), 1 = one or more sections errored (ERR lines kept per section),
@@ -90,6 +100,19 @@ def _win(since, until):
     return ("a.created_at >= '%s' AND a.created_at < '%s'" % (since, until))
 
 
+def _pub_win(since, until):
+    return ("p.timeline_at >= '%s' AND p.timeline_at < '%s'" % (since, until))
+
+
+def _judged_face(since, until):
+    """WHERE of judgedReports (reports/edition.ts) verbatim: the count the
+    daily 'nothing judged in its window' throw consults (tech#179)."""
+    return ("p.visibility = 'public' AND p.eligible "
+            "AND (NOT p.selected OR p.visible_after <= '%s') "
+            "AND p.score IS NOT NULL AND NOT p.backfill AND %s"
+            % (until, _pub_win(since, until)))
+
+
 def section_a(since, until):
     return ("SELECT art.source_id, count(*), max(a.score), "
             "count(*) FILTER (WHERE a.score >= 60), "
@@ -130,6 +153,24 @@ def section_e(since, until, source):
             "GROUP BY 1 ORDER BY 1 DESC;" % (source, _win(since, until)))
 
 
+def section_f_total(since, until):
+    """Exact mirror of judgedReports(start,end): one number, timeline_at face."""
+    return ("SELECT count(*) FROM publications p WHERE %s;"
+            % _judged_face(since, until))
+
+
+def section_f_census(since, until):
+    """Same shape as section A, but on the judged (timeline_at) face, so
+    A vs F reads side-by-side as the dual-window comparison."""
+    return ("SELECT p.source_id, count(*), max(p.score), "
+            "count(*) FILTER (WHERE p.score >= 60), "
+            "count(*) FILTER (WHERE p.score >= 55), "
+            "count(*) FILTER (WHERE p.selected) "
+            "FROM publications p WHERE %s "
+            "GROUP BY p.source_id ORDER BY p.source_id;"
+            % _judged_face(since, until))
+
+
 def _rows(out):
     return [ln for ln in out.strip().splitlines() if ln]
 
@@ -168,6 +209,12 @@ def collect(runner, since, until, source, top):
              "created_at": f[3], "title": t}, ensure_ascii=False)),
         ("E %s band" % source, section_e(since, until, source), None,
          lambda f: json.dumps({"s_band": f[0], "count": f[1]})),
+        ("F judged_total (timeline_at face)", section_f_total(since, until), None,
+         lambda f: json.dumps({"judged_total": f[0]})),
+        ("F judged_census (timeline_at face)", section_f_census(since, until), None,
+         lambda f: json.dumps({"source_id": f[0], "judged": f[1],
+                               "max_score": f[2], "ge60": f[3],
+                               "ge55": f[4], "selected_n": f[5]})),
     ]
 
     for header, sql, hex_idx, fmt in spec:
@@ -191,7 +238,11 @@ def collect(runner, since, until, source, top):
         bad_total += bad
         parts.append(render_section(header, lines, bad))
 
-    head = ("== AIHOT window read (since %s -> until %s, tz Asia/Shanghai) =="
+    head = ("== AIHOT window read (since %s -> until %s, tz Asia/Shanghai) ==\n"
+            "window semantics: A-E = analyses.created_at (tool/analysis face); "
+            "F = publications.timeline_at (composeDaily judgedReports face - "
+            "the count behind the daily nothing-judged throw). "
+            "Daily green/red prediction reads F, not A (tech#179, R2283 fork lesson)."
             % (since, until))
     return "\n\n".join([head] + parts), errs, bad_total
 
@@ -223,7 +274,7 @@ def main(argv=None):
     with open(out_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(report + "\n")
     print("wrote %s sections=%d bad_utf8_rows=%d errs=%d"
-          % (out_path, 5, bad_total, len(errs)))
+          % (out_path, 7, bad_total, len(errs)))
     return 1 if errs else 0
 
 
