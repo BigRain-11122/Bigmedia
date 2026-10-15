@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 08:36:22",
- "do": "R2282 tech#92 重判窗 FAIL 确证+fallback 阈值腿执行毕（T1_5 65→55·激活全证）·真发现=events.group 判定段 404 死亡（tech#178）=日报 266 连败根因",
+ "export_ts": "2026-10-15 08:56:25",
+ "do": "R2283: events.group revived (0 new 404); MV V3 08:43 deadline not met (preview only); REACT-v21 candidates gated",
  "depts": [
   {
    "n": "工程技术部",
