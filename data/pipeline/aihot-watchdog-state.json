@@ -11,5 +11,12 @@
   "reanchored_ts": "2026-10-13 12:38:00"
  },
  "last_heartbeat": "2026-10-15",
- "last_err_log": "2026-10-13 23:41:15"
+ "last_err_log": "2026-10-13 23:41:15",
+ "pause": {
+  "reason": "bm-a workday halt CEO word-gate O-20261015-1845 (orders row 452): MODE=pause stopped ollama 11434; AIHOT worker alive would burn failed LLM retries on CEO machine; halt-aligned stop per R2047/R2048 precedent",
+  "resume_step": "on CEO kaigong word (workday) or weekend free-run window (10-18 00:00 per O-1845): remove pause object + run data/assets/aihot-poc/worker-restart.bat (main#21 family); ollama recovery belongs to machine-state resume domain",
+  "set_by": "R2307 loop round (orders rows 449-454 consumption + halt alignment)",
+  "worker_restart_paused": true,
+  "ts": "2026-10-15 20:37:30"
+ }
 }
