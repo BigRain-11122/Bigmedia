@@ -1,0 +1,34 @@
+== AIHOT window read (since 2026-10-14 08:25 -> until 2026-10-15 08:24, tz Asia/Shanghai) ==
+
+== A per-source ==
+{"source_id": "json-bilibili-knowledge", "scored": "163", "max_score": "56.00", "ge60": "0", "ge55": "1", "selected_n": "0"}
+{"source_id": "json-bilibili-tech", "scored": "125", "max_score": "40.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-zhihu-hot", "scored": "1", "max_score": "55.00", "ge60": "0", "ge55": "1", "selected_n": "0"}
+{"source_id": "rss-techcrunch-ai", "scored": "1", "max_score": "22.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-the-verge-ai", "scored": "1", "max_score": "44.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+
+== B json-zhihu-hot top ==
+{"score": "55.00", "selected": "f", "title": "新能源车出口退税从 13% 降至 9%，2027 年 4 月落地，会影响国内车企出海利润与海外定价吗？"}
+
+== C top15 any ==
+{"score": "56.00", "source_id": "json-bilibili-knowledge", "title": "苹果10月13日新品：HomeView、Apple TV 4K、HomePod mini 2，一次看完", "bad_utf8": false}
+{"score": "55.00", "source_id": "json-zhihu-hot", "title": "新能源车出口退税从 13% 降至 9%，2027 年 4 月落地，会影响国内车企出海利润与海外定价吗？", "bad_utf8": false}
+{"score": "52.00", "source_id": "json-bilibili-knowledge", "title": "【熟肉】黄仁勋亲口承认：没有AI，英伟达连芯片都不会设计了？", "bad_utf8": false}
+{"score": "47.00", "source_id": "json-bilibili-knowledge", "title": "20261014.2026年10月14日|杭州回应白天遛狗罚款；海口九岁自闭症男童乘电梯遭男子踹倒；敌敌畏消杀餐厅事件新进展", "bad_utf8": false}
+{"score": "44.00", "source_id": "rss-the-verge-ai", "title": "Shopify opens its catalog up to more AI agents", "bad_utf8": false}
+{"score": "40.00", "source_id": "json-bilibili-knowledge", "title": "出口退税削减确认，中国汽车迎来利润承压与行业出清拐点", "bad_utf8": false}
+{"score": "40.00", "source_id": "json-bilibili-knowledge", "title": "2026诺贝尔经济学奖：想让经济稳下来，先得让人们对未来有一个靠得住的判断（Why Government Stimulus Fails）", "bad_utf8": false}
+{"score": "40.00", "source_id": "json-bilibili-knowledge", "title": "倒置水桶里的水为何不掉？", "bad_utf8": false}
+{"score": "40.00", "source_id": "json-bilibili-tech", "title": "这么便宜？ROG绝杀27二代电竞显示器 #华硕ROG显示器 #绝杀27二代", "bad_utf8": false}
+{"score": "38.00", "source_id": "json-bilibili-knowledge", "title": "财富速报：Shein港股IPO与美债信用风险同现 高净值跨境配置要看懂两个信号 | 港股IPO 美债久期 中东能源风险 | 高净值配置需重估", "bad_utf8": false}
+{"score": "35.00", "source_id": "json-bilibili-knowledge", "title": "百万豪车刹车踏板被踩断！人民日报怒批“速成车”，别再拿国标当挡箭牌！", "bad_utf8": false}
+{"score": "35.00", "source_id": "json-bilibili-tech", "title": "【中配】Claude Opus 6 泄漏，Gemini 4 Carbon 泄漏，OpenAI 巨大更新，Claude 24/7 Agent，及其他！AI ...", "bad_utf8": false}
+{"score": "35.00", "source_id": "json-bilibili-knowledge", "title": "一报还一报-为什么老实人不一定吃亏", "bad_utf8": false}
+{"score": "35.00", "source_id": "json-bilibili-knowledge", "title": "烧纸不如“充电”？老祖宗为啥说，选对安息地是给后代“续能”？", "bad_utf8": false}
+{"score": "35.00", "source_id": "json-bilibili-knowledge", "title": "让AI学会说土家语，先得整理几千条字音配对", "bad_utf8": false}
+
+== D selected_ledger ==
+(no rows)
+
+== E json-zhihu-hot band ==
+{"s_band": "55", "count": "1"}
