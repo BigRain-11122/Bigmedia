@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 07:48:15",
- "do": "R2281 REACT-v20 收口=F-189 登记（E4 6/10·S2 双绿·断轮吸收批闭）·下轮 08:00 tech#92 重判窗+MV V3 08:43 死线守望",
+ "export_ts": "2026-10-15 08:36:22",
+ "do": "R2282 tech#92 重判窗 FAIL 确证+fallback 阈值腿执行毕（T1_5 65→55·激活全证）·真发现=events.group 判定段 404 死亡（tech#178）=日报 266 连败根因",
  "depts": [
   {
    "n": "工程技术部",
@@ -10,12 +10,12 @@
  ],
  "outs": [
   [
-   "雷达评分标定重判窗 10-15 08:00（R2231 读数 FAIL·锚例版已部署·fallback 递补序在册）",
-   "wait",
+   "雷达阈值腿 T1_5 65→55 执行毕·10-16 08:00 窗判读·判定段死亡=tech#178",
+   "on",
    "radar"
   ],
   [
-   "MV 全曲成品线在跑（V3 reel 装配夜窗·循环查看位零接触）",
+   "MV 全曲成品线在跑（V3 预览 01:27 落位·终剪未至·循环查看位零接触）",
    "on",
    "mv0001"
   ],
@@ -85,8 +85,8 @@
   ]
  ],
  "live": [
-  "当前活：夜窗生产轮——tech#172 S1 CPU 航道 launcher 生成器族统一位交付毕（e4_launcher_gen 通用化 --expert 面·24 新测·全回归 1442 绿 118s）；tech#92 08:00 锚例重判窗+REACT-v20 晨窗双 gated 待晨窗；MV V3 装配守望中（CEO 优先线·08:43 死线·CEO-PROXY 事件班承载）",
-  "最近实物：技术件 src/os/e4_launcher_gen.py --expert 面+tests/test_e4_launcher_gen.py（R2257 手写 s1_call_cpu.py 工艺沉淀为一键生成器·S1 CPU 航道下次调用零手抄）·2026-10-15 02:0x",
-  "下个里程碑：10-15 08:00 tech#92 AIHOT 锚例重判窗读数（zhihu 头部 ≥3 ≥60）+MV V3 全曲成片 08:43 死线呈片·窗口 2026-10-15 晨（≤48h）"
+  "当前活：tech#92 锚例真测窗 FAIL→fallback 阈值腿 T1_5 65→55 执行+激活全证（watchdog heal 08:30:28·R2231 正法）；tech#178 新种子=events.group 判定段 404 死亡根因（日报 266 连败·席位 id 错配 tech#166 漏面）待愈合",
+  "最近实物：门槛变更 industry/selection.ts（城市四源 T1_5 65→55·gitignore 域运行时资产·tech#92 注记即档案）+窗读证据 data/pipeline/aihot-evidence/r2282_t92_window_result.txt·2026-10-15 08:2x",
+  "下个里程碑：10-16 08:00 compose 窗读城市源 selected_n（阈值腿判据窗）+tech#178 判定段愈合（events.group 复活+daily compose 落表）·窗口 2026-10-16 晨（≤48h）"
  ]
 }
