@@ -1,0 +1,32 @@
+== compose job runs (latest 8) ==
+cron.reports.compose|failed|2026-10-15 09:00:35.268689+08|reports: daily:2026-10-15, monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 08:30:34.399697+08|reports: daily:2026-10-15, monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 08:00:44.345912+08|reports: daily:2026-10-15, monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 07:30:43.344429+08|reports: monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 07:00:42.412825+08|reports: monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 06:30:41.485394+08|reports: monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 06:00:40.616421+08|reports: monthly:2026-09 failed
+cron.reports.compose|failed|2026-10-15 05:30:39.778105+08|reports: monthly:2026-09 failed
+== events.group created|active|completed|last_start ==
+14|1|1928|2026-10-15 09:06:10.295884+08
+== reports (kind|winStart|winEnd) ==
+daily|2026-10-13 08:00:00+08|2026-10-14 08:00:00+08
+daily|2026-10-12 08:00:00+08|2026-10-13 08:00:00+08
+weekly|2026-10-04 08:00:00+08|2026-10-11 08:00:00+08
+daily|2026-10-11 08:00:00+08|2026-10-12 08:00:00+08
+daily|2026-10-10 08:00:00+08|2026-10-11 08:00:00+08
+== reports columns ==
+id
+kind
+key
+window_start
+window_end
+content
+generated_at
+model
+revision
+origin
+created_at
+updated_at
+== selected count|maxscore ==
+36|83.00

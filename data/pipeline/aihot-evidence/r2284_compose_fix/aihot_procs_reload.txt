@@ -1,0 +1,8 @@
+﻿aihot_procs 2026-10-15 09:13:37: verdict=complete rc=0
+  proxy: pid 25132
+  api: pid 32204
+  worker: pid 49764
+  evidence: api pid 32204: owns 127.0.0.1:3101 (netstat binding)
+  evidence: proxy pid 25132: owns 127.0.0.1:3100 (netstat binding)
+  evidence: worker pid 49764: 'src/main.ts' cmdline shape, bound to no known port
+judgment law (R2038): roles proven -- safe to operate the named pid; restart via the canonical worker-restart.bat / api-restart.bat
