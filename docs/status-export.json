@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 12:33:05",
- "do": "tech#178 compose 验证读数收官（monthly 修复五连证），明日 08:00 读正式判据窗",
+ "export_ts": "2026-10-15 12:52:50",
+ "do": "tech#179 F 双窗段交付毕（timeline_at face=judgedReports 镜像）；下窗 10-16 08:00 tech#92 权威读数消费 F face",
  "depts": [
   {
    "n": "工程技术部",
