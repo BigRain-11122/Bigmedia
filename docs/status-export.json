@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 13:17:08",
- "do": "R2291 tech#180 腿① --h2-auto em 阶梯机核交付（13 新测+1481 全回归绿·真 deck 双 dry-run 冒烟）·余腿②壳模板化+live-fire 10-16；下轮=tech#92 权威窗读数",
+ "export_ts": "2026-10-15 13:40:18",
+ "do": "tech#180 leg2 landed: e4_ref_call.py shared E4 shell, 1506 tests OK; next 10-16 REACT-v22 live-fire",
  "depts": [
   {
    "n": "工程技术部",
