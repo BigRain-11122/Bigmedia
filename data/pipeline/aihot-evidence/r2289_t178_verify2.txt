@@ -1,0 +1,62 @@
+# r2289 t178 verify phase2 (ts=2026-10-15 12:3x)
+[job columns rc=0]
+id name priority data state retry_limit retry_count retry_delay retry_backoff retry_delay_max expire_seconds deletion_seconds singleton_key singleton_on group_id group_tier start_after created_on started_on completed_on keep_until output dead_letter policy heartbeat_on heartbeat_seconds blocked blocking pending_dependencies source_name source_id source_created_on source_retry_count
+picked created_col=created_on done_col=completed_on
+[C2 compose last 8 runs rc=1]
+ERROR:  column "response" does not exist
+LINE 1: ...eated_on,'MM-DD HH24:MI'), state, encode(coalesce(response::...
+                                                             ^
+[G2 group last completed rc=0]
+10-15 12:22
+[G3 group last failed ts rc=0]
+10-15 12:23
+[J frozen daily:2026-10-15 judged rc=0]
+judged=0
+[S2 live-window per-source max score rc=0]
+json-bilibili-knowledge|45.00
+json-bilibili-popular|36.00
+json-bilibili-tech|43.00
+json-zhihu-hot|46.00
+rss-simon-willison|23.00
+rss-techcrunch-ai|43.00
+[S3 city-sources live-window score bands rc=0]
+46|1
+45|1
+43|3
+42|5
+41|4
+40|1
+39|3
+38|4
+37|3
+36|5
+35|6
+34|1
+33|3
+32|6
+31|1
+30|42
+28|1
+27|7
+26|9
+25|26
+24|7
+23|19
+22|29
+21|15
+20|36
+19|2
+18|7
+17|11
+16|8
+15|30
+14|4
+13|8
+12|6
+11|8
+10|31
+6|1
+5|3
+3|6
+1|4
+0|54

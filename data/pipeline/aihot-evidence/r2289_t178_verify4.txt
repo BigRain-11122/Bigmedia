@@ -1,0 +1,7 @@
+# r2289 phase4 frozen-window catch-up potential read (12:4x)
+[frozen-window articles processing_state rc=0]
+failed|9221
+[frozen-window articles backfill split (non-bf new/pending only) rc=0]
+
+[frozen-window publications rows exist at all (pre-listed raw count) rc=0]
+0|0|0

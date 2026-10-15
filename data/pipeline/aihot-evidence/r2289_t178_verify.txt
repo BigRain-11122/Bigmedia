@@ -1,0 +1,64 @@
+# r2289 t178 verification read (ts=2026-10-15 12:2x, read-only)
+# sections: P=pgboss tables, C=compose job face, R=reports table, G=events.group, J=judged counts, S=selected per-source (live window)
+[P pgboss tables rc=0]
+bam
+job
+job_common
+job_dependency
+queue
+queue_stats
+queue_stats_20261007
+queue_stats_20261008
+schedule
+subscription
+version
+warning
+[C1 compose job states rc=0]
+failed|273
+[C2 compose last 8 runs rc=1]
+ERROR:  column "createdon" does not exist
+LINE 1: SELECT to_char(createdon,'MM-DD HH24:MI'), state, encode(coa...
+                       ^
+HINT:  Perhaps you meant to reference the column "job.crea
+[R1 reports columns rc=0]
+id
+kind
+key
+window_start
+window_end
+content
+generated_at
+model
+revision
+origin
+created_at
+updated_at
+[R2 reports last 6 rc=0]
+daily|2026-10-14|10-14 08:00
+daily|2026-10-13|10-13 22:35
+weekly|2026-W41|10-12 10:46
+daily|2026-10-12|10-12 08:00
+daily|2026-10-11|10-11 08:00
+daily|2026-10-10|10-10 08:00
+[G1 group job states rc=0]
+retry|8
+completed|2085
+failed|1378
+[G2 group last completed rc=1]
+ERROR:  column "completedon" does not exist
+LINE 1: SELECT to_char(max(completedon),'MM-DD HH24:MI') FROM pgboss...
+                           ^
+HINT:  Perha
+[J frozen daily:2026-10-15 (10-14 08:00->10-15 08:00) rc=1]
+judged=ERROR:  syntax error at or near "08"
+LINE 1: ... (NOT p.selected OR p.visible_after <= 2026-10-15 08:00)) AN...
+                                              
+[J live daily:2026-10-16 (10-15 08:00->10-16 08:00, partial) rc=0]
+judged=278
+[S live-window per-source judged/ge55/ge60/selected rc=0]
+json-bilibili-knowledge|138|0|0|0
+json-bilibili-popular|1|0|0|0
+json-bilibili-tech|134|0|0|0
+json-zhihu-hot|3|0|0|0
+rss-simon-willison|1|0|0|0
+rss-techcrunch-ai|1|0|0|0
