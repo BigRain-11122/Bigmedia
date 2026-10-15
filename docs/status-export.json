@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 09:24:24",
- "do": "R2284: compose.ts skip fix shipped+reloaded (heal 09:15 PID 66292); daily window honest-empty; next=REACT-v21 F-190",
+ "export_ts": "2026-10-15 09:53:00",
+ "do": "R2285 compose tick 验证 PASS（tech#178 monthly skip 生效）+REACT-v21 M0-M2 落（A 8/8 入选·M1+M2 全绿·验图五检过）·收官链下轮",
  "depts": [
   {
    "n": "工程技术部",
@@ -10,12 +10,12 @@
  ],
  "outs": [
   [
-   "雷达阈值腿 T1_5 65→55 执行毕·10-16 08:00 窗判读·判定段死亡=tech#178",
+   "雷达阈值腿已执行·10-16 08:00 compose 窗判读 selected_n·daily 空窗=诚实态",
    "on",
    "radar"
   ],
   [
-   "MV 全曲成品线在跑（V3 预览 01:27 落位·终剪未至·循环查看位零接触）",
+   "MV 全曲成品线在跑（V3 终剪守望·循环查看位零接触）",
    "on",
    "mv0001"
   ],
@@ -35,17 +35,17 @@
    "intel"
   ],
   [
-   "SC-005 口述史第五件风控官陈雅雯收官=F-177 入库（B 批 04/05 毕·06 林之恒 fire-ready）",
+   "SC-005 口述史第五件收官=F-177 入库（B 批 04/05 毕）",
    "on",
    "l-audio"
   ],
   [
-   "磁盘减负执行（9.2GB+79MB+bonsai 6.14GB 已清·renders 冻结维持）",
+   "磁盘减负执行毕·renders 冻结维持",
    "on",
    "ops"
   ],
   [
-   "REACT/CENSUS 图鉴系列量产线（供给门照守）",
+   "REACT-v21 M0-M2 落（A 入选/B 回退·验图五检过）·M4.5+F-190 收官下轮",
    "on",
    "l-card"
   ],
@@ -55,7 +55,7 @@
    "weekly"
   ],
   [
-   "fire 席位复活裁决=案 A 过（14b S1/E4 席位·夜窗点火 main#33）",
+   "fire 席位复活裁决=案 A 过（14b S1/E4 席位）",
    "wait",
    "fire-seat"
   ]
@@ -85,8 +85,8 @@
   ]
  ],
  "live": [
-  "当前活：tech#178 修复裁决腿落地毕（compose.ts 空封闭期 skip+reload 自愈 09:15）——验证窗=09:30/10:00 compose tick 首读（monthly 轴退出 failed 列+daily catch-up 观察）",
-  "最近实物：AIHOT compose.ts 修复正身+证据四件（data/pipeline/aihot-evidence/r2284_compose_fix/·2026-10-15 09:2x·tsc exit0+heal ledger 09:15 行）",
-  "下个里程碑：REACT-v21《城市速报 021》F-190 登记（main#119 队头·≤48h 窗）+09:30 tick 验证读数（下轮首读）"
+  "当前活：main#119 REACT-v21 生产链 M0-M2 毕（双候选复核 A 8/8 入选/B 5/8 回退留痕·M1 十断言·M2 34 档出图·验图五检全绿含像素级全角实证）·M4.5+E4+F-190 收官链下轮；compose 09:30 tick 验证 PASS（tech#178 monthly skip 生效·daily 空窗=诚实态）",
+  "最近实物：MC-20261015-REACT-v21.png（247KB·城市速报 021·zhihu #8 双休待业题·像素画匠信条收束）+mp4 121KB·data/storylines/cards/MC-20261015-REACT-v21/·2026-10-15 09:4x",
+  "下个里程碑：REACT-v21 M4.5 七席+E4+F-190 登记收官（R2286）+10-16 08:00 compose 窗城市源 selected_n 判读·窗口 2026-10-16 晨（≤48h）"
  ]
 }
