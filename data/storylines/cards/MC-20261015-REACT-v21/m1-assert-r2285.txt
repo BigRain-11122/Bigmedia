@@ -1,0 +1,10 @@
+PASS  daily-brief zhihu #8 located  如何看待二本毕业女生待业一年，仍坚持找一份双休工作？是不愿降低生活标准，还是对就
+PASS  HOT1+HOT2 == HOT_FULL (split-preserve assertion)  HOT1=26 HOT2=22 FULL=48
+PASS  axis 秩序 verbatim in weekend bucket  慢点儿，别让这难得的闲暇走了
+PASS  axis 怀旧 verbatim in weekend bucket  小日子慢悠悠，多好啊
+PASS  axis 侠气 verbatim in weekend bucket  慢悠悠过个周末，自在得很
+PASS  creed verbatim == C-00018 anchor  像素越小，心眼越大。
+PASS  fleet line-collision zero (quoted content lines)  []
+PASS  creed unused in REACT v1-v20 closings (rotation)  []
+PASS  single-bucket discipline (weekend only)
+PASS  zero personal name on face (axis/occupation-level only)

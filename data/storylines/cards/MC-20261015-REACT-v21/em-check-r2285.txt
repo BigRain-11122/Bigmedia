@@ -1,0 +1,12 @@
+em-check-r2285 (REACT-v21 M2 front-fit, ladder even-steps, v19/v20 format)
+h2_size=34 budget=27.06em
+OK   15.55em margin +11.51  今日热点 · 知乎热榜 2026-10-15
+OK   26.00em margin  +1.06  如何看待二本毕业女生待业一年，仍坚持找一份双休工作？
+OK   22.00em margin  +5.06  是不愿降低生活标准，还是对就业市场缺乏认知？
+OK   20.00em margin  +7.06  秩序轴：「慢点儿，别让这难得的闲暇走了」
+OK   16.00em margin +11.06  怀旧轴：「小日子慢悠悠，多好啊」
+OK   18.00em margin  +9.06  侠气轴：「慢悠悠过个周末，自在得很」
+OK   19.00em margin  +8.06  像素画匠信条：「像素越小，心眼越大。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+ALL-HORIZ: PASS

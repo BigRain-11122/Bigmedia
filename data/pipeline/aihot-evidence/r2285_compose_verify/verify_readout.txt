@@ -1,0 +1,4 @@
+﻿r2285 compose tick verify 2026-10-15 09:38:55
+- pgboss cron.reports.compose 09:30 run: state=failed (daily axis only, fail-closed by design), retry_count=1
+- worker.log post-reload (PID 66292): 'period skipped: no daily issue covers it' report=monthly:2026-09 x2 = tech#178 skip fix VERIFIED (no more monthly throw)
+- daily:2026-10-15 'nothing judged in its window' = honest empty (0 scored since 08:00), compose will pass once judged>0 enters window; selected_n ruling window 10-16 08:00 (R2282 fallback prereg)
