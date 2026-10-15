@@ -56,6 +56,24 @@ if (-not $decision -or $decision -notmatch '^decision=own') {
 Log "lock acquired: $decision"
 
 try {
+    # ---- C-20261015-03 cloud concurrency cap v1.0 preflight (O-20261015-1800,
+    # committee case: spawn-gate spec par.3, fleet-wide unified face).
+    # Before igniting a new cloud LLM round, count live codely.exe on this
+    # machine (CEO interactive + other autonomous lanes + bg subagents all
+    # count). live >= 2 -> defer this grid slot: ledger line + exit 0, next
+    # slot auto-retries. Fail-open: a probe crash must never block the line.
+    $capLedger = Join-Path $logDir 'cloud-cap-ledger.txt'
+    try {
+        $live = @(Get-CimInstance Win32_Process -Filter "Name='codely.exe'" -ErrorAction Stop).Count
+        if ($live -ge 2) {
+            Add-Content -Path $capLedger -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | CLOUD_CAP_DEFER live=$live" -Encoding UTF8
+            Log "defer: cloud concurrency cap (live=$live >= 2, C-20261015-03)"
+            Beat "cloud-cap defer (live=$live)"
+            exit 0
+        }
+        Log "cloud-cap preflight ok (live=$live)"
+    } catch { Log "cloud-cap preflight probe failed - fail-open ignition: $_" }
+
     Log "iteration round start $stamp"
 
     $codelyPath = (Get-Command codely -ErrorAction SilentlyContinue).Source
