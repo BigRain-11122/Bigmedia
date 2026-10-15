@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 08:56:25",
- "do": "R2283: events.group revived (0 new 404); MV V3 08:43 deadline not met (preview only); REACT-v21 candidates gated",
+ "export_ts": "2026-10-15 09:24:24",
+ "do": "R2284: compose.ts skip fix shipped+reloaded (heal 09:15 PID 66292); daily window honest-empty; next=REACT-v21 F-190",
  "depts": [
   {
    "n": "工程技术部",
@@ -85,8 +85,8 @@
   ]
  ],
  "live": [
-  "当前活：tech#92 锚例真测窗 FAIL→fallback 阈值腿 T1_5 65→55 执行+激活全证（watchdog heal 08:30:28·R2231 正法）；tech#178 新种子=events.group 判定段 404 死亡根因（日报 266 连败·席位 id 错配 tech#166 漏面）待愈合",
-  "最近实物：门槛变更 industry/selection.ts（城市四源 T1_5 65→55·gitignore 域运行时资产·tech#92 注记即档案）+窗读证据 data/pipeline/aihot-evidence/r2282_t92_window_result.txt·2026-10-15 08:2x",
-  "下个里程碑：10-16 08:00 compose 窗读城市源 selected_n（阈值腿判据窗）+tech#178 判定段愈合（events.group 复活+daily compose 落表）·窗口 2026-10-16 晨（≤48h）"
+  "当前活：tech#178 修复裁决腿落地毕（compose.ts 空封闭期 skip+reload 自愈 09:15）——验证窗=09:30/10:00 compose tick 首读（monthly 轴退出 failed 列+daily catch-up 观察）",
+  "最近实物：AIHOT compose.ts 修复正身+证据四件（data/pipeline/aihot-evidence/r2284_compose_fix/·2026-10-15 09:2x·tsc exit0+heal ledger 09:15 行）",
+  "下个里程碑：REACT-v21《城市速报 021》F-190 登记（main#119 队头·≤48h 窗）+09:30 tick 验证读数（下轮首读）"
  ]
 }
