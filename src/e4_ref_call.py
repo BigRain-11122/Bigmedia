@@ -54,7 +54,7 @@ rc contract (mirrors the CPU-variant generated launcher):
 
 Usage:
   python src/e4_ref_call.py --prompt-file <e4-body.txt> [--label L]
-      [--model qwen2.5:14b] [--timeout 1500] [--threads 4]
+      [--model qwen3.8:27b] [--timeout 1500] [--threads 4]
       [--questions-file QF]
 
 --label defaults to the prompt file's parent directory name with a
@@ -162,7 +162,7 @@ def main(argv=None):
                     help='material label for result json + ledger '
                          '(default: prompt file parent dir name '
                          'with trailing -tmp stripped)')
-    ap.add_argument('--model', default='qwen2.5:14b')
+    ap.add_argument('--model', default='qwen3.8:27b')
     ap.add_argument('--timeout', type=int, default=1500)
     ap.add_argument('--threads', type=int, default=4,
                     help='CPU threads (CEO 10%% margin law)')
@@ -207,7 +207,7 @@ def main(argv=None):
     result = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'),
               'model': args.model, 'material': label, 'lane': LANE}
     payload = json.dumps({'model': args.model, 'prompt': prompt,
-                          'stream': False,
+                          'stream': False, 'think': False,
                           'options': {'num_gpu': 0,
                                       'num_thread': args.threads}}
                         ).encode('utf-8')

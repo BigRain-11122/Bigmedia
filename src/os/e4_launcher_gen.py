@@ -351,6 +351,7 @@ prompt = __PROMPT_REPR__
 result = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'model': MODEL,
           'material': MATERIAL, 'lane': LANE}
 payload = json.dumps({'model': MODEL, 'prompt': prompt, 'stream': False,
+                      'think': False,
                       'options': {'num_gpu': 0,
                                   'num_thread': CPU_THREADS}}).encode('utf-8')
 request = urllib.request.Request(GENERATE_URL, data=payload,
@@ -445,7 +446,7 @@ except Exception as exc:
 reg = json.loads(io.open(os.path.join(ROOT, 'data', 'experts',
                                       'registry.json'),
                          encoding='utf-8-sig').read())
-seat = str(reg.get('model', '')) or 'qwen2.5:14b'
+seat = str(reg.get('model', '')) or 'qwen3.8:27b'
 prompt_file = None
 role_dept = EXPERT_ID
 entries = reg.get('experts') or reg.get('roster') or []
@@ -477,6 +478,7 @@ prompt = (prompt_text.rstrip() + '\n\n===== 材料 =====\n' +
 result = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'), 'model': seat,
           'material': MATERIAL_REL, 'lane': LANE, 'expert': EXPERT_ID}
 payload = json.dumps({'model': seat, 'prompt': prompt, 'stream': False,
+                      'think': False,
                       'options': {'num_gpu': 0,
                                   'num_thread': CPU_THREADS}}).encode('utf-8')
 request = urllib.request.Request(GENERATE_URL, data=payload,
@@ -626,7 +628,7 @@ def main(argv=None):
                     help='launcher output path (E4 default: <body dir>'
                          '/e4_call.py; expert default: <material dir>'
                          '/<id-lower>_call_cpu.py)')
-    ap.add_argument('--model', default='qwen2.5:14b')
+    ap.add_argument('--model', default='qwen3.8:27b')
     ap.add_argument('--timeout', type=int, default=1500)
     ap.add_argument('--questions-file',
                     help='override the canonical question block (whole file '

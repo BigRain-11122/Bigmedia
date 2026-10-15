@@ -36,10 +36,10 @@ from call_expert import call_model  # noqa: E402  (src/ sibling module)
 REPO = Path(__file__).resolve().parents[1]
 PROMPT_FILE = REPO / "data" / "pipeline" / "prompts" / "p4-digest.txt"
 LEDGER = REPO / "data" / "pipeline" / "p4-ledger.md"
-DEFAULT_MODEL = "qwen2.5:7b-instruct"  # ladder: digest = 7b resident tier
+DEFAULT_MODEL = "qwen3.8:27b"  # O-20261015-1335: sole local gen model (7b tier deleted fleet-wide)
 DEFAULT_TIMEOUT = 600                 # J3: <=10 min per item
 DEFAULT_MAX_LINES = 60                # J2 line cap
-DEFAULT_MAX_INPUT_CHARS = 6000        # 7b ctx budget; clipping is declared
+DEFAULT_MAX_INPUT_CHARS = 6000        # 7b-era cap kept as conservative clip; clipping is declared
 CITE_RE = re.compile(r"\[L(\d+)\]")
 _VERIF_MARK = "## " + "\u9a8c\u8bc1\u58f0\u660e"  # tool-written section
 

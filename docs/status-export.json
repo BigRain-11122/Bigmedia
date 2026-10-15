@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 13:40:18",
- "do": "tech#180 leg2 landed: e4_ref_call.py shared E4 shell, 1506 tests OK; next 10-16 REACT-v22 live-fire",
+ "export_ts": "2026-10-15 14:05:10",
+ "do": "O-20261015-1335 consumer switch: expert+fire/probe stack now on qwen3.8:27b (think:false), 1506 tests green",
  "depts": [
   {
    "n": "工程技术部",

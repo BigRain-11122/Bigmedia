@@ -59,7 +59,10 @@ face lands on the --json line, the human line (non-ok) and every --ledger
 row, so window judgments read the discipline straight off the evidence.
 
 tech#56 (R1890): cold-reload face. The 4000MiB residency line sits below
-the smallest ollama model we probe (qwen2.5:7b needs ~4.7GB VRAM), so a
+the resident footprint of any ollama generation model we probe (the
+qwen2.5 7b/14b tiers are deleted fleet-wide per O-20261015-1335; the
+sole local gen model qwen3.8:27b spans ~17GB and never fully fits the
+12GB card), so a
 timeout row with gpu_mem under the line means no model was resident at
 probe time -- the probe itself triggered the cold load and the 60s cap
 expired mid-load. That is a scheduling fact (wait for residency), not a
@@ -145,7 +148,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-DEFAULT_MODEL = "qwen2.5:14b-8k"
+DEFAULT_MODEL = "qwen3.8:27b"
 DEFAULT_TIMEOUT = 60
 DEFAULT_BASE_URL = "http://localhost:11434"
 GEN_PATH = "/api/generate"
@@ -153,8 +156,11 @@ DEFAULT_LEDGER = Path(__file__).resolve().parents[2] / "data" / "pipeline" / "ol
 
 
 def build_request_body(model):
-    """Build the JSON request body as bytes (no shell-quoting surface)."""
-    return json.dumps({"model": model, "prompt": "hi", "stream": False}).encode("utf-8")
+    """Build the JSON request body as bytes (no shell-quoting surface).
+    think:false (O-20261015-1335): the flagship is a thinking model;
+    probe timing must not fund thinking tokens."""
+    return json.dumps({"model": model, "prompt": "hi", "stream": False,
+                       "think": False}).encode("utf-8")
 
 
 def _http_post(base_url, body, timeout):
@@ -194,7 +200,9 @@ def _is_timeout(exc):
 
 FACE_GPU_BUSY_UTIL = 80  # tech#44 defer threshold
 # tech#56: below this much VRAM in use no probed ollama model can be
-# resident (the smallest we run, qwen2.5:7b, needs ~4.7GB), so a timeout
+# resident (qwen2.5 7b/14b tiers deleted fleet-wide O-20261015-1335;
+# the sole gen model qwen3.8:27b resident-occupies well above this
+# line even partial-offloaded), so a timeout
 # with gpu_mem under the line means the probe itself started a cold load.
 FACE_COLD_RELOAD_VRAM_MB = 4000
 
@@ -205,7 +213,12 @@ PS_TIMEOUT = 10  # status endpoint: fast even under saturation (R1877 family)
 # anchor: free 4.2GB < 14b-8k ~9GB -> partial-offload slow load, util 100
 # during load, probe cap burned mid-load). Unknown models -> no estimate ->
 # legacy flight always (conservative).
+# O-20261015-1335: qwen3.8:27b (17GB blob, envelope 17408MB) is the sole
+# local generation model; on the 12GB bm-a card free VRAM can never reach
+# the envelope, so cold flights for it always read skipped-not-resident
+# (honest: a cold 27b load always crawls; the CPU lane is the flight path).
 COLD_SKIP_MODEL_VRAM_MB = {
+    "qwen3.8:27b": 17408,
     "qwen2.5:14b-8k": 9000,
     "qwen2.5:7b": 4700,
 }

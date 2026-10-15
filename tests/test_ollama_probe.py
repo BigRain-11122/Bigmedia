@@ -848,13 +848,13 @@ class PrecheckTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_timeout(calls)
         self._ps([])
-        op._nvidia_smi_free_query = lambda: "12288, 3000\n"  # free 9288 >= 9000
+        op._nvidia_smi_free_query = lambda: "32768, 1000\n"  # free 31768 >= 17408
         rc, out = self._run(["--json"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["face"], "probe-coldload")
         self.assertTrue(line["timeout"])
-        self.assertEqual(line["precheck"], "cold-run free=9288MB>=model=9000MB")
+        self.assertEqual(line["precheck"], "cold-run free=31768MB>=model=17408MB")
         self.assertEqual(calls["flights"], 1)
 
 
@@ -1229,13 +1229,13 @@ class EvictionAwareTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_ok(calls)
         self._ps([{"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
-        op._nvidia_smi_free_query = lambda: "12288, 6674\n"  # free 5614 < 9000
+        op._nvidia_smi_free_query = lambda: "32768, 19268\n"  # free 13500 < 17408, +4888 credit >= envelope
         path = os.path.join(self.tmp, "dual-ledger.jsonl")
         rc, out = self._run(["--json", "--ledger", path])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "skipped-not-resident")
-        self.assertIn("cold-skip free=5614MB<model=9000MB", line["precheck"])
+        self.assertIn("cold-skip free=13500MB<model=17408MB", line["precheck"])
         self.assertEqual(line["evictable_mb"], 4888)
         self.assertEqual(line["eviction_aware_verdict"], "fly")
         self.assertEqual(calls["flights"], 0)  # skip maintained, no flight
@@ -1252,13 +1252,13 @@ class EvictionAwareTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_ok(calls)
         self._ps([{"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
-        op._nvidia_smi_free_query = lambda: "12288, 6674\n"
+        op._nvidia_smi_free_query = lambda: "32768, 18768\n"  # free 14000
         rc, out = self._run(["--json", "--eviction-aware"])
         self.assertEqual(rc, 0)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "ok")
         self.assertEqual(
-            line["precheck"], "cold-run free=5614MB+evictable=4888MB>=model=9000MB")
+            line["precheck"], "cold-run free=14000MB+evictable=4888MB>=model=17408MB")
         self.assertEqual(calls["flights"], 1)
 
     def test_main_eviction_aware_insufficient_credit_keeps_skip(self):
@@ -1273,7 +1273,7 @@ class EvictionAwareTests(unittest.TestCase):
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "skipped-not-resident")
         self.assertIn(
-            "cold-skip free=4200MB+evictable=1000MB<model=9000MB",
+            "cold-skip free=4200MB+evictable=1000MB<model=17408MB",
             line["precheck"])
         self.assertEqual(line["eviction_aware_verdict"], "skip")
         self.assertEqual(calls["flights"], 0)

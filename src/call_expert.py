@@ -9,7 +9,8 @@ called at any time" literal:
 
 Registry = data/experts/registry.json (id/dept/role/prompt_file/model).
 Prompts live as UTF-8 data files (encoding rule); the model is the local
-Ollama (default qwen2.5:14b - zero API, zero token). The call goes through
+Ollama (default qwen3.8:27b - fleet rollout O-20261015-1335; zero API,
+zero token). The call goes through
 subprocess stdin in UTF-8, which also fixes the PS5.1 GBK pipe garbling
 that hit raw `ollama run` piping on 2026-09-23.
 
@@ -64,7 +65,10 @@ REGISTRY = REPO / "data" / "experts" / "registry.json"
 LEDGER = REPO / "docs" / "reviews" / "expert-calls.md"
 VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
 DEFER_LEDGER = REPO / "data" / "pipeline" / "gpu-guard-defer-ledger.jsonl"
-DEFAULT_TIMEOUT = 300
+# O-20261015-1335 fleet rollout: the 14b-era 300s default cannot fund a
+# cold-ish 17G partial-offload flagship on the 12G card (canon precedent:
+# gen_storyboard 420->600 for the same model on this same machine).
+DEFAULT_TIMEOUT = 600
 # GPU pre-flight guard thresholds (tech#44): defer when the card is
 # clearly occupied by another lane (training/render window) or when
 # free VRAM is too tight for a local LLM seat.
@@ -72,13 +76,16 @@ GPU_DEFER_UTIL_PCT = 80
 GPU_DEFER_FREE_MB = 2048
 # tech#120 wedge fast-fail probe: two 1500s S1 flights burned through
 # wedged/contended ollama windows with zero verdicts (R2012 flight-1 /
-# R2013 flight-2 anchor). A tiny generation on a small model either
-# returns in seconds (healthy seat) or burns the cap (wedged seat) ->
-# bail with rc 6 BEFORE the main long flight. The probe itself never
-# lands in expert-calls (verdict/ledger writes only happen on the
-# main call path).
-WEDGE_PROBE_MODEL = "qwen2.5:7b-instruct"
-WEDGE_PROBE_CAP = 90
+# R2013 flight-2 anchor). A tiny generation either returns in seconds
+# (healthy seat) or burns the cap (wedged seat) -> bail with rc 6
+# BEFORE the main long flight. The probe itself never lands in
+# expert-calls (verdict/ledger writes only happen on the main call
+# path). O-20261015-1335: the old 7b probe tier is deleted fleet-wide,
+# so the probe now flies the sole local generation model (the registry
+# default itself); the cap grows 90->240 to fund that 17G model's
+# cold-load envelope (canon precedent: BigLife 90/120->240).
+WEDGE_PROBE_MODEL = "qwen3.8:27b"
+WEDGE_PROBE_CAP = 240
 # ollama streams ANSI line-erase codes on slow generations (cold-load
 # case); without stripping they land verbatim in verdict archives
 # (2026-09-24 BS-003 S1 case). Braille spinner glyphs (U+2800 block)
@@ -112,8 +119,10 @@ def build_prompt(prompt_text, material_text):
 
 def call_model(model, prompt, timeout=DEFAULT_TIMEOUT):
     """Run local ollama with UTF-8 stdin/stdout (pure subprocess wrapper).
-    Returns (returncode, stdout_text). Chinese-safe on PS5.1."""
-    p = subprocess.run(["ollama", "run", model],
+    Returns (returncode, stdout_text). Chinese-safe on PS5.1.
+    --think false (O-20261015-1335): the fleet flagship is a thinking
+    model; verdict formats (S1 v1.5 scoring etc.) need clean output."""
+    p = subprocess.run(["ollama", "run", model, "--think", "false"],
                        input=prompt.encode("utf-8"),
                        capture_output=True, timeout=timeout)
     out = _ANSI_RE.sub("", p.stdout.decode("utf-8", "replace"))

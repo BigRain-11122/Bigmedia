@@ -379,7 +379,8 @@ class TestWedgeProbeCli(unittest.TestCase):
 
     def test_wedge_probe_respects_custom_main_timeout(self):
         # staged launchers fly --timeout 1500; the probe cap must stay
-        # at WEDGE_PROBE_CAP (90s), not inherit the main cap.
+        # at WEDGE_PROBE_CAP (240s, O-20261015-1335 17G flagship
+        # cold-load envelope), not inherit the main cap.
         import tempfile
         from unittest import mock
         with tempfile.TemporaryDirectory() as td:
@@ -503,7 +504,7 @@ class TestTimeoutCli(unittest.TestCase):
         rc, captured = self._run_main([])
         self.assertEqual(0, rc)
         self.assertEqual([ce.DEFAULT_TIMEOUT], captured)
-        self.assertEqual(300, ce.DEFAULT_TIMEOUT)
+        self.assertEqual(600, ce.DEFAULT_TIMEOUT)  # O-20261015-1335: 17G flagship funds 300->600
 
     def test_non_integer_rejected_before_flight(self):
         rc, captured = self._run_main(["--timeout", "1500s"])

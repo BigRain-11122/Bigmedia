@@ -721,7 +721,7 @@ class ExpertFaceRenderTests(unittest.TestCase):
     def test_registry_read_at_flight_time(self):
         # seat/prompt/role come from the registry AT FLIGHT TIME
         for marker in ("'registry.json'",
-                      "str(reg.get('model', '')) or 'qwen2.5:14b'",
+                      "str(reg.get('model', '')) or 'qwen3.8:27b'",
                       "e.get('prompt_file')",
                       "e.get('role', EXPERT_ID)",
                       "e.get('dept', '')"):

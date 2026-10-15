@@ -101,7 +101,7 @@ LAUNCH_MARGIN_S = 2  # dispatch latency budget inside the TTL
 # face can only demote a GO, never force one. Thresholds are
 # deliberately conservative initial values, calibrate from the
 # pilot readout (P-7 judge questions pre-registered in §D).
-PROBE_MODEL_DEFAULT = "qwen2.5:14b"
+PROBE_MODEL_DEFAULT = "qwen3.8:27b"
 PROBE_PROMPT = ("Reply with the numbers from one to twenty, "
                 "comma separated.")
 PROBE_TOKENS = 96          # num_predict of the micro-generation
@@ -281,6 +281,9 @@ def real_throughput_probe(model=PROBE_MODEL_DEFAULT,
         options["num_thread"] = CPU_LANE_THREADS
     payload = json.dumps({
         "model": model, "prompt": PROBE_PROMPT, "stream": False,
+        # O-20261015-1335: flagship is a thinking model; thinking would
+        # wreck the token-rate math this probe exists to measure.
+        "think": False,
         "options": options,
     }).encode("utf-8")
     request = urllib.request.Request(

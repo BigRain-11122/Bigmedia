@@ -230,7 +230,7 @@ class RefCallBehaviorTests(unittest.TestCase):
         self.assertEqual(payload['options']['num_gpu'], 0)
         self.assertEqual(payload['options']['num_thread'], 4)
         self.assertFalse(payload['stream'])
-        self.assertEqual(payload['model'], 'qwen2.5:14b')
+        self.assertEqual(payload['model'], 'qwen3.8:27b')
         # prompt = body + canonical question block (single source)
         self.assertTrue(payload['prompt'].startswith(
             u'角色：E4 直觉观众参考仪。\n卡面八行 verbatim。\n'))

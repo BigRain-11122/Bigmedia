@@ -22,12 +22,12 @@ _SPEC.loader.exec_module(fwc)
 GATE_GO = {"go": True, "reasons": [], "free_min_mb": 5650,
            "free_max_mb": 5660, "band_mb": 10, "util_max": 2,
            "min_free_mb": 2048}
-# tech#140: static GO + free_min >= the 14b class load -- the genuine
+# tech#140: static GO + free_min >= the 27b class load -- the genuine
 # path-A fire fixture (the old 5650 fixture now reads class-starved:
-# BASE 14b cold-loads ~9.4GB and would partial-offload crawl there,
-# the R2012/R2013/R2025 burn family).
-GATE_GO_BIG = {"go": True, "reasons": [], "free_min_mb": 10650,
-               "free_max_mb": 10660, "band_mb": 10, "util_max": 2,
+# BASE qwen3.8:27b spans ~17GB and would partial-offload crawl there,
+# O-20261015-1335 envelope 17408MB).
+GATE_GO_BIG = {"go": True, "reasons": [], "free_min_mb": 20000,
+               "free_max_mb": 20010, "band_mb": 10, "util_max": 2,
                "min_free_mb": 2048}
 GATE_NOGO_UTIL = {"go": False, "reasons": [
     "util-face: worst-case util 100% > gate 80%"],
@@ -58,9 +58,9 @@ MV_ERROR = {"verdict": None, "rc": 2, "newest_age_min": None}
 CREDIT_GO = {"go": True, "reasons": [], "free_min_mb": 5669,
              "free_max_mb": 5674, "band_mb": 5, "util_max": 40,
              "min_free_mb": 2048, "evictable_mb": 4888,
-             "effective_free_mb": 10557}
+             "effective_free_mb": 20000}
 # tech#140: credit GO whose validated effective free cannot fund the
-# consuming leg's cold class load (5000 < 8704) -- the path-B
+# consuming leg's cold class load (5000 < 17408) -- the path-B
 # load-class demotion fixture.
 CREDIT_GO_SMALL = {"go": True, "reasons": [], "free_min_mb": 2600,
                    "free_max_mb": 2610, "band_mb": 10, "util_max": 40,
@@ -143,14 +143,15 @@ class ClassifyFireTests(unittest.TestCase):
 
     def test_path_b_fire_uses_credit_validated_free(self):
         # tech#140: on the credit path the class gate reads the credit
-        # re-run's VALIDATED effective_free (10557), not the starved
+        # re-run's VALIDATED effective_free (20000), not the starved
         # static band (5669) -- the credit machinery stays the only
-        # admissible unlock, and a funded eviction window still fires.
+        # admissible unlock, and a funded eviction window still fires
+        # (effective >= the 17408 27b envelope, O-20261015-1335).
         face = fwc.evaluate_load_class(GATE_NOGO_UTIL, CREDIT_GO,
                                        fwc.DEFAULT_LOAD_CLASS_MB)
         self.assertTrue(face["ok"])
         self.assertTrue(face["credit_validated"])
-        self.assertEqual(face["free_for_class_mb"], 10557)
+        self.assertEqual(face["free_for_class_mb"], 20000)
 
     def test_path_b_demoted_load_class_starved(self):
         # tech#140: credit GO at effective 5000 funds the old 2048
@@ -288,7 +289,7 @@ class OrchestrateTests(unittest.TestCase):
         self.assertEqual(card["readings"]["gate_credit"]["evictable_mb"],
                          4888)
         self.assertEqual(card["readings"]["gate_credit"]
-                         ["effective_free_mb"], 10557)
+                         ["effective_free_mb"], 20000)
         # tech#140: the funded credit window clears the class gate too
         self.assertTrue(card["readings"]["load_class"]["ok"])
         self.assertTrue(card["readings"]["load_class"]
@@ -306,8 +307,8 @@ class OrchestrateTests(unittest.TestCase):
         self.assertFalse(face["ok"])
         self.assertFalse(face["credit_validated"])
         self.assertEqual(face["free_for_class_mb"], 5650)
-        self.assertEqual(face["required_mb"], fwc.S1_14B_LOAD_MB)
-        self.assertEqual(face["required_mb"], 8704)
+        self.assertEqual(face["required_mb"], fwc.S1_BASE_LOAD_MB)
+        self.assertEqual(face["required_mb"], 17408)
 
     def test_credit_rerun_blocked_when_mv_active(self):
         card = fwc.orchestrate(
@@ -446,7 +447,7 @@ class CliTests(unittest.TestCase):
         self.assertEqual(payload["reasons"], [fwc.LOAD_CLASS_REASON])
         face = payload["readings"]["load_class"]
         self.assertFalse(face["ok"])
-        self.assertEqual(face["required_mb"], fwc.S1_14B_LOAD_MB)
+        self.assertEqual(face["required_mb"], fwc.S1_BASE_LOAD_MB)
         self.assertEqual(face["free_for_class_mb"], 5650)
 
     def test_json_load_class_zero_legacy_rc0(self):
@@ -590,7 +591,7 @@ class ReadingsTimestampTests(unittest.TestCase):
         self.assertEqual(card["verdict"], "no-fire")
         text = fwc._render_human(card)
         self.assertIn("load-class:", text)
-        self.assertIn("required=%s" % fwc.S1_14B_LOAD_MB, text)
+        self.assertIn("required=%s" % fwc.S1_BASE_LOAD_MB, text)
         self.assertIn("free_for_class=5650", text)
         self.assertIn("ok=False", text)
 
@@ -598,7 +599,7 @@ class ReadingsTimestampTests(unittest.TestCase):
         card = self._card(GATE_GO_BIG, PROBE_OK, CREDIT_GO)
         text = fwc._render_human(card)
         self.assertIn("load-class:", text)
-        self.assertIn("free_for_class=10650", text)
+        self.assertIn("free_for_class=20000", text)
         self.assertIn("ok=True", text)
 
     def test_no_fire_path_carries_ages_too(self):

@@ -31,16 +31,20 @@ Verdict core (classify_fire, pure):
   on it.
 
 Load-class face (tech#140, conservative one-way): the review legs
-CONSUME a cold BASE qwen2.5:14b load (S1/E4 registry ~9.4GB full-VRAM
-挤态族, R2025/tech#122), while the probe flies the 14b-8k tag (9000MB
-envelope) -- residency or flight of THAT tag never proves the
-consuming leg's load class. The old static gate (2048MB) said GO in
-windows (free 2.9-5.6GB) where the S1 BASE load partial-offloads and
-crawls (R2012/R2013/R2025 1500s burn family) and the launcher
-wedge-probe rc6s -- the GO-then-wedge loop. The face demotes a fire
-whose window cannot fund the class load (path A: static free_min; path
-B: the credit re-run's validated effective_free -- never a hand-rolled
-sum) and surfaces load-class-starved on quiet-window no-fires. It only
+CONSUME a cold BASE qwen3.8:27b load (S1/E4 registry flagship,
+O-20261015-1335; 17GB blob, 17408MB envelope) -- on the 12GB bm-a
+card that load can never fund in full VRAM, so GPU-lane review fires
+read load-class-starved by physics and the tech#169 CPU lane is the
+flight path. (Face origin: the old static gate (2048MB) said GO in
+windows where the S1 BASE load partial-offloads and crawls
+(R2012/R2013/R2025 1500s burn family) and the launcher wedge-probe
+rc6s -- the GO-then-wedge loop.) The probe now flies the same 27b
+tag, but residency of
+THAT tag still never proves the consuming leg's load class on its own
+-- the class gate keeps keying on the CONSUMING leg (path A: static
+free_min; path B: the credit re-run's validated effective_free --
+never a hand-rolled sum) and surfaces load-class-starved on
+quiet-window no-fires. It only
 ever adds a no-fire reason, never forces GO; a missing free reading
 skips the face silently (the wedge-probe backstop still guards); the
 mv-yield paths never get the face (the yield reason dominates).
@@ -95,14 +99,16 @@ PROBE_SKIP_STATUS = "skipped-not-resident"
 PATH_A = "A-hot-resident"
 PATH_B = "B-eviction-credit"
 
-# tech#140: consuming-leg load-class threshold. The review legs (S1/E4)
-# cold-load BASE qwen2.5:14b (~9.4GB full-VRAM挤态族, R2025/tech#122;
-# 8704MB = the conservative in-VRAM footprint band) while the probe
-# flies the 14b-8k tag -- the class gate must reflect the CONSUMING
-# leg, not the probe's tag. 0 disables the face (a future leg that
-# reuses the probe's hot tag passes 0).
-S1_14B_LOAD_MB = 8704
-DEFAULT_LOAD_CLASS_MB = S1_14B_LOAD_MB
+# tech#140: consuming-leg load-class threshold. O-20261015-1335 fleet
+# rollout: the S1/E4 registry BASE is qwen3.8:27b (17GB blob;
+# 17408MB = the conservative full-VRAM envelope). On the 12GB bm-a
+# card no window can ever fund that class load in full VRAM -- GPU-lane
+# review fires read load-class-starved by physics and the tech#169
+# CPU lane is the flight path. The class gate still reflects the
+# CONSUMING leg, not the probe's tag. 0 disables the face (a future
+# leg that reuses the probe's hot tag passes 0).
+S1_BASE_LOAD_MB = 17408
+DEFAULT_LOAD_CLASS_MB = S1_BASE_LOAD_MB
 LOAD_CLASS_REASON = "load-class-starved"
 
 USAGE = ("usage: python src/os/fire_window_card.py [--json] "
