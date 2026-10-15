@@ -1,0 +1,47 @@
+# tech#182 aihot group/analyze model reference audit + new-model switch (R2294, 2026-10-15 14:2x)
+# Context: O-20261015-1335 (local LLM -> latest Qwen, per-fleet assignment; text-creation face = qwen3.8:27b).
+# R2282 anchor: events.group failed tail err = llm HTTP 404 model 'qwen2.5:14b-8k' not found (10-14 model purge).
+# Gap closed this round: bm-a old-model re-delete landed ~13:5x on 10-15 -> .env LLM_MODEL=qwen2.5:14b went 404 live.
+
+## Model face (ollama /api/tags, 14:2x read)
+qwen3:4b-instruct | qwen3.8:27b | bge-m3:latest
+(qwen2.5:14b / qwen2.5:7b-instruct gone = bm-a re-delete landed between 13:51 and 13:58 on 10-15)
+
+## Config audit (data/assets/aihot-poc/AIHOT/.env, NOT git-tracked = local secrets face)
+- BEFORE: LLM_MODEL=qwen2.5:14b (no per-stage overrides -> all stages via default; LLM_EXTRA_JSON={"think": false} already in place)
+- AFTER (this round): LLM_MODEL=qwen3.8:27b
+- EMBEDDING_MODEL=bge-m3:latest (untouched, model exists)
+- Code face: rg '14b|qwen2.5' across packages/backend/src = zero hardcoded refs (all stages read process.env.LLM_MODEL dynamically via providers/llm.ts spec getter)
+
+## Live failure evidence (psql pgboss.job, ASCII SQL)
+- events.group failed tail (pre-switch, retry4 exhausted):
+  2026-10-15 14:00:38 | llm HTTP 404: model 'qwen2.5:14b' not found   <- re-delete break (judge segment down again)
+  2026-10-15 13:58:25 | llm HTTP 404: model 'qwen2.5:14b' not found
+  2026-10-15 13:05:48 | embeddings HTTP 503: server busy, maximum pending requests exceeded   <- saturation busy family (benign retry)
+  2026-10-15 13:02:08 | embeddings HTTP 503: server busy ...
+- events.group counts @14:15: completed 2091 (last 13:51:14, alive before break) / failed 1394 (grew from 1311 @R2282 = old frozen jobs + new 404s)
+- R2282 candidate-2 (enqueue chain stall 10-14 12:40 -> 10-15 zero new jobs): resolved by liveness evidence chain -
+  watchdog heals at 10-15 08:30:28 + 09:15:28 (missing-worker twice this morning) + jobs resumed ~12:22 (R2289) +
+  8 new content.analyze jobs created 14:20:22 right after worker restart = enqueue chain is worker-liveness-coupled, alive.
+
+## Fix execution (R2294)
+1. .env LLM_MODEL qwen2.5:14b -> qwen3.8:27b (single line; think:false already set; LLM_REASONING_TOKENS=4096 moot under think:false)
+2. Worker restart for env re-snapshot (providers/llm.ts reads process.env per call, but node --env-file-if-exists snapshots at process start):
+   killed PID 66292 (R2284 heal anchor identity) -> BigStream-AIHotWatchdog heal 14:20:00 run -> NEW WORKER PID 64480
+   (aihot_procs 14:20:24 verdict=complete: proxy 25132 / api 32204 / worker 64480)
+3. API (32204) NOT restarted: admin/models.ts imports MODELS (display metadata only) + editorial/input.ts is a type-only
+   import = zero direct LLM calls in api request paths; stale env snapshot there is display-face only (admin UI model label
+   self-corrects at next natural api restart). Honest residual note, no blast radius taken for a cosmetic item.
+
+## Verification (判据 legs)
+- 旧款引用清零: config clean (27b only) + code zero refs + ollama face zero qwen2.5 + worker process env = new snapshot. PASS
+- analyze segment on new model: 6 content.analyze completed 14:20:22->14:22:23 (31890->31896) on qwen3.8:27b. PASS (llm exec path proven)
+- events.group completed>0 复活: segment alive through 13:51 on 14b; post-switch group jobs are periodic-batch (none enqueued
+  in round window); group path shares the same provider/env as analyze (structural inherit). 404 face structurally removed
+  (referenced model now exists on box). OBSERVATION CONTINUES at next group batch.
+- compose daily:2026-10-16 成功: tomorrow 08:00+ tick = tech#92 authoritative window read consumption (pre-registered;
+  judged=280+ already banked in live window per R2290 F-face smoke -> judged>0 precondition held even before this fix).
+
+## Residual risk (seed -> tech#183)
+27b is shared with MV lane long generations; saturation windows can 503/timeout analyze/group/embeddings calls;
+observed retry cap = 4 (failed jobs retry4). Retry-exhaustion during saturation = monitored face.
