@@ -207,6 +207,69 @@ def _line_cost(s):
     return sum(_em_cost(ch) for ch in s)
 
 
+# tech#63/#180 (R2291) --h2-auto: the em-budget tier ladder lives in
+# the renderer itself, beside (not replacing) the M2 driver
+# tools/lcard_m2.py, whose 40..28 even-step ladder stays canonical for
+# the L-card M2 face - this one gates any direct renderer call.
+H2_AUTO_LADDER = (50, 46, 44, 40, 36, 32)
+H2_EM_FIT_FLOOR = 0.30  # zero-margin tier exclusion law (lcard_m2 mirror)
+H2_EM_MARGIN = 80       # wrap_for_width default margin (same face)
+
+
+def _h2_face_rows(cfg):
+    """H2 deck rows as (card_index, line, explicit_h2_size_or_None).
+    Pure."""
+    rows = []
+    for i, c in enumerate(cfg.get("cards") or []):
+        for x in (c.get("lines") or [])[1:]:
+            x = str(x).strip()
+            if x:
+                rows.append((i, x, c.get("h2_size")))
+    return rows
+
+
+def h2_auto_fit(cfg):
+    """Largest H2_AUTO_LADDER tier where every auto-pool H2 line fits
+    single-line with >= H2_EM_FIT_FLOOR em margin; per-card explicit
+    h2_size rows must fit at their own size (no override hole in the
+    gate). Returns the chosen tier, or None when every H2 line already
+    carries an explicit per-card size (nothing to choose - spec default
+    stays). Raises ValueError when no tier fits / an explicit override
+    violates the law / there are no H2 lines at all. Pure."""
+    frame_w = int(cfg["video"]["width"])
+    rows = _h2_face_rows(cfg)
+    if not rows:
+        raise ValueError("no H2 deck lines to fit")
+    auto_costs = []
+    for idx, s, own in rows:
+        cost = _line_cost(s)
+        if own is not None:
+            size = int(own)
+            budget = (frame_w - 2 * H2_EM_MARGIN) / float(size)
+            if budget - cost < H2_EM_FIT_FLOOR:
+                raise ValueError(
+                    "card %d explicit h2_size=%d violates em law "
+                    "(budget %.2fem, margin %+.2fem < %.2f): %s"
+                    % (idx, size, budget, budget - cost,
+                       H2_EM_FIT_FLOOR, s))
+        else:
+            auto_costs.append(cost)
+    if not auto_costs:
+        return None
+    worst = max(auto_costs)
+    for size in H2_AUTO_LADDER:
+        budget = (frame_w - 2 * H2_EM_MARGIN) / float(size)
+        if budget - worst >= H2_EM_FIT_FLOOR:
+            return size
+    raise ValueError(
+        "no ladder tier fits: worst H2 line %.2fem exceeds even the "
+        "%d-tier budget %.2fem (margin %+.2fem < %.2f)"
+        % (worst, H2_AUTO_LADDER[-1],
+           (frame_w - 2 * H2_EM_MARGIN) / float(H2_AUTO_LADDER[-1]),
+           (frame_w - 2 * H2_EM_MARGIN) / float(H2_AUTO_LADDER[-1]) - worst,
+           H2_EM_FIT_FLOOR))
+
+
 # clause enders for punctuation-preferred subtitle breaks (O-20260924-1115)
 _BREAK_AFTER = set(",.!?;:...,"
                    "\uff0c\u3002\uff01\uff1f\uff1b\uff1a\u3001\u2026")
@@ -619,6 +682,12 @@ def main(argv=None):
     ap.add_argument("--sys-status", action="store_true",
                     help="S4.5(3): per-cue machine telemetry line "
                          "sys.beat=NN t=MM:SS")
+    ap.add_argument("--h2-auto", action="store_true",
+                    help="tech#63/#180: pick the largest H2 tier "
+                         "(50/46/44/40/36/32) where every H2 deck line "
+                         "fits single-line with >=0.30em margin "
+                         "(em-budget ladder; explicit per-card h2_size "
+                         "rows must also fit, else FAIL)")
     args = ap.parse_args(argv)
 
     if args.series_intro and not (args.series_id or "").strip():
@@ -641,6 +710,27 @@ def main(argv=None):
     if args.no_cards:
         # keep the timeline (cue ends drive duration); drop card layers
         cfg["cards"] = []
+    if args.h2_auto:
+        # tech#63/#180 ladder gate: must see the EFFECTIVE card set,
+        # i.e. run after --no-cards dropped the layers.
+        try:
+            chosen = h2_auto_fit(cfg)
+        except ValueError as e:
+            print("FAIL --h2-auto: %s" % e)
+            return 2
+        if chosen is None:
+            print("h2-auto: every H2 line carries an explicit per-card "
+                  "h2_size - spec default kept, em law validated")
+        else:
+            prev = int(cfg["font"].get("h2_size", 52))
+            cfg["font"]["h2_size"] = chosen
+            budget = ((int(cfg["video"]["width"]) - 2 * H2_EM_MARGIN)
+                      / float(chosen))
+            print("h2-auto: h2_size %d -> %d (ladder %s, budget %.2fem, "
+                  "floor %.2fem margin)"
+                  % (prev, chosen,
+                     "/".join(str(t) for t in H2_AUTO_LADDER),
+                     budget, H2_EM_FIT_FLOOR))
     if args.bgvideo and not Path(args.bgvideo).exists():
         print("FAIL bgvideo not found: %s" % args.bgvideo)
         return 2

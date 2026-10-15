@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 12:52:50",
- "do": "tech#179 F 双窗段交付毕（timeline_at face=judgedReports 镜像）；下窗 10-16 08:00 tech#92 权威读数消费 F face",
+ "export_ts": "2026-10-15 13:17:08",
+ "do": "R2291 tech#180 腿① --h2-auto em 阶梯机核交付（13 新测+1481 全回归绿·真 deck 双 dry-run 冒烟）·余腿②壳模板化+live-fire 10-16；下轮=tech#92 权威窗读数",
  "depts": [
   {
    "n": "工程技术部",
