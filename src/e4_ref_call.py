@@ -25,19 +25,20 @@ Anti-drift by construction -- this file imports, it never re-states:
     the generated launchers embed the block, this shell runs the
     very same code).
 
-CPU lane laws (tech#169, O-20260913-2215): the CPU face is legal
-24/7, the CEO 10% CPU margin survives as num_thread=4 (default), and
-zero GPU touch is asserted by the flight itself (options num_gpu=0).
-No GPU preflight: this is a same-round direct shell, not a
-fire-gated staged launcher; the probe-gated path for cold /
-starve-risk windows stays fire_consume.py --cpu-lane + a generated
-launcher (mis-wiring guard: this file's name carries no "_cpu", so
-fire_consume --cpu-lane refuses it loudly -- by design, fire_consume
-cannot pass launcher args, so a parameterized shell is structurally
-a direct-invocation face).
+tech#186 wire v3 (origin row 432, O-20261015-1335/1500): the seat
+stack flies the external brain lane -- :8090 Qwen3.6-35B-A3B via the
+OpenAI wire (BRAIN_URL/BRAIN_MODEL env-driven, same contract as
+Tools/model-lane-smoke.py lane A) with
+chat_template_kwargs.enable_thinking:false. The dormant ollama
+qwen3.8:27b (measured pathological prompt_eval 0.16tok/s) is no
+longer referenced. --threads is kept for dispatch compatibility but
+is MOOT on this lane: threads/GPU pinning belong to the external
+resident server, not to this client's payload (the old options
+num_gpu/num_thread pair no longer applies -- semantically noted, not
+silently dropped).
 
-Liveness: /api/tags 2s probe -> rc 3 (never burn the 1500s hat on a
-dead server; s1 doctrine R2257).
+Liveness: <brain-base>/health 2s probe -> rc 3 (never burn the 1500s
+hat on a dead server; s1 doctrine R2257).
 
 Evidence lands in the ITEM directory (the prompt file's dir --
 tech#63 "evidence unified in the item dir"): e4-result.json (five-key
@@ -54,7 +55,7 @@ rc contract (mirrors the CPU-variant generated launcher):
 
 Usage:
   python src/e4_ref_call.py --prompt-file <e4-body.txt> [--label L]
-      [--model qwen3.8:27b] [--timeout 1500] [--threads 4]
+      [--model qwen3.6-35b] [--timeout 1500] [--threads 4]
       [--questions-file QF]
 
 --label defaults to the prompt file's parent directory name with a
@@ -79,8 +80,13 @@ import e4_launcher_gen as _gen  # noqa: E402  single source of the E4 contract
 
 UsageError = _gen.UsageError  # one class, no fork
 
-TAGS_URL = 'http://localhost:11434/api/tags'
-GENERATE_URL = 'http://localhost:11434/api/generate'
+# tech#186 brain lane: env-driven OpenAI wire (canon
+# cph4/fleet/qwen38-rollout-20261015.md v3 -- BRAIN_URL/BRAIN_MODEL
+# "one line per machine", same defaults as model-lane-smoke lane A).
+BRAIN_URL = os.environ.get(
+    'BRAIN_URL', 'http://127.0.0.1:8090/v1/chat/completions')
+HEALTH_URL = (BRAIN_URL.split('/v1/')[0].rstrip('/') + '/health')
+DEFAULT_MODEL = os.environ.get('BRAIN_MODEL', 'qwen3.6-35b')
 LANE = 'cpu'
 RESULT_NAME = 'e4-result.json'
 LIVENESS_CAP_S = 2
@@ -134,10 +140,10 @@ def run_ledger_block(result, here, material, model):
 
 
 def _liveness_ok(cap_s=LIVENESS_CAP_S):
-    """True when ollama answers /api/tags inside the cap. Never
-    raises -- an unreachable server reads as not-ok (rc 3)."""
+    """True when the brain lane answers <base>/health inside the cap.
+    Never raises -- an unreachable server reads as not-ok (rc 3)."""
     try:
-        with urllib.request.urlopen(TAGS_URL, timeout=cap_s) as resp:
+        with urllib.request.urlopen(HEALTH_URL, timeout=cap_s) as resp:
             resp.read()
         return True
     except Exception:
@@ -162,10 +168,14 @@ def main(argv=None):
                     help='material label for result json + ledger '
                          '(default: prompt file parent dir name '
                          'with trailing -tmp stripped)')
-    ap.add_argument('--model', default='qwen3.8:27b')
+    ap.add_argument('--model', default=DEFAULT_MODEL,
+                    help='brain model name (default: env BRAIN_MODEL '
+                         'or qwen3.6-35b)')
     ap.add_argument('--timeout', type=int, default=1500)
     ap.add_argument('--threads', type=int, default=4,
-                    help='CPU threads (CEO 10%% margin law)')
+                    help='MOOT on the brain lane (tech#186): kept '
+                         'for dispatch compatibility; server-side '
+                         'config owns threads now')
     ap.add_argument('--questions-file',
                     help='override the canonical question block')
     args = ap.parse_args(argv)
@@ -200,27 +210,34 @@ def main(argv=None):
     here = os.path.dirname(os.path.abspath(args.prompt_file))
 
     if not _liveness_ok():
-        print('LIVENESS-FAIL ollama /api/tags unreachable (%ds cap)'
+        print('LIVENESS-FAIL brain /health unreachable (%ds cap)'
               % LIVENESS_CAP_S, flush=True)
         return 3
 
     result = {'ts': time.strftime('%Y-%m-%d %H:%M:%S'),
               'model': args.model, 'material': label, 'lane': LANE}
-    payload = json.dumps({'model': args.model, 'prompt': prompt,
-                          'stream': False, 'think': False,
-                          'options': {'num_gpu': 0,
-                                      'num_thread': args.threads}}
+    # tech#186 OpenAI wire: messages shape + thinking-off (canon v3);
+    # no options block -- num_gpu/num_thread are server-owned (moot).
+    payload = json.dumps({'model': args.model, 'stream': False,
+                         'messages': [{'role': 'user',
+                                       'content': prompt}],
+                         'chat_template_kwargs':
+                             {'enable_thinking': False}}
                         ).encode('utf-8')
     request = urllib.request.Request(
-        GENERATE_URL, data=payload,
+        BRAIN_URL, data=payload,
         headers={'Content-Type': 'application/json'})
     try:
         with urllib.request.urlopen(request,
                                     timeout=args.timeout) as resp:
             body_json = json.loads(resp.read().decode('utf-8',
                                                       'replace'))
-        result['verdict'] = ((body_json.get('response') or '').strip()
-                             or 'EMPTY-RESPONSE')
+        choices = body_json.get('choices') or []
+        content = ''
+        if choices:
+            content = ((choices[0].get('message') or {})
+                       .get('content') or '')
+        result['verdict'] = content.strip() or 'EMPTY-RESPONSE'
     except Exception as exc:
         text = '%s: %s' % (type(exc).__name__, exc)
         if 'timed out' in text.lower() or 'timeout' in text.lower():

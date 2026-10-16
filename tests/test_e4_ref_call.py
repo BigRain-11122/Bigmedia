@@ -188,16 +188,20 @@ class RefCallBehaviorTests(unittest.TestCase):
             if isinstance(req_or_url, str):
                 if mode == 'liveness-fail':
                     raise Exception('ConnectionRefusedError: dead server')
-                yield _Resp(b'{"models": []}')
+                yield _Resp(b'{"status": "ok"}')
             else:
                 if mode == 'gen-timeout':
                     raise Exception('The read operation timed out')
                 if mode == 'gen-transport':
                     raise Exception('HTTP Error 404: model not found')
                 if mode == 'gen-empty':
-                    yield _Resp(b'{"response": "   \\n"}')
+                    yield _Resp(
+                        b'{"choices": [{"message": '
+                        b'{"content": "   \\n"}}]}')
                 else:
-                    yield _Resp(b'{"response": "8.0\\nverdict line"}')
+                    yield _Resp(
+                        b'{"choices": [{"message": '
+                        b'{"content": "8.0\\nverdict line"}}]}')
 
         urllib_mod = types.ModuleType('urllib')
         request_mod = types.ModuleType('urllib.request')
@@ -220,21 +224,24 @@ class RefCallBehaviorTests(unittest.TestCase):
                 payload = json.loads(req.data.decode('utf-8'))
         return rc, buf.getvalue(), payload
 
-    def test_success_verdict_five_keys_and_cpu_lane_law(self):
+    def test_success_verdict_five_keys_and_brain_wire_law(self):
         rc, out, payload = self._exec_shell(
             'ok', ['--prompt-file', self.body])
         self.assertEqual(rc, 0, out)
         self.assertIn('DONE', out)
         self.assertIn('LEDGER-ROW E4-audience', out)
-        # CPU lane law: zero GPU touch + CEO margin + non-stream
-        self.assertEqual(payload['options']['num_gpu'], 0)
-        self.assertEqual(payload['options']['num_thread'], 4)
+        # tech#186 OpenAI wire law: brain default model + messages
+        # shape + thinking-off + NO server-owned options block
+        self.assertEqual(payload['model'], 'qwen3.6-35b')
         self.assertFalse(payload['stream'])
-        self.assertEqual(payload['model'], 'qwen3.8:27b')
-        # prompt = body + canonical question block (single source)
-        self.assertTrue(payload['prompt'].startswith(
+        self.assertEqual(payload['chat_template_kwargs'],
+                         {'enable_thinking': False})
+        self.assertNotIn('options', payload)
+        self.assertNotIn('think', payload)
+        content = payload['messages'][0]['content']
+        self.assertTrue(content.startswith(
             u'角色：E4 直觉观众参考仪。\n卡面八行 verbatim。\n'))
-        self.assertIn(gen.QUESTION_MARKER, payload['prompt'])
+        self.assertIn(gen.QUESTION_MARKER, content)
         # five-key result json parity (R2261 audit shape)
         with io.open(os.path.join(self.item, 'e4-result.json'),
                      encoding='utf-8') as fh:
@@ -242,6 +249,7 @@ class RefCallBehaviorTests(unittest.TestCase):
         self.assertEqual(set(result.keys()),
                          {'ts', 'model', 'material', 'lane', 'verdict'})
         self.assertEqual(result['lane'], 'cpu')
+        self.assertEqual(result['model'], 'qwen3.6-35b')
         self.assertEqual(result['verdict'], '8.0\nverdict line')
 
     def test_default_label_from_item_dir(self):
@@ -273,8 +281,10 @@ class RefCallBehaviorTests(unittest.TestCase):
             'ok', ['--prompt-file', self.body,
                    '--questions-file', qf])
         self.assertEqual(rc, 0, out)
-        self.assertIn(u'请回答三个问题（自定义形态）', payload['prompt'])
-        self.assertNotIn(u'指出原句', payload['prompt'])
+        self.assertIn(u'请回答三个问题（自定义形态）',
+                      payload['messages'][0]['content'])
+        self.assertNotIn(u'指出原句',
+                         payload['messages'][0]['content'])
 
     def test_liveness_fail_rc3_no_result(self):
         rc, out, _ = self._exec_shell(
@@ -377,7 +387,8 @@ class StageBehaviorTests(unittest.TestCase):
             class _Resp(object):
                 @staticmethod
                 def read():
-                    return b'{"response": "9.0"}'
+                    return (b'{"choices": [{"message": '
+                            b'{"content": "9.0"}}]}')
 
             class _Req(object):
                 def __init__(self, *a, **k):

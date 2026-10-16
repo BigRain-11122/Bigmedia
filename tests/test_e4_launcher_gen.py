@@ -373,24 +373,41 @@ class PreflightBehaviorTests(unittest.TestCase):
 
 
 class CpuLaneRenderTests(unittest.TestCase):
-    """tech#169: --cpu-lane renders the CPU variant -- API flight with
-    the zero-GPU-touch assertion (num_gpu=0) + CEO 10% margin
-    (num_thread=4), no GPU preflight -- while the GPU template stays
-    byte-shaped as before (no CPU markers leak into it)."""
+    """tech#169 face on wire v3 (tech#186): --cpu-lane renders the
+    CPU variant flying the EXTERNAL brain lane (BRAIN_URL env at
+    flight time, OpenAI chat wire, thinking-off) -- the old ollama
+    options pair (num_gpu/num_thread) is moot and absent -- while the
+    GPU template stays byte-shaped as before (no CPU markers leak
+    into it)."""
 
     def _render(self, cpu_lane):
         return gen.render_launcher(u'body text', u'label-x',
                                    u'qwen2.5:14b', 1500, cpu_lane=cpu_lane)
 
-    def test_cpu_variant_carries_cpu_assertions(self):
+    def test_cpu_variant_carries_brain_wire_law(self):
         src = self._render(True)
-        self.assertIn("num_gpu': 0", src)      # zero-GPU-touch assertion
-        self.assertIn('CPU_THREADS = 4', src)  # 10% margin law constant
-        self.assertIn("num_thread': CPU_THREADS", src)
-        self.assertIn('api/generate', src)     # API face (CLI has no
-                                               # num_gpu flag, tech#164)
+        # env-driven brain URL read at FLIGHT time (canon v3 one-line
+        # per machine), OpenAI messages shape + thinking-off
+        self.assertIn("'BRAIN_URL', 'http://127.0.0.1:8090"
+                      "/v1/chat/completions')", src)
+        self.assertIn("'messages': [{'role': 'user', 'content': prompt}]",
+                      src)
+        self.assertIn("'chat_template_kwargs': {'enable_thinking': False}",
+                      src)
+        self.assertIn('MOOT', src)          # num_gpu/num_thread moot note
         self.assertIn('CPU LANE', src)
         self.assertIn("LANE = 'cpu'", src)  # result auditability
+
+    def test_cpu_variant_dropped_moot_options(self):
+        src = self._render(True)
+        # the dormant-27b-era ollama API payload faces are gone from
+        # the CPU face (tech#186 dead-reference clearing); quoted-key
+        # forms = payload shapes, the MOOT note keeps its words
+        self.assertNotIn("'num_gpu'", src)
+        self.assertNotIn("'num_thread'", src)
+        self.assertNotIn('api/generate', src)
+        self.assertNotIn("'think'", src)
+        self.assertNotIn('11434', src)
 
     def test_cpu_variant_has_no_gpu_faces(self):
         src = self._render(True)
@@ -404,6 +421,7 @@ class CpuLaneRenderTests(unittest.TestCase):
         self.assertNotIn('num_gpu', src)
         self.assertNotIn('num_thread', src)
         self.assertNotIn('CPU LANE', src)
+        self.assertNotIn('BRAIN_URL', src)  # GPU face stays ollama-CLI
         self.assertIn('preflight(', src)   # GPU three-piece intact
         self.assertIn('nvidia-smi', src)
 
@@ -419,7 +437,9 @@ class CpuLaneRenderTests(unittest.TestCase):
     def test_cpu_variant_compiles(self):
         compile(self._render(True), 'e4_call_cpu.py', 'exec')
 
-    def test_cli_cpu_lane_flag_writes_cpu_variant(self):
+    def test_cli_cpu_lane_default_model_is_brain_lane(self):
+        # tech#186: --cpu-lane without --model bakes the BRAIN_MODEL
+        # default (qwen3.6-35b), NOT the dormant ollama 27b
         with tempfile.TemporaryDirectory() as tmp:
             body = os.path.join(tmp, 'e4-body.txt')
             with io.open(body, 'w', encoding='utf-8') as fh:
@@ -430,8 +450,22 @@ class CpuLaneRenderTests(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stdout)
             with io.open(out, encoding='utf-8') as fh:
                 src = fh.read()
-            self.assertIn("num_gpu': 0", src)
+            self.assertIn("MODEL = 'qwen3.6-35b'", src)
+            self.assertIn("chat_template_kwargs", src)
             self.assertIn('CPU LANE', src)
+
+    def test_cli_gpu_face_default_model_unchanged(self):
+        # the GPU face keeps its legacy default until the tech#185
+        # retirement ruling (no silent drift while the lane lives)
+        with tempfile.TemporaryDirectory() as tmp:
+            body = os.path.join(tmp, 'e4-body.txt')
+            with io.open(body, 'w', encoding='utf-8') as fh:
+                fh.write(u'卡面内容叙述。')
+            out = os.path.join(tmp, 'e4_call.py')
+            proc = _run_cli('--body', body, '--label', 'L1', '--out', out)
+            self.assertEqual(proc.returncode, 0, proc.stdout)
+            with io.open(out, encoding='utf-8') as fh:
+                self.assertIn("MODEL = 'qwen3.8:27b'", fh.read())
 
 
 class AutoLedgerRenderTests(unittest.TestCase):
@@ -537,7 +571,8 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
         class _Resp(object):
             @staticmethod
             def read():
-                return b'{"response": "7.0\\nverdict line"}'
+                return (b'{"choices": [{"message": '
+                        b'{"content": "7.0\\nverdict line"}}]}')
 
         class _Req(object):
             def __init__(self, *a, **k):
@@ -611,7 +646,7 @@ class AutoLedgerBehaviorTests(unittest.TestCase):
         class _Resp(object):
             @staticmethod
             def read():
-                return b'{"response": "8.0"}'
+                return b'{"choices": [{"message": {"content": "8.0"}}]}'
 
         class _Req(object):
             def __init__(self, *a, **k):
@@ -719,9 +754,12 @@ class ExpertFaceRenderTests(unittest.TestCase):
         self.assertIn('TIMEOUT = 1500', self.src)
 
     def test_registry_read_at_flight_time(self):
-        # seat/prompt/role come from the registry AT FLIGHT TIME
+        # seat/prompt/role come from the registry AT FLIGHT TIME; the
+        # model fallback is env BRAIN_MODEL (tech#186 brain lane),
+        # never a hardcoded dormant ollama name
         for marker in ("'registry.json'",
-                      "str(reg.get('model', '')) or 'qwen3.8:27b'",
+                      "str(reg.get('model', '')) or os.environ.get(",
+                      "'BRAIN_MODEL', 'qwen3.6-35b')",
                       "e.get('prompt_file')",
                       "e.get('role', EXPERT_ID)",
                       "e.get('dept', '')"):
@@ -733,19 +771,30 @@ class ExpertFaceRenderTests(unittest.TestCase):
                       self.src)
         self.assertIn("material_text.strip() + '\\n'", self.src)
 
-    def test_cpu_lane_laws(self):
-        self.assertIn("num_gpu': 0", self.src)       # zero-GPU assertion
-        self.assertIn('CPU_THREADS = 4', self.src)   # CEO 10% margin
-        self.assertIn("num_thread': CPU_THREADS", self.src)
+    def test_brain_wire_law(self):
+        # tech#186: env-driven brain URL at flight time + OpenAI
+        # messages shape + thinking-off; the moot ollama options pair
+        # is absent from the payload
+        self.assertIn("'BRAIN_URL', 'http://127.0.0.1:8090"
+                      "/v1/chat/completions')", self.src)
+        self.assertIn("'messages': [{'role': 'user', 'content': prompt}]",
+                      self.src)
+        self.assertIn("'chat_template_kwargs': {'enable_thinking': False}",
+                      self.src)
+        self.assertNotIn("'num_gpu'", self.src)
+        self.assertNotIn("'num_thread'", self.src)
+        self.assertNotIn("'think'", self.src)
         self.assertIn("LANE = 'cpu'", self.src)
 
     def test_liveness_and_rc3_semantics(self):
-        for marker in ("TAGS_URL = 'http://localhost:11434/api/tags'",
-                       'urllib.request.urlopen(TAGS_URL, timeout=2)',
-                       'LIVENESS-FAIL',
-                       'TRANSPORT-ERROR',
-                       'raise SystemExit(3)',
-                       "'TIMEOUT-%ds' % TIMEOUT"):
+        for marker in (
+                "HEALTH_URL = (GENERATE_URL.split('/v1/')[0].rstrip('/') "
+                "+ '/health')",
+                'urllib.request.urlopen(HEALTH_URL, timeout=2)',
+                'LIVENESS-FAIL',
+                'TRANSPORT-ERROR',
+                'raise SystemExit(3)',
+                "'TIMEOUT-%ds' % TIMEOUT"):
             self.assertIn(marker, self.src, marker)
 
     def test_auto_ledger_parametrized_on_registry_seat(self):
@@ -911,7 +960,8 @@ class ExpertFaceBehaviorTests(unittest.TestCase):
                 sys.modules[key] = mod
 
     def _install_fake_urllib(self, liveness_exc=None, generate_exc=None,
-                             response=b'{"response": "10/10 PASS"}'):
+                             response=b'{"choices": [{"message": '
+                                      b'{"content": "10/10 PASS"}}]}'):
         import types
 
         calls = []
