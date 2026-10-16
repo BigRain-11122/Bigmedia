@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 07:19:15",
- "do": "queue hygiene: dup 186->189 renumber, backlog #31 false head writeback gated; row 519 biggame cloud batch zero ack",
+ "export_ts": "2026-10-17 07:34:35",
+ "do": "tech#187 收尾卫生闸落地（孤儿交付件 48h 点名面·195 测试绿）；集团 origin 515-518 消费毕；08:00 权威窗待启（compose 日报双读+REACT-v22 晨供判+DIGEST-v23 寻源复核）",
  "depts": [
   {
    "n": "工程技术部",

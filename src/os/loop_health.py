@@ -97,6 +97,11 @@ Findings:
                                    body landed round work whose
                                    accounting never ran (R2214 anchor;
                                    tech#155)
+  WARN  orphan-work-face          deliverable-class file(s) (src/tests/
+                                   tools/docs) uncommitted with mtime
+                                   older than 48h - dead-round orphan
+                                   work the 7-day sediment line misses
+                                   (R2298/R2308 anchors; tech#187)
 
 Exit codes: 0 = healthy (WARN allowed), 1 = any FAIL, 2 = usage/source.
 
@@ -285,6 +290,16 @@ ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
 AUDIO_DOMAIN_PREFIX = "data/storylines/audio/"
 AUDIO_TMP_DIR_SUFFIX = "-tmp"
 AUDIO_TMP_LIST_CAP = 3
+# tech#187: orphan-deliverable guard. R2298/R2308 anchors: two rounds
+# died post-suite pre-commit, leaving landed src deliverables
+# uncommitted; the stale-dirty face names sediment only at 7 days, so
+# the 2-7 day band had no machine face and the orphans waited for a
+# human adopt (R2315). Deliverable-class trees only (src/tests/tools/
+# docs); in-flight domain whitelist is defense-in-depth (dirty-face
+# split law); an uncommitted file with mtime > 48h in a deliverable
+# tree is orphan work by definition.
+ORPHAN_DELIVERABLE_HOURS = 48.0
+ORPHAN_DELIVERABLE_DIR_PREFIXES = ("src/", "tests/", "tools/", "docs/")
 # tech#68: status-export contract guard. R1901 anchor: the CEO-facing
 # docs/status-export.json drifted silently for ~1700 rounds - "do" grew
 # into a 3406-char paragraph (product-priority law section 5 wants a
@@ -630,6 +645,58 @@ def check_stale_dirty(root, now, findings):
                      "days: %s - sediment naming (C-20261009-03 dirty-face "
                      "split law; fresh-mtime in-flight files never flag)"
                      % (len(stale), STALE_DIRTY_DAYS, shown)))
+
+
+def classify_orphan_deliverable(entries, now,
+                                 hours=ORPHAN_DELIVERABLE_HOURS,
+                                 prefixes=ORPHAN_DELIVERABLE_DIR_PREFIXES,
+                                 skip=INFLIGHT_DIR_PREFIXES):
+    """[(relpath, mtime-or-None)] -> sorted orphan relpaths (pure core).
+    Deliverable-class trees only; deleted paths and whitelisted
+    in-flight-domain paths never flag; an mtime older than `hours` in a
+    deliverable tree flags (no upper band - a 9-day orphan is still an
+    orphan; the 7-day sediment face names it too, advisory overlap)."""
+    bound = hours * 3600.0
+    orphan = []
+    for rel, mtime in entries:
+        if rel is None or mtime is None:
+            continue
+        if not any(rel.startswith(p) for p in prefixes):
+            continue
+        if any(rel.startswith(p) for p in skip):
+            continue
+        if (now - mtime).total_seconds() > bound:
+            orphan.append(rel)
+    return sorted(orphan)
+
+
+def check_orphan_deliverable(root, now, findings):
+    """tech#187 guard face: name deliverable-class orphan work (one WARN
+    with the file list) - rounds that die post-suite pre-commit leave
+    landed-but-uncommitted src/tests/tools/docs files; this face names
+    them within one round on the routine probe consumption instead of
+    waiting for the 7-day sediment line (R2298/R2308 anchors, human
+    adopt R2315 - machine teeth per the escalation law)."""
+    paths = _git_status_files(root)
+    if not paths:
+        return
+    entries = []
+    for rel in paths:
+        mtime = None
+        try:
+            mtime = datetime.fromtimestamp((root / rel).stat().st_mtime)
+        except OSError:
+            pass
+        entries.append((rel, mtime))
+    orphan = classify_orphan_deliverable(entries, now)
+    if not orphan:
+        return
+    shown = ", ".join(orphan[:5]) + (" ..." if len(orphan) > 5 else "")
+    findings.append(("WARN", "orphan-work-face",
+                     "%d deliverable-class file(s) uncommitted for over "
+                     "%g h: %s - dead-round orphan work (tech#187; "
+                     "adopt-or-commit, not sediment yet)"
+                     % (len(orphan), ORPHAN_DELIVERABLE_HOURS, shown)))
 
 
 def classify_codex_freshness(entries, now, fresh_days=CODEX_FRESH_DAYS):
@@ -1732,6 +1799,7 @@ def main(argv):
         check_audio_tmp_residue(root, findings)
         check_broken_round_debris(root, state, findings)
         check_stale_dirty(root, datetime.now(), findings)
+        check_orphan_deliverable(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
         check_codex_version_face(root, findings)
         check_queue_glue(root, findings)

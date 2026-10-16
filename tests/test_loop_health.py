@@ -2344,5 +2344,37 @@ class UnaccountedRoundWorkTests(unittest.TestCase):
         self.assertEqual(findings, [])
 
 
+class OrphanDeliverableClassifyTests(unittest.TestCase):
+    """tech#187 pure-core tests for classify_orphan_deliverable."""
+
+    def test_fresh_and_out_of_tree_never_flag(self):
+        now = datetime.now()
+        entries = [("src/os/new.py", now),
+                   ("src/os/day_old.py",
+                    now - timedelta(days=1, hours=23)),
+                   ("data/storylines/notes.md",
+                    now - timedelta(days=9)),
+                   ("data/storylines/drama/mv0001/PRODUCTION.md",
+                    now - timedelta(days=9))]
+        self.assertEqual(
+            loop_health.classify_orphan_deliverable(entries, now), [])
+
+    def test_orphan_flagged_sorted_across_all_four_trees(self):
+        now = datetime.now()
+        entries = [("tools/zz.py", now - timedelta(days=3)),
+                   ("docs/aa.md", now - timedelta(hours=50)),
+                   ("src/b.py", now - timedelta(days=1)),
+                   ("tests/c_test.py", now - timedelta(days=8))]
+        self.assertEqual(
+            loop_health.classify_orphan_deliverable(entries, now),
+            ["docs/aa.md", "tests/c_test.py", "tools/zz.py"])
+
+    def test_none_rel_and_none_mtime_skipped(self):
+        now = datetime.now()
+        self.assertEqual(
+            loop_health.classify_orphan_deliverable(
+                [(None, now), ("src/x.py", None)], now), [])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
