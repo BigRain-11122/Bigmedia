@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 06:12:58",
- "do": "MV V5 v5redo 17/17 clips DELIVERY-GO verified; next=V5 final assembly + DIRECTOR-REVIEW (MV session domain)",
+ "export_ts": "2026-10-17 07:19:15",
+ "do": "queue hygiene: dup 186->189 renumber, backlog #31 false head writeback gated; row 519 biggame cloud batch zero ack",
  "depts": [
   {
    "n": "工程技术部",
