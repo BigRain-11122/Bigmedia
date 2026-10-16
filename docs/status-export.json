@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 02:47:55",
- "do": "R2310: DIGEST-v22 card M0-M2 done (tech#177 live-fire PASS); orders 515-517 acked; next M3-M4.5 review leg",
+ "export_ts": "2026-10-17 03:49:31",
+ "do": "R2311: F-191 DIGEST-v22 registered (E4 brain-lane first flight); tech#156 rubric at 08:00; next: window read + supply",
  "depts": [
   {
    "n": "工程技术部",
