@@ -1,22 +1,15 @@
 {
- "last_pause_log": "2026-10-13 18:40:03",
- "last_resume_log": "2026-10-13 22:34 R2202: CEO off-work (group orders row 378 carrying 21:0x off-work full-compute order) -> night window early-open; pause object removed per main#21 resume step; MiniGameOllamaServe/KeepWarm disabled + 7b llama-server stopped (R2074 night protocol) freeing 5.1GB; watchdog to auto-heal worker.",
+ "last_pause_log": "2026-10-16 20:40:02",
+ "last_resume_log": "2026-10-17 01:2x R2309: weekend free-run window adjudicated to start Sat 2026-10-17 00:00 (main#36 timepoint candidate correction; O-20261015-1845 halt scope = workdays per CEO wording, weekend free-run per standing rule; R2307 flag anchor 10-18 00:00 was one day late). Pause object removed; AIHOT .env LLM lane migrated qwen3.8:27b(sick model, R2297 verdict) -> bm-a:8090 brain Qwen3.6-35B per C-20261016-03 allocation (heavy lane -> bm-a:8090) + O-20261015-1500 v3; ollama 11434 already alive (whitelist trio 4b/27b/bge-m3); worker restart via worker-restart.bat; watchdog auto-heal continues. Revert condition: CEO halt word at any time -> pause again per O-20261015-1845.",
  "last_pause_removed": {
-  "reason": "CEO workday at-machine yield: O-20261012-1505(3) workday-hours zero-dispatch iron rule + CEO actively issuing orders (V3 rectification chain 10-13 11:3x-13:1x); superseded basis O-20261012-2025 night-KF split expired at KF batch end (comfy DOWN, GPU idle 4%). VRAM free ~6.1GB < 14b-8k load 8704MB = worker restart would thrash CEO foreground app group.",
-  "resume_step": "at night window 2026-10-14 00:00-08:00 (or CEO off-work flag same-date): remove pause object + run data/assets/aihot-poc/worker-restart.bat (main#21); tech#92 re-judge window shifts to first 08:00 compose after resume (= 10-14 08:00 per R2125); llama-server re-enable per machine-state domain.",
-  "set_by": "R2048 tech#127 delivery",
-  "reanchored_by": "R2149 main#27 close-out judgment",
-  "worker_restart_paused": true,
-  "ts": "2026-10-12 12:37:48",
-  "reanchored_ts": "2026-10-13 12:38:00"
- },
- "last_heartbeat": "2026-10-15",
- "last_err_log": "2026-10-13 23:41:15",
- "pause": {
   "reason": "bm-a workday halt CEO word-gate O-20261015-1845 (orders row 452): MODE=pause stopped ollama 11434; AIHOT worker alive would burn failed LLM retries on CEO machine; halt-aligned stop per R2047/R2048 precedent",
   "resume_step": "on CEO kaigong word (workday) or weekend free-run window (10-18 00:00 per O-1845): remove pause object + run data/assets/aihot-poc/worker-restart.bat (main#21 family); ollama recovery belongs to machine-state resume domain",
   "set_by": "R2307 loop round (orders rows 449-454 consumption + halt alignment)",
   "worker_restart_paused": true,
-  "ts": "2026-10-15 20:37:30"
- }
+  "ts": "2026-10-15 20:37:30",
+  "removed_by": "R2309 loop round (weekend free-run window adjudication, main#36 candidate correction)",
+  "removed_ts": "2026-10-17 01:2x"
+ },
+ "last_heartbeat": "2026-10-17",
+ "last_err_log": "2026-10-13 23:41:15"
 }

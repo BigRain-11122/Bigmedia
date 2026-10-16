@@ -59,16 +59,30 @@ try {
     # ---- C-20261015-03 cloud concurrency cap v1.0 preflight (O-20261015-1800,
     # committee case: spawn-gate spec par.3, fleet-wide unified face).
     # Before igniting a new cloud LLM round, count live codely.exe on this
-    # machine (CEO interactive + other autonomous lanes + bg subagents all
-    # count). live >= 2 -> defer this grid slot: ledger line + exit 0, next
-    # slot auto-retries. Fail-open: a probe crash must never block the line.
+    # machine. C-20261016-05 correction (orders row 514, bigmoney 63943e50b
+    # pattern): count HEADLESS -p faces only (autonomous lanes + bg agents);
+    # CEO interactive windows are exempt per C-20261015-03 par.2 (bm-a
+    # same-bug fix). live >= 2 -> defer this grid slot: ledger line + exit 0,
+    # next slot auto-retries. Fail-open: a probe crash must never block.
     $capLedger = Join-Path $logDir 'cloud-cap-ledger.txt'
     try {
-        $live = @(Get-CimInstance Win32_Process -Filter "Name='codely.exe'" -ErrorAction Stop).Count
+        $live = @(Get-CimInstance Win32_Process -Filter "Name='codely.exe'" -ErrorAction Stop | Where-Object { $_.CommandLine -match ' -p( |")' }).Count
         if ($live -ge 2) {
             Add-Content -Path $capLedger -Value "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | CLOUD_CAP_DEFER live=$live" -Encoding UTF8
             Log "defer: cloud concurrency cap (live=$live >= 2, C-20261015-03)"
             Beat "cloud-cap defer (live=$live)"
+            # PT-20261015-01 remediation option 1 (group orders row 456):
+            # defer windows ran with zero round closes, so the fleet-audit
+            # ts face read STALE 2.2h while the loop was alive retrying.
+            # This spawner holds round.lock here (no round body can be
+            # closing concurrently) - pulse ts + marker, ZERO accounting
+            # touch (tick/log/task untouched; finalize_state stays the one
+            # accounting writer). Fail-open: a failed pulse never blocks
+            # the defer path.
+            try {
+                $pulseOut = @( & python (Join-Path $PSScriptRoot 'close_commit.py') --pulse "cloud-cap defer (live=$live)" 2>&1 )
+                Log ("state pulse rc=${LASTEXITCODE}: " + ($pulseOut -join ' | '))
+            } catch { Log "state pulse crashed (non-fatal): $_" }
             exit 0
         }
         Log "cloud-cap preflight ok (live=$live)"
