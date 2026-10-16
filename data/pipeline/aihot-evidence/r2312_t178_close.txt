@@ -1,0 +1,25 @@
+# r2312 t178 close verification read (ts=2026-10-17 03:5x, read-only)
+# criteria (tech#178 item text): events.group completed >0 (judge-stage alive)
+# + daily 2026-10-15/16 compose success landing in reports table.
+# method: psql read-only ASCII SQL (psql.exe DSN postgres://aihot@127.0.0.1:55432/aihot)
+[G1 events.group job states rc=0]
+completed|2289
+failed|1382
+[G2 events.group last completed rc=0]
+10-17 03:57
+[R1 reports tail (id desc, top 8) rc=0]
+9|daily|2026-10-15|10-17 02:00
+8|daily|2026-10-16|10-17 01:25
+7|daily|2026-10-14|10-14 08:00
+6|daily|2026-10-13|10-13 22:35
+5|weekly|2026-W41|10-12 10:46
+4|daily|2026-10-12|10-12 08:00
+3|daily|2026-10-11|10-11 08:00
+2|daily|2026-10-10|10-10 08:00
+[verdict]
+P1 events.group judge-stage alive: completed 2289 (R2289 read 2085 -> +204 growth), last completed 10-17 03:57 = live after R2309 worker resume. PASS
+P2 daily:2026-10-16 compose SUCCESS: reports id=8 created 10-17 01:25 (R2309 catch-up first-verify anchor, judgedReports 286 quiet issue). PASS
+P3 daily:2026-10-15 compose SUCCESS: reports id=9 created 10-17 02:00 = NEW after R2309 reading (R2289 froze-window structural-death verdict was pre-model-switch state; post-switch catch-up landed the report). PASS
+P4 monthly:2026-09 skip-with-warn fix in force per R2284/R2289 (not re-queried this round; in-case dual evidence).
+[close]
+tech#178 done 2026-10-17 R2312. tech#92 line-band verdict window (08:00 synthesis read) stays with the focus window position, not this item.
