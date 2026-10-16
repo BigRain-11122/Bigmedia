@@ -32,7 +32,25 @@ Exit codes: 0 dispatched | 4 window-flip defer | 7 slow-window bail.
 Verdict auto-archives to
 docs/reviews/expert-verdicts/<ts>-S1-script.md + expert-calls.md line
 (call_expert single-writer).
+
+[RETIRED 2026-10-17 R2316, tech#185] GPU-lane zombie retirement guard.
+Evidence: this launcher holds 208 fire-consume ledger rows, ALL no-fire
+(99 workday-block + 42 mv-active + 26 cold-skip/load-class-starved +
+minor gate families) - it never dispatched once, and no row has landed
+since 2026-10-15 10:08. Its payload was completed on the CPU lane
+(s1_call_cpu.py, R2257: S1 10/10, verdict 20261014-225340-S1-script.md)
+and the full chain closed with F-180 registered (R2258,
+review-20261015-sc00707-v1.md). ZERO undelivered batches. Any future
+dispatch exits rc 3 immediately: a zombie re-invocation can never
+re-run a finished review. Future S1 needs = a new CPU-lane launcher
+(tech#169 lane), not this file.
 """
+
+import sys as _retd_sys
+_retd_sys.stderr.write(
+    "RETIRED (tech#185, R2316): SC-005-07 GPU-lane S1 launcher - "
+    "payload completed on CPU lane (F-180, R2257/R2258); rc 3\n")
+_retd_sys.exit(3)
 
 import json
 import subprocess
