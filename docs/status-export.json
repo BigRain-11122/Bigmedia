@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 01:33:24",
- "do": "AIHOT radar resumed: daily 2026-10-16 published (judged 286); gate fix; next: tech#156 + DIGEST-v22",
+ "export_ts": "2026-10-17 02:47:55",
+ "do": "R2310: DIGEST-v22 card M0-M2 done (tech#177 live-fire PASS); orders 515-517 acked; next M3-M4.5 review leg",
  "depts": [
   {
    "n": "工程技术部",

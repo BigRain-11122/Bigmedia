@@ -1,0 +1,13 @@
+em-check-r2310 (MC-20261017-DIGEST-v22 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   14.90em margin  +8.10  治本大修日（10-16·60 行令批）
+OK   11.55em margin +11.45  「机制呢？自我学习呢?」
+OK   16.35em margin  +6.65  V4 终审未过 → V5 17 镜重烧单派发
+OK   15.80em margin  +7.20  全机制普查 113 项任务 · 66 行法
+OK   15.75em margin  +7.25  死链 11 件注销 · 受审 86 项清零
+OK   16.20em margin  +6.80  根治五件上链 · 修法包 7/7 记名票
+OK   13.85em margin  +9.15  深夜 V5 正片 17/17 回采入库
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.00em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS

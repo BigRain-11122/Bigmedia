@@ -1,0 +1,36 @@
+A1 [PASS] two-segment claim 60 = 46 (rows 455-500, R2308 ack) + 14 (rows 501-514, R2309 ack)
+    tail table-rows=76 ; 10-16-day-rows=47 ; window includes 10-15 evening head + 10-17 early tail per queue item definition
+A1b [PASS] main.md #37 segment 1 definition
+    source: rows 455-500 R2308 消费
+A1c [PASS] main.md #37 segment 2 definition
+    source: 501-514 R2309 消费
+A1d [PASS] main.md #37 60-row composition
+    source: ~60 行
+A2 [PASS] CEO quote verbatim byte-equal
+    face line 3: 「机制呢？自我学习呢?」
+    source verbatim tail: 机制呢？自我学习呢?
+A3a [PASS] V4 final review verdict (15:5x row)
+    source: 终审=未过
+A3b [PASS] 17-shot reburn spec (16:3x row)
+    source: 17 镜重烧单
+A3c [PASS] 113-task audit (14:4x row)
+    source: 113 项任务
+A3d [PASS] 66-rule census (14:4x row)
+    source: 66 行法
+A3e [PASS] 11 broken links retired (14:5x row)
+    source: 注销 11 件
+A3f [PASS] 86 items audited (14:5x row)
+    source: 86 项受审
+A3g [PASS] five root cures (17:0x row)
+    source: 五件根治全上链
+A3h [PASS] 7/7 council vote (23:4x row)
+    source: 7/7 PASS
+A3i [PASS] 17/17 mp4 harvest (21:3x row)
+    source: 17/17
+A3j [PASS] motif anchor zhiben in CEO words (14:5x/16:5x rows)
+    source: 治本
+A3k [PASS] mechanism-question motif source (16:0x row)
+    source: 机制呢
+
+M1 VERDICT: PASS (16 asserts, fails=none)
+face lines mirror v21 schema (8 lines, end 3.0s); numbers 60/17/113/66/11/86/5/7/17 all ledger-traceable;
