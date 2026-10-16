@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-15 18:28:26",
- "do": "收令轮：row 448 云帽令消费+spawn 闸落位（iteration_loop.ps1·live>=2 defer·实测 live=7）；下轮=19:00 复工窗守望",
+ "export_ts": "2026-10-16 19:21:44",
+ "do": "收令+窗读轮：orders 455-500 消费（PT-01 回执 F-20261016-01 死线前闭环）+tech#92 窗 FAIL 确证（judged 286·selected_n=0→tech#156 触发）",
  "depts": [
   {
    "n": "工程技术部",
@@ -68,34 +68,34 @@
  ],
  "results": [
   [
-   "orders 444 acked",
-   "r2301"
+   "orders 500 acked",
+   "r2308"
   ],
   [
-   "decisions acked",
-   "r2299"
+   "decisions wm 180",
+   "r2308"
   ],
   [
-   "tech#182 live",
-   "r2290"
+   "tech#156 fired",
+   "r2308"
   ],
   [
-   "V3 cut landed",
-   "r2302"
+   "PT-01 receipt ok",
+   "r2308"
   ]
  ],
  "live": [
   [
    "当前活",
-   "查看位验证轮：MV V3 终剪落位实锚+JAY-REDO KF 板真品确证（全轮只读零写接触）"
+   "停产口令值守态：CEO「开工」口令/周末窗解锁生产线（AIHOT worker pause 承继 R2307·pulse 面保鲜中）"
   ],
   [
    "最近实物",
-   "full_mv_v3_final.mp4 10:52 落位（1344×768·234.17s·AAC）·查看位独立验真毕"
+   "r2308_t92_window_result.txt 权威窗证据件（7 段 rc0）+HQ-FEEDBACK F-20261016-01 回执行+2026-10-16 日报补产"
   ],
   [
    "下个里程碑",
-   "夜窗 19:00 tech#186 live-fire（bm-a 批闭后）+明早 08:00 日报权威窗（10-16 08:00）"
+   "复产窗首验三读数（worker 复活+compose daily 补刊+tech#156 分位归一执行腿）·ETA=CEO 开工口令/周末窗"
   ]
  ]
 }
