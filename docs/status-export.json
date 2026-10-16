@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 05:03:42",
- "do": "codex 编年史批四交付（10-12→10-16 五节点·v1.4·tech#37 守卫触发位解除）；下轮=08:00 tech#92/#156 权威窗读数+晨供窗 REACT-v22/DIGEST-v23（main#121）",
+ "export_ts": "2026-10-17 05:47:35",
+ "do": "R2315 orphan adoption close-out; next=08:00 window read (tech#92/#156 + morning supply)",
  "depts": [
   {
    "n": "工程技术部",
