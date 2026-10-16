@@ -55,6 +55,17 @@ CLI:
     python src/os/close_commit.py --files A B C --message "..."
         [--root PATH] [--no-push] [--dry-run]
 
+PT-20261015-01 (R2308 anchor) adds pulse_state_beat(): the pulse-only
+half of the heartbeat face. The inspection finding (group orders row 456,
+RUN_ID=20261015-203247): the cloud-cap spawn gate (C-20261015-03) defers
+every 10-min spawn while live codely.exe >= 2 - the 2026-10-15 defer
+window ran 18:26->20:38 with zero round closes, so the fleet-audit ts
+face read STALE 2.2h while the loop was alive and retrying every slot.
+The spawner (holding round.lock - no round body can be closing
+concurrently) pulses ts + marker through such windows with ZERO
+accounting touch; the accounting face keeps exactly one writer
+(finalize_state, tech#149 unchanged). CLI mode: --pulse REASON.
+
 tech#76 (R1920 placeholder anchor) adds finalize_state(): the single-writer
 state.json accounting step. Import-only by design (no CLI): the ledger line
 is CJK prose, and CLI args are exactly the shell-quoting/GBK pit surface -
@@ -349,6 +360,89 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
                                if orders_wm_stored else None)}
 
 
+# PT-20261015-01 option 2 declaration (beat policy block): written ONCE
+# when absent by pulse_state_beat. Declares the ts-face gap semantics so a
+# remote fleet-audit can interpret a stale ts without a new inspection
+# order, plus the D-13 machine-readable pointer (receipt channel + canon).
+BEAT_POLICY = {
+    "active_gap_max_min": 35,
+    "active_semantics": "round schedule 10min + budget 25min; ts refreshed at every round close (finalize_state)",
+    "defer_semantics": "cloud-cap gate (C-20261015-03) defers spawns while live codely.exe >= 2; spawner pulses ts every 10min slot through defer windows (PT-20261015-01 option 1)",
+    "pause_semantics": "CEO halt word / machine-state pause stops the loop task entirely; ts stale for the pause duration by design; liveness evidence = origin commits",
+    "d13_pointer": "canon=docs/os-protocol.md s6; receipt=HQ-FEEDBACK PT-20261015-01 line + ack commit (orders row 456 + round + next action)",
+}
+PULSE_REASON_MAX = 80
+
+
+def pulse_state_beat(reason, state_path=None, now=None):
+    """PT-20261015-01 remediation (R2308): pulse-only state beat writer.
+
+    Freshness touch for defer windows - the inspection anchor is the
+    2026-10-15 18:26->20:38 window: the spawn gate deferred every slot
+    (live codely.exe >= 2), no round body ran, no closing step refreshed
+    ts, and fleet-audit read the machine heartbeat face STALE 2.2h while
+    the loop was alive. The SPAWNER calls this while holding round.lock -
+    a live round body implies its spawner still holds the lock, so no
+    finalize_state can interleave here (structural, not TOCTOU).
+
+    Encoded laws:
+    - accounting-untouched: tick / log / task / focus / watermarks are
+      never modified - tech#149 stays whole, the accounting face keeps
+      exactly one writer. Refuses (loud, zero partial writes) when the
+      on-disk ts is missing/malformed or the pulse clock is not strictly
+      newer (clock-skew guard: a pulse never moves ts backwards).
+    - reason: non-empty, clamped to PULSE_REASON_MAX chars; CLI enforces
+      ASCII (encoding rule - GBK console hazard).
+    - beat policy block: written once when absent (option 2 declaration,
+      see BEAT_POLICY); an existing block is never overwritten.
+
+    Returns summary dict {ts, reason, policy_written}. Raises ValueError
+    on usage errors - validation happens before the first disk mutation;
+    the atomic replace makes the write all-or-nothing.
+    """
+    if state_path is None:
+        state_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "state.json")
+    if not isinstance(reason, str) or not reason.strip():
+        raise ValueError("pulse reason must be a non-empty string")
+    reason = reason.strip()[:PULSE_REASON_MAX]
+    clock = now if now is not None else datetime.datetime.now()
+    ts = clock.strftime("%Y-%m-%d %H:%M:%S")
+
+    with io.open(state_path, encoding="utf-8") as f:
+        data = json.load(f)
+    if not isinstance(data.get("log"), list):
+        raise ValueError("state.json 'log' is not a list - refusing to touch")
+    cur_ts = data.get("ts")
+    if not isinstance(cur_ts, str) or not TS_RE.match(cur_ts):
+        raise ValueError("state ts missing/malformed - refusing to pulse "
+                         "over a broken face: %r" % (cur_ts,))
+    try:
+        cur_dt = datetime.datetime.strptime(cur_ts, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        raise ValueError("state ts unparseable: %r" % (cur_ts,))
+    if clock <= cur_dt:
+        raise ValueError("pulse ts %s not newer than on-disk ts %s "
+                         "(clock skew?) - refusing" % (ts, cur_ts))
+
+    policy_written = False
+    if not isinstance(data.get("beat"), dict):
+        data["beat"] = dict(BEAT_POLICY)
+        policy_written = True
+    data["ts"] = ts
+    data["pulse"] = {"ts": ts, "reason": reason}
+
+    payload = json.dumps(data, ensure_ascii=False, indent=1)
+    tmp = state_path + ".tmp_pulse"
+    with io.open(tmp, "w", encoding="utf-8", newline="") as f:
+        f.write(payload)
+    os.replace(tmp, state_path)
+    # ASCII-only evidence line (encoding law)
+    print("STATE-PULSED ts=%s reason=%r policy_written=%s" % (
+        ts, reason, policy_written))
+    return {"ts": ts, "reason": reason, "policy_written": policy_written}
+
+
 def _path_is_gitignored(root, rel_path):
     """True when git ignores rel_path (``git check-ignore -q`` advisory).
 
@@ -640,10 +734,19 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
 def main(argv=None):
     ap = argparse.ArgumentParser(
         description="Embedded accounting-close commit helper (tech#65).")
-    ap.add_argument("--files", nargs="+", required=True,
-                    help="explicit file list (repo-relative), never add -A")
-    ap.add_argument("--message", required=True,
-                    help="ASCII one-line commit message")
+    ap.add_argument("--files", nargs="+", default=None,
+                    help="explicit file list (repo-relative), never add -A; "
+                         "not required in --pulse mode")
+    ap.add_argument("--message", default=None,
+                    help="ASCII one-line commit message; not required in "
+                         "--pulse mode")
+    ap.add_argument("--pulse", default=None,
+                    help="PT-20261015-01: pulse-only state beat (ASCII "
+                         "reason) - refreshes ts + pulse marker with zero "
+                         "accounting touch (defer-window freshness)")
+    ap.add_argument("--state-path", default=None,
+                    help="state.json path override for --pulse (default: "
+                         "the live ledger next to this module)")
     ap.add_argument("--root", default=None,
                     help="repo root (default: this module's repo)")
     ap.add_argument("--no-push", action="store_true",
@@ -664,6 +767,26 @@ def main(argv=None):
                          "tick (the R2214 readback law); mismatch = rc 3 "
                          "with a loud VERIFY-FAIL line")
     args = ap.parse_args(argv)
+
+    # --- PT-20261015-01 pulse mode: no accounting, no git, exit fast ---
+    if args.pulse is not None:
+        if not message_is_ascii(args.pulse):
+            print("USAGE-ERROR pulse reason must be ASCII (encoding rule)")
+            return RC_USAGE
+        try:
+            pulse_state_beat(args.pulse, state_path=args.state_path)
+        except ValueError as exc:
+            print("PULSE-FAIL %s" % exc)
+            return RC_USAGE
+        except OSError as exc:
+            print("PULSE-FAIL io: %.120s" % exc)
+            return RC_USAGE
+        return RC_OK
+
+    if not args.files or not args.message:
+        print("USAGE-ERROR --files and --message are required without "
+              "--pulse")
+        return RC_USAGE
 
     export_patch = None
     if args.export_patch:

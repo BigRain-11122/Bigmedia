@@ -663,6 +663,142 @@ class TestFinalizeState(unittest.TestCase):
         self.assertNotIn("orders_row_watermark", fx.read())
 
 
+class TestPulseStateBeat(unittest.TestCase):
+    """PT-20261015-01 (R2308): pulse-only state beat - defer-window
+    freshness touch with ZERO accounting mutation (tech#149 stays whole:
+    finalize_state remains the one accounting writer)."""
+
+    def _fx(self):
+        fx = StateFixture()
+        self.addCleanup(fx.destroy)
+        return fx
+
+    def test_pulse_touches_ts_and_marker_only(self):
+        fx = self._fx()
+        fixed = datetime.datetime(2026, 10, 15, 22, 40, 0)
+        summary = cc.pulse_state_beat("cloud-cap defer (live=2)",
+                                     state_path=fx.path, now=fixed)
+        self.assertEqual("2026-10-15 22:40:00", summary["ts"])
+        self.assertEqual("cloud-cap defer (live=2)", summary["reason"])
+        d = fx.read()
+        self.assertEqual("2026-10-15 22:40:00", d["ts"])
+        self.assertEqual("cloud-cap defer (live=2)", d["pulse"]["reason"])
+        # accounting face untouched: tick/log/task/focus/production
+        self.assertEqual(5, d["tick"])
+        self.assertEqual(1, len(d["log"]))
+        self.assertEqual("seed task", d["task"])
+        self.assertEqual("seed focus", d["focus"])
+        self.assertEqual("open", d["production"])
+        # option 2 declaration: static beat policy block written once
+        self.assertTrue(summary["policy_written"])
+        self.assertEqual(35, d["beat"]["active_gap_max_min"])
+        self.assertIn("d13_pointer", d["beat"])
+        # atomic write house format: no temp residue, no BOM
+        self.assertFalse(os.path.exists(fx.path + ".tmp_pulse"))
+        self.assertFalse(fx.raw_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_policy_block_written_once_never_overwritten(self):
+        fx = self._fx()
+        cc.pulse_state_beat("first", state_path=fx.path,
+                            now=datetime.datetime(2026, 10, 15, 22, 40, 0))
+        d = fx.read()
+        d["beat"]["note"] = "hand-tuned"
+        with open(fx.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        summary = cc.pulse_state_beat("second", state_path=fx.path,
+                                      now=datetime.datetime(2026, 10, 15,
+                                                            22, 50, 0))
+        d2 = fx.read()
+        self.assertFalse(summary["policy_written"])
+        self.assertEqual("hand-tuned", d2["beat"]["note"])
+        self.assertEqual("second", d2["pulse"]["reason"])
+
+    def test_pulse_after_finalize_preserves_accounting(self):
+        # the designed interleaving: pulse (defer) -> real round close
+        # (finalize) -> pulse again - accounting survives the round trip.
+        fx = self._fx()
+        cc.pulse_state_beat("defer pulse", state_path=fx.path,
+                            now=datetime.datetime(2026, 10, 15, 22, 40, 0))
+        # ts injected: finalize must not read the live clock, or this test
+        # goes red for every real-world run after 2026-10-15 23:00 (the
+        # frozen pulse clock below would read as clock-skew backwards).
+        cc.finalize_state("2026-10-15 22:5x R2308: close after pulse",
+                          state_path=fx.path,
+                          ts="2026-10-15 22:50:00")
+        cc.pulse_state_beat("defer pulse 2", state_path=fx.path,
+                            now=datetime.datetime(2026, 10, 15, 23, 0, 0))
+        d = fx.read()
+        self.assertEqual(6, d["tick"])
+        self.assertEqual("2026-10-15 23:00:00", d["ts"])
+        self.assertEqual(2, len(d["log"]))
+        self.assertIn("close after pulse", d["log"][-1])
+        self.assertEqual("defer pulse 2", d["pulse"]["reason"])
+
+    def test_refuses_empty_reason_and_clamps_long(self):
+        fx = self._fx()
+        before = fx.raw_bytes()
+        with self.assertRaises(ValueError):
+            cc.pulse_state_beat("   ", state_path=fx.path)
+        self.assertEqual(before, fx.raw_bytes())
+        summary = cc.pulse_state_beat("r" * 200, state_path=fx.path,
+                                      now=datetime.datetime(2026, 10, 15,
+                                                            22, 40, 0))
+        self.assertEqual(cc.PULSE_REASON_MAX, len(summary["reason"]))
+
+    def test_refuses_clock_skew_backwards(self):
+        # fixture ts = 2026-10-10 23:57:00; an older/equal pulse clock
+        # must refuse and touch nothing (a pulse never moves ts back).
+        fx = self._fx()
+        before = fx.raw_bytes()
+        for skewed in (datetime.datetime(2026, 10, 10, 23, 0, 0),
+                       datetime.datetime(2026, 10, 10, 23, 57, 0)):
+            with self.assertRaises(ValueError):
+                cc.pulse_state_beat("skewed", state_path=fx.path,
+                                    now=skewed)
+        self.assertEqual(before, fx.raw_bytes())
+        self.assertNotIn("pulse", fx.read())
+
+    def test_refuses_broken_ts_face(self):
+        fx = self._fx()
+        d = fx.read()
+        d["ts"] = "not-a-ts"
+        with open(fx.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        before = fx.raw_bytes()
+        with self.assertRaises(ValueError):
+            cc.pulse_state_beat("x", state_path=fx.path,
+                                now=datetime.datetime(2026, 10, 15, 22, 40, 0))
+        self.assertEqual(before, fx.raw_bytes())
+
+    def test_cli_pulse_mode(self):
+        fx = self._fx()
+        rc = cc.main(["--pulse", "cloud-cap defer (live=3)",
+                      "--state-path", fx.path])
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertEqual("cloud-cap defer (live=3)",
+                         fx.read()["pulse"]["reason"])
+        # legacy contract preserved: neither mode -> loud usage error
+        rc = cc.main([])
+        self.assertEqual(cc.RC_USAGE, rc)
+        # non-ASCII pulse reason is a loud usage error (encoding rule)
+        rc = cc.main(["--pulse", "\u5e26\u4e2d", "--state-path", fx.path])
+        self.assertEqual(cc.RC_USAGE, rc)
+        # a refused pulse (clock skew against the real clock) is loud
+        rc = cc.main(["--pulse", "skewed-older", "--state-path", fx.path])
+        # fixture ts is 2026-10-10; real clock is newer, so this pulse
+        # passes - instead prove the refusal path via a fresh fixture
+        # whose ts is set into the future relative to the real clock
+        fx2 = StateFixture()
+        self.addCleanup(fx2.destroy)
+        d = fx2.read()
+        d["ts"] = "2099-01-01 00:00:00"
+        with open(fx2.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        rc = cc.main(["--pulse", "future-face", "--state-path", fx2.path])
+        self.assertEqual(cc.RC_USAGE, rc)
+        self.assertNotIn("pulse", fx2.read())
+
+
 def clean_export_body():
     """Minimal contract-clean export body (mirrors the tech#70 writer's
     test fixture; export_ts is writer-owned)."""

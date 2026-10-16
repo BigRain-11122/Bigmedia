@@ -43,6 +43,7 @@
 - **路由三问**（同集团 local-first）：①能否脚本确定性完成（探针/周报/台账核验/规格门=纯脚本零 token）？②能否本地模型完成（Ollama/faster-whisper/FFmpeg=零 API）？③必须会话模型的最小必要面是什么？
 - **空轮判定路径**（P-2026-09-28-02 v2.1 增补令 ②·**idle-fast 空转路径全司废止**·原「空转快速路径」退役）：空轮禁全文档重读——五查+三探针全静后**不再跳轮**：按序取活（①backlog 可领活→②自进清单顶项→③创新提案轨〔每窗 ≥1 提案·三句式·判负留痕合法·落点=清单 §D 提案面〕）·真无活可拉（无可领+清单空+本窗提案已交+保护态豁免面在案）=一行声明收轮（declared-idle·四查尽）合法（任务书【空轮判定路径】节为准）；探针照跑=响应性不降，只省重读 token；**禁以声明代取活**（造活凑数=空转第四形态·保护态豁免不算违规闲置）。
 - **声明轮收账并窗**（原 idle-fast 收账并窗 P-62 ③·2026-09-24 → P-2026-09-28-02 改道承接）：连续声明轮的 commit+push 并窗——**照记律不变**（每轮 state.json tick+log 照写盘=探针数据源·盘面即真相），commit 触发=①窗满 6 轮（≈1 小时）②跨日边界轮 ③五查/探针任一异常（立即收账·恢复逐轮）④出现实活轮（实活收账一并卷入）；并窗 commit 消息注明区间（如「R627-R632 declared-idle batch」）；未推增量上限=6 轮。并窗期间 `M src/os/state.json`=本循环自记账预期态——树净判定与 bm-a 活跃写盘判定**排除 state.json 自身**（其余脏文件照常判·同仓退避不误触）。
+- **心跳 pulse 律**（集团巡检 PT-20261015-01 整改·orders row 456·R2308·承 v1.10 机读心跳面）：cloud-cap defer 窗（live≥2 让路）内 spawner 持 round.lock 逐槽 pulse-only 刷 `ts`+`pulse` 块（`close_commit.py --pulse`·tick/log/task/focus 零接触——tech#149 单一记账写手不变·时钟回拨拒写）——fleet-audit 判活面经 defer 窗保鲜（≤10min/槽·2026-10-15 18:26→20:38 STALE 2.2h 假警根因闭口）；停机面（CEO halt 词/machine-state pause）ts 按设计滞后·判活证据=origin commits；`beat` 声明块（选项②·首写后不覆写）=间隙语义（active ≤35min/defer/pause）+D-13 机读指针。
 - **实活轮收账两段制**（tech#27·R1840 试点启动·缺口锚=R1832 断洞实录：25min 超时杀落在收账段吞掉整轮交付件 commit）：实活轮收账=**交付件先行 commit**（tests/门检绿后立即提交本轮产物 tools/tests/docs/queue 等）→ state.json 记账/log 行+status-export 刷新**后段独立 commit**——尾段超时杀只丢心跳记账（可复账），交付件零丢失；成本=每轮 +1 commit 可接受；试点窗 ≤2 周·判据=期间断轮交付件零丢失（断洞复盘逐案核对）·判负留痕合法。
 - **计量原则**：测量先行——本条生效前后，空转轮的轮次时长/操作步数对比入 state.json log（idle vs idle-fast 可分辨）。
 - **外部 API 面**：web 采集/云端模型仅调研令或 CEO 明令授权时用；产线默认=本地栈四站；edge-tts=免费云端接口（piper=纯本地备份线在案）。
@@ -67,6 +68,7 @@
 
 ## 变更记录
 
+- 2026-10-15: v1.14 §6 心跳 pulse 律（集团巡检 PT-20261015-01 整改·orders row 456·R2308）——defer 窗 pulse-only state beat 落地（close_commit.py pulse_state_beat+CLI --pulse+iteration_loop.ps1 defer 分支接线·7 新测+全回归 1515 绿+实弹 STATE-PULSED ts 刷新 tick/log 零接触实证）+`beat` 声明块（选项②·active 间隙 ≤35min+defer/pause 语义+D-13 机读指针）——fleet-audit STALE 2.2h 假警根因（18:26→20:38 cloud-cap defer 窗零轮闭·loop 活着重试）闭口·死亡线 10-22 提前毕。回执=HQ-FEEDBACK PT-20261015-01 行+ack commit（row 456+R2308+next·P-51 双载体）。
 - 2026-10-09: v1.12 §6 实活轮收账两段制（tech#27·R1840）——缺口锚=R1832 断洞（超时杀落在收账段吞交付件 commit）；采纳两段制=交付件先行 commit→state.json/export 后段独立 commit，断轮只丢心跳可复账·交付件零丢失；成本每轮 +1 commit·试点窗 ≤2 周。
 - 2026-10-11: v1.13 燃面预算律指针行（集团决策 D-20261011-06 采纳·BigStream #112 点名通道收口）——视频产线燃面预算律三帽正典落 `docs/production-chain.md` §5（装配批中间件 ≤2GB/批帽+模型源件即弃律+renders ≤200MB/周软帽）；os-protocol 零重复文本=指针制（单一真相律）。
 - 2026-09-23: v1.0 建立（CEO 令 O-20260923-1525-bm-a）。同批推翻 PLAN §8 原文「P3 后再装循环」——CEO 令优先。
