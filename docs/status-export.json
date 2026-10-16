@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 03:49:31",
- "do": "R2311: F-191 DIGEST-v22 registered (E4 brain-lane first flight); tech#156 rubric at 08:00; next: window read + supply",
+ "export_ts": "2026-10-17 04:42:27",
+ "do": "R2313 codex batch-2 cleared (3 files version-up, guard warn zeroed); next: 08:00 window read + supply legs",
  "depts": [
   {
    "n": "工程技术部",
