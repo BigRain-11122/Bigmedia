@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-16 19:21:44",
- "do": "收令+窗读轮：orders 455-500 消费（PT-01 回执 F-20261016-01 死线前闭环）+tech#92 窗 FAIL 确证（judged 286·selected_n=0→tech#156 触发）",
+ "export_ts": "2026-10-17 01:33:24",
+ "do": "AIHOT radar resumed: daily 2026-10-16 published (judged 286); gate fix; next: tech#156 + DIGEST-v22",
  "depts": [
   {
    "n": "工程技术部",
