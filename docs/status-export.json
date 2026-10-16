@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 05:47:35",
- "do": "R2315 orphan adoption close-out; next=08:00 window read (tech#92/#156 + morning supply)",
+ "export_ts": "2026-10-17 05:58:24",
+ "do": "R2316: tech#185 closed - SC-005-07 GPU-lane zombie launcher retired; next: 08:00 authority window + tech#186 legs 4-5",
  "depts": [
   {
    "n": "工程技术部",
