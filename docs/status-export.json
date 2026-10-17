@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 08:13:06",
- "do": "08:00 权威窗收官：tech#92 PASS+#156 闭项+daily 10-17 首个非 quiet 出刊→REACT-v22 生产链下轮领",
+ "export_ts": "2026-10-17 08:51:07",
+ "do": "REACT-v22 M0-M4 全落（zhihu#1 1314 案·30 档全绿）→M4.5+E4+F-192 登记下轮 fire 窗收官",
  "depts": [
   {
    "n": "工程技术部",
@@ -10,12 +10,12 @@
  ],
  "outs": [
   [
-   "雷达阈值腿已执行·10-16 08:00 compose 窗判读 selected_n·daily 空窗=诚实态",
+   "雷达权威窗收官：tech#92 PASS+daily 10-17 首个非 quiet 出刊（flashes 10）",
    "on",
    "radar"
   ],
   [
-   "MV V3 终剪已落位（768P 234.17s·CEO 过目位在册）·V4 Jay-redo 装配 19:00 窗在飞",
+   "MV V5 17 镜到件验真（QC GO 17/17）·装配链在飞（精压→签章→呈 CEO）",
    "on",
    "mv0001"
   ],
@@ -30,7 +30,7 @@
    "meme-v1"
   ],
   [
-   "AIHOT 双新源换装（B站科技/知识端点·流量真实）",
+   "AIHOT 复产链健康（worker 复活·daily 10-17 出刊 judged 229）",
    "on",
    "intel"
   ],
@@ -45,7 +45,7 @@
    "ops"
   ],
   [
-   "REACT-v21 收官 F-190 入库·v22 晨供窗候 10-16 日报窗",
+   "REACT-v22 M0-M4 产成（1314 案·F-192 候选）·评审腿下轮收官",
    "on",
    "l-card"
   ],
@@ -55,8 +55,8 @@
    "weekly"
   ],
   [
-   "fire 席位复活裁决=案 A 过（14b S1/E4 席位）",
-   "wait",
+   "评审席栈重路由 v3：:8090 brain 通道（③④腿可领）",
+   "on",
    "fire-seat"
   ]
  ],
@@ -87,15 +87,15 @@
  "live": [
   [
    "当前活",
-   "停产口令值守态：CEO「开工」口令/周末窗解锁生产线（AIHOT worker pause 承继 R2307·pulse 面保鲜中）"
+   "REACT-v22《城市速报 022》M0-M4 生产链全落（1314 转账返还案·market_close 桶三轴·C-00029 收束）"
   ],
   [
    "最近实物",
-   "r2308_t92_window_result.txt 权威窗证据件（7 段 rc0）+HQ-FEEDBACK F-20261016-01 回执行+2026-10-16 日报补产"
+   "MC-20261017-REACT-v22.png poster 234KB+mp4 3.400s（m1-assert 17/17+em-check 30 档+验图五检 5/5）"
   ],
   [
    "下个里程碑",
-   "复产窗首验三读数（worker 复活+compose daily 补刊+tech#156 分位归一执行腿）·ETA=CEO 开工口令/周末窗"
+   "REACT-v22 评审腿收官（M4.5 七席+E4 brain lane+F-192 登记）·ETA=10-17 下轮 fire 窗"
   ]
  ]
 }
