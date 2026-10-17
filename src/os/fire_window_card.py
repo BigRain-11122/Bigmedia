@@ -48,6 +48,11 @@ quiet-window no-fires. It only
 ever adds a no-fire reason, never forces GO; a missing free reading
 skips the face silently (the wedge-probe backstop still guards); the
 mv-yield paths never get the face (the yield reason dominates).
+tech#186 leg-5 moot re-adjudication: the eval stack now runs on the
+external :8090 brain lane (qwen3.6-35B-A3B, resident service) -- no
+consuming leg cold-loads the 17GB blob on this card any more, so the
+face is OFF by default (DEFAULT_LOAD_CLASS_MB = 0) and a leg that
+does cold-load a big class locally passes --load-class-mb explicitly.
 
 rc contract (consumers gate on rc, not on parsing):
   0 = fire window open (verdict "fire")
@@ -107,8 +112,15 @@ PATH_B = "B-eviction-credit"
 # CPU lane is the flight path. The class gate still reflects the
 # CONSUMING leg, not the probe's tag. 0 disables the face (a future
 # leg that reuses the probe's hot tag passes 0).
+# tech#186 leg-5 moot re-adjudication: the eval stack now
+# runs on the external :8090 brain lane (qwen3.6-35B-A3B,
+# resident service) -- no consuming leg cold-loads the 17GB
+# 27b blob on this card, so the class face is OFF by
+# default. S1_BASE_LOAD_MB stays as the named 27b envelope
+# for explicit pins (tests, or a future local big-class
+# leg).
 S1_BASE_LOAD_MB = 17408
-DEFAULT_LOAD_CLASS_MB = S1_BASE_LOAD_MB
+DEFAULT_LOAD_CLASS_MB = 0
 LOAD_CLASS_REASON = "load-class-starved"
 
 USAGE = ("usage: python src/os/fire_window_card.py [--json] "
@@ -454,8 +466,8 @@ def main(argv=None):
     parser.add_argument("--load-class-mb", type=int,
                         default=DEFAULT_LOAD_CLASS_MB,
                         help="consuming-leg cold-load class threshold in "
-                             "MB (tech#140; default %d = S1/E4 BASE "
-                             "14b; 0 disables the face)"
+                             "MB (tech#140; default %d = face off, "
+                             "tech#186 moot; 0 disables the face)"
                              % DEFAULT_LOAD_CLASS_MB)
     args = parser.parse_args(argv)
 
