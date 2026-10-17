@@ -122,8 +122,12 @@ PYCACHE_DIRNAME = "__pycache__"
 # that registers a new F-number in the finished ledger must also carry the
 # main-queue done backwrite - R2258 missed state/queue/main.md and the
 # main#19 done mark stayed unwritten for 57 rounds.
+# tech#209 (R2342 anchor): station-reviews joins the guard surface -
+# F-192/F-193 registered without the station-reviews row and the ledger
+# tail lagged two rounds (REACT-v22/DIGEST-v23) until R2342 backfilled.
 FINISHED_LEDGER_REL = "output/finished.md"
 QUEUE_MAIN_REL = "state/queue/main.md"
+STATION_REVIEWS_REL = "docs/reviews/station-reviews.md"
 
 # tech#76: ledger prefix shape. Minute field is two chars - digit+digit
 # ("23:26") or digit+x ("23:5x", fuzzy-minute house style). Anything else
@@ -697,6 +701,22 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
             "missing from the manifest; backwrite the main-queue done "
             "mark for the new F-number (tech#188, R2258 anchor: main#19 "
             "stayed undone for 57 rounds)" % QUEUE_MAIN_REL)
+
+    # --- tech#209: F-registration station-reviews backwrite guard
+    # (R2342 anchor). The F-192/F-193 rounds registered their finished
+    # entries but never wrote the station-reviews ledger row - the
+    # station-reviews tail lagged two rounds until R2342 backfilled
+    # both rows (R16/R21 repair precedent). Same advisory shape as
+    # tech#188: the row may legitimately live in an earlier commit, so
+    # the WARN never fails an accounting close. ---
+    if (FINISHED_LEDGER_REL in rel_files
+            and STATION_REVIEWS_REL not in rel_files):
+        lines.append(
+            "WARN F-REGISTRATION-SR close without station-reviews "
+            "backwrite - %s missing from the manifest; backwrite the "
+            "station-reviews row for the new F-number (tech#209, "
+            "R2342 anchor: F-192/F-193 rows lagged two rounds)"
+            % STATION_REVIEWS_REL)
 
     # --- tech#148: canonical export refresh (before the git steps so the
     # refreshed export rides the same accounting commit). Refusal is

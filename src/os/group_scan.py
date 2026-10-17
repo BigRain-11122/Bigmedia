@@ -60,9 +60,15 @@ Faces:
             17:4x 鬼相排查令 which the worktree face only gained minutes
             after origin had it. Any git/network failure degrades to the
             worktree-only behavior (pre-registered) -- never a probe
-            FAIL. Real git binary only: the PATH git on this machine is
+            FAIL.             Real git binary only: the PATH git on this machine is
             the gitsilent stdout-swallowing wrapper, which would read as
             0 rows and silently kill the face (R-1952 family).
+            tech#208 (R2341 anchor): dual readings -- anchor-count
+            (content face) is reported side by side with delta (count
+            face); divergence classifies into insert-family vs
+            edit-family candidates (a worktree row whose content
+            origin lacks pairs with one anchor). Count-quiet with
+            content edits stays rc-quiet with an advisory note.
   MTIME      HQ orders/decisions/ledger anchors + own orders newest file
 
 Usage:
@@ -583,6 +589,8 @@ def origin_only_row_anchors(origin_lines, local_text,
     numbers were commit subjects, not ledger rows, HITS=0).
     Returns [{"row": <1-based origin index>, "cell": <first cell>,
     "preview": <first preview_len chars>}] capped at ``cap``;
+    ``cap=None`` (tech#208) returns the full uncapped list so the face
+    can report the true anchor-count next to the count-face delta;
     [] when origin_lines is None/empty or everything is present.
     """
     if not origin_lines:
@@ -598,9 +606,29 @@ def origin_only_row_anchors(origin_lines, local_text,
         anchors.append({"row": idx,
                         "cell": _orders_first_cell(line),
                         "preview": line.strip()[:preview_len]})
-        if len(anchors) >= cap:
+        if cap is not None and len(anchors) >= cap:
             break
     return anchors
+
+
+def classify_anchor_delta_alignment(anchor_count, delta):
+    """Pure core (tech#208, R2341 anchor): anchor-count vs delta verdict.
+
+    R2341 live case: the count face read delta=4 while 5 origin-only
+    anchors echoed -- one worktree row carried content origin did not
+    have, and the count face alone could not explain the split. Set
+    algebra: L = (O - A) + E, so E = A - delta >= 0 always, where E is
+    the number of worktree-only-content rows (edit-family candidates
+    that pair with E of the A anchors). Aligned (E == 0) means every
+    origin-only anchor is a pure insert candidate.
+    Returns {"anchor_count", "delta", "edit_family", "insert_family",
+    "aligned"}.
+    """
+    edit_family = max(0, anchor_count - delta)
+    return {"anchor_count": anchor_count, "delta": delta,
+            "edit_family": edit_family,
+            "insert_family": anchor_count - edit_family,
+            "aligned": edit_family == 0}
 
 
 def face_orders_origin_delta(paths, runner=None, git_path=None):
@@ -611,7 +639,10 @@ def face_orders_origin_delta(paths, runner=None, git_path=None):
     pre-registered graceful degradation). tech#165: ahead echoes
     origin-only row content anchors (row index + first cell + preview)
     so the consuming round anchors on verbatim content, never on a
-    guessed identity.
+    guessed identity. tech#208 (R2341 anchor): anchor-count and delta
+    are reported side by side with an insert-family vs edit-family
+    classification when they diverge; quiet-by-count with content edits
+    keeps rc-quiet and gains an advisory edit-family note.
     """
     try:
         text, mtime, size = read_text(paths["hq_orders"])
@@ -631,19 +662,57 @@ def face_orders_origin_delta(paths, runner=None, git_path=None):
     lines.append("origin rows=%s | delta=%s" % (verdict["origin"],
                                                 verdict["delta"]))
     if verdict["status"] == "quiet":
-        lines.append("ORDERS-ORIGIN-DELTA: quiet (origin == worktree rows)")
+        # tech#208 (R2341 anchor): quiet is a row-count verdict; the
+        # content face can still hold edited rows. Count-quiet with
+        # content edits stays rc-quiet -- these are not origin-only
+        # inserts, so no D-13 blind spot -- but the advisory note makes
+        # the count-vs-content split explainable instead of silent.
+        quiet_anchors = origin_only_row_anchors(origin_lines, text,
+                                                 cap=None)
+        if not quiet_anchors:
+            lines.append("ORDERS-ORIGIN-DELTA: quiet "
+                         "(origin == worktree rows)")
+        else:
+            lines.append(
+                "ORDERS-ORIGIN-DELTA: quiet (origin == worktree rows; "
+                "anchor-count=%d content-edited row(s) = edit-family "
+                "candidates -- count aligned but content differs; "
+                "FleetLink pull surfaces the edits, not origin-only "
+                "inserts) (tech#208)" % len(quiet_anchors))
         return RC_QUIET, "\n".join(lines)
-    anchors = origin_only_row_anchors(origin_lines, text)
-    for a in anchors:
+    anchors_all = origin_only_row_anchors(origin_lines, text, cap=None)
+    align = classify_anchor_delta_alignment(len(anchors_all),
+                                             verdict["delta"])
+    for a in anchors_all[:ORIGIN_ANCHOR_CAP]:
         lines.append("origin-only-anchor: row %d | %s | %s"
                      % (a["row"], a["cell"], a["preview"]))
+    if len(anchors_all) > ORIGIN_ANCHOR_CAP:
+        lines.append("origin-only-anchor: ... %d more below cap %d"
+                     % (len(anchors_all) - ORIGIN_ANCHOR_CAP,
+                        ORIGIN_ANCHOR_CAP))
+    if align["aligned"]:
+        lines.append("anchor-count=%d vs delta=%d -- aligned "
+                     "insert-family (every origin-only anchor is an "
+                     "insert candidate) (tech#208)"
+                     % (align["anchor_count"], align["delta"]))
+    else:
+        lines.append(
+            "anchor-count=%d vs delta=%d NOT aligned (tech#208) -- "
+            "%d worktree-only-content row(s) = edit-family candidates "
+            "(content edits between origin and worktree pair with %d "
+            "of the anchors; the other %d anchor(s) are insert "
+            "candidates; verify local edits before FleetLink pull)"
+            % (align["anchor_count"], align["delta"],
+               align["edit_family"], align["edit_family"],
+               align["insert_family"]))
     lines.append("ORDERS-ORIGIN-DELTA-WARN: origin %d vs worktree %d "
-                 "(%d origin-only row(s)) -- worktree-face blind spot "
+                 "(%d origin-only row(s), anchor-count %d) -- worktree-face blind spot "
                  "(R2059/R2064 family); consume via git show origin/main "
                  "now (D-13 SLA), anchor log/commit on the origin-only-"
                  "anchor lines above (tech#165), FleetLink pull heals "
                  "the worktree"
-                 % (verdict["origin"], verdict["local"], verdict["delta"]))
+                 % (verdict["origin"], verdict["local"], verdict["delta"],
+                    align["anchor_count"]))
     return RC_NEW, "\n".join(lines)
 
 

@@ -807,6 +807,60 @@ class OrdersOriginDeltaTests(unittest.TestCase):
         self.assertEqual(rc, gs.RC_READ_FAIL)
         self.assertIn("read-fail", out)
 
+    # --- tech#208 (R2341 anchor): anchor-count vs delta dual readings
+    # with insert/edit-family classification. R2341 live case: delta=4
+    # while 5 origin-only anchors echoed -- one worktree row carried
+    # content origin did not have and the count face could not explain
+    # the split. ---
+
+    def test_alignment_pure_core_aligned(self):
+        a = gs.classify_anchor_delta_alignment(4, 4)
+        self.assertTrue(a["aligned"])
+        self.assertEqual(a["edit_family"], 0)
+        self.assertEqual(a["insert_family"], 4)
+
+    def test_alignment_pure_core_edit_family(self):
+        a = gs.classify_anchor_delta_alignment(5, 4)
+        self.assertFalse(a["aligned"])
+        self.assertEqual(a["edit_family"], 1)
+        self.assertEqual(a["insert_family"], 4)
+
+    def test_anchors_cap_none_uncapped(self):
+        origin = ["| r%d |" % i for i in range(9)]
+        anchors = gs.origin_only_row_anchors(origin, "| none |",
+                                             cap=None)
+        self.assertEqual(len(anchors), 9)
+
+    def test_face_ahead_edit_family_classification(self):
+        local = "| a |\n| local-edit |\n"
+        origin = b"| a |\n| o1 |\n| o2 |\n| o3 |\n| o4 |\n| o5 |\n"
+        rc, out = self._face_with(local, origin)
+        self.assertEqual(rc, gs.RC_NEW)
+        self.assertIn("anchor-count=5 vs delta=4 NOT aligned (tech#208)",
+                      out)
+        self.assertIn("1 worktree-only-content row(s) = edit-family "
+                      "candidates", out)
+        self.assertIn("4 origin-only row(s)", out)
+
+    def test_face_ahead_aligned_insert_family(self):
+        rc, out = self._face_with("| a |\n", b"| a |\n| o1 |\n| o2 |\n")
+        self.assertEqual(rc, gs.RC_NEW)
+        self.assertIn("anchor-count=2 vs delta=2 -- aligned "
+                      "insert-family", out)
+
+    def test_face_quiet_content_edit_advisory_note(self):
+        # count-quiet, one row edited on both sides: rc stays quiet but
+        # the edit-family note makes the count-vs-content split
+        # explainable instead of silent (tech#208).
+        local = "| a |\n| local-edit |\n"
+        origin = b"| a |\n| origin-edit |\n"
+        rc, out = self._face_with(local, origin)
+        self.assertEqual(rc, gs.RC_QUIET)
+        self.assertIn("quiet (origin == worktree rows; "
+                      "anchor-count=1 content-edited row(s)", out)
+        self.assertIn("edit-family", out)
+        self.assertNotIn("ORDERS-ORIGIN-DELTA-WARN", out)
+
 
 class OriginAnchorTests(unittest.TestCase):
     """tech#165 (R2241 seed): origin-only rows echo content anchors.

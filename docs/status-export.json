@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-18 06:28:11",
- "do": "tech#204 leadin density readings done (suite 1601 rc0); next=tech#206 leg + chronicle batch-6 + V5.5 watch + E4 backfill",
+ "export_ts": "2026-10-18 07:09:53",
+ "do": "tech#208+#209 dual-reading + SR guard done (suite 1613 rc0); next=tech queue head + chronicle batch-6 + V5.5 watch + E4",
  "depts": [
   {
    "n": "工程技术部",

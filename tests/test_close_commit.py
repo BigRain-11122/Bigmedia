@@ -309,9 +309,14 @@ class TestFDoneBackwriteGuard(GitRepoCase):
     """tech#188 (R2316 anchor): the R2258 forget-shape - an F-registration
     close whose manifest misses state/queue/main.md - must be loud.
     Advisory by design: the WARN never fails the close (the done mark may
-    legitimately live in an earlier commit)."""
+    legitimately live in an earlier commit).
 
-    def _touch(self, with_queue):
+    tech#209 (R2342 anchor): station-reviews joins the guard surface -
+    the F-192/F-193 rounds registered finished entries without the
+    station-reviews row and the ledger tail lagged two rounds until
+    R2342 backfilled. Same advisory shape."""
+
+    def _touch(self, with_queue, with_sr=False):
         fin = self.root / cc.FINISHED_LEDGER_REL
         fin.parent.mkdir(parents=True, exist_ok=True)
         fin.write_text("F-### | entry", encoding="utf-8")
@@ -321,6 +326,11 @@ class TestFDoneBackwriteGuard(GitRepoCase):
             q.parent.mkdir(parents=True, exist_ok=True)
             q.write_text("1. item", encoding="utf-8")
             files.append(cc.QUEUE_MAIN_REL)
+        if with_sr:
+            sr = self.root / cc.STATION_REVIEWS_REL
+            sr.parent.mkdir(parents=True, exist_ok=True)
+            sr.write_text("| R### | row", encoding="utf-8")
+            files.append(cc.STATION_REVIEWS_REL)
         return files
 
     def test_f_close_missing_queue_backwrite_warns_but_commits(self):
@@ -331,18 +341,32 @@ class TestFDoneBackwriteGuard(GitRepoCase):
                             and "tech#188" in l for l in lines))
         self.assertNotEqual(self.head0, self.head())  # commit still landed
 
+    def test_f_close_missing_station_reviews_warns_but_commits(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._touch(with_queue=True,
+                                           with_sr=False), push=False)
+        self.assertEqual(cc.RC_OK, rc)  # advisory: never fails the close
+        self.assertTrue(any(l.startswith("WARN F-REGISTRATION-SR")
+                            and "tech#209" in l for l in lines))
+        self.assertFalse(any("tech#188" in l for l in lines))
+        self.assertNotEqual(self.head0, self.head())  # commit still landed
+
     def test_f_close_with_queue_backwrite_no_warn(self):
         (self.root / "a.txt").write_text("changed", encoding="utf-8")
-        rc, lines = self.close(self._touch(with_queue=True), push=False)
+        rc, lines = self.close(self._touch(with_queue=True, with_sr=True),
+                               push=False)
         self.assertEqual(cc.RC_OK, rc)
-        self.assertFalse(any("tech#188" in l for l in lines))
+        self.assertFalse(any(l.startswith("WARN F-REGISTRATION")
+                            for l in lines))
         self.assertIn(cc.QUEUE_MAIN_REL, self.head_files())
+        self.assertIn(cc.STATION_REVIEWS_REL, self.head_files())
 
     def test_plain_close_never_warns(self):
         (self.root / "a.txt").write_text("changed", encoding="utf-8")
         rc, lines = self.close(["a.txt"], push=False)
         self.assertEqual(cc.RC_OK, rc)
-        self.assertFalse(any("tech#188" in l for l in lines))
+        self.assertFalse(any(l.startswith("WARN F-REGISTRATION")
+                             for l in lines))
 
 
 class TestSelfInclude(unittest.TestCase):
