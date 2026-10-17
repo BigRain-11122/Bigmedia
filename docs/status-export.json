@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 08:51:07",
- "do": "REACT-v22 M0-M4 全落（zhihu#1 1314 案·30 档全绿）→M4.5+E4+F-192 登记下轮 fire 窗收官",
+ "export_ts": "2026-10-17 09:29:06",
+ "do": "REACT-v22 评审腿收官=F-192 登记毕（M4.5 七席 PASS+E4 brain lane 5.0/10 非拦截）→tech#186 ③④+DIGEST-v23/编年史批五（日闭窗后）",
  "depts": [
   {
    "n": "工程技术部",
@@ -68,34 +68,34 @@
  ],
  "results": [
   [
-   "orders 500 acked",
-   "r2308"
+   "orders 521 acked",
+   "r2322"
   ],
   [
-   "decisions wm 180",
-   "r2308"
+   "decisions wm 185",
+   "r2322"
   ],
   [
-   "tech#156 fired",
-   "r2308"
+   "F-192 registered",
+   "r2322"
   ],
   [
-   "PT-01 receipt ok",
-   "r2308"
+   "E4 brain 5.0",
+   "r2322"
   ]
  ],
  "live": [
   [
    "当前活",
-   "REACT-v22《城市速报 022》M0-M4 生产链全落（1314 转账返还案·market_close 桶三轴·C-00029 收束）"
+   "REACT-v22《城市速报 022》评审腿收官=F-192 登记毕（M4.5 4×9+3N/A PASS+E4 brain lane 第二飞 5.0/10）"
   ],
   [
    "最近实物",
-   "MC-20261017-REACT-v22.png poster 234KB+mp4 3.400s（m1-assert 17/17+em-check 30 档+验图五检 5/5）"
+   "F-192 成品入库：MC-20261017-REACT-v22.png+mp4+评审单 review-20261017-mcreact-v22.md（成品库 193·L-卡 140·10-17 09:2x）"
   ],
   [
    "下个里程碑",
-   "REACT-v22 评审腿收官（M4.5 七席+E4 brain lane+F-192 登记）·ETA=10-17 下轮 fire 窗"
+   "tech#186 ③④ 席位栈重路由 :8090（下轮首项）+DIGEST-v23/编年史批五（日闭窗后）·ETA ≤10-18"
   ]
  ]
 }
