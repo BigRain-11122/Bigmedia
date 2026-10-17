@@ -30,6 +30,14 @@ glossary order. The old static order let a once-mentioned unit at the
 top of the glossary outrank the card's own core jargon (R2334 anchor:
 v22 deferred its core units, v23 deferred T1); density makes the
 top-notes selection per-card and mechanical.
+
+tech#204: the editor footer carries density readings. DEFERRED lines
+read "term (N hit(s)*marker)" where the marker is the boundary-tie mark
+(reorder the glossary to promote this unit) or "low density" (lever =
+change the card-face word or accept); NOTE lines carry the same hits
+basis. R2339 anchor: v23's T1 sat in a 1-hit tie set and fell behind
+only by glossary order, but the footer showed "who" not "why" -- the
+glossary-order tuning lever was invisible to the editor.
 """
 import argparse
 import datetime
@@ -71,20 +79,22 @@ def unit_hits(blob, terms):
 
 
 def matched_units(lines, glossary):
-    """Glossary units whose any term appears in the card lines.
+    """Glossary (unit, hits) pairs whose any term appears in the card lines.
 
     tech#200 density ranking: ordered by per-card hit count (descending),
     tie-broken by glossary order (editorial priority). What the card talks
-    about most is what the lead-in glosses first.
+    about most is what the lead-in glosses first. Hits stay attached to
+    each unit so the editor footer can show WHY each unit ranked where it
+    did (tech#204).
     """
     blob = "\n".join(lines)
     ranked = []
     for idx, unit in enumerate(glossary.get("units", [])):
         hits = unit_hits(blob, unit.get("terms", []))
         if hits:
-            ranked.append((-hits, idx, unit))
+            ranked.append((-hits, idx, unit, hits))
     ranked.sort(key=lambda r: (r[0], r[1]))
-    return [r[2] for r in ranked]
+    return [(r[2], r[3]) for r in ranked]
 
 
 def unglossed_terms(lines, glossary):
@@ -112,13 +122,38 @@ def extract_motif(cfg, glossary):
     return glossary.get("motif_fallback", ""), False
 
 
+TIE_MARK = u"\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f"  # tie set, ranked by glossary order
+LOW_DENSITY_MARK = u"\u4f4e\u5bc6\u5ea6"  # below the notes boundary
+
+
+def _hits_label(hits):
+    return "%d %s" % (hits, "hit" if hits == 1 else "hits")
+
+
+def deferred_reading(term, hits, boundary_hits):
+    """tech#204: why this unit fell behind -- boundary tie (reorder the
+    glossary to promote it) vs genuinely lower density (lever = change
+    the card-face word or accept)."""
+    mark = TIE_MARK if hits == boundary_hits else LOW_DENSITY_MARK
+    return u"%s (%s\u00b7%s)" % (term, _hits_label(hits), mark)
+
+
+def note_reading(term, hits, tied):
+    """tech#204: hits basis for a chosen note; the tie mark flags notes
+    whose position was decided by glossary order inside a tie set."""
+    if tied:
+        return u"%s (%s\u00b7%s)" % (term, _hits_label(hits), TIE_MARK)
+    return u"%s (%s)" % (term, _hits_label(hits))
+
+
 def build_leadin(cfg, glossary):
-    """Return dict(form, paragraph, notes, deferred, unglossed, motif, motif_exact)."""
+    """Return dict(form, paragraph, notes, note_readings, deferred,
+    unglossed, motif, motif_exact)."""
     lines = card_lines(cfg)
     form = detect_form(cfg)
-    units = matched_units(lines, glossary)
-    chosen, deferred = units[:MAX_NOTES], units[MAX_NOTES:]
-    notes = [u["note"] for u in chosen]
+    ranked = matched_units(lines, glossary)
+    chosen, deferred = ranked[:MAX_NOTES], ranked[MAX_NOTES:]
+    notes = [u["note"] for u, _ in chosen]
     unglossed = unglossed_terms(lines, glossary)
     motif, motif_exact = extract_motif(cfg, glossary)
     setting = glossary.get("city_setting", [])
@@ -129,11 +164,22 @@ def build_leadin(cfg, glossary):
     if form == "DIGEST":
         parts.append(motif + u"\u3002")
     paragraph = "".join(p for p in parts if p)
+    hit_counts = [h for _, h in ranked]
+    boundary = chosen[-1][1] if chosen else 0
+    note_readings = [
+        note_reading(u["terms"][0], h, hit_counts.count(h) > 1)
+        for u, h in chosen
+    ]
+    deferred_readings = [
+        deferred_reading(u["terms"][0], h, boundary)
+        for u, h in deferred
+    ]
     return {
         "form": form,
         "paragraph": paragraph,
         "notes": notes,
-        "deferred": [u["terms"][0] for u in deferred],
+        "note_readings": note_readings,
+        "deferred": deferred_readings,
         "unglossed": unglossed,
         "motif": motif,
         "motif_exact": motif_exact,
@@ -150,6 +196,9 @@ def render_md(cfg, result, glossary):
         u"---",
         u"<!-- editor footer (design-state draft; publish opens with M5 account physicals) -->",
     ]
+    if result["note_readings"]:
+        lines.append(u"<!-- NOTES density basis (top-%d by per-card hits): %s -->"
+                     % (MAX_NOTES, u"\u3001".join(result["note_readings"])))
     if result["deferred"]:
         lines.append(u"<!-- DEFERRED glossary units (beyond top-%d notes): %s -->"
                      % (MAX_NOTES, u"\u3001".join(result["deferred"])))
@@ -158,7 +207,7 @@ def render_md(cfg, result, glossary):
                      % u"\u3001".join(result["unglossed"]))
     if not result["motif_exact"]:
         lines.append(u"<!-- MOTIF fallback used (no \u300c...\u300d\u6bcd\u9898 in editorial_value) -->")
-    lines.append(u"<!-- generated %s by tools/lcard_leadin.py (tech#194) -->"
+    lines.append(u"<!-- generated %s by tools/lcard_leadin.py (tech#194/#200/#204) -->"
                  % datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
     return "\n".join(lines) + "\n"
 
@@ -178,8 +227,8 @@ def main(argv=None):
     print("form=%s notes=%d deferred=%d unglossed=%d motif_exact=%s"
           % (result["form"], len(result["notes"]), len(result["deferred"]),
              len(result["unglossed"]), result["motif_exact"]))
-    for note in result["notes"]:
-        print("NOTE: " + note)
+    for note, reading in zip(result["notes"], result["note_readings"]):
+        print("NOTE %s: %s" % (reading, note))
     for t in result["deferred"]:
         print("DEFERRED: " + t)
     for t in result["unglossed"]:

@@ -64,7 +64,20 @@ class LeadinTest(unittest.TestCase):
         md = lcard_leadin.render_md(load(V23), r, lcard_leadin.load_glossary())
         self.assertIn(u"M5 \u53d1\u5e03\u6848\u5bfc\u8bed\u6bb5\u8349\u7a3f", md)
         self.assertIn("DEFERRED glossary units", md)
-        self.assertIn("tools/lcard_leadin.py (tech#194)", md)
+        self.assertIn("tools/lcard_leadin.py (tech#194/#200/#204)", md)
+
+    def test_render_md_footer_density_readings(self):
+        """tech#204: footer lines carry hits readings + lever markers."""
+        cfg = load(V23)
+        g = lcard_leadin.load_glossary()
+        r = lcard_leadin.build_leadin(cfg, g)
+        md = lcard_leadin.render_md(cfg, r, g)
+        self.assertRegex(
+            md, r"NOTES density basis \(top-3 by per-card hits\): "
+                 r".+?\(\d+ hits?[^)]*\)")
+        self.assertRegex(
+            md, r"DEFERRED glossary units \(beyond top-3 notes\): "
+                 r".+?\(\d+ hits?\u00b7(\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f|\u4f4e\u5bc6\u5ea6)\)")
 
 
 class DensityRankingTest(unittest.TestCase):
@@ -94,7 +107,10 @@ class DensityRankingTest(unittest.TestCase):
     def test_tie_break_keeps_glossary_order(self):
         r = lcard_leadin.build_leadin(self.cfg(u"aa bb zz cc"), self.GLOSS)
         self.assertEqual(r["notes"], ["early-once", "late-dense", "early-second"])
-        self.assertEqual(r["deferred"], ["cc"])  # 4-way 1-hit tie -> cap cut by index
+        # tech#204: 4-way 1-hit tie -> cap cut by index, reading names the lever
+        self.assertEqual(
+            r["deferred"],
+            [u"cc (1 hit\u00b7\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f)"])
 
     def test_unit_hits_longest_match_no_double_count(self):
         self.assertEqual(lcard_leadin.unit_hits(u"bm-c \u8f66\u9053",
@@ -108,6 +124,55 @@ class DensityRankingTest(unittest.TestCase):
         r = lcard_leadin.build_leadin(cfg, g)
         self.assertIn(u"\u4fee\u6cd5\u5305", r["paragraph"])  # core unit back in notes
         self.assertIn(u"V4\uff0fV5", r["paragraph"])  # V4/V5 note recovered over statics
+
+
+class FooterReadingTest(unittest.TestCase):
+    """tech#204: DEFERRED/NOTE lines carry density readings so the editor
+    can tell a boundary tie (lever: reorder glossary) from low density
+    (lever: change the card-face word)."""
+
+    GLOSS5 = {
+        "city_setting": ["s1"],
+        "react_two_state": "twostate",
+        "motif_fallback": "fallback",
+        "units": [
+            {"terms": ["aa"], "note": "u-aa"},
+            {"terms": ["zz", "yy"], "note": "u-zz"},
+            {"terms": ["bb"], "note": "u-bb"},
+            {"terms": ["cc"], "note": "u-cc"},
+            {"terms": ["dd"], "note": "u-dd"},
+        ],
+        "watch_patterns": ["aa", "zz", "yy", "bb", "cc", "dd"],
+    }
+
+    def cfg(self, text):
+        return {"meta": {"form": "DIGEST", "topic": "t", "editorial_value": ""},
+                "cards": [{"lines": [text]}]}
+
+    def test_deferred_tie_reading(self):
+        r = lcard_leadin.build_leadin(self.cfg(u"aa bb zz cc"), self.GLOSS5)
+        self.assertEqual(
+            r["deferred"],
+            [u"cc (1 hit\u00b7\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f)"])
+
+    def test_deferred_low_density_reading(self):
+        # zz 3 hits, aa 2, bb 2 -> boundary 2; cc 1 sits below it
+        r = lcard_leadin.build_leadin(self.cfg(u"zz zz zz aa aa bb bb cc"),
+                                      self.GLOSS5)
+        self.assertEqual(r["deferred"], [u"cc (1 hit\u00b7\u4f4e\u5bc6\u5ea6)"])
+
+    def test_note_readings_tied_set_marked(self):
+        r = lcard_leadin.build_leadin(self.cfg(u"aa bb zz cc"), self.GLOSS5)
+        self.assertEqual(r["note_readings"], [
+            u"aa (1 hit\u00b7\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f)",
+            u"zz (1 hit\u00b7\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f)",
+            u"bb (1 hit\u00b7\u5e73\u624b\u96c6\u6309\u672f\u8bed\u7c3f\u5e8f)",
+        ])
+
+    def test_note_reading_untied_no_marker(self):
+        r = lcard_leadin.build_leadin(self.cfg(u"zz zz zz zz"), self.GLOSS5)
+        self.assertEqual(r["note_readings"], [u"zz (4 hits)"])
+        self.assertEqual(r["deferred"], [])
 
 
 if __name__ == "__main__":

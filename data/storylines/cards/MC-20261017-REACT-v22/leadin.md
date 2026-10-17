@@ -4,5 +4,6 @@
 
 ---
 <!-- editor footer (design-state draft; publish opens with M5 account physicals) -->
+<!-- NOTES density basis (top-3 by per-card hits): 轴 (3 hits) -->
 <!-- MOTIF fallback used (no 「...」母题 in editorial_value) -->
-<!-- generated 2026-10-18 01:09 by tools/lcard_leadin.py (tech#194) -->
+<!-- generated 2026-10-18 06:20 by tools/lcard_leadin.py (tech#194/#200/#204) -->

@@ -4,5 +4,6 @@
 
 ---
 <!-- editor footer (design-state draft; publish opens with M5 account physicals) -->
-<!-- DEFERRED glossary units (beyond top-3 notes): 上链、死链、回采、终审 -->
-<!-- generated 2026-10-18 01:09 by tools/lcard_leadin.py (tech#194) -->
+<!-- NOTES density basis (top-3 by per-card hits): V4 (3 hits)、修法包 (2 hits)、令批 (1 hit·平手集按术语簿序) -->
+<!-- DEFERRED glossary units (beyond top-3 notes): 上链 (1 hit·平手集按术语簿序)、死链 (1 hit·平手集按术语簿序)、回采 (1 hit·平手集按术语簿序)、终审 (1 hit·平手集按术语簿序) -->
+<!-- generated 2026-10-18 06:20 by tools/lcard_leadin.py (tech#194/#200/#204) -->
