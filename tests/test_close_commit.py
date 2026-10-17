@@ -305,6 +305,46 @@ class TestPycachePurge(GitRepoCase):
         self.assertEqual((0, []), (n, fails))
 
 
+class TestFDoneBackwriteGuard(GitRepoCase):
+    """tech#188 (R2316 anchor): the R2258 forget-shape - an F-registration
+    close whose manifest misses state/queue/main.md - must be loud.
+    Advisory by design: the WARN never fails the close (the done mark may
+    legitimately live in an earlier commit)."""
+
+    def _touch(self, with_queue):
+        fin = self.root / cc.FINISHED_LEDGER_REL
+        fin.parent.mkdir(parents=True, exist_ok=True)
+        fin.write_text("F-### | entry", encoding="utf-8")
+        files = [cc.FINISHED_LEDGER_REL, "a.txt"]
+        if with_queue:
+            q = self.root / cc.QUEUE_MAIN_REL
+            q.parent.mkdir(parents=True, exist_ok=True)
+            q.write_text("1. item", encoding="utf-8")
+            files.append(cc.QUEUE_MAIN_REL)
+        return files
+
+    def test_f_close_missing_queue_backwrite_warns_but_commits(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._touch(with_queue=False), push=False)
+        self.assertEqual(cc.RC_OK, rc)  # advisory: never fails the close
+        self.assertTrue(any(l.startswith("WARN F-REGISTRATION")
+                            and "tech#188" in l for l in lines))
+        self.assertNotEqual(self.head0, self.head())  # commit still landed
+
+    def test_f_close_with_queue_backwrite_no_warn(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._touch(with_queue=True), push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any("tech#188" in l for l in lines))
+        self.assertIn(cc.QUEUE_MAIN_REL, self.head_files())
+
+    def test_plain_close_never_warns(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any("tech#188" in l for l in lines))
+
+
 class TestSelfInclude(unittest.TestCase):
     """tech#81: the round's own close script rides the manifest (r1930
     anchor: that script stayed untracked across rounds because the explicit

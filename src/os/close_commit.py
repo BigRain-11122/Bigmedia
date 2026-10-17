@@ -44,6 +44,14 @@ Laws encoded (why this is safe in this shared tree):
   contained the script that consumed it - a structural gap healed here,
   not by every future script remembering its own path. Advisory by
   design: an unreadable state or a missing script never fails the close.
+- tech#188 (R2316 anchor) F-registration backwrite guard: a close whose
+  manifest carries the finished ledger (output/finished.md) without the
+  main queue (state/queue/main.md) emits a loud WARN - R2258 registered
+  F-180 but forgot main#19's done mark, which then sat unwritten for 57
+  rounds until tech#185's forensic pass surfaced it. Advisory only: the
+  mark may legitimately live in an earlier commit, so this never fails
+  an accounting close; it just makes the forget-shape loud at the one
+  place that sees the whole manifest.
 
 rc: 0 = commit landed (push may have warned); 1 = a git add/commit step
 failed; 2 = usage error; 3 = readback verify failed (tech#155 face 2:
@@ -109,6 +117,13 @@ RC_WRITER_REFUSE = 2
 
 MSG_MAX_SOFT = 500  # P-30 one-line convention; WARN only, never fails
 PYCACHE_DIRNAME = "__pycache__"
+
+# tech#188 (R2316 anchor): F-registration backwrite guard paths. A close
+# that registers a new F-number in the finished ledger must also carry the
+# main-queue done backwrite - R2258 missed state/queue/main.md and the
+# main#19 done mark stayed unwritten for 57 rounds.
+FINISHED_LEDGER_REL = "output/finished.md"
+QUEUE_MAIN_REL = "state/queue/main.md"
 
 # tech#76: ledger prefix shape. Minute field is two chars - digit+digit
 # ("23:26") or digit+x ("23:5x", fuzzy-minute house style). Anything else
@@ -631,6 +646,23 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
     else:
         rel_files.append(auto_self)
         lines.append("STEP self-include %s (tech#81)" % auto_self)
+
+    # --- tech#188: F-registration backwrite guard (R2258 anchor). The
+    # anchor round registered F-180 in output/finished.md but its FILES
+    # list missed state/queue/main.md - main#19's done mark stayed
+    # unwritten for 57 rounds until tech#185 surfaced it. The structural
+    # fix is this loud advisory at the one place that sees the whole
+    # manifest: an F-registration close without the queue backwrite on
+    # board is almost always the forget-shape. Advisory by design (the
+    # mark may legitimately live in an earlier commit) - never fails an
+    # accounting close. ---
+    if (FINISHED_LEDGER_REL in rel_files
+            and QUEUE_MAIN_REL not in rel_files):
+        lines.append(
+            "WARN F-REGISTRATION close without queue backwrite - %s "
+            "missing from the manifest; backwrite the main-queue done "
+            "mark for the new F-number (tech#188, R2258 anchor: main#19 "
+            "stayed undone for 57 rounds)" % QUEUE_MAIN_REL)
 
     # --- tech#148: canonical export refresh (before the git steps so the
     # refreshed export rides the same accounting commit). Refusal is
