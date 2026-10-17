@@ -31,7 +31,10 @@ OpenAI wire (BRAIN_URL/BRAIN_MODEL env-driven, same contract as
 Tools/model-lane-smoke.py lane A) with
 chat_template_kwargs.enable_thinking:false. The dormant ollama
 qwen3.8:27b (measured pathological prompt_eval 0.16tok/s) is no
-longer referenced. --threads is kept for dispatch compatibility but
+longer referenced anywhere in the seat stack -- tech#186 legs 3-4
+retired the last defaults (registry 12 seats, research_digest, the
+probe/tooling surfaces, and the retired E4 GPU face). --threads is
+kept for dispatch compatibility but
 is MOOT on this lane: threads/GPU pinning belong to the external
 resident server, not to this client's payload (the old options
 num_gpu/num_thread pair no longer applies -- semantically noted, not

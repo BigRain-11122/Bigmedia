@@ -648,9 +648,9 @@ def main(argv=None):
                          '/<id-lower>_call_cpu.py)')
     ap.add_argument('--model',
                     help='seat model name (default: BRAIN_MODEL env / '
-                         'qwen3.6-35b on the CPU-lane faces, '
-                         'qwen3.8:27b on the GPU face pending its '
-                         'tech#185 retirement)')
+                         'qwen3.6-35b on every face; the GPU face is '
+                         'retired per tech#185 and kept for '
+                         'regeneration parity only)')
     ap.add_argument('--timeout', type=int, default=1500)
     ap.add_argument('--questions-file',
                     help='override the canonical question block (whole file '
@@ -749,12 +749,17 @@ def main(argv=None):
             else:
                 questions = CANONICAL_QUESTIONS
             prompt = build_prompt(body, questions)
-            # tech#186 per-face default: the CPU face flies the brain
-            # lane (env BRAIN_MODEL), the GPU face keeps its legacy
-            # default until the tech#185 retirement ruling.
-            model = args.model or (
-                os.environ.get('BRAIN_MODEL', 'qwen3.6-35b')
-                if args.cpu_lane else 'qwen3.8:27b')
+            # tech#186 leg-4: BOTH faces default to the brain lane
+            # (env BRAIN_MODEL) -- the tech#185 retirement ruling
+            # landed (R2316: the GPU-lane staged launcher pointer
+            # swapped to the CPU route, the old s1_call.py carries a
+            # RETIRED fast-fail), retiring the last qwen3.8:27b
+            # default. The GPU face template keeps its legacy
+            # ollama-CLI transport verbatim (retired artifact,
+            # regeneration parity only -- live dispatch goes through
+            # --cpu-lane).
+            model = args.model or os.environ.get(
+                'BRAIN_MODEL', 'qwen3.6-35b')
             out = args.out or os.path.join(
                 os.path.dirname(os.path.abspath(args.body)), 'e4_call.py')
             if os.path.isdir(out):

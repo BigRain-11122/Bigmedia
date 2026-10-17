@@ -46,6 +46,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
@@ -91,25 +92,41 @@ LAUNCH_MARGIN_S = 2  # dispatch latency budget inside the TTL
 # S1 flights burned their full 1500s hats in GPU-starved windows with
 # zero verdict (R2012 flight-1 / R2013 flight-2 / R2024 flight-3) --
 # the card's gates (VRAM / util / mv / load-class) say nothing about
-# ollama's ACHIEVABLE generation rate. The probe runs ONLY on a
+# the lane's ACHIEVABLE generation rate. The probe runs ONLY on a
 # card-GO (no-fire rounds stay zero-cost): one small non-streaming
-# generation against the local ollama gives a load-excluded effective
-# token rate, extrapolated to a full-verdict ETA. ETA over the
-# conservative starve line -> no-fire reason=throughput-starved,
-# deferred to the next window (a <=90s probe instead of a 1500s
-# burn). Conservative single-direction (tech#136 discipline): this
-# face can only demote a GO, never force one. Thresholds are
-# deliberately conservative initial values, calibrate from the
-# pilot readout (P-7 judge questions pre-registered in §D).
-PROBE_MODEL_DEFAULT = "qwen3.8:27b"
+# generation against the BRAIN WIRE gives an effective token rate,
+# extrapolated to a full-verdict ETA. ETA over the conservative starve
+# line -> no-fire reason=throughput-starved, deferred to the next
+# window (a <=90s probe instead of a 1500s burn). Conservative
+# single-direction (tech#136 discipline): this face can only demote
+# a GO, never force one. Thresholds are deliberately conservative
+# initial values, calibrate from the pilot readout (P-7 judge
+# questions pre-registered in §D).
+#
+# tech#186 leg-4 wire migration: the probe now flies the lane the
+# staged launchers actually fly -- the EXTERNAL brain lane (:8090
+# Qwen3.6-35B-A3B via the OpenAI chat wire, BRAIN_URL/BRAIN_MODEL
+# env, canon cph4/fleet/qwen38-rollout-20261015.md v3) -- instead of
+# the retired local ollama API (the old default probed the dormant
+# pathological qwen3.8:27b face, structurally blocking every CPU-lane
+# fire with a timeout demotion). The OpenAI wire exposes no
+# server-side eval counters, so the rate is usage-tokens over
+# request wall-clock: the brain is a RESIDENT server by design (no
+# cold load exists to exclude), and a contended brain honestly
+# reads slow and demotes. The old num_gpu/num_thread lane options
+# are MOOT on this wire (threads/GPU pinning belong to the resident
+# server, not the client payload -- same doctrine as the e4
+# launcher templates).
+PROBE_MODEL_DEFAULT = os.environ.get("BRAIN_MODEL", "qwen3.6-35b")
 PROBE_PROMPT = ("Reply with the numbers from one to twenty, "
                 "comma separated.")
-PROBE_TOKENS = 96          # num_predict of the micro-generation
+PROBE_TOKENS = 96          # max_tokens of the micro-generation
 PROBE_CAP_S = 90           # P-7: probe budget <= 90s per attempt
 ETA_PROMPT_TOKENS = 6000   # conservative S1/E4 material size
 ETA_OUTPUT_TOKENS = 900     # conservative verdict size
 ETA_STARVED_S = 1200       # P-7: conservative initial starve line
-OLLAMA_GENERATE_URL = "http://localhost:11434/api/generate"
+BRAIN_URL = os.environ.get(
+    "BRAIN_URL", "http://127.0.0.1:8090/v1/chat/completions")
 
 # tech#169 (CPU lane): O-20260913-2215 CEO standing order opens the
 # fleet CPU face 24/7 and explicitly repeals the workday zero-dispatch
@@ -232,26 +249,30 @@ def workday_dispatch_blocked(dt, flag_declared=None):
     return True
 
 
-def compute_rate(body):
-    """Pure core: ollama generate response -> (rate_tps, eta_s) or
-    None.
+def compute_rate(body, elapsed_s):
+    """Pure core: brain-wire chat response + wall-clock seconds ->
+    (rate_tps, eta_s) or None.
 
-    Load time is deliberately excluded (prompt_eval_duration +
-    eval_duration only): a cold load is not starvation, and after the
-    probe the model stays resident for the flight (shared work, not
-    extra cost). The rate covers prefill+decode tokens over
-    prefill+decode time -- a conservative proxy for a full verdict
-    (whose prompt is ~6000 tokens, not 20). Missing/zero counters
-    read as None; callers treat that as probe-error fail-closed."""
-    prompt_count = body.get("prompt_eval_count") or 0
-    eval_count = body.get("eval_count") or 0
-    prompt_ns = body.get("prompt_eval_duration") or 0
-    eval_ns = body.get("eval_duration") or 0
-    elapsed_ns = prompt_ns + eval_ns
-    tokens = prompt_count + eval_count
-    if elapsed_ns <= 0 or tokens <= 0:
+    tech#186 leg-4: the OpenAI wire exposes only usage counters (no
+    server-side eval timings like the retired ollama face), so the
+    rate is (prompt+completion tokens) / request wall-clock. The
+    brain is a RESIDENT external server by design -- there is no
+    cold load left to exclude, and a contended brain honestly reads
+    slow and demotes (the conservative single-direction discipline
+    survives the transport swap). Missing/zero usage or a
+    non-positive elapsed read as None; callers treat that as
+    probe-error fail-closed."""
+    usage = (body or {}).get("usage") or {}
+    try:
+        prompt_count = int(usage.get("prompt_tokens") or 0)
+        eval_count = int(usage.get("completion_tokens") or 0)
+    except (TypeError, ValueError):
         return None
-    rate_tps = tokens / (elapsed_ns / 1e9)
+    tokens = prompt_count + eval_count
+    if not isinstance(elapsed_s, (int, float)) or elapsed_s <= 0 \
+            or tokens <= 0:
+        return None
+    rate_tps = tokens / elapsed_s
     eta_s = (ETA_PROMPT_TOKENS + ETA_OUTPUT_TOKENS) / rate_tps
     return rate_tps, eta_s
 
@@ -259,49 +280,56 @@ def compute_rate(body):
 def real_throughput_probe(model=PROBE_MODEL_DEFAULT,
                           cap_s=PROBE_CAP_S, cpu_lane=False):
     """Network seam (injected in tests; never called on no-fire
-    paths): one small non-streaming ollama generation -> probe row.
+    paths): one small non-streaming brain-wire generation -> probe
+    row.
 
-    cpu_lane=True (tech#169) pins the probe to the CPU lane
-    (options num_gpu=0 + num_thread=4): the probe then measures the
-    lane the flight will actually fly, and its success IS the
-    zero-GPU-touch assertion in flight.
+    tech#186 leg-4: the probe flies the EXTERNAL brain lane
+    (BRAIN_URL env -> :8090 OpenAI chat wire) -- the lane the staged
+    launchers actually fly -- instead of the retired local ollama
+    API. cpu_lane stays in the signature for call-surface
+    compatibility and is MOOT on this wire: threads/GPU pinning
+    belong to the resident server, not the client payload (same
+    doctrine as the e4 launcher templates); the lane distinction
+    that matters lives in this tool's gating (GPU lane = card +
+    workday block; CPU lane = tech#169 24/7 face), not in the
+    probe payload.
 
     verdict: ok (rate+eta computed) / timeout (cap exceeded -- the
     starved hard case: PROBE_TOKENS did not finish inside cap_s, so
     an ETA_OUTPUT_TOKENS verdict cannot land inside the 1500s flight
     hat) / error (transport/HTTP/JSON failure -- fail-closed at the
-    caller for the same reason: an ollama that cannot answer a
+    caller for the same reason: a brain that cannot answer a
     96-token generation cannot deliver a verdict). The probe calls
-    ollama directly and NEVER writes expert-calls rows (same
+    the wire directly and NEVER writes expert-calls rows (same
     discipline as the tech#120 wedge probe: probes never pollute
     call accounting)."""
-    options = {"num_predict": PROBE_TOKENS}
-    if cpu_lane:
-        options["num_gpu"] = 0
-        options["num_thread"] = CPU_LANE_THREADS
     payload = json.dumps({
-        "model": model, "prompt": PROBE_PROMPT, "stream": False,
-        # O-20261015-1335: flagship is a thinking model; thinking would
-        # wreck the token-rate math this probe exists to measure.
-        "think": False,
-        "options": options,
+        "model": model,
+        "messages": [{"role": "user", "content": PROBE_PROMPT}],
+        "stream": False,
+        "max_tokens": PROBE_TOKENS,
+        # canon v3 wire doctrine: thinking tokens would wreck the
+        # token-rate math this probe exists to measure.
+        "chat_template_kwargs": {"enable_thinking": False},
     }).encode("utf-8")
     request = urllib.request.Request(
-        OLLAMA_GENERATE_URL, data=payload,
+        BRAIN_URL, data=payload,
         headers={"Content-Type": "application/json"})
+    started = time.monotonic()
     try:
         with urllib.request.urlopen(request, timeout=cap_s) as resp:
             body = json.loads(resp.read().decode("utf-8", "replace"))
+        elapsed_s = time.monotonic() - started
     except Exception as exc:  # transport errors include the cap
         text = "%s: %s" % (type(exc).__name__, exc)
         verdict = ("timeout"
                    if "timed out" in text.lower() else "error")
         return {"verdict": verdict, "model": model, "cap_s": cap_s,
                 "error": text}
-    computed = compute_rate(body)
+    computed = compute_rate(body, elapsed_s)
     if computed is None:
         return {"verdict": "error", "model": model, "cap_s": cap_s,
-                "error": "probe counters missing/zero",
+                "error": "probe usage counters missing/zero",
                 "raw_keys": sorted(str(k) for k in body)}
     rate_tps, eta_s = computed
     return {"verdict": "ok", "model": model, "cap_s": cap_s,
@@ -388,8 +416,9 @@ def main(argv=None):
     parser.add_argument("--json", action="store_true",
                         help="single machine-readable line")
     parser.add_argument("--probe-model", default=PROBE_MODEL_DEFAULT,
-                        help="ollama model for the throughput "
-                             "pre-probe (default %(default)s)")
+                        help="brain model for the throughput "
+                             "pre-probe (default: env BRAIN_MODEL / "
+                             "%(default)s)")
     parser.add_argument("--eta-starved-s", type=float,
                         default=ETA_STARVED_S,
                         help="verdict-ETA starve line in seconds "

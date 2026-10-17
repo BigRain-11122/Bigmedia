@@ -454,9 +454,13 @@ class CpuLaneRenderTests(unittest.TestCase):
             self.assertIn("chat_template_kwargs", src)
             self.assertIn('CPU LANE', src)
 
-    def test_cli_gpu_face_default_model_unchanged(self):
-        # the GPU face keeps its legacy default until the tech#185
-        # retirement ruling (no silent drift while the lane lives)
+    def test_cli_gpu_face_default_model_is_brain_lane(self):
+        # tech#186 leg-4: the tech#185 retirement ruling landed
+        # (R2316 -- GPU-lane dispatch retired), so the GPU face
+        # drops the last qwen3.8:27b default and lands on the brain
+        # default like every other face (the GPU template keeps its
+        # legacy ollama-CLI transport verbatim = retired artifact,
+        # regeneration parity only)
         with tempfile.TemporaryDirectory() as tmp:
             body = os.path.join(tmp, 'e4-body.txt')
             with io.open(body, 'w', encoding='utf-8') as fh:
@@ -465,7 +469,7 @@ class CpuLaneRenderTests(unittest.TestCase):
             proc = _run_cli('--body', body, '--label', 'L1', '--out', out)
             self.assertEqual(proc.returncode, 0, proc.stdout)
             with io.open(out, encoding='utf-8') as fh:
-                self.assertIn("MODEL = 'qwen3.8:27b'", fh.read())
+                self.assertIn("MODEL = 'qwen3.6-35b'", fh.read())
 
 
 class AutoLedgerRenderTests(unittest.TestCase):
@@ -1089,7 +1093,7 @@ class ExpertFaceBehaviorTests(unittest.TestCase):
                                   'registry.json'), 'w',
                      encoding='utf-8') as fh:
             json.dump({'model': 'qwen2.5:14b', 'experts': [
-                {'id': 'S1-script', 'model': 'qwen3.8:27b',
+                {'id': 'S1-script', 'model': 'qwen3:4b-instruct',
                  'prompt_file': 'data/experts/prompts/S1-script.txt',
                  'role': 'S1 编剧官', 'dept': '内容生产部'}]}, fh,
                 ensure_ascii=False)
@@ -1097,7 +1101,8 @@ class ExpertFaceBehaviorTests(unittest.TestCase):
         rc, out = self._exec()
         self.assertEqual(rc, 0)
         with io.open(self.result_path, encoding='utf-8') as fh:
-            self.assertEqual(json.load(fh)['model'], 'qwen3.8:27b')
+            self.assertEqual(json.load(fh)['model'],
+                             'qwen3:4b-instruct')
 
 
 class TeardownHygieneTests(unittest.TestCase):

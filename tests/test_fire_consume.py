@@ -406,17 +406,17 @@ class ThroughputProbeTests(unittest.TestCase):
     """tech#135 (P-7): pure cores of the card-GO throughput probe.
 
     The network seam (real_throughput_probe) is deliberately NOT
-    exercised here -- a real probe would load 14b onto the GPU
-    mid-window; the parse math is split into compute_rate so the
-    whole probe pipeline is covered without any network."""
+    exercised here -- a real probe would hit the resident brain
+    server; the parse math is split into compute_rate so the whole
+    probe pipeline is covered without any network (tech#186 leg-4:
+    the probe flies the brain wire -- usage tokens over request
+    wall-clock, the wire exposes no server-side eval counters)."""
 
-    def test_compute_rate_from_ollama_counters(self):
-        # 20 prompt + 96 gen tokens over 0.1s prefill + 2.8s decode
+    def test_compute_rate_from_wire_usage_and_wall_clock(self):
+        # 20 prompt + 96 completion tokens over a 2.9s request
         rate, eta = consumer.compute_rate({
-            "prompt_eval_count": 20, "eval_count": 96,
-            "prompt_eval_duration": 100_000_000,
-            "eval_duration": 2_800_000_000,
-        })
+            "usage": {"prompt_tokens": 20, "completion_tokens": 96},
+        }, 2.9)
         self.assertAlmostEqual(rate, 116 / 2.9, places=3)
         self.assertAlmostEqual(
             eta,
@@ -425,13 +425,13 @@ class ThroughputProbeTests(unittest.TestCase):
             places=3)
 
     def test_compute_rate_missing_or_zero_counters_none(self):
-        self.assertIsNone(consumer.compute_rate({}))
+        self.assertIsNone(consumer.compute_rate({}, 2.9))
         self.assertIsNone(consumer.compute_rate({
-            "prompt_eval_count": 0, "eval_count": 0,
-            "prompt_eval_duration": 10, "eval_duration": 10}))
+            "usage": {"prompt_tokens": 0, "completion_tokens": 0}},
+            2.9))
         self.assertIsNone(consumer.compute_rate({
-            "prompt_eval_count": 5, "eval_count": 7,
-            "prompt_eval_duration": 0, "eval_duration": 0}))
+            "usage": {"prompt_tokens": 5, "completion_tokens": 7}}, 0))
+        self.assertIsNone(consumer.compute_rate(None, 2.9))
 
     def test_classify_ok_under_line(self):
         ok, reason = consumer.classify_throughput(
@@ -625,9 +625,13 @@ class CpuLaneTests(unittest.TestCase):
         self.assertEqual(self.probe_calls[0]["cap_s"],
                          consumer.CPU_PROBE_CAP_S)
 
-    def test_real_probe_cpu_payload_carries_zero_gpu_options(self):
-        # the zero-GPU-touch assertion lives in the probe payload:
-        # options num_gpu=0 + num_thread=4 (CEO 10% margin law).
+    def test_real_probe_cpu_payload_carries_wire_contract(self):
+        # tech#186 leg-4: on the brain wire the CPU-lane call form
+        # carries NO lane-pinning options at all -- num_gpu/
+        # num_thread belong to the resident server, not the client
+        # payload (moot, same doctrine as the e4 launcher templates).
+        # The payload lock: OpenAI chat shape + thinking off + the
+        # CPU cap override stays call-site-explicit.
         captured = {}
 
         def _fake_urlopen(request, timeout=None):
@@ -635,9 +639,8 @@ class CpuLaneTests(unittest.TestCase):
                 request.data.decode("utf-8"))
             captured["timeout"] = timeout
             return _FakeHttpResp(json.dumps({
-                "prompt_eval_count": 48, "eval_count": 96,
-                "prompt_eval_duration": 4_000_000_000,
-                "eval_duration": 8_000_000_000,
+                "usage": {"prompt_tokens": 48,
+                          "completion_tokens": 96},
             }).encode("utf-8"))
 
         orig_urlopen = consumer.urllib.request.urlopen
@@ -650,24 +653,33 @@ class CpuLaneTests(unittest.TestCase):
         finally:
             consumer.urllib.request.urlopen = orig_urlopen
         self.assertEqual(row["verdict"], "ok")
-        self.assertEqual(captured["data"]["options"]["num_gpu"], 0)
-        self.assertEqual(captured["data"]["options"]["num_thread"],
-                         consumer.CPU_LANE_THREADS)
+        self.assertNotIn("options", captured["data"])
+        self.assertNotIn("num_gpu", captured["data"])
+        self.assertNotIn("num_thread", captured["data"])
+        self.assertNotIn("num_predict", captured["data"])
+        self.assertNotIn("prompt", captured["data"])
+        self.assertEqual(
+            captured["data"]["chat_template_kwargs"]["enable_thinking"],
+            False)
+        self.assertEqual(captured["data"]["max_tokens"],
+                         consumer.PROBE_TOKENS)
+        self.assertEqual(captured["data"]["stream"], False)
         self.assertEqual(captured["timeout"],
                          consumer.CPU_PROBE_CAP_S)
 
-    def test_real_probe_gpu_payload_has_no_cpu_options(self):
-        # regression lock: the GPU-path probe payload must not gain
-        # the CPU pinning options (that lane measures what it flies).
+    def test_real_probe_wire_payload_has_no_ollama_faces(self):
+        # regression lock (tech#186 leg-4): the wire probe payload
+        # must never regress to the retired local-ollama generate
+        # face -- no options block, no ollama prompt field, and the
+        # default-flight call stays on the brain wire contract.
         captured = {}
 
         def _fake_urlopen(request, timeout=None):
             captured["data"] = json.loads(
                 request.data.decode("utf-8"))
             return _FakeHttpResp(json.dumps({
-                "prompt_eval_count": 48, "eval_count": 96,
-                "prompt_eval_duration": 4_000_000_000,
-                "eval_duration": 8_000_000_000,
+                "usage": {"prompt_tokens": 48,
+                          "completion_tokens": 96},
             }).encode("utf-8"))
 
         orig_urlopen = consumer.urllib.request.urlopen
@@ -677,8 +689,10 @@ class CpuLaneTests(unittest.TestCase):
         finally:
             consumer.urllib.request.urlopen = orig_urlopen
         self.assertEqual(row["verdict"], "ok")
-        self.assertNotIn("num_gpu", captured["data"]["options"])
-        self.assertNotIn("num_thread", captured["data"]["options"])
+        self.assertNotIn("options", captured["data"])
+        self.assertNotIn("prompt", captured["data"])
+        self.assertNotIn("think", captured["data"])
+        self.assertIn("messages", captured["data"])
 
 
 if __name__ == "__main__":
