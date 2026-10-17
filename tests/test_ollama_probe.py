@@ -22,7 +22,8 @@ semantics never move. Face lands on --json, human line (non-ok) and every
 --ledger row. GPU busy threshold util>=80 (tech#44 defer threshold).
 
 tech#56 (R1890): cold-reload face -- timeout + GPU idle + gpu_mem below
-the 4000MiB residency line (smallest probed model ~4.7GB) = the probe
+the 2048MiB residency line (smallest probed model qwen3:4b-instruct
+~2.6GB, tech#186) = the probe
 itself started a cold load that outran the request cap; not a service
 fault (R1889 11:28:48 anchor). Busy generation still wins (busy-contended);
 unreadable mem stays the conservative service-anomaly face; 503 saturation
@@ -234,11 +235,12 @@ class FaceTests(unittest.TestCase):
         # footprint = cold-reload, not service-anomaly (R1889 11:28:48
         # anchor: rc2/gpu_mem=2012, 13 min after a clean GEN-OK).
         self.assertEqual(self._face(2, "1", timeout=True, mem="2012"), "cold-reload")
-        # Default helper mem (3246) also sits under the 4000MiB line.
-        self.assertEqual(self._face(2, "1", timeout=True), "cold-reload")
+        # Default helper mem (3246) sits ABOVE the 2048MiB line (tech#186
+        # rebased the line on the qwen3:4b-instruct model set).
+        self.assertEqual(self._face(2, "1", timeout=True), "service-anomaly")
         # Boundary: strictly below the line is cold; at/above = anomaly.
-        self.assertEqual(self._face(2, "1", timeout=True, mem="3999"), "cold-reload")
-        self.assertEqual(self._face(2, "1", timeout=True, mem="4000"), "service-anomaly")
+        self.assertEqual(self._face(2, "1", timeout=True, mem="2047"), "cold-reload")
+        self.assertEqual(self._face(2, "1", timeout=True, mem="2048"), "service-anomaly")
         # Busy generation wins regardless of mem: contended, not cold.
         self.assertEqual(self._face(2, "100", timeout=True, mem="2012"), "busy-contended")
         # Unreadable mem stays the conservative anomaly face.
@@ -762,7 +764,8 @@ class PrecheckTests(unittest.TestCase):
         self._ps([])  # model not resident
         op._nvidia_smi_free_query = lambda: "12288, 7547\n"  # free 4741 < 9000
         path = os.path.join(self.tmp, "skip-ledger.jsonl")
-        rc, out = self._run(["--json", "--ledger", path])
+        # tech#186: pin the 14b-8k tag (envelope 9000) the comment math uses.
+        rc, out = self._run(["--model", "qwen2.5:14b-8k", "--json", "--ledger", path])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "skipped-not-resident")
@@ -783,7 +786,9 @@ class PrecheckTests(unittest.TestCase):
         self._flight_timeout(calls)
         self._ps([])
         op._nvidia_smi_free_query = lambda: "12288, 7547\n"
-        rc, out = self._run([])
+        # tech#186: pin the hibernated 27b tag so the 17408-envelope skip
+        # arithmetic asserted here stays intact under the 4b default.
+        rc, out = self._run(["--model", "qwen3.8:27b"])
         self.assertEqual(rc, 2)
         self.assertIn("GEN-SKIP not-resident", out)
         self.assertIn("face=not-resident", out)
@@ -849,7 +854,8 @@ class PrecheckTests(unittest.TestCase):
         self._flight_timeout(calls)
         self._ps([])
         op._nvidia_smi_free_query = lambda: "32768, 1000\n"  # free 31768 >= 17408
-        rc, out = self._run(["--json"])
+        # tech#186: pin the hibernated 27b tag (envelope 17408) explicitly.
+        rc, out = self._run(["--json", "--model", "qwen3.8:27b"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["face"], "probe-coldload")
@@ -891,12 +897,12 @@ class SizeVramTests(unittest.TestCase):
 
     def _ps_entry(self, size_vram):
         payload = json.dumps({"models": [
-            {"name": op.DEFAULT_MODEL, "size_vram": size_vram}]}).encode("utf-8")
+            {"name": "qwen2.5:14b-8k", "size_vram": size_vram}]}).encode("utf-8")
         op._http_get_ps = lambda base_url, timeout: _FakeResp(payload)
 
     def _ps_resident_no_size(self):
         payload = json.dumps(
-            {"models": [{"name": op.DEFAULT_MODEL}]}).encode("utf-8")
+            {"models": [{"name": "qwen2.5:14b-8k"}]}).encode("utf-8")
         op._http_get_ps = lambda base_url, timeout: _FakeResp(payload)
 
     def _flight_timeout(self, calls):
@@ -956,7 +962,8 @@ class SizeVramTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_timeout(calls)
         self._ps_entry(self.OFFLOADED_BYTES)
-        rc, out = self._run(["--json"])
+        # tech#186: pin the 14b-8k tag (envelope 9000) of the R1928 anchor.
+        rc, out = self._run(["--json", "--model", "qwen2.5:14b-8k"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         # Advisory columns carry the reading the pre-check already had...
@@ -971,7 +978,8 @@ class SizeVramTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_timeout(calls)
         self._ps_entry(self.RESIDENT_BYTES)
-        rc, out = self._run(["--json"])
+        # tech#186: pin the 14b-8k tag (envelope 9000) of the R1928 anchor.
+        rc, out = self._run(["--json", "--model", "qwen2.5:14b-8k"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["ps_size_vram"], 9216)
@@ -982,7 +990,8 @@ class SizeVramTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_timeout(calls)
         self._ps_resident_no_size()
-        rc, out = self._run(["--json"])
+        # tech#186: pin the 14b-8k tag (envelope 9000) of the R1928 anchor.
+        rc, out = self._run(["--json", "--model", "qwen2.5:14b-8k"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertIsNone(line["ps_size_vram"])
@@ -995,7 +1004,7 @@ class SizeVramTests(unittest.TestCase):
         calls = {"flights": 0}
         self._flight_timeout(calls)
         self._ps_entry(self.OFFLOADED_BYTES)
-        rc, out = self._run(["--json", "--cold-skip-free-mb", "99999"])
+        rc, out = self._run(["--model", "qwen2.5:14b-8k", "--json", "--cold-skip-free-mb", "99999"])
         self.assertEqual(rc, 2)
         self.assertTrue(json.loads(out.strip())["offloaded_resident"])
 
@@ -1023,7 +1032,8 @@ class SizeVramTests(unittest.TestCase):
         op._http_get_ps = lambda base_url, timeout: _FakeResp(
             json.dumps({"models": []}).encode("utf-8"))
         op._nvidia_smi_free_query = lambda: "12288, 7547\n"  # free 4741 < 9000
-        rc, out = self._run(["--json"])
+        # tech#186: pin the 14b-8k tag (envelope 9000) the comment math uses.
+        rc, out = self._run(["--json", "--model", "qwen2.5:14b-8k"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "skipped-not-resident")
@@ -1038,7 +1048,8 @@ class SizeVramTests(unittest.TestCase):
         self._flight_timeout(calls)
         self._ps_entry(self.OFFLOADED_BYTES)
         path = os.path.join(self.tmp, "size-ledger.jsonl")
-        rc, _ = self._run(["--ledger", path])
+        # tech#186: pin the 14b-8k tag matching the _ps_entry fixture name.
+        rc, _ = self._run(["--model", "qwen2.5:14b-8k", "--ledger", path])
         self.assertEqual(rc, 2)
         with open(path, encoding="utf-8") as fh:
             row = json.loads(fh.read().splitlines()[0])
@@ -1231,7 +1242,8 @@ class EvictionAwareTests(unittest.TestCase):
         self._ps([{"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
         op._nvidia_smi_free_query = lambda: "32768, 19268\n"  # free 13500 < 17408, +4888 credit >= envelope
         path = os.path.join(self.tmp, "dual-ledger.jsonl")
-        rc, out = self._run(["--json", "--ledger", path])
+        # tech#186: pin the hibernated 27b tag (envelope 17408) explicitly.
+        rc, out = self._run(["--model", "qwen3.8:27b", "--json", "--ledger", path])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "skipped-not-resident")
@@ -1253,7 +1265,8 @@ class EvictionAwareTests(unittest.TestCase):
         self._flight_ok(calls)
         self._ps([{"name": "qwen2.5:7b", "size_vram": self.KEEP_WARM_BYTES}])
         op._nvidia_smi_free_query = lambda: "32768, 18768\n"  # free 14000
-        rc, out = self._run(["--json", "--eviction-aware"])
+        # tech#186: pin the hibernated 27b tag (envelope 17408) explicitly.
+        rc, out = self._run(["--model", "qwen3.8:27b", "--json", "--eviction-aware"])
         self.assertEqual(rc, 0)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "ok")
@@ -1268,7 +1281,8 @@ class EvictionAwareTests(unittest.TestCase):
         self._flight_ok(calls)
         self._ps([{"name": "qwen2.5:7b", "size_vram": 1000 * 1024 * 1024}])
         op._nvidia_smi_free_query = lambda: "12288, 8088\n"  # free 4200
-        rc, out = self._run(["--json", "--eviction-aware"])
+        # tech#186: pin the hibernated 27b tag (envelope 17408) explicitly.
+        rc, out = self._run(["--model", "qwen3.8:27b", "--json", "--eviction-aware"])
         self.assertEqual(rc, 2)
         line = json.loads(out.strip())
         self.assertEqual(line["status"], "skipped-not-resident")

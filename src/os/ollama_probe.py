@@ -58,11 +58,11 @@ GPU busy threshold util>=80 aligns with the tech#44 defer threshold. The
 face lands on the --json line, the human line (non-ok) and every --ledger
 row, so window judgments read the discipline straight off the evidence.
 
-tech#56 (R1890): cold-reload face. The 4000MiB residency line sits below
+tech#56 (R1890)/tech#186: cold-reload face. The 2048MiB residency line
+(rebased on the qwen3:4b-instruct default envelope 2560MB) sits below
 the resident footprint of any ollama generation model we probe (the
-qwen2.5 7b/14b tiers are deleted fleet-wide per O-20261015-1335; the
-sole local gen model qwen3.8:27b spans ~17GB and never fully fits the
-12GB card), so a
+qwen2.5 7b/14b tiers are deleted fleet-wide per O-20261015-1335;
+qwen3.8:27b spans ~17GB and never fully fits the 12GB card), so a
 timeout row with gpu_mem under the line means no model was resident at
 probe time -- the probe itself triggered the cold load and the 60s cap
 expired mid-load. That is a scheduling fact (wait for residency), not a
@@ -148,7 +148,10 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-DEFAULT_MODEL = "qwen3.8:27b"
+# tech#186 (qwen38-rollout v3): the 27b flagship hibernated (review lanes
+# moved to the :8090 brain); qwen3:4b-instruct is the resident lightweight
+# whitelist tag the probe defaults to.
+DEFAULT_MODEL = "qwen3:4b-instruct"
 DEFAULT_TIMEOUT = 60
 DEFAULT_BASE_URL = "http://localhost:11434"
 GEN_PATH = "/api/generate"
@@ -199,12 +202,13 @@ def _is_timeout(exc):
 
 
 FACE_GPU_BUSY_UTIL = 80  # tech#44 defer threshold
-# tech#56: below this much VRAM in use no probed ollama model can be
-# resident (qwen2.5 7b/14b tiers deleted fleet-wide O-20261015-1335;
-# the sole gen model qwen3.8:27b resident-occupies well above this
-# line even partial-offloaded), so a timeout
-# with gpu_mem under the line means the probe itself started a cold load.
-FACE_COLD_RELOAD_VRAM_MB = 4000
+# tech#56/tech#186: below this much VRAM in use no probed ollama model can
+# be resident (smallest probed model = default qwen3:4b-instruct, envelope
+# 2560MB; qwen2.5 7b/14b tiers deleted fleet-wide O-20261015-1335;
+# qwen3.8:27b resident-occupies well above this line even partial-
+# offloaded), so a timeout with gpu_mem under the line means the probe
+# itself started a cold load.
+FACE_COLD_RELOAD_VRAM_MB = 2048
 
 PS_PATH = "/api/ps"
 PS_TIMEOUT = 10  # status endpoint: fast even under saturation (R1877 family)
@@ -213,11 +217,16 @@ PS_TIMEOUT = 10  # status endpoint: fast even under saturation (R1877 family)
 # anchor: free 4.2GB < 14b-8k ~9GB -> partial-offload slow load, util 100
 # during load, probe cap burned mid-load). Unknown models -> no estimate ->
 # legacy flight always (conservative).
-# O-20261015-1335: qwen3.8:27b (17GB blob, envelope 17408MB) is the sole
-# local generation model; on the 12GB bm-a card free VRAM can never reach
-# the envelope, so cold flights for it always read skipped-not-resident
-# (honest: a cold 27b load always crawls; the CPU lane is the flight path).
+# tech#186 (qwen38-rollout v3): the default probe target is the resident
+# lightweight whitelist tag qwen3:4b-instruct (~2.6GB blob, envelope
+# 2560MB) -- its cold flights fund in full VRAM on most windows.
+# qwen3.8:27b (17GB blob, envelope 17408MB) is hibernated; explicit
+# --model qwen3.8:27b probes keep the estimate: on the 12GB bm-a card
+# free VRAM can never reach the envelope, so cold flights for it always
+# read skipped-not-resident (honest: a cold 27b load always crawls; the
+# CPU lane is the flight path).
 COLD_SKIP_MODEL_VRAM_MB = {
+    "qwen3:4b-instruct": 2560,
     "qwen3.8:27b": 17408,
     "qwen2.5:14b-8k": 9000,
     "qwen2.5:7b": 4700,
