@@ -1,0 +1,49 @@
+# r2320 compose daily:2026-10-17 verification (ts=2026-10-17 08:0x, read-only psql; scripts .c3-tmp/r2320_compose_read.py + r2320_compose_out.py)
+# context: 08:00 authority window (tech#92 judged_total + tech#156 rubric verdict + compose dual read)
+# verdict: daily:2026-10-17 composed 08:00:31 zero-fail; flashes 0->10 = FIRST NON-QUIET daily; judged_total=229 F-face (companion r2320_t92_window.txt); compose failed 273 (10-15 R2289) -> 210 = pgboss sweep
+[R reports last 8 rc=0]daily|2026-10-17|10-17 08:00
+
+daily|2026-10-15|10-17 02:00
+
+daily|2026-10-16|10-17 01:25
+
+daily|2026-10-14|10-14 08:00
+
+daily|2026-10-13|10-13 22:35
+
+weekly|2026-W41|10-12 10:46
+
+daily|2026-10-12|10-12 08:00
+
+daily|2026-10-11|10-11 08:00
+
+
+[C1 compose states rc=0]completed|13
+
+failed|210
+
+
+[C2 last started runs rc=1]
+ERR: ERROR:  column "startedon" does not exist
+
+��1��SELECT to_char(startedon,'MM-DD HH24:MI:SS')||'|'||state||'|...
+
+                  ^
+
+��ʾ:  Perhaps you meant to reference the column "job.started_on".
+[R3 daily 2026-10-17 content head rc=0]{"date": "2026-10-17", "lead": {"title": "GPT-6-Astra在理论物理计算基准中解决49/50问题", "leadParagraph": "GPT-6-Astra在OpenAI Codex环境中以平均不到3美元的成本，在TheoPhysEval基准上解决了50个理论物理问题中的49个，准确率达98%。Anthropic Opus 5.5以92%的成绩位列第二，Google Gemini 3.8 Flash为68%。研究指出，模型在无需联网的情况下表现优异，表明其已记忆大量文献，但AI目前仍缺乏人类研究者的选题直觉和“品味”。"}, "flashes": [{"role": "媒体", "score": 70, "title": "iPhone Duo发售一分钟售罄，发货排至明年", "factId": "fNM4zVZqglSY", "itemId": "mig3a9ccon22di4lvnjul15a9", "sources": 1, "summary": "10月16日晚，苹果首款折叠屏手机iPhone Duo正式开售，全型号在一分钟内售罄，发货时间已排至明年1月下旬。受此消息影响，苹果美股盘前涨超2%。二手市场出现高溢价，1TB黑色版本成交价接近2.9万元，较发售价高出7143元，代拍价格高达700至1000元。", "sourceId": "json-zhihu-hot", "sourceUrl": "https://www.zhihu.com/question/2094528208381145900", "firstParty": false, "sourceName": "知乎 · 热榜", "publishedAt": "2026-10-16T17:24:50.421Z", "storyPublicId": "e16331ad-9d37-4b22-a5dc-1d5614a51444"}, {"role": "媒体", "score": 68, "title": "四部门组织30余家车企座谈，加强产品研发测试验证管理", "factId": "f7TPvnmDBZ0E", "itemId": "rodbw0v8wpfj45i3i1s3dj17n", "sources": 1, "summary": "工信部、公安部、生态环境部、市场监管总局四部门组织30余家重点汽车生产企业座谈，要求加强汽车产品创新设计和研发测试验证管理，守牢产品安全底线。车企需如实宣传产品创新设计的使用边界、限制条件和研发测试验证等情况，不得作虚假、夸大或引人误解的宣传，不得使用违反道路交通法规的场景来宣传产品功能，不得诱导驾驶人忽视安全驾驶责任。", "sourceId": "json-zhihu-hot", "sourceUrl
+
+
+[C2 compose last runs rc=0]10-17 08:00:31|completed|{"failed": [], "generated": ["daily:2026-10-17"]}
+
+10-17 07:30:15|completed|{"failed": [], "generated": []}
+
+10-17 07:00:14|completed|{"failed": [], "generated": []}
+
+10-17 06:30:28|completed|{"failed": [], "generated": []}
+
+
+[R4 flashes count rc=0]2026-10-16|0
+
+2026-10-17|10
+

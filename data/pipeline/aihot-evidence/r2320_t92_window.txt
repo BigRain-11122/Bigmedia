@@ -1,0 +1,126 @@
+== AIHOT window read (since 2026-10-16 08:00 -> until 2026-10-17 08:00, tz Asia/Shanghai) ==
+window semantics: A-E = analyses.created_at (tool/analysis face); F = publications.timeline_at (composeDaily judgedReports face - the count behind the daily nothing-judged throw). Daily green/red prediction reads F, not A (tech#179, R2283 fork lesson).
+
+== A per-source ==
+{"source_id": "json-bilibili-knowledge", "scored": "875", "max_score": "65.00", "ge60": "2", "ge55": "2", "selected_n": "2"}
+{"source_id": "json-bilibili-popular", "scored": "36", "max_score": "36.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-tech", "scored": "620", "max_score": "73.00", "ge60": "2", "ge55": "3", "selected_n": "3"}
+{"source_id": "json-zhihu-hot", "scored": "37", "max_score": "82.00", "ge60": "10", "ge55": "13", "selected_n": "13"}
+{"source_id": "rss-ars-technica-ai", "scored": "4", "max_score": "68.00", "ge60": "1", "ge55": "1", "selected_n": "0"}
+{"source_id": "rss-aws-ml", "scored": "3", "max_score": "35.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-google-deepmind", "scored": "1", "max_score": "42.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-hugging-face", "scored": "2", "max_score": "23.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-latent-space", "scored": "2", "max_score": "35.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-microsoft-research", "scored": "1", "max_score": "40.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-mistral", "scored": "1", "max_score": "23.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-nvidia-blog", "scored": "7", "max_score": "68.00", "ge60": "2", "ge55": "2", "selected_n": "2"}
+{"source_id": "rss-openai-news", "scored": "3", "max_score": "42.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-simon-willison", "scored": "3", "max_score": "52.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-techcrunch-ai", "scored": "18", "max_score": "52.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-the-decoder", "scored": "11", "max_score": "83.00", "ge60": "2", "ge55": "2", "selected_n": "1"}
+{"source_id": "rss-the-verge-ai", "scored": "11", "max_score": "70.00", "ge60": "4", "ge55": "4", "selected_n": "0"}
+
+== B json-zhihu-hot top ==
+{"score": "82.00", "selected": "t", "title": "四部门公布纸尿裤甲酰胺问题调查结果，所有抽检均未检出甲酰胺，还有哪些信息值得关注？"}
+{"score": "75.00", "selected": "t", "title": "深圳发布楼市销售新政，要求购房定金不超购房总价款的3%，还有哪些信息值得关注？对购房者和楼市有何影响？"}
+{"score": "70.00", "selected": "t", "title": "iPhone Duo一分钟全线售罄，下单发货已排到明年，你抢到了吗？折叠机能否支撑苹果股价再创新高？"}
+{"score": "68.00", "selected": "t", "title": "四部门组织30余家车企座谈，加强产品研发测试验证管理，要求不得作虚假、夸大或引人误解的宣传，怎样解读？"}
+{"score": "68.00", "selected": "t", "title": "1 岁宝宝吃下被邻居投毒的鸡蛋后进 ICU，邻居自首称「想毒黄鼠狼」，你怎么看？邻居该担什么法律责任？"}
+{"score": "65.00", "selected": "t", "title": "中国科学家首次用中国大模型攻克世界级数学难题，如何理解这一成果的意义？"}
+{"score": "63.00", "selected": "t", "title": "酒店因肖战演唱会从 179 元涨到 2193元，市监部门称「明码标价都是正常的」，你怎么看？这合理吗？"}
+{"score": "62.00", "selected": "t", "title": "10月15日DeepSeek网页和APP显示「服务器暂时不可用」，后发布补偿方案，可能是啥原因导致的？"}
+{"score": "62.00", "selected": "t", "title": "特斯拉为啥要造一款会「飞」的汽车？"}
+{"score": "62.00", "selected": "t", "title": "维密员工请假陪患癌母亲遭拒，当事人已离职称无力与公司掰扯，打工人维权到底有多难？遇到类似情形该怎么办？"}
+{"score": "58.00", "selected": "t", "title": "日本误报称发生 9.9 级地震，出现这种情况可能是因为啥原因？9.9 级地震是什么概念？"}
+{"score": "57.00", "selected": "t", "title": "腾讯上线「绿泡泡短剧」小程序打造短剧闭环，你看好这一产品吗？它该如何撬动红果近 2 亿日活？"}
+{"score": "55.00", "selected": "t", "title": "如何看待微软已完成2.8T大模型的预训练？"}
+{"score": "50.00", "selected": "f", "title": "网传肖战演唱会门票被炒至 25 万元，高溢价黄牛票为何屡禁不止？倒卖和「天价炒票」涉嫌哪些违法违规？"}
+{"score": "48.00", "selected": "f", "title": "10 月 15 日全球股市大跌，为什么会这样？相互之间有哪些关联吗？"}
+
+== C top15 any ==
+{"score": "83.00", "source_id": "rss-the-decoder", "title": "GPT-6-Astra solves 49 of 50 physics research problems at $2.40 apiece", "bad_utf8": false}
+{"score": "82.00", "source_id": "json-zhihu-hot", "title": "四部门公布纸尿裤甲酰胺问题调查结果，所有抽检均未检出甲酰胺，还有哪些信息值得关注？", "bad_utf8": false}
+{"score": "75.00", "source_id": "json-zhihu-hot", "title": "深圳发布楼市销售新政，要求购房定金不超购房总价款的3%，还有哪些信息值得关注？对购房者和楼市有何影响？", "bad_utf8": false}
+{"score": "73.00", "source_id": "json-bilibili-tech", "title": "库克官宣：国行 AI 将于10月底推出！", "bad_utf8": false}
+{"score": "70.00", "source_id": "rss-the-verge-ai", "title": "Friends don&#8217;t let friends feed their data to AI agents", "bad_utf8": false}
+{"score": "70.00", "source_id": "json-zhihu-hot", "title": "iPhone Duo一分钟全线售罄，下单发货已排到明年，你抢到了吗？折叠机能否支撑苹果股价再创新高？", "bad_utf8": false}
+{"score": "68.00", "source_id": "rss-the-verge-ai", "title": "Your secrets aren’t safe with this cute robot toy — they’re on Chinese servers ready to be hacked", "bad_utf8": false}
+{"score": "68.00", "source_id": "rss-ars-technica-ai", "title": "Report: FTC probes Anthropic, OpenAI after Trump dismissed AI fears as “hoax”", "bad_utf8": false}
+{"score": "68.00", "source_id": "json-zhihu-hot", "title": "四部门组织30余家车企座谈，加强产品研发测试验证管理，要求不得作虚假、夸大或引人误解的宣传，怎样解读？", "bad_utf8": false}
+{"score": "68.00", "source_id": "rss-the-verge-ai", "title": "ChatGPT can peek at your Chrome tabs now", "bad_utf8": false}
+{"score": "68.00", "source_id": "rss-nvidia-blog", "title": "Open From Data Center to Desktop: NVIDIA Expands Nemotron Family With Highest Efficiency Super VL and Bolt Models", "bad_utf8": false}
+{"score": "68.00", "source_id": "json-zhihu-hot", "title": "1 岁宝宝吃下被邻居投毒的鸡蛋后进 ICU，邻居自首称「想毒黄鼠狼」，你怎么看？邻居该担什么法律责任？", "bad_utf8": false}
+{"score": "65.00", "source_id": "json-bilibili-knowledge", "title": "熟人求助签个字，为什么最后背上几十万元债务？", "bad_utf8": false}
+{"score": "65.00", "source_id": "rss-the-decoder", "title": "Muse Spark Open is Meta's answer to Qwen, GLM, and Kimi in the open-weight race", "bad_utf8": false}
+{"score": "65.00", "source_id": "json-zhihu-hot", "title": "中国科学家首次用中国大模型攻克世界级数学难题，如何理解这一成果的意义？", "bad_utf8": false}
+
+== D selected_ledger ==
+{"score": "65.00", "source_id": "json-bilibili-knowledge", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 07:48:54.900716+08", "title": "熟人求助签个字，为什么最后背上几十万元债务？"}
+{"score": "55.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 07:44:43.888853+08", "title": "如何看待微软已完成2.8T大模型的预训练？"}
+{"score": "62.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 07:27:52.10814+08", "title": "10月15日DeepSeek网页和APP显示「服务器暂时不可用」，后发布补偿方案，可能是啥原因导致的？"}
+{"score": "57.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 05:22:25.394264+08", "title": "腾讯上线「绿泡泡短剧」小程序打造短剧闭环，你看好这一产品吗？它该如何撬动红果近 2 亿日活？"}
+{"score": "82.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 05:10:44.559659+08", "title": "四部门公布纸尿裤甲酰胺问题调查结果，所有抽检均未检出甲酰胺，还有哪些信息值得关注？"}
+{"score": "65.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 04:51:55.638779+08", "title": "中国科学家首次用中国大模型攻克世界级数学难题，如何理解这一成果的意义？"}
+{"score": "65.00", "source_id": "json-bilibili-tech", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 04:32:04.876543+08", "title": "8个州联手起诉OpenAI：ChatGPT被指教唆青少年自伤"}
+{"score": "58.00", "source_id": "json-bilibili-tech", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 04:31:57.468761+08", "title": "库克确认国行苹果 AI 十月底上线！"}
+{"score": "63.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 04:13:56.511399+08", "title": "酒店因肖战演唱会从 179 元涨到 2193元，市监部门称「明码标价都是正常的」，你怎么看？这合理吗？"}
+{"score": "73.00", "source_id": "json-bilibili-tech", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 03:45:54.106001+08", "title": "库克官宣：国行 AI 将于10月底推出！"}
+{"score": "83.00", "source_id": "rss-the-decoder", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 03:10:52.97549+08", "title": "GPT-6-Astra solves 49 of 50 physics research problems at $2.40 apiece"}
+{"score": "60.00", "source_id": "json-bilibili-knowledge", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 02:32:32.93902+08", "title": "9月1日起，外籍股东分红要交20%了"}
+{"score": "68.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:58:31.970715+08", "title": "1 岁宝宝吃下被邻居投毒的鸡蛋后进 ICU，邻居自首称「想毒黄鼠狼」，你怎么看？邻居该担什么法律责任？"}
+{"score": "68.00", "source_id": "rss-nvidia-blog", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:39:54.990649+08", "title": "Open From Data Center to Desktop: NVIDIA Expands Nemotron Family With Highest Efficiency Super VL and Bolt Models"}
+{"score": "62.00", "source_id": "rss-nvidia-blog", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:39:31.600341+08", "title": "Be There for the Beginning: Celebrate the Launch of NVIDIA RTX Spark"}
+{"score": "62.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:35:18.123935+08", "title": "特斯拉为啥要造一款会「飞」的汽车？"}
+{"score": "70.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:32:39.0756+08", "title": "iPhone Duo一分钟全线售罄，下单发货已排到明年，你抢到了吗？折叠机能否支撑苹果股价再创新高？"}
+{"score": "75.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:32:01.555492+08", "title": "深圳发布楼市销售新政，要求购房定金不超购房总价款的3%，还有哪些信息值得关注？对购房者和楼市有何影响？"}
+{"score": "62.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:31:32.263702+08", "title": "维密员工请假陪患癌母亲遭拒，当事人已离职称无力与公司掰扯，打工人维权到底有多难？遇到类似情形该怎么办？"}
+{"score": "68.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:28:31.336056+08", "title": "四部门组织30余家车企座谈，加强产品研发测试验证管理，要求不得作虚假、夸大或引人误解的宣传，怎样解读？"}
+{"score": "58.00", "source_id": "json-zhihu-hot", "prompt_version": "prefilter@6fcc1559ff+selection-score@8455058086+understand@23d70e3645+summarize-article+summarize-article-empty+summarize-short-post+summarize-short-post-quoted+summarize-long-post+summarize-long-post-quoted+identity-context@b9917be0c9+structure@15ec0e3abe", "created_at": "2026-10-17 01:27:34.006344+08", "title": "日本误报称发生 9.9 级地震，出现这种情况可能是因为啥原因？9.9 级地震是什么概念？"}
+
+== E json-zhihu-hot band ==
+{"s_band": "82", "count": "1"}
+{"s_band": "75", "count": "1"}
+{"s_band": "70", "count": "1"}
+{"s_band": "68", "count": "2"}
+{"s_band": "65", "count": "1"}
+{"s_band": "63", "count": "1"}
+{"s_band": "62", "count": "3"}
+{"s_band": "58", "count": "1"}
+{"s_band": "57", "count": "1"}
+{"s_band": "55", "count": "1"}
+{"s_band": "50", "count": "1"}
+{"s_band": "48", "count": "1"}
+{"s_band": "43", "count": "2"}
+{"s_band": "42", "count": "4"}
+{"s_band": "38", "count": "1"}
+{"s_band": "35", "count": "4"}
+{"s_band": "30", "count": "1"}
+{"s_band": "27", "count": "1"}
+{"s_band": "21", "count": "2"}
+{"s_band": "15", "count": "3"}
+{"s_band": "13", "count": "2"}
+{"s_band": "12", "count": "1"}
+{"s_band": "0", "count": "1"}
+
+== F judged_total (timeline_at face) ==
+{"judged_total": "229"}
+
+== F judged_census (timeline_at face) ==
+{"source_id": "json-bilibili-knowledge", "judged": "97", "max_score": "65.00", "ge60": "1", "ge55": "1", "selected_n": "1"}
+{"source_id": "json-bilibili-popular", "judged": "9", "max_score": "35.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-bilibili-tech", "judged": "44", "max_score": "38.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "json-zhihu-hot", "judged": "19", "max_score": "75.00", "ge60": "5", "ge55": "7", "selected_n": "7"}
+{"source_id": "rss-ars-technica-ai", "judged": "4", "max_score": "68.00", "ge60": "1", "ge55": "1", "selected_n": "0"}
+{"source_id": "rss-aws-ml", "judged": "3", "max_score": "35.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-google-deepmind", "judged": "1", "max_score": "42.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-google-research", "judged": "1", "max_score": "32.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-hugging-face", "judged": "2", "max_score": "23.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-latent-space", "judged": "1", "max_score": "13.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-microsoft-research", "judged": "1", "max_score": "40.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-mistral", "judged": "1", "max_score": "23.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-nvidia-blog", "judged": "3", "max_score": "68.00", "ge60": "2", "ge55": "2", "selected_n": "2"}
+{"source_id": "rss-openai-news", "judged": "3", "max_score": "42.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-simon-willison", "judged": "2", "max_score": "52.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-techcrunch-ai", "judged": "17", "max_score": "52.00", "ge60": "0", "ge55": "0", "selected_n": "0"}
+{"source_id": "rss-the-decoder", "judged": "12", "max_score": "83.00", "ge60": "3", "ge55": "3", "selected_n": "1"}
+{"source_id": "rss-the-verge-ai", "judged": "9", "max_score": "70.00", "ge60": "3", "ge55": "3", "selected_n": "0"}
