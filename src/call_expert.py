@@ -8,11 +8,14 @@ called at any time" literal:
     python src/call_expert.py --expert hot-intel --material data/intel/daily/2026-09-24.md [--timeout S] [--gpu-guard]
 
 Registry = data/experts/registry.json (id/dept/role/prompt_file/model).
-Prompts live as UTF-8 data files (encoding rule); the model is the local
-Ollama (default qwen3.8:27b - fleet rollout O-20261015-1335; zero API,
-zero token). The call goes through
-subprocess stdin in UTF-8, which also fixes the PS5.1 GBK pipe garbling
-that hit raw `ollama run` piping on 2026-09-23.
+Prompts live as UTF-8 data files (encoding rule). tech#186 wire v3
+(origin row 432, canon cph4/fleet/qwen38-rollout-20261015.md v3): the
+seat stack flies the external brain lane -- :8090 Qwen3.6-35B-A3B over
+the OpenAI wire (BRAIN_URL env; model name from the registry default)
+with chat_template_kwargs.enable_thinking:false. Liveness probe:
+<brain-base>/health 2s -> rc 3 BEFORE any flight cap burns (s1
+doctrine R2257). The dormant ollama qwen3.8:27b (measured pathological
+prompt_eval 0.16tok/s) is no longer referenced. Zero API, zero token.
 
 Every call is appended to docs/reviews/expert-calls.md (audit trail).
 
@@ -54,9 +57,11 @@ future pieces fly the CLI directly:
 another lane owns the card instead of burning the full cap.)
 """
 import json
+import os
 import re
 import subprocess
 import sys
+import urllib.request
 from datetime import datetime
 from pathlib import Path
 
@@ -74,17 +79,28 @@ DEFAULT_TIMEOUT = 600
 # free VRAM is too tight for a local LLM seat.
 GPU_DEFER_UTIL_PCT = 80
 GPU_DEFER_FREE_MB = 2048
+# tech#186 wire v3 (origin row 432): the expert seat stack flies the
+# external brain lane -- :8090 Qwen3.6-35B-A3B over the OpenAI wire.
+# BRAIN_URL is env-driven (canon cph4/fleet/qwen38-rollout-20261015.md
+# v3 -- BRAIN_URL/BRAIN_MODEL "one line per machine"); the health URL
+# derives from the same base. The dormant ollama qwen3.8:27b (measured
+# pathological prompt_eval 0.16tok/s) is no longer referenced.
+BRAIN_URL = os.environ.get(
+    "BRAIN_URL", "http://127.0.0.1:8090/v1/chat/completions")
+BRAIN_HEALTH_URL = (BRAIN_URL.split("/v1/")[0].rstrip("/")
+                    + "/health")
+BRAIN_DEFAULT_MODEL = os.environ.get("BRAIN_MODEL", "qwen3.6-35b")
+LIVENESS_CAP_S = 2
 # tech#120 wedge fast-fail probe: two 1500s S1 flights burned through
-# wedged/contended ollama windows with zero verdicts (R2012 flight-1 /
+# wedged/contended windows with zero verdicts (R2012 flight-1 /
 # R2013 flight-2 anchor). A tiny generation either returns in seconds
 # (healthy seat) or burns the cap (wedged seat) -> bail with rc 6
 # BEFORE the main long flight. The probe itself never lands in
 # expert-calls (verdict/ledger writes only happen on the main call
-# path). O-20261015-1335: the old 7b probe tier is deleted fleet-wide,
-# so the probe now flies the sole local generation model (the registry
-# default itself); the cap grows 90->240 to fund that 17G model's
-# cold-load envelope (canon precedent: BigLife 90/120->240).
-WEDGE_PROBE_MODEL = "qwen3.8:27b"
+# path). tech#186 lane: the micro-probe flies the brain lane's own
+# seat (the resident server answers a micro generation in <1s, R2297
+# smoke wall=0.5s); the 240s cap stays as the hard hat only.
+WEDGE_PROBE_MODEL = BRAIN_DEFAULT_MODEL
 WEDGE_PROBE_CAP = 240
 # ollama streams ANSI line-erase codes on slow generations (cold-load
 # case); without stripping they land verbatim in verdict archives
@@ -117,17 +133,58 @@ def build_prompt(prompt_text, material_text):
             material_text.strip() + "\n")
 
 
+def brain_health_ok(cap_s=LIVENESS_CAP_S):
+    """True when the brain lane answers <brain-base>/health inside the
+    cap. Never raises -- an unreachable server reads as not-ok."""
+    try:
+        with urllib.request.urlopen(BRAIN_HEALTH_URL,
+                                    timeout=cap_s) as resp:
+            resp.read()
+        return True
+    except Exception:
+        return False
+
+
 def call_model(model, prompt, timeout=DEFAULT_TIMEOUT):
-    """Run local ollama with UTF-8 stdin/stdout (pure subprocess wrapper).
-    Returns (returncode, stdout_text). Chinese-safe on PS5.1.
-    --think false (O-20261015-1335): the fleet flagship is a thinking
-    model; verdict formats (S1 v1.5 scoring etc.) need clean output."""
-    p = subprocess.run(["ollama", "run", model, "--think", "false"],
-                       input=prompt.encode("utf-8"),
-                       capture_output=True, timeout=timeout)
-    out = _ANSI_RE.sub("", p.stdout.decode("utf-8", "replace"))
-    out = _SPINNER_RE.sub("", out)
-    return p.returncode, out
+    """Fly the expert call on the brain lane (tech#186 OpenAI wire,
+    same contract as src/e4_ref_call.py): liveness <base>/health 2s
+    probe first, then one non-streaming /v1/chat/completions POST with
+    chat_template_kwargs.enable_thinking:false (the fleet flagship is
+    a thinking model; verdict formats like S1 v1.5 scoring need clean
+    output).
+    Returns (returncode, text): 0 ok; 3 liveness/transport/timeout
+    failure. Never raises -- main()/wedge callers hold their own rc
+    contracts on the (rc, text) pair."""
+    if not brain_health_ok():
+        return 3, ("brain /health unreachable (%ds cap) - liveness"
+                   " fail-closed, no flight cap burned"
+                   % LIVENESS_CAP_S)
+    payload = json.dumps({
+        "model": model,
+        "stream": False,
+        "messages": [{"role": "user", "content": prompt}],
+        "chat_template_kwargs": {"enable_thinking": False},
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        BRAIN_URL, data=payload,
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as resp:
+            body = json.loads(resp.read().decode("utf-8", "replace"))
+    except Exception as exc:  # transport errors include the cap
+        text = "%s: %s" % (type(exc).__name__, exc)
+        if "timed out" in text.lower() or "timeout" in text.lower():
+            return 3, "brain wire timeout (%ds cap)" % timeout
+        return 3, "brain wire transport error: %s" % text
+    choices = body.get("choices") or []
+    content = ""
+    if choices:
+        content = (choices[0].get("message") or {}).get("content") or ""
+    # defense-in-depth strip (ollama-CLI era pollution classes; the
+    # wire returns clean JSON but the strip is zero-cost)
+    content = _ANSI_RE.sub("", content)
+    content = _SPINNER_RE.sub("", content)
+    return 0, content
 
 
 def parse_headroom(raw_output):
@@ -344,13 +401,13 @@ def main(argv):
                                   "Reply with the single word OK",
                                   timeout=WEDGE_PROBE_CAP)
         except subprocess.TimeoutExpired:
-            print("WEDGE-FAIL ollama micro-probe timed out (%ds cap,"
+            print("WEDGE-FAIL brain micro-probe timed out (%ds cap,"
                   " model %s) - wedged/contended window; re-dispatch"
                   " in a healthy window"
                   % (WEDGE_PROBE_CAP, WEDGE_PROBE_MODEL))
             return 6
         if wcode != 0:
-            print("WEDGE-FAIL ollama micro-probe exit %d - server"
+            print("WEDGE-FAIL brain micro-probe exit %d - server"
                   " unhealthy; re-dispatch in a healthy window" % wcode)
             return 6
         print("WEDGE-OK micro-probe alive (model %s, %ds cap)"
@@ -360,10 +417,12 @@ def main(argv):
     try:
         code, out = call_model(ex["model"], prompt, timeout=timeout_s)
     except subprocess.TimeoutExpired:
-        print("FAIL ollama timeout (%ds)" % timeout_s)
+        # call_model never raises on the wire (its (rc, text) contract
+        # absorbs timeouts); kept as a hard safety net.
+        print("FAIL model call timeout (%ds)" % timeout_s)
         code, out = 3, ""
     if code != 0:
-        print("FAIL ollama exit %d" % code)
+        print("FAIL model call exit %d" % code)
         print(out[-500:])
         return 3
     verdict = out.strip()

@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from datetime import datetime
 from pathlib import Path
 
@@ -599,7 +600,7 @@ class TestTimeoutCli(unittest.TestCase):
                               "--material", str(mat),
                               "--timeout", "1500"])
             self.assertEqual(3, rc)
-            self.assertIn("FAIL ollama timeout (1500s)", buf.getvalue())
+            self.assertIn("FAIL model call timeout (1500s)", buf.getvalue())
             self.assertFalse((repo / "ledger.md").exists())
             self.assertFalse((repo / "verdicts").exists())
 
@@ -640,6 +641,106 @@ class E4AudienceSeatTests(unittest.TestCase):
         self.assertIn("\u6700\u5f31\u7684\u4e00\u9879", text)
         # evidence law (verbatim quote anchor)
         self.assertIn("\u5b9e\u9524\u5f8b", text)
+
+
+class TestBrainWireTransport(unittest.TestCase):
+    """tech#186: call_model flies the :8090 OpenAI wire. Hermetic --
+    brain_health_ok and urllib.request.urlopen are both injected; no
+    live server is ever contacted (mock.patch saves/restores the real
+    module members, so the tech#175 double-key teardown is not needed
+    here)."""
+
+    def setUp(self):
+        patcher = mock.patch.object(ce, "brain_health_ok",
+                                    return_value=True)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    @staticmethod
+    def _fake_response(payload_bytes):
+        resp = mock.MagicMock()
+        resp.__enter__.return_value.read.return_value = payload_bytes
+        resp.__exit__.return_value = False
+        return resp
+
+    def test_wire_flight_posts_openai_shape(self):
+        import urllib.request as urlreq
+        captured = {}
+
+        def fake_urlopen(request, timeout=None):
+            captured["url"] = request.full_url
+            captured["data"] = json.loads(request.data.decode("utf-8"))
+            captured["timeout"] = timeout
+            body = {"choices": [{"message": {"content": "\u7ed3\u8bba"}}]}
+            return self._fake_response(
+                json.dumps(body).encode("utf-8"))
+
+        with mock.patch.object(urlreq, "urlopen",
+                               side_effect=fake_urlopen):
+            code, out = ce.call_model("qwen3.6-35b", "ping",
+                                      timeout=123)
+        self.assertEqual(0, code)
+        self.assertEqual("\u7ed3\u8bba", out)
+        self.assertEqual(ce.BRAIN_URL, captured["url"])
+        self.assertEqual(123, captured["timeout"])
+        payload = captured["data"]
+        self.assertEqual("qwen3.6-35b", payload["model"])
+        self.assertFalse(payload["stream"])
+        self.assertEqual([{"role": "user", "content": "ping"}],
+                         payload["messages"])
+        self.assertEqual({"enable_thinking": False},
+                         payload["chat_template_kwargs"])
+
+    def test_liveness_fail_short_circuits_before_flight(self):
+        import urllib.request as urlreq
+        with mock.patch.object(ce, "brain_health_ok",
+                               return_value=False):
+
+            def boom(request, timeout=None):
+                raise AssertionError("no flight expected on dead lane")
+
+            with mock.patch.object(urlreq, "urlopen",
+                                   side_effect=boom):
+                code, out = ce.call_model("qwen3.6-35b", "ping")
+        self.assertEqual(3, code)
+        self.assertIn("unreachable", out)
+
+    def test_transport_timeout_reads_rc3(self):
+        import urllib.request as urlreq
+        with mock.patch.object(urlreq, "urlopen",
+                               side_effect=OSError("timed out")):
+            code, out = ce.call_model("qwen3.6-35b", "ping",
+                                      timeout=77)
+        self.assertEqual(3, code)
+        self.assertIn("timeout", out)
+        self.assertIn("77", out)
+
+    def test_transport_error_reads_rc3(self):
+        import urllib.request as urlreq
+        with mock.patch.object(
+                urlreq, "urlopen",
+                side_effect=OSError("connection refused")):
+            code, out = ce.call_model("qwen3.6-35b", "ping")
+        self.assertEqual(3, code)
+        self.assertIn("transport error", out)
+        self.assertIn("connection refused", out)
+
+    def test_empty_choices_read_as_empty_verdict(self):
+        import urllib.request as urlreq
+        with mock.patch.object(
+                urlreq, "urlopen",
+                return_value=self._fake_response(b'{"choices": []}')):
+            code, out = ce.call_model("qwen3.6-35b", "ping")
+        self.assertEqual(0, code)
+        self.assertEqual("", out)
+
+    def test_wedge_probe_model_follows_brain_default(self):
+        self.assertEqual(ce.BRAIN_DEFAULT_MODEL, ce.WEDGE_PROBE_MODEL)
+
+    def test_health_url_derives_from_brain_base(self):
+        self.assertTrue(ce.BRAIN_HEALTH_URL.endswith("/health"))
+        base = ce.BRAIN_HEALTH_URL[:-len("/health")]
+        self.assertTrue(ce.BRAIN_URL.startswith(base))
 
 
 if __name__ == "__main__":

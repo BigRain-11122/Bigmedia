@@ -9,8 +9,9 @@ never replaces reading the source when a decision cites it.
 
     python src/research_digest.py --input research/R-20260925-fan-ops-architecture.md
 
-Channel = local Ollama via call_expert.call_model (UTF-8 subprocess pipe,
-ANSI/braille-spinner cleaned, zero API tokens). The prompt lives as a
+Channel = the brain lane via call_expert.call_model (tech#186 OpenAI
+wire to :8090, thinking-off payload, liveness-gated, zero API tokens).
+The prompt lives as a
 UTF-8 data file (encoding rule). Output = <input stem>.digest-v1.md next
 to the input, carrying the model digest plus a tool-written verification
 statement (criteria J1/J2 machine checks, docs/local-llm-p4-criteria.md).
@@ -36,7 +37,7 @@ from call_expert import call_model  # noqa: E402  (src/ sibling module)
 REPO = Path(__file__).resolve().parents[1]
 PROMPT_FILE = REPO / "data" / "pipeline" / "prompts" / "p4-digest.txt"
 LEDGER = REPO / "data" / "pipeline" / "p4-ledger.md"
-DEFAULT_MODEL = "qwen3.8:27b"  # O-20261015-1335: sole local gen model (7b tier deleted fleet-wide)
+DEFAULT_MODEL = "qwen3.6-35b"  # tech#186 wire v3: brain-lane model (:8090 OpenAI wire)
 DEFAULT_TIMEOUT = 600                 # J3: <=10 min per item
 DEFAULT_MAX_LINES = 60                # J2 line cap
 DEFAULT_MAX_INPUT_CHARS = 6000        # 7b-era cap kept as conservative clip; clipping is declared
