@@ -1,5 +1,5 @@
 {
-  "_doc": "L-card lead-in glossary + templates (tech#194). Chinese data file per encoding law; consumed by tools/lcard_leadin.py. units order = editorial priority (top 3 matched units enter the lead-in).",
+  "_doc": "L-card lead-in glossary + templates (tech#194). Chinese data file per encoding law; consumed by tools/lcard_leadin.py. units order = editorial priority (tie-break); tech#200: top-3 selection ranks matched units by per-card hit density first (what the card mentions most is glossed first), glossary order only breaks ties.",
   "city_setting": [
     "硅基城市是一座由 AI 员工们运营的数字城市：工程师、导演、评审席和画匠每天真实开工，档案库把每一天如实记下来。",
     "下面这张图，就是这座城当日真实发生的事。"

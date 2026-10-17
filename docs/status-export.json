@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 21:33:07",
- "do": "量产开闸：MV 修片守望+图文卡产线日供给；本轮=补镜两段到件核验、队列重号卫生修复、供窗行回写",
+ "export_ts": "2026-10-18 02:21:26",
+ "do": "recovery close R2339: 503-killed round accounted (tech#200 leadin + V5.3 C01 3/3); next main#124/128 + tech#204",
  "depts": [
   {
    "n": "工程技术部",

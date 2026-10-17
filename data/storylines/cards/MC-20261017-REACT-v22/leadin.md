@@ -5,4 +5,4 @@
 ---
 <!-- editor footer (design-state draft; publish opens with M5 account physicals) -->
 <!-- MOTIF fallback used (no 「...」母题 in editorial_value) -->
-<!-- generated 2026-10-17 18:18 by tools/lcard_leadin.py (tech#194) -->
+<!-- generated 2026-10-18 01:09 by tools/lcard_leadin.py (tech#194) -->

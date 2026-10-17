@@ -23,6 +23,13 @@ Usage:
 Publishing stays locked on M5 account physicals; generated lead-ins are
 design-state publish-case drafts (negative-result logging is legitimate).
 Exit codes: 0 ok; 1 unglossed jargon present (check mode) or bad input.
+
+tech#200: matched units are ranked by per-card hit density (number of
+text positions covered by any term, longest-match first), tie-broken by
+glossary order. The old static order let a once-mentioned unit at the
+top of the glossary outrank the card's own core jargon (R2334 anchor:
+v22 deferred its core units, v23 deferred T1); density makes the
+top-notes selection per-card and mechanical.
 """
 import argparse
 import datetime
@@ -54,14 +61,30 @@ def detect_form(cfg):
     return "REACT" if "REACT" in blob else "DIGEST"
 
 
+def unit_hits(blob, terms):
+    """Positions in the card text covered by any term (longest-match first)."""
+    pats = sorted((t for t in terms if t), key=len, reverse=True)
+    if not pats:
+        return 0
+    rx = re.compile("|".join(re.escape(t) for t in pats))
+    return len(rx.findall(blob))
+
+
 def matched_units(lines, glossary):
-    """Glossary units whose any term appears in the card lines, in priority order."""
+    """Glossary units whose any term appears in the card lines.
+
+    tech#200 density ranking: ordered by per-card hit count (descending),
+    tie-broken by glossary order (editorial priority). What the card talks
+    about most is what the lead-in glosses first.
+    """
     blob = "\n".join(lines)
-    out = []
-    for unit in glossary.get("units", []):
-        if any(t in blob for t in unit.get("terms", [])):
-            out.append(unit)
-    return out
+    ranked = []
+    for idx, unit in enumerate(glossary.get("units", [])):
+        hits = unit_hits(blob, unit.get("terms", []))
+        if hits:
+            ranked.append((-hits, idx, unit))
+    ranked.sort(key=lambda r: (r[0], r[1]))
+    return [r[2] for r in ranked]
 
 
 def unglossed_terms(lines, glossary):

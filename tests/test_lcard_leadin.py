@@ -67,5 +67,48 @@ class LeadinTest(unittest.TestCase):
         self.assertIn("tools/lcard_leadin.py (tech#194)", md)
 
 
+class DensityRankingTest(unittest.TestCase):
+    """tech#200: per-card hit density outranks static glossary order."""
+
+    GLOSS = {
+        "city_setting": ["s1", "s2"],
+        "react_two_state": "twostate",
+        "motif_fallback": "fallback",
+        "units": [
+            {"terms": ["aa"], "note": "early-once"},
+            {"terms": ["zz", "yy", "xx"], "note": "late-dense"},
+            {"terms": ["bb"], "note": "early-second"},
+            {"terms": ["cc"], "note": "fourth"},
+        ],
+        "watch_patterns": ["aa", "zz", "yy", "xx", "bb", "cc"],
+    }
+
+    def cfg(self, text):
+        return {"meta": {"form": "DIGEST", "topic": "t", "editorial_value": ""},
+                "cards": [{"lines": [text]}]}
+
+    def test_density_beats_glossary_order(self):
+        r = lcard_leadin.build_leadin(self.cfg(u"aa zz yy zz xx zz"), self.GLOSS)
+        self.assertEqual(r["notes"][0], "late-dense")  # 4 hits > 1 despite later index
+
+    def test_tie_break_keeps_glossary_order(self):
+        r = lcard_leadin.build_leadin(self.cfg(u"aa bb zz cc"), self.GLOSS)
+        self.assertEqual(r["notes"], ["early-once", "late-dense", "early-second"])
+        self.assertEqual(r["deferred"], ["cc"])  # 4-way 1-hit tie -> cap cut by index
+
+    def test_unit_hits_longest_match_no_double_count(self):
+        self.assertEqual(lcard_leadin.unit_hits(u"bm-c \u8f66\u9053",
+                                                [u"bm-c \u8f66\u9053", u"\u8f66\u9053", "bm-c"]), 1)
+
+    def test_v22_anchor_core_units_recovered(self):
+        """R2334 anchor regression: v22 lead-in must gloss its core jargon, not static top units."""
+        g = lcard_leadin.load_glossary()
+        cfg = load(os.path.join(REPO, "data", "storylines", "cards",
+                                "MC-20261017-DIGEST-v22", "cards.json"))
+        r = lcard_leadin.build_leadin(cfg, g)
+        self.assertIn(u"\u4fee\u6cd5\u5305", r["paragraph"])  # core unit back in notes
+        self.assertIn(u"V4\uff0fV5", r["paragraph"])  # V4/V5 note recovered over statics
+
+
 if __name__ == "__main__":
     unittest.main()
