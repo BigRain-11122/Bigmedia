@@ -397,5 +397,61 @@ class TestConsoleHardening(unittest.TestCase):
             self.assertIsNone(qs._harden_console_stdio())
 
 
+class TestGateLiftNoteAndFaceLine(unittest.TestCase):
+    """tech#210 half-unlocked rule + tech#207 --item face line (R2344).
+
+    Live anchor: canonical --item 206 read [GATED] while the row's own
+    R2340 progress note said the gate had lifted -> claimant ambiguity.
+    And a bare "--item 128" once silently read the tech face while the
+    caller meant main#128 (R2340 ~2min misread).
+    """
+
+    def _item(self, num, text):
+        return {"num": num, "head": text, "text": text}
+
+    def test_gate_lift_note_flips_stale_gated_head(self):
+        it = self._item(206, (
+            "206. [R2339 seed.gated] work ... gated=protocol file must "
+            "land ... **[R2340 gate 解除注记 2026-10-18]**: file landed "
+            "-> gated 前半解除·转 claimable (next round)"))
+        state, marker = qs.classify_item(it)
+        self.assertEqual("claimable", state)
+        self.assertIn("HEAD-INCONSISTENT", marker)
+
+    def test_gate_lift_requires_both_signals(self):
+        lift_note_only = ("7. [seed.gated] x [R2340 gate 解除注记 "
+                          "2026-10-18] but no lift phrase")
+        self.assertEqual(
+            "gated", qs.classify_item(self._item(7, lift_note_only))[0])
+        phrase_only = "8. [seed.gated] x ... 转 claimable but no lift bracket"
+        self.assertEqual(
+            "gated", qs.classify_item(self._item(8, phrase_only))[0])
+
+    def test_plain_gated_unchanged(self):
+        text = "9. [seed.gated] pure gated row"
+        self.assertEqual(("gated", None), qs.classify_item(self._item(9, text)))
+
+    def test_bare_item_echoes_default_face(self):
+        with tempfile.TemporaryDirectory() as td:
+            qdir = Path(td) / "state" / "queue"
+            qdir.mkdir(parents=True)
+            (qdir / "tech.md").write_text("1. sample row\n", encoding="utf-8")
+            rc, out = run_main_silent(["--root", td, "--item", "1"])
+            self.assertEqual(0, rc)
+            self.assertIn("face: tech (DEFAULT", out)
+            self.assertIn("#1 [CLAIMABLE]", out)
+
+    def test_explicit_queue_face_has_no_default_tag(self):
+        with tempfile.TemporaryDirectory() as td:
+            qdir = Path(td) / "state" / "queue"
+            qdir.mkdir(parents=True)
+            (qdir / "main.md").write_text("1. sample row\n", encoding="utf-8")
+            rc, out = run_main_silent(["--root", td, "--queue", "main",
+                                       "--item", "1"])
+            self.assertEqual(0, rc)
+            self.assertIn("face: main\n", out)
+            self.assertNotIn("DEFAULT", out)
+
+
 if __name__ == "__main__":
     unittest.main()

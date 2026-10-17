@@ -106,6 +106,17 @@ _DONE_RE = re.compile(r"\[[^\[\]]*\bdone\s+(\d{4}-\d{2}-\d{2})[^\[\]]*\]")
 # ("不达=判负留痕"), so machine detection would misclassify; the
 # preview line surfaces the verdict and the loop still judges.
 _GATED_RE = re.compile(r"gated|观察位|到点执行|GPU 独占窗|窗到即领")
+# tech#210 (R2343 seed): half-unlocked state rule. A row can keep a
+# stale gated head while an in-row progress note has explicitly lifted
+# the gate - the loop's append convention writes
+# "**[R2340 gate 解除注记 2026-10-18]** ... 转 claimable ...". BOTH signals
+# must be present (the explicit gate-lift note bracket AND the
+# lift-to-claimable phrase) so ordinary prose never lifts a gate; when
+# both are, the note wins and the verdict flips to claimable with a
+# HEAD-INCONSISTENT marker - canonical readout stays aligned with the
+# row's own state (zero claimant ambiguity) and the drift stays loud.
+_GATE_LIFT_NOTE_RE = re.compile(r"\[R\d+\s*gate\s*解除注记[^\]]*\]")
+_LIFT_TO_CLAIMABLE_RE = re.compile(r"转\s*claimable")
 # tech#146: P1-board-only gated family - items parked on the CEO (P1
 # proposals, sign-off waits). Matches the readiness NEEDS_CEO_RE shape.
 NEEDS_CEO_RE = re.compile(r"\[needs-CEO[^\]]*\]")
@@ -145,6 +156,13 @@ def classify_item(item):
     if NEEDS_CEO_RE.search(item["text"]):
         return "gated", None
     if _GATED_RE.search(item["text"]):
+        # tech#210: half-unlocked rule - see _GATE_LIFT_NOTE_RE note.
+        # Both signals required so prose never lifts a gate silently.
+        if (_GATE_LIFT_NOTE_RE.search(item["text"])
+                and _LIFT_TO_CLAIMABLE_RE.search(item["text"])):
+            return ("claimable",
+                    "HEAD-INCONSISTENT: gate-lift note wins over stale "
+                    "gated head (tech#210)")
         return "gated", None
     return "claimable", None
 
@@ -303,9 +321,11 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description="queue compact readout")
     ap.add_argument("--root", default=".",
                     help="repo root (default: cwd)")
-    ap.add_argument("--queue", default=DEFAULT_QUEUE,
+    ap.add_argument("--queue", default=None,
                     choices=sorted(QUEUE_FILES),
-                    help="queue for --item (default: tech)")
+                    help="queue for --item (default: tech when omitted; "
+                         "the --item face line echoes the resolved queue "
+                         "and tags defaults, tech#207)")
     ap.add_argument("--item", type=int, default=None,
                     help="print ONE full item verbatim (fail-closed)")
     ap.add_argument("--json", action="store_true",
@@ -315,14 +335,27 @@ def main(argv=None):
     root = Path(args.root).resolve()
 
     if args.item is not None:
-        items = load_queue(root, args.queue)
+        queue_name = args.queue or DEFAULT_QUEUE
+        queue_default = args.queue is None
+        items = load_queue(root, queue_name)
         if items is None:
-            print("queue %s unreadable - fail-closed" % args.queue,
+            print("queue %s unreadable - fail-closed" % queue_name,
                   file=sys.stderr)
             return 2
         face = classify_queue(items)  # buckets/markers/needs-ceo unused here
         report_face = {"items": items}
         out, code = render_item(report_face, args.item)
+        # tech#207 (R2340 anchor): a bare "--item 124" used to read the
+        # tech face silently while the caller meant main#124 (~2min
+        # misread). The face line makes the resolved queue explicit on
+        # every --item readout; default calls get a loud DEFAULT tag.
+        if queue_default:
+            others = "|".join(q for q in sorted(QUEUE_FILES)
+                             if q != queue_name)
+            print("face: %s (DEFAULT - pass --queue %s to disambiguate)"
+                  % (queue_name, others))
+        else:
+            print("face: %s" % queue_name)
         for line in out:
             print(line)
         return code
