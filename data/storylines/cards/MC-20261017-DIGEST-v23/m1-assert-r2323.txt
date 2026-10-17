@@ -1,0 +1,28 @@
+m1-assert-r2323 (MC-20261017-DIGEST-v23, programmatic byte-equal vs HQ orders.md rows 514-521)
+A [PASS] window claim 7 rows = 515-521, all 2026-10-17
+    tail table-rows=521 ; window rows 515-521 (00:1x CEO open order -> 09:0x V5 addendum); v22 window ended at row 514 (60-row claim, R2309 tail)
+A [PASS] main.md #121 definition (DIGEST-v23, rows 515+)
+    source: state/queue/main.md #121 kaigong-day digest candidate
+A [PASS] CEO quote verbatim byte-equal
+    face line 3: 「开工啊！合理排满任务！」; source verbatim head: 开工啊！合理排满任务！
+A [PASS] lane freeze order (row 515)
+    source: bm-c 车道定格=AI MV 视频+短剧+漫剧专线
+A [PASS] 264 sheets + 33 slots (row 516)
+    source: 33 帧位×8 种子=264 张 · 星晴 T1 海选两级海审收官
+A [PASS] 26 slots signed (row 517)
+    source: 26 帧位签章
+A [PASS] 7 slots sent back (row 517)
+    source: +7 帧位回炉 T1-1R
+A [PASS] three lines night close (row 518)
+    source: GPU 双卡 0016/0017+CPU 道 V2《法务部》…三线齐发
+A [PASS] 9.66/10 blind review (row 518)
+    source: 盲评 9.66/10 PASS
+A [PASS] 8/8 tier-1 pass (row 519)
+    source: —8/8 过一级 (cloud spend 100 credits = desensitized, NOT on card face)
+A [PASS] 53.5h heartbeat freeze (row 514, content-level reuse per queue item)
+    source: 心跳冻结 10-15 19:10:18（r986 GREEN·53.5h）; row 514 sat at v22 window tail (counted, fact NOT card-consumed by v22); v23 consumes the E1 fact per main.md #121 source definition; window row-count stays 7 (515-521)
+A [PASS] motif anchor kaigong in CEO words (row 515)
+    source: 开工啊
+
+M1 VERDICT: PASS (12 asserts, fails=none)
+face lines mirror v22 schema (8 lines, end 3.0s); numbers 7/264/33/26/8/3/9.66/10/8/8/53.5 all ledger-traceable;

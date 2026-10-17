@@ -1,0 +1,13 @@
+em-check-r2323 (MC-20261017-DIGEST-v23 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   12.35em margin +10.65  开工日（10-17·7 行令批）
+OK   13.00em margin +10.00  「开工啊！合理排满任务！」
+OK   17.50em margin  +5.50  bm-c 车道定格：AI MV·短剧·漫剧专线
+OK   18.40em margin  +4.60  星晴 T1 两级海审收官：264 张·33 帧位
+OK   14.70em margin  +8.30  对审签章 26 帧位 · 7 帧位回炉
+OK   18.35em margin  +4.65  夜窗三线齐发：《法务部》盲评 9.66/10
+OK   19.15em margin  +3.85  云批 8/8 过一级 · bm-b 停摆并案 53.5h
+H1=6.15em (h1 own face, h1_size=84)
+subs 21.00em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS
