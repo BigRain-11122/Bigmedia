@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 17:26:48",
- "do": "tech#192 事件锚定预检落地（live-fire v22 双 HINT）→下件 REACT 产前过预检；下轮=tech 队 #193/#194 依序+MV V5.3 回执守望",
+ "export_ts": "2026-10-17 18:06:24",
+ "do": "R2333: tech#193 orders-rows helper+12 tests (suite 1572 green); row537 short-video freeze acked; V5.3 watch in-flight",
  "depts": [
   {
    "n": "工程技术部",
