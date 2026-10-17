@@ -15,6 +15,15 @@
 # path, never a Start-Process redirect handle). Do not read the redirect
 # artifacts raw; read the result file.
 #
+# tech#198 (R2336, pitfall ledger): NEVER build an evidence file by pointing
+# PS `>` at this wrapper's or any native tool's output. PS 5.1 re-encodes the
+# native byte stream through its own codepage and corrupts it (R2331 anchor:
+# `python -m unittest > file 2>&1` produced a dead result-marker line, NUL
+# padding, and mixed traceback frames -- the suite log read as a binary file).
+# Evidence chains go through THIS wrapper's own result file, or through
+# python subprocess capture_output written as raw bytes. PS `>` is reserved
+# for PS object streams only.
+#
 # Usage:
 #   tools/run_suite.ps1                                   # full discovery (tests/)
 #   tools/run_suite.ps1 -Module tests.test_board_check    # one module
