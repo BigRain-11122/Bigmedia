@@ -475,6 +475,91 @@ class DigestSupplyFaceTests(unittest.TestCase):
         self.assertEqual(rc, gs.RC_READ_FAIL)
         self.assertIn("read-fail: hq-orders", out)
 
+    # --- tech#202 (R2337 anchor): latest-name ordering + row-level
+    # coverage. Same-day pair v22/v23 used to report v22 as "latest"
+    # (iteration order), and rows 522-539 landing after v23's rows
+    # 515-521 read as fully covered (day-granularity hole). ---
+
+    def test_latest_digest_prefers_higher_version_same_date(self):
+        os.makedirs(os.path.join(self.cards, "MC-20261011-DIGEST-v19"))
+        os.makedirs(os.path.join(self.cards, "MC-20261011-DIGEST-v20-tmp"))
+        latest = gs.latest_digest_card(self.cards)
+        self.assertEqual((latest[0], latest[1]),
+                         (date(2026, 10, 11), "MC-20261011-DIGEST-v20-tmp"))
+
+    def test_latest_digest_version_beats_iteration_order(self):
+        # The live R2337 shape: v22, v22-tmp, v23, v23-tmp all on 10-17.
+        for name in ("MC-20261011-DIGEST-v22", "MC-20261011-DIGEST-v22-tmp",
+                     "MC-20261011-DIGEST-v23", "MC-20261011-DIGEST-v23-tmp"):
+            os.makedirs(os.path.join(self.cards, name))
+        latest = gs.latest_digest_card(self.cards)
+        self.assertEqual(latest[1], "MC-20261011-DIGEST-v23")
+
+    def test_card_orders_frontier_parses_rows_range(self):
+        card = os.path.join(self.cards, "MC-20261011-DIGEST-v18")
+        _write(os.path.join(card, "cards.json"), json.dumps({
+            "meta": {"source_pointer":
+                     "orders.md 00:1x->09:0x (rows 514-521 R2323)",
+                     "form": "source=cluster (rows 515-521 qi hang)"}}))
+        self.assertEqual(gs.card_orders_frontier(card), 521)
+
+    def test_card_orders_frontier_ignores_unprefixed_ranges(self):
+        card = os.path.join(self.cards, "MC-20261011-DIGEST-v18")
+        _write(os.path.join(card, "cards.json"), json.dumps({
+            "meta": {"form": "v22 window (455-514, 60 hang) no claim"}}))
+        self.assertIsNone(gs.card_orders_frontier(card))
+        self.assertIsNone(gs.card_orders_frontier(
+            os.path.join(self.cards, "no-such-card")))
+
+    def test_digest_frontier_falls_through_jsonless_tmp(self):
+        v18 = os.path.join(self.cards, "MC-20261011-DIGEST-v18")
+        _write(os.path.join(v18, "cards.json"), json.dumps({
+            "meta": {"source_pointer": "rows 514-521 consumed"}}))
+        os.makedirs(os.path.join(self.cards, "MC-20261011-DIGEST-v19-tmp"))
+        self.assertEqual(gs.digest_frontier(self.cards), 521)
+
+    def test_classify_row_level_kills_same_day_false_quiet(self):
+        # R2337 anchor shape: card frontier 521, current rows 533, ALL
+        # row dates same-day (10-17 == card date) -> must NOT read quiet.
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 10, 17)}, date(2026, 10, 17), date(2026, 10, 17),
+            row_frontier=521, current_rows=533,
+            row_dates_seq=[date(2026, 10, 17)] * 533)
+        self.assertEqual(verdict["status"], "advisory")
+        self.assertEqual(verdict["row_unconsumed"], 12)
+
+    def test_classify_row_level_gap_escalation(self):
+        # The same-day cluster sits unconsumed past the threshold: the
+        # row dates carry the escalation clock day-granularity misses.
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 10, 17)}, date(2026, 10, 17), date(2026, 10, 20),
+            row_frontier=521, current_rows=533,
+            row_dates_seq=[date(2026, 10, 17)] * 533)
+        self.assertEqual(verdict["status"], "gap")
+        self.assertEqual(verdict["age_days"], 3)
+
+    def test_classify_quiet_when_frontier_covers_rows(self):
+        verdict = gs.classify_digest_supply_gap(
+            {date(2026, 10, 11)}, date(2026, 10, 11), date(2026, 10, 14),
+            row_frontier=1, current_rows=1, row_dates_seq=[date(2026, 10, 11)])
+        self.assertEqual(verdict["status"], "quiet")
+        self.assertEqual(verdict["row_unconsumed"], 0)
+
+    def test_face_row_level_false_quiet_regression(self):
+        card = os.path.join(self.cards, "MC-20261011-DIGEST-v18")
+        _write(os.path.join(card, "cards.json"), json.dumps({
+            "meta": {"source_pointer": "orders rows 1-1 consumed"}}))
+        _write(self.orders, "| 10-11 11:3x | covered |\n"
+                            "| 10-11 20:2x | same-day cluster a |\n"
+                            "| 10-11 22:4x | same-day cluster b |\n")
+        rc, out = gs.face_digest_supply(
+            {"cards_dir": self.cards, "hq_orders": self.orders},
+            today=date(2026, 10, 13))
+        self.assertEqual(rc, gs.RC_QUIET)  # advisory keeps silence
+        self.assertIn("DIGEST-SUPPLY:", out)
+        self.assertNotIn("DIGEST-SUPPLY: quiet", out)
+        self.assertIn("row-level: 2 row(s) beyond frontier 1", out)
+
 
 class DigestSupplyCliTests(unittest.TestCase):
     """CLI wiring: gap WARN breaks the whole probe's silence; advisory

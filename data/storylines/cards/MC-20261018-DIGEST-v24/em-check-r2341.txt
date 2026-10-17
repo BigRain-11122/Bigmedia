@@ -1,0 +1,13 @@
+em-check-r2341 (MC-20261018-DIGEST-v24 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   17.40em margin  +5.60  终片冲刺夜（10-17 晚段·18 行令批）
+OK   18.60em margin  +4.40  「现在是80分了 好好再打磨一下给成品」
+OK   21.30em margin  +1.70  「按水印的内容是 大喵没鱼吃」暗水印 256bit
+OK   17.35em margin  +5.65  「严格审核后给我终片」234.25s 交付
+OK   18.20em margin  +4.80  「务必做到MV最顶级的」·转场现役 9 族
+OK   19.60em margin  +3.40  「给我全部项目并行开工！」32 款三线并跑
+OK   20.00em margin  +3.00  对抗式审查全面引入：「互相监督互相制约」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.00em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS

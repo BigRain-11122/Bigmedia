@@ -39,9 +39,15 @@ Faces:
             note: same-day-evening clusters (e.g. 10-11 晚 vs v18 10-11)
             are below this face's resolution -- the >2d WARN is the
             chronic-blindness backstop, the age<=2d advisory line keeps
-            the unconsumed cluster in per-round view. Cards dir missing =
-            face inactive (quiet) -- the DIGEST production line itself is
-            absent then.
+            the unconsumed cluster in per-round view. tech#202 (R2337
+            anchor) closes the same-day hole two ways: the "latest card"
+            orders by captured vNN (v22 no longer shadows v23 by
+            iteration order), and coverage is ALSO judged row-level
+            against the card's cards.json consumption frontier ("rows
+            N-M") -- rows beyond the frontier surface as advisory even
+            when same-day, and escalate to WARN via their row dates once
+            past the threshold. Cards dir missing = face inactive
+            (quiet) -- the DIGEST production line itself is absent then.
   ORDERS-ORIGIN-DELTA  origin-only rows advisory (tech#133, R2059/R2064):
             git fetch + git show origin/main row count vs the worktree
             count (D-20261001-03 read-only consumption canon). origin >
@@ -90,9 +96,17 @@ ORDERS_CELL_DATE_RE = re.compile(
     r"^(20\d{2})-(\d{2})-(\d{2})(?!\d)|^(\d{2})-(\d{2})(?!\d)")
 # DIGEST card dir name: MC-YYYYMMDD-DIGEST-vNN[-tmp]. -tmp staging dirs are a
 # legitimate consumption signal (CPU pre-stage counts -- the cluster has been
-# derived even while the F-registration waits for a GPU fire window).
-DIGEST_CARD_RE = re.compile(r"^MC-(20\d{2})(\d{2})(\d{2})-DIGEST-v\d+")
+# derived even while the F-registration waits for a GPU fire window). The
+# vNN number is captured (tech#202): same-date cards must order by version,
+# not by directory iteration order (R2337 anchor: v22/v23 same-day pair
+# reported v22 as "latest" while v23 + F-193 were already in the ledger).
+DIGEST_CARD_RE = re.compile(r"^MC-(20\d{2})(\d{2})(\d{2})-DIGEST-v(\d+)")
 DIGEST_SUPPLY_GAP_DAYS = 2
+# tech#202 (R2337 anchor): a card's cards.json meta declares its consumed
+# orders row range ("rows 514-521"); the range END is the row-level
+# consumption frontier. Requires the literal "row"/"rows" prefix so sibling
+# window notes ("（455-514·60 行）") never pose as consumption claims.
+CARD_ROWS_RANGE_RE = re.compile(r"\brows?\s*(\d{1,4})\s*[-–—~]\s*(\d{1,4})")
 # Only whitespace / list / heading markers may precede a row-anchored token.
 ANCHOR_PREFIX_RE = re.compile(r"^(?:\s|[-*#>]+|\d{1,3}[.)])*$")
 LEDGER_MARKERS = ("@BigStream", "@七线全司", "@全司", "@六司", "@八线全量")
@@ -254,8 +268,10 @@ def orders_row_dates(text, year=None):
 def latest_digest_card(cards_dir):
     """(date, dir_name) of the newest MC-YYYYMMDD-DIGEST-vNN card, or None.
 
-    Staging dirs (``-tmp`` suffix) are valid consumption signal; at equal
-    dates the non-tmp name wins for reporting.
+    Ordering is (date, version, non-tmp): same-date cards compare by the
+    captured vNN first (tech#202 -- iteration order used to let v22 shadow
+    v23); staging dirs (``-tmp`` suffix) are valid consumption signal and
+    only lose to the non-tmp twin at equal (date, version).
     """
     cards_dir = Path(cards_dir)
     best = None
@@ -269,42 +285,151 @@ def latest_digest_card(cards_dir):
             continue
         when = date(int(match.group(1)), int(match.group(2)),
                     int(match.group(3)))
+        version = int(match.group(4))
         is_tmp = entry.name.endswith("-tmp")
-        if best is None or when > best[0] or (when == best[0] and
-                                              is_tmp < best[2]):
-            best = (when, entry.name, is_tmp)
+        key = (when, version, not is_tmp)
+        if best is None or key > best[0]:
+            best = (key, entry.name)
     if best is None:
         return None
-    return best[0], best[1]
+    return best[0][0], best[1]
+
+
+def card_orders_frontier(card_dir):
+    """Max orders row number the card declares consumed, or None.
+
+    Parses the "rows N-M" consumption range from cards.json meta fields
+    (source_pointer / form / source_facts). tech#202 row-level anchor:
+    same-day rows landing after the latest card are invisible to day
+    granularity, so the card's own recorded frontier is the only honest
+    coverage claim. Unreadable / absent cards.json -> None (face falls
+    back to day granularity).
+    """
+    try:
+        text = (Path(card_dir) / "cards.json").read_text(encoding="utf-8")
+        data = json.loads(text)
+    except (OSError, ValueError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    meta = data.get("meta")
+    fields = []
+    if isinstance(meta, dict):
+        fields = [str(meta.get(key) or "") for key in
+                  ("source_pointer", "form", "source_facts")]
+    best = None
+    for field in fields:
+        for match in CARD_ROWS_RANGE_RE.finditer(field):
+            start, end = int(match.group(1)), int(match.group(2))
+            if 0 < start <= end and (best is None or end > best):
+                best = end
+    return best
+
+
+def digest_frontier(cards_dir):
+    """Newest parseable row frontier across DIGEST card dirs, or None.
+
+    Walks card dirs newest-first (same ordering as latest_digest_card);
+    a cards.json-less staging dir falls through to the next-newest card
+    (conservative: an older frontier can only over-report unconsumed rows,
+    never hide them)."""
+    cards_dir = Path(cards_dir)
+    try:
+        entries = list(cards_dir.iterdir())
+    except OSError:
+        return None
+    ranked = []
+    for entry in entries:
+        match = DIGEST_CARD_RE.match(entry.name)
+        if not match:
+            continue
+        when = date(int(match.group(1)), int(match.group(2)),
+                    int(match.group(3)))
+        version = int(match.group(4))
+        is_tmp = entry.name.endswith("-tmp")
+        ranked.append(((when, version, not is_tmp), entry.name))
+    for _, name in sorted(ranked, reverse=True):
+        frontier = card_orders_frontier(cards_dir / name)
+        if frontier is not None:
+            return frontier
+    return None
+
+
+def orders_row_date_seq(text, year=None):
+    """Ordered per-row date list over the |-row family (tech#202).
+
+    Index i holds the date of orders row i+1 (None when the first cell
+    is not a live date shape); rows beyond a card frontier slice
+    directly: ``seq[frontier:]`` = rows frontier+1..current.
+    """
+    if year is None:
+        year = datetime.now().year
+    seq = []
+    for line in text.splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        match = ORDERS_CELL_DATE_RE.match(_orders_first_cell(line))
+        if match and match.group(1):
+            seq.append(date(int(match.group(1)), int(match.group(2)),
+                            int(match.group(3))))
+        elif match:
+            seq.append(date(year, int(match.group(4)), int(match.group(5))))
+        else:
+            seq.append(None)
+    return seq
 
 
 def classify_digest_supply_gap(orders_dates, latest, today,
-                               threshold_days=DIGEST_SUPPLY_GAP_DAYS):
+                               threshold_days=DIGEST_SUPPLY_GAP_DAYS,
+                               row_frontier=None, current_rows=None,
+                               row_dates_seq=None):
     """Pure core for the DIGEST supply-gap advisory face (tech#129).
 
     Returns a dict: status inactive|quiet|advisory|gap + reading fields.
-    - unconsumed = row dates strictly newer than the latest DIGEST card
-      (day granularity; same-day clusters are below face resolution)
+    - day-level unconsumed = row dates strictly newer than the latest
+      DIGEST card (day granularity; same-day clusters are below day
+      resolution)
+    - row-level unconsumed (tech#202, R2337 anchor): when the latest
+      card's recorded orders-row frontier is parseable, rows beyond it
+      count as unconsumed even when their dates are same-day -- the
+      false-quiet hole where a same-day evening cluster (rows 522-539
+      after v23's rows 515-521) read as fully covered
     - advisory: unconsumed exists but oldest age <= threshold (per-round
       hint line, silence NOT broken)
     - gap: oldest unconsumed age > threshold -> WARN breaks silence (the
       chronic-blindness backstop for the R870/R1095/R1303/R1536/R2050
       manual-correction family). Creative judgment stays with the body.
     """
-    if latest is None and not orders_dates:
+    row_unconsumed = 0
+    row_unconsumed_dates = set()
+    if (row_frontier is not None and current_rows is not None
+            and current_rows > row_frontier):
+        row_unconsumed = current_rows - row_frontier
+        if row_dates_seq is not None:
+            row_unconsumed_dates = set(
+                d for d in row_dates_seq[row_frontier:] if d is not None)
+    day_unconsumed = set(d for d in orders_dates
+                         if latest is None or d > latest)
+    unconsumed_set = day_unconsumed | row_unconsumed_dates
+    if not unconsumed_set and row_unconsumed == 0:
         return {"status": "quiet", "unconsumed": 0, "oldest": None,
-                "age_days": None, "threshold": threshold_days}
-    unconsumed = sorted(d for d in orders_dates
-                        if latest is None or d > latest)
-    if not unconsumed:
-        return {"status": "quiet", "unconsumed": 0, "oldest": None,
-                "age_days": None, "threshold": threshold_days}
-    oldest = unconsumed[0]
-    age_days = (today - oldest).days
-    status = "gap" if age_days > threshold_days else "advisory"
+                "age_days": None, "threshold": threshold_days,
+                "row_unconsumed": 0, "row_frontier": row_frontier}
+    unconsumed = sorted(unconsumed_set)
+    if unconsumed:
+        oldest = unconsumed[0]
+        age_days = (today - oldest).days
+        status = "gap" if age_days > threshold_days else "advisory"
+    else:
+        # Row-unconsumed whose rows carry no parseable dates: undatable
+        # residue -- advisory at the day-granularity floor, never quiet.
+        oldest = latest
+        age_days = max((today - latest).days, 0) if latest else 0
+        status = "advisory"
     return {"status": status, "unconsumed": len(unconsumed),
             "oldest": oldest, "age_days": age_days,
-            "threshold": threshold_days}
+            "threshold": threshold_days,
+            "row_unconsumed": row_unconsumed, "row_frontier": row_frontier}
 
 
 def face_digest_supply(paths, today=None):
@@ -312,7 +437,11 @@ def face_digest_supply(paths, today=None):
 
     rc 0 quiet/advisory/inactive / 1 gap WARN (breaks silence) / 3 read
     error. Cards dir missing = face inactive (the DIGEST production line
-    itself is absent) -- never a read failure.
+    itself is absent) -- never a read failure. tech#202 (R2337 anchor):
+    coverage is judged BOTH day-level (row dates vs card date) and
+    row-level (current orders rows vs the card's recorded consumption
+    frontier in cards.json meta) -- same-day rows beyond the frontier
+    kill the false-quiet.
     """
     cards = Path(paths["cards_dir"])
     latest = latest_digest_card(cards)
@@ -327,10 +456,17 @@ def face_digest_supply(paths, today=None):
     if today is None:
         today = datetime.now().date()
     dates = orders_row_dates(text)
-    verdict = classify_digest_supply_gap(dates, latest[0], today)
+    rows, _tail_key = orders_row_stats(text)
+    row_seq = orders_row_date_seq(text)
+    frontier = digest_frontier(cards)
+    verdict = classify_digest_supply_gap(dates, latest[0], today,
+                                         row_frontier=frontier,
+                                         current_rows=rows,
+                                         row_dates_seq=row_seq)
     lines = ["cards: %s | latest DIGEST card %s (%s) | orders rows "
-             "mtime %s | row-dates=%d"
-             % (cards, latest[0].isoformat(), latest[1], mtime, len(dates))]
+             "mtime %s | row-dates=%d | rows=%d | frontier=%s"
+             % (cards, latest[0].isoformat(), latest[1], mtime, len(dates),
+                rows, frontier if frontier is not None else "n/a")]
     if verdict["status"] == "quiet":
         lines.append("DIGEST-SUPPLY: quiet (orders rows covered by "
                      "latest DIGEST card %s)" % latest[0].isoformat())
@@ -339,6 +475,10 @@ def face_digest_supply(paths, today=None):
               "%s (oldest %s, age %dd)"
               % (verdict["unconsumed"], latest[0].isoformat(),
                  verdict["oldest"].isoformat(), verdict["age_days"]))
+    if verdict["row_unconsumed"]:
+        detail += (" | row-level: %d row(s) beyond frontier %s "
+                   "(same-day clusters are invisible to day granularity)"
+                   % (verdict["row_unconsumed"], verdict["row_frontier"]))
     if verdict["status"] == "advisory":
         lines.append("DIGEST-SUPPLY: %s -- advisory (age <= %dd; "
                      "judgment stays with the loop)" % (detail,
