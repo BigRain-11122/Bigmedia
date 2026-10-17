@@ -519,8 +519,8 @@ class StateFixture(object):
         self.dir = tempfile.mkdtemp(prefix="finalize_state_")
         self.path = os.path.join(self.dir, "state.json")
         state = {
-            "tick": 5,
-            "log": ["2026-10-10 23:5x R0005: seed round"],
+            "tick": 1926,
+            "log": ["2026-10-10 23:5x R1926: seed round"],
             "ts": "2026-10-10 23:57:00",
             "task": "seed task",
             "focus": "seed focus",
@@ -583,15 +583,15 @@ class TestFinalizeState(unittest.TestCase):
         fx = self._fx()
         summary = cc.finalize_state(self.LINE, focus="next round focus",
                                     state_path=fx.path)
-        self.assertEqual(6, summary["tick"])
+        self.assertEqual(1927, summary["tick"])
         d = fx.read()
-        self.assertEqual(6, d["tick"])
+        self.assertEqual(1927, d["tick"])
         self.assertEqual(self.LINE, d["log"][-1])
         self.assertEqual("等待轮·tech#76 交付轮", d["task"])
         self.assertEqual("next round focus", d["focus"])
         # unrelated fields preserved by the round-trip
         self.assertEqual("open", d["production"])
-        self.assertEqual("seed round", d["log"][0][len("2026-10-10 23:5x R0005: "):])
+        self.assertEqual("seed round", d["log"][0][len("2026-10-10 23:5x R1926: "):])
         # atomic write: no temp residue, no BOM (house format)
         self.assertFalse(os.path.exists(fx.path + ".tmp_final"))
         self.assertFalse(fx.raw_bytes().startswith(b"\xef\xbb\xbf"))
@@ -603,12 +603,12 @@ class TestFinalizeState(unittest.TestCase):
 
     def test_tick_guard_explicit_and_mismatch(self):
         fx = self._fx()
-        cc.finalize_state(self.LINE, tick=6, state_path=fx.path)
-        self.assertEqual(6, fx.read()["tick"])
+        cc.finalize_state(self.LINE, tick=1927, state_path=fx.path)
+        self.assertEqual(1927, fx.read()["tick"])
         # a re-run with a stale tick must be loud and touch nothing
         before = fx.raw_bytes()
         with self.assertRaises(ValueError):
-            cc.finalize_state(self.LINE, tick=6, state_path=fx.path)
+            cc.finalize_state(self.LINE, tick=1927, state_path=fx.path)
         self.assertEqual(before, fx.raw_bytes())
 
     def test_ts_default_uses_injected_clock(self):
@@ -703,6 +703,67 @@ class TestFinalizeState(unittest.TestCase):
         self.assertNotIn("orders_row_watermark", fx.read())
 
 
+class TestRoundNumberInvariant(unittest.TestCase):
+    """tech#196 (R2329 anchor): the R==new-tick born gate.
+
+    One body self-derived round number R2334 while its real tick was
+    2328, breaking the historical R==tick arithmetic chain and tripping
+    loop_health's unaccounted-round-work WARN for a ~12-commit window.
+    finalize_state now refuses any line whose R number will not equal
+    the new tick - loud, zero partial writes, before any mutation.
+    """
+
+    def _state(self, tick):
+        d = tempfile.mkdtemp(prefix="r_number_")
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        sp = os.path.join(d, "state.json")
+        with open(sp, "w", encoding="utf-8", newline="") as f:
+            json.dump({"tick": tick, "log": [],
+                       "ts": "2026-10-17 13:30:00", "task": "t"},
+                      f, ensure_ascii=False, indent=1)
+        with open(sp, "rb") as f:
+            return sp, f.read()
+
+    def test_r2334_anchor_reproduction_refused_zero_write(self):
+        # the R2329 anchor: on-disk tick 2327, the line claims R2334
+        sp, before = self._state(2327)
+        with self.assertRaises(ValueError) as cm:
+            cc.finalize_state(
+                "2026-10-17 14:2x R2334: mislabeled body round",
+                state_path=sp)
+        self.assertIn("round-number invariant", str(cm.exception))
+        self.assertIn("R2328", str(cm.exception))  # relabel hint
+        with open(sp, "rb") as f:
+            self.assertEqual(before, f.read())  # zero partial writes
+
+    def test_correct_round_number_passes(self):
+        sp, _ = self._state(2327)
+        summary = cc.finalize_state(
+            "2026-10-17 14:2x R2328: correctly labeled round",
+            state_path=sp)
+        self.assertEqual(2328, summary["tick"])
+
+    def test_gate_covers_explicit_tick_path(self):
+        # an explicit tick passes the tick guard, then the R gate still
+        # bites on a mismatched round number (both directions)
+        sp, before = self._state(2327)
+        with self.assertRaises(ValueError):
+            cc.finalize_state("2026-10-17 14:2x R2334: wrong with tick",
+                              tick=2328, state_path=sp)
+        with open(sp, "rb") as f:
+            self.assertEqual(before, f.read())
+        cc.finalize_state("2026-10-17 14:2x R2328: aligned with tick",
+                          tick=2328, state_path=sp)
+
+    def test_derive_round_number_helper(self):
+        self.assertEqual(2334, cc.derive_round_number(
+            "2026-10-17 14:2x R2334: body"))
+        self.assertEqual(7, cc.derive_round_number(
+            "2026-10-10 23:5x R7: short numbers allowed"))
+        with self.assertRaises(ValueError):
+            cc.derive_round_number("2026-10-17 no prefix")
+
+
 class TestPulseStateBeat(unittest.TestCase):
     """PT-20261015-01 (R2308): pulse-only state beat - defer-window
     freshness touch with ZERO accounting mutation (tech#149 stays whole:
@@ -724,7 +785,7 @@ class TestPulseStateBeat(unittest.TestCase):
         self.assertEqual("2026-10-15 22:40:00", d["ts"])
         self.assertEqual("cloud-cap defer (live=2)", d["pulse"]["reason"])
         # accounting face untouched: tick/log/task/focus/production
-        self.assertEqual(5, d["tick"])
+        self.assertEqual(1926, d["tick"])
         self.assertEqual(1, len(d["log"]))
         self.assertEqual("seed task", d["task"])
         self.assertEqual("seed focus", d["focus"])
@@ -762,13 +823,13 @@ class TestPulseStateBeat(unittest.TestCase):
         # ts injected: finalize must not read the live clock, or this test
         # goes red for every real-world run after 2026-10-15 23:00 (the
         # frozen pulse clock below would read as clock-skew backwards).
-        cc.finalize_state("2026-10-15 22:5x R2308: close after pulse",
+        cc.finalize_state("2026-10-15 22:5x R1927: close after pulse",
                           state_path=fx.path,
                           ts="2026-10-15 22:50:00")
         cc.pulse_state_beat("defer pulse 2", state_path=fx.path,
                             now=datetime.datetime(2026, 10, 15, 23, 0, 0))
         d = fx.read()
-        self.assertEqual(6, d["tick"])
+        self.assertEqual(1927, d["tick"])
         self.assertEqual("2026-10-15 23:00:00", d["ts"])
         self.assertEqual(2, len(d["log"]))
         self.assertIn("close after pulse", d["log"][-1])

@@ -128,7 +128,7 @@ QUEUE_MAIN_REL = "state/queue/main.md"
 # tech#76: ledger prefix shape. Minute field is two chars - digit+digit
 # ("23:26") or digit+x ("23:5x", fuzzy-minute house style). Anything else
 # raises before the ledger is touched (born-level gate).
-LOG_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{1}[0-9x] R\d+: ")
+LOG_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{1}[0-9x] R(\d+): ")
 TASK_MAX_CHARS = 60  # mandate: task = log line minus prefix, first 60 chars
 TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 
@@ -239,6 +239,27 @@ def derive_task(log_line):
     return log_line[m.end():][:TASK_MAX_CHARS]
 
 
+def derive_round_number(log_line):
+    """tech#196 (R2329 anchor): the round number from a ledger prefix.
+
+    The R/tick arithmetic chain (R == the tick the finalize produces)
+    held for the whole historical ledger until one body self-derived a
+    wrong round number (R2334 while its real tick was 2328), which
+    tripped loop_health's unaccounted-round-work WARN for a ~12-commit
+    window. This helper is the born-gate input: finalize_state refuses
+    any log line whose R number will not equal the new tick.
+
+    Raises ValueError on a non-matching prefix (same shape gate as
+    derive_task, single regex source).
+    """
+    m = LOG_PREFIX_RE.match(log_line)
+    if not m:
+        raise ValueError(
+            "log_line does not match ledger prefix "
+            "'YYYY-MM-DD HH:MMx RNNNN: ': %r" % (log_line[:40],))
+    return int(m.group(1))
+
+
 def finalize_state(log_line, ts=None, focus=None, tick=None,
                    watermark_add=None, orders_watermark=None, state_path=None,
                    now=None):
@@ -260,7 +281,8 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     Steps: validate log prefix shape -> derive task (60-char law) ->
     resolve ts (explicit or injected clock, second-precision ASCII) ->
     load state -> tick guard (explicit tick must equal on-disk tick+1;
-    default = auto-increment) -> append log line -> stamp ts/task ->
+    default = auto-increment) -> round-number guard (the prefix R number
+    must equal the new tick, tech#196 R2329 anchor) -> append log line -> stamp ts/task ->
     optional focus overwrite -> optional decisions_watermark.dnums append
     (dedup, order-preserving) -> optional orders_row_watermark overwrite
     (tech#103 consumption anchor) -> atomic write (temp + os.replace,
@@ -320,6 +342,18 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
                 "tick guard: on-disk tick=%s, expected new tick=%s "
                 "(double-run or concurrent writer?)" % (cur, tick))
         new_tick = tick
+
+    # tech#196 born gate (R2329 anchor): R number must equal the new
+    # tick, keeping the R==tick arithmetic chain true at write time -
+    # a self-derived wrong round number is refused loudly instead of
+    # landing in the ledger and tripping unaccounted-round-work later.
+    round_num = derive_round_number(log_line)
+    if round_num != new_tick:
+        raise ValueError(
+            "round-number invariant: log line carries R%d but the new "
+            "tick is %d (on-disk tick=%d) - relabel the round number "
+            "to R%d before writing (R2329 anchor: R==tick chain)"
+            % (round_num, new_tick, cur, new_tick))
 
     wm_added = 0
     if watermark_add is not None:
