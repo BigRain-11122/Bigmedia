@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-17 18:31:51",
- "do": "R2334: tech#194 leadin template C-51 live (3 drafts+7 tests); V5.3 3-shot no-show at 18:30 (24h window)",
+ "export_ts": "2026-10-17 19:07:30",
+ "do": "tech#196 收账 R 号守卫落地（finalize_state 出生门+4 新测·全回归 1583 绿）——候 MV V5.3 三镜重烧到件（24h 窗至 10-18 13:5x）",
  "depts": [
   {
    "n": "工程技术部",
@@ -87,15 +87,15 @@
  "live": [
   [
    "当前活",
-   "tech#194 卡外导语模板件落地（C-51·三卡导语草稿+语境门检 rc0+7 测绿）——候 MV V5.3 三镜回执验真（D04_her_brush/SIL1_v4b/C01_carver_face·18:30 死线到点未到件）+编年史批五（日闭窗后）"
+   "tech#196 收账 R 号守卫落地（finalize_state 出生门·全回归 1583 绿）——候 MV V5.3 三镜回执验真（24h 窗至 10-18 13:5x）+编年史批五（日闭窗后）"
   ],
   [
    "最近实物",
-   "tools/lcard_leadin.py+data/storylines/cards/leadin-glossary.json+三卡 leadin.md 导语草稿（DIGEST-v23/v22+REACT-v22·E4 语境门槛卡外层吸收位·2026-10-17 18:2x）"
+   "src/os/close_commit.py R 号==new tick 出生门+derive_round_number 助手+4 新测（R2329 unaccounted 锚根修·2026-10-17 19:1x）"
   ],
   [
    "下个里程碑",
-   "MV V5.3 三镜到件验真→导演席复验收→V5.3 装配（24h 执行窗内·≤10-18 13:5x）+编年史批五（10-17 日闭窗后·≤48h）"
+   "MV V5.3 三镜到件验真→V5 终版装配+导演审后呈 CEO（10-18 窗内）"
   ]
  ]
 }
