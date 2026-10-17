@@ -1,0 +1,13 @@
+em-check-r2346 (MC-20261018-DIGEST-v25 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   18.05em margin  +4.95  深夜治理夜（10-17 深夜→10-18 凌晨）
+OK   14.50em margin  +8.50  MV 三镜重烧 3/3 齐→V5.3 重建
+OK   20.25em margin  +2.75  「清理本机所有的自动化任务」×2·41 个全删
+OK   19.85em margin  +3.15  「需要的自动化恢复」36/36 复位·8 仓对齐
+OK   20.00em margin  +3.00  「你负责分配好，让他们都各自满负荷运转」
+OK   17.00em margin  +6.00  「膨胀的太厉害太快了」记忆治理立席
+OK   18.65em margin  +4.35  闸 v2 首跑 93,662→71,850B·112→75 条
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.00em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS
