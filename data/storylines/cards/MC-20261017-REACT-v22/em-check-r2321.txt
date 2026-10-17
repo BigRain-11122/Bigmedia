@@ -1,0 +1,13 @@
+em-check-r2321 (MC-20261017-REACT-v22 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=30 budget=30.67em
+OK   15.55em margin +15.12  今日热点 · 知乎热榜 2026-10-17
+OK   30.20em margin  +0.47  女子在自己手机上登录前男友账号以「1314」等金额转走近二十万，
+OK   19.00em margin +11.67  法院判决全部返还，如何从法律角度解读？
+OK   22.00em margin  +8.67  秩序轴：「今儿个结算顺利完成，心里头才踏实」
+OK   21.00em margin  +9.67  侠气轴：「算盘这会儿打清了，该收心回家了」
+OK   16.00em margin +14.67  逍遥轴：「偶尔空手而归，也挺好」
+OK   22.00em margin  +8.67  伴居灵感条：「蹭饭是门艺术，报恩是门手艺。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+subs tail cue end derived=card end 2.600s (zero hardcode); expected duration=3.400s (card end + tail 0.80)
+ALL-HORIZ: PASS

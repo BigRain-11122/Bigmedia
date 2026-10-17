@@ -249,3 +249,5 @@
 
 
 190. [R2319 restock round-finding] queue_status backlog false-claimable-head case 4 anchor (#27 = city-storyline ch.1-5 all closed F-008..F-012, only remaining leg ch.6 audio waits novel SC-001-06 source manuscript [unwritten, bm-a session serial lane, R231 tail note] - row text lacks the marker phrase so #189(1) semantic gate does not cover this shape = classifier third form "waiting upstream source"); same-round disposition = #27 row-tail gated write-back (R2318 #31 precedent, tech#176 discipline); structural close = merge third form into #189(1) classifier semantic gate family (sync unit tests, criterion = rerun queue_status backlog false-positives = 0)
+
+191. [R2321 补货·本轮真发现] **池句复用防线正典化候选**（缺口锚=R2321 实锚：m1-assert r2321 A6 全形态扫描拦截 REACT-v3 已用池句「刚赚的这份钱，得给孩子买点糖」=REACT 产线 21 件以来池句级复用防线靠逐轮 ad-hoc 扫描零结构化〔v21 r2285_collide_scan 先例同族·均为一次性脚本〕；候选=collide_scan〔三反应行+收束行全卡面扫描〕并入 tools/lcard_m2.py 前置断言〔render 前跑·命中=rc1 拒渲零产出〕或并入 m1-assert 正身模板固定化〔r2321_m1_assert 升格仓内正身件〕；判据=下件 L-卡池句/收束复用=渲前拦截零漏网+全回归绿；判负留痕合法）——CPU 面·随轮领
