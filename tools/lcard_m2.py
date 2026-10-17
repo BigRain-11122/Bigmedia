@@ -16,6 +16,9 @@ per-card m2_em_render_rNNNN.py (historical copies stay as evidence):
         --tag rNNNN [--mp4]
 
 Exit codes: 0 ok; 1 em-fit/probe/render failure (details on stdout).
+tech#191 (R2331): the pool/closing sentence reuse defense
+(tools/collide_scan.py) runs right after loading cards.json and before any
+disk write -- a reuse hit is exit 1 with zero rendered output.
 """
 import argparse
 import json
@@ -26,6 +29,8 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO, "src", "render"))
 from render_card_video import _em_cost, parse_srt  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import collide_scan  # noqa: E402
 
 FRAME_W, MARGIN = 1080, 80
 EM_FIT_FLOOR = 0.30  # zero-margin tier exclusion law (em-budget ladder)
@@ -104,6 +109,18 @@ def main():
 
     d = json.load(open(cards_path, encoding="utf-8"))
     lines = d["cards"][0]["lines"]
+
+    # --- tech#191: pool/closing sentence reuse defense, BEFORE any disk
+    # write. The R2285/R2321 ad-hoc scans canonized: a pool-row sentence
+    # already on any historical card face, or a closing sentence already
+    # used as a same-form closing, refuses the render with zero output.
+    collide_violations = collide_scan.scan_cards(cards_dir)
+    if collide_violations:
+        for v in collide_violations:
+            print("COLLIDE-FAIL: %s" % v)
+        print("FAIL collide_scan refused render (tech#191 reuse defense)")
+        return 1
+
     h1 = lines[0]
     h2s = lines[1:]
     c_h1 = cost(h1)
