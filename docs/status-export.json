@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-17 18:06:24",
- "do": "R2333: tech#193 orders-rows helper+12 tests (suite 1572 green); row537 short-video freeze acked; V5.3 watch in-flight",
+ "export_ts": "2026-10-17 18:31:51",
+ "do": "R2334: tech#194 leadin template C-51 live (3 drafts+7 tests); V5.3 3-shot no-show at 18:30 (24h window)",
  "depts": [
   {
    "n": "工程技术部",
-   "t": "1328 测试全绿；S2 三门+守卫面 20+ 在役；fire 链四件套+comfy 波感探针+收账 export writer 收编（tech#148）全落位",
+   "t": "1328 测试全绿；S2 三门+守卫面 20+ 在役；lcard_leadin 导语模板+语境门检在役（C-51）",
    "s": 1
   }
  ],
@@ -15,7 +15,7 @@
    "radar"
   ],
   [
-   "MV V5 17 镜到件验真（QC GO 17/17）·装配链在飞（精压→签章→呈 CEO）",
+   "MV V5.3 三镜重烧 in-flight（18:30 未到件·候 bm-c 回执·24h 窗）",
    "on",
    "mv0001"
   ],
@@ -62,40 +62,40 @@
  ],
  "chips": [
   [
-   "1506 测绿",
+   "1572+7 tests",
    "live"
   ]
  ],
  "results": [
   [
-   "F-193 DIGEST-v23",
-   "r2324"
+   "tech#194 C-51",
+   "r2334"
   ],
   [
-   "E4 brain 2.0 3rd",
-   "r2324"
+   "V5.3 no-show",
+   "r2334"
   ],
   [
-   "wm 187 rows 527",
-   "r2324"
+   "row538 ack",
+   "r2334"
   ],
   [
-   "tech#194 seed",
+   "F-193 v23",
    "r2324"
   ]
  ],
  "live": [
   [
    "当前活",
-   "DIGEST-v23《城市盘点 023·开工日》全链收官=F-193 登记入成品库（M4.5 七席 4×9+3 N/A PASS·E4 brain lane 第三飞 2.0/10 非拦截参考线）"
+   "tech#194 卡外导语模板件落地（C-51·三卡导语草稿+语境门检 rc0+7 测绿）——候 MV V5.3 三镜回执验真（D04_her_brush/SIL1_v4b/C01_carver_face·18:30 死线到点未到件）+编年史批五（日闭窗后）"
   ],
   [
    "最近实物",
-   "MC-20261017-DIGEST-v23.png（1080×1080·开工日令批数字盘点 264 张海选/26 签章/9.66 盲评/53.5h 停摆并案）+F-193=成品库第 194 件·2026-10-17 10:52"
+   "tools/lcard_leadin.py+data/storylines/cards/leadin-glossary.json+三卡 leadin.md 导语草稿（DIGEST-v23/v22+REACT-v22·E4 语境门槛卡外层吸收位·2026-10-17 18:2x）"
   ],
   [
    "下个里程碑",
-   "六线附卷 BigStream 份额（MV/短剧/短视频三线环节附卷·死线 10-19 委员会窗·≤48h）+tech#186 ③④ 27b→:8090 迁移（下窗头）"
+   "MV V5.3 三镜到件验真→导演席复验收→V5.3 装配（24h 执行窗内·≤10-18 13:5x）+编年史批五（10-17 日闭窗后·≤48h）"
   ]
  ]
 }
