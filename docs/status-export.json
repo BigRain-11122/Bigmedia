@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-18 07:09:53",
- "do": "tech#208+#209 dual-reading + SR guard done (suite 1613 rc0); next=tech queue head + chronicle batch-6 + V5.5 watch + E4",
+ "export_ts": "2026-10-18 08:23:39",
+ "do": "DIGEST-v25 closed: M4.5 desk-audit PASS, F-195 registered (196th), unannot cleared; next=tech#199 + E4 backfill",
  "depts": [
   {
    "n": "工程技术部",
-   "t": "1583 测试全绿；S2 三门+守卫面 20+ 在役；lcard_leadin 导语模板+语境门检在役（C-51）",
+   "t": "1613 测试全绿（r2345 rc0）；S2 三门+守卫面 20+ 在役；lcard_leadin 导语模板+语境门检在役（C-51）",
    "s": 1
   }
  ],
@@ -15,8 +15,8 @@
    "radar"
   ],
   [
-   "MV V5.3 三镜重烧 in-flight（候 bm-c 回执·24h 窗至 10-18）",
-   "on",
+   "MV V5.5 成片守望（moov-not-found 写入悬置态维持·bm-a 会话域）",
+   "wait",
    "mv0001"
   ],
   [
@@ -25,7 +25,7 @@
    "drama"
   ],
   [
-   "meme V1《慢慢踩》生产在飞（设计闸 CERTIFIED）",
+   "meme v1《慢慢踩》生产在飞（设计闸 CERTIFIED）",
    "wait",
    "meme-v1"
   ],
@@ -45,7 +45,7 @@
    "ops"
   ],
   [
-   "REACT-v22+DIGEST-v23 双卡收官（F-192/F-193 登记）",
+   "DIGEST-v24+v25 双卡收官（F-194/F-195 登记·M4.5 desk-audit 双 PASS）",
    "on",
    "l-card"
   ],
@@ -62,27 +62,27 @@
  ],
  "chips": [
   [
-   "1572+7 tests",
+   "1613 tests",
    "live"
   ]
  ],
  "results": [
   [
-   "W42 dissect",
-   "r2337"
+   "F-195 close",
+   "r2347"
   ],
   [
-   "t202/203 seed",
-   "r2337"
+   "0 findings",
+   "r2347"
   ],
   [
-   "main128 cand",
-   "r2337"
+   "tech#211",
+   "r2347"
   ]
  ],
  "live": [
-  "MV 修片补镜守望中：追加三镜已到两镜并核验过，末镜在途（明午前到）",
-  "最近实物：城市盘点023 图文卡今晨入库；MV 补镜两段今夜到件核验过",
-  "里程碑：明晨判读新热点供窗出速报卡；MV 补镜齐后推终版装配"
+  "DIGEST-v25《城市盘点 025·深夜治理夜》收官链毕：M4.5 七席 4×9+3N/A PASS+E4 让路态如实注（回填腿预置）",
+  "最近实物：MC-20261018-DIGEST-v25 图文卡入库 F-195（成品库第 196 件·2026-10-18 08:2x）",
+  "里程碑：随窗判读新令级事件簇出 DIGEST-v26 供给位（≤48h）；CEO resume 窗后 E4 参考仪 v22~v25 四件回填"
  ]
 }
