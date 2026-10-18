@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-18 08:23:39",
- "do": "DIGEST-v25 closed: M4.5 desk-audit PASS, F-195 registered (196th), unannot cleared; next=tech#199 + E4 backfill",
+ "export_ts": "2026-10-18 08:43:42",
+ "do": "R2348: REACT-v23 M0 done (DeepSeek 8/8); closing-pool terminal -> tech#212; next v23 render + E4 backfill",
  "depts": [
   {
    "n": "工程技术部",
