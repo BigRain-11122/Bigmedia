@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 00:10:06",
- "do": "E4 v23~v25 回填毕（7.5/5.5/1.0·F-194/195/196 债清零）——下一站=10-19 晨供窗双成品位判读+MV V5.9 双签守望",
+ "export_ts": "2026-10-19 01:46:12",
+ "do": "REACT-v24 收官=F-197 登记毕（红队试点 3 首签 P0×0+三问首卡+E4 6.5）——下一站=DIGEST-v26 史源腿",
  "depts": [
   {
    "n": "工程技术部",
@@ -10,12 +10,12 @@
  ],
  "outs": [
   [
-   "雷达权威窗收官：tech#92 PASS+daily 10-17 首个非 quiet 出刊（flashes 10）",
+   "radar 权威窗收官（tech#92 PASS+daily 10-17 出刊）",
    "on",
    "radar"
   ],
   [
-   "MV V5.5 成片守望（moov-not-found 写入悬置态维持·bm-a 会话域）",
+   "MV V5.9 双签齐（DIRECTOR+SUPERVISOR 在位·终审=MV 会话域）",
    "wait",
    "mv0001"
   ],
@@ -30,32 +30,32 @@
    "meme-v1"
   ],
   [
-   "AIHOT 复产链健康（worker 复活·daily 10-17 出刊 judged 229）",
+   "AIHOT 复产链健康（worker 复活·daily 出刊）",
    "on",
    "intel"
   ],
   [
-   "SC-005 口述史第五件收官=F-177 入库（B 批 04/05 毕）",
+   "SC-005 口述史第五件收官=F-177 入库",
    "on",
    "l-audio"
   ],
   [
-   "磁盘减负执行毕·renders 冻结维持",
+   "磁盘减负毕·renders 冻结维持",
    "on",
    "ops"
   ],
   [
-   "DIGEST-v24/v25+REACT-v23 三卡收官（F-194/195/196·M4.5 三 PASS）",
+   "REACT-v24 收官=F-197 入库（红队首签+三问首卡+E4 6.5）",
    "on",
    "l-card"
   ],
   [
-   "W42 周审件交付（bilibili-hot-dissect v1.3·引文金句式定谳通识级第四项）",
+   "W42 周审交付（bilibili-hot-dissect v1.3）",
    "on",
    "weekly"
   ],
   [
-   "评审席栈重路由 v3：:8090 brain 通道（③④腿可领）",
+   "评审席栈 v3：:8090 brain 通道（③④腿可领）",
    "on",
    "fire-seat"
   ]
@@ -68,21 +68,21 @@
  ],
  "results": [
   [
-   "tech#211 shipped",
-   "r2351"
+   "F-197 登记",
+   "r2369"
   ],
   [
-   "1617 tests OK",
-   "r2351"
+   "red-team P0x0",
+   "r2369"
   ],
   [
-   "REACT-v24 no-go",
-   "r2351"
+   "E4 6.5/10",
+   "r2369"
   ]
  ],
  "live": [
-  "main#136 L-卡线五件套回执交付毕（①-⑤映射+缺位=零+三问增位+缺件禁开新品执法位）+origin row 577 九司方案消费（已 executed·BigStream=基线母版）+前体 r2366 断轮吸收",
-  "最近实物：docs/lcard-five-piece-instantiation-20261018.md v1.0+dept-review-mechanism.md v1.8（五件套回执=CEO 令 rows 564/570/576 点名件·2026-10-18 22:10·死线 ≤10-20 带内）",
-  "里程碑：10-19 晨供窗双成品位判读（REACT-v24+DIGEST-v26 rows 545-577 巨簇·main#137）+MV V5.9 双签守望+编年史批六（main#130 日闭窗后）+CEO resume 窗 E4 v23~v25 回填（≤48h）"
+  "REACT-v24 收官链毕=红队试点 3 首签（独立子代理物理隔离·问题清单 P0×0/P1×2/P2×7+绿队三响应）+三问检项首卡（E1/E2/E3 必答）+制监位判负留痕（红签承载对抗职能·呈 CEO 面激活保留）+E4 6.5 同窗落地",
+  "最近实物：data/storylines/cards/MC-20261019-REACT-v24/MC-20261019-REACT-v24.png（F-197·成品库第 198 件·评审单 docs/reviews/review-20261019-mcreact-v24.md·2026-10-19）",
+  "里程碑：DIGEST-v26 史源腿立卡判读（orders rows 545-582 巨簇+tech#224 受众翻译闸同窗评估·窗 ≤48h）+tech#225 轴选句全句对位律试点（REACT v25+）"
  ]
 }
