@@ -973,7 +973,13 @@ class TestPulseStateBeat(unittest.TestCase):
         self.assertEqual("open", d["production"])
         # option 2 declaration: static beat policy block written once
         self.assertTrue(summary["policy_written"])
-        self.assertEqual(35, d["beat"]["active_gap_max_min"])
+        # tech#219 lock: v2 thresholds (250/240 hard cap + 25min silence
+        # gate) and the rebuilt block == code canonical BEAT_POLICY dict,
+        # so a rebuild can never regress to retired 35min semantics.
+        self.assertEqual(250, d["beat"]["active_gap_max_min"])
+        self.assertIn("silence gate", d["beat"]["active_semantics"])
+        self.assertIn("240min hard cap", d["beat"]["active_semantics"])
+        self.assertEqual(cc.BEAT_POLICY, d["beat"])
         self.assertIn("d13_pointer", d["beat"])
         # atomic write house format: no temp residue, no BOM
         self.assertFalse(os.path.exists(fx.path + ".tmp_pulse"))

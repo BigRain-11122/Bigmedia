@@ -538,9 +538,12 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
 # when absent by pulse_state_beat. Declares the ts-face gap semantics so a
 # remote fleet-audit can interpret a stale ts without a new inspection
 # order, plus the D-13 machine-readable pointer (receipt channel + canon).
+# tech#219 (R2360): thresholds synced to the v2 liveness budget so a
+# rebuilt block matches the live state.json beat block migrated during
+# the tech#217 absorb (35min retired semantics would drift the gap face).
 BEAT_POLICY = {
-    "active_gap_max_min": 35,
-    "active_semantics": "round schedule 10min + budget 25min; ts refreshed at every round close (finalize_state)",
+    "active_gap_max_min": 250,
+    "active_semantics": "round schedule 10min + v2 liveness budget (tech#217, BM 945c3f60 port): 25min zero-output silence gate + 240min hard cap, kills on evidence only - a streaming long round is never wall-clock killed; ts refreshed at every round close (finalize_state)",
     "defer_semantics": "cloud-cap gate (C-20261015-03) defers spawns while live codely.exe >= 2; spawner pulses ts every 10min slot through defer windows (PT-20261015-01 option 1)",
     "pause_semantics": "CEO halt word / machine-state pause stops the loop task entirely; ts stale for the pause duration by design; liveness evidence = origin commits",
     "d13_pointer": "canon=docs/os-protocol.md s6; receipt=HQ-FEEDBACK PT-20261015-01 line + ack commit (orders row 456 + round + next action)",
