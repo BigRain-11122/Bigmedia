@@ -30,6 +30,7 @@ $runLog = Join-Path $logDir "run_$stamp.log"
 $roundOut = Join-Path $logDir "round_$stamp.out"
 $roundErr = Join-Path $logDir "round_$stamp.err"
 $heart = Join-Path $Project 'logs\probe-heartbeat.txt'
+$stormFlag = Join-Path $logDir 'api-storm.flag'
 
 function Log([string]$m) {
     $line = "$(Get-Date -Format 'HH:mm:ss') $m"
@@ -100,6 +101,29 @@ try {
     $prompt = (Get-Content -Raw -Encoding UTF8 $promptFile).Trim()
     if ($prompt.Length -lt 50) { Log 'FATAL: iteration_prompt.txt too short'; Beat 'error prompt file empty'; exit 2 }
 
+    # ---- tech#205 API 503-storm preflight (R2339 seed: the 00:52 storm burned
+    # a full 25min round on backend 503 retries, launcher-killed, zero
+    # accounting). Armed slots probe the backend with one tiny headless call
+    # BEFORE ignition; probe fail -> defer pulse (budget conserved, next slot
+    # retries), probe pass -> disarm + ignite. Fail-open on any machinery
+    # crash; flag auto-expires (90min) so a stuck probe can never starve the
+    # loop - a storm that outlives the cap costs one canary round per window.
+    $gateDecision = ''
+    try {
+        $gateDecision = & (Join-Path $PSScriptRoot 'api_storm_gate.ps1') -Verb Gate -FlagPath $stormFlag -ProbeExe $codelyPath -WorkDir $Project -OutDir $logDir -LedgerFile $capLedger
+    } catch { Log "storm-gate crashed - fail-open ignition: $_" }
+    if ($gateDecision) { Log "storm-gate: $gateDecision" }
+    if ($gateDecision -match '^decision=defer') {
+        Beat 'api-storm defer (probe fail)'
+        # same pulse contract as the cloud-cap defer path (PT-20261015-01):
+        # this spawner holds round.lock -> pulse ts, ZERO accounting touch.
+        try {
+            $pulseOut = @( & python (Join-Path $PSScriptRoot 'close_commit.py') --pulse "api-storm defer (probe fail)" 2>&1 )
+            Log ("state pulse rc=${LASTEXITCODE}: " + ($pulseOut -join ' | '))
+        } catch { Log "state pulse crashed (non-fatal): $_" }
+        exit 0
+    }
+
     # Single-line prompt, no embedded double quotes (Start-Process argument passing).
     if ($prompt.Contains('"')) { $prompt = $prompt.Replace('"', "'") }
     $argLine = '-y -p "' + $prompt + '"'
@@ -113,6 +137,14 @@ try {
                 ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
             Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
         } catch { Log "kill failed: $_" }
+        # tech#205: arm the API-storm gate when the killed round's stderr
+        # carries the 503-storm signature (R2339 00:52 evidence: 25min burned,
+        # zero accounting). Armed slots probe before igniting (see Gate below).
+        $armDecision = ''
+        try {
+            $armDecision = & (Join-Path $PSScriptRoot 'api_storm_gate.ps1') -Verb Arm -ErrFile $roundErr -FlagPath $stormFlag
+        } catch { Log "storm-arm crashed (non-fatal): $_" }
+        if ($armDecision) { Log "storm-arm: $armDecision" }
         Beat "round timeout killed (age over ${RoundTimeoutMinutes}min)"
         exit 3
     }
