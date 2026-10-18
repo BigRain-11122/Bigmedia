@@ -809,6 +809,81 @@ class TestFClaimLedgerAdvisory(unittest.TestCase):
         self.assertNotIn("WARN F-CLAIM-NOT-IN-LEDGER", buf.getvalue())
 
 
+class TestLogPrefixBackwardAdvisory(unittest.TestCase):
+    """tech#214 (R2351 anchor): write-time narrative ts order advisory.
+
+    R2349 wrote prefix "09:5x" while its successor R2350 wrote "09:2x" -
+    the round number advanced but the narrative clock went backwards,
+    and loop_health only surfaced it one probe cycle later (log-order
+    WARN). finalize_state now WARNs into the close evidence face at
+    write time; advisory-only, never fails the accounting close.
+    """
+
+    def _fx(self):
+        fx = StateFixture()
+        self.addCleanup(fx.destroy)
+        return fx
+
+    def test_backward_prefix_warns_but_write_lands(self):
+        # the R2351 real shape: last line 23:5x, new line 23:2x
+        fx = self._fx()
+        line = "2026-10-10 23:2x R1927: 收官轮·倒退位实证·tech#214 收账"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary = cc.finalize_state(line, state_path=fx.path)
+        self.assertTrue(summary["prefix_backward"])
+        self.assertIn("WARN LOG-PREFIX-BACKWARD 2026-10-10 23:2x after "
+                      "2026-10-10 23:5x", buf.getvalue())
+        # advisory never fails the close: the ledger write still landed
+        d = fx.read()
+        self.assertEqual(line, d["log"][-1])
+        self.assertEqual(1927, d["tick"])
+
+    def test_forward_prefix_no_warn(self):
+        fx = self._fx()
+        line = "2026-10-11 00:1x R1927: 等待轮·tech#214 前进位对照"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary = cc.finalize_state(line, state_path=fx.path)
+        self.assertFalse(summary["prefix_backward"])
+        self.assertNotIn("WARN LOG-PREFIX-BACKWARD", buf.getvalue())
+        # the write landed
+        self.assertEqual(line, fx.read()["log"][-1])
+
+    def test_empty_log_zero_noise(self):
+        # no last line to compare against: advisory stays silent
+        d = tempfile.mkdtemp(prefix="pfx_back_")
+        self.addCleanup(shutil.rmtree, d, ignore_errors=True)
+        sp = os.path.join(d, "state.json")
+        with open(sp, "w", encoding="utf-8", newline="") as f:
+            json.dump({"tick": 1926, "log": [],
+                       "ts": "2026-10-10 23:57:00", "task": "t"},
+                      f, ensure_ascii=False, indent=1)
+        line = "2026-10-10 23:2x R1927: 首笔位·零对照面"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary = cc.finalize_state(line, state_path=sp)
+        self.assertFalse(summary["prefix_backward"])
+        self.assertNotIn("WARN LOG-PREFIX-BACKWARD", buf.getvalue())
+
+    def test_malformed_last_line_zero_noise(self):
+        # a legacy/history line without the prefix shape is the probe's
+        # business - the writer never WARNs on unreadable history
+        fx = self._fx()
+        d = fx.read()
+        d["log"] = ["legacy narrative line without prefix"]
+        with open(fx.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        line = "2026-10-10 23:2x R1927: 历史位不可读·零噪声实证"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary = cc.finalize_state(line, state_path=fx.path)
+        self.assertFalse(summary["prefix_backward"])
+        self.assertNotIn("WARN LOG-PREFIX-BACKWARD", buf.getvalue())
+        # and the malformed history line itself still landed intact
+        self.assertEqual(2, len(fx.read()["log"]))
+
+
 class TestRoundNumberInvariant(unittest.TestCase):
     """tech#196 (R2329 anchor): the R==new-tick born gate.
 

@@ -52,6 +52,14 @@ Laws encoded (why this is safe in this shared tree):
   mark may legitimately live in an earlier commit, so this never fails
   an accounting close; it just makes the forget-shape loud at the one
   place that sees the whole manifest.
+- tech#214 (R2351 anchor) narrative ts order advisory: finalize_state
+  compares the new ledger line's fuzzy-minute prefix against the last
+  on-disk line and WARNs into the close evidence face when it goes
+  backwards (R2349 wrote 09:5x, R2350 wrote 09:2x - the round number
+  advanced while the narrative clock went backwards, and the probe only
+  surfaced it one cycle later). Advisory only, same WARN grade the
+  probe gives; the comparison semantics are loop_health's own
+  (single-semantics house law), so writer and probe can never disagree.
 
 rc: 0 = commit landed (push may have warned); 1 = a git add/commit step
 failed; 2 = usage error; 3 = readback verify failed (tech#155 face 2:
@@ -135,6 +143,12 @@ STATION_REVIEWS_REL = "docs/reviews/station-reviews.md"
 LOG_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{1}[0-9x] R(\d+): ")
 TASK_MAX_CHARS = 60  # mandate: task = log line minus prefix, first 60 chars
 TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+
+# tech#214 (R2351 anchor): the fuzzy-minute prefix ts shape for the
+# write-time ordering advisory - the same capture loop_health's LOG_TS_RE
+# reads, so the writer and the probe share one comparison semantics
+# (plain string compare; the fuzzy char "x" sorts after digits).
+LOG_TS_PREFIX_RE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d[0-9x])")
 
 # tech#211 (R2346 anchor): "F-NNN 登记" claim shape in a log line. The
 # claim verb must sit right after the number (spaces allowed); other
@@ -296,6 +310,40 @@ def f_claim_ledger_advisory(log_line, finished_path):
     return missing
 
 
+def log_prefix_backward_advisory(log_line, last_log_line):
+    """tech#214: write-time narrative-order advisory (R2351 anchor).
+
+    R2349's ledger line carried prefix "09:5x" and its successor R2350
+    carried "09:2x" - the round number advanced but the narrative
+    timestamp went backwards, and only the next loop_health run surfaced
+    it (log-order WARN, one probe cycle late). This helper is the
+    write-time twin: finalize_state compares the new line's prefix
+    against the last on-disk line and a backwards shape gets its WARN
+    into THIS round's close evidence face.
+
+    Comparison semantics are the probe's own (single-semantics house
+    law): plain string compare on the captured fuzzy-minute prefix
+    "YYYY-MM-DD HH:MM" where the minute's last char may be "x" (the
+    approximate-minute house style). Advisory only - never fails an
+    accounting close (narrative hygiene, the same WARN grade the probe
+    gives).
+
+    Returns (backward, new_pfx, last_pfx). backward=False with empty
+    stamps when either line lacks the prefix shape (zero noise: the
+    born-level gate already refuses malformed NEW lines, and malformed
+    history is the probe's business, not the writer's).
+    """
+    m_new = LOG_TS_PREFIX_RE.match(log_line or "")
+    if not m_new:
+        return False, "", ""
+    last = last_log_line if isinstance(last_log_line, str) else ""
+    m_last = LOG_TS_PREFIX_RE.match(last)
+    if not m_last:
+        return False, m_new.group(1), ""
+    backward = m_new.group(1) < m_last.group(1)
+    return backward, m_new.group(1), m_last.group(1)
+
+
 def finalize_state(log_line, ts=None, focus=None, tick=None,
                    watermark_add=None, orders_watermark=None, state_path=None,
                    now=None, finished_ledger_path=None):
@@ -344,10 +392,12 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             f_claim_ledger_advisory), never affects the write itself.
 
     Returns: summary dict {tick, ts, task, wm_added, orders_wm_rows,
-    log_len, f_claims_missing} (orders_wm_rows None when no orders
-    watermark was given; f_claims_missing = tech#211 advisory list,
-    empty when every "F-NNN 登记" claim is present in the finished
-    ledger or there was no ledger to check against).
+    log_len, f_claims_missing, prefix_backward} (orders_wm_rows None
+    when no orders watermark was given; f_claims_missing = tech#211
+    advisory list, empty when every "F-NNN 登记" claim is present in the
+    finished ledger or there was no ledger to check against;
+    prefix_backward = tech#214 advisory flag, True when the new line's
+    fuzzy-minute prefix sits behind the last on-disk line's).
     Raises: ValueError on any usage error - loud, zero partial writes
     (validation happens before the first disk mutation; the atomic
     replace makes the write itself all-or-nothing).
@@ -414,6 +464,20 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
               "register next round or fix the line)" % (
                   fnum, FINISHED_LEDGER_REL))
 
+    # --- tech#214: narrative ts order advisory (R2351 anchor). The new
+    # line's fuzzy-minute prefix vs the last on-disk line's - a
+    # backwards prefix gets its WARN in THIS round's close evidence
+    # (the probe already grades the same shape WARN post-hoc; this is
+    # the write-time twin, one cycle earlier). Advisory only: never
+    # fails an accounting close. ---
+    last_line = data["log"][-1] if data["log"] else None
+    prefix_backward, new_pfx, last_pfx = log_prefix_backward_advisory(
+        log_line, last_line)
+    if prefix_backward:
+        print("WARN LOG-PREFIX-BACKWARD %s after %s (tech#214, R2351 "
+              "anchor: narrative prefix behind the last ledger line - "
+              "fix the line's clock before it lands)" % (new_pfx, last_pfx))
+
     wm_added = 0
     if watermark_add is not None:
         wm = data.setdefault("decisions_watermark", {})
@@ -465,6 +529,7 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     return {"tick": new_tick, "ts": ts, "task": task,
             "wm_added": wm_added, "log_len": len(log_line),
             "f_claims_missing": f_claims_missing,
+            "prefix_backward": prefix_backward,
             "orders_wm_rows": (orders_wm_stored["rows"]
                                if orders_wm_stored else None)}
 
