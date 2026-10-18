@@ -1,0 +1,13 @@
+em-check-r2368 (MC-20261019-REACT-v24 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=32 budget=28.75em
+OK   15.55em margin +13.20  今日热点 · 知乎热榜 2026-10-19
+OK   24.20em margin  +4.55  杭州21岁大三女生摆摊卖柠檬奶，一年开出20家门店，
+OK   18.65em margin +10.10  月营业额超100万，她成功的因素有哪些？
+OK   17.00em margin +11.75  求新轴：「啥新鲜玩意儿又上架了？」
+OK   20.00em margin  +8.75  烟火轴：「白茫茫的光，包子铺都得开张了」
+OK   21.00em margin  +7.75  侠气轴：「城主一声令，咱这买卖就能赚翻天」
+OK   27.00em margin  +1.75  数据粥铺摊主开档语：「头几家客倌真灵额，一早就来捧场」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+subs tail cue end derived=card end 2.600s (zero hardcode); expected duration=3.400s (card end + tail 0.80)
+ALL-HORIZ: PASS

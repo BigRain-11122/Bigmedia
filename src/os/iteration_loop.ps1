@@ -6,8 +6,8 @@
 # dead overnight (BigMoney evidence: 8.8h, zero beats). This OS task is the only
 # 10-min channel that survives closed windows. Every beat: guards -> spawn ONE
 # headless codely round (src/os/iteration_prompt.txt driven) -> heartbeat. Round
-# budget v2 = liveness-gated: hard cap $RoundTimeoutMinutes (240) + silence kill
-# $RoundSilenceMinutes (25 min of ZERO output = hang); overlap prevented by
+# budget v2 = liveness-gated: hard cap $RoundTimeoutMinutes (240) + SILENCE-KILL
+# gate $RoundSilenceMinutes (25 min of ZERO output = hang); overlap prevented by
 # round.lock + task-level IgnoreNew.
 #
 # v2 (2026-10-18 liveness-budget surgery, tech#217, BM 945c3f60 canonical
