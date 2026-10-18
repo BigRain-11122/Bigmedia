@@ -1,0 +1,13 @@
+em-check-r2370 (MC-20261019-DIGEST-v26 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   18.05em margin  +4.95  一日打磨日：10-18 全天—10-19 凌晨，
+OK   16.30em margin  +6.70  MV 一日六版 V5.4→V5.9·转场 14→6
+OK   18.10em margin  +4.90  「不要再改这么多版本了。」往后 ≤3 版
+OK   19.00em margin  +4.00  「给我引入监督和校对的机制。」新立监制
+OK   18.10em margin  +4.90  「所有环节 都要有专家。」12 环节配齐
+OK   16.05em margin  +6.95  「要高效快速啊 5天搞不定一个。」
+OK   16.95em margin  +6.05  「全面开工。」02:18 V5.9 双签出片
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.00em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS
