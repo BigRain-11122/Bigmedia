@@ -167,6 +167,17 @@ FOLD_DENSE_DEFAULT = 5  # tech#20: dense same-code WARN group fold size
 # suppressed-adjudicated count (account_drift_adjudicated's structural
 # twin), while the full audit face prints them unchanged.
 LOG_ORDER_ADJ_TAG = " [adjudicated: tech#215]"
+# tech#221 (R2362): canon-doc constant drift guard. The code-level
+# BEAT_POLICY constant is the single source of truth (tech#220 ruling 3);
+# the os-protocol s6 law line is the machine-consumed canon face. The
+# 2026-10-18 35min lag (tech#219 code bump -> doc law line left stale
+# until the tech#220 round) is the anchored miss this probe guards.
+# Section scoping is the zero-false-positive law (criterion 1): the
+# changelog keeps retired values in prose ("active 间隙 <=35min") that
+# must never leak a false positive into the live law face.
+OS_PROTOCOL_S6_HEADING_RE = re.compile(r"^##\s*§?6\b")
+NEXT_SECTION_RE = re.compile(r"^##\s")
+ACTIVE_LAW_RE = re.compile(r"active\s*≤\s*(\d+)\s*min")
 # tech#22: root-level probe/temp leftovers - both historical families
 # (r_cur_* 28 files R1816 sweep + r<digits>* 107 files R1828 sweep; three
 # episodic manual sweeps R1807/R1816/R1828 before this guard existed).
@@ -942,6 +953,63 @@ def check_codex_version_face(root, findings):
                          "bumped neither face (tech#111 third face; "
                          "R1992/R1998 batch-first anchors)"
                          % (fn, cl_ver, r_txt, h_txt)))
+
+
+def _beat_policy_active_min():
+    """close_commit.BEAT_POLICY.active_gap_max_min, or None when the
+    module/constant is unreachable (advisory face stays silent)."""
+    try:
+        import close_commit  # src/os sibling (sys.path[0] when run as script)
+        v = close_commit.BEAT_POLICY.get("active_gap_max_min")
+    except Exception:
+        return None
+    return v if isinstance(v, int) and not isinstance(v, bool) else None
+
+
+def parse_beat_law_min(text):
+    """os-protocol text -> the single 'active <=Nmin' value in the s6
+    law section, or None. Section-scoped by design: the changelog keeps
+    retired values in prose that must never leak in (tech#221 criterion
+    1). Zero or multiple anchors -> None (ambiguous input never guesses)."""
+    section, in_section = [], False
+    for line in text.splitlines():
+        if in_section and NEXT_SECTION_RE.match(line):
+            break
+        if OS_PROTOCOL_S6_HEADING_RE.match(line):
+            in_section = True
+            continue
+        if in_section:
+            section.append(line)
+    values = [int(m.group(1)) for m in ACTIVE_LAW_RE.finditer("\n".join(section))]
+    return values[0] if len(values) == 1 else None
+
+
+def classify_beat_policy_drift(doc_value, code_value):
+    """(doc, code) -> WARN finding or None. None on either side stays
+    silent (one-way advisory: unanchored/ambiguous law text or an
+    unreachable constant is a skip, never a false positive)."""
+    if doc_value is None or code_value is None or doc_value == code_value:
+        return None
+    return ("WARN", "canon-beat-policy-drift",
+            "os-protocol s6 law line 'active <=%dmin' disagrees with "
+            "close_commit BEAT_POLICY.active_gap_max_min=%d - the code "
+            "constant is the single source of truth (tech#220), update "
+            "the doc law line (tech#219 35min lag pattern)"
+            % (doc_value, code_value))
+
+
+def check_canon_beat_policy_drift(root, findings):
+    """tech#221: canon-doc vs code-constant consistency probe (advisory,
+    never breaks the probe; absent/unreadable canon file stays silent)."""
+    path = root / "docs" / "os-protocol.md"
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return
+    f = classify_beat_policy_drift(parse_beat_law_min(text),
+                                   _beat_policy_active_min())
+    if f:
+        findings.append(f)
 
 
 def probe_http_face(url, timeout_s=AIHOT_PROBE_TIMEOUT_S, _urlopen=None):
@@ -1898,6 +1966,7 @@ def main(argv):
         check_orphan_deliverable(root, datetime.now(), findings)
         check_codex_freshness(root, datetime.now(), findings)
         check_codex_version_face(root, findings)
+        check_canon_beat_policy_drift(root, findings)
         check_queue_glue(root, findings)
         check_queue_dup_numbers(root, findings)
         check_account_uncommitted(root, state, findings)

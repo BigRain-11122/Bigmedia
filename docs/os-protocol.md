@@ -35,7 +35,7 @@
 ## §5 度量（诚实纪律）
 
 - 循环健康判据：心跳时间戳间隔≤20 分钟（同机队通信 SLA）；state.json 的 tick 序列连续无空洞。
-- 判据机器化（R17·C-20）：`python src/os/loop_health.py` 只读探针——心跳新鲜度/间隔（SLA 20 分钟=WARN 级·长轮次 25 分钟预算内静默合法；锁龄 40 分钟=FAIL 级停跳线）、tick↔完成轮次对账（账目滞后=FAIL·防 R4/R5 型断洞）、台账卫生（叙事时间戳乱序/缺行=WARN·近似分钟如 17:2x 合法）、backlog 燃尽率（info）。WARN=顾问级如实记录，不阻断循环。
+- 判据机器化（R17·C-20）：`python src/os/loop_health.py` 只读探针——心跳新鲜度/间隔（SLA 20 分钟=WARN 级·v2 长轮〔tech#217·25min 静音门+240min 硬顶〕预算内 WARN 级合法；锁龄 288 分钟=FAIL 级停跳线〔tech#217 v2=1.2×240min 硬顶〕）、tick↔完成轮次对账（账目滞后=FAIL·防 R4/R5 型断洞）、台账卫生（叙事时间戳乱序/缺行=WARN·近似分钟如 17:2x 合法）、正典常量漂移检（tech#221：§6「active ≤Nmin」律行 vs close_commit BEAT_POLICY 码级常量·漂移=WARN 顾问级）、backlog 燃尽率（info）。WARN=顾问级如实记录，不阻断循环。
 - 未发生=未测量：循环自评只看 state.json/log 与 git 实况，禁自夸。
 
 ## §6 Token 面纪律（O-20260923-2241-bm-a「尽量调用本地工作流去减少token使用」）
@@ -68,6 +68,7 @@
 
 ## 变更记录
 
+- 2026-10-18: v1.16 §4 判据机器化行 v2 语义收口+tech#221 正典常量漂移检入册（state/queue/tech#221·OS 循环 R2362）——①tech#217 文档滞留第二例随轮修红（「锁龄 40 分钟」→288 分钟〔=1.2×240min〕+「长轮次 25 分钟预算内静默合法」→v2 活性门控预算表述·缺口锚=tech#219 35min 滞留同族=R2362 实读第二案）；②loop_health 新 advisory 检查面 check_canon_beat_policy_drift（os-protocol §6「active ≤Nmin」律行正则抽验 vs close_commit.BEAT_POLICY.active_gap_max_min 码级常量·§6 域界 scoping=变更记录退役值 prose 永不误报·零锚/多锚=静默不猜·漂移即 WARN）=tech#219 35min 滞留案防复发闸；6 新测（红绿实弹=退役值 35min 先红后同步绿·真板绿 smoke·CLI 接线）+模块 298 绿。
 - 2026-10-18: v1.15 §6 beat 块写时自愈（state/queue/tech#220·R2361）——write-once 律退役：`_sync_beat_policy` 纯核（union merge：BEAT_POLICY 键自码级常量同步+hand-tuned 额外子键保留+幂等）接线 pulse_state_beat+finalize_state 双写面——BEAT_POLICY bump 即下个写面自愈=R2359 手迁违例面结构性根除（state 写面强制律例外归零）+§6 律行退役 35min 值同步 250min（tech#219 码侧同步的文档漂移面收口）；4 新测+全回归 1663 绿。
 - 2026-10-15: v1.14 §6 心跳 pulse 律（集团巡检 PT-20261015-01 整改·orders row 456·R2308）——defer 窗 pulse-only state beat 落地（close_commit.py pulse_state_beat+CLI --pulse+iteration_loop.ps1 defer 分支接线·7 新测+全回归 1515 绿+实弹 STATE-PULSED ts 刷新 tick/log 零接触实证）+`beat` 声明块（选项②·active 间隙 ≤35min+defer/pause 语义+D-13 机读指针）——fleet-audit STALE 2.2h 假警根因（18:26→20:38 cloud-cap defer 窗零轮闭·loop 活着重试）闭口·死亡线 10-22 提前毕。回执=HQ-FEEDBACK PT-20261015-01 行+ack commit（row 456+R2308+next·P-51 双载体）。
 - 2026-10-09: v1.12 §6 实活轮收账两段制（tech#27·R1840）——缺口锚=R1832 断洞（超时杀落在收账段吞交付件 commit）；采纳两段制=交付件先行 commit→state.json/export 后段独立 commit，断轮只丢心跳可复账·交付件零丢失；成本每轮 +1 commit·试点窗 ≤2 周。

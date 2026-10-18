@@ -2516,5 +2516,93 @@ class OrphanDeliverableClassifyTests(unittest.TestCase):
                 [(None, now), ("src/x.py", None)], now), [])
 
 
+class CanonBeatPolicyDriftTests(unittest.TestCase):
+    """tech#221: os-protocol s6 'active <=Nmin' law line vs the
+    close_commit BEAT_POLICY code constant - the tech#219 35min doc-lag
+    miss class, guarded as a loop_health advisory face."""
+
+    PROTOCOL_BODY = (
+        "## §5 循环健康\n\n- 判据机器化（锁龄 288 分钟=FAIL 级）。\n\n"
+        "## §6 Token 面纪律\n\n"
+        "- **心跳 pulse 律**：`beat` 声明块=间隙语义"
+        "（active ≤%dmin/defer/pause）+D-13 机读指针。\n\n"
+        "## §7 周期性自我审查\n\n- 节律。\n\n"
+        "## 变更记录\n\n"
+        "- 2026-10-15: v1.14 `beat` 声明块（选项②·active 间隙 "
+        "≤35min+defer/pause 语义）历史行。\n"
+    )
+
+    def _protocol(self, root, active_min):
+        d = root / "docs"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "os-protocol.md").write_text(
+            self.PROTOCOL_BODY % active_min, encoding="utf-8")
+
+    def test_parse_section_scoped_and_anchored(self):
+        # s6's single anchor wins; the changelog's retired "active 间隙
+        # ≤35min" prose and the §5 lock-age numbers never leak in
+        # (criterion 1: zero false positives by section scoping)
+        self.assertEqual(
+            loop_health.parse_beat_law_min(self.PROTOCOL_BODY % 250), 250)
+        self.assertEqual(
+            loop_health.parse_beat_law_min("## §6 Token\n- no law here\n"),
+            None)
+        # two anchors = ambiguous -> None, never a guess
+        self.assertEqual(loop_health.parse_beat_law_min(
+            "## §6 x\n- active ≤240min and active ≤250min\n"), None)
+        # no s6 section at all -> None
+        self.assertEqual(loop_health.parse_beat_law_min("## §4 a\n"), None)
+
+    def test_classify_silent_on_match_and_skips(self):
+        code = loop_health._beat_policy_active_min()
+        self.assertIsInstance(code, int)  # live constant reachable
+        self.assertIsNone(loop_health.classify_beat_policy_drift(code, code))
+        f = loop_health.classify_beat_policy_drift(35, code)
+        self.assertEqual(warn_codes([f]), {"canon-beat-policy-drift"})
+        self.assertIn("35", f[2])
+        self.assertIn(str(code), f[2])
+        self.assertIsNone(loop_health.classify_beat_policy_drift(None, code))
+        self.assertIsNone(loop_health.classify_beat_policy_drift(35, None))
+
+    def test_check_drift_then_match_red_to_green(self):
+        # criterion 2 live-fire: a simulated bump leaves the doc law line
+        # at the retired value -> WARN (red); syncing the line to the code
+        # constant -> silent (green) on the very same fixture root
+        code = loop_health._beat_policy_active_min()
+        root = make_dir(self, "bs-health-canon-")
+        self._protocol(root, 35)
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(warn_codes(findings), {"canon-beat-policy-drift"})
+        self._protocol(root, code)
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_silent_without_canon_file(self):
+        root = make_dir(self, "bs-health-canon-")
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_real_repo_green_smoke(self):
+        # green leg on the live canon: the s6 law line carries the synced
+        # value - zero findings, read-only
+        findings = []
+        loop_health.check_canon_beat_policy_drift(REPO, findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_warn_not_fail(self):
+        root = make_repo(self, [(5, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        self._protocol(root, 35)  # doc law line at retired value
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root),
+                                   "--max-age", "600"])
+        self.assertIn("canon-beat-policy-drift", buf.getvalue())
+        self.assertEqual(rc, 0)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
