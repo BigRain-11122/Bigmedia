@@ -136,6 +136,12 @@ LOG_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{1}[0-9x] R(\d+): ")
 TASK_MAX_CHARS = 60  # mandate: task = log line minus prefix, first 60 chars
 TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 
+# tech#211 (R2346 anchor): "F-NNN 登记" claim shape in a log line. The
+# claim verb must sit right after the number (spaces allowed); other
+# mentions ("F-196·登记轮核验", "F-195 归档") are references, not claims,
+# and stay out of the advisory's trigger face.
+F_CLAIM_RE = re.compile(r"F-(\d{1,4})\s*登记")
+
 
 def message_is_ascii(message):
     """True when every char in the message is ASCII (encoding rule)."""
@@ -264,9 +270,35 @@ def derive_round_number(log_line):
     return int(m.group(1))
 
 
+def f_claim_ledger_advisory(log_line, finished_path):
+    """tech#211: F-claim vs finished-ledger presence check (advisory).
+
+    R2346 anchor: that round's log line claimed "F-195 登记" while
+    output/finished.md did not carry the row yet (it landed next
+    round), so a premature claim read as done for a full round. This
+    helper returns the claim numbers ("F-205") the finished ledger
+    lacks. Best-effort by design: a missing or unreadable ledger yields
+    an empty list - no evidence to check against, zero noise - and the
+    caller only WARNs, never failing an accounting close.
+    """
+    if not finished_path or not os.path.isfile(finished_path):
+        return []
+    try:
+        with io.open(finished_path, encoding="utf-8") as f:
+            ledger = f.read()
+    except (IOError, OSError):
+        return []
+    missing = []
+    for m in F_CLAIM_RE.finditer(log_line or ""):
+        fnum = "F-" + m.group(1)
+        if fnum not in ledger and fnum not in missing:
+            missing.append(fnum)
+    return missing
+
+
 def finalize_state(log_line, ts=None, focus=None, tick=None,
                    watermark_add=None, orders_watermark=None, state_path=None,
-                   now=None):
+                   now=None, finished_ledger_path=None):
     """Single-writer state.json accounting step (tech#76, R1920 anchor).
 
     R1920 root cause: that round's log line lived in an external template
@@ -307,9 +339,15 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             turnkey via group_scan.current_orders_watermark()).
         state_path: default = state.json next to this module.
         now: injectable clock (needs strftime) for tests.
+        finished_ledger_path: default = output/finished.md derived from
+            state_path's repo root; tech#211 advisory input (see
+            f_claim_ledger_advisory), never affects the write itself.
 
     Returns: summary dict {tick, ts, task, wm_added, orders_wm_rows,
-    log_len} (orders_wm_rows None when no orders watermark was given).
+    log_len, f_claims_missing} (orders_wm_rows None when no orders
+    watermark was given; f_claims_missing = tech#211 advisory list,
+    empty when every "F-NNN 登记" claim is present in the finished
+    ledger or there was no ledger to check against).
     Raises: ValueError on any usage error - loud, zero partial writes
     (validation happens before the first disk mutation; the atomic
     replace makes the write itself all-or-nothing).
@@ -358,6 +396,23 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             "tick is %d (on-disk tick=%d) - relabel the round number "
             "to R%d before writing (R2329 anchor: R==tick chain)"
             % (round_num, new_tick, cur, new_tick))
+
+    # --- tech#211: premature F-claim advisory (R2346 anchor). A log
+    # line may claim "F-NNN 登记" for a finished-ledger row that is not
+    # on disk yet - the claim then reads as done for a full round while
+    # the registration actually lands next round. Advisory only (WARN
+    # printed into the close evidence face, never FAIL): the legitimate
+    # mid-chain plan shape must keep closing. ---
+    if finished_ledger_path is None:
+        finished_ledger_path = os.path.join(
+            os.path.dirname(os.path.abspath(state_path)),
+            os.pardir, os.pardir, FINISHED_LEDGER_REL)
+    f_claims_missing = f_claim_ledger_advisory(log_line, finished_ledger_path)
+    for fnum in f_claims_missing:
+        print("WARN F-CLAIM-NOT-IN-LEDGER %s claimed in log but %s "
+              "lacks it (tech#211, R2346 anchor: premature claim - "
+              "register next round or fix the line)" % (
+                  fnum, FINISHED_LEDGER_REL))
 
     wm_added = 0
     if watermark_add is not None:
@@ -409,6 +464,7 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
               len(log_line)))
     return {"tick": new_tick, "ts": ts, "task": task,
             "wm_added": wm_added, "log_len": len(log_line),
+            "f_claims_missing": f_claims_missing,
             "orders_wm_rows": (orders_wm_stored["rows"]
                                if orders_wm_stored else None)}
 

@@ -17,6 +17,8 @@ Run:
 """
 
 import datetime
+import contextlib
+import io
 import json
 import os
 import shutil
@@ -725,6 +727,86 @@ class TestFinalizeState(unittest.TestCase):
         summary = cc.finalize_state(self.LINE, state_path=fx.path)
         self.assertIsNone(summary["orders_wm_rows"])
         self.assertNotIn("orders_row_watermark", fx.read())
+
+
+class TestFClaimLedgerAdvisory(unittest.TestCase):
+    """tech#211 (R2346 anchor): log-line F-claim vs finished-ledger
+    presence, advisory-only.
+
+    R2346 anchor reproduction: that round's log line claimed "F-195 登记"
+    while output/finished.md did not carry the row yet (it landed next
+    round) - a premature claim read as done for a full round. The guard
+    WARNs into the close evidence face at write time; it never fails the
+    accounting close.
+    """
+
+    LINE_TMPL = "2026-10-18 09:4x R1927: 实活轮·%s·tech#211 收账"
+
+    def _fx(self):
+        fx = StateFixture()
+        self.addCleanup(fx.destroy)
+        return fx
+
+    def _ledger(self, fx, rows):
+        path = os.path.join(fx.dir, "finished.md")
+        with open(path, "w", encoding="utf-8", newline="") as f:
+            f.write("\n".join(rows))
+        return path
+
+    def test_premature_claim_warns_but_write_lands(self):
+        fx = self._fx()
+        ledger = self._ledger(fx, ["## 成品库", "F-195 城市速报 025"])
+        line = self.LINE_TMPL % "收官链 F-205 登记·台账落位"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary = cc.finalize_state(
+                line, state_path=fx.path, finished_ledger_path=ledger)
+        self.assertEqual(["F-205"], summary["f_claims_missing"])
+        self.assertIn("WARN F-CLAIM-NOT-IN-LEDGER F-205", buf.getvalue())
+        self.assertIn("output/finished.md", buf.getvalue())
+        # advisory never fails the close: the ledger write still landed
+        d = fx.read()
+        self.assertEqual(line, d["log"][-1])
+        self.assertEqual(1927, d["tick"])
+
+    def test_claim_present_no_warn(self):
+        fx = self._fx()
+        ledger = self._ledger(fx, ["F-195 城市盘点 025"])
+        line = self.LINE_TMPL % "收官链 F-195 登记·台账落位"
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary = cc.finalize_state(
+                line, state_path=fx.path, finished_ledger_path=ledger)
+        self.assertEqual([], summary["f_claims_missing"])
+        self.assertNotIn("WARN F-CLAIM-NOT-IN-LEDGER", buf.getvalue())
+
+    def test_reference_mentions_stay_out_of_trigger(self):
+        # "F-196·登记轮核验" and "F-195 归档" are references, not claims
+        fx = self._fx()
+        ledger = self._ledger(fx, [])
+        line = self.LINE_TMPL % "候选 F-196·登记轮核验·F-195 归档注记"
+        summary = cc.finalize_state(
+            line, state_path=fx.path, finished_ledger_path=ledger)
+        self.assertEqual([], summary["f_claims_missing"])
+
+    def test_plain_line_and_missing_ledger_zero_noise(self):
+        fx = self._fx()
+        # no F-claim in the line; an explicit ledger path that does not
+        # exist skips the check (best-effort, zero noise)
+        summary = cc.finalize_state(
+            self.LINE_TMPL % "声明轮·五查全静",
+            state_path=fx.path,
+            finished_ledger_path=os.path.join(fx.dir, "no-such-ledger.md"))
+        self.assertEqual([], summary["f_claims_missing"])
+        # derived default path from a fixture dir points nowhere: skip
+        # (fresh fixture: the R==tick born gate counts every finalize)
+        fx2 = self._fx()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            summary2 = cc.finalize_state(
+                self.LINE_TMPL % "声明轮·五查全静·二连", state_path=fx2.path)
+        self.assertEqual([], summary2["f_claims_missing"])
+        self.assertNotIn("WARN F-CLAIM-NOT-IN-LEDGER", buf.getvalue())
 
 
 class TestRoundNumberInvariant(unittest.TestCase):
