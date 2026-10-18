@@ -17,6 +17,12 @@ $a = New-ScheduledTaskAction -Execute 'wscript.exe' `
 $start = Get-Date -Minute 0 -Second 0
 while ($start -le (Get-Date)) { $start = $start.AddMinutes(8) }
 $t = New-ScheduledTaskTrigger -Once -At $start -RepetitionInterval (New-TimeSpan -Minutes 10) -RepetitionDuration (New-TimeSpan -Days 3650)
-$s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 35)
+# MultipleInstances=IgnoreNew keeps overlap off at the task level while a
+# long round is still running. ExecutionTimeLimit 250 min (tech#217 v2):
+# the launcher now enforces its own 240-min hard cap + 25-min silence gate
+# (round_budget_guard.ps1), so the scheduler cap must sit ABOVE the script
+# cap or Task Scheduler would guillotine legitimate long rounds at 35 min
+# and reintroduce the dead-window epidemic the v2 surgery removed.
+$s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit (New-TimeSpan -Minutes 250)
 Register-ScheduledTask -TaskName 'BigStream-OSLoop' -Action $a -Trigger $t -Settings $s -Force | Out-Null
 Write-Output "registered BigStream-OSLoop (project=$Project), first fire $start"

@@ -549,7 +549,10 @@ class LoopModeTests(unittest.TestCase):
         self.assertNotIn("dense-window fold", out)
 
     def test_dense_fail_group_never_folds(self):
-        spec = [(45 * i, "round done exit=0") for i in range(6)]  # 5 x 45-min outages
+        # tech#217 v2 note: gaps sized past the v2 lock bound (288 min)
+        # so each stays an outage FAIL on the CLI face (defaults ride
+        # LOCK_AGE_MIN; the fold must never swallow FAILs at any size).
+        spec = [(300 * i, "round done exit=0") for i in range(6)]  # 5 x 300-min outages
         root = make_repo(self, spec, make_state(tick=6), BOARD)
         rc, out = self.run_cli(root, ["--loop"])
         self.assertEqual(rc, 1)

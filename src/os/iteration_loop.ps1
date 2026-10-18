@@ -6,7 +6,20 @@
 # dead overnight (BigMoney evidence: 8.8h, zero beats). This OS task is the only
 # 10-min channel that survives closed windows. Every beat: guards -> spawn ONE
 # headless codely round (src/os/iteration_prompt.txt driven) -> heartbeat. Round
-# budget 25 min; overlap prevented by round.lock + task-level IgnoreNew.
+# budget v2 = liveness-gated: hard cap $RoundTimeoutMinutes (240) + silence kill
+# $RoundSilenceMinutes (25 min of ZERO output = hang); overlap prevented by
+# round.lock + task-level IgnoreNew.
+#
+# v2 (2026-10-18 liveness-budget surgery, tech#217, BM 945c3f60 canonical
+# port, group 10-18 root-cure ruling "solve it at the root"): the 2026-09-23
+# port carried the MiniGame 25-min wall-clock kill. Every legitimate long
+# round (batch re-renders, absorb chains, suite runs) that crossed 25 min
+# was tree-killed mid-flight - the fleet-wide "dead window" epidemic
+# ("died pre-closeout" family). v2 kills only on EVIDENCE: 25 min of zero
+# output (true hang, round_budget_guard.ps1) or the 240-min hard cap.
+# Productive long rounds survive. Lock faces scale with the budget
+# (debounce floor + hard cap = 1.2 x 240 = 288 min), loop_health
+# LOCK_AGE_MIN follows, task ExecutionTimeLimit raised past the cap.
 #
 # ENCODING RULE: this file must stay PURE ASCII. powershell.exe 5.1 decodes
 # BOM-less .ps1 as ANSI/GBK and swallows quote bytes after multibyte sequences.
@@ -18,8 +31,12 @@
 #   powershell -NoProfile -ExecutionPolicy Bypass -File src/os/register_loop_task.ps1
 param(
     [string]$Project = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
-    [int]$LockMaxAgeMinutes = 40,
-    [int]$RoundTimeoutMinutes = 25
+    # v2 liveness budget (tech#217): 0 = auto = 1.2 x hard cap (288 min for
+    # the 240 default). Lock faces must scale WITH the budget or the guard
+    # would steal locks from legitimate long rounds at the old 40-min cap.
+    [int]$LockMaxAgeMinutes = 0,
+    [int]$RoundTimeoutMinutes = 240,
+    [int]$RoundSilenceMinutes = 25
 )
 $ErrorActionPreference = 'Continue'
 Set-Location $Project
@@ -42,12 +59,17 @@ function Beat([string]$m) {
 }
 
 # ---- single-instance: D-20260925-03 guard (pid in lock + liveness probe
-# + atomic CreateNew; debounce floor 1.2x budget, hard cap = LockMaxAgeMinutes).
-# Manual-launch races now hit the same atomic grab; stale-lock restarts probe
-# the recorded holder PID before taking over (old behavior was age-only). ----
+# + atomic CreateNew; debounce floor 1.2x budget, hard cap below). Manual-
+# launch races now hit the same atomic grab; stale-lock restarts probe the
+# recorded holder PID before taking over (old behavior was age-only).
+# v2 scaling (tech#217): BOTH windows ride 1.2 x the 240-min hard cap, so a
+# legitimately running long round is never lock-stolen mid-flight and a
+# dead holder still yields inside the debounce floor (orphan child finish
+# window). ----
 $lock = Join-Path $logDir 'round.lock'
 $guard = Join-Path $PSScriptRoot 'lock_guard.ps1'
 $takeoverMin = [int][Math]::Round(1.2 * $RoundTimeoutMinutes)
+if ($LockMaxAgeMinutes -le 0) { $LockMaxAgeMinutes = $takeoverMin }
 $decision = & $guard -LockPath $lock -TakeoverMinMinutes $takeoverMin -HardCapMinutes $LockMaxAgeMinutes
 if (-not $decision -or $decision -notmatch '^decision=own') {
     Log "skip: $decision"
@@ -127,29 +149,60 @@ try {
     # Single-line prompt, no embedded double quotes (Start-Process argument passing).
     if ($prompt.Contains('"')) { $prompt = $prompt.Replace('"', "'") }
     $argLine = '-y -p "' + $prompt + '"'
-    Log "spawning headless round (budget ${RoundTimeoutMinutes}min, prompt_chars=$($prompt.Length), out=$roundOut)"
+    # ---- tech#217 v2 liveness budget (BM 945c3f60 canonical port): kill
+    # ONLY on evidence. $RoundSilenceMinutes of zero output (true hang,
+    # round_budget_guard.ps1 polls the redirect files) or the
+    # $RoundTimeoutMinutes hard cap. A productive long round that streams
+    # tool output is never killed by wall clock alone - the 25-min
+    # guillotine behind the "died pre-closeout" dead-window epidemic is
+    # retired. Guard faults never abandon the round to an unmonitored
+    # eternity: a plain hard-cap wait backstops (fail-safe, not fail-open).
+    Log "spawning headless round (hard-cap ${RoundTimeoutMinutes}min, silence-kill ${RoundSilenceMinutes}min, prompt_chars=$($prompt.Length), out=$roundOut)"
     $p = Start-Process -FilePath $codelyPath -ArgumentList $argLine -WorkingDirectory $Project -PassThru -NoNewWindow -RedirectStandardOutput $roundOut -RedirectStandardError $roundErr
     $null = $p.Handle   # materialize handle so ExitCode is readable
-    if (-not $p.WaitForExit($RoundTimeoutMinutes * 60 * 1000)) {
-        Log "ROUND TIMEOUT after ${RoundTimeoutMinutes}min - killing headless process tree"
-        try {
-            Get-CimInstance Win32_Process -Filter "ParentProcessId=$($p.Id)" -ErrorAction SilentlyContinue |
-                ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
-            Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
-        } catch { Log "kill failed: $_" }
-        # tech#205: arm the API-storm gate when the killed round's stderr
-        # carries the 503-storm signature (R2339 00:52 evidence: 25min burned,
-        # zero accounting). Armed slots probe before igniting (see Gate below).
+    $budgetVerdict = ''
+    try {
+        $budgetVerdict = & (Join-Path $PSScriptRoot 'round_budget_guard.ps1') -ProcId $p.Id -OutFile $roundOut -ErrFile $roundErr -SilenceMinutes $RoundSilenceMinutes -HardCapMinutes $RoundTimeoutMinutes
+    } catch { Log "budget guard crashed - hard-cap backstop engages: $_" }
+    Log "budget-guard: $budgetVerdict"
+    if ($budgetVerdict -match '^budget=finished') {
+        $p.Refresh()
+        Log "headless round finished exit=$($p.ExitCode)"
+        Beat "round done exit=$($p.ExitCode)"
+        exit $p.ExitCode
+    }
+    if ($budgetVerdict -match '^budget=(silence-kill|hard-cap-kill)') {
+        # evidence kill: the guard already tree-killed the round; ledger the
+        # verdict, then keep the tech#205 arm face on BOTH evidence paths
+        # (a 503-retry storm can hang silent OR stream errors until the cap).
+        Log "ROUND $($budgetVerdict -replace '^budget=', '') - headless process tree killed by liveness budget"
         $armDecision = ''
         try {
             $armDecision = & (Join-Path $PSScriptRoot 'api_storm_gate.ps1') -Verb Arm -ErrFile $roundErr -FlagPath $stormFlag
         } catch { Log "storm-arm crashed (non-fatal): $_" }
         if ($armDecision) { Log "storm-arm: $armDecision" }
-        Beat "round timeout killed (age over ${RoundTimeoutMinutes}min)"
+        Beat "round killed ($budgetVerdict)"
+        exit 3
+    }
+    # guard machinery fault (guard-error / crash / empty): plain hard-cap wait.
+    Log "budget guard fault - engaging plain hard-cap wait (${RoundTimeoutMinutes}min)"
+    if (-not $p.WaitForExit($RoundTimeoutMinutes * 60 * 1000)) {
+        Log "ROUND HARD-CAP after ${RoundTimeoutMinutes}min (backstop) - killing headless process tree"
+        try {
+            Get-CimInstance Win32_Process -Filter "ParentProcessId=$($p.Id)" -ErrorAction SilentlyContinue |
+                ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+            Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+        } catch { Log "kill failed: $_" }
+        $armDecision = ''
+        try {
+            $armDecision = & (Join-Path $PSScriptRoot 'api_storm_gate.ps1') -Verb Arm -ErrFile $roundErr -FlagPath $stormFlag
+        } catch { Log "storm-arm crashed (non-fatal): $_" }
+        if ($armDecision) { Log "storm-arm: $armDecision" }
+        Beat "round hard-cap killed (backstop, age over ${RoundTimeoutMinutes}min)"
         exit 3
     }
     $p.Refresh()
-    Log "headless round finished exit=$($p.ExitCode)"
+    Log "headless round finished exit=$($p.ExitCode) (backstop path)"
     Beat "round done exit=$($p.ExitCode)"
     exit $p.ExitCode
 }

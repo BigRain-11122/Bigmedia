@@ -167,11 +167,15 @@ class TestApiStormGate(unittest.TestCase):
         m = re.search(r"probe_pid=(\d+)", out)
         self.assertTrue(m, out)
         pid = int(m.group(1))
-        # the force-killed probe must really be gone (no orphan retry burner)
+        # the force-killed probe must really be gone (no orphan retry burner).
+        # tech#198 encoding-hole family: tasklist emits host-locale bytes
+        # (GBK on zh-CN), and the suite runs python under -X utf8, so bare
+        # text=True strict-decodes and kills the reader thread (stdout=None).
+        # errors="replace" keeps the pid-digit assertion deterministic.
         time.sleep(1)
         check = subprocess.run(
             ["tasklist", "/FI", "PID eq %d" % pid],
-            capture_output=True, text=True,
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
         )
         self.assertNotIn(str(pid), check.stdout)
         self.assertTrue(self.ledger.exists())

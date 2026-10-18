@@ -12,16 +12,18 @@ heartbeat, tick continuity, backlog burn rate). Pure read-only.
 Beat vocabulary (written by src/os/iteration_loop.ps1):
   "round done exit=N"         a headless round completed (accounts a tick)
   "skip (round in flight)"    single-instance guard beat
-  "round timeout killed ..."  25-min budget kill (does NOT account a tick)
+  "round killed ..."          v2 liveness-budget evidence kill, silence
+                              gate or hard cap (does NOT account a tick)
   "error ..."                 launcher error beat
 
 Thresholds:
   --max-gap MIN  beat-to-beat gap advisory bound (default 20 = fleet
-                 comm SLA; a legit long round can run the full 25-min
-                 budget, so a SLA breach is WARN, not FAIL)
-  --max-age MIN  staleness FAIL bound (default 40 = launcher lock
-                 expiry; silence beyond it means the loop stopped)
-  Any historical gap over 40 min = outage FAIL (same lock-age logic).
+                 comm SLA; a legit v2 long round can run the full
+                 240-min hard cap, so a SLA breach is WARN, not FAIL)
+  --max-age MIN  staleness FAIL bound (default 288 = launcher lock
+                 hard cap, tech#217 v2 budget: 1.2 x 240 min;
+                 silence beyond it means the loop stopped)
+  Any historical gap over 288 min = outage FAIL (same lock-age logic).
 
 State log entries may carry approximate minutes ("17:2x" - unknown
 digit). The x is a legal placeholder, ordered lexicographically; a
@@ -154,8 +156,8 @@ LOG_TS_RE = re.compile(r"^(\d{4}-\d{2}-\d{2} \d{2}:\d[0-9x])")
 DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 STATE_REQUIRED = ("loop", "mode", "production", "tick", "backlog", "log", "ts", "task")
 PRODUCTION_REGIMES = ("paused", "open")
-LOCK_AGE_MIN = 40  # iteration_loop.ps1 LockMaxAgeMinutes - staleness bound
-SLA_GAP_MIN = 20   # fleet comm SLA - advisory bound (rounds may run 25m)
+LOCK_AGE_MIN = 288  # iteration_loop.ps1 LockMaxAgeMinutes (tech#217 v2: auto = 1.2 x 240min hard cap) - staleness bound
+SLA_GAP_MIN = 20   # fleet comm SLA - advisory bound (v2 rounds may run the 240m hard cap)
 STATE_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 GAP_MIN_RE = re.compile(r"beat gap (\d+) min")
 FOLD_DENSE_DEFAULT = 5  # tech#20: dense same-code WARN group fold size
@@ -511,12 +513,17 @@ def parse_backlog(path):
 
 
 def classify(beats):
-    """Beats -> (done [(ts, msg)], skip_n, timeout_n, error_n)."""
+    """Beats -> (done [(ts, msg)], skip_n, timeout_n, error_n).
+
+    timeout bucket = evidence kills that do NOT account a tick: the
+    historical "round timeout killed ..." wall-clock face and the v2
+    liveness-budget faces "round killed (budget=silence-kill ...)" /
+    "round hard-cap killed ..." (tech#217)."""
     done, skip_n, timeout_n, error_n = [], 0, 0, 0
     for ts, msg in beats:
         if ROUND_DONE_RE.search(msg):
             done.append((ts, msg))
-        elif "timeout" in msg:
+        elif "timeout" in msg or "killed" in msg:
             timeout_n += 1
         elif "skip" in msg:
             skip_n += 1
@@ -1743,10 +1750,10 @@ def cross_check(beats, state, done, now, max_age, max_gap, findings):
             gap = (beats[i][0] - beats[i - 1][0]).total_seconds() / 60.0
             pair = "%s -> %s" % (beats[i - 1][0].strftime("%Y-%m-%d %H:%M"),
                                  beats[i][0].strftime("%Y-%m-%d %H:%M"))
-            if gap > LOCK_AGE_MIN:
+            if gap > max_age:
                 findings.append(("FAIL", "heartbeat-outage",
                                  "beat gap %.0f min (%s) exceeds lock age %d min "
-                                 "- loop outage window" % (gap, pair, LOCK_AGE_MIN)))
+                                 "- loop outage window" % (gap, pair, max_age)))
             elif gap > max_gap:
                 findings.append(("WARN", "heartbeat-gap",
                                  "beat gap %.0f min (%s) over %d min comm SLA "
@@ -1800,10 +1807,10 @@ def cross_check(beats, state, done, now, max_age, max_gap, findings):
             try:
                 ts_dt = datetime.strptime(ts.strip(), "%Y-%m-%d %H:%M:%S")
                 age = (now - ts_dt).total_seconds() / 60.0
-                if age > LOCK_AGE_MIN:
+                if age > max_age:
                     findings.append(("WARN", "state-ts-stale",
                                      "state ts %.0f min old (> %d min) - closing "
-                                     "step not refreshing ts" % (age, LOCK_AGE_MIN)))
+                                     "step not refreshing ts" % (age, max_age)))
                 elif age < -5:
                     findings.append(("WARN", "state-ts-future",
                                      "state ts %.0f min ahead of clock - future "
