@@ -104,6 +104,52 @@ class TestClassifyItem(unittest.TestCase):
         self.assertEqual("claimable", qs.classify_item(it)[0])
 
 
+class TestUpstreamWaitGate(unittest.TestCase):
+    """tech#189/#190 (R2317/R2319 seeds, closed R2364): waiting-upstream
+    family gates. Literal marker phrases only - form 1 (backlog #31
+    shape) 稿落即领 / 稿落即随轮认领; form 3 (backlog #27 shape)
+    等上游源稿 / waits ... source manuscript. Done wins; the tech#210
+    gate-lift note flips a stale upstream-gated row the same way."""
+
+    def _it(self, body, num=21):
+        return {"num": num, "head": "%d. %s" % (num, body),
+                "text": "%d. %s" % (num, body)}
+
+    def test_form1_markers_gate(self):
+        for body in ("ch.5 v3 稿未落盘（bm-a 面）=稿落即领——观察位",
+                     "后续章 v2 稿未落盘=稿落即随轮认领（新连载节律同口径）"):
+            self.assertEqual("gated", qs.classify_item(self._it(body))[0])
+
+    def test_form3_markers_gate(self):
+        for body in ("唯余 ch.6 有声腿等上游源稿（SC-001-06 未撰·连载面）",
+                     "only remaining leg ch.6 audio waits novel SC-001-06 "
+                     "source manuscript [unwritten]"):
+            self.assertEqual("gated", qs.classify_item(self._it(body))[0])
+
+    def test_done_beats_upstream_marker(self):
+        # backlog #30/#87/#88 shape: done-marked rows quoting the marker
+        it = {"num": 30,
+              "head": "30. [done 2026-09-25] 后续章稿未落盘=稿落即随轮认领",
+              "text": "30. [done 2026-09-25] 后续章稿未落盘=稿落即随轮认领"}
+        self.assertEqual("done", qs.classify_item(it)[0])
+
+    def test_gate_lift_note_beats_upstream_marker(self):
+        # tech#210 rule extends to the family: source manuscript landed
+        # and an explicit lift note + 转 claimable flips the stale head.
+        body = ("唯余 ch.5 等上游源稿=稿落即领 "
+                "**[R2364 gate 解除注记 2026-10-18]** 源稿已落盘·转 "
+                "claimable 即领")
+        state, marker = qs.classify_item(self._it(body))
+        self.assertEqual("claimable", state)
+        self.assertIn("HEAD-INCONSISTENT", marker)
+
+    def test_landed_or_plain_manuscript_prose_stays_claimable(self):
+        # near-miss negative: manuscript landed / plain manuscript work
+        for body in ("ch.6 源稿已落盘·源稿落盘即转可领·全链随轮领",
+                     "拍稿 v1 落盘=随轮领", "源稿落盘后领做"):
+            self.assertEqual("claimable", qs.classify_item(self._it(body))[0])
+
+
 class TestNeedsCeoBucket(unittest.TestCase):
     """tech#146: [needs-CEO] items are gated semantics, never claimable."""
 

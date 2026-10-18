@@ -19,6 +19,10 @@ Machine teeth:
     and marks embedded mid-line or on continuation lines).
   * gated = not done and mentions gated / 观察位 / 到点执行
     (event-window items; not claimable in a normal round).
+    tech#189/#190: the waiting-upstream marker family
+    (稿落即领 / 稿落即随轮认领 / 等上游源稿 / waits...source
+    manuscript) is gated semantics too - rows whose only remaining
+    leg waits for an upstream manuscript to land.
   * claimable = the rest. Head = first claimable in file order.
   * --item N fetches ONE full item verbatim (zero full-file reads for
     the consumer); unknown number -> exit 2 fail-closed (ANCHOR-MISS
@@ -117,6 +121,17 @@ _GATED_RE = re.compile(r"gated|观察位|到点执行|GPU 独占窗|窗到即领
 # row's own state (zero claimant ambiguity) and the drift stays loud.
 _GATE_LIFT_NOTE_RE = re.compile(r"\[R\d+\s*gate\s*解除注记[^\]]*\]")
 _LIFT_TO_CLAIMABLE_RE = re.compile(r"转\s*claimable")
+# tech#189/#190 (R2317/R2319 seeds, closed R2364): waiting-upstream
+# family - rows whose only remaining leg waits for an upstream
+# manuscript/source written elsewhere (lands later) read claimable
+# until rewritten. Literal marker phrases only, no semantic guessing:
+# form 1 (backlog #31 shape) 稿落即领 / 稿落即随轮认领; form 3
+# (backlog #27 shape) 等上游源稿 / waits ... source manuscript.
+# Live audit 2026-10-18: every board hit sits in done-marked rows
+# (done wins) or rows already gated by word - zero claimable flips.
+_UPSTREAM_WAIT_RE = re.compile(
+    r"稿落即领|稿落即随轮认领|等上游源稿"
+    r"|waits.{0,60}source\s+manuscript")
 # tech#146: P1-board-only gated family - items parked on the CEO (P1
 # proposals, sign-off waits). Matches the readiness NEEDS_CEO_RE shape.
 NEEDS_CEO_RE = re.compile(r"\[needs-CEO[^\]]*\]")
@@ -155,9 +170,12 @@ def classify_item(item):
         return "done", m.group(0)
     if NEEDS_CEO_RE.search(item["text"]):
         return "gated", None
-    if _GATED_RE.search(item["text"]):
+    if (_GATED_RE.search(item["text"])
+            or _UPSTREAM_WAIT_RE.search(item["text"])):
         # tech#210: half-unlocked rule - see _GATE_LIFT_NOTE_RE note.
         # Both signals required so prose never lifts a gate silently.
+        # (tech#189/#190: the upstream-wait family joins this branch,
+        # so a landed-manuscript lift note flips it the same way.)
         if (_GATE_LIFT_NOTE_RE.search(item["text"])
                 and _LIFT_TO_CLAIMABLE_RE.search(item["text"])):
             return ("claimable",
