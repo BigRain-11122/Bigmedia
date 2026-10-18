@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 07:35:00",
- "do": "R2375 tech#230 em glyph advance table landed (fleet recheck zero overflow + pixel gates); next 10-20 AM dual-slot window",
+ "export_ts": "2026-10-19 07:46:05",
+ "do": "修红清理：R2375 gate2 测试渲染三件入台账+UTF-16 残片转档（readiness finding 3→0）·下窗=OSS 窗 8 切片 ≤10-20 21:40",
  "depts": [
   {
    "n": "工程技术部",
