@@ -185,6 +185,40 @@ class StateParseTests(unittest.TestCase):
         self.assertEqual(warn_codes(findings), {"log-order"})
         self.assertEqual(fail_codes(findings), set())
 
+    def test_backwards_pair_on_ledger_gets_tech215_tag(self):
+        """tech#215: a backward pair carried on the state
+        log_order_adjudicated ledger is tagged at parse time - the tag
+        drives the --loop fold; the WARN itself still lands (full face)."""
+        log = ["2026-09-23 17:45 R8 work", "2026-09-23 17:25 R9 work"]
+        state = make_state(tick=2, log=log)
+        state["log_order_adjudicated"] = {
+            "pairs": [["2026-09-23 17:45", "2026-09-23 17:25"]]}
+        self.p.write_text(json.dumps(state), encoding="utf-8")
+        _, _, findings = loop_health.parse_state(self.p)
+        self.assertEqual(warn_codes(findings), {"log-order"})
+        self.assertIn("[adjudicated: tech#215]", findings[0][2])
+
+    def test_ledger_malformed_never_silences_new_pairs(self):
+        """tech#215 gate integrity: malformed ledger shapes widen
+        nothing - a real backward pair stays an ordinary untagged WARN."""
+        log = ["2026-09-23 17:45 R8 work", "2026-09-23 17:25 R9 work"]
+        for bad in ("nope", 7, {"pairs": "2026-09-23 17:45"},
+                    [["2026-09-23 17:45"], ["a", "b", "c"], [1, 2], "x"]):
+            state = make_state(tick=2, log=log)
+            state["log_order_adjudicated"] = bad
+            self.p.write_text(json.dumps(state), encoding="utf-8")
+            _, _, findings = loop_health.parse_state(self.p)
+            self.assertEqual(warn_codes(findings), {"log-order"})
+            self.assertNotIn("[adjudicated: tech#215]", findings[0][2])
+
+    def test_ledger_bare_list_shape_accepted(self):
+        state = make_state(tick=2, log=["2026-09-23 17:45 R8 work",
+                                        "2026-09-23 17:25 R9 work"])
+        state["log_order_adjudicated"] = [["2026-09-23 17:45",
+                                           "2026-09-23 17:25"]]
+        self.assertEqual(loop_health.load_log_order_adjudicated(state),
+                         {("2026-09-23 17:45", "2026-09-23 17:25")})
+
     def test_fewer_entries_than_ticks_warns(self):
         self.p.write_text(json.dumps(make_state(tick=5)), encoding="utf-8")
         _, _, findings = loop_health.parse_state(self.p)
@@ -415,6 +449,42 @@ class LoopModeTests(unittest.TestCase):
         self.assertIn("log-order", out2)
         self.assertIn("loop health probe:", out2)
         self.assertNotIn("suppressed:", out2)
+
+    def test_loop_mode_folds_ledgered_log_order_pair(self):
+        """tech#215: a backward pair carried on the state adjudication
+        ledger folds out of the --loop face into its own
+        suppressed-adjudicated count (never the historical count); the
+        full audit face still prints it, tag visible, count unchanged."""
+        log = ["2026-01-01 10:0x r1 ok", "2026-01-01 09:5x r2 ok"]
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        state = make_state(tick=1, log=log)
+        state["log_order_adjudicated"] = {
+            "pairs": [["2026-01-01 10:0x", "2026-01-01 09:5x"]]}
+        root = make_repo(self, spec, state, BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 1)  # account-lag FAIL survives the compact face
+        self.assertNotIn("- [WARN] log-order:", out)  # ledgered pair folded
+        self.assertNotIn("go backwards: 2026-01-01 10:0x", out)
+        self.assertIn("suppressed-adjudicated: 1 log-order WARN", out)
+        self.assertNotIn("suppressed: 1 historical WARN", out)  # own channel
+        # default face unchanged: same tree, same WARN, tag on the line
+        rc2, out2 = self.run_cli(root, [])
+        self.assertEqual(rc2, 1)
+        self.assertIn("log-order", out2)
+        self.assertIn("[adjudicated: tech#215]", out2)
+        self.assertNotIn("suppressed-adjudicated:", out2)
+
+    def test_loop_mode_keeps_new_fresh_log_order_pair_visible(self):
+        """tech#215 can never hide NEW findings: a fresh backward pair
+        not on the ledger stays a visible WARN in the loop face."""
+        today = datetime.now().strftime("%Y-%m-%d")
+        log = [today + " 10:5x r1 ok", today + " 10:2x r2 ok"]
+        spec = [(30, "round done exit=0"), (10, "round done exit=0")]
+        root = make_repo(self, spec, make_state(tick=2, log=log), BOARD)
+        rc, out = self.run_cli(root, ["--loop"])
+        self.assertEqual(rc, 0)
+        self.assertIn("log-order", out)
+        self.assertNotIn("suppressed-adjudicated:", out)
 
     def test_loop_mode_keeps_recent_and_dateless_warns(self):
         spec = [(35, "round done exit=0"), (10, "round done exit=0")]

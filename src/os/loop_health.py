@@ -111,7 +111,10 @@ Output modes:
                    compact output - FAILs always print in full, WARNs
                    that embed only pre-cutoff dates (adjudicated
                    log-order / heartbeat-gap history) fold into one
-                   suppression count. Structural/every-run WARNs (no
+                   suppression count; log-order pairs carried on the
+                   state log_order_adjudicated ledger (tech#215) fold
+                   into a separate suppressed-adjudicated count.
+                   Structural/every-run WARNs (no
                    embedded date) stay visible. Dense in-window
                    same-code WARN groups (>= --fold-dense N, default 5)
                    collapse into one count line with date span and
@@ -152,6 +155,12 @@ SLA_GAP_MIN = 20   # fleet comm SLA - advisory bound (rounds may run 25m)
 STATE_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
 GAP_MIN_RE = re.compile(r"beat gap (\d+) min")
 FOLD_DENSE_DEFAULT = 5  # tech#20: dense same-code WARN group fold size
+# tech#215 (R2353): log-order adjudication ledger tag. A backward
+# narrative pair carried on state.log_order_adjudicated gets this tag at
+# parse time; the --loop face folds tagged pairs into a separate
+# suppressed-adjudicated count (account_drift_adjudicated's structural
+# twin), while the full audit face prints them unchanged.
+LOG_ORDER_ADJ_TAG = " [adjudicated: tech#215]"
 # tech#22: root-level probe/temp leftovers - both historical families
 # (r_cur_* 28 files R1816 sweep + r<digits>* 107 files R1828 sweep; three
 # episodic manual sweeps R1807/R1816/R1828 before this guard existed).
@@ -394,6 +403,28 @@ def parse_beats(path):
     return beats, findings
 
 
+def load_log_order_adjudicated(state):
+    """tech#215 (R2352 probe anchor: 47 backward log-order pairs, 46 of
+    them pre-10-15 history the --loop date cutoff already folds, plus the
+    R2349/R2350 pair - a fresh in-window pair that re-WARNs every loop
+    face). State-carried adjudication ledger, account_drift_adjudicated's
+    narrative twin: {"pairs": [["<prev-ts>", "<cur-ts>"], ...]} (a bare
+    list of pairs also accepted). Malformed data widens nothing -
+    unrecognized shapes return an empty set and the pair keeps warning
+    like any new finding."""
+    block = state.get("log_order_adjudicated") if isinstance(state, dict) else None
+    if isinstance(block, dict):
+        block = block.get("pairs")
+    if not isinstance(block, list):
+        return set()
+    pairs = set()
+    for item in block:
+        if (isinstance(item, (list, tuple)) and len(item) == 2
+                and all(isinstance(x, str) for x in item)):
+            pairs.add((item[0], item[1]))
+    return pairs
+
+
 def parse_state(path):
     """state.json -> (state-or-None, log timestamp strings, findings)."""
     findings = []
@@ -436,12 +467,15 @@ def parse_state(path):
                              "log entry %d lacks leading timestamp: %.40s" % (i, entry)))
             continue
         stamps.append(m.group(1))
+    adj_pairs = load_log_order_adjudicated(state)
     for i in range(1, len(stamps)):
         if stamps[i] < stamps[i - 1]:
-            findings.append(("WARN", "log-order",
-                             "log entry timestamps go backwards: %s -> %s "
-                             "(narrative hygiene; approximate minutes allowed)"
-                             % (stamps[i - 1], stamps[i])))
+            msg = ("log entry timestamps go backwards: %s -> %s "
+                   "(narrative hygiene; approximate minutes allowed)"
+                   % (stamps[i - 1], stamps[i]))
+            if (stamps[i - 1], stamps[i]) in adj_pairs:
+                msg += LOG_ORDER_ADJ_TAG
+            findings.append(("WARN", "log-order", msg))
     if isinstance(tick, int) and not isinstance(tick, bool) and len(stamps) < tick:
         findings.append(("WARN", "log-gap",
                          "tick=%d but %d stamped log entries - multi-round "
@@ -1825,18 +1859,28 @@ def main(argv):
              b_total, b_done, burn))
     if loop_mode:
         cutoff = (datetime.now() - timedelta(days=recent_days)).strftime("%Y-%m-%d")
-        shown = [f for f in findings
-                 if f[0] != "WARN" or warn_is_recent(f[2], cutoff)]
-        supp = len(findings) - len(shown)
+        shown = []
+        adj_supp = 0
+        for f in findings:
+            if f[0] == "WARN" and LOG_ORDER_ADJ_TAG in f[2]:
+                adj_supp += 1
+                continue
+            if f[0] != "WARN" or warn_is_recent(f[2], cutoff):
+                shown.append(f)
+        supp = len(findings) - len(shown) - adj_supp
         shown = dense_fold(shown, fold_dense)
     else:
-        shown, supp = findings, 0
+        shown, supp, adj_supp = findings, 0, 0
     for sev, code, msg in shown:
         print("- [%s] %s: %s" % (sev, code, msg))
     if supp:
         print("- [INFO] suppressed: %d historical WARN with no date on/after "
               "%s (--loop face; run without --loop for the full audit output)"
               % (supp, cutoff))
+    if adj_supp:
+        print("- [INFO] suppressed-adjudicated: %d log-order WARN pair(s) "
+              "carried on the state log_order_adjudicated ledger (tech#215; "
+              "run without --loop for the full audit output)" % adj_supp)
     fails = sum(1 for s, _, _ in findings if s == "FAIL")
     warns = sum(1 for s, _, _ in findings if s == "WARN")
     verdict = "FAIL" if fails else ("WARN" if warns else "PASS")
