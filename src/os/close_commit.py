@@ -368,8 +368,9 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     default = auto-increment) -> round-number guard (the prefix R number
     must equal the new tick, tech#196 R2329 anchor) -> append log line -> stamp ts/task ->
     optional focus overwrite -> optional decisions_watermark.dnums append
-    (dedup, order-preserving) -> optional orders_row_watermark overwrite
-    (tech#103 consumption anchor) -> atomic write (temp + os.replace,
+    (dedup, order-preserving)     -> optional orders_row_watermark overwrite
+    (tech#103 consumption anchor) -> beat policy block sync-on-diff
+    (tech#220 self-heal) -> atomic write (temp + os.replace,
     indent=1, UTF-8, no BOM - the on-disk house format).
 
     Args:
@@ -397,7 +398,10 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     advisory list, empty when every "F-NNN 登记" claim is present in the
     finished ledger or there was no ledger to check against;
     prefix_backward = tech#214 advisory flag, True when the new line's
-    fuzzy-minute prefix sits behind the last on-disk line's).
+    fuzzy-minute prefix sits behind the last on-disk line's;
+    beat_written/beat_synced = tech#220 self-heal flags for the beat
+    policy block: written = rebuilt from the constant (absent/broken
+    block), synced = an existing block had policy keys healed in place).
     Raises: ValueError on any usage error - loud, zero partial writes
     (validation happens before the first disk mutation; the atomic
     replace makes the write itself all-or-nothing).
@@ -515,6 +519,15 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     if orders_wm_stored is not None:
         data["orders_row_watermark"] = orders_wm_stored
 
+    # tech#220 (R2361): beat-block write-time self-heal - the same
+    # sync-on-diff as pulse_state_beat, so a BEAT_POLICY bump in code
+    # heals at the very next round close with no hand migration (the
+    # R2359 violation class dies here). Same constant + idempotent =
+    # no double-write conflict with the pulse wiring (which structurally
+    # cannot interleave: the spawner pulses only while this round body
+    # holds round.lock). Union merge - hand-tuned notes survive.
+    beat_written, beat_synced = _sync_beat_policy(data)
+
     payload = json.dumps(data, ensure_ascii=False, indent=1)
     tmp = state_path + ".tmp_final"
     with io.open(tmp, "w", encoding="utf-8", newline="") as f:
@@ -522,25 +535,31 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
     os.replace(tmp, state_path)
     # ASCII-only evidence line (encoding law; task/ts contain CJK digits text)
     print("STATE-FINALIZED tick=%s ts=%s task_len=%d focus_set=%s "
-          "wm_added=%d orders_wm_rows=%s log_len=%d" % (
+          "wm_added=%d orders_wm_rows=%s log_len=%d beat_written=%s "
+          "beat_synced=%s" % (
               new_tick, ts, len(task), focus is not None, wm_added,
               orders_wm_stored["rows"] if orders_wm_stored else "-",
-              len(log_line)))
+              len(log_line), beat_written, beat_synced))
     return {"tick": new_tick, "ts": ts, "task": task,
             "wm_added": wm_added, "log_len": len(log_line),
             "f_claims_missing": f_claims_missing,
             "prefix_backward": prefix_backward,
+            "beat_written": beat_written, "beat_synced": beat_synced,
             "orders_wm_rows": (orders_wm_stored["rows"]
                                if orders_wm_stored else None)}
 
 
-# PT-20261015-01 option 2 declaration (beat policy block): written ONCE
-# when absent by pulse_state_beat. Declares the ts-face gap semantics so a
+# PT-20261015-01 option 2 declaration (beat policy block): written when
+# absent, then policy-key synced to the code constant on every write
+# face (tech#220 sync-on-diff). Declares the ts-face gap semantics so a
 # remote fleet-audit can interpret a stale ts without a new inspection
 # order, plus the D-13 machine-readable pointer (receipt channel + canon).
 # tech#219 (R2360): thresholds synced to the v2 liveness budget so a
 # rebuilt block matches the live state.json beat block migrated during
 # the tech#217 absorb (35min retired semantics would drift the gap face).
+# tech#220 (R2361): the write-once law retired - any future BEAT_POLICY
+# bump heals the live block at the next pulse / round close, so the R2359
+# hand-migration violation class is structurally impossible.
 BEAT_POLICY = {
     "active_gap_max_min": 250,
     "active_semantics": "round schedule 10min + v2 liveness budget (tech#217, BM 945c3f60 port): 25min zero-output silence gate + 240min hard cap, kills on evidence only - a streaming long round is never wall-clock killed; ts refreshed at every round close (finalize_state)",
@@ -549,6 +568,39 @@ BEAT_POLICY = {
     "d13_pointer": "canon=docs/os-protocol.md s6; receipt=HQ-FEEDBACK PT-20261015-01 line + ack commit (orders row 456 + round + next action)",
 }
 PULSE_REASON_MAX = 80
+
+
+def _sync_beat_policy(data):
+    """tech#220 (R2361): beat-block write-time self-heal (sync-on-diff).
+
+    R2359 anchor: the tech#217 semantics bump had to be hand-migrated
+    into live state.json because the write-once law meant an existing
+    block was never touched - a hand edit on the accounting face (state
+    write-force-law violation) with zero regression gate on the gap
+    face. The heal is a union merge: every BEAT_POLICY key is restored
+    from the code constant (single source of truth), sub-keys outside
+    BEAT_POLICY (hand-tuned notes) are preserved - a machine writer
+    never silently deletes a human annotation. Idempotent by
+    construction: an in-sync block is a no-op, so the pulse_state_beat
+    and finalize_state wirings can never double-write-conflict. No
+    rollback window on a policy downgrade either: the code constant IS
+    the policy source, so a downgrade bump heals forward to the new
+    (lower) constant the same way.
+
+    Returns (policy_written, policy_synced): written = the block was
+    absent/broken and rebuilt wholesale; synced = an existing dict had
+    at least one policy key healed in place.
+    """
+    beat = data.get("beat")
+    if not isinstance(beat, dict):
+        data["beat"] = dict(BEAT_POLICY)
+        return True, False
+    synced = False
+    for key, value in BEAT_POLICY.items():
+        if beat.get(key) != value:
+            beat[key] = value
+            synced = True
+    return False, synced
 
 
 def pulse_state_beat(reason, state_path=None, now=None):
@@ -570,10 +622,12 @@ def pulse_state_beat(reason, state_path=None, now=None):
       newer (clock-skew guard: a pulse never moves ts backwards).
     - reason: non-empty, clamped to PULSE_REASON_MAX chars; CLI enforces
       ASCII (encoding rule - GBK console hazard).
-    - beat policy block: written once when absent (option 2 declaration,
-      see BEAT_POLICY); an existing block is never overwritten.
+    - beat policy block: written when absent, policy-key synced to the
+      code constant otherwise (tech#220 sync-on-diff, see BEAT_POLICY);
+      sub-keys outside BEAT_POLICY (hand-tuned notes) always survive.
 
-    Returns summary dict {ts, reason, policy_written}. Raises ValueError
+    Returns summary dict {ts, reason, policy_written, policy_synced}.
+    Raises ValueError
     on usage errors - validation happens before the first disk mutation;
     the atomic replace makes the write all-or-nothing.
     """
@@ -602,10 +656,7 @@ def pulse_state_beat(reason, state_path=None, now=None):
         raise ValueError("pulse ts %s not newer than on-disk ts %s "
                          "(clock skew?) - refusing" % (ts, cur_ts))
 
-    policy_written = False
-    if not isinstance(data.get("beat"), dict):
-        data["beat"] = dict(BEAT_POLICY)
-        policy_written = True
+    policy_written, policy_synced = _sync_beat_policy(data)
     data["ts"] = ts
     data["pulse"] = {"ts": ts, "reason": reason}
 
@@ -615,9 +666,10 @@ def pulse_state_beat(reason, state_path=None, now=None):
         f.write(payload)
     os.replace(tmp, state_path)
     # ASCII-only evidence line (encoding law)
-    print("STATE-PULSED ts=%s reason=%r policy_written=%s" % (
-        ts, reason, policy_written))
-    return {"ts": ts, "reason": reason, "policy_written": policy_written}
+    print("STATE-PULSED ts=%s reason=%r policy_written=%s "
+          "policy_synced=%s" % (ts, reason, policy_written, policy_synced))
+    return {"ts": ts, "reason": reason, "policy_written": policy_written,
+            "policy_synced": policy_synced}
 
 
 def _path_is_gitignored(root, rel_path):

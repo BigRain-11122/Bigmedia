@@ -627,6 +627,42 @@ class TestFinalizeState(unittest.TestCase):
         cc.finalize_state(self.LINE, state_path=fx.path)
         self.assertEqual("seed focus", fx.read()["focus"])
 
+    def test_finalize_state_heals_stale_beat_policy(self):
+        # tech#220 (R2361): finalize_state is the second sync-on-diff
+        # wiring - a BEAT_POLICY bump heals at the very next round close
+        # (R2359 hand-migration violation class), accounting face whole,
+        # hand-tuned notes survive, and the pulse wiring after it reads
+        # a pure no-op (same constant + idempotent = no double-write
+        # conflict).
+        fx = self._fx()
+        d = fx.read()
+        d["beat"] = {"active_gap_max_min": 35, "note": "hand-tuned"}
+        with open(fx.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        summary = cc.finalize_state(self.LINE, state_path=fx.path,
+                                    ts="2026-10-18 16:40:00")
+        self.assertFalse(summary["beat_written"])
+        self.assertTrue(summary["beat_synced"])
+        d2 = fx.read()
+        self.assertEqual(cc.BEAT_POLICY["active_gap_max_min"],
+                         d2["beat"]["active_gap_max_min"])
+        self.assertEqual("hand-tuned", d2["beat"]["note"])
+        self.assertEqual(1927, d2["tick"])
+        self.assertEqual(self.LINE, d2["log"][-1])
+        # cross-wiring idempotence: pulse after finalize = no-op
+        s2 = cc.pulse_state_beat("defer", state_path=fx.path,
+                                 now=datetime.datetime(2026, 10, 18,
+                                                       16, 50, 0))
+        self.assertFalse(s2["policy_written"])
+        self.assertFalse(s2["policy_synced"])
+        # absent block on a fresh fixture: finalize rebuilds it wholesale
+        fx2 = self._fx()
+        s3 = cc.finalize_state(self.LINE, state_path=fx2.path,
+                               ts="2026-10-18 16:55:00")
+        self.assertTrue(s3["beat_written"])
+        self.assertFalse(s3["beat_synced"])
+        self.assertEqual(cc.BEAT_POLICY, fx2.read()["beat"])
+
     def test_tick_guard_explicit_and_mismatch(self):
         fx = self._fx()
         cc.finalize_state(self.LINE, tick=1927, state_path=fx.path)
@@ -985,7 +1021,10 @@ class TestPulseStateBeat(unittest.TestCase):
         self.assertFalse(os.path.exists(fx.path + ".tmp_pulse"))
         self.assertFalse(fx.raw_bytes().startswith(b"\xef\xbb\xbf"))
 
-    def test_policy_block_written_once_never_overwritten(self):
+    def test_policy_block_hand_tuned_note_survives_pulse(self):
+        # tech#220 union-merge law: a present block keeps its sub-keys
+        # outside BEAT_POLICY (hand-tuned notes) across every pulse -
+        # the old write-once contract's survivor face, kept whole.
         fx = self._fx()
         cc.pulse_state_beat("first", state_path=fx.path,
                             now=datetime.datetime(2026, 10, 15, 22, 40, 0))
@@ -1000,6 +1039,67 @@ class TestPulseStateBeat(unittest.TestCase):
         self.assertFalse(summary["policy_written"])
         self.assertEqual("hand-tuned", d2["beat"]["note"])
         self.assertEqual("second", d2["pulse"]["reason"])
+
+    def test_beat_policy_sync_on_diff_heals_stale_policy_keys(self):
+        # tech#220 (R2361): the R2359 hand-migration violation class dies
+        # here - a stale beat block (retired 35min semantics) heals from
+        # the code constant at the next write face, hand-tuned note
+        # survives the union merge, and the heal is idempotent.
+        fx = self._fx()
+        cc.pulse_state_beat("first", state_path=fx.path,
+                            now=datetime.datetime(2026, 10, 15, 22, 40, 0))
+        d = fx.read()
+        d["beat"]["active_gap_max_min"] = 35
+        d["beat"]["note"] = "hand-tuned"
+        with open(fx.path, "w", encoding="utf-8", newline="") as f:
+            json.dump(d, f, ensure_ascii=False, indent=1)
+        summary = cc.pulse_state_beat("second", state_path=fx.path,
+                                      now=datetime.datetime(2026, 10, 15,
+                                                            22, 50, 0))
+        self.assertFalse(summary["policy_written"])
+        self.assertTrue(summary["policy_synced"])
+        d2 = fx.read()
+        self.assertEqual(cc.BEAT_POLICY["active_gap_max_min"],
+                         d2["beat"]["active_gap_max_min"])
+        self.assertEqual("hand-tuned", d2["beat"]["note"])
+        # idempotence: an in-sync block is a no-op on the next pulse
+        summary2 = cc.pulse_state_beat("third", state_path=fx.path,
+                                       now=datetime.datetime(2026, 10, 15,
+                                                             23, 0, 0))
+        self.assertFalse(summary2["policy_written"])
+        self.assertFalse(summary2["policy_synced"])
+        self.assertEqual(d2["beat"], fx.read()["beat"])
+
+    def test_sync_beat_policy_broken_block_rebuilt_wholesale(self):
+        # tech#220: a non-dict beat block is rebuilt wholesale from the
+        # constant (written=True, synced=False) - a broken face has no
+        # sub-keys worth preserving; the rebuilt dict is then a no-op.
+        fx = self._fx()
+        d = fx.read()
+        d["beat"] = "garbage-not-a-dict"
+        written, synced = cc._sync_beat_policy(d)
+        self.assertTrue(written)
+        self.assertFalse(synced)
+        self.assertEqual(cc.BEAT_POLICY, d["beat"])
+        written2, synced2 = cc._sync_beat_policy(d)
+        self.assertFalse(written2)
+        self.assertFalse(synced2)
+
+    def test_sync_beat_policy_downgrade_heals_forward(self):
+        # tech#220 question (3) regression lock: no rollback window by
+        # design - the code constant IS the policy source, so even a
+        # policy DOWNGRADE bump heals the live block forward to the new
+        # constant. Drift in either direction is impossible.
+        fx = self._fx()
+        d = fx.read()
+        d["beat"] = dict(cc.BEAT_POLICY)
+        saved = cc.BEAT_POLICY
+        self.addCleanup(setattr, cc, "BEAT_POLICY", saved)
+        cc.BEAT_POLICY = dict(saved, active_gap_max_min=120)
+        written, synced = cc._sync_beat_policy(d)
+        self.assertFalse(written)
+        self.assertTrue(synced)
+        self.assertEqual(120, d["beat"]["active_gap_max_min"])
 
     def test_pulse_after_finalize_preserves_accounting(self):
         # the designed interleaving: pulse (defer) -> real round close
