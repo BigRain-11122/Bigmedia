@@ -1,0 +1,12 @@
+em-check-r2349 (MC-20261018-REACT-v23 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   15.55em margin  +7.45  今日热点 · 知乎热榜 2026-10-18
+OK   17.60em margin  +5.40  如何评价DeepSeek V4.1 Flash 1017?
+OK   18.00em margin  +5.00  求新轴：「新图纸一出，赶紧动手画！」
+OK   19.00em margin  +4.00  怀旧轴：「脑塔一亮，今儿可有新鲜事？」
+OK   19.00em margin  +4.00  侠气轴：「白光一闪，心跳跟着快了几拍」
+OK   19.00em margin  +4.00  信使小跟班家人语：「跟版本一起长的娃」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+subs tail cue end derived=card end 2.600s (zero hardcode); expected duration=3.400s (card end + tail 0.80)
+ALL-HORIZ: PASS
