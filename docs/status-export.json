@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-18 09:23:22",
- "do": "R2350: REACT-v23 close (M4.5 PASS, F-196 done); E4 deferred (CEO pause); next: tech#213/#199 + supply reads",
+ "export_ts": "2026-10-18 09:49:05",
+ "do": "R2351: window negative (supply out/no gap); tech#211 advisory shipped (1617 OK); next: 10-19 window + tech#214",
  "depts": [
   {
    "n": "工程技术部",
-   "t": "1613 测试全绿（r2345 rc0）；S2 三门+守卫面 20+ 在役；lcard_leadin 导语模板+语境门检在役（C-51）",
+   "t": "1617 测试全绿（r2351 rc0·tech#211 交付）；S2 三门+守卫面 20+ 在役；lcard_leadin 导语模板在役（C-51）",
    "s": 1
   }
  ],
@@ -62,27 +62,27 @@
  ],
  "chips": [
   [
-   "1613 tests",
+   "1617 tests",
    "live"
   ]
  ],
  "results": [
   [
-   "F-196 close",
-   "r2350"
+   "tech#211 shipped",
+   "r2351"
   ],
   [
-   "0 findings",
-   "r2350"
+   "1617 tests OK",
+   "r2351"
   ],
   [
-   "REACT-v23 done",
-   "r2350"
+   "REACT-v24 no-go",
+   "r2351"
   ]
  ],
  "live": [
-  "REACT-v23《城市速报 023·DeepSeek V4.1 Flash 1017 之问》收官链毕：M4.5 七席 4×9+3N/A PASS 放行候选+E4 让路态如实注（e4-body 预置 v23-tmp·回填腿待 CEO resume 窗）",
-  "最近实物：MC-20261018-REACT-v23 图文卡入库 F-196（成品库第 197 件·2026-10-18 09:2x）",
-  "里程碑：REACT-v24/DIGEST-v26 供给位随窗判读+tech 队 #213/#199 依序领（≤48h）；CEO resume 窗后 E4 v23~v25 三件回填"
+  "tech#211 F-claim vs finished-ledger 写时 advisory 交付（finalize_state WARN 门防 R2346 型超前表述·4 新测+存量 2386 行 558 命中 0 缺位）+双成品位窗口判读收口（REACT-v24 供应耗尽判负·DIGEST-v26 无缺口·main#133 留痕）",
+  "最近实物：src/os/close_commit.py F-claim advisory 防线+tests/test_close_commit.py 4 新测（全套件 1617 测 OK·2026-10-18 09:4x）",
+  "里程碑：10-19 晨窗 REACT 日报判读（M0 四维分+回避筛全档）+编年史批六日闭窗后领（main#130）+CEO resume 窗 E4 v23~v25 三件回填（≤48h）"
  ]
 }
