@@ -178,6 +178,18 @@ LOG_ORDER_ADJ_TAG = " [adjudicated: tech#215]"
 OS_PROTOCOL_S6_HEADING_RE = re.compile(r"^##\s*§?6\b")
 NEXT_SECTION_RE = re.compile(r"^##\s")
 ACTIVE_LAW_RE = re.compile(r"active\s*≤\s*(\d+)\s*min")
+# tech#222 (R2363): second canon-drift anchor - the s5 lock-age law
+# line ("锁龄 N 分钟=FAIL") vs loop_health.LOCK_AGE_MIN. Anchored miss:
+# tech#217 v2 raised LOCK_AGE_MIN 40->288 while the doc law line kept
+# the retired 40 value until the R2362 hand-sync (tech#219 35min lag
+# family, second case). Section scoping is the same zero-false-positive
+# law; the changelog keeps retired "锁龄 40 分钟" prose that must never
+# leak in. Seed correction (honest note): the tech#222 seed and the
+# v1.16 changelog row call this the "s4" line, but the law line lives
+# in s5 度量 - the s4 heading body has no lock-age text, so scoping to
+# s4 would anchor nothing (a guard that can never fire).
+OS_PROTOCOL_S5_HEADING_RE = re.compile(r"^##\s*§?5\b")
+LOCK_AGE_LAW_RE = re.compile(r"锁龄\s*(\d+)\s*分钟\s*=\s*FAIL")
 # tech#22: root-level probe/temp leftovers - both historical families
 # (r_cur_* 28 files R1816 sweep + r<digits>* 107 files R1828 sweep; three
 # episodic manual sweeps R1807/R1816/R1828 before this guard existed).
@@ -966,21 +978,41 @@ def _beat_policy_active_min():
     return v if isinstance(v, int) and not isinstance(v, bool) else None
 
 
+def _protocol_section(text, heading_re):
+    """os-protocol text + heading regex -> that section's body (lines
+    between the matched heading and the next '## ' heading), joined as
+    one string. Shared by the section-scoped canon parsers so retired
+    values in other sections and changelog prose never leak in."""
+    section, in_section = [], False
+    for line in text.splitlines():
+        if in_section and NEXT_SECTION_RE.match(line):
+            break
+        if heading_re.match(line):
+            in_section = True
+            continue
+        if in_section:
+            section.append(line)
+    return "\n".join(section)
+
+
 def parse_beat_law_min(text):
     """os-protocol text -> the single 'active <=Nmin' value in the s6
     law section, or None. Section-scoped by design: the changelog keeps
     retired values in prose that must never leak in (tech#221 criterion
     1). Zero or multiple anchors -> None (ambiguous input never guesses)."""
-    section, in_section = [], False
-    for line in text.splitlines():
-        if in_section and NEXT_SECTION_RE.match(line):
-            break
-        if OS_PROTOCOL_S6_HEADING_RE.match(line):
-            in_section = True
-            continue
-        if in_section:
-            section.append(line)
-    values = [int(m.group(1)) for m in ACTIVE_LAW_RE.finditer("\n".join(section))]
+    section = _protocol_section(text, OS_PROTOCOL_S6_HEADING_RE)
+    values = [int(m.group(1)) for m in ACTIVE_LAW_RE.finditer(section)]
+    return values[0] if len(values) == 1 else None
+
+
+def parse_lock_age_law_min(text):
+    """os-protocol text -> the single '锁龄 N分钟=FAIL' value in the s5
+    measurement section, or None. Same section-scoped design as
+    parse_beat_law_min (tech#222 criterion 1): the changelog keeps
+    retired 40min prose that must never leak in. Zero or multiple
+    anchors -> None (ambiguous input never guesses)."""
+    section = _protocol_section(text, OS_PROTOCOL_S5_HEADING_RE)
+    values = [int(m.group(1)) for m in LOCK_AGE_LAW_RE.finditer(section)]
     return values[0] if len(values) == 1 else None
 
 
@@ -998,9 +1030,28 @@ def classify_beat_policy_drift(doc_value, code_value):
             % (doc_value, code_value))
 
 
+def classify_lock_age_drift(doc_value, code_value):
+    """(doc, code) -> WARN finding or None. Same one-way advisory
+    contract as classify_beat_policy_drift: None on either side stays
+    silent (unanchored/ambiguous law text or an unreachable constant is
+    a skip, never a false positive)."""
+    if doc_value is None or code_value is None or doc_value == code_value:
+        return None
+    return ("WARN", "canon-lock-age-drift",
+            "os-protocol s5 law line 'lock-age %dmin = FAIL' disagrees "
+            "with loop_health LOCK_AGE_MIN=%d - the code constant is "
+            "the single source of truth (tech#217 v2), update the doc "
+            "law line (tech#222: R2362 40min lag pattern)"
+            % (doc_value, code_value))
+
+
 def check_canon_beat_policy_drift(root, findings):
-    """tech#221: canon-doc vs code-constant consistency probe (advisory,
-    never breaks the probe; absent/unreadable canon file stays silent)."""
+    """tech#221/tech#222: canon-doc vs code-constant consistency probe
+    (advisory, never breaks the probe; absent/unreadable canon file
+    stays silent). Two anchors, both one-way WARN advisories: s6
+    'active <=Nmin' law line vs close_commit BEAT_POLICY.active_gap_max_min
+    (tech#221), and s5 lock-age law line vs loop_health LOCK_AGE_MIN
+    (tech#222)."""
     path = root / "docs" / "os-protocol.md"
     try:
         text = path.read_text(encoding="utf-8")
@@ -1008,6 +1059,10 @@ def check_canon_beat_policy_drift(root, findings):
         return
     f = classify_beat_policy_drift(parse_beat_law_min(text),
                                    _beat_policy_active_min())
+    if f:
+        findings.append(f)
+    f = classify_lock_age_drift(parse_lock_age_law_min(text),
+                                LOCK_AGE_MIN)
     if f:
         findings.append(f)
 

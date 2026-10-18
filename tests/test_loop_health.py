@@ -2522,7 +2522,7 @@ class CanonBeatPolicyDriftTests(unittest.TestCase):
     miss class, guarded as a loop_health advisory face."""
 
     PROTOCOL_BODY = (
-        "## §5 循环健康\n\n- 判据机器化（锁龄 288 分钟=FAIL 级）。\n\n"
+        "## §5 循环健康\n\n- 判据机器化（锁龄 %d 分钟=FAIL 级）。\n\n"
         "## §6 Token 面纪律\n\n"
         "- **心跳 pulse 律**：`beat` 声明块=间隙语义"
         "（active ≤%dmin/defer/pause）+D-13 机读指针。\n\n"
@@ -2532,18 +2532,23 @@ class CanonBeatPolicyDriftTests(unittest.TestCase):
         "≤35min+defer/pause 语义）历史行。\n"
     )
 
-    def _protocol(self, root, active_min):
+    def _protocol(self, root, active_min, lock_age=None):
+        # lock_age defaults to the live LOCK_AGE_MIN so the s5 anchor
+        # (tech#222) stays silent here whatever the code constant becomes
+        if lock_age is None:
+            lock_age = loop_health.LOCK_AGE_MIN
         d = root / "docs"
         d.mkdir(parents=True, exist_ok=True)
         (d / "os-protocol.md").write_text(
-            self.PROTOCOL_BODY % active_min, encoding="utf-8")
+            self.PROTOCOL_BODY % (lock_age, active_min), encoding="utf-8")
 
     def test_parse_section_scoped_and_anchored(self):
         # s6's single anchor wins; the changelog's retired "active 间隙
         # ≤35min" prose and the §5 lock-age numbers never leak in
         # (criterion 1: zero false positives by section scoping)
         self.assertEqual(
-            loop_health.parse_beat_law_min(self.PROTOCOL_BODY % 250), 250)
+            loop_health.parse_beat_law_min(
+                self.PROTOCOL_BODY % (loop_health.LOCK_AGE_MIN, 250)), 250)
         self.assertEqual(
             loop_health.parse_beat_law_min("## §6 Token\n- no law here\n"),
             None)
@@ -2602,6 +2607,95 @@ class CanonBeatPolicyDriftTests(unittest.TestCase):
                                    "--max-age", "600"])
         self.assertIn("canon-beat-policy-drift", buf.getvalue())
         self.assertEqual(rc, 0)
+
+
+class CanonLockAgeDriftTests(unittest.TestCase):
+    """tech#222: os-protocol s5 '锁龄 N分钟=FAIL' law line vs the
+    loop_health LOCK_AGE_MIN code constant - the R2362 hand-synced
+    40min doc-lag miss class, guarded as the second canon-drift anchor.
+    Seed correction under test: the seed said s4, but the law line
+    lives in s5 (an s4 scope would anchor nothing)."""
+
+    PROTOCOL_BODY = (
+        "## §5 度量\n\n- 判据机器化：锁龄 %d 分钟=FAIL 级停跳线"
+        "（tech#217 v2）。\n\n"
+        "## §6 Token 面纪律\n\n"
+        "- **心跳 pulse 律**：（active ≤250min/defer/pause）。\n\n"
+        "## 变更记录\n\n"
+        "- 2026-10-18: v1.16 「锁龄 40 分钟」→288 分钟 历史行。\n"
+    )
+
+    def _protocol(self, root, lock_age):
+        d = root / "docs"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "os-protocol.md").write_text(
+            self.PROTOCOL_BODY % lock_age, encoding="utf-8")
+
+    def test_parse_section_scoped_and_anchored(self):
+        # criterion 1: the s5 anchor wins; the changelog's retired
+        # "锁龄 40 分钟" prose never leaks in; the s6 active numbers and
+        # any s4 body never leak either (cross-section isolation)
+        self.assertEqual(
+            loop_health.parse_lock_age_law_min(self.PROTOCOL_BODY % 288),
+            288)
+        self.assertIsNone(loop_health.parse_lock_age_law_min(
+            "## §5 x\n- no lock-age law here\n"))
+        # two anchors = ambiguous -> None, never a guess
+        self.assertIsNone(loop_health.parse_lock_age_law_min(
+            "## §5 x\n- 锁龄 40 分钟=FAIL 与 锁龄 288 分钟=FAIL\n"))
+        # no s5 section at all -> None (s4 body has no lock-age text)
+        self.assertIsNone(loop_health.parse_lock_age_law_min(
+            "## §4 互斥与自愈\n- 互斥：round.lock（40 分钟过期）\n"))
+
+    def test_classify_silent_on_match_and_skips(self):
+        code = loop_health.LOCK_AGE_MIN
+        self.assertIsInstance(code, int)  # live constant reachable
+        self.assertIsNone(loop_health.classify_lock_age_drift(code, code))
+        f = loop_health.classify_lock_age_drift(40, code)
+        self.assertEqual(warn_codes([f]), {"canon-lock-age-drift"})
+        self.assertIn("40", f[2])
+        self.assertIn(str(code), f[2])
+        self.assertIsNone(loop_health.classify_lock_age_drift(None, code))
+        self.assertIsNone(loop_health.classify_lock_age_drift(40, None))
+
+    def test_check_drift_then_match_red_to_green(self):
+        # criterion 2 live-fire: the doc law line left at the retired 40
+        # (the exact R2362 pre-fix state) -> WARN (red); syncing it to
+        # the code constant -> silent (green) on the same fixture root
+        code = loop_health.LOCK_AGE_MIN
+        root = make_dir(self, "bs-health-lockage-")
+        self._protocol(root, 40)
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(warn_codes(findings), {"canon-lock-age-drift"})
+        self._protocol(root, code)
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_check_both_anchors_fire_together(self):
+        # dual-anchor wiring: s6 active 35 (tech#219 pattern) + s5
+        # lock-age 40 (tech#222 pattern) both stale -> both WARN codes
+        root = make_dir(self, "bs-health-lockage-")
+        body = (
+            "## §5 度量\n\n- 锁龄 40 分钟=FAIL 级。\n\n"
+            "## §6 Token 面纪律\n\n"
+            "- **心跳 pulse 律**：（active ≤35min/defer/pause）。\n\n"
+            "## 变更记录\n\n- 历史。\n"
+        )
+        (root / "docs").mkdir(parents=True)
+        (root / "docs" / "os-protocol.md").write_text(body,
+                                                      encoding="utf-8")
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(warn_codes(findings),
+                         {"canon-beat-policy-drift", "canon-lock-age-drift"})
+
+    def test_check_silent_without_canon_file(self):
+        root = make_dir(self, "bs-health-lockage-")
+        findings = []
+        loop_health.check_canon_beat_policy_drift(root, findings)
+        self.assertEqual(findings, [])
 
 
 if __name__ == "__main__":
