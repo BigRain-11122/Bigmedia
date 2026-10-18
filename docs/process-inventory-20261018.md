@@ -2,7 +2,7 @@
 
 > 供证律=C-20261018-02 §二.1 schema 现读（源=docs/os-protocol.md v1.14 全文实读+docs/capabilities.md C 册 C-01~C-52 行实读+schtasks 三任务 2026-10-18 12:2x 实测+state/queue 三队现读+iteration_loop.ps1 现读 L1-158）；裁决权归委员会，本件零新法零裁决（§二 B 型活口一项=按案 §二.2 证据+裁决提案呈报）。
 > 落点律：本件=本仓 docs/ 供证件（跨仓写禁令执法=不写 cph4 案表）；HQ-FEEDBACK 回执一行随批二交付轮落（24h 窗内·案 §四）。
-> 批面拆分：批一=机制面（本件）；批二=产线面（M0-M5 七站+评审链+四内容线·下窗交付）。
+> 批面拆分：批一=机制面（§一-§五·R2357）；批二=产线面（§六-§九·R2358·24h 窗内双批闭环）。
 
 ## §一 机制面流程总清单（每流程一行·案 §二.1 律）
 
@@ -53,8 +53,60 @@
 
 ## §四 批二预告（产线面·窗至 10-19 ~11:3x）
 
-产线面流程清单（production-chain M0-M5 七站+dept-review 评审链+四条内容线〔L-卡/audio/drama/短切片〕+meme 线停用态〔O-20261017-1741〕+MV 查看位面〔执行认领制·mv 会话域零接触律〕）+产线面成对冲突扫描+四标带——源=production-chain v2.5+dept-review-mechanism v1.7+expert-roster v1.2+各线 charter 现读；HQ-FEEDBACK 回执一行随批二交付轮落。
+产线面流程清单（production-chain M0-M6 七站+dept-review 评审链+四条内容线〔L-卡/audio/drama/短切片〕+meme 线停用态〔O-20261017-1741〕+MV 查看位面〔执行认领制·mv 会话域零接触律〕）+产线面成对冲突扫描+四标带——源=production-chain v2.5+dept-review-mechanism v1.7+expert-roster v1.2+各线 charter 现读；HQ-FEEDBACK 回执一行随批二交付轮落。
+
+**[R2358 兑现 2026-10-18]**：批二=§六-§九（产线面 15 行流程清单+成对冲突扫描+O-025 四标带+验证声明）·当窗修法=production-chain v2.6 meme 配额行停用态注记·HQ-FEEDBACK F-20261018-BS04 回执行落——窗至 10-19 ~11:3x·提前 ~23h 交付。
 
 ## §五 验证声明
 
 本件全部源面 2026-10-18 12:1x-12:4x 现读（os-protocol 85 行全文/capabilities C 册行/iteration_loop.ps1 L1-158/schtasks 三任务 verbose 实测/三队现读）；B 型活口证据=文件行号级实锚非记忆复述；零推测成分；裁决权归委员会（本件=供证非自裁）。
+
+## §六 产线面流程总清单（批二·R2358·案 §二.1 schema）
+
+| ID | 流程 | 执掌席 | 触发节律 | 写入资源面 | 依赖面 | 预算与产出账 |
+|---|---|---|---|---|---|---|
+| BS-P1 | M0 选题提案（S0 选题官环节门） | 选题研究部 | 认领制随轮·两源合流（集团 git 实况+情报日报 daily_brief） | data/ideas 选题板+backlog 提案行 | board_check 一致性探针（C-08） | ≤5 题/周批·每题 1 源 1 假设·缺源打回 |
+| BS-P2 | M1 母稿/拍稿（S1 编剧官·v1.5 违律扣分制） | 内容生产部（品牌文化部会签） | 随件（make_draft 骨架+AI 会话填充·L15 平台窗前置律+L18-L20 措辞律） | data/sources/bs*/voiceover-*.beats.txt+溯源表+s1-review-material | draft_lint 0 FAIL+plain_language_check（M1 即检） | S1 ≥9 过门·1500s Ollama 异步窗·零 API token |
+| BS-P3 | M2 TTS/素材（S2 配音听审官） | 内容生产部（工程技术部供仪器） | 随件（edge-tts light 赛博+human 42·空气预算律·发布件禁烧 BGM〔D-BS-02〕·脱敏渲染探针+段中尾帧验图） | .bs*-tmp 定稿音轨+cards 对位表+素材探针帧 | ai_feel+platform_spec+ASR 三机检前置 | 零 API token·产出=可听审音轨+对位表 |
+| BS-P4 | M3 变体/R-E 渲染（S3 变体官） | 平台运营部 | 随件（render_card_video/edit_craft 双渲染器同源·系列件 §5.5+§4.5 赛博层·em 机核+VERT 断言+字形覆盖门〔R1033 OSS ADOPT〕） | output/renders/*.mp4+plan.json+renders README 注记律 | 层 1.8 edit_craft 机检 | 本地 ffmpeg/CPU·时长窗实测余量带 1.2-2.9s |
+| BS-P5 | M4 审查（S4 合规官·四层机检） | 合规审查部 | 随件 | docs/reviews/station-reviews.md+finished.md M4 证据链 | draft_lint+层 1.5/1.6/1.7/1.8+AIGC 标识国家法层判据（#77） | FAIL=禁发布无例外·红线 0 分一票否决 |
+| BS-P6 | M4.5 七席+E8 终审（评审团八席·E4 双态制·§8 对抗式红绿双签 P0 档） | 评审团 | F 登记轮强制（盲评材料律 v1.4·返工 ≤2 轮升裁 B2） | docs/reviews/review-*.md+expert-verdicts+expert-calls 台账 | Ollama qwen2.5:14b（CEO pause 窗 defer·设计内让路见 §七.1） | 七席 ≥9=放行候选·试点 3=下个 F 登记轮红队点火 |
+| BS-P7 | M5 发布（S5 发布官） | 平台运营部 | blocked（账号批次①=CEO 物理件·readiness blocker 常设行） | output/schedule.md 发布物登记节 | readiness 阻塞清零+M4 PASS 双前置 | 未上线=未测量·零催办·状态件呈报 |
+| BS-P8 | M6 复盘（S6 数据官） | 数据分析部 | 周更一行 | output/analytics.md | 周报对账 | 未上线=未测量·假设逐条校准证伪即改 |
+| BS-P9 | L-卡四形态产线（QUOTE/DIGEST/CENSUS/REACT） | 选题研究部+内容生产部（bigstream-lcard-pipeline skill） | 认领制随轮+供给窗（编年史 A 级事件门+REACT 按日热点窗〔tech#199 校准窗 10-19〕） | data/storylines/cards/*+output/finished.md F 登记 | M0-M4.5 全链+七席+E4+多模态验图五检 | 194 件在产（DIGEST-v25 10-18）·推理面零云 |
+| BS-P10 | 有声线（audio） | 内容生产部 | 认领制随轮 | output/finished.md F-音 块 | 三轴定靶（内容/声线/技术） | 5 件在库·edge-tts 本地链 |
+| BS-P11 | 漫剧线（drama） | 短剧部（drama-dept-v1·bm-b 承办+bm-a 漫剧会话） | CEO 直令驱动（试点 IP《一路长虹》CEO 终审 pending） | cph4/fleet/drama-dept-v1/（跨仓只读） | 席位群审→提示词闸→导演席定稿链 | **3D 全面转型令在途（orders row 547·D 型候选在途见 §七.1）**·2D 工艺档注销位=tech#218 |
+| BS-P12 | meme 短视频线 | 短视频部 | **停用态**（O-20261017-1741 冻结令：V2/V3 冻结+HotScan1-3/HotApiKeepAlive 禁用+DailyHotApi :6688 停服·10-18 复工对齐令维持禁用） | cph4/fleet/meme-daily-v1/（跨仓只读·LEDGER J-M1~M19） | CEO 复启前禁点火 | V1《慢慢踩》成品在库候终审·停用期配额归零（production-chain v2.6 注记） |
+| BS-P13 | 视频切片部 | 切片部 | 试产未开（授权验证硬门=无授权画面一帧不进成片） | 零产出 | cph4/fleet/video-remix-dept/（跨仓只读） | gated·开线=CEO 令 |
+| BS-P14 | MV 线查看位（mv-album-001-jay 域） | 循环席（执行认领制） | 随轮到件验真（krea2 正典根 R1762 双路径并读+ffprobe 独立读数+多模态验真） | backlog #111 查看位注记行+state log | MV 会话域零接触律（R1745 承继） | 零接触·守望 V5.5→V5.6（导演席快改四件套 executing） |
+| BS-P15 | 云端配额面 | 循环席 | attribution 发射前必填+>500 积分高成本闸+争用裁决序 P0>P1>P2 | production-chain §5 配额节（v2.6） | TJGenerators 池 100 单/日·并发 10 | pause 窗实测消耗=零·未用配额归池 |
+
+## §七 产线面成对冲突扫描（批二·案 §一 A/B/C/D 逐对过）
+
+### 七.1 活口/在途三项
+
+| 冲突对 | 型 | 证据（现读实锚） | 裁决 | 当窗修法 | 防复发闸 |
+|---|---|---|---|---|---|
+| meme 线停用令 vs production-chain §5 配额表在册行 | D | orders L1180 O-20261017-1741 冻结令原文（V2/V3 冻结+4 任务禁用+6688 停服）+L1185 复工对齐令「短视频 4 任务按 O-20261017-1741 冻结令维持禁用」vs production-chain §5 配额节 meme 行现读仍活册（≤6 单/日 P1 日更节律）=被停用线配额行未同步 | 配额行保留+停用态注记（冻结≠删除·CEO 复启面保留） | **production-chain v2.6 本窗落**（§5 meme 行停用态注记+变更记录行） | 停用/复用令落板时配额表同窗注记检查位（入轮收账检查单） |
+| 漫剧 3D 全面转型令 vs 本司 2D 漫剧工艺档 | D（在途） | orders row 547 CEO 原话（10-18 11:28「漫剧要是3D漫 不要在搞2D漫了 全面转型」·dispatched @bm-a 漫剧会话 P0+@bm-b DRAMA-PRODUCTION-SYSTEM-v1 重写 3D-only）vs 本司 2D 工艺档现读仍在册（docs/ai-drama-mv-pipeline-plan-v1.md+data/storylines/drama/md0001/ T2I gate 判例族）未注销 | 3D 系统件落位后按「被接替机制注销」律处置 2D 档（superseded 指针非删除）——在途态如实注：执行域=bm-a 会话/bm-b drama lane（本司零接触）·非本窗可闭 | tech#218 落队（转型收口轮=2D 档注销检查位） | tech#218 检查位+案对账表续行候选 |
+| 评审链 LLM 依赖（S1/E4/Ollama）vs CEO 用机让路 pause 旗 | B（设计内） | machine-state.flag paused（10-17 22:51 起·:8090 CoderServe Disabled）→E4 v23~v25 回填腿 defer（R2354 实录）+AIHotWatchdog pause 旗 skip-pause fail-closed（R2048 交付） | 设计内让路非冲突（CEO 让路律优先级高于评审窗·零带病运行） | 已在案（defer 语义 state.beat 四键+resume 窗回填机制） | watchdog pause 旗守卫在役+resume 窗回填腿队列在册 |
+
+### 七.2 已治族注记（产线面·存量已知·如实入行）
+
+- **A 型·三账分工**：finished.md（件与证据链）/schedule.md（发布案物料）/renders README（渲染台账+SUPERSEDED 更账律 R189）分工在册=单一真相非冲突 ✓
+- **A 型·生产闸门**：state.json `production` 唯一总开关 vs make_draft 机牢（paused 拒稿 exit 3）=闸门长牙配套 ✓
+- **C 型·renders 注记位**：双连漏注（R2312/R2321）→当轮清偿+R2323 同轮补注先例固化 ✓
+- **C 型·临时件清理钩 vs 在飞批**：批未闭不预补账（R35/R144）+批闭收账（R150）——批一 §二.2 同判 ✓
+- **B 型·E4 双态制 vs 对抗式红队**：dept-review §8 设计分离在册（E4=受众参考线/红队=质量对抗线·分工不同面）✓
+
+## §八 O-025 四标高效复核带（产线面·批二）
+
+- **顺畅**：机检先行全绿才进专家面（FAIL 直接打回不占专家注意力）+canonical queue_status 真态取活+认领制+S1 v1.5 违律扣分制（「找不到违律才给分」退役=不可达门根修·R190/R191 零旗实证）
+- **高效**：本地栈全覆盖（edge-tts/faster-whisper/FFmpeg/PIL/Ollama）推理面零云·云端=例外面（三径闸+配额表）·B1 并行评审合并整改清单+B2 返工 ≤2 轮升裁+B4 批量共享母件结论·盲评材料律 v1.4 防鹦鹉回声无效返工
+- **简洁**：一法一册一账（dept-review 合一+expert-roster+station-reviews+review-panel 退役指针）·台账追加式·单门槛 ≥9·make_draft 骨架自带 GATE PENDING
+- **先进**：对抗式红绿双签（§8·C-20261018-01 对位·试点 3=下个 F 登记轮点火）+缺陷出生地拦截律+帧验三律+字形覆盖门（OSS ADOPT R1033）+垂直栈预算律+SUPERSEDED 更账律
+- **成本账**：全链 CPU/轻 GPU 本地面·评审=Ollama 本地零 API token·云端 pause 窗消耗=零·本批供证成本=一轮 CPU 面（现读+写件+收账）
+
+## §九 验证声明（批二）
+
+本批源面 2026-10-18 12:3x-12:5x 现读：docs/production-chain.md v2.5 全文+docs/dept-review-mechanism.md v1.7 全文+docs/six-line-appendix-20261017.md 全文+集团 orders.md O-20261017-1741（L1180）/复工对齐令（L1185）/row 547（漫剧 3D 转型）grep 行号级实锚；D 型活口证据=orders 行号+正典行现读双源非记忆复述；零推测成分；裁决权归委员会（本件=供证非自裁·跨仓写禁令执法=不写 cph4 案表·council 秘书处收卷聚合）。
