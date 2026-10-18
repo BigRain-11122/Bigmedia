@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-18 08:43:42",
- "do": "R2348: REACT-v23 M0 done (DeepSeek 8/8); closing-pool terminal -> tech#212; next v23 render + E4 backfill",
+ "export_ts": "2026-10-18 09:23:22",
+ "do": "R2350: REACT-v23 close (M4.5 PASS, F-196 done); E4 deferred (CEO pause); next: tech#213/#199 + supply reads",
  "depts": [
   {
    "n": "工程技术部",
@@ -45,7 +45,7 @@
    "ops"
   ],
   [
-   "DIGEST-v24+v25 双卡收官（F-194/F-195 登记·M4.5 desk-audit 双 PASS）",
+   "DIGEST-v24/v25+REACT-v23 三卡收官（F-194/195/196·M4.5 三 PASS）",
    "on",
    "l-card"
   ],
@@ -68,21 +68,21 @@
  ],
  "results": [
   [
-   "F-195 close",
-   "r2347"
+   "F-196 close",
+   "r2350"
   ],
   [
    "0 findings",
-   "r2347"
+   "r2350"
   ],
   [
-   "tech#211",
-   "r2347"
+   "REACT-v23 done",
+   "r2350"
   ]
  ],
  "live": [
-  "DIGEST-v25《城市盘点 025·深夜治理夜》收官链毕：M4.5 七席 4×9+3N/A PASS+E4 让路态如实注（回填腿预置）",
-  "最近实物：MC-20261018-DIGEST-v25 图文卡入库 F-195（成品库第 196 件·2026-10-18 08:2x）",
-  "里程碑：随窗判读新令级事件簇出 DIGEST-v26 供给位（≤48h）；CEO resume 窗后 E4 参考仪 v22~v25 四件回填"
+  "REACT-v23《城市速报 023·DeepSeek V4.1 Flash 1017 之问》收官链毕：M4.5 七席 4×9+3N/A PASS 放行候选+E4 让路态如实注（e4-body 预置 v23-tmp·回填腿待 CEO resume 窗）",
+  "最近实物：MC-20261018-REACT-v23 图文卡入库 F-196（成品库第 197 件·2026-10-18 09:2x）",
+  "里程碑：REACT-v24/DIGEST-v26 供给位随窗判读+tech 队 #213/#199 依序领（≤48h）；CEO resume 窗后 E4 v23~v25 三件回填"
  ]
 }
