@@ -1648,6 +1648,73 @@ class C3TmpStaleTests(unittest.TestCase):
         self.assertNotIn("c3tmp-stale", fail_codes(findings))
 
 
+class Utf16DebrisTests(unittest.TestCase):
+    """tech#216: PS 5.1 `>` UTF-16 redirect residue guard - pure core,
+    check face and CLI wiring. A root-level .c3-tmp file headed by a
+    UTF-16 BOM (R2331/R2355 anchor form) is named; UTF-8, UTF-8-BOM,
+    plain-ASCII, empty, unreadable and missing faces stay silent."""
+
+    BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
+
+    def _repo_with_bom(self):
+        root = make_repo(self, self.BEAT_SPEC, make_state(tick=2356), BOARD)
+        c3 = root / ".c3-tmp"
+        c3.mkdir()
+        (c3 / "r2355_t199.txt").write_bytes(
+            b"\xff\xfe" + "dead evidence".encode("utf-16-le"))
+        (c3 / "r2356_probe.txt").write_text("live utf-8", encoding="utf-8")
+        return root
+
+    def test_pure_core_flags_both_bom_orders_only(self):
+        self.assertEqual(
+            loop_health.classify_utf16_debris([
+                (".c3-tmp/a.txt", b"\xff\xfe\x00a"),   # LE BOM - anchor
+                (".c3-tmp/b.txt", b"\xfe\xff\x00b"),   # BE BOM - also dead
+                (".c3-tmp/c.txt", b"\xef\xbb\xbf#"),    # UTF-8 BOM - fine
+                (".c3-tmp/d.txt", b"plain ascii"),      # plain - silent
+                (".c3-tmp/e.txt", b""),                # empty - silent
+                (".c3-tmp/g.txt", b"\xff"),            # short head - silent
+                (".c3-tmp/f.txt", None),               # unreadable - silent
+            ]),
+            [".c3-tmp/a.txt", ".c3-tmp/b.txt"])
+
+    def test_check_face_names_bom_file_only(self):
+        root = self._repo_with_bom()
+        findings = []
+        loop_health.check_utf16_debris(root, findings)
+        self.assertEqual(warn_codes(findings), {"utf16-debris"})
+        self.assertEqual(len(findings), 1)
+        self.assertIn(".c3-tmp/r2355_t199.txt", findings[0][2])
+        self.assertIn("cap_utf8", findings[0][2])
+        self.assertNotIn("r2356_probe.txt", findings[0][2])
+
+    def test_missing_dir_silent(self):
+        root = make_repo(self, self.BEAT_SPEC, make_state(tick=2356), BOARD)
+        findings = []
+        loop_health.check_utf16_debris(root, findings)
+        self.assertEqual(findings, [])
+
+    def test_cli_wired_on_bom_fixture(self):
+        # judgement criterion 2: the anchor debris form surfaces on the
+        # probe's own face (round-end routine consumption); WARN never
+        # fails the probe
+        root = self._repo_with_bom()
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = loop_health.main(["loop_health.py", "--root", str(root)])
+        self.assertIn("utf16-debris", buf.getvalue())
+        self.assertEqual(rc, 0)
+
+    def test_real_repo_clean_baseline_smoke(self):
+        """Judgement criterion 1 (zero false naming): the real repo's
+        in-flight UTF-8 evidence never flags; assert only that the face
+        never FAILs the probe and never crashes (a WARN here would be
+        genuine debris from a re-tread, not a false positive)."""
+        findings = []
+        loop_health.check_utf16_debris(REPO, findings)
+        self.assertNotIn("utf16-debris", fail_codes(findings))
+
+
 class AudioTmpResidueTests(unittest.TestCase):
     """tech#114: audio TTS tmp working-dir residue guard - pure core,
     check face and CLI wiring. The R2005 anchor form (untracked file

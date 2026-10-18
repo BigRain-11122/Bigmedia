@@ -59,6 +59,10 @@ Findings:
   FAIL  root-probe-litter            >= 3 root-level r<digit>/r_ probe
                                    files (recurring-litter pattern -
                                    episodic sweeps R1807/R1816/R1828)
+  WARN  utf16-debris              root-level .c3-tmp file whose head
+                                   bytes are a UTF-16 BOM - PS 5.1 `>`
+                                   redirect residue (tech#198 family;
+                                   R2331/R2355 anchors; tech#216)
   WARN  stale-dirty                uncommitted file(s) whose on-disk
                                    mtime is older than 7 days
                                    (C-20261009-03 workspace baseline v1
@@ -282,6 +286,12 @@ C3TMP_DIR_PREFIX = ".c3-tmp/"
 C3TMP_STALE_HOURS = 48.0
 # Round-numbered middleware name convention: r<N>_<rest> under .c3-tmp/
 ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
+# tech#216: PS 5.1 `>` redirect residue guard. The pit law lived only in
+# tools/run_suite.ps1's header (tech#198) while ad-hoc round probes kept
+# re-treading it (R2331 + R2355 x2 anchors: UTF-16 BOM evidence files
+# that read_file rejects as binary). This face names the debris at the
+# round-end probe so recurrence no longer relies on self-recall.
+UTF16_BOM_HEADS = (b"\xff\xfe", b"\xfe\xff")
 # tech#114: audio-line TTS tmp working-dir residue guard. R2005 anchor:
 # 75 untracked TTS intermediates (10.59 MB) sat across rounds under
 # data/storylines/audio/sc005-0X-v1-tmp/ because every hand-built close
@@ -1169,6 +1179,50 @@ def check_c3tmp_stale(root, now, findings):
                          % (rel, age_h, C3TMP_STALE_HOURS)))
 
 
+def classify_utf16_debris(samples):
+    """[(relpath, head-bytes)] -> sorted relpaths whose head is a
+    UTF-16 BOM (pure core). None heads (unreadable) never flag."""
+    flagged = []
+    for rel, head in samples:
+        if head is None:
+            continue
+        for bom in UTF16_BOM_HEADS:
+            if head.startswith(bom):
+                flagged.append(rel)
+                break
+    return sorted(flagged)
+
+
+def check_utf16_debris(root, findings):
+    """tech#216 guard face: name root-level .c3-tmp files that start
+    with a UTF-16 BOM - the residue of pointing PS 5.1 ``>`` at a
+    native tool's output (tech#198 pit family; R2331 + R2355 x2
+    anchors: the evidence file came back as binary that read_file
+    rejects, killing the chain). Recapture with tools/cap_utf8.py and
+    delete the debris at round end. A missing .c3-tmp dir and
+    unreadable files stay silent (advisory face, never breaks the
+    probe)."""
+    c3 = Path(root) / C3TMP_DIR_PREFIX
+    if not c3.is_dir():
+        return
+    samples = []
+    for child in sorted(c3.iterdir()):
+        if not child.is_file():
+            continue
+        try:
+            with open(child, "rb") as fh:
+                head = fh.read(2)
+        except OSError:
+            continue
+        samples.append((C3TMP_DIR_PREFIX + child.name, head))
+    for rel in classify_utf16_debris(samples):
+        findings.append(("WARN", "utf16-debris",
+                         "%s starts with a UTF-16 BOM - PS 5.1 `>` "
+                         "redirect residue (tech#198 family; R2331/R2355 "
+                         "anchors) - recapture via tools/cap_utf8.py and "
+                         "delete the debris at round end" % rel))
+
+
 def classify_audio_tmp_residue(relpaths, domain_prefix=AUDIO_DOMAIN_PREFIX,
                                 list_cap=AUDIO_TMP_LIST_CAP):
     """untracked paths under data/storylines/audio/*-tmp/ -> one WARN
@@ -1830,6 +1884,7 @@ def main(argv):
         findings += f
         check_root_litter(root, findings)
         check_c3tmp_stale(root, datetime.now(), findings)
+        check_utf16_debris(root, findings)
         check_audio_tmp_residue(root, findings)
         check_broken_round_debris(root, state, findings)
         check_stale_dirty(root, datetime.now(), findings)
