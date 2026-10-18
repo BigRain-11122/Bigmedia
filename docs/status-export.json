@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 06:36:35",
- "do": "R2374 chronicle v1.6 10-18 node; main#130 done; next 10-20 AM dual-slot + batch-7 window",
+ "export_ts": "2026-10-19 07:35:00",
+ "do": "R2375 tech#230 em glyph advance table landed (fleet recheck zero overflow + pixel gates); next 10-20 AM dual-slot window",
  "depts": [
   {
    "n": "工程技术部",

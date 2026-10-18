@@ -256,6 +256,38 @@ class TestWrap(unittest.TestCase):
         self.assertEqual("abc", rcv.wrap_for_width(text, 44, 1080))
 
 
+class TestEmGlyphAdv(unittest.TestCase):
+    """tech#230 (R2375): fontTools-measured advances for the three
+    codepoints the 0.55em fallthrough under-priced (R2372 red-team
+    forensics anchor: msyh U+2026 = 0.813em). A dense ellipsis line must
+    never again be priced at 0.55em per glyph."""
+
+    def test_ellipsis_measured_advance(self):
+        # 1666/2048 = 0.813 -> charged 0.82 (rounded up, conservative)
+        self.assertAlmostEqual(0.82, rcv._em_cost("\u2026"), places=6)
+
+    def test_em_dash_measured_advance(self):
+        # 2212/2048 = 1.078 -> charged 1.08 (wider than CJK 1.0)
+        self.assertAlmostEqual(1.08, rcv._em_cost("\u2014"), places=6)
+
+    def test_right_arrow_measured_advance(self):
+        # 2048/2048 = 1.000 (full square, not a 0.55em latin)
+        self.assertAlmostEqual(1.00, rcv._em_cost("\u2192"), places=6)
+
+    def test_dense_ellipsis_line_regression(self):
+        # 9 CJK + 17 ellipsis: old model 9 + 17*0.55 = 18.35em (a
+        # false-comfort margin); new model 9 + 17*0.82 = 22.94em.
+        line = "\u4e00" * 9 + "\u2026" * 17
+        self.assertAlmostEqual(22.94, rcv._line_cost(line), places=6)
+
+    def test_baseline_classes_unchanged(self):
+        self.assertAlmostEqual(1.0, rcv._em_cost("\u4e00"), places=6)
+        self.assertAlmostEqual(0.5, rcv._em_cost(" "), places=6)
+        self.assertAlmostEqual(0.55, rcv._em_cost("a"), places=6)
+        # CJK-range punctuation still 1.0 (U+300A >= 0x2E80)
+        self.assertAlmostEqual(1.0, rcv._em_cost("\u300a"), places=6)
+
+
 class TestPlanAndMatch(unittest.TestCase):
     def test_voiceover_match(self):
         cues = [(0.0, 3.0, "hello  world"), (3.0, 6.0, "foo\nbar")]

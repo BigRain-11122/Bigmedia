@@ -191,11 +191,31 @@ def load_cards(path):
     return cfg
 
 
+# tech#230 (R2375): fontTools-measured msyh.ttc advances (upm=2048) for
+# the codepoints the coarse fallthrough (0.55em) under-priced by
+# 0.26-0.53em per glyph on dense lines (R2372 red-team forensics:
+# U+2026 adv 1666/2048 = 0.813em vs 0.55em charged). Values are the
+# declared body font (font.file, regular msyh) rounded UP one notch so
+# the h2 deck / subs / AIGC faces price >= reality. Known conservative
+# residual: the h1 face renders msyhbd.ttc where U+2026 is 0.963em
+# (charged 0.82 here); h1 lines are short with rare ellipsis and keep
+# wide headroom -- observation seed on file, not a blocker.
+_EM_SPECIAL_ADV = {
+    0x2026: 0.82,  # HORIZONTAL ELLIPSIS ... (1666/2048=0.813)
+    0x2014: 1.08,  # EM DASH -- (2212/2048=1.078, widest priced glyph)
+    0x2192: 1.00,  # RIGHTWARDS ARROW -> (2048/2048=1.000)
+}
+
+
 def _em_cost(ch):
     """Rough glyph width in em units: CJK ~1.0 em, latin/digit ~0.55,
-    space ~0.5. Good enough to keep drawtext inside the frame (it has
-    no auto line-wrap, so oversize lines get clipped at the edges)."""
+    space ~0.5, plus the fontTools-measured table above. Good enough to
+    keep drawtext inside the frame (it has no auto line-wrap, so
+    oversize lines get clipped at the edges)."""
     o = ord(ch)
+    adv = _EM_SPECIAL_ADV.get(o)
+    if adv is not None:
+        return adv
     if o >= 0x2E80:  # CJK ideographs + fullwidth forms + CJK punct
         return 1.0
     if ch in (" ", "\t"):
