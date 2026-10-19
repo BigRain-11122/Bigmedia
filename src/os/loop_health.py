@@ -24,6 +24,8 @@ Thresholds:
                  hard cap, tech#217 v2 budget: 1.2 x 240 min;
                  silence beyond it means the loop stopped)
   Any historical gap over 288 min = outage FAIL (same lock-age logic).
+  A gap carried on the state outage_adjudicated ledger (documented
+  historical window, tech#241) downgrades to a tagged WARN instead.
 
 State log entries may carry approximate minutes ("17:2x" - unknown
 digit). The x is a legal placeholder, ordered lexicographically; a
@@ -39,6 +41,9 @@ Findings:
   FAIL  heartbeat-file/line/order   beat log missing/garbled/rewound
   FAIL  heartbeat-stale             last beat older than --max-age
   FAIL  heartbeat-outage            historical gap beyond lock age
+  WARN  heartbeat-outage-adjudicated documented outage window on the
+                                   state outage_adjudicated ledger
+                                   (tech#241); unlisted gaps still FAIL
   FAIL  state-file/schema/tick      state ledger unusable
   FAIL  state-production             production value outside regimes
   FAIL  log-ts                       entry lacks leading timestamp
@@ -465,6 +470,29 @@ def parse_beats(path):
                              % (beats[i - 1][0].strftime("%Y-%m-%d %H:%M:%S"),
                                 beats[i][0].strftime("%Y-%m-%d %H:%M:%S"))))
     return beats, findings
+
+
+def load_outage_adjudicated(state):
+    """tech#241 (R2388): state-carried ledger of documented historical
+    heartbeat-outage windows, account_drift_adjudicated's outage twin.
+    Entry shape: {"date": "YYYY-MM-DD", "gap_min": <int>}. An outage FAIL
+    whose (start date, rounded gap minutes) matches an entry downgrades to
+    a tagged WARN; anything unrecognized stays a FAIL like any new window
+    (fail-closed - malformed shapes widen nothing)."""
+    block = state.get("outage_adjudicated") if isinstance(state, dict) else None
+    out = set()
+    if isinstance(block, dict):
+        block = block.get("windows")
+    if not isinstance(block, list):
+        return out
+    for w in block:
+        if not isinstance(w, dict):
+            continue
+        d, g = w.get("date"), w.get("gap_min")
+        if (isinstance(d, str) and len(d) == 10 and d[4] == "-" and d[7] == "-"
+                and isinstance(g, int) and not isinstance(g, bool) and g > 0):
+            out.add((d, g))
+    return out
 
 
 def load_log_order_adjudicated(state):
@@ -2008,15 +2036,29 @@ def check_export_face(root, findings):
 
 def cross_check(beats, state, done, now, max_age, max_gap, findings):
     """Protocol section 5 criteria -> findings appended in place."""
+    adj_outages = load_outage_adjudicated(state)
     if beats:
         for i in range(1, len(beats)):
             gap = (beats[i][0] - beats[i - 1][0]).total_seconds() / 60.0
             pair = "%s -> %s" % (beats[i - 1][0].strftime("%Y-%m-%d %H:%M"),
                                  beats[i][0].strftime("%Y-%m-%d %H:%M"))
             if gap > max_age:
-                findings.append(("FAIL", "heartbeat-outage",
-                                 "beat gap %.0f min (%s) exceeds lock age %d min "
-                                 "- loop outage window" % (gap, pair, max_age)))
+                key = (beats[i - 1][0].strftime("%Y-%m-%d"), int(round(gap)))
+                if key in adj_outages:
+                    # tech#241 (R2388): a documented historical window on
+                    # the state outage_adjudicated ledger downgrades to a
+                    # tagged WARN - visible on the full audit face, folded
+                    # by the --loop date cutoff like other pre-cutoff
+                    # history; unlisted windows keep failing.
+                    findings.append(("WARN", "heartbeat-outage-adjudicated",
+                                     "beat gap %.0f min (%s) over %d min lock "
+                                     "age - adjudicated historical outage "
+                                     "window (state outage_adjudicated, "
+                                     "tech#241)" % (gap, pair, max_age)))
+                else:
+                    findings.append(("FAIL", "heartbeat-outage",
+                                     "beat gap %.0f min (%s) exceeds lock age %d min "
+                                     "- loop outage window" % (gap, pair, max_age)))
             elif gap > max_gap:
                 findings.append(("WARN", "heartbeat-gap",
                                  "beat gap %.0f min (%s) over %d min comm SLA "

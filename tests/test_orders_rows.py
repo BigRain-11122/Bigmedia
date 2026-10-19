@@ -179,6 +179,31 @@ class RowsWindowTextTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             orders_rows.rows_window_text(MIXED, 5, 3)
 
+    def test_cli_window_output_is_utf8(self):
+        # tech#245 (R2388): orders_rows console face must emit UTF-8
+        # (group_scan parity, tech#243 twin) - rows 596-600 consumption
+        # hit full CJK mojibake on the GBK codepage and cost a stable
+        # second read_file hop per judgment (R2387 anchor).
+        import os
+        import subprocess
+        import sys
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as td:
+            src = Path(td) / "orders.md"
+            src.write_text(
+                "| 2026-10-19 13:41 | CEO 令：还是乱入了动画镜头 | executed |\n",
+                encoding="utf-8")
+            env = dict(os.environ, PYTHONIOENCODING="gbk")
+            p = subprocess.run(
+                [sys.executable, str(Path(orders_rows.__file__)),
+                 "--hq-orders", str(src), "--window", "1", "1"],
+                capture_output=True, timeout=60, env=env)
+            self.assertEqual(0, p.returncode)
+            txt = p.stdout.decode("utf-8")
+            self.assertIn("ROW 1:", txt)
+            self.assertIn("乱入了动画镜头", txt)
+
     def test_rows_window_from_host_reads_file(self):
         with tempfile.NamedTemporaryFile(
                 "w", suffix=".md", delete=False, encoding="utf-8") as fh:

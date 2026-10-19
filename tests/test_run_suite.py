@@ -22,7 +22,7 @@ WRAPPER = REPO / "tools" / "run_suite.ps1"
 PS = "powershell.exe"
 
 
-def run_wrapper(module=None, log=None, result_file=None, timeout=300):
+def run_wrapper(module=None, log=None, result_file=None, timeout=300, env=None):
     cmd = [PS, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(WRAPPER)]
     if module:
         cmd += ["-Module", module]
@@ -32,7 +32,7 @@ def run_wrapper(module=None, log=None, result_file=None, timeout=300):
         cmd += ["-ResultFile", result_file]
     proc = subprocess.run(
         cmd, capture_output=True, text=True, timeout=timeout,
-        encoding="utf-8", errors="replace", cwd=str(REPO),
+        encoding="utf-8", errors="replace", cwd=str(REPO), env=env,
     )
     return proc.returncode, proc.stdout
 
@@ -154,6 +154,52 @@ class RunSuiteWrapperTests(unittest.TestCase):
             self.assertNotIn(b"SUITE_RC=999", raw)
             self.assertNotIn(b"\x00", raw)
             self.assertIn(b"SUITE_RC=0", raw)
+
+
+class PreflightTests(unittest.TestCase):
+    """tech#240 (R2388): the wrapper refuses to start a suite when ffmpeg
+    or ffprobe is missing or unexecutable (R2382 anchor: a winget upgrade
+    race removed the old bin dir mid-session; 11 ffprobe-dependent suite
+    failures burned ~10min and read like code regressions while ffmpeg's
+    Tuanjie hub copy masked the half-broken env). Refusal = dedicated rc
+    126 + LOUD ENV-PREFLIGHT-FAIL banner on stdout AND in the canonical
+    result file.
+    """
+
+    def test_missing_binary_refuses_suite_rc126(self):
+        with tempfile.TemporaryDirectory() as td:
+            log = os.path.join(td, "pf-missing.log")
+            env = dict(os.environ)
+            # system dirs only: no winget links, no Tuanjie hub - both
+            # media binaries vanish from the PATH slot
+            env["PATH"] = r"C:\Windows\System32;C:\Windows"
+            rc, out = run_wrapper(module="tests.test_board_check",
+                                  log=log, env=env)
+            self.assertEqual(126, rc)
+            self.assertIn("ENV-PREFLIGHT-FAIL", out)
+            self.assertIn("NOT FOUND ON PATH", out)
+            raw = _read_raw(log + ".result").decode("utf-8")
+            self.assertIn("SUITE_RC=126", raw)
+            self.assertIn("ENV-PREFLIGHT-FAIL", raw)
+
+    def test_found_but_unexecutable_binary_refuses_suite(self):
+        with tempfile.TemporaryDirectory() as td:
+            fdir = os.path.join(td, "bin")
+            os.makedirs(fdir)
+            for name in ("ffmpeg.exe", "ffprobe.exe"):
+                # PATH slot passes (Get-Command is extension-based), the
+                # execution slot must refuse the fake
+                with open(os.path.join(fdir, name), "w",
+                          encoding="utf-8") as f:
+                    f.write("not a real executable\n")
+            log = os.path.join(td, "pf-broken.log")
+            env = dict(os.environ)
+            env["PATH"] = fdir + os.pathsep + r"C:\Windows\System32;C:\Windows"
+            rc, out = run_wrapper(module="tests.test_board_check",
+                                  log=log, env=env)
+            self.assertEqual(126, rc)
+            self.assertIn("ENV-PREFLIGHT-FAIL", out)
+            self.assertIn("-version", out)  # the execution-slot banner
 
 
 if __name__ == "__main__":

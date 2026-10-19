@@ -71,9 +71,11 @@ R2276 console hardening: --item crashed live with UnicodeEncodeError
 ('gbk' codec can't encode '\\u226a') when an item carries characters
 outside the console codepage (tech#151's VRAM reading uses the CJK
 much-less-than sign). main() now reconfigures stdout/stderr with
-errors="replace": the codepage is kept (CJK still displays), the rare
-non-encodable character degrades to '?' instead of killing the
-readout. The --json face is ASCII-only payload, so it is unaffected.
+encoding="utf-8" (tech#243, R2388: codepage-kept CJK read as mojibake
+in the harness and cost a second read_file hop per --item judgment;
+group_scan.py parity) plus errors="replace": the rare non-encodable
+character degrades to '?' instead of killing the readout. The --json
+face is ASCII-only payload, so it is unaffected.
 
 tech#236 (R2383 seed, closed R2385): machine-readable pin suffix. A
 new seed whose true state is window/gate-pinned ENDS its line with
@@ -358,7 +360,7 @@ def build_json(report):
 
 
 def _harden_console_stdio():
-    """R2276: keep CLI printing alive on a GBK console.
+    """R2276/tech#243: CLI prints UTF-8 on any console.
 
     Live crash anchor: `--item 151` raised UnicodeEncodeError ('gbk'
     codec can't encode '\\u226a') because queue rows carry characters
@@ -368,12 +370,20 @@ def _harden_console_stdio():
     instead of crashing the readout. Guards: pythonw None-stream skip
     (tech#169 family) and the unittest harness (StringIO has no
     reconfigure) both no-op via AttributeError.
+
+    tech#243 (R2388): the reconfigure now pins encoding='utf-8'
+    outright (group_scan.py parity). Keeping the console codepage
+    shipped CJK readouts as codepage bytes that read as mojibake in
+    the harness, forcing a second read_file/grep hop per --item
+    judgment (R2385 8-call anchor); UTF-8 output makes the face
+    one-shot readable. errors='replace' stays as the last-resort
+    guard (R2276 contract).
     """
     for stream in (sys.stdout, sys.stderr):
         if stream is None:  # pythonw / detached: no console attached
             continue
         try:
-            stream.reconfigure(errors="replace")
+            stream.reconfigure(encoding="utf-8", errors="replace")
         except (AttributeError, ValueError, OSError):
             pass
 

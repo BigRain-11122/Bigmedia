@@ -286,6 +286,53 @@ class CrossCheckTests(unittest.TestCase):
                                  make_state(tick=2))
         self.assertEqual(fail_codes(findings), {"heartbeat-outage"})
 
+    # ---- tech#241 (R2388): documented historical outage windows carried on
+    # the state outage_adjudicated ledger downgrade to a tagged WARN
+    # (account_drift/log_order adjudication twin); unlisted windows keep
+    # failing - fail-closed on any mismatch or malformed ledger shape.
+    def _outage_repo_beats(self):
+        root = make_repo(self, [(50, "round done exit=0"), (5, "round done exit=0")],
+                         make_state(tick=2), BOARD)
+        beats, _ = loop_health.parse_beats(root / "logs" / "probe-heartbeat.txt")
+        return beats
+
+    def _cross(self, beats, state):
+        done, _, _, _ = loop_health.classify(beats)
+        findings = []
+        loop_health.cross_check(beats, state, done, datetime.now(),
+                                40, 20, findings)
+        return findings
+
+    def test_adjudicated_outage_window_downgrades_to_warn(self):
+        beats = self._outage_repo_beats()
+        state = make_state(tick=2)
+        state["outage_adjudicated"] = {
+            "windows": [{"date": beats[0][0].strftime("%Y-%m-%d"),
+                         "gap_min": 45}],
+            "law": "tech#241 test", "adjudicated_by": "R2388"}
+        findings = self._cross(beats, state)
+        self.assertEqual(fail_codes(findings), set())
+        self.assertEqual(warn_codes(findings), {"heartbeat-outage-adjudicated"})
+
+    def test_outage_ledger_mismatch_stays_fail(self):
+        beats = self._outage_repo_beats()
+        for windows in ([[{"date": "2020-01-01", "gap_min": 45}]],
+                         [[{"date": beats[0][0].strftime("%Y-%m-%d"),
+                            "gap_min": 44}]]):
+            state = make_state(tick=2)
+            state["outage_adjudicated"] = {"windows": windows}
+            self.assertEqual(fail_codes(self._cross(beats, state)),
+                             {"heartbeat-outage"})
+
+    def test_malformed_outage_ledger_fail_closed(self):
+        beats = self._outage_repo_beats()
+        for bad in ("not-a-list", [{"gap_min": 45}], [{"date": "2020-01-01"}],
+                    [["2020-01-01", 45]], [{"date": "20200101xx", "gap_min": 45}]):
+            state = make_state(tick=2)
+            state["outage_adjudicated"] = {"windows": bad}
+            self.assertEqual(fail_codes(self._cross(beats, state)),
+                             {"heartbeat-outage"})
+
     def test_done_beats_over_tick_fail_lag(self):
         spec = [(30, "round done exit=0"), (5, "round done exit=0")]
         _, findings = self.check(spec, make_state(tick=1))

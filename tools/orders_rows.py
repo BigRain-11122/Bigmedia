@@ -126,7 +126,27 @@ def rows_window_from_host(start, end, path=None):
     return rows_window_text(read_hq_orders_text(path), start, end)
 
 
+def _harden_console_stdio():
+    """tech#245 (R2388): orders_rows console face prints UTF-8.
+
+    tech#243's twin for this probe: rows 596-600 consumption hit full
+    CJK mojibake on the GBK codepage console (R2387 anchor), forcing a
+    stable second read_file hop per judgment. Reconfigure stdout/stderr
+    to encoding='utf-8' + errors='replace' (group_scan.py parity; the
+    R2276 hardening contract). pythonw None-streams and the unittest
+    harness (StringIO has no reconfigure) both no-op via AttributeError.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        if stream is None:
+            continue
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def main(argv=None):
+    _harden_console_stdio()
     parser = argparse.ArgumentParser(description="orders rows probe")
     parser.add_argument("--hq-orders", default=os.path.join(
         REPO, "..", "..", "docs", "orders.md"))

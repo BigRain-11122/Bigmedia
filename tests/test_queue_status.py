@@ -434,6 +434,27 @@ class TestConsoleHardening(unittest.TestCase):
             self.assertIn(b"#151 [CLAIMABLE]", p.stdout)
             self.assertIn(b"8704MB", p.stdout)  # verbatim text survives
 
+    def test_item_cjk_output_is_utf8_bytes(self):
+        # tech#243 (R2388): the face must emit UTF-8 bytes so harness
+        # reads are one-shot - codepage-kept CJK read as mojibake and
+        # cost a second read_file hop per --item judgment (R2385
+        # 8-call anchor). Red before the fix: GBK bytes fail the
+        # utf-8 decode below.
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "state" / "queue").mkdir(parents=True)
+            (root / "state" / "queue" / "tech.md").write_text(
+                "240. 套件前置 ffprobe 哨兵候选\n", encoding="utf-8")
+            env = dict(os.environ, PYTHONIOENCODING="gbk")
+            p = subprocess.run(
+                [sys.executable, str(REPO / "src" / "os" / "queue_status.py"),
+                 "--root", str(root), "--item", "240"],
+                capture_output=True, timeout=60, env=env)
+            self.assertEqual(0, p.returncode)
+            self.assertIn(b"#240 [CLAIMABLE]", p.stdout)
+            txt = p.stdout.decode("utf-8")
+            self.assertIn("套件前置", txt)
+
     def test_harden_noop_on_stringio_streams(self):
         # pythonw None-stream guard (tech#169 family) + the unittest
         # harness (StringIO has no reconfigure) must both no-op.
