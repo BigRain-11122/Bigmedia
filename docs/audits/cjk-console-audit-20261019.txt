@@ -70,3 +70,17 @@ ollama_probe.py (subject)                    ASCII   no cjk bytes
 axis_anchor_check.py --help (subject)        ASCII   no cjk bytes
 
 R2389 axis_anchor_check live leg: module tests (31) green RC=0, CJK lines displayed correctly under default console (no PYTHONIOENCODING) - fix verified functionally; standalone smoke hit brain-lane fail-closed rc3 (CoderServe task Disabled, machine domain).
+
+== ARG-GATED SMOKE FACE (tech#247, R2390, temp fixtures, raw-byte judged) ==
+A board_check [fixture ledger+drafts]        PASS   utf-8 strict ok, cjk present (pre-existing inline harden; stale/orphan findings echo CJK statuses + filenames clean)
+B platform_spec_check --video mp4 --platform <CJK>   FAIL -> PASS  (was: codepage(gbk) bytes on default console; SUMMARY echoes the CJK platform name that S2 gate runs write into the renders ledger)
+C intel/daily_brief --date --out <CJK dir>    FAIL -> PASS  (was: codepage(gbk) bytes on the out= path echo; both channels live, 20 items)
+verdict after promotion: 0 FAIL / 3 total.
+
+R2390 promotion legs (same canon _harden_console_stdio as tech#243, pythonw/StringIO no-op guards):
+  src/platform_spec_check.py   main() now calls _harden_console_stdio()
+  src/intel/daily_brief.py     main() now calls _harden_console_stdio()
+Re-smoke (same judge, env without PYTHONIOENCODING): B SUMMARY line echoes the platform name as clean utf-8; C OK line echoes the CJK out path as clean utf-8.
+Full suite regression: Ran 1749 tests in 195.765s, OK (SUITE_RC=0; includes test_daily_brief / test_board_check - zero breakage).
+
+Methodology note (new anchor): the static face classified platform_spec_check.py as "NO-HARDEN cjk-in-file-writes" (no literal CJK prints) - yet the DATA-driven echo (platform name parsed from the playbook at runtime) still shipped CJK on stdout as codepage bytes. Static literal-print scanning cannot rule out data-driven CJK echo faces; arg-gated live fixtures are the only closing leg for that blind spot (tech#248 seed: make the fixture smoke a permanent suite member).

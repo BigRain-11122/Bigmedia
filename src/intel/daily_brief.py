@@ -121,7 +121,26 @@ def render_brief(day, result):
     return "\n".join(lines) + "\n"
 
 
+def _harden_console_stdio():
+    """tech#247 (R2390): CLI prints UTF-8 on any console.
+
+    Live anchor: the tech#247 arg-gated smoke captured GBK codepage
+    bytes for the "out=" path echo (and channel-fail reason strings)
+    when stdout is piped with a non-ASCII --out path. Pinning utf-8
+    keeps the loop-side readout one-shot readable (tech#243 canon);
+    the brief file itself was already written utf-8 and is untouched.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        if stream is None:  # pythonw / detached: no console attached
+            continue
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def main(argv):
+    _harden_console_stdio()
     day = date.today().isoformat()
     out_dir = DEFAULT_OUT
     i = 1

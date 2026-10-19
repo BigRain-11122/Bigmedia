@@ -130,7 +130,26 @@ def check(spec, width, height, duration):
     return findings
 
 
+def _harden_console_stdio():
+    """tech#247 (R2390): CLI prints UTF-8 on any console.
+
+    Live anchor: the tech#247 arg-gated smoke captured GBK codepage
+    bytes for the SUMMARY / platform-name echo when stdout is piped
+    (the S2 gate runs read this face into the renders ledger), so
+    the CJK platform names read back as mojibake. Pinning utf-8
+    keeps the gate readout one-shot readable (tech#243 canon).
+    """
+    for stream in (sys.stdout, sys.stderr):
+        if stream is None:  # pythonw / detached: no console attached
+            continue
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError, OSError):
+            pass
+
+
 def main(argv):
+    _harden_console_stdio()
     video = platform = None
     i = 1
     while i < len(argv):
