@@ -136,6 +136,10 @@ PYCACHE_DIRNAME = "__pycache__"
 FINISHED_LEDGER_REL = "output/finished.md"
 QUEUE_MAIN_REL = "state/queue/main.md"
 STATION_REVIEWS_REL = "docs/reviews/station-reviews.md"
+# main#139 (R2373 anchor): F-192/F-196/F-197 carried closing-position
+# anchors registered without the residents appearance-ledger row; the
+# misses lagged to the R2373 backfill batch.
+RESIDENTS_LEDGER_REL = "data/storylines/codex/city-residents.md"
 
 # tech#76: ledger prefix shape. Minute field is two chars - digit+digit
 # ("23:26") or digit+x ("23:5x", fuzzy-minute house style). Anything else
@@ -893,6 +897,25 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
             "station-reviews row for the new F-number (tech#209, "
             "R2342 anchor: F-192/F-193 rows lagged two rounds)"
             % STATION_REVIEWS_REL)
+
+    # --- main#139: REACT-form F-registration residents backwrite guard
+    # (R2373 anchor). F-192/F-196/F-197 carried closing-position anchors
+    # whose appearance-ledger rows were never written at registration -
+    # the misses surfaced only via the R2373 backfill batch. Trigger
+    # face: a finished-ledger write plus any REACT-form artifact path
+    # (review files carry "mcreact", card dirs carry "REACT") with no
+    # residents-ledger write on board. Same advisory contract as
+    # tech#188/209: the row may legitimately live in an earlier commit,
+    # so the WARN never fails an accounting close. ---
+    if (FINISHED_LEDGER_REL in rel_files
+            and RESIDENTS_LEDGER_REL not in rel_files
+            and any("react" in rel.lower() for rel in rel_files)):
+        lines.append(
+            "WARN F-REGISTRATION-RESIDENTS close without residents "
+            "backwrite - %s missing from the manifest; backwrite the "
+            "closing-position appearance-ledger row for the new REACT "
+            "F-number (main#139, R2373 anchor: F-192/F-196/F-197 rows "
+            "lagged to the backfill batch)" % RESIDENTS_LEDGER_REL)
 
     # --- tech#148: canonical export refresh (before the git steps so the
     # refreshed export rides the same accounting commit). Refusal is

@@ -371,6 +371,63 @@ class TestFDoneBackwriteGuard(GitRepoCase):
                              for l in lines))
 
 
+class TestReactResidentsBackwriteGuard(GitRepoCase):
+    """main#139 (R2373 anchor): REACT-form F-registration closes whose
+    manifest misses the residents appearance ledger must be loud -
+    F-192/F-196/F-197 closing-position rows lagged to the R2373 backfill
+    batch. Trigger face: finished ledger + a REACT-form artifact path
+    (review files carry "mcreact", card dirs carry "REACT") + no
+    residents ledger. Advisory by design: the WARN never fails the close
+    (the row may legitimately live in an earlier commit)."""
+
+    def _touch(self, with_residents, artifact_rel):
+        fin = self.root / cc.FINISHED_LEDGER_REL
+        fin.parent.mkdir(parents=True, exist_ok=True)
+        fin.write_text("F-### | entry", encoding="utf-8")
+        art = self.root / artifact_rel
+        art.parent.mkdir(parents=True, exist_ok=True)
+        art.write_text("| review | row", encoding="utf-8")
+        files = [cc.FINISHED_LEDGER_REL, artifact_rel, "a.txt"]
+        if with_residents:
+            res = self.root / cc.RESIDENTS_LEDGER_REL
+            res.parent.mkdir(parents=True, exist_ok=True)
+            res.write_text("| C-xxxxx | appearance row", encoding="utf-8")
+            files.append(cc.RESIDENTS_LEDGER_REL)
+        return files
+
+    def test_react_close_missing_residents_warns_but_commits(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._touch(
+            with_residents=False,
+            artifact_rel="docs/reviews/review-20261019-mcreact-v24.md"),
+            push=False)
+        self.assertEqual(cc.RC_OK, rc)  # advisory: never fails the close
+        self.assertTrue(any(l.startswith("WARN F-REGISTRATION-RESIDENTS")
+                            and "main#139" in l for l in lines))
+        self.assertNotEqual(self.head0, self.head())  # commit still landed
+
+    def test_react_close_with_residents_no_warn(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._touch(
+            with_residents=True,
+            artifact_rel="docs/reviews/review-20261019-mcreact-v24.md"),
+            push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any(l.startswith("WARN F-REGISTRATION-RESIDENTS")
+                             for l in lines))
+        self.assertIn(cc.RESIDENTS_LEDGER_REL, self.head_files())
+
+    def test_digest_close_never_warns_residents(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._touch(
+            with_residents=False,
+            artifact_rel="docs/reviews/review-20261019-mcdigest-v26.md"),
+            push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any(l.startswith("WARN F-REGISTRATION-RESIDENTS")
+                             for l in lines))
+
+
 class TestSelfInclude(unittest.TestCase):
     """tech#81: the round's own close script rides the manifest (r1930
     anchor: that script stayed untracked across rounds because the explicit
