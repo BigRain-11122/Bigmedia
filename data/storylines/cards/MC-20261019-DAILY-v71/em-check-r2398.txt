@@ -1,0 +1,9 @@
+em-check-r2398 (MC-20261019-DAILY-v71 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK   14.60em margin  +8.40  2026-10-19 · 城主连令日 · 晚
+OK   16.00em margin  +7.00  「听说城主有令，咱先别急着打听」
+OK   13.71em margin  +9.29  ——硅基城市台词池 · 怀旧轴
+H1=6.15em (h1 own face, h1_size=96)
+subs 19.00em < 23.00em budget OK
+subs tail cue end derived=card end 2.600s (zero hardcode); expected duration=3.400s (card end + tail 0.80)
+ALL-HORIZ: PASS

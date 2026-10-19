@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 20:00:12",
- "do": "R2397: ack row 632; DAILY supply review done -> P-10 relaunch proposal + tech#254 seed; next: claim tech#254",
+ "export_ts": "2026-10-19 20:34:30",
+ "do": "R2398: DAILY-v71 order-day card shipped F-199 (200th item); next: E4 backfill tech#256 + P-10 pilot 2/2 watch",
  "depts": [
   {
    "n": "工程技术部",
