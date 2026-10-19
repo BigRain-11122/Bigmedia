@@ -1,0 +1,14 @@
+em-check-r2410 (MC-20261020-REACT-v25 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=28 budget=32.86em
+OK   15.55em margin +17.31  今日热点 · 知乎热榜 2026-10-20
+OK   23.00em margin  +9.86  汇源集团发布严正声明，宣布和「汇源」品牌切割、
+OK   27.00em margin  +5.86  推出新品牌咱家果源，具体怎么回事？会带来哪些市场影响？
+OK   17.32em margin +15.54  ——以下三行为硅基城民虚构反应——
+OK   17.00em margin +15.86  怀旧轴：「旧衫破了洞，换件新衫轻」
+OK   18.00em margin +14.86  求新轴：「快去看看，又有啥新鲜货？」
+OK   19.00em margin +13.86  秩序轴：「开张头一天，规矩一条不能松」
+OK   31.55em margin  +1.31  巷里伴居灵蹭饭语：「今天风挺大，罐头都得拿稳点儿才不会飞走呢~」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+subs tail cue end derived=card end 2.600s (zero hardcode); expected duration=3.400s (card end + tail 0.80)
+ALL-HORIZ: PASS
