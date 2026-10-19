@@ -87,16 +87,64 @@ def orders_rows(text):
             yield n, orders_row_ts(line), line
 
 
+HQ_ORDERS_DEFAULT = os.path.abspath(os.path.join(
+    REPO, "..", "..", "docs", "orders.md"))
+
+
+def read_hq_orders_text(path=None):
+    """Host orders.md text, read-only (D-20261001-03 zero-write canon)."""
+    with open(path or HQ_ORDERS_DEFAULT, encoding="utf-8",
+              errors="replace") as fh:
+        return fh.read()
+
+
+def rows_window_text(text, start, end):
+    """'ROW N: <row line>' lines for rows start..end inclusive (tech#231).
+
+    m1-assert evidence-snapshot fallback leg: card-build assertions keep
+    their .c3-tmp/orders-rows-*.txt snapshots only until the round-end
+    cleanup hook deletes them, after which re-running an assertion died
+    on FileNotFoundError (R2369/R2371/R2372 three-reel pit). This rebuilds
+    the same 'ROW N:' window text in-process from any orders.md text with
+    row numbering identical to the ORDERS watermark (tech#193 canonical
+    parity), so assertions stay permanently re-runnable with zero repo
+    bloat and zero cross-repo writes. Windows extending past the current
+    tail yield the rows that exist (callers assert contiguity themselves
+    -- fail-closed on shrinkage).
+    """
+    if start < 1 or end < start:
+        raise ValueError("window must satisfy 1 <= start <= end")
+    out = []
+    for row_no, _ts, line in orders_rows(text):
+        if start <= row_no <= end:
+            out.append("ROW %d: %s" % (row_no, line))
+    return out
+
+
+def rows_window_from_host(start, end, path=None):
+    """rows_window_text over the host orders.md (snapshot-missing leg)."""
+    return rows_window_text(read_hq_orders_text(path), start, end)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="orders rows probe")
     parser.add_argument("--hq-orders", default=os.path.join(
         REPO, "..", "..", "docs", "orders.md"))
     parser.add_argument("--tail", type=int, default=5)
+    parser.add_argument("--window", nargs=2, type=int,
+                        metavar=("START", "END"),
+                        help="print the 'ROW N: <line>' window text "
+                             "(tech#231 m1-assert fallback source)")
     args = parser.parse_args(argv)
 
     path = os.path.abspath(args.hq_orders)
     with open(path, encoding="utf-8", errors="replace") as fh:
         text = fh.read()
+    if args.window:
+        start, end = args.window
+        for line in rows_window_text(text, start, end):
+            print(line)
+        return 0
     rows = list(orders_rows(text))
     print("orders-rows probe:", path)
     print("rows=%d" % len(rows))

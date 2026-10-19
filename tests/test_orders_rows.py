@@ -135,5 +135,81 @@ class OrdersRowsParityTests(unittest.TestCase):
             os.unlink(path)
 
 
+class RowsWindowTextTests(unittest.TestCase):
+    """tech#231: m1-assert snapshot-missing fallback window rebuild.
+
+    The card-build assertions read 'ROW N: <line>' evidence windows from
+    .c3-tmp snapshots that the round-end cleanup hook deletes; the
+    fallback leg must rebuild byte-equivalent window text in-process from
+    the same |-row numbering the ORDERS watermark counts.
+    """
+
+    def test_window_format_and_bounds(self):
+        lines = orders_rows.rows_window_text(MIXED, 3, 5)
+        self.assertEqual([l.split(':', 1)[0] for l in lines],
+                         ['ROW 3', 'ROW 4', 'ROW 5'])
+        # full row line carried verbatim after the 'ROW N: ' prefix
+        self.assertTrue(lines[0].endswith(ROW_FULL))
+        self.assertTrue(lines[1].endswith(ROW_518_ANCHOR))
+        self.assertTrue(lines[2].endswith(ROW_SHORT))
+
+    def test_window_ids_parse_with_m1_assert_regex(self):
+        # the m1-assert A3 id parser must read the rebuilt text verbatim
+        import re
+        txt = '\n'.join(orders_rows.rows_window_text(MIXED, 1, 5))
+        ids = [int(x) for x in re.findall(r'^ROW (\d+):', txt, re.M)]
+        self.assertEqual(ids, [1, 2, 3, 4, 5])
+
+    def test_window_count_parity_with_orders_row_stats(self):
+        # judging criterion 2: same-source row counting (|-row family)
+        stats_rows, _tail = group_scan.orders_row_stats(MIXED)
+        rebuilt_all = orders_rows.rows_window_text(MIXED, 1, stats_rows)
+        self.assertEqual(len(rebuilt_all), stats_rows)
+
+    def test_window_beyond_tail_returns_existing_rows(self):
+        # append-only growth: asking past the tail yields what exists;
+        # callers assert contiguity themselves (fail-closed on shrinkage)
+        lines = orders_rows.rows_window_text(MIXED, 4, 99)
+        self.assertEqual([l.split(':', 1)[0] for l in lines],
+                         ['ROW 4', 'ROW 5'])
+
+    def test_window_bounds_validation(self):
+        with self.assertRaises(ValueError):
+            orders_rows.rows_window_text(MIXED, 0, 3)
+        with self.assertRaises(ValueError):
+            orders_rows.rows_window_text(MIXED, 5, 3)
+
+    def test_rows_window_from_host_reads_file(self):
+        with tempfile.NamedTemporaryFile(
+                "w", suffix=".md", delete=False, encoding="utf-8") as fh:
+            fh.write(MIXED)
+            path = fh.name
+        try:
+            lines = orders_rows.rows_window_from_host(3, 4, path=path)
+            self.assertEqual([l.split(':', 1)[0] for l in lines],
+                             ['ROW 3', 'ROW 4'])
+            self.assertTrue(lines[1].endswith(ROW_518_ANCHOR))
+        finally:
+            os.unlink(path)
+
+    def test_cli_window_flag(self):
+        with tempfile.NamedTemporaryFile(
+                "w", suffix=".md", delete=False, encoding="utf-8") as fh:
+            fh.write(MIXED)
+            path = fh.name
+        try:
+            buf = _io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                rc = orders_rows.main(
+                    ["--hq-orders", path, "--window", "3", "5"])
+            self.assertEqual(rc, 0)
+            out = buf.getvalue()
+            self.assertIn("ROW 3:", out)
+            self.assertIn("ROW 5:", out)
+            self.assertNotIn("ROW 2:", out)
+        finally:
+            os.unlink(path)
+
+
 if __name__ == "__main__":
     unittest.main()

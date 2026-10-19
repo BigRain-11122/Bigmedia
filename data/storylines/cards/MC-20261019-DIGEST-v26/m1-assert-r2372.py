@@ -14,10 +14,28 @@ Rebuilt after the red-team round-4 rejection (review-20261019-mcdigest-v26):
 """
 import io
 import json
+import os
 import re
+import sys
 
-rows_txt = io.open(r'.c3-tmp/orders-rows-545plus-r2372.txt',
-                   encoding='utf-8').read()
+# tech#231 evidence leg: prefer the .c3-tmp snapshot; when the round-end
+# cleanup hook has already deleted it, re-extract the row window
+# in-process from the host orders.md via tools/orders_rows (same |-row
+# numbering as the ORDERS watermark) -- the assertion stays re-runnable
+# after its round, zero repo bloat, zero cross-repo writes.
+try:
+    rows_txt = io.open(r'.c3-tmp/orders-rows-545plus-r2372.txt',
+                       encoding='utf-8').read()
+    rows_src = 'snapshot .c3-tmp/orders-rows-545plus-r2372.txt'
+except OSError:
+    _here = os.path.dirname(os.path.abspath(__file__))
+    _repo = os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.dirname(_here))))
+    sys.path.insert(0, os.path.join(_repo, 'tools'))
+    import orders_rows
+    rows_txt = '\n'.join(orders_rows.rows_window_from_host(545, 583))
+    rows_src = ('fallback host orders.md |-row family rows 545-583 '
+                '(tech#231)')
 card = json.load(io.open(
     r'data/storylines/cards/MC-20261019-DIGEST-v26/cards.json',
     encoding='utf-8'))
@@ -95,5 +113,5 @@ assert '令批台账档案' not in subs_txt, (
     'A6 FAIL: old jargon source line still burned')
 
 print('M1 ASSERT ALL GREEN (remediation r1): deck_quotes=%d exact '
-      'numbers=8 window_rows=39 rows_range=545-583 tech#224_face=clean '
-      '(deck+subs)' % len(deck_quotes))
+      'numbers=8 window_rows=39 rows_range=545-583 rows_src=[%s] '
+      'tech#224_face=clean (deck+subs)' % (len(deck_quotes), rows_src))

@@ -37,6 +37,7 @@ M0 选题爆款分 → M1 钩子工艺（T1-T9 全线）→ M2 素材爆款面 �
 - 节拍判据：音视频线=pacing/copy CV 机检（ai_feel 四指纹·系列校准曲线在案）；文字线=句长参差与段节拍（产稿自检+E8 节奏位评「度」）——上线后 M6 校准。
 - 产稿即自检：爆款自检表随稿（storyline-craft §4 同制）——缺表=草案未完成。
 - **REACT 选轴「事件锚定度」advisory 预检**（tech#192·2026-10-17 R2332 立·E4「映射人感落差」旗族根治面）：REACT M1 池行选轴时跑 `python tools/axis_anchor_check.py --cards-dir <卡目录>`——brain lane（本地 :8090 零云 token）评轴行/收束行与热点题眼词语义共振 0-10·低于阈值 6.0=换轴候选提示（**非硬闸·render 永不因此被拦**·池句 verbatim 纪实律不动·生产者换轴或在评审单记接受理由二选一）；brain 不可达=UNVERIFIED 如实入账（假绿灯律）·非 REACT 形态零反应行=结构穿行；判据=下件起 E4「关联弱/万能句式」旗对照 ≤3 窗清零。
+- **m1-assert 证据快照回退腿（tech#231·2026-10-19 立·M1 机核断言族律）**：orders 行窗证据一律「快照优先+缺位回退」——.c3-tmp/orders-rows-*.txt 被轮末清理钩删除后，断言脚本须能进程内直读 host orders.md 按 |-行族重抽行窗（正身=`tools/orders_rows.py` `rows_window_from_host(start,end)`·行号=ORDERS 水位同源〔tech#193 parity〕）=断言永久可复现零仓膨胀零跨仓写；新卡 m1-assert 落生即带本腿（缺口锚=R2369/R2371/R2372 三连「删快照后断言 FileNotFoundError 成死件·整改复审计都要手工重抽」实录）。
 
 ## §4 M2 素材爆款面
 
