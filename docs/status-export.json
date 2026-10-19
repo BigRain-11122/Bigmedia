@@ -1,5 +1,5 @@
 {
- "export_ts": "2026-10-20 05:12:49",
+ "export_ts": "2026-10-20 05:13:48",
  "do": "REACT-v26《日文の之问》卡面产出并过 M1/M2 机检；S0/S4 两席 REVISE，F 未登记；下轮按 tech#265 席位适用表重审或改产 DIGEST",
  "depts": [
   {
@@ -81,8 +81,8 @@
   ]
  ],
  "live": [
-  "当前活：V5.11 768P 母版后置验证收口（R2405）——PTS/平台闸/四板全绿，真峰闸抓出 +0.2 dBTP 破线并已修",
-  "最近实物：full_mv_v511_n1.mp4（TP -1.1 dBTP·I -14.1 LUFS·视频流零重编）2026-10-20 03:2x·C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\30s-reel-v1\\",
-  "下个里程碑：AIGC 徽标+隐形水印打件 → 双签呈 CEO 终审（窗 ≤48h，预计 10-21 夜窗）"
+  "当前活：L-卡 REACT-v26《城市速报 026·日文の之问》卡面产出（R2408）——M1 verbatim 13/13+em ALL-HORIZ PASS+验图五检 5/5；S0/S4 双席 REVISE，F 未登记",
+  "最近实物：MC-20261020-REACT-v26.png（1080×1080·235,394B）2026-10-20 05:1x·C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\data\\storylines\\cards\\MC-20261020-REACT-v26\\",
+  "下个里程碑：tech#265 REACT 席位适用表落表后重审本件，或改产 DIGEST-v27（≤2026-10-21）"
  ]
 }
