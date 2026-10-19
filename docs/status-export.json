@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 22:00:50",
- "do": "E4 backfill closed (v71=6.0 band break; P-10 pilot negative, DAILY suspended); next 10-20 morning dual cards",
+ "export_ts": "2026-10-19 22:25:03",
+ "do": "tech#259 silicon gate landed (tool+tests+canon); CENSUS gate closed (C-00030 absent); next 10-20 morning dual cards",
  "depts": [
   {
    "n": "工程技术部",
@@ -81,8 +81,8 @@
   ]
  ],
  "live": [
-  "当前活：10-20 晨窗双卡候领（REACT-v25+DIGEST-v27·CEO 连令日 49 行未耗史源在册）+E4 回填 tech#256 lane 活窗候领+P-10 试点 2/2 事件窗守望",
-  "最近实物：output/renders/README.md v71 行补账毕（mc-20261019-daily-v71-card.mp4 注账·readiness 0 发现·2026-10-19 20:42 复跑实证）",
-  "里程碑：10-20 晨窗双卡出件（≤48h）；城市闭环快样 ≤10-26；MV V5.11 终版链=MV 会话域在飞"
+  "当前活：tech#259 M0 硅基辨识度检已落闸（R2402 交付=工具+14 测+正典条文·下件 DAILY/QUOTE 起执法）；10-20 晨窗双卡候领（REACT-v25+DIGEST-v27）+CENSUS gate 随轮核（C-00030 到件即开）",
+  "最近实物：tools/silicon_texture.py + tests/test_silicon_texture.py（14 新测绿·live-fire=v71 锚句 DOWNGRADE=E4 判读机核复现·2026-10-19 22:2x）",
+  "里程碑：10-20 晨窗双卡出件（≤48h）；F-199 v71 带破件二择判读（tech#260）；城市闭环快样 ≤10-26"
  ]
 }
