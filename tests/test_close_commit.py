@@ -307,6 +307,108 @@ class TestPycachePurge(GitRepoCase):
         self.assertEqual((0, []), (n, fails))
 
 
+class TestUtf16Transcode(GitRepoCase):
+    """tech#233 (R2375 anchor, third PS 5.1 `>` occurrence): root-level
+    .c3-tmp files carrying a UTF-16 BOM are transcoded to UTF-8 in place
+    during the close - the debris class cannot survive a round boundary.
+    Self-heal, never refusal (an accounting close must not fail on
+    disposable middleware); the probe face (loop_health utf16-debris)
+    stays live for mid-round visibility."""
+
+    def _touch(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+
+    def _mk_bom(self, name, text, big_endian=False):
+        d = self.root / ".c3-tmp"
+        d.mkdir(parents=True, exist_ok=True)
+        enc = "utf-16-be" if big_endian else "utf-16-le"
+        bom = b"\xfe\xff" if big_endian else b"\xff\xfe"
+        (d / name).write_bytes(bom + text.encode(enc))
+        return d / name
+
+    def test_le_bom_transcoded_in_place(self):
+        p = self._mk_bom("full_regress.txt", "Ran 1684 tests OK\n中文行")
+        self._touch()
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        raw = p.read_bytes()
+        self.assertFalse(raw.startswith(b"\xff\xfe"))
+        self.assertEqual("Ran 1684 tests OK\n中文行", raw.decode("utf-8"))
+        self.assertTrue(any(
+            l.startswith("STEP utf16-debris transcoded 1 file(s)") for l in lines))
+        self.assertTrue(any(
+            "full_regress.txt" in l and "transcoded" in l for l in lines))
+
+    def test_be_bom_transcoded_in_place(self):
+        p = self._mk_bom("be.txt", "ok 中文", big_endian=True)
+        self._touch()
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertEqual("ok 中文", p.read_bytes().decode("utf-8"))
+
+    def test_plain_files_untouched(self):
+        d = self.root / ".c3-tmp"
+        d.mkdir(parents=True, exist_ok=True)
+        plain = d / "plain.txt"
+        plain.write_bytes("hello 中文".encode("utf-8"))
+        self._touch()
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertEqual("hello 中文", plain.read_bytes().decode("utf-8"))
+        self.assertTrue(any(
+            l.startswith("STEP utf16-debris transcoded 0 file(s)") for l in lines))
+
+    def test_bad_utf16_left_alone_and_warned(self):
+        d = self.root / ".c3-tmp"
+        d.mkdir(parents=True, exist_ok=True)
+        p = d / "junk.bin"
+        p.write_bytes(b"\xff\xfe\x00\xd8\x00\x00")  # unpaired surrogate
+        self._touch()
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(p.read_bytes().startswith(b"\xff\xfe"))  # left as-is
+        self.assertTrue(any("utf16-debris transcode failed" in l for l in lines))
+
+    def test_subdir_bom_out_of_scope(self):
+        # root-level scope law mirrors the probe face (check_utf16_debris)
+        p = self._mk_bom("nested.txt", "nested 中文")
+        sub = self.root / ".c3-tmp" / "sub"
+        sub.mkdir(parents=True, exist_ok=True)
+        p.rename(sub / "nested.txt")
+        self._touch()
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue((sub / "nested.txt").read_bytes().startswith(b"\xff\xfe"))
+        self.assertTrue(any(
+            l.startswith("STEP utf16-debris transcoded 0 file(s)") for l in lines))
+
+    def test_dry_run_counts_without_writing(self):
+        p = self._mk_bom("dry.txt", "x 中文")
+        rc, lines = self.close(["a.txt"], dry_run=True)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(p.read_bytes().startswith(b"\xff\xfe"))  # untouched
+        self.assertTrue(any(
+            "DRY-RUN utf16-debris transcode 1 file(s)" in l for l in lines))
+
+    def test_missing_c3tmp_dir_ok(self):
+        self._touch()
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any(
+            l.startswith("STEP utf16-debris transcoded 0 file(s)") for l in lines))
+
+    def test_bom_heads_alias_locked_to_probe(self):
+        import loop_health as lh
+        self.assertEqual(lh.UTF16_BOM_HEADS, cc.UTF16_BOM_HEADS)
+
+    def test_helper_direct_surface(self):
+        p = self._mk_bom("direct.txt", "直接调用 中文")
+        names, failed = cc.transcode_c3tmp_utf16(str(self.root))
+        self.assertEqual(["direct.txt"], names)
+        self.assertEqual([], failed)
+        self.assertEqual("直接调用 中文", p.read_bytes().decode("utf-8"))
+
+
 class TestFDoneBackwriteGuard(GitRepoCase):
     """tech#188 (R2316 anchor): the R2258 forget-shape - an F-registration
     close whose manifest misses state/queue/main.md - must be loud.

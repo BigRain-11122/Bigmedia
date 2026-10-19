@@ -60,6 +60,16 @@ Laws encoded (why this is safe in this shared tree):
   surfaced it one cycle later). Advisory only, same WARN grade the
   probe gives; the comparison semantics are loop_health's own
   (single-semantics house law), so writer and probe can never disagree.
+- tech#233 (R2375 anchor) UTF-16 debris close-time self-heal: the close
+  transcodes root-level .c3-tmp files carrying a UTF-16 BOM into UTF-8
+  in place, before the git steps. Third PS 5.1 ``>`` occurrence
+  (R2331/R2355x2/R2375); the escalation is self-healing, not refusal -
+  a hard close refusal would trade disposable middleware for
+  accounting-tick holes (the strictly worse failure class), while the
+  in-place rewrite makes the debris class unable to survive ANY round
+  close. Scope mirrors the probe face (loop_health check_utf16_debris
+  root-level scope); the pinned BOM heads are alias-locked to the probe
+  constants by test.
 
 rc: 0 = commit landed (push may have warned); 1 = a git add/commit step
 failed; 2 = usage error; 3 = readback verify failed (tech#155 face 2:
@@ -125,6 +135,12 @@ RC_WRITER_REFUSE = 2
 
 MSG_MAX_SOFT = 500  # P-30 one-line convention; WARN only, never fails
 PYCACHE_DIRNAME = "__pycache__"
+
+# tech#233 (R2375 anchor): UTF-16 BOM heads for the close-time debris
+# self-heal. Pinned here (same precedent as RC_WRITER_REFUSE);
+# test_close_commit locks the alias to loop_health.UTF16_BOM_HEADS so the
+# close face and the probe face can never drift.
+UTF16_BOM_HEADS = (b"\xff\xfe", b"\xfe\xff")
 
 # tech#188 (R2316 anchor): F-registration backwrite guard paths. A close
 # that registers a new F-number in the finished ledger must also carry the
@@ -244,6 +260,62 @@ def purge_c3tmp_pycache(root, dry=False):
             # do not descend into the removed/skipped cache dir
             dirnames[:] = [d for d in dirnames if d != PYCACHE_DIRNAME]
     return purged, failed
+
+
+def transcode_c3tmp_utf16(root, dry=False):
+    """tech#233 (R2375 anchor): self-heal UTF-16 debris at close time.
+
+    The three-occurrence family (R2331 / R2355 x2 / R2375): a body points
+    PS 5.1 ``>`` at native tool output, the redirect lands a UTF-16 BOM
+    file in .c3-tmp, and the debris survives the round boundary until the
+    next round's probe names it (loop_health utf16-debris WARN) and a
+    successor hand-transcodes or deletes it. CEO escalation law
+    (recurrence = gate escalation) asks for the script-assertion level;
+    the assertion here is self-healing rather than refusing: a hard close
+    refusal would trade disposable middleware for accounting-tick holes
+    (the strictly worse failure class), while an in-place lossless
+    UTF-16 -> UTF-8 rewrite makes the debris class structurally unable to
+    survive ANY round close.
+
+    Scope law: root-level files of <root>/.c3-tmp only, mirroring
+    loop_health's check_utf16_debris face. BOM heads are the pinned
+    module constants (alias-locked to the probe's own by test). dry=True
+    counts without writing. Returns (transcoded_names, failed_names) and
+    never raises: a cleanup step must not fail an accounting close. A
+    BOM file that fails to decode is left byte-identical and reported in
+    failed_names (fail-soft; the probe keeps it visible next round).
+    """
+    base = os.path.join(root, ".c3-tmp")
+    transcoded, failed = [], []
+    if not os.path.isdir(base):
+        return transcoded, failed
+    try:
+        names = sorted(os.listdir(base))
+    except OSError:
+        return transcoded, failed
+    for name in names:
+        path = os.path.join(base, name)
+        try:
+            if not os.path.isfile(path):
+                continue
+            with open(path, "rb") as f:
+                head = f.read(2)
+            if not head.startswith(UTF16_BOM_HEADS):
+                continue
+            if dry:
+                transcoded.append(name)
+                continue
+            with open(path, "rb") as f:
+                raw = f.read()
+            text = raw.decode("utf-16")  # the BOM picks the endianness
+            tmp = path + ".tmp_utf16"
+            with io.open(tmp, "w", encoding="utf-8", newline="") as f:
+                f.write(text)
+            os.replace(tmp, path)
+            transcoded.append(name)
+        except (OSError, ValueError, UnicodeError):
+            failed.append(name)
+    return transcoded, failed
 
 
 def derive_task(log_line):
@@ -959,6 +1031,28 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
         lines.append("STEP pycache purged %d dir(s) (tech#67)" % n_cache)
         for f in fails:
             lines.append("WARN pycache purge failed: %s" % f)
+
+    # --- tech#233: UTF-16 debris self-heal (R2375 anchor, third PS 5.1
+    # `>` occurrence). Root-level .c3-tmp files carrying a UTF-16 BOM are
+    # losslessly transcoded to UTF-8 in place BEFORE the git steps, so the
+    # debris class can no longer survive a round boundary (the probe face
+    # stays live: loop_health keeps naming anything that appears mid-round).
+    # Self-heal rather than refuse: a hard close refusal would trade
+    # disposable middleware for accounting-tick holes - the strictly worse
+    # failure class. Warn-only, never fails the close. ---
+    if dry_run:
+        t_names, _t_failed = transcode_c3tmp_utf16(root, dry=True)
+        lines.append("DRY-RUN utf16-debris transcode %d file(s) (skipped)"
+                     % len(t_names))
+    else:
+        t_names, t_failed = transcode_c3tmp_utf16(root)
+        lines.append("STEP utf16-debris transcoded %d file(s) (tech#233)"
+                     % len(t_names))
+        for name in t_names:
+            lines.append("STEP utf16-debris transcoded: %s" % name)
+        for name in t_failed:
+            lines.append("WARN utf16-debris transcode failed: %s "
+                         "(left as-is; decode error)" % name)
 
     if dry_run:
         lines.append("DRY-RUN " + " ".join(plan_add))
