@@ -12,6 +12,9 @@ data/assets/
 *.avi
 *.wav
 *.ape
+*.mp3
+# audio born-gate per HQ REPO-SLIM order 2026-10-19 12:21 (git stops tracking, disk files stay)
+output/renders/.edit-tmp-*
 # secrets (docs/accounts.md discipline)
 .env
 .env.*
