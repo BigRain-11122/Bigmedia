@@ -148,3 +148,5 @@
 | 2026-10-20 04:53 | S0-topic | S0 选题官（选题研究部） | .c3-tmp\r2410_review_material.md | 0 | 全文=expert-verdicts/20261020-045307-S0-topic.md ｜ **① 每题一句话裁决** |
 | 2026-10-20 04:54 | S1-script | S1 编剧官（内容生产部） | .c3-tmp\r2410_review_material.md | 0 | 全文=expert-verdicts/20261020-045401-S1-script.md ｜ **① 违律清单** |
 | 2026-10-20 04:56 | S4-compliance | S4 合规官（合规审查部） | .c3-tmp\r2410_review_material.md | 0 | 全文=expert-verdicts/20261020-045637-S4-compliance.md ｜ ### ① 红线违例清单 |
+| 2026-10-20 05:08 | S0-topic | S0 选题官（选题研究部） | .c3-tmp\r2412_material.md | 0 | 全文=expert-verdicts/20261020-050818-S0-topic.md ｜ **① 每题一句话裁决** |
+| 2026-10-20 05:11 | S4-compliance | S4 合规官（合规审查部） | .c3-tmp\r2412_material.md | 0 | 全文=expert-verdicts/20261020-051126-S4-compliance.md ｜ ①红线违例清单 |
