@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 18:19:48",
- "do": "R2394 self-inspection landed + tech#251 watermark guard (104 tests OK); next 10-20 AM double-card window",
+ "export_ts": "2026-10-19 18:55:49",
+ "do": "R2395 city-bridge share landed (D-07); next: probe first-scan verify + 10-20 AM window",
  "depts": [
   {
    "n": "工程技术部",
@@ -74,11 +74,15 @@
   [
    "OH w8 slice1",
    "r2378"
+  ],
+  [
+   "city bridge",
+   "r2395"
   ]
  ],
  "live": [
-  "orders rows 630-631 消费（全司空转根治令·自查自纠即刻开跑未等 22:0x 班）——git 实测 7 日 459 commit：产品 62=13.5%（L-卡 9 件 F-190~F-198）/工具自迭代 305=66.4%（机制件占大头·诚实定谳）/纯簿记 92=20.0%；tech#251 水位守卫当窗交付（模块 104 测绿）",
-  "最近实物：data/storylines/cards/MC-20261019-DIGEST-v26/MC-20261019-DIGEST-v26.png（F-198·成品库第 199 件·红队回合 5 红签+整改轮 1 收官·2026-10-19）",
-  "里程碑：10-20 晨窗双成品位判读（REACT-v25 tech#225 轴选句试点+DIGEST-v27 tech#228 读者价值锚点预检·窗 ≤48h）+MV V5.11 verdict 守望（代理档 16:52 已落）"
+  "城桥 D-07 份额首腿落地（档期台账 v1+事件 outbox+登记工具+perceptor 探针·P-43 单写律）——探针首扫验真随轮读",
+  "最近实物：output/city-screen-schedule.json + output/city-events-outbox.jsonl + tools/city_event_register.py（2026-10-19 19:1x·FluxVerse 侧探针落位待其 tick 顺扫）",
+  "里程碑：10-20 晨窗双卡判读+探针首扫验真（≤48h）；城市闭环快样 ≤10-26（MV 城内大屏播放录屏+Jay 首条成长事件入流面板可见）"
  ]
 }
