@@ -33,6 +33,9 @@ sys.path.insert(0, str(REPO / "src" / "os"))
 
 import close_commit as cc  # noqa: E402
 
+sys.path.insert(0, str(REPO / "src"))
+import readiness as rd  # noqa: E402  (tech#257: single-source marks)
+
 GIT_ENV = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
                GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
 
@@ -528,6 +531,121 @@ class TestReactResidentsBackwriteGuard(GitRepoCase):
         self.assertEqual(cc.RC_OK, rc)
         self.assertFalse(any(l.startswith("WARN F-REGISTRATION-RESIDENTS")
                              for l in lines))
+
+
+class TestFRegistrationRendersBirthGate(GitRepoCase):
+    """tech#257 (R2398 anchor): an F-registration close must not leave
+    unannotated media in the renders face - the single-round fast chain
+    registered F-199 without the renders README row and readiness only
+    caught it one round later (R2399 backfill). Content-level gate: the
+    audio-line shape (no renders face at all) stays silent, and a plain
+    close without a finished-ledger write stays silent (readiness
+    remains the standing general gate). Advisory: never fails the close;
+    the NOTE heartbeat line makes the gate's execution observable."""
+
+    def _f_files(self):
+        fin = self.root / cc.FINISHED_LEDGER_REL
+        fin.parent.mkdir(parents=True, exist_ok=True)
+        fin.write_text("F-### | entry", encoding="utf-8")
+        return [cc.FINISHED_LEDGER_REL, "a.txt"]
+
+    def _renders(self, ledger_text, media_names):
+        rdir = self.root / cc.RENDERS_DIR_REL
+        rdir.mkdir(parents=True, exist_ok=True)
+        for name in media_names:
+            (rdir / name).write_bytes(b"\x00" * 8)
+        if ledger_text is not None:
+            ledger = self.root / cc.RENDERS_LEDGER_REL
+            ledger.parent.mkdir(parents=True, exist_ok=True)
+            ledger.write_text(ledger_text, encoding="utf-8")
+
+    def test_f_close_with_unannotated_media_warns_but_commits(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        self._renders("| annotated.mp4 | %s | row |\n" % rd.TEST_MARK,
+                      ["annotated.mp4", "orphan.mp4"])
+        rc, lines = self.close(self._f_files(), push=False)
+        self.assertEqual(cc.RC_OK, rc)  # advisory: never fails the close
+        warns = [l for l in lines
+                 if l.startswith("WARN F-REGISTRATION-RENDERS")]
+        self.assertEqual(1, len(warns))
+        self.assertIn("orphan.mp4", warns[0])  # the gap, named
+        self.assertNotIn("annotated.mp4", warns[0])  # clean file not flagged
+        self.assertIn("tech#257", warns[0])
+        self.assertTrue(any(l.startswith("NOTE F-RENDERS-BIRTH-GATE unannot=1")
+                            for l in lines))  # heartbeat observable
+        self.assertNotEqual(self.head0, self.head())  # commit still landed
+
+    def test_f_close_all_annotated_no_warn(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        self._renders("| a.mp4 | %s |\n| b.mp4 | %s |\n"
+                      % (rd.TEST_MARK, rd.TEST_MARK), ["a.mp4", "b.mp4"])
+        rc, lines = self.close(self._f_files(), push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any(l.startswith("WARN F-REGISTRATION-RENDERS")
+                             for l in lines))
+        self.assertTrue(any(l.startswith("NOTE F-RENDERS-BIRTH-GATE unannot=0")
+                            for l in lines))
+
+    def test_plain_close_with_unannotated_media_no_warn(self):
+        # scope: the birth gate rides F-registration closes only -
+        # readiness stays the general gate for every other close.
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        self._renders(None, ["orphan.mp4"])
+        rc, lines = self.close(["a.txt"], push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any("F-REGISTRATION-RENDERS" in l for l in lines))
+        self.assertFalse(any("F-RENDERS-BIRTH-GATE" in l for l in lines))
+
+    def test_audio_style_f_close_without_render_face_silent(self):
+        # exception face inventoried before the gate shipped: audio-line
+        # F items (F-008~F-012) keep their own ledger under
+        # data/storylines/audio/README.md and never touch the renders
+        # face - no renders dir, no gate, zero noise.
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        rc, lines = self.close(self._f_files(), push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertFalse(any(l.startswith("WARN F-REGISTRATION-RENDERS")
+                             for l in lines))
+        self.assertTrue(any(l.startswith("NOTE F-RENDERS-BIRTH-GATE unannot=0")
+                            for l in lines))
+
+    def test_f_close_media_without_ledger_file_warns(self):
+        # media present but the renders ledger file itself is missing -
+        # parse_renders counts every media file unannotated (loud side;
+        # the real repo always carries the ledger).
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        self._renders(None, ["orphan.mp4"])
+        rc, lines = self.close(self._f_files(), push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any(l.startswith("WARN F-REGISTRATION-RENDERS")
+                            and "orphan.mp4" in l for l in lines))
+
+    def test_f_close_render_row_in_manifest_other_unannot_still_warns(self):
+        # content-level, not manifest-level: the new row riding the
+        # manifest does not mute the gate when OTHER media is stale.
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        self._f_files()  # writes the finished ledger
+        self._renders("| new.mp4 | %s |\n" % rd.TEST_MARK,
+                      ["new.mp4", "stale.mp4"])
+        rc, lines = self.close(
+            [cc.FINISHED_LEDGER_REL, cc.RENDERS_LEDGER_REL, "a.txt"],
+            push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        self.assertTrue(any(l.startswith("WARN F-REGISTRATION-RENDERS")
+                            and "stale.mp4" in l for l in lines))
+
+    def test_f_close_unannot_cap_shows_three_plus_count(self):
+        (self.root / "a.txt").write_text("changed", encoding="utf-8")
+        self._renders(None, ["m1.mp4", "m2.mp4", "m3.mp4",
+                             "m4.mp4", "m5.mp4"])
+        rc, lines = self.close(self._f_files(), push=False)
+        self.assertEqual(cc.RC_OK, rc)
+        warns = [l for l in lines
+                 if l.startswith("WARN F-REGISTRATION-RENDERS")]
+        self.assertEqual(1, len(warns))
+        self.assertIn("m3.mp4", warns[0])  # first three sorted names shown
+        self.assertIn("(+2 more)", warns[0])
+        self.assertNotIn("m4.mp4", warns[0])
 
 
 class TestSelfInclude(unittest.TestCase):

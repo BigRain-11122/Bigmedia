@@ -52,6 +52,13 @@ Laws encoded (why this is safe in this shared tree):
   mark may legitimately live in an earlier commit, so this never fails
   an accounting close; it just makes the forget-shape loud at the one
   place that sees the whole manifest.
+- tech#257 (R2398 anchor) F-registration renders birth gate: a close
+  that writes the finished ledger runs the readiness render-unannot
+  semantics over output/renders at close time and WARNs on unannotated
+  media - R2398's single-round fast chain registered F-199 without the
+  renders README row and the probe only caught it one round later
+  (R2399 backfill). Content-level by design (audio/novel/comic-line F
+  items legitimately carry no renders face), fail-open by design.
 - tech#214 (R2351 anchor) narrative ts order advisory: finalize_state
   compares the new ledger line's fuzzy-minute prefix against the last
   on-disk line and WARNs into the close evidence face when it goes
@@ -156,6 +163,13 @@ STATION_REVIEWS_REL = "docs/reviews/station-reviews.md"
 # anchors registered without the residents appearance-ledger row; the
 # misses lagged to the R2373 backfill batch.
 RESIDENTS_LEDGER_REL = "data/storylines/codex/city-residents.md"
+# tech#257 (R2398 anchor): renders-face paths for the F-registration
+# birth gate. Content-level input, not a manifest trigger: audio-line
+# F items keep their own ledger (data/storylines/audio/README.md) and
+# legitimately never touch the renders face, so the ledger's absence
+# from a manifest is NOT evidence - unannotated media is.
+RENDERS_DIR_REL = "output/renders"
+RENDERS_LEDGER_REL = "output/renders/README.md"
 
 # tech#76: ledger prefix shape. Minute field is two chars - digit+digit
 # ("23:26") or digit+x ("23:5x", fuzzy-minute house style). Anything else
@@ -384,6 +398,32 @@ def f_claim_ledger_advisory(log_line, finished_path):
         if fnum not in ledger and fnum not in missing:
             missing.append(fnum)
     return missing
+
+
+def unannotated_render_media(root):
+    """tech#257: unannotated renders-dir media names (birth gate input).
+
+    Reuses readiness.parse_renders so the close-side birth gate and the
+    readiness probe share one render-unannot semantics (single-semantics
+    house law, tech#214 precedent) - they can never disagree. Best-effort
+    by design: any import/IO failure returns an empty list (fail-open;
+    readiness remains the standing general gate) - an accounting close
+    never fails on this face. A missing renders dir also yields an empty
+    list: no renders face, no gate (the audio/novel/comic-line shape).
+    """
+    try:
+        from pathlib import Path  # lazy: parse_renders speaks pathlib
+        src_dir = os.path.abspath(os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), ".."))
+        if src_dir not in sys.path:
+            sys.path.insert(0, src_dir)
+        import readiness
+        rows, _findings = readiness.parse_renders(
+            Path(os.path.join(root, RENDERS_DIR_REL)),
+            Path(os.path.join(root, RENDERS_LEDGER_REL)))
+        return [name for name, status in rows if status is None]
+    except Exception:
+        return []
 
 
 def log_prefix_backward_advisory(log_line, last_log_line):
@@ -1049,6 +1089,32 @@ def run_close_commit(files, message, root=None, push=True, dry_run=False,
             "closing-position appearance-ledger row for the new REACT "
             "F-number (main#139, R2373 anchor: F-192/F-196/F-197 rows "
             "lagged to the backfill batch)" % RESIDENTS_LEDGER_REL)
+
+    # --- tech#257: F-registration renders birth gate (R2398 anchor).
+    # The single-round fast chain registered F-199 in the finished
+    # ledger but never wrote the renders README row - readiness only
+    # surfaced the unannotated mp4 at the NEXT round's probe (R2399
+    # backfill). Birth-position move: run the same render-unannot
+    # semantics at close time, so the forget-shape dies inside its own
+    # round. Content-level by design (audio/novel/comic-line F items
+    # legitimately carry no renders face - manifest absence is not
+    # evidence); advisory by design (same WARN grade as tech#188/209,
+    # never fails an accounting close). The NOTE line always lands at
+    # an F-registration close so the gate's execution is observable -
+    # its absence would itself be fail-open evidence for the probe. ---
+    if FINISHED_LEDGER_REL in rel_files:
+        unannot = unannotated_render_media(root)
+        lines.append("NOTE F-RENDERS-BIRTH-GATE unannot=%d (tech#257)"
+                     % len(unannot))
+        if unannot:
+            shown = ", ".join(unannot[:3])
+            if len(unannot) > 3:
+                shown += " (+%d more)" % (len(unannot) - 3)
+            lines.append(
+                "WARN F-REGISTRATION-RENDERS close with unannotated "
+                "render media - %s; backwrite the %s row(s) (tech#257, "
+                "R2398 anchor: F-199 renders row lagged one round to "
+                "the R2399 backfill)" % (shown, RENDERS_LEDGER_REL))
 
     # --- tech#148: canonical export refresh (before the git steps so the
     # refreshed export rides the same accounting commit). Refusal is
