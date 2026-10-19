@@ -236,5 +236,122 @@ class RowsWindowTextTests(unittest.TestCase):
             os.unlink(path)
 
 
+class OrdersOriginFaceTests(unittest.TestCase):
+    """tech#250: --source origin git-show face.
+
+    R2392 seed anchor: origin-only rows (ORIGIN-DELTA ahead state) were
+    consumed by hand-rolled one-shot git-show scripts for four rounds
+    (R2385/R2387/R2389/R2392). Judgment criteria: (1) origin window
+    extraction verbatim-identical to the git blob, (2) host default
+    zero regression, (3) module tests green. Real-git temp fixtures
+    (TestUtf16Transcode precedent), zero network, zero repo writes.
+    """
+
+    ORIGIN_FIXTURE = "\n".join([
+        ROW_HEADER,
+        ROW_SEP,
+        ROW_FULL,
+        ROW_518_ANCHOR,
+        ROW_SHORT,
+    ]) + "\n"
+
+    def _git(self, repo, *args):
+        import subprocess
+        p = subprocess.run(
+            ["git", "-C", repo] + list(args),
+            capture_output=True, timeout=60)
+        # init hints on stderr are fine; only rc matters here
+        if p.returncode != 0:
+            self.fail("git %s failed: %s"
+                      % (" ".join(args),
+                         p.stderr.decode("utf-8", errors="replace")))
+        return p
+
+    def setUp(self):
+        import tempfile
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.repo = os.path.join(self._tmp.name, "hq")
+        self.orders_path = os.path.join(self.repo, "docs", "orders.md")
+        os.makedirs(os.path.dirname(self.orders_path))
+        with open(self.orders_path, "w", encoding="utf-8",
+                  newline="\n") as fh:
+            fh.write(self.ORIGIN_FIXTURE)
+        self._git(self.repo, "init")
+        self._git(self.repo, "config", "user.email", "t@example.com")
+        self._git(self.repo, "config", "user.name", "t")
+        self._git(self.repo, "add", "docs/orders.md")
+        self._git(self.repo, "commit", "-m", "init orders fixture")
+
+    def test_origin_face_verbatim_parity_with_blob(self):
+        # criterion 1: origin text == committed blob, windows identical
+        text = orders_rows.read_origin_orders_text("HEAD", self.orders_path)
+        self.assertEqual(text, self.ORIGIN_FIXTURE)
+        win = orders_rows.rows_window_from_origin(
+            3, 5, "HEAD", path=self.orders_path)
+        self.assertEqual(
+            win, orders_rows.rows_window_text(self.ORIGIN_FIXTURE, 3, 5))
+
+    def test_origin_face_blind_to_worktree_drift(self):
+        # the point of the face: worktree edits after the commit are
+        # invisible (this is exactly the host/origin divergence the
+        # ORIGIN-DELTA face reports; a fallback to host would lie)
+        drift = "| 2026-10-19 99:99 | worktree-only drift row |\n"
+        with open(self.orders_path, "a", encoding="utf-8") as fh:
+            fh.write(drift)
+        text = orders_rows.read_origin_orders_text(
+            "HEAD", self.orders_path)
+        self.assertNotIn("worktree-only drift", text)
+        win = orders_rows.rows_window_from_origin(
+            3, 5, "HEAD", path=self.orders_path)
+        self.assertEqual(len(win), 3)
+
+    def test_origin_face_fail_closed_on_bad_ref(self):
+        with self.assertRaises(RuntimeError):
+            orders_rows.read_origin_orders_text(
+                "no-such-ref-xyz", self.orders_path)
+
+    def test_origin_face_fail_closed_outside_repo(self):
+        plain = os.path.join(self._tmp.name, "plain", "orders.md")
+        os.makedirs(os.path.dirname(plain))
+        with open(plain, "w", encoding="utf-8") as fh:
+            fh.write(self.ORIGIN_FIXTURE)
+        with self.assertRaises(RuntimeError):
+            orders_rows.read_origin_orders_text("HEAD", plain)
+
+    def test_cli_source_origin_window(self):
+        buf = _io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = orders_rows.main(
+                ["--hq-orders", self.orders_path,
+                 "--source", "origin", "--ref", "HEAD",
+                 "--window", "4", "4"])
+        self.assertEqual(rc, 0)
+        out = buf.getvalue()
+        self.assertIn("ROW 4:", out)
+        self.assertIn("2026-10-17 03:2x", out)  # CJK blob round-trips
+
+    def test_cli_source_host_default_zero_regression(self):
+        # criterion 2: no --source flag == host face, byte-identical
+        # behavior for the existing --window consumers
+        drift = "| 2026-10-19 99:99 | host face must see me |\n"
+        with open(self.orders_path, "a", encoding="utf-8") as fh:
+            fh.write(drift)
+        buf = _io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = orders_rows.main(
+                ["--hq-orders", self.orders_path, "--window", "3", "6"])
+        self.assertEqual(rc, 0)
+        out = buf.getvalue()
+        self.assertIn("host face must see me", out)
+        buf2 = _io.StringIO()
+        with contextlib.redirect_stdout(buf2):
+            rc2 = orders_rows.main(
+                ["--hq-orders", self.orders_path,
+                 "--source", "host", "--window", "3", "6"])
+        self.assertEqual(rc2, 0)
+        self.assertEqual(out, buf2.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

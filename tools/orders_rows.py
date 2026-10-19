@@ -32,6 +32,7 @@ CLI probe (read-only sanity check on the live file):
 
 import argparse
 import os
+import subprocess
 import sys
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -126,6 +127,57 @@ def rows_window_from_host(start, end, path=None):
     return rows_window_text(read_hq_orders_text(path), start, end)
 
 
+def read_origin_orders_text(ref="origin/main", path=None, git_binary="git"):
+    """orders.md blob text at ``ref`` via ``git show`` (tech#250 origin face).
+
+    Why (R2392 seed): origin-only rows (ORIGIN-DELTA ahead state, the
+    D-13 SLA consumption face) had to be hand-rolled as one-shot git-show
+    extraction scripts for four straight rounds (R2385/R2387/R2389/R2392
+    .c3-tmp throwaways) because this module only read the worktree face.
+    This is the canonical origin face: byte-capture
+    ``git -C <repo> show <ref>:<relpath>``, decode utf-8/replace
+    (read_hq_orders_text parity).
+
+    Fail-closed by design: any git failure (bad ref, not a repo, origin
+    never fetched) raises RuntimeError -- a silent fallback to the
+    host worktree file would re-create the exact worktree-blind-spot
+    family (R2059/R2064) that the ORIGIN-DELTA face exists to catch.
+    Zero repo writes (D-20261001-03 read-only canon).
+    """
+    target = os.path.abspath(path or HQ_ORDERS_DEFAULT)
+    probe = subprocess.run(
+        [git_binary, "-C", os.path.dirname(target),
+         "rev-parse", "--show-toplevel"],
+        capture_output=True, timeout=60)
+    if probe.returncode != 0:
+        raise RuntimeError(
+            "orders_rows origin face: %r is not inside a git repo "
+            "(git rev-parse rc=%d)"
+            % (os.path.dirname(target), probe.returncode))
+    toplevel = probe.stdout.decode("utf-8", errors="replace").strip()
+    rel = os.path.relpath(target, toplevel).replace(os.sep, "/")
+    show = subprocess.run(
+        [git_binary, "-C", toplevel, "show", "%s:%s" % (ref, rel)],
+        capture_output=True, timeout=120)
+    if show.returncode != 0:
+        err = show.stderr.decode("utf-8", errors="replace").strip()[-300:]
+        raise RuntimeError(
+            "orders_rows origin face: git show %s:%s failed rc=%d: %s"
+            % (ref, rel, show.returncode, err))
+    return show.stdout.decode("utf-8", errors="replace")
+
+
+def rows_window_from_origin(start, end, ref="origin/main", path=None,
+                            git_binary="git"):
+    """rows_window_text over the origin-face blob (tech#250).
+
+    Window/row semantics are the shared pure core, so an origin row
+    numbered here is the same row the ORDERS / ORIGIN-DELTA faces count.
+    """
+    return rows_window_text(
+        read_origin_orders_text(ref, path, git_binary), start, end)
+
+
 def _harden_console_stdio():
     """tech#245 (R2388): orders_rows console face prints UTF-8.
 
@@ -155,11 +207,25 @@ def main(argv=None):
                         metavar=("START", "END"),
                         help="print the 'ROW N: <line>' window text "
                              "(tech#231 m1-assert fallback source)")
+    parser.add_argument("--source", choices=["host", "origin"],
+                        default="host",
+                        help="row source face: 'host' worktree file "
+                             "(default -- zero regression for existing "
+                             "--window consumers) or 'origin' git-show "
+                             "blob face (tech#250)")
+    parser.add_argument("--ref", default="origin/main",
+                        help="git ref for --source origin "
+                             "(default origin/main)")
     args = parser.parse_args(argv)
 
     path = os.path.abspath(args.hq_orders)
-    with open(path, encoding="utf-8", errors="replace") as fh:
-        text = fh.read()
+    if args.source == "origin":
+        # tech#250: origin-only rows (ORIGIN-DELTA ahead state) read via
+        # the canonical git-show face -- no more hand-rolled extraction.
+        text = read_origin_orders_text(args.ref, path)
+    else:
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
     if args.window:
         start, end = args.window
         for line in rows_window_text(text, start, end):
