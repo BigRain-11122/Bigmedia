@@ -1,10 +1,10 @@
 {
- "export_ts": "2026-10-19 12:16:33",
- "do": "R2383 acked HQ orders rows 585-591; tech#237/#230 queue hygiene; next 10-20 AM L-card window",
+ "export_ts": "2026-10-19 18:19:48",
+ "do": "R2394 self-inspection landed + tech#251 watermark guard (104 tests OK); next 10-20 AM double-card window",
  "depts": [
   {
    "n": "工程技术部",
-   "t": "1617 测试全绿（r2351 rc0·tech#211 交付）；S2 三门+守卫面 20+ 在役；lcard_leadin 导语模板在役（C-51）",
+   "t": "S2 三门+守卫面 20+ 在役；tech#251 水位守卫+5 新测（模块 104 绿）；selfcheck 工具落仓",
    "s": 1
   }
  ],
@@ -62,7 +62,7 @@
  ],
  "chips": [
   [
-   "1617 tests",
+   "suite 1764+5",
    "live"
   ]
  ],
@@ -77,8 +77,8 @@
   ]
  ],
  "live": [
-  "REACT-v24 收官链毕=红队试点 3 首签（独立子代理物理隔离·问题清单 P0×0/P1×2/P2×7+绿队三响应）+三问检项首卡（E1/E2/E3 必答）+制监位判负留痕（红签承载对抗职能·呈 CEO 面激活保留）+E4 6.5 同窗落地",
-  "最近实物：data/storylines/cards/MC-20261019-REACT-v24/MC-20261019-REACT-v24.png（F-197·成品库第 198 件·评审单 docs/reviews/review-20261019-mcreact-v24.md·2026-10-19）",
-  "里程碑：DIGEST-v26 史源腿立卡判读（orders rows 545-582 巨簇+tech#224 受众翻译闸同窗评估·窗 ≤48h）+tech#225 轴选句全句对位律试点（REACT v25+）"
+  "orders rows 630-631 消费（全司空转根治令·自查自纠即刻开跑未等 22:0x 班）——git 实测 7 日 459 commit：产品 62=13.5%（L-卡 9 件 F-190~F-198）/工具自迭代 305=66.4%（机制件占大头·诚实定谳）/纯簿记 92=20.0%；tech#251 水位守卫当窗交付（模块 104 测绿）",
+  "最近实物：data/storylines/cards/MC-20261019-DIGEST-v26/MC-20261019-DIGEST-v26.png（F-198·成品库第 199 件·红队回合 5 红签+整改轮 1 收官·2026-10-19）",
+  "里程碑：10-20 晨窗双成品位判读（REACT-v25 tech#225 轴选句试点+DIGEST-v27 tech#228 读者价值锚点预检·窗 ≤48h）+MV V5.11 verdict 守望（代理档 16:52 已落）"
  ]
 }
