@@ -1,0 +1,72 @@
+# cjk console audit (tech#246) 2026-10-19 14:09:57
+
+== STATIC FACE: 56 CLI entries with CJK in source ==
+src\ai_feel_check.py                           ascii      literal-cjk-prints=0 -
+src\board_check.py                             ascii      literal-cjk-prints=0 -
+src\call_expert.py                             NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\draft_lint.py                              hardened   literal-cjk-prints=0 cjk-in-file-writes
+src\e4_ref_call.py                             ascii      literal-cjk-prints=0 -
+src\edit_craft_check.py                        ascii      literal-cjk-prints=0 -
+src\gpu_attribution.py                         ascii      literal-cjk-prints=0 -
+src\make_draft.py                              ascii      literal-cjk-prints=0 -
+src\plain_language_check.py                    NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\platform_spec_check.py                     NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\readiness.py                               hardened   literal-cjk-prints=0 cjk-in-file-writes
+src\research_digest.py                         ascii      literal-cjk-prints=0 -
+src\weekly_report.py                           ascii      literal-cjk-prints=0 -
+src\intel\daily_brief.py                       NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\aihot_procs.py                          ascii      literal-cjk-prints=0 -
+src\os\aihot_watchdog.py                       ascii      literal-cjk-prints=0 -
+src\os\aihot_window_read.py                    ascii      literal-cjk-prints=0 -
+src\os\close_commit.py                         NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\comfy_activity.py                       ascii      literal-cjk-prints=0 -
+src\os\e4_launcher_gen.py                      NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\expert_retry_loop.py                    ascii      literal-cjk-prints=0 -
+src\os\export_refresh.py                       ascii      literal-cjk-prints=0 -
+src\os\fire_consume.py                         hardened   literal-cjk-prints=0 cjk-in-file-writes
+src\os\fire_window_card.py                     ascii      literal-cjk-prints=0 -
+src\os\gpu_window_gate.py                      NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\group_scan.py                           hardened   literal-cjk-prints=0 cjk-in-file-writes
+src\os\local_rate_report.py                    NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\loop_health.py                          hardened   literal-cjk-prints=0 cjk-in-file-writes
+src\os\mv_sprint_probe.py                      ascii      literal-cjk-prints=0 -
+src\os\ollama_probe.py                         NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\origin_gap_check.py                     ascii      literal-cjk-prints=0 -
+src\os\probe_capture.py                        ascii      literal-cjk-prints=0 -
+src\os\queue_status.py                         hardened   literal-cjk-prints=0 cjk-in-file-writes
+src\os\self_audit.py                           NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\os\suite_budget.py                         ascii      literal-cjk-prints=0 -
+src\os\tokens_local_meter.py                   NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\render\comic_compose.py                    ascii      literal-cjk-prints=0 -
+src\render\edit_craft.py                       ascii      literal-cjk-prints=0 -
+src\render\emotive_tts.py                      NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\render\prep_vertical.py                    ascii      literal-cjk-prints=0 -
+src\render\record_screen.py                    ascii      literal-cjk-prints=0 -
+src\render\render_card_video.py                NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\render\same_text_check.py                  NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+src\render\sc_beats_check.py                   ascii      literal-cjk-prints=0 -
+src\render\srt_fix.py                          ascii      literal-cjk-prints=0 -
+src\render\whisper_to_srt.py                   ascii      literal-cjk-prints=0 -
+tools\aihot_restart.py                         ascii      literal-cjk-prints=0 -
+tools\axis_anchor_check.py                     hardened   literal-cjk-prints=2 console-cjk
+tools\cap_utf8.py                              ascii      literal-cjk-prints=0 -
+tools\cjk_console_audit.py                     ascii      literal-cjk-prints=0 -
+tools\collide_scan.py                          NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+tools\drama_takt_probe.py                      ascii      literal-cjk-prints=0 -
+tools\lcard_leadin.py                          ascii      literal-cjk-prints=0 -
+tools\lcard_m2.py                              NO-HARDEN  literal-cjk-prints=0 cjk-in-file-writes
+tools\orders_rows.py                           ascii      literal-cjk-prints=0 -
+tools\radar_snapshot_gen.py                    ascii      literal-cjk-prints=0 -
+summary: hardened=7 NO-HARDEN=16 ascii=33
+
+== SMOKE FACE (default console, raw-byte judged) ==
+readiness.py --summary (hardened ctrl)       PASS    utf-8 strict ok, cjk present
+loop_health.py --loop (hardened ctrl)        ASCII   no cjk bytes
+queue_status.py (hardened ctrl)              PASS    utf-8 strict ok, cjk present
+origin_gap_check.py (ascii ctrl)             ASCII   no cjk bytes
+local_rate_report.py (subject)               ASCII   no cjk bytes
+tokens_local_meter.py (subject)              ASCII   no cjk bytes
+ollama_probe.py (subject)                    ASCII   no cjk bytes
+axis_anchor_check.py --help (subject)        ASCII   no cjk bytes
+
+R2389 axis_anchor_check live leg: module tests (31) green RC=0, CJK lines displayed correctly under default console (no PYTHONIOENCODING) - fix verified functionally; standalone smoke hit brain-lane fail-closed rc3 (CoderServe task Disabled, machine domain).

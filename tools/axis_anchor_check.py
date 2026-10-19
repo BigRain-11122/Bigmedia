@@ -180,7 +180,19 @@ def run_check(topic, rows, threshold, timeout, model):
     }
 
 
+def _harden_console_stdio():
+    # tech#246 (R2389): pin console to utf-8 so the CJK advisory lines
+    # below stay readable under any codepage (canonical form shared with
+    # queue_status.py / orders_rows.py, tech#243/#245).
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
 def main(argv=None):
+    _harden_console_stdio()
     ap = argparse.ArgumentParser(
         description="M1 axis-selection event-anchoring pre-check (advisory)")
     ap.add_argument("--cards-dir", help="card dir holding cards.json")
