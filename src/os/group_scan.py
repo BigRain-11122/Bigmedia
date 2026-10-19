@@ -235,9 +235,16 @@ def orders_row_stats(text):
 def current_orders_watermark(hq_orders_path=None):
     """Turnkey {rows, tail_key} for the close step (consumption anchor).
 
-    The close script calls this and passes the result to
-    close_commit.finalize_state(orders_watermark=...) so the baseline
-    update flows through the single state writer (tech#76 law).
+    CAUTION (tech#251, R2393 anchor): this reads the file's CURRENT
+    mechanical value. Passing it to finalize_state at CLOSE time is the
+    heal-race trap: FleetLink can heal rows into the worktree after the
+    round's scan, and the stored watermark then absorbs never-scanned
+    rows (rows 616-617 escaped every ORDERS-NEW diff that way). The
+    close step must pass the round-START group_scan ORDERS-face boundary
+    (the "current: rows=N | tail_key=..." line captured at round open),
+    optionally double-checked by finalize_state's orders_wm_scanned
+    guard. This helper stays for probes/echo faces only - not a
+    finalize_state turnkey.
     """
     path = Path(hq_orders_path) if hq_orders_path else DEFAULTS["hq_orders"]
     text, _, _ = read_text(path)

@@ -923,6 +923,90 @@ class TestFinalizeState(unittest.TestCase):
         self.assertIsNone(summary["orders_wm_rows"])
         self.assertNotIn("orders_row_watermark", fx.read())
 
+    def test_orders_wm_guard_blocks_heal_race_absorption(self):
+        # tech#251 judgment (1) - R2393 reproduction fixture: the round
+        # scanned the ORDERS face at 617 rows, FleetLink healed the file
+        # to 631 inside the round window, and the close step passed the
+        # mechanical close-time value. Storing 631 would absorb rows
+        # 618-631 that no scan face ever saw - fail closed, zero writes.
+        fx = self._fx()
+        before = fx.raw_bytes()
+        with self.assertRaises(ValueError) as ctx:
+            cc.finalize_state(
+                self.LINE, state_path=fx.path,
+                orders_watermark={"rows": 631, "tail_key": "10-19 18:0x"},
+                orders_wm_scanned={"rows": 617, "tail_key": "10-19 16:1x"})
+        self.assertIn("tech#251", str(ctx.exception))
+        self.assertIn("exceeds", str(ctx.exception))
+        self.assertEqual(before, fx.raw_bytes())  # zero partial writes
+
+    def test_orders_wm_guard_allows_r2292_origin_only_below_boundary(self):
+        # tech#251 judgment (2) - R2292 semantic fidelity: rows consumed
+        # origin-only (git show) legitimately leave the worktree anchor
+        # BELOW the file/scanned boundary, and an equal anchor is the
+        # normal scanned case - both must stay legal (fail-safe
+        # direction: next round simply re-surfaces rows as NEW).
+        # Fresh fixture per call: the R==tick born gate (tech#196) means
+        # one finalize per fixture per round number.
+        fx = self._fx()
+        summary = cc.finalize_state(
+            self.LINE, state_path=fx.path,
+            orders_watermark={"rows": 617, "tail_key": "10-19 16:1x"},
+            orders_wm_scanned={"rows": 620, "tail_key": "10-19 17:0x"})
+        self.assertEqual(617, summary["orders_wm_rows"])
+        self.assertEqual("verified", summary["orders_wm_guard"])
+        self.assertEqual(617, fx.read()["orders_row_watermark"]["rows"])
+        fx2 = self._fx()
+        summary = cc.finalize_state(
+            "2026-10-11 00:2x R1927: guard equal-boundary case",
+            state_path=fx2.path,
+            orders_watermark={"rows": 620, "tail_key": "10-19 17:0x"},
+            orders_wm_scanned={"rows": 620, "tail_key": "10-19 17:0x"})
+        self.assertEqual("verified", summary["orders_wm_guard"])
+        self.assertEqual(620, fx2.read()["orders_row_watermark"]["rows"])
+
+    def test_orders_wm_guard_unverified_advisory_when_scanned_missing(self):
+        # tech#251: passing orders_watermark without the scanned boundary
+        # is legal-but-advised (legacy surface unchanged); the summary
+        # carries the unverified flag so the close evidence shows it.
+        fx = self._fx()
+        summary = cc.finalize_state(
+            self.LINE, state_path=fx.path,
+            orders_watermark={"rows": 631, "tail_key": "10-19 18:0x"})
+        self.assertEqual("unverified-no-scanned-boundary",
+                         summary["orders_wm_guard"])
+        self.assertEqual(631, fx.read()["orders_row_watermark"]["rows"])
+
+    def test_orders_wm_scanned_bad_shape_rejected_before_write(self):
+        fx = self._fx()
+        before = fx.raw_bytes()
+        bad_shapes = (
+            {"rows": 0, "tail_key": "x"},
+            {"rows": "12", "tail_key": "x"},
+            {"rows": 12, "tail_key": " "},
+            {"rows": 12},
+            [12, "x"],
+            "scalar",
+        )
+        for bad in bad_shapes:
+            with self.assertRaises(ValueError):
+                cc.finalize_state(
+                    self.LINE, state_path=fx.path,
+                    orders_watermark={"rows": 12, "tail_key": "ok"},
+                    orders_wm_scanned=bad)
+        self.assertEqual(before, fx.raw_bytes())  # zero partial writes
+
+    def test_orders_wm_guard_none_when_no_watermark_given(self):
+        fx = self._fx()
+        summary = cc.finalize_state(self.LINE, state_path=fx.path)
+        self.assertIsNone(summary["orders_wm_guard"])
+        fx2 = self._fx()
+        summary = cc.finalize_state(
+            "2026-10-11 00:3x R1927: guard scanned-only case",
+            state_path=fx2.path,
+            orders_wm_scanned={"rows": 631, "tail_key": "10-19 18:0x"})
+        self.assertEqual("verified", summary["orders_wm_guard"])
+
 
 class TestFClaimLedgerAdvisory(unittest.TestCase):
     """tech#211 (R2346 anchor): log-line F-claim vs finished-ledger

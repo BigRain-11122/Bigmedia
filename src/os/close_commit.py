@@ -422,7 +422,7 @@ def log_prefix_backward_advisory(log_line, last_log_line):
 
 def finalize_state(log_line, ts=None, focus=None, tick=None,
                    watermark_add=None, orders_watermark=None, state_path=None,
-                   now=None, finished_ledger_path=None):
+                   now=None, finished_ledger_path=None, orders_wm_scanned=None):
     """Single-writer state.json accounting step (tech#76, R1920 anchor).
 
     R1920 root cause: that round's log line lived in an external template
@@ -460,8 +460,27 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             to decisions_watermark.dnums (dedup, order-preserving).
         orders_watermark: optional {"rows": int >= 1, "tail_key": non-empty
             str} stored verbatim at state.json orders_row_watermark after
-            the body consumes the new HQ orders rows (tech#103; compute
-            turnkey via group_scan.current_orders_watermark()).
+            the body consumes the new HQ orders rows (tech#103
+            consumption anchor). MUST be the round's ORDERS-face measured
+            boundary from the round-START group_scan run (the "current:
+            rows=N | tail_key=..." line), NOT the close-time mechanical
+            group_scan.current_orders_watermark() value: FleetLink can
+            heal rows into the worktree mid-round, and a close-time read
+            absorbs rows this round never scanned - the next round's
+            ORDERS-NEW diff then goes permanently blind on them (tech#251,
+            R2393 anchor: rows 616-617 escaped every scan face and were
+            recovered only by manual log-vs-state comparison). Rows
+            consumed origin-only via git show legitimately leave the
+            worktree anchor BELOW the file (R2292 precedent) - that
+            direction is always legal.
+        orders_wm_scanned: optional {"rows": int >= 1, "tail_key":
+            non-empty str} guard input = the round-start ORDERS-face
+            boundary actually scanned this round (tech#251). When both
+            are given and orders_watermark["rows"] >
+            orders_wm_scanned["rows"] the write FAILS CLOSED (a watermark
+            above the scanned boundary would absorb never-scanned rows);
+            passing orders_watermark without orders_wm_scanned emits a
+            non-blocking ORDERS-WM-GUARD advisory (cannot verify).
         state_path: default = state.json next to this module.
         now: injectable clock (needs strftime) for tests.
         finished_ledger_path: default = output/finished.md derived from
@@ -469,8 +488,10 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             f_claim_ledger_advisory), never affects the write itself.
 
     Returns: summary dict {tick, ts, task, wm_added, orders_wm_rows,
-    log_len, f_claims_missing, prefix_backward} (orders_wm_rows None
-    when no orders watermark was given; f_claims_missing = tech#211
+    log_len, f_claims_missing, prefix_backward, orders_wm_guard}
+    (orders_wm_rows None when no orders watermark was given;
+    orders_wm_guard = "verified" / "unverified-no-scanned-boundary" /
+    None per tech#251; f_claims_missing = tech#211
     advisory list, empty when every "F-NNN 登记" claim is present in the
     finished ledger or there was no ledger to check against;
     prefix_backward = tech#214 advisory flag, True when the new line's
@@ -586,6 +607,45 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
         orders_wm_stored = {"rows": orders_watermark["rows"],
                             "tail_key": orders_watermark["tail_key"]}
 
+    # tech#251 (R2394): heal-race absorption guard. The R2393 anchor:
+    # finalize was passed current_orders_watermark() at close time, the
+    # FleetLink pull had healed the worktree from 611 to 617 rows inside
+    # the round window, the stored watermark jumped to 617, and rows
+    # 616-617 (two CEO orders) escaped every scan face forever. A
+    # watermark may never sit ABOVE the boundary the round actually
+    # scanned; below is the R2292 origin-only consumption family and is
+    # always legal (next round simply re-surfaces those rows as NEW -
+    # the fail-safe direction).
+    orders_wm_guard = None
+    if orders_wm_scanned is not None:
+        if (not isinstance(orders_wm_scanned, dict)
+                or not isinstance(orders_wm_scanned.get("rows"), int)
+                or orders_wm_scanned["rows"] < 1
+                or not isinstance(orders_wm_scanned.get("tail_key"), str)
+                or not orders_wm_scanned["tail_key"].strip()):
+            raise ValueError(
+                "orders_wm_scanned must be {'rows': int >= 1, "
+                "'tail_key': non-empty str} (got %r)" % (orders_wm_scanned,))
+        if orders_wm_stored is not None and \
+                orders_wm_stored["rows"] > orders_wm_scanned["rows"]:
+            raise ValueError(
+                "orders_watermark rows=%d exceeds the round's scanned "
+                "ORDERS-face boundary rows=%d (tech#251 heal-race "
+                "guard): FleetLink healed rows into the worktree after "
+                "the scan, and storing this watermark would absorb "
+                "never-scanned rows permanently. Pass the round-START "
+                "group_scan ORDERS-face boundary instead "
+                "(tail_key=%r)." % (orders_wm_stored["rows"],
+                                    orders_wm_scanned["rows"],
+                                    orders_wm_scanned["tail_key"]))
+        orders_wm_guard = "verified"
+    elif orders_wm_stored is not None:
+        orders_wm_guard = "unverified-no-scanned-boundary"
+        print("ORDERS-WM-GUARD-WARN orders_watermark given without "
+              "orders_wm_scanned - cannot verify heal-race absorption "
+              "(tech#251); pass the round-start group_scan ORDERS-face "
+              "boundary as orders_wm_scanned")
+
     data["tick"] = new_tick
     data["log"].append(log_line)
     data["ts"] = ts
@@ -622,7 +682,8 @@ def finalize_state(log_line, ts=None, focus=None, tick=None,
             "prefix_backward": prefix_backward,
             "beat_written": beat_written, "beat_synced": beat_synced,
             "orders_wm_rows": (orders_wm_stored["rows"]
-                               if orders_wm_stored else None)}
+                               if orders_wm_stored else None),
+            "orders_wm_guard": orders_wm_guard}
 
 
 # PT-20261015-01 option 2 declaration (beat policy block): written when
