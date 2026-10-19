@@ -34,3 +34,7 @@
 {"event": "heartbeat", "pg_ok": true, "verdict": "complete", "ts": "2026-10-17 01:25:03"}
 {"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-17 01:30:28"}
 {"event": "heartbeat", "pg_ok": true, "verdict": "complete", "ts": "2026-10-18 00:00:02"}
+{"event": "heartbeat", "pg_ok": true, "verdict": "complete", "ts": "2026-10-19 00:00:03"}
+{"event": "heal", "actions": ["pg", "api"], "passes": 1, "before": {"verdict": "missing-api", "rc": 1, "pg_ok": false}, "after": {"verdict": "missing-api", "rc": 1, "pg_ok": true}, "ts": "2026-10-19 10:20:30"}
+{"event": "heal", "actions": ["proxy"], "passes": 1, "before": {"verdict": "missing-proxy", "rc": 1, "pg_ok": true}, "after": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "ts": "2026-10-19 10:25:29"}
+{"event": "heal", "actions": ["worker"], "passes": 1, "before": {"verdict": "missing-worker", "rc": 1, "pg_ok": true}, "after": {"verdict": "complete", "rc": 0, "pg_ok": true}, "ts": "2026-10-19 10:30:28"}
