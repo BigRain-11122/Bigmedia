@@ -585,5 +585,76 @@ class TestPinSuffix(unittest.TestCase):
         self.assertEqual("done", qs.classify_item(it)[0])
 
 
+class TestGatedWordBoundary(unittest.TestCase):
+    """tech#249 (R2392): hyphenated English compounds are technical terms.
+
+    Live self-proof: seeded #249 (arg-gated false-positive family) was
+    itself read [GATED] by the bare-substring match while its own text
+    says CPU-face claim-any-round. The negative lookbehind excludes
+    letter/hyphen-prefixed compounds; bare 'gated' and CJK anchors are
+    untouched (real gated rows must never flip).
+    """
+
+    def _item(self, num, text):
+        return {"num": num, "head": text.splitlines()[0], "text": text}
+
+    def test_arg_gated_compound_is_claimable(self):
+        # the live false positive: tech#248/#249 row shape
+        it = self._item(249, (
+            "249. queue_status _GATED_RE 裸子串命中「arg-gated」技术术语"
+            "假阳性族——词边界收紧候选——CPU 面·随轮领"))
+        self.assertEqual(("claimable", None), qs.classify_item(it))
+
+    def test_hyphen_and_letter_prefixed_compounds_claimable(self):
+        for text in ("307. CPU-gated window probe",
+                     "308. selfgated miswrite",
+                     "309. sm -gated flag family"):
+            it = self._item(int(text.split(".")[0]),
+                            text + "——CPU 面·随轮领")
+            self.assertEqual(("claimable", None), qs.classify_item(it),
+                             msg=text)
+
+    def test_bare_gated_still_gated_all_flanks(self):
+        # start-of-string, CJK-flanked, space-flanked: real gate survives
+        for text in ("310. gated until MV batch closes",
+                     "311. 真 gated 项若正文被污染则假阴",
+                     "312. 观察·gated·窗到即领"):
+            it = {"num": int(text.split(".")[0]),
+                  "head": text, "text": text}
+            self.assertEqual("gated", qs.classify_item(it)[0], msg=text)
+
+    def test_cjk_gate_anchors_unchanged(self):
+        # the four CJK anchors must keep gating (word-boundary fix scope)
+        for i, word in enumerate(
+                ["观察位", "到点执行", "GPU 独占窗", "窗到即领"]):
+            text = "%d. cand %s——窗口件" % (313 + i, word)
+            it = {"num": 313 + i, "head": text, "text": text}
+            self.assertEqual("gated", qs.classify_item(it)[0], msg=word)
+
+    def test_live_tech249_row_shape_regression(self):
+        # regression lock, honest boundary: the actual seeded #249 row
+        # quotes gate vocabulary in prose (bare ' gated ', 观察位,
+        # 到点执行, GPU 独占窗) while describing the bug family - under
+        # the literal doctrine (tech#176) those quoted words keep the
+        # raw row gated. The fix must do exactly two things: (a) the
+        # hyphenated arg-gated compounds stop gating a row that ONLY
+        # carries them; (b) done still wins over everything.
+        raw = ("249. [R2391 补货·队头判读实锚] queue_status 门判定词边界收紧"
+               "候选（arg-gated 技术术语假阳性族）——判据 ≤3 问：①#248 修后翻 "
+               "CLAIMABLE 实测 ②真 gated 抽样 5 项判读零翻案 ③test_queue_status"
+               " 回归绿；CPU 面·随轮领")
+        # (a) hyphenated compound alone: claimable
+        only_compound = ("249. queue_status 词边界收紧候选（arg-gated 技术术语"
+                         "假阳性族）——CPU 面·随轮领")
+        self.assertEqual(("claimable", None),
+                         qs.classify_item(self._item(249, only_compound)))
+        # quoted-vocabulary prose keeps the raw row gated (by design)
+        it = self._item(249, raw)
+        self.assertEqual("gated", qs.classify_item(it)[0])
+        # (b) delivery path: done mark wins over all gate vocabulary
+        it2 = self._item(249, "[done 2026-10-19 R2392] " + raw)
+        self.assertEqual("done", qs.classify_item(it2)[0])
+
+
 if __name__ == "__main__":
     unittest.main()

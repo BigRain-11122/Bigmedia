@@ -126,7 +126,15 @@ _DONE_RE = re.compile(r"\[[^\[\]]*\bdone\s+(\d{4}-\d{2}-\d{2})[^\[\]]*\]")
 # appears inside OPEN items as a pre-registered judging criterion
 # ("不达=判负留痕"), so machine detection would misclassify; the
 # preview line surfaces the verdict and the loop still judges.
-_GATED_RE = re.compile(r"gated|观察位|到点执行|GPU 独占窗|窗到即领")
+# tech#249 (R2392): hyphenated English compounds ("arg-gated" CJK-console
+# gate family) are technical terms, not a scheduling gate - the bare
+# substring match read tech#248/#249 as [GATED] while their own text says
+# "CPU 面·随轮领" (live self-proof: seeded #249 was caught by the very bug
+# it describes). Negative lookbehind excludes letter/hyphen-prefixed
+# compounds; bare 'gated' (start-of-string and CJK-flanked alike) and the
+# CJK anchors stay untouched. Reverse direction (real gate + lift-word
+# contamination) stays with tech#210, not here.
+_GATED_RE = re.compile(r"(?<![A-Za-z-])gated|观察位|到点执行|GPU 独占窗|窗到即领")
 # tech#210 (R2343 seed): half-unlocked state rule. A row can keep a
 # stale gated head while an in-row progress note has explicitly lifted
 # the gate - the loop's append convention writes
