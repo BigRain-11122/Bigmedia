@@ -6,6 +6,10 @@ output/*
 !output/reports/
 !output/renders/
 !output/finished.md
+# city-loop bridge files (D-20261019-07): schedule ledger + event outbox are the
+# file bridge City3D/panel consume - tracked single source of truth
+!output/city-screen-schedule.json
+!output/city-events-outbox.jsonl
 data/assets/
 *.mp4
 *.mov

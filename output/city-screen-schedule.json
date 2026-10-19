@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "updated": "2026-10-19 18:55",
+  "law_ref": "D-20261019-07 / C-20261019-01 sec.6.3 (first period = manual single-screen rotation; schedule row = source + start/end; source ledger = media/BigStream/output/finished.md)",
+  "root": "C:/Users/sjs20/Desktop/FluxGroup",
+  "screen": {
+    "id": "AD-022-Billboard-Pole-first",
+    "family": "AD-022 Billboard_Pole (street-level)",
+    "note": "first screen per council ruling; the exact prefab instance is picked on site by the city-3d line for close-up readability; Megacity advertising mega-board is the second-screen candidate for the full phase"
+  },
+  "mode": "manual-single-screen-rotation",
+  "consumers": [
+    "City3D (read-only: VideoPlayer file:// direct read of pool paths)",
+    "siliconwatch generate.ps1 bake (panel 'playing-in-city' section, zero-runtime-network law)"
+  ],
+  "red_lines": [
+    "in-city playback is NOT a platform publish (copyright face unchanged)",
+    "AIGC label must be visible on every scheduled piece",
+    "City3D side never writes this file (BigStream owns the schedule); panel side reads only"
+  ],
+  "entries": [
+    {
+      "slot": 1,
+      "title": "MV《爱在西元前》合成块 A（Jay 系 jman 作品·cloud-v4 正身块）",
+      "path": "media/MV/mv0001/cloud-v4/blockA.mp4",
+      "kind": "mv_block",
+      "start": "2026-10-20 00:00",
+      "end": "2026-10-21 00:00",
+      "aigc_label": true
+    },
+    {
+      "slot": 2,
+      "title": "MV《爱在西元前》合成块 B（Jay 系 jman 作品·cloud-v4 正身块）",
+      "path": "media/MV/mv0001/cloud-v4/blockB.mp4",
+      "kind": "mv_block",
+      "start": "2026-10-21 00:00",
+      "end": "2026-10-22 00:00",
+      "aigc_label": true
+    },
+    {
+      "slot": 3,
+      "title": "短剧《慢慢踩》V1 成片（速成汽车宇宙·盲评 10/10·候 CEO 终审）",
+      "path": "media/meme-daily-v1/v1-zunjie-brake/final/v1-sucheng-brake-final.mp4",
+      "kind": "drama_episode",
+      "start": "2026-10-22 00:00",
+      "end": "2026-10-23 00:00",
+      "aigc_label": true
+    },
+    {
+      "slot": 4,
+      "title": "漫剧试播预览 PILOT-PREVIEW-3x20s（三段 20s 预览档）",
+      "path": "media/drama-pilot-in/PILOT-PREVIEW-3x20s.mp4",
+      "kind": "drama_pilot",
+      "start": "2026-10-23 00:00",
+      "end": "2026-10-24 00:00",
+      "aigc_label": true
+    }
+  ],
+  "notes": [
+    "every path verified on disk at schedule time (2026-10-19 18:5x); full-song MV single file lands when V5.11 verdict closes - slots 1-2 upgrade to it then (versioned filename = new schedule row)",
+    "L-card finished pieces (finished.md F-001..F-198) are the standing filler pool for the full-phase multi-screen schedule table",
+    "this file is the single source of truth for the first-period rotation; City3D and the panel must not fork it"
+  ]
+}
