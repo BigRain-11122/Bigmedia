@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 19:28:23",
- "do": "R2396: census gate recheck (closed) + probe verify PASS, receipt pending tick; next: 10-20 AM double-card window",
+ "export_ts": "2026-10-19 20:00:12",
+ "do": "R2397: ack row 632; DAILY supply review done -> P-10 relaunch proposal + tech#254 seed; next: claim tech#254",
  "depts": [
   {
    "n": "工程技术部",
@@ -81,8 +81,8 @@
   ]
  ],
  "live": [
-  "城桥 D-07 份额首腿落地（档期台账 v1+事件 outbox+登记工具+perceptor 探针·P-43 单写律）——探针首扫验真随轮读",
+  "日签连载复航提案已交（供给复查毕：新行断供但今天 CEO 连令日事件窗开着·提案候领试点首件）",
   "最近实物：output/city-screen-schedule.json + output/city-events-outbox.jsonl + tools/city_event_register.py（2026-10-19 19:1x·FluxVerse 侧探针落位待其 tick 顺扫）",
-  "里程碑：10-20 晨窗双卡判读+探针首扫验真（≤48h）；城市闭环快样 ≤10-26（MV 城内大屏播放录屏+Jay 首条成长事件入流面板可见）"
+  "里程碑：日签 v71 事件窗件今明窗内出（CEO 连令日开着）；10-20 晨窗双卡判读+探针首扫验真（≤48h）；城市闭环快样 ≤10-26"
  ]
 }
