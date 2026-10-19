@@ -297,18 +297,25 @@ STATE_REL = "src/os/state.json"
 # commit picked up only the state/export files (cleanup-hook recurrence
 # case 3, C-20261009-02 order 3; R1896 round-open git status was the
 # only detector). Committed evidence files are in the account by
-# definition, so only UNTRACKED files age the test; in-flight files are
-# naturally fresh (written this round), so an untracked .c3-tmp file
-# with mtime > 48h is a leftover by definition. One WARN per file,
-# advisory per the guard family law (tech#22/#31/#37/#58/#60/#61/#62).
-# Boundary note (tech#114 correction): the listing seam passes
-# --exclude-standard, so .gitignore IS applied - an ignored .c3-tmp
-# would go silently blind, and committed evidence files are the
-# repo's account, keep the dir out of .gitignore. (The pre-114 note
-# claimed the bare ls-files already respected .gitignore; it did not -
-# kept on record as the correction anchor.)
+# definition; in-flight files are naturally fresh (written this
+# round), so a .c3-tmp file with mtime > 24h is a leftover by
+# definition. Under LITTER_FAIL_N stale files = one WARN per file;
+# at LITTER_FAIL_N+ = one aggregate FAIL (recurring pattern, the
+# check_root_litter calibration) - advisory per the guard family law
+# (tech#22/#31/#37/#58/#60/#61/#62).
+# Boundary note (tech#114 correction, superseded by tech#234): the
+# pre-234 face listed via _git_untracked_files (--exclude-standard),
+# so .gitignore applied - and .gitignore's ".c3-tmp/" rule (tech#157
+# born-fix) made the whole face silently blind on the real repo: the
+# R2375/R2376 11-file debris sat with every probe reading zero rows,
+# and the 48h bound was never the binding constraint. tech#234
+# switches the face to a direct filesystem walk (the tech#216
+# utf16-debris method), so ignore-status no longer matters;
+# __pycache__ segments are exempt (an imported .c3-tmp script drops a
+# bytecode cache - not round debt). The git seam stays unchanged for
+# its other consumers (audio-tmp-residue, broken-round debris).
 C3TMP_DIR_PREFIX = ".c3-tmp/"
-C3TMP_STALE_HOURS = 48.0
+C3TMP_STALE_HOURS = 24.0
 # Round-numbered middleware name convention: r<N>_<rest> under .c3-tmp/
 ROUND_DEBRIS_RE = re.compile(r"^r(\d+)_")
 # tech#216: PS 5.1 `>` redirect residue guard. The pit law lived only in
@@ -1265,8 +1272,10 @@ def _git_untracked_files(root, _run=None):
 def classify_c3tmp_stale(entries, now, stale_hours=C3TMP_STALE_HOURS):
     """[(relpath, mtime-or-None)] -> sorted stale relpaths (pure core).
     Only paths under .c3-tmp/ age the test; an mtime strictly older
-    than stale_hours flags. Deleted/unreadable paths (None) never flag
-    - same advisory skip as the sediment guard's deleted paths."""
+    than stale_hours flags. __pycache__ segments never flag (an
+    imported .c3-tmp script drops a bytecode cache - not round debt).
+    Deleted/unreadable paths (None) never flag - same advisory skip
+    as the sediment guard's deleted paths."""
     bound = stale_hours * 3600.0
     stale = []
     for rel, mtime in entries:
@@ -1274,31 +1283,60 @@ def classify_c3tmp_stale(entries, now, stale_hours=C3TMP_STALE_HOURS):
             continue
         if not rel.startswith(C3TMP_DIR_PREFIX):
             continue
+        if "__pycache__/" in rel:
+            continue
         if (now - mtime).total_seconds() > bound:
             stale.append(rel)
     return sorted(stale)
 
 
 def check_c3tmp_stale(root, now, findings):
-    """tech#64 guard face: name untracked .c3-tmp evidence files left
-    behind across rounds (mtime > 48h). Committed files never flag
-    (tracked = in the account); a missing .c3-tmp dir, a non-git tree
-    or any git failure stays silent (advisory face, never breaks the
-    probe). Enforced every round by the routine probe consumption -
-    an R1895-form leftover is named within one round instead of at the
-    next round's git status read."""
+    """tech#64 guard face, tech#234 repair + escalation: name .c3-tmp
+    evidence files left behind across rounds (mtime > 24h). The walk
+    is a direct recursive filesystem scan (tech#216 method):
+    .gitignore's ".c3-tmp/" rule (tech#157) made the pre-234 git-seam
+    listing (--exclude-standard) read zero rows on this repo - the
+    R2375/R2376 11-file debris anchor sat invisible to every probe.
+    A missing .c3-tmp dir and unreadable files stay silent (advisory
+    face, never breaks the probe). Under LITTER_FAIL_N stale files =
+    one WARN per file (single-round debt, advisory); at LITTER_FAIL_N+
+    = one aggregate FAIL (recurring cleanup-hook pattern, the
+    check_root_litter calibration). Enforced every round by the
+    routine probe consumption - an R1895-form leftover is named
+    within one round instead of at the next round's git status read."""
+    c3 = Path(root) / C3TMP_DIR_PREFIX
+    if not c3.is_dir():
+        return
     entries = []
     mtimes = {}
-    for rel in _git_untracked_files(root):
-        if not rel.startswith(C3TMP_DIR_PREFIX):
-            continue
+    for path in sorted(c3.rglob("*")):
         try:
-            mtime = datetime.fromtimestamp((root / rel).stat().st_mtime)
+            if not path.is_file():
+                continue
+            mtime = datetime.fromtimestamp(path.stat().st_mtime)
         except OSError:
             continue
+        rel = C3TMP_DIR_PREFIX + path.relative_to(c3).as_posix()
         entries.append((rel, mtime))
         mtimes[rel] = mtime
-    for rel in classify_c3tmp_stale(entries, now):
+    stale = classify_c3tmp_stale(entries, now)
+    if not stale:
+        return
+    if len(stale) >= LITTER_FAIL_N:
+        shown = ", ".join(
+            "%s (%.1f h)" % (
+                rel, (now - mtimes[rel]).total_seconds() / 3600.0)
+            for rel in stale[:5])
+        fold = " ..." if len(stale) > 5 else ""
+        findings.append(("FAIL", "c3tmp-stale",
+                         "%d cross-round .c3-tmp leftover(s) older than "
+                         "%g h: %s%s - recurring cleanup-hook debt "
+                         "(R2375/R2376 anchor: 11 files sat invisible "
+                         "while every probe read zero; C-20261009-02 "
+                         "order 3) - batch-commit or delete at round end"
+                         % (len(stale), C3TMP_STALE_HOURS, shown, fold)))
+        return
+    for rel in stale:
         age_h = (now - mtimes[rel]).total_seconds() / 3600.0
         findings.append(("WARN", "c3tmp-stale",
                          "%s uncommitted for %.1f h (> %g h) - round "

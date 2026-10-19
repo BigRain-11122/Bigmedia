@@ -1535,11 +1535,15 @@ class AccountUncommittedTests(unittest.TestCase):
 
 
 class C3TmpStaleTests(unittest.TestCase):
-    """tech#64: .c3-tmp cross-round leftover guard - pure core, git
-    untracked seam, check face and CLI wiring. The R1895 anchor form
-    (untracked .c3-tmp evidence file older than 48h) must be named;
-    fresh in-flight files, committed files and every unreadable side
-    stay silent."""
+    """tech#64 face, tech#234 repair + escalation: .c3-tmp cross-round
+    leftover guard - pure core, filesystem-walk seam, check face and
+    CLI wiring. The R1895 anchor form (a .c3-tmp file older than 24h)
+    must be named EVEN though .gitignore ignores the dir - the pre-234
+    git-seam listing read zero rows on this repo (tech#157 x tech#64
+    collision; R2375/R2376 11-file debris anchor). Fresh in-flight
+    files, __pycache__ bytecode and every unreadable side stay
+    silent; >= LITTER_FAIL_N stale files escalate to one aggregate
+    FAIL (check_root_litter calibration)."""
 
     BEAT_SPEC = [(0, "round done exit=0"), (5, "round done exit=0")]
 
@@ -1547,10 +1551,13 @@ class C3TmpStaleTests(unittest.TestCase):
         return make_repo(self, self.BEAT_SPEC, make_state(tick=1897), BOARD)
 
     def _git_repo(self):
-        """Real-git fixture reproducing the R1895 form: one .c3-tmp file
-        committed (in the account, never flags) and one UNTRACKED file
-        with mtime pushed past the 48h bound (the leftover form)."""
+        """Real-git fixture reproducing the repo reality: .gitignore
+        ignores .c3-tmp/ (the tech#157 line), one file force-committed
+        (in the account) and one UNTRACKED-IGNORED file with mtime
+        pushed past the 24h bound - the leftover form the pre-234
+        seam could never see."""
         root = self._repo()
+        (root / ".gitignore").write_text(".c3-tmp/\n", encoding="utf-8")
         c3 = root / ".c3-tmp"
         c3.mkdir()
         (c3 / "r1890_probe.txt").write_text("in the account", encoding="utf-8")
@@ -1561,7 +1568,7 @@ class C3TmpStaleTests(unittest.TestCase):
         env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t",
                    GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
         for args in (["init", "-q"],
-                     ["add", ".c3-tmp/r1890_probe.txt"],
+                     ["add", "-f", ".c3-tmp/r1890_probe.txt"],
                      ["commit", "-q", "-m", "x"]):
             p = subprocess.run(["git"] + args, cwd=str(root), env=env,
                                capture_output=True, timeout=30)
@@ -1580,20 +1587,26 @@ class C3TmpStaleTests(unittest.TestCase):
             (".c3-tmp/r1890_gone.txt", None),           # deleted - silent
             ("data/sources/other.py", stale_mtime),     # outside dir - silent
             (None, stale_mtime),                        # unparseable - silent
+            (".c3-tmp/__pycache__/r1895_close.cpython-313.pyc",
+             stale_mtime),                              # bytecode - silent
+            (".c3-tmp/sub/r1895_deep.txt", stale_mtime),  # recursive walk
         ]
         self.assertEqual(
             loop_health.classify_c3tmp_stale(entries, now),
-            [".c3-tmp/r1895_close.py"])
+            [".c3-tmp/r1895_close.py", ".c3-tmp/sub/r1895_deep.txt"])
 
     def test_pure_core_boundary_strictly_greater(self):
         now = datetime.now()
         self.assertEqual(loop_health.classify_c3tmp_stale(
-            [(".c3-tmp/b.txt", now - timedelta(hours=48))], now), [])
+            [(".c3-tmp/b.txt", now - timedelta(hours=24))], now), [])
         self.assertEqual(loop_health.classify_c3tmp_stale(
-            [(".c3-tmp/b.txt", now - timedelta(hours=48, minutes=1))], now),
+            [(".c3-tmp/b.txt", now - timedelta(hours=24, minutes=1))], now),
             [".c3-tmp/b.txt"])
 
     def test_untracked_seam_git_failure_silent(self):
+        # the seam no longer feeds this face (tech#234 walk) but still
+        # serves audio-tmp-residue and broken-round debris - keep its
+        # failure-silent contract locked
         root = self._repo()
 
         def dead(_args, **_kw):
@@ -1610,7 +1623,8 @@ class C3TmpStaleTests(unittest.TestCase):
             loop_health._git_untracked_files(root, _run=bad_rc), [])
 
     def test_check_face_non_git_tree_silent(self):
-        # no .git: untracked list yields [] -> advisory skip
+        # the tech#234 walk needs no git: a fresh in-flight file is
+        # silent by age in a non-git tree
         root = self._repo()
         c3 = root / ".c3-tmp"
         c3.mkdir()
@@ -1621,7 +1635,10 @@ class C3TmpStaleTests(unittest.TestCase):
 
     def test_git_fixture_r1895_form_named(self):
         # judgement criterion 2: the anchor leftover form is named at
-        # the check-face level, one WARN per file, committed file silent
+        # the check-face level even though .gitignore ignores the dir
+        # (the pre-234 seam read zero rows here - the tech#157 x
+        # tech#64 collision this fixture now locks); one WARN per
+        # file, the fresh force-committed file silent
         root = self._git_repo()
         findings = []
         loop_health.check_c3tmp_stale(root, datetime.now(), findings)
@@ -1630,6 +1647,44 @@ class C3TmpStaleTests(unittest.TestCase):
         self.assertIn(".c3-tmp/r1895_close.py", findings[0][2])
         self.assertIn("R1895", findings[0][2])
         self.assertNotIn("c3tmp-stale", fail_codes(findings))
+
+    def test_two_stale_files_stay_warn(self):
+        # under LITTER_FAIL_N: one WARN per file, never a FAIL
+        root = self._repo()
+        c3 = root / ".c3-tmp"
+        c3.mkdir()
+        past = time.time() - 30 * 3600
+        for name in ("r2375_a.txt", "r2376_b.py"):
+            p = c3 / name
+            p.write_text("debris", encoding="utf-8")
+            os.utime(str(p), (past, past))
+        findings = []
+        loop_health.check_c3tmp_stale(root, datetime.now(), findings)
+        self.assertEqual(warn_codes(findings), {"c3tmp-stale"})
+        self.assertEqual(len(findings), 2)
+        self.assertNotIn("c3tmp-stale", fail_codes(findings))
+
+    def test_fail_escalation_at_three_stale_files(self):
+        # >= LITTER_FAIL_N stale files = one aggregate FAIL naming
+        # count + files; no per-file WARNs alongside (recurring
+        # pattern, the check_root_litter calibration)
+        root = self._repo()
+        c3 = root / ".c3-tmp"
+        c3.mkdir()
+        past = time.time() - 30 * 3600
+        for name in ("r2375_full.txt", "r2376_close.py",
+                     "r2376_export.json"):
+            p = c3 / name
+            p.write_text("debris", encoding="utf-8")
+            os.utime(str(p), (past, past))
+        findings = []
+        loop_health.check_c3tmp_stale(root, datetime.now(), findings)
+        self.assertEqual(fail_codes(findings), {"c3tmp-stale"})
+        rows = [f for f in findings if f[1] == "c3tmp-stale"]
+        self.assertEqual(len(rows), 1)
+        self.assertIn("3 cross-round", rows[0][2])
+        self.assertIn("r2375_full.txt", rows[0][2])
+        self.assertNotIn("c3tmp-stale", warn_codes(findings))
 
     def test_cli_wired_on_git_fixture(self):
         root = self._git_repo()
@@ -1641,11 +1696,12 @@ class C3TmpStaleTests(unittest.TestCase):
 
     def test_real_repo_clean_baseline_smoke(self):
         """Judgement criterion 1 (round-start face): the real repo's
-        .c3-tmp evidence files are committed at round open, so the guard
-        must stay silent on the committed baseline. Read-only: a fresh
+        .c3-tmp is clean at round open (cleanup-hook discipline), so
+        the walk-based guard must stay silent on the live baseline -
+        ignore-status no longer hides anything. Read-only: a fresh
         in-flight evidence file from a live round is naturally under
-        the 48h bound; assert only that the face never FAILs the probe
-        and never crashes."""
+        the 24h bound; assert only that the face never FAILs the
+        probe and never crashes."""
         findings = []
         loop_health.check_c3tmp_stale(REPO, datetime.now(), findings)
         self.assertNotIn("c3tmp-stale", fail_codes(findings))
