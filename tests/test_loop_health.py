@@ -1182,6 +1182,156 @@ class AihotStackTests(unittest.TestCase):
         self.assertIn("http://127.0.0.1:9/api/health", seen)
         self.assertIn(loop_health.AIHOT_WEB_URL, seen)
 
+    # ------------- tech#239: watchdog-heal awareness -------------
+    # 10-19 anchor: watchdog healed the 10:1x four-face kill across
+    # three PT5M cycles (ledger rows 10:20:30/10:25:29/10:30:28) while
+    # R2381 manually rebuilt the same stack - the WARN named faces a
+    # live healer was already fixing. Fresh heal row -> INFO; stale/
+    # empty/unreadable ledger -> WARN kept (a dead watchdog is the
+    # real gap, fail-closed).
+
+    def _heal_ledger_text(self, minutes_ago):
+        stamp = (datetime.now() - timedelta(minutes=minutes_ago)).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        return ('{"event": "heartbeat", "verdict": "complete", '
+                '"ts": "%s"}\n'
+                '{"event": "heal", "actions": ["pg", "api"], "passes": 1, '
+                '"before": {"verdict": "missing-api"}, '
+                '"after": {"verdict": "missing-proxy"}, "ts": "%s"}\n'
+                % (stamp, stamp))
+
+    def test_fresh_heal_row_downgrades_warn_to_info(self):
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (False, "ConnectionRefusedError: x"),
+            ledger_reader=lambda path: self._heal_ledger_text(2))
+        self.assertEqual(len(findings), 1)
+        sev, code, msg = findings[0]
+        self.assertEqual((sev, code), ("INFO", "aihot-stack"))
+        self.assertIn("healing in progress", msg)
+        self.assertIn("tech#127", msg)  # healer owner named
+        self.assertIn("tech#239", msg)  # race-law pointer named
+
+    def test_stale_heal_row_keeps_warn(self):
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (False, "ConnectionRefusedError: x"),
+            ledger_reader=lambda path: self._heal_ledger_text(30))
+        self.assertEqual(warn_codes(findings), {"aihot-stack"})
+        self.assertEqual(len(findings), 1)
+
+    def test_ledger_only_heartbeats_keeps_warn(self):
+        stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (False, "refused"),
+            ledger_reader=lambda path:
+                '{"event": "heartbeat", "ts": "%s"}\n' % stamp)
+        self.assertEqual(warn_codes(findings), {"aihot-stack"})
+
+    def test_ledger_unreadable_fail_closed_keeps_warn(self):
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (False, "refused"),
+            ledger_reader=lambda path: None)  # read-error face
+        self.assertEqual(warn_codes(findings), {"aihot-stack"})
+
+    def test_ledger_reader_raises_fail_closed_keeps_warn(self):
+        def boom(path):
+            raise OSError("disk")
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (False, "refused"),
+            ledger_reader=boom)  # contract break must not raise out
+        self.assertEqual(warn_codes(findings), {"aihot-stack"})
+
+    def test_missing_ledger_file_fail_closed_keeps_warn(self):
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (False, "refused"),
+            ledger_path=loop_health.REPO / "data" / "pipeline" /
+            "no-such-watchdog-ledger.jsonl")
+        self.assertEqual(warn_codes(findings), {"aihot-stack"})
+
+    def test_healthy_stack_never_reads_ledger(self):
+        seen = []
+
+        def reader(path):
+            seen.append(path)
+            return self._heal_ledger_text(1)
+        findings = []
+        loop_health.check_aihot_stack(
+            findings,
+            probe=lambda url, timeout_s: (True, '{"ok":true,"db":"ok"}'),
+            ledger_reader=reader)
+        self.assertEqual(findings, [])
+        self.assertEqual(seen, [])  # ledger consult only on down faces
+
+    def test_pure_core_future_row_counts_fresh(self):
+        future = datetime.now() + timedelta(minutes=5)
+        text = ('{"event": "heal", "actions": ["pg"], "ts": "%s"}\n'
+                % future.strftime("%Y-%m-%d %H:%M:%S"))
+        fresh, detail = loop_health.watchdog_heal_fresh(text)
+        self.assertTrue(fresh)
+        self.assertIn("newest heal row", detail)
+
+    def test_pure_core_malformed_rows_skipped_newest_wins(self):
+        now = datetime.now()
+        old = (now - timedelta(hours=2)).strftime("%Y-%m-%d %H:%M:%S")
+        fresh = (now - timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+        text = ("not json at all\n"
+                '{"event": "heal", "ts": "not-a-time"}\n'
+                '{"event": "heal", "ts": null}\n'
+                '{"event": "skip-pause", "ts": "%s"}\n'
+                '{"event": "heal", "ts": "%s"}\n'
+                '{"event": "heal", "ts": "%s"}\n' % (old, old, fresh))
+        ok, detail = loop_health.watchdog_heal_fresh(text, now_dt=now)
+        self.assertTrue(ok)
+        self.assertIn(fresh, detail)
+
+    def test_pure_core_empty_and_none_text_no_heal_row(self):
+        for text in ("", None):
+            ok, detail = loop_health.watchdog_heal_fresh(text)
+            self.assertFalse(ok)
+            self.assertIn("no parsable heal row", detail)
+
+    def test_cli_wiring_heal_in_progress_shows_info(self):
+        root = self._healthy_repo()
+        ledger_dir = root / "data" / "pipeline"
+        ledger_dir.mkdir(parents=True, exist_ok=True)
+        (ledger_dir / "aihot-watchdog-ledger.jsonl").write_text(
+            self._heal_ledger_text(2), encoding="utf-8")
+        old = loop_health.probe_http_face
+        loop_health.probe_http_face = lambda url, timeout_s=4.0: (
+            False, "ConnectionRefusedError: refused")
+        try:
+            rc, out = self._run_cli(root)
+        finally:
+            loop_health.probe_http_face = old
+        self.assertEqual(rc, 0)  # INFO face: never a probe-break FAIL
+        self.assertIn("[INFO] aihot-stack", out)
+        self.assertIn("healing in progress", out)
+        self.assertNotIn("[WARN] aihot-stack", out)  # downgraded, not duplicated
+
+    def test_cli_wiring_missing_ledger_keeps_warn(self):
+        root = self._healthy_repo()  # fixture repo: no ledger file
+        old = loop_health.probe_http_face
+        loop_health.probe_http_face = lambda url, timeout_s=4.0: (
+            False, "ConnectionRefusedError: refused")
+        try:
+            rc, out = self._run_cli(root)
+        finally:
+            loop_health.probe_http_face = old
+        self.assertEqual(rc, 0)
+        self.assertIn("[WARN] aihot-stack", out)
+        self.assertNotIn("healing in progress", out)
+
 
 class QueueGlueTests(unittest.TestCase):
     """tech#60: queue entry-glue guard - pure core, check face and CLI

@@ -77,7 +77,19 @@ Findings:
                                    four deaths were all found after the
                                    fact (R1727/R1750/R1752/R1891) - this
                                    face names a dead stack within one
-                                   round (tech#58)
+                                   round (tech#58). Stays WARN unless a
+                                   fresh watchdog heal row is in the
+                                   ledger (tech#239, see INFO below).
+  INFO  aihot-stack               down faces with an autoheal-watchdog
+                                   heal row fresher than 3 x PT5M - the
+                                   healer (tech#127) is live and owns
+                                   the recovery; a manual heal on top
+                                   would be the duplicate-healer race
+                                   (tech#239 10-19 anchor: R2381 manual
+                                   prose recovery raced the watchdog's
+                                   three-cycle heal). Unreadable/stale/
+                                   empty ledger keeps the WARN - a dead
+                                   watchdog is the real gap (fail-closed).
   WARN  queue-glue               queue entry head 'NN. [' at a non-zero
                                    column in state/queue/*.md - entry
                                    written without a leading newline;
@@ -263,6 +275,16 @@ CODEX_CHANGELOG_ENTRY_RE = re.compile(
 AIHOT_API_URL = "http://127.0.0.1:3101/api/health"
 AIHOT_WEB_URL = "http://127.0.0.1:3100/"
 AIHOT_PROBE_TIMEOUT_S = 4.0
+# tech#239: the autoheal watchdog (src/os/aihot_watchdog.py, tech#127)
+# heals the stack on a PT5M cadence and appends every heal row to this
+# ledger. A heal row fresher than 3 x PT5M means the down faces below
+# are already being fixed - naming the WARN inside that window is the
+# duplicate-healer race (10-19 anchor: 10:1x four-face kill healed by
+# the watchdog at 10:20:30/10:25:29/10:30:28 while R2381 ran a 6-minute
+# manual prose recovery on top of it).
+AIHOT_WATCHDOG_LEDGER_REL = ("data", "pipeline",
+                             "aihot-watchdog-ledger.jsonl")
+AIHOT_HEAL_FRESH_WINDOW_S = 3 * 5 * 60  # 3 x PT5M watchdog cycles
 # tech#60: queue entry-glue guard. Queue entries live in state/queue/*.md
 # as single lines starting 'NN. ['; a seed written without its leading
 # newline glues onto the previous entry's tail (R1891 anchor: seed entry
@@ -1119,17 +1141,97 @@ def classify_aihot_faces(api, web):
     return findings
 
 
+def read_watchdog_ledger(path):
+    """Ledger path -> text or None. Any read error maps to None so the
+    caller fail-closes to the plain WARN (tech#239 Q3: an unreadable
+    ledger must never suppress the down-stack finding)."""
+    try:
+        return Path(path).read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+
+
+def watchdog_heal_fresh(ledger_text, now_dt=None,
+                        window_s=AIHOT_HEAL_FRESH_WINDOW_S):
+    """Ledger jsonl text -> (fresh, detail) pure core (tech#239).
+
+    Scans rows for event == "heal" with a parsable "ts"
+    ("YYYY-MM-DD HH:MM:SS", the aihot_watchdog append_row format); the
+    newest decides. Malformed/non-heal rows are skipped, never fatal
+    (append-only jsonl). A future-stamped row still counts as fresh
+    (clock-skew guard, same family as the state-ts faces). No parsable
+    heal row -> (False, ...) so a dead watchdog keeps the WARN."""
+    if now_dt is None:
+        now_dt = datetime.now()
+    newest = None
+    for line in (ledger_text or "").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if not isinstance(row, dict) or row.get("event") != "heal":
+            continue
+        try:
+            stamp = datetime.strptime(str(row.get("ts")),
+                                      "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            continue
+        if newest is None or stamp > newest:
+            newest = stamp
+    if newest is None:
+        return False, "no parsable heal row in ledger"
+    age = (now_dt - newest).total_seconds()
+    if age < 0:
+        age = 0.0  # future stamp: clock skew, still a live healer
+    detail = ("newest heal row %s (%.0fs old, window %ds)"
+              % (newest.strftime("%Y-%m-%d %H:%M:%S"), age, window_s))
+    return (age <= window_s), detail
+
+
 def check_aihot_stack(findings, timeout_s=AIHOT_PROBE_TIMEOUT_S,
-                      probe=None):
+                      probe=None, ledger_path=None, now_dt=None,
+                      ledger_reader=None):
     """tech#58 guard face: probe the AIHOT stack HTTP faces and name any
     down face (one WARN). Machine-enforced every round by the routine
-    probe consumption - a dead stack is named within one round."""
+    probe consumption - a dead stack is named within one round.
+
+    tech#239: a down stack is not automatically a WARN. The autoheal
+    watchdog ledger (aihot_watchdog, tech#127) is consulted first: a
+    heal row fresher than 3 x PT5M means the healer is live and mid-
+    cycle, so the finding is downgraded to INFO "watchdog healing in
+    progress" (a manual heal on top would be the duplicate-healer race,
+    10-19 anchor). Zero/stale/unreadable ledger keeps the WARN - a dead
+    watchdog is the real gap and must stay loud (fail-closed)."""
     if probe is None:
         probe = probe_http_face  # module global read at call time (test seam)
     api_url = os.environ.get("AIHOT_API_URL", AIHOT_API_URL)
     web_url = os.environ.get("AIHOT_WEB_URL", AIHOT_WEB_URL)
-    findings.extend(classify_aihot_faces(probe(api_url, timeout_s),
-                                         probe(web_url, timeout_s)))
+    down = classify_aihot_faces(probe(api_url, timeout_s),
+                                probe(web_url, timeout_s))
+    if down:
+        if ledger_reader is None:
+            ledger_reader = read_watchdog_ledger
+        if ledger_path is None:
+            ledger_path = REPO.joinpath(*AIHOT_WATCHDOG_LEDGER_REL)
+        try:
+            text = ledger_reader(ledger_path)
+        except Exception:
+            text = None  # contract break: fail closed to the WARN below
+        if text is not None:
+            fresh, detail = watchdog_heal_fresh(text, now_dt=now_dt)
+            if fresh:
+                findings.append(("INFO", "aihot-stack",
+                                 "AIHOT stack face(s) down - watchdog "
+                                 "healing in progress (%s); autoheal on "
+                                 "the PT5M cadence owns the recovery "
+                                 "(tech#127), a manual heal on top would "
+                                 "be the duplicate-healer race (tech#239)"
+                                 % detail))
+                return
+    findings.extend(down)
 
 
 def classify_queue_glue(files):
@@ -2065,7 +2167,9 @@ def main(argv):
         check_account_uncommitted(root, state, findings)
         check_unaccounted_round_work(root, state, findings)
         check_export_face(root, findings)
-        check_aihot_stack(findings)
+        check_aihot_stack(
+            findings,
+            ledger_path=root.joinpath(*AIHOT_WATCHDOG_LEDGER_REL))
     except OSError as e:
         print("source error: %s" % e)
         return 2
