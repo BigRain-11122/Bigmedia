@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-20 07:32:06",
- "do": "DIGEST-v27《城市盘点 027》已登记 F-200（红队两回合 P1 整改后红签过）；下轮取 tech#266 或下一件 L-卡",
+ "export_ts": "2026-10-20 07:58:40",
+ "do": "V5.11 publish copy watermarked: extract 100%, TP -1.1 dBFS, 31.1 Mbps; badge not burned per CEO 10-17; next review pack",
  "depts": [
   {
    "n": "工程技术部",
@@ -15,8 +15,8 @@
    "radar"
   ],
   [
-   "MV V5.9 双签齐（DIRECTOR+SUPERVISOR 在位·终审=MV 会话域）",
-   "wait",
+   "MV V5.11 出库水印件（提取100%·角标按10-17令不烧）",
+   "on",
    "mv0001"
   ],
   [
@@ -68,6 +68,10 @@
  ],
  "results": [
   [
+   "V511wm 100%",
+   "r2410"
+  ],
+  [
    "whisperX adopt",
    "r2378"
   ],
@@ -78,15 +82,11 @@
   [
    "city bridge",
    "r2395"
-  ],
-  [
-   "DIGEST-v27 F-200",
-   "r2409"
   ]
  ],
  "live": [
-  "当前活：L-卡 DIGEST-v27《城市盘点 027·冲刺总动员日（10-19）》登记 F-200（R2409）——48 条 CEO 命令窗口盘点+M1 断言 ALL GREEN+红队 P0×0/P1×0",
-  "最近实物：MC-20261020-DIGEST-v27.png（1080×1080·225,261B）+ mc-20261020-digest-v27-card.mp4（3.800s·140,462B）2026-10-20 07:2x·C:\\\\Users\\\\sjs20\\\\Desktop\\\\FluxGroup\\\\media\\\\BigStream\\\\data\\\\storylines\\\\cards\\\\MC-20261020-DIGEST-v27\\\\",
-  "下个里程碑：tech#266 DIGEST 窗口断言去硬编码落地（≤2026-10-21 12:00）"
+  "当前活：mv0001 V5.11 发布前水印闸（R2410）——VideoSeal 隐形水印已嵌入出库件，全片提取位精度 100%",
+  "最近实物：full_mv_v511_wmvs.mp4（917,565,589B·234.25s·1344x768·31.1Mbps·TP -1.1dBFS·SHA256 134C980E…D685·2026-10-20 07:50）  C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\30s-reel-v1\\full_mv_v511_wmvs.mp4",
+  "下个里程碑：V5.11 出库件呈审包（终审签章更新 + 逐平台规格复跑），窗 ≤2026-10-21 12:00"
  ]
 }

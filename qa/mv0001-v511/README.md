@@ -32,9 +32,17 @@ Machine pack: `FINAL-QC-PACK.json`. Full verdict:
 
 ## Open items carried to publish-prep
 
-1. AIGC badge overlay + VideoSeal invisible watermark (「大喵没鱼吃」) not applied.
-2. Master bitrate 45.7 Mbps is spec-compliant but upload-heavy; delivery-size
-   encode is a separate decision.
+1. ~~AIGC badge overlay + VideoSeal invisible watermark (「大喵没鱼吃」) not applied.~~
+   **RESOLVED 2026-10-20 R2410** — invisible VideoSeal watermark applied to the
+   delivery variant: `full_mv_v511_wmvs.mp4` (917.6 MB, 31.1 Mbps, TP -1.1 dBFS,
+   audio stream-copied, full-clip extract bit-accuracy 100 %). The visible AIGC
+   badge was deliberately NOT burned in: CEO order 2026-10-17 removed the
+   in-frame mark (`PUBLISH-CHECKLIST.md` §2), so Note 4 of the FINAL review is
+   stale on that half. Evidence: `WATERMARK-R2410.md` + `WM-VIS-BOARD-VS.jpg`.
+2. ~~Master bitrate 45.7 Mbps is spec-compliant but upload-heavy; delivery-size
+   encode is a separate decision.~~ The watermarked delivery copy is 31.1 Mbps,
+   so the upload-facing size question is closed for the publish copy; the
+   archival master stays untouched as source of record.
 3. R05_gold_threads verse split 5.40 s (beat-aligned, residual).
 
 Tooling: `tools/v511_final_qc.py` (this repo) — PTS + four boards, read-only
