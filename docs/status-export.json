@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-19 18:55:49",
- "do": "R2395 city-bridge share landed (D-07); next: probe first-scan verify + 10-20 AM window",
+ "export_ts": "2026-10-19 19:28:23",
+ "do": "R2396: census gate recheck (closed) + probe verify PASS, receipt pending tick; next: 10-20 AM double-card window",
  "depts": [
   {
    "n": "工程技术部",
