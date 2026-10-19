@@ -1,0 +1,13 @@
+em-check-r2412 (MC-20261020-REACT-v26 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=28 budget=32.86em
+OK   21.10em margin +11.76  今日热点 · 知乎热榜 2026-10-20 · 热榜提问
+OK   21.10em margin +11.76  如何看待日文“の”在中文互联网上的广泛使用？
+OK   17.32em margin +15.54  ——以下三行为硅基城民虚构反应——
+OK   22.00em margin +10.86  怀旧轴：「街坊邻里见了面，总爱唠叨两句闲话」
+OK   26.00em margin  +6.86  求新轴：「新画作出炉了，快来看看有没有你喜欢的吧！」
+OK   22.00em margin +10.86  秩序轴：「守规矩，才稳得住这超体宇宙城的根」
+OK   32.00em margin  +0.86  巷里选题馆守门人语：「再挖一层，这稿子角度不对，得再琢磨琢磨。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.55em < 24.21em budget OK
+subs tail cue end derived=card end 2.600s (zero hardcode); expected duration=3.400s (card end + tail 0.80)
+ALL-HORIZ: PASS
