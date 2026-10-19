@@ -1,0 +1,47 @@
+{
+ "label": "V5.11",
+ "file": "C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\30s-reel-v1\\full_mv_v511.mp4",
+ "ffprobe": {
+  "programs": [],
+  "stream_groups": [],
+  "streams": [
+   {
+    "codec_name": "h264",
+    "width": 1344,
+    "height": 768,
+    "r_frame_rate": "24/1",
+    "nb_frames": "5622"
+   },
+   {
+    "codec_name": "aac",
+    "sample_rate": "44100",
+    "channels": 2,
+    "r_frame_rate": "0/0",
+    "nb_frames": "10090"
+   }
+  ],
+  "format": {
+   "duration": "234.253333",
+   "size": "1338164642",
+   "bit_rate": "45699743"
+  }
+ },
+ "frames": 5622,
+ "pts_nonuniform_steps": 0,
+ "pts_anomalies_sample": [],
+ "expected_fps_step": 0.041666666666666664,
+ "tolerance": 0.008,
+ "verdict": "PASS",
+ "boards": [
+  "XFS-CUT-BOARD.jpg",
+  "SPLIT-DENSE-BOARD.jpg",
+  "GRADE-DUAL-BOARD.jpg",
+  "DENSE-3SHOT.jpg"
+ ],
+ "dense_shots": [
+  "C03_dig_reveal",
+  "D06_chisel_fingertip",
+  "E03_gaze_meet"
+ ],
+ "note_bitrate_mbps": 45.7
+}
