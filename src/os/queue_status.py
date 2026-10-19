@@ -74,6 +74,21 @@ much-less-than sign). main() now reconfigures stdout/stderr with
 errors="replace": the codepage is kept (CJK still displays), the rare
 non-encodable character degrades to '?' instead of killing the
 readout. The --json face is ASCII-only payload, so it is unaffected.
+
+tech#236 (R2383 seed, closed R2385): machine-readable pin suffix. A
+new seed whose true state is window/gate-pinned ENDS its line with
+`[window:...]` / `[gate:...]` (type vocabulary <= 6 pin words by
+design; value = short free text) - classify_item reads the pin
+straight off the row into the gated bucket and --item echoes a PIN
+marker line. The suffix is LINE-END anchored (re.M), so mid-line
+bracket mentions never match and appended prose notes never silently
+unpin; old rows keep prose window notes with zero backfill (prose
+stays prose, the loop still judges those rows - tech#176); the
+tech#210 gate-lift note pair still wins over a stale pin. Rationale:
+R2378-R2385 rounds paid 6-10 manual --item reads per round to
+rediscover prose window pins (#225/#227 family) - the suffix makes
+the pin one canonical readout line (judging-criteria validation:
+next-round --item call-count comparison 6-10 -> <= 3).
 """
 
 import argparse
@@ -132,6 +147,21 @@ _LIFT_TO_CLAIMABLE_RE = re.compile(r"转\s*claimable")
 _UPSTREAM_WAIT_RE = re.compile(
     r"稿落即领|稿落即随轮认领|等上游源稿"
     r"|waits.{0,60}source\s+manuscript")
+# tech#236 (R2383 seed, closed R2385): machine-readable pin suffix.
+# A NEW seed whose true state is window/gate-pinned may END its line
+# with `[window:...]` / `[gate:...]` so the classifier reads the pin
+# straight off the row (type vocabulary is a short fixed word set,
+# <= 6 pin types by design; value = short free text, <= 40 chars).
+# The suffix must sit at LINE END (re.M covers the head line and
+# appended continuation lines alike - appending prose notes never
+# silently unpins); mid-line bracket mentions (seed-law doc examples)
+# never match. Old rows keep their prose window notes untouched
+# (zero backfill by design, seed law): prose stays prose, the loop
+# still judges those rows (tech#176 doctrine). Lift discipline for a
+# pinned row = rewrite the suffix off the row in the same round
+# (leg-state write-back), or the tech#210 gate-lift note pair wins.
+_PIN_SUFFIX_RE = re.compile(r"\[(window|gate):([^\]]{1,40})\]\s*$",
+                            re.MULTILINE)
 # tech#146: P1-board-only gated family - items parked on the CEO (P1
 # proposals, sign-off waits). Matches the readiness NEEDS_CEO_RE shape.
 NEEDS_CEO_RE = re.compile(r"\[needs-CEO[^\]]*\]")
@@ -182,6 +212,20 @@ def classify_item(item):
                     "HEAD-INCONSISTENT: gate-lift note wins over stale "
                     "gated head (tech#210)")
         return "gated", None
+    # tech#236: machine-readable pin suffix at line end - a new seed
+    # pins itself out of the claimable bucket without prose guessing.
+    # tech#210 doctrine carries over: the explicit gate-lift note pair
+    # still wins over a stale machine pin.
+    pin = _PIN_SUFFIX_RE.search(item["text"])
+    if pin:
+        if (_GATE_LIFT_NOTE_RE.search(item["text"])
+                and _LIFT_TO_CLAIMABLE_RE.search(item["text"])):
+            return ("claimable",
+                    "HEAD-INCONSISTENT: gate-lift note wins over pin "
+                    "suffix (tech#210/#236)")
+        return ("gated",
+                "PIN [%s:%s] (tech#236 pin)"
+                % (pin.group(1), pin.group(2)))
     return "claimable", None
 
 

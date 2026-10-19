@@ -499,5 +499,70 @@ class TestGateLiftNoteAndFaceLine(unittest.TestCase):
             self.assertNotIn("DEFAULT", out)
 
 
+class TestPinSuffix(unittest.TestCase):
+    """tech#236 (R2383 seed, closed R2385): machine-readable pin suffix.
+
+    Live anchor: R2378-R2385 rounds walked the tech queue head with
+    6-10 manual --item reads per round because prose window pins
+    (#225/#227 family) classify claimable - the pin suffix moves the
+    pin into the row itself for NEW seeds; old rows zero backfill.
+    """
+
+    def _item(self, num, text):
+        return {"num": num, "head": text, "text": text}
+
+    def test_window_suffix_pins_row(self):
+        it = self._item(300, (
+            "300. [R2385 seed] candidate ... CPU 面 [window:2026-10-20 晨]"))
+        state, marker = qs.classify_item(it)
+        self.assertEqual("gated", state)
+        self.assertIn("PIN [window:2026-10-20 晨]", marker)
+
+    def test_gate_suffix_pins_row(self):
+        it = self._item(301, (
+            "301. [R2385 seed] candidate ... 发布面 [gate:M5]"))
+        state, marker = qs.classify_item(it)
+        self.assertEqual("gated", state)
+        self.assertIn("PIN [gate:M5]", marker)
+
+    def test_no_suffix_row_stays_claimable(self):
+        # zero backfill: old rows with prose window notes keep reading
+        # claimable - the loop still judges them (tech#176 doctrine).
+        it = self._item(302, (
+            "302. [R2380 seed] candidate ... ——CPU 面·下一件 REACT "
+            "立卡窗随轮领"))
+        self.assertEqual(("claimable", None), qs.classify_item(it))
+
+    def test_midline_bracket_mention_is_not_a_pin(self):
+        # seed-law text quotes suffixes mid-line - a quoted example
+        # must never classify the row from its own documentation.
+        it = self._item(303, (
+            "303. seed text quoting 行尾 `[gate:M5]` 词表 ≤6 词·"
+            "旧项零回改）——随轮领"))
+        self.assertEqual(("claimable", None), qs.classify_item(it))
+
+    def test_pin_survives_appended_note_line(self):
+        # re.M: a later appended progress note must not silently unpin.
+        it = {"num": 304, "head": "304. cand [gate:MV-batch]",
+              "text": "304. cand [gate:MV-batch]\n"
+                      "   [R2390 进展注] prose note"}
+        state, marker = qs.classify_item(it)
+        self.assertEqual("gated", state)
+        self.assertIn("PIN [gate:MV-batch]", marker)
+
+    def test_gate_lift_note_pair_wins_over_pin(self):
+        it = self._item(305, (
+            "305. cand **[R2386 gate 解除注记 2026-10-20]**: batch "
+            "closed -> 转 claimable [gate:M5]"))
+        state, marker = qs.classify_item(it)
+        self.assertEqual("claimable", state)
+        self.assertIn("HEAD-INCONSISTENT", marker)
+
+    def test_done_wins_over_pin(self):
+        it = self._item(306, (
+            "306. cand [gate:M5] [done 2026-10-20 R2386] closed"))
+        self.assertEqual("done", qs.classify_item(it)[0])
+
+
 if __name__ == "__main__":
     unittest.main()
