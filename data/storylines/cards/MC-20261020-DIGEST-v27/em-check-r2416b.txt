@@ -1,0 +1,13 @@
+em-check-r2416b (MC-20261020-DIGEST-v27 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=36 budget=25.56em
+OK   18.35em margin  +7.21  冲刺总动员日：10-19 全天至 20 日凌晨
+OK   22.50em margin  +3.06  44 条 CEO 指令 · 六阶段工程 · 165 条知识入册
+OK   14.19em margin +11.37  「……大干快上1个月，冲刺！」
+OK   17.28em margin  +8.28  「……彻底解决空转，只追求规则……」
+OK   24.28em margin  +1.28  「……不要有卡点，很多任务都可以先行或者并行……」
+OK   17.64em margin  +7.92  「……每天给我汇报产出，要真实的！」
+OK   20.64em margin  +4.92  「……用心，走心，只做精品，要全球第一！」
+H1=6.15em (h1 own face, h1_size=84)
+subs 22.25em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS

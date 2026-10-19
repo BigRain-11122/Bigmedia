@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-20 05:13:48",
- "do": "REACT-v26《日文の之问》卡面产出并过 M1/M2 机检；S0/S4 两席 REVISE，F 未登记；下轮按 tech#265 席位适用表重审或改产 DIGEST",
+ "export_ts": "2026-10-20 07:32:06",
+ "do": "DIGEST-v27《城市盘点 027》已登记 F-200（红队两回合 P1 整改后红签过）；下轮取 tech#266 或下一件 L-卡",
  "depts": [
   {
    "n": "工程技术部",
@@ -78,11 +78,15 @@
   [
    "city bridge",
    "r2395"
+  ],
+  [
+   "DIGEST-v27 F-200",
+   "r2409"
   ]
  ],
  "live": [
-  "当前活：L-卡 REACT-v26《城市速报 026·日文の之问》卡面产出（R2408）——M1 verbatim 13/13+em ALL-HORIZ PASS+验图五检 5/5；S0/S4 双席 REVISE，F 未登记",
-  "最近实物：MC-20261020-REACT-v26.png（1080×1080·235,394B）2026-10-20 05:1x·C:\\Users\\sjs20\\Desktop\\FluxGroup\\media\\BigStream\\data\\storylines\\cards\\MC-20261020-REACT-v26\\",
-  "下个里程碑：tech#265 REACT 席位适用表落表后重审本件，或改产 DIGEST-v27（≤2026-10-21）"
+  "当前活：L-卡 DIGEST-v27《城市盘点 027·冲刺总动员日（10-19）》登记 F-200（R2409）——48 条 CEO 命令窗口盘点+M1 断言 ALL GREEN+红队 P0×0/P1×0",
+  "最近实物：MC-20261020-DIGEST-v27.png（1080×1080·225,261B）+ mc-20261020-digest-v27-card.mp4（3.800s·140,462B）2026-10-20 07:2x·C:\\\\Users\\\\sjs20\\\\Desktop\\\\FluxGroup\\\\media\\\\BigStream\\\\data\\\\storylines\\\\cards\\\\MC-20261020-DIGEST-v27\\\\",
+  "下个里程碑：tech#266 DIGEST 窗口断言去硬编码落地（≤2026-10-21 12:00）"
  ]
 }
