@@ -1,6 +1,6 @@
 # V5.11 发布文案 · YouTube
 
-> 对象：`full_mv_v511_wmvs.mp4`（同 B站件：917,565,589 B / 234.253 s / 1344×768 / 24 fps / 31.10 Mbps / AAC 262 kbps）
+> 对象：`full_mv_v511_wmvs_aigc.mp4`（同 B站件：917,566,040 B / 234.253 s / 1344×768 / 24 fps / 31.10 Mbps / AAC 262 kbps；含 VideoSeal 隐形水印 + GB 45438-2025 七字段元数据）
 > 状态：**未发布 · 未测量**（YouTube 账号=CEO 物理件，`docs/accounts.md` 未注册）
 > 发布时只需替换：发布日期；结尾链接位。
 

@@ -43,7 +43,15 @@ Machine pack: `FINAL-QC-PACK.json`. Full verdict:
    encode is a separate decision.~~ The watermarked delivery copy is 31.1 Mbps,
    so the upload-facing size question is closed for the publish copy; the
    archival master stays untouched as source of record.
-3. R05_gold_threads verse split 5.40 s (beat-aligned, residual).
+3. ~~GB 45438-2025 metadata fields in the media file.~~
+   **RESOLVED 2026-10-20 R2413** — seven-field AIGC JSON embedded in
+   `full_mv_v511_wmvs_aigc.mp4` (moov.udta.meta, tag key `AIGC`), readback 7/7,
+   video/audio stream MD5 bit-identical to the watermarked input. New reusable
+   tool `src/aigc_metadata.py`. Evidence: `AIGC-METADATA-R2413.md`.
+   The `_aigc` file is now the upload body in `DELIVERY-PACK-V511.json` and in
+   `docs/publish/mv0001-v511/`.
+4. R05_gold_threads verse split 5.40 s (beat-aligned, residual).
 
 Tooling: `tools/v511_final_qc.py` (this repo) — PTS + four boards, read-only
-against the media tree, boards land here.
+against the media tree, boards land here. `src/aigc_metadata.py` (R2413) —
+GB 45438-2025 seven-field metadata embed/verify gate, stream-copy only.

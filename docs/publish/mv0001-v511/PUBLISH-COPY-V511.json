@@ -1,10 +1,10 @@
 {
   "pack": "mv0001-v511-publish-copy",
   "generated": "2026-10-20",
-  "round": "R2412",
+  "round": "R2412 / media updated R2413",
   "media": {
-    "delivery_file": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs.mp4",
-    "bytes": 917565589,
+    "delivery_file": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs_aigc.mp4",
+    "bytes": 917566040,
     "duration_s": 234.253,
     "width": 1344,
     "height": 768,
@@ -14,7 +14,14 @@
     "true_peak_dbtp": -1.1,
     "integrated_lufs": -14.1,
     "lra_lu": 5.6,
-    "invisible_watermark": "VideoSeal, all 5622 frames, extract accuracy 100%"
+    "invisible_watermark": "VideoSeal, all 5622 frames, extract accuracy 100%",
+    "aigc_metadata": {
+      "embedded": true,
+      "round": "R2413",
+      "fields": 7,
+      "tool": "src/aigc_metadata.py",
+      "evidence": "qa/mv0001-v511/AIGC-METADATA-R2413.md"
+    }
   },
   "credits": {
     "song": "爱在西元前",
@@ -72,7 +79,7 @@
   },
   "open_preconditions": [
     "original-song license decision (CEO, red zone; YouTube-only path while unlicensed)",
-    "GB 45438-2025 metadata fields not yet written into the media file (media-side action)",
+    "GB 45438-2025 metadata fields: CLOSED 2026-10-20 R2413 (seven-field JSON embedded, readback 7/7, stream-copy bit-identical)",
     "platform accounts not open (CEO physical item)",
     "original MV director credit is C-level; obtain official on-screen credit or use fallback title variant"
   ],

@@ -1,17 +1,31 @@
 {
   "pack": "mv0001-v511-delivery",
   "generated": "2026-10-20",
-  "round": "R2411",
-  "title": "mv0001 V5.11 delivery copy (watermarked, publish-prep)",
-  "delivery_file": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs.mp4",
+  "round": "R2413",
+  "title": "mv0001 V5.11 delivery copy (watermarked + AIGC metadata, publish-prep)",
+  "delivery_file": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs_aigc.mp4",
+  "pre_metadata_file": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs.mp4",
   "archival_master": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511.mp4",
-  "bytes": 917565589,
+  "bytes": 917566040,
   "duration_s": 234.253,
   "video": {"codec": "h264", "width": 1344, "height": 768, "fps": "24/1", "frames": 5622, "bitrate_bps": 31067711},
   "audio": {"codec": "aac", "channels": 2, "bitrate_bps": 262394, "source": "stream-copied from full_mv_v511_n1.mp4"},
   "audio_gate": {"true_peak_dbtp": -1.1, "integrated_lufs": -14.1, "lra_lu": 5.6, "result": "PASS"},
   "watermark": {"kind": "VideoSeal invisible", "payload": "invisible payload (not echoed)", "embed_frames": 5622, "extract_bit_accuracy": 1.0, "result": "PASS"},
   "visible_aigc_badge": {"burned_in": false, "reason": "CEO order 2026-10-17 removes in-frame mark; declaration at platform level", "publish_precondition": true},
+  "aigc_metadata": {
+    "standard": "GB 45438-2025 + TC260-PG-20257A (in-repo canon R-20260927-04 v1.2 s10.1)",
+    "container_box": "moov.udta.meta (tag key AIGC)",
+    "tool": "src/aigc_metadata.py",
+    "payload": {"Label": "AIGC", "ContentProducer": "FluxGroup BigStream", "ProduceID": "BS-MV0001-V511-20261020", "ReservedCode1": "", "ContentPropagator": "", "PropagateID": "", "ReservedCode2": ""},
+    "propagator_fields_note": "ContentPropagator/PropagateID are filled by the distributing platform, left empty here by design",
+    "video_stream_md5": "e2760d2ca2b2fbff0f909038a2021021",
+    "audio_stream_md5": "1ed2f4d5e62e538c7cf5571e9460a5b9",
+    "stream_copy_verified": true,
+    "readback_7_of_7": true,
+    "result": "PASS",
+    "evidence": "qa/mv0001-v511/AIGC-METADATA-R2413.md"
+  },
   "platform_gates": [
     {"platform": "B站", "aspect": "16:9", "duration_window_s": [180, 900], "result": "PASS"},
     {"platform": "YouTube", "aspect": "16:9", "duration_window_s": null, "result": "PASS"}
@@ -31,7 +45,8 @@
   },
   "open_blockers": [
     "platform accounts not open (CEO physical item)",
-    "per-platform description + AIGC declaration copy: AUTHORED R2412 -> docs/publish/mv0001-v511/ (BILIBILI-DESC.md / YOUTUBE-DESC.md / AIGC-DECLARATION.md / PUBLISH-COPY-V511.json); remaining copy-side blocker = GB 45438-2025 metadata fields in the media file"
+    "per-platform description + AIGC declaration copy: AUTHORED R2412 -> docs/publish/mv0001-v511/ (BILIBILI-DESC.md / YOUTUBE-DESC.md / AIGC-DECLARATION.md / PUBLISH-COPY-V511.json); copy-side blocker CLOSED R2413 (GB 45438-2025 metadata now embedded, see aigc_metadata block)",
+    "原曲授权口径 (PUBLISH-CHECKLIST s1-1): CEO channel decision, B站 publish gate"
   ],
   "publish_status": "not published / not measured"
 }
