@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-20 07:58:40",
- "do": "V5.11 publish copy watermarked: extract 100%, TP -1.1 dBFS, 31.1 Mbps; badge not burned per CEO 10-17; next review pack",
+ "export_ts": "2026-10-20 08:05:58",
+ "do": "V5.11 delivery copy signed: TP -1.1 dBTP, B站/YouTube gates PASS, readiness findings 0. Next: publish copy pack.",
  "depts": [
   {
    "n": "工程技术部",
@@ -68,6 +68,10 @@
  ],
  "results": [
   [
+   "V511 pack",
+   "r2411"
+  ],
+  [
    "V511wm 100%",
    "r2410"
   ],
@@ -76,17 +80,13 @@
    "r2378"
   ],
   [
-   "OH w8 slice1",
-   "r2378"
-  ],
-  [
    "city bridge",
    "r2395"
   ]
  ],
  "live": [
-  "当前活：mv0001 V5.11 发布前水印闸（R2410）——VideoSeal 隐形水印已嵌入出库件，全片提取位精度 100%",
-  "最近实物：full_mv_v511_wmvs.mp4（917,565,589B·234.25s·1344x768·31.1Mbps·TP -1.1dBFS·SHA256 134C980E…D685·2026-10-20 07:50）  C:\\Users\\sjs20\\Desktop\\FluxGroup\\cph4\\fleet\\mv0001-handover\\outbound\\krea2\\30s-reel-v1\\full_mv_v511_wmvs.mp4",
-  "下个里程碑：V5.11 出库件呈审包（终审签章更新 + 逐平台规格复跑），窗 ≤2026-10-21 12:00"
+  "当前活：mv0001 V5.11 发布前置包（R2411）——出库件独立复测+导演席签章+机器可读交付包，B站/YouTube 双平台门 PASS；readiness findings 清零",
+  "最近实物：DELIVERY-PACK-V511.json + DIRECTOR-REVIEW-V511-DELIVERY-ADDENDUM-20261020.md（2026-10-20 08:05·media/BigStream/qa/mv0001-v511/）；片体=cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs.mp4（917,565,589B·234.25s·31.1Mbps）",
+  "下个里程碑：V5.11 发布文案包（B站/YouTube 描述+AIGC 声明）起草 ≤2026-10-21 12:00；发布仍候 CEO 账号物理件"
  ]
 }
