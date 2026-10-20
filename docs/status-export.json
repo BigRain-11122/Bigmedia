@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-20 08:05:58",
- "do": "V5.11 delivery copy signed: TP -1.1 dBTP, B站/YouTube gates PASS, readiness findings 0. Next: publish copy pack.",
+ "export_ts": "2026-10-20 09:21:22",
+ "do": "V5.11 publish copy pack authored (B站/YouTube/AIGC + JSON); next: CEO final review",
  "depts": [
   {
    "n": "工程技术部",
@@ -15,8 +15,8 @@
    "radar"
   ],
   [
-   "MV V5.11 出库水印件（提取100%·角标按10-17令不烧）",
-   "on",
+   "MV V5.11 发布文案包已起草（B站/YouTube/AIGC·待账号）",
+   "wait",
    "mv0001"
   ],
   [
@@ -68,6 +68,10 @@
  ],
  "results": [
   [
+   "publish copy",
+   "r2412"
+  ],
+  [
    "V511 pack",
    "r2411"
   ],
@@ -78,10 +82,6 @@
   [
    "whisperX adopt",
    "r2378"
-  ],
-  [
-   "city bridge",
-   "r2395"
   ]
  ],
  "live": [

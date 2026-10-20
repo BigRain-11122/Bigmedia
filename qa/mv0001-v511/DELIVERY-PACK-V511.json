@@ -31,7 +31,7 @@
   },
   "open_blockers": [
     "platform accounts not open (CEO physical item)",
-    "per-platform description + AIGC declaration copy not authored"
+    "per-platform description + AIGC declaration copy: AUTHORED R2412 -> docs/publish/mv0001-v511/ (BILIBILI-DESC.md / YOUTUBE-DESC.md / AIGC-DECLARATION.md / PUBLISH-COPY-V511.json); remaining copy-side blocker = GB 45438-2025 metadata fields in the media file"
   ],
   "publish_status": "not published / not measured"
 }

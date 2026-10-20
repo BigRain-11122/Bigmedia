@@ -1,0 +1,80 @@
+{
+  "pack": "mv0001-v511-publish-copy",
+  "generated": "2026-10-20",
+  "round": "R2412",
+  "media": {
+    "delivery_file": "C:/Users/sjs20/Desktop/FluxGroup/cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs.mp4",
+    "bytes": 917565589,
+    "duration_s": 234.253,
+    "width": 1344,
+    "height": 768,
+    "fps": 24,
+    "video_bitrate_bps": 31067711,
+    "audio_bitrate_bps": 262394,
+    "true_peak_dbtp": -1.1,
+    "integrated_lufs": -14.1,
+    "lra_lu": 5.6,
+    "invisible_watermark": "VideoSeal, all 5622 frames, extract accuracy 100%"
+  },
+  "credits": {
+    "song": "爱在西元前",
+    "album": "范特西",
+    "lyrics": "方文山",
+    "music": "周杰伦",
+    "original_mv_director": "邝盛",
+    "original_mv_director_confidence": "C (three independent sources agree; official on-screen credit not yet obtained)",
+    "fan_made_producer": "大喵没鱼吃",
+    "credit_source_anchors": [
+      "cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/PUBLISH-CHECKLIST.md (lyrics/music line)",
+      "cph4/research/R-20261008-mv-era-taiwan00s-01.md (director)",
+      "cph4/research/R-20261015-mv-director-craft.md (director confidence C)"
+    ]
+  },
+  "titles": {
+    "bilibili_a": "《爱在西元前》二创 MV｜专辑《范特西》｜词 方文山 曲 周杰伦｜导演 邝盛",
+    "bilibili_b_fallback": "《爱在西元前》AI 二创 MV｜专辑《范特西》｜词 方文山 曲 周杰伦｜导演 邝盛",
+    "bilibili_director_unverified_variant": "《爱在西元前》二创 MV｜专辑《范特西》｜词 方文山 曲 周杰伦｜原版 MV 导演：见片尾职员表（待官方字卡核）",
+    "youtube_a": "爱在西元前 (Fan-Made MV) | Album: 范特西 | Lyrics: 方文山 | Music: 周杰伦 | Dir. 邝盛",
+    "youtube_b": "Before BC 3700 — 爱在西元前 Fan-Made MV | Album: 范特西 | Lyrics: 方文山 | Music: 周杰伦"
+  },
+  "aigc": {
+    "title_suffix": "【AI 生成画面】",
+    "desc_short_zh": "本片画面为人工智能生成合成内容，经人工剪辑与调色；原曲原音未作改动。",
+    "desc_full_zh": "【AI 内容声明】本片含人工智能生成合成内容（画面），已在标题、简介与平台声明三处显著标识。片中无真人出演、无真人面孔再现、无声音克隆；音频为原曲原音。非官方二创致敬，与原作者及版权方无关联。本片内嵌隐形版权水印，盗用搬运必究。",
+    "desc_en": "AI DISCLOSURE: This video contains AI-generated synthetic imagery, hand-edited and color-graded. No real person appears, no real face is reproduced, no voice cloning is used; the audio is the original recording, unaltered. Synthetic-content disclosure is enabled in the upload flow.",
+    "platform_switches": {
+      "bilibili": "content-source / self-made declaration checkbox per current upload page",
+      "youtube": "Altered or synthetic content = Yes",
+      "douyin": "作品内容声明 = AI 生成",
+      "xiaohongshu": "per current upload page",
+      "wechat_channels": "per current upload page"
+    },
+    "immutable_rule": "declaration must never be removed after publish; re-distribution must carry it"
+  },
+  "copy_blacklist_in_force": [
+    "神似",
+    "1:1 复刻",
+    "官方重制",
+    "完整版",
+    "AI 翻唱",
+    "撞脸钩问句",
+    "人名 hashtag"
+  ],
+  "copy_blacklist_resolution": {
+    "conflict": "PUBLISH-CHECKLIST (2026-10-10) bans the artist name in copy; CEO order 2026-10-18 requires album + lyrics + music + director credits in the title.",
+    "ruling": "CEO order 2026-10-18 governs attribution fields (title credits + end-credit line). The 10-10 blacklist stays in force for promotional copy, hashtags and pinned comments (no artist-name hashtags, no look-alike hooks).",
+    "scope": "attribution lines only"
+  },
+  "pinned_comments": {
+    "bilibili": "非官方二创，画面为 AI 生成 + 人工剪辑调色，与原作者及版权方无关联。\n一个想问的问题：你第一次听这首歌，是哪一年？",
+    "youtube": "Fan-made, not official. Visuals are AI-generated and hand-edited; the audio is the original recording, unaltered.\nWhich year did you first hear this song?",
+    "no_reply_policy": "look-alike / identity comparisons are not answered, not boosted, not preemptively denied"
+  },
+  "open_preconditions": [
+    "original-song license decision (CEO, red zone; YouTube-only path while unlicensed)",
+    "GB 45438-2025 metadata fields not yet written into the media file (media-side action)",
+    "platform accounts not open (CEO physical item)",
+    "original MV director credit is C-level; obtain official on-screen credit or use fallback title variant"
+  ],
+  "publish_status": "not published / not measured"
+}
