@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-20 12:42:34",
- "do": "Keai Women KF-PACK-A v2.6 signed (28 frames, lint 30/30 clean, wc 105-190) - burn unlocked for @bm-c POOL-0022",
+ "export_ts": "2026-10-20 18:29:18",
+ "do": "R2415 简单爱分镜 30 镜落盘（lint 0/窗口 0）：下一动作=双曲 KF-PACK 送导演席四块 verdict",
  "depts": [
   {
    "n": "工程技术部",
@@ -10,54 +10,19 @@
  ],
  "outs": [
   [
-   "radar 权威窗收官（tech#92 PASS+daily 10-17 出刊）",
+   "简单爱分镜 v2.0=30 镜·270.99s 全曲铺满·自检绿",
    "on",
-   "radar"
+   "mv-jda-shots"
   ],
   [
-   "MV V5.11 发布文案包已起草（B站/YouTube/AIGC·待账号）",
+   "龙卷风分镜 v2.0=29 镜（R2414 产件·R2415 补上链）",
+   "on",
+   "mv-ljf-shots"
+  ],
+  [
+   "MV V5.11 水印+AIGC 成片=候 CEO 终审（账号未到位=未上线）",
    "wait",
    "mv0001"
-  ],
-  [
-   "MD-0002 配音+装配预置毕·T2I 待 CEO 点头",
-   "wait",
-   "drama"
-  ],
-  [
-   "meme v1《慢慢踩》生产在飞（设计闸 CERTIFIED）",
-   "wait",
-   "meme-v1"
-  ],
-  [
-   "AIHOT 复产链健康（worker 复活·daily 出刊）",
-   "on",
-   "intel"
-  ],
-  [
-   "SC-005 口述史第五件收官=F-177 入库",
-   "on",
-   "l-audio"
-  ],
-  [
-   "磁盘减负毕·renders 冻结维持",
-   "on",
-   "ops"
-  ],
-  [
-   "REACT-v24 收官=F-197 入库（红队首签+三问首卡+E4 6.5）",
-   "on",
-   "l-card"
-  ],
-  [
-   "W42 周审交付（bilibili-hot-dissect v1.3）",
-   "on",
-   "weekly"
-  ],
-  [
-   "评审席栈 v3：:8090 brain 通道（③④腿可领）",
-   "on",
-   "fire-seat"
   ]
  ],
  "chips": [
@@ -68,20 +33,16 @@
  ],
  "results": [
   [
-   "publish copy",
-   "r2412"
+   "30 shots green",
+   "r2415"
   ],
   [
-   "V511 pack",
-   "r2411"
+   "resnap bad rows",
+   "r2415"
   ],
   [
-   "V511wm 100%",
-   "r2410"
-  ],
-  [
-   "whisperX adopt",
-   "r2378"
+   "cloud-off ack",
+   "r2415"
   ]
  ],
  "live": [
