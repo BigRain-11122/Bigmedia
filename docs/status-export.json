@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-24 00:09:02",
- "do": "R2416: v700 verified clean (pops 0/11), v701 rejected (2 pops back) -> determinism assert next",
+ "export_ts": "2026-10-24 00:27:34",
+ "do": "R2417: v700/v702 have a 1-frame flash at 44.042s; v703 clean; pop metric needs magnitude gate",
  "depts": [
   {
    "n": "渲染复核席",
@@ -10,23 +10,28 @@
  ],
  "outs": [
   [
-   "MV repair verify report (v700 vs v701 frame-diff)",
+   "MV repair verify R2417",
    "on",
    "qa/mv0001-v700"
   ],
   [
-   "full_mv_v700.mp4 repaired cut, independently clean",
+   "flash board 44.042s",
    "on",
-   "mv0001"
+   "qa/mv0001-v700"
   ],
   [
-   "full_mv_v701.mp4 second pass, 2 pops back",
+   "mv_pop_probe detector",
+   "on",
+   "src"
+  ],
+  [
+   "full_mv_v700 flash @44.042",
    "off",
    "mv0001"
   ],
   [
-   "MV V5.11 watermark+AIGC cut, awaiting CEO acc",
-   "wait",
+   "full_mv_v703 captured clean",
+   "on",
    "mv0001"
   ]
  ],
@@ -38,21 +43,25 @@
  ],
  "results": [
   [
-   "pops v700 0/11",
-   "r2416"
+   "flash@44.042s",
+   "r2417"
   ],
   [
-   "pops v701 2/11",
-   "r2416"
+   "v703 clean",
+   "r2417"
   ],
   [
-   "dark +17.4 code",
-   "r2416"
+   "77.333s noise",
+   "r2417"
+  ],
+  [
+   "v704 race",
+   "r2417"
   ]
  ],
  "live": [
-  "当前活：mv0001 修复面独立复核收口（与在执 MV 会话并行·只读·未碰其在产件）",
-  "最近实物：qa/mv0001-v700/REPAIR-VERIFY-R2416.md（2026-10-24 00:08）；被验件 full_mv_v700.mp4（621.6MB·234.29s·11/11 pop 已清）",
-  "下个里程碑：tech#275 修复脚本确定性断言（pop 决策清单化+出片自检归零）· 窗 2026-10-25"
+  "当前活：mv0001 修复面二轮复核收口（在执 MV 会话仍在出片，本循环只读）",
+  "最近实物：qa/mv0001-v700/REPAIR-VERIFY-R2417.md＋FLASH-BOARD-44s-R2417.png（00:26）",
+  "下个里程碑：S2 补 flash-frame 检测，v700=FAIL/v703=PASS 双对照，窗 ≤10-25"
  ]
 }
