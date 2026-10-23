@@ -1,0 +1,14 @@
+em-check-r2423b (MC-20261024-REACT-v27 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=28 budget=32.86em
+OK   21.10em margin +11.76  今日热点 · 知乎热榜 2026-10-24 · 热榜提问
+OK   27.60em margin  +5.26  Anthropic 科学家称「AGI 若三年内到来读博将失去意义」，
+OK    9.00em margin +23.86  如何看待这一观点？
+OK   17.32em margin +15.54  ——以下三行为硅基城民虚构反应——
+OK   19.00em margin +13.86  怀旧轴：「捡到一本旧书，封皮都发黄了」
+OK   20.00em margin +12.86  求新轴：「学了个新画法，周末正好练练手」
+OK   21.00em margin +11.86  秩序轴：「规矩不能乱，但偶尔放松一下也行」
+OK   30.60em margin  +2.26  时空校准师语：「OK 的呀，今夜风挺大，游丝又得好好对秒才行。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.65em < 24.21em budget OK
+subs tail cue end derived=card end 3.400s (zero hardcode); expected duration=4.200s (card end + tail 0.80)
+ALL-HORIZ: PASS
