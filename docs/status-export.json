@@ -1,38 +1,33 @@
 {
- "export_ts": "2026-10-24 02:01:43",
- "do": "R2420: DIGEST v28 gated (47-row window / 3 cloud turns / 1 new dept; m1 green, em PASS)",
+ "export_ts": "2026-10-24 02:23:30",
+ "do": "R2421: cut-gate double pass landed (v703 721->147 cuts, v700 flash anchor kept)",
  "depts": [
   {
-   "n": "L-卡产线",
-   "t": "DIGEST v28 落件并过门：47 行窗口 m1 机核 ALL GREEN、em 全行 PASS、验图五检过",
+   "n": "S2 机检门",
+   "t": "detect_cuts 增相对幅度门+内容门+短镜保护；v703 721→147 切点（分镜表 144），v700 44.042s 锚命中、v703 锚消失",
    "s": 1
   }
  ],
  "outs": [
   [
-   "digest v28 png",
+   "cut-gate evidence",
    "on",
-   "digest-v28"
+   "cut-gate-r2421"
   ],
   [
-   "digest v28 mp4",
+   "edit_craft_check",
    "on",
-   "renders"
+   "src-edit-craft"
   ],
   [
-   "review v28",
+   "intel daily 10-24",
    "on",
-   "review-v28"
-  ],
-  [
-   "audio v700/v703",
-   "on",
-   "mv0001-v700"
+   "intel-daily"
   ]
  ],
  "chips": [
   [
-   "suite 1764+5",
+   "suite 1804",
    "live"
   ],
   [
@@ -42,25 +37,25 @@
  ],
  "results": [
   [
-   "47 rows/43 CEO",
-   "r2420"
+   "721->147 cuts",
+   "r2421"
   ],
   [
-   "3 cloud turns",
-   "r2420"
+   "144 target",
+   "r2421"
   ],
   [
-   "em 17.80/23.00",
-   "r2420"
+   "anchor v700 hit",
+   "r2421"
   ],
   [
-   "mp4 3.800s",
-   "r2420"
+   "9.7s / 5623f",
+   "r2421"
   ]
  ],
  "live": [
-  "当前活：L-卡 DIGEST v28 落件过门；集团 orders origin 13 新行（10-20—10-23）当轮消费 ack",
-  "最近实物：data/storylines/cards/MC-20261024-DIGEST-v28/MC-20261024-DIGEST-v28.png（201,504B·02:0x）",
-  "下个里程碑：backlog#63 CENSUS 按卡号序领件（先查 anchors/ 正典位），窗 ≤10-26"
+  "当前活：S2 切点双门落地（tech#369/#368 判据修正）——切点由 721 收至 147，贴近分镜表 144",
+  "最近实物：qa/mv0001-v700/CUT-GATE-R2421.md（02:2x·含真片两件读数与诚实边界）",
+  "下个里程碑：REACT 线 S0/S4 结构修复提案（未修前 REACT 不登记），窗 ≤10-27"
  ]
 }

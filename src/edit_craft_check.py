@@ -105,6 +105,18 @@ FLASH_MAX_SHOT_FRAMES = 3  # 1-3 frames (<=0.125s at 24fps) = unreadable
 FLASH_MIN_NEIGHBOR_FRAMES = 8  # both neighbours must be normal shots
 FLASH_LIST_MAX = 12        # hit rows quoted in the finding text
 
+# Content gate for cut detection (tech#369, R2419 measurement). A torch
+# flare or a local exposure jump clears the magnitude gate but the picture
+# on both sides is the same shot: v703 produced 721 cuts for a 144-shot
+# plan. A real cut changes what is on screen, so the frames either side of
+# it stay dissimilar. Measured on v703 (proxy 240x136): similarity across
+# candidates p50=0.945, and "< 0.90" keeps 166 cuts (target 144 +-20%).
+CUT_SIM_MAX = 0.90         # keep a cut only if the two sides differ
+CUT_SIM_LEFT = 2           # frames sampled before the boundary
+CUT_SIM_RIGHT = 3          # and after it (spans the 1-frame insertion too)
+CUT_PEAK_RATIO = 1.5       # peak must clear the local median by this factor
+CUT_PEAK_WIN = 15          # +- frames used for that local median
+
 SPEC = {
     "shipinhao": {
         "fade_min_s": 0.24, "fade_max_s": 0.32,
@@ -705,7 +717,91 @@ def detect_cuts(video, fps=24.0, min_abs=FLASH_MIN_ABS,
             continue
         cuts.append(i)
     cuts.sort()
+    cuts = _peak_gate(r, cuts)
+    cuts = _content_gate(video, cuts)
     return cuts, r, count, None
+
+
+def _peak_gate(r, cuts):
+    """Keep only peaks that stand out from the local median (tech#369).
+
+    The absolute gate alone (400k) sits near grain level, so camera motion
+    produces a local maximum every few frames: 721 candidates for a 144-shot
+    plan. Measured on v703 the candidate/local-median ratio has p50=1.26
+    (noise) while real cuts sit far above it; 1.5 keeps 203 candidates, and
+    the content gate then lands on 147 cuts.
+    """
+    import numpy as np
+
+    if not cuts:
+        return cuts
+    ra = np.asarray(r, dtype=np.float64)
+    kept = []
+    for i in cuts:
+        lo, hi = max(0, i - CUT_PEAK_WIN), min(len(ra), i + CUT_PEAK_WIN + 1)
+        seg = np.concatenate([ra[lo:i], ra[i + 1:hi]])
+        base = float(np.median(seg)) if seg.size else 0.0
+        if ra[i] >= CUT_PEAK_RATIO * max(base, 1.0):
+            kept.append(i)
+    return kept
+
+
+def _content_gate(video, cuts):
+    """Drop candidates whose two sides are still the same picture (tech#369).
+
+    Second pass over the proxy frames, only for the candidate boundaries the
+    magnitude gate produced. Measured on v703: 721 candidates -> 166 real
+    cuts (plan has 144 shots), while the 44.042s insertion and the 77.333s
+    cut keep a similarity of 0.877 / 0.861 and survive.
+
+    A boundary that cannot be measured (short clip, decode error) is kept:
+    fail-open, because silently inventing a cut is worse than one extra.
+    """
+    import numpy as np
+
+    if not cuts:
+        return cuts
+    # Boundaries of a 1-3 frame run are a candidate flash insertion, not an
+    # exposure jump: the frames far on either side are the SAME shot, so a
+    # content gate would delete exactly what the flash face must see. Those
+    # boundaries stay unconditionally (44.042s: cuts 1056/1057).
+    protected = set()
+    for a, b in zip(cuts, cuts[1:]):
+        if b - a <= FLASH_MAX_SHOT_FRAMES:
+            protected.add(a)
+            protected.add(b)
+    gate = [i for i in cuts if i not in protected]
+    if not gate:
+        return cuts
+    want = {}
+    for i in gate:
+        if i - CUT_SIM_LEFT >= 0:
+            want.setdefault(i - CUT_SIM_LEFT, []).append(i)
+        want.setdefault(i + CUT_SIM_RIGHT, []).append(i)
+    last = max(want)
+    frames = {}
+    idx = -1
+    try:
+        for frame in _stream_proxy_frames(video):
+            idx += 1
+            if idx in want:
+                frames[idx] = frame
+            if idx > last:
+                break
+    except (ImportError, OSError, ValueError):
+        return cuts
+
+    kept = set(protected)
+    for i in gate:
+        a = frames.get(i - CUT_SIM_LEFT)
+        b = frames.get(i + CUT_SIM_RIGHT)
+        if a is None or b is None:
+            kept.add(i)
+            continue
+        sim = 1.0 - float(np.abs(a - b).mean()) / 255.0
+        if sim < CUT_SIM_MAX:
+            kept.add(i)
+    return [i for i in cuts if i in kept]
 
 
 def scan_flash_frames(video, fps=24.0, min_abs=FLASH_MIN_ABS,
