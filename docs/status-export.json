@@ -1,72 +1,66 @@
 {
- "export_ts": "2026-10-24 01:48:45",
- "do": "R2419: #118 measured - audio PASS on both cuts; 82s/191s repeat keeps identical framing, 1.34x recompose absent",
+ "export_ts": "2026-10-24 02:01:43",
+ "do": "R2420: DIGEST v28 gated (47-row window / 3 cloud turns / 1 new dept; m1 green, em PASS)",
  "depts": [
   {
-   "n": "机检工程席",
-   "t": "重复镜探针落地 mv_dup_shot_probe.py（detect_cuts 抽公共+7 单测）+音轨 EBU R128 复核：C 项 1.34x 实测未执行",
+   "n": "L-卡产线",
+   "t": "DIGEST v28 落件并过门：47 行窗口 m1 机核 ALL GREEN、em 全行 PASS、验图五检过",
    "s": 1
   }
  ],
  "outs": [
   [
-   "dup-shot probe",
+   "digest v28 png",
    "on",
-   "mv_dup_shot_probe.py"
+   "digest-v28"
   ],
   [
-   "dup tests 7/7",
+   "digest v28 mp4",
    "on",
-   "test_dup_shot_probe"
+   "renders"
+  ],
+  [
+   "review v28",
+   "on",
+   "review-v28"
   ],
   [
    "audio v700/v703",
    "on",
-   "qa/mv0001-v700"
-  ],
-  [
-   "crossbeat board",
-   "on",
-   "qa/mv0001-v700"
-  ],
-  [
-   "boundary board",
-   "on",
-   "qa/mv0001-v700"
-  ],
-  [
-   "dup+audio report",
-   "on",
-   "qa/mv0001-v700"
+   "mv0001-v700"
   ]
  ],
  "chips": [
   [
    "suite 1764+5",
    "live"
+  ],
+  [
+   "L-cards 149",
+   "live"
   ]
  ],
  "results": [
   [
-   "-14.1 LUFS",
-   "r2419"
+   "47 rows/43 CEO",
+   "r2420"
   ],
   [
-   "-1.1 dBTP",
-   "r2419"
+   "3 cloud turns",
+   "r2420"
   ],
   [
-   "dup 82/191",
-   "r2419"
+   "em 17.80/23.00",
+   "r2420"
   ],
   [
-   "zoom 1.00",
-   "r2419"
+   "mp4 3.800s",
+   "r2420"
   ]
  ],
  "live": [
-  "当前活：mv0001 修复面剩余两项（音轨响度 / 重复镜 1.34x）实测收口，只读在产件零接触",
-  "最近实物：qa/mv0001-v700/DUP-AUDIO-VERIFY-R2419.md＋板图 DUP-CROSSBEAT-BOARD-R2419.jpg（01:47）",
-  "下个里程碑：导演席对 82.000s/191.042s 同构图重复出裁（接受回扣或重烧一镜 1.34x），窗 ≤10-26"
+  "当前活：L-卡 DIGEST v28 落件过门；集团 orders origin 13 新行（10-20—10-23）当轮消费 ack",
+  "最近实物：data/storylines/cards/MC-20261024-DIGEST-v28/MC-20261024-DIGEST-v28.png（201,504B·02:0x）",
+  "下个里程碑：backlog#63 CENSUS 按卡号序领件（先查 anchors/ 正典位），窗 ≤10-26"
  ]
 }
