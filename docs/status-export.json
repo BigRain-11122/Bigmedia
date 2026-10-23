@@ -1,41 +1,41 @@
 {
- "export_ts": "2026-10-24 01:38:14",
- "do": "R2418: flash-frame gate landed in S2 L1.8; v700 fails incl 44.042s anchor, v703 still fails on 6 other 1-3f shots",
+ "export_ts": "2026-10-24 01:48:45",
+ "do": "R2419: #118 measured - audio PASS on both cuts; 82s/191s repeat keeps identical framing, 1.34x recompose absent",
  "depts": [
   {
    "n": "机检工程席",
-   "t": "S2 层 1.8 第七面 flash-frame 落地：两版判据被实测否证，终版=孤立短镜头，幅度门实测校准 400k",
+   "t": "重复镜探针落地 mv_dup_shot_probe.py（detect_cuts 抽公共+7 单测）+音轨 EBU R128 复核：C 项 1.34x 实测未执行",
    "s": 1
   }
  ],
  "outs": [
   [
-   "flash-frame gate L1.8",
+   "dup-shot probe",
    "on",
-   "edit_craft_check"
+   "mv_dup_shot_probe.py"
   ],
   [
-   "flash tests 7/7",
+   "dup tests 7/7",
    "on",
-   "test_flash_frame"
+   "test_dup_shot_probe"
   ],
   [
-   "v700 scan 7 hits",
-   "on",
-   "qa/mv0001-v700"
-  ],
-  [
-   "v703 scan 6 hits",
+   "audio v700/v703",
    "on",
    "qa/mv0001-v700"
   ],
   [
-   "anchor eyeball 44s",
+   "crossbeat board",
    "on",
    "qa/mv0001-v700"
   ],
   [
-   "flash report R2418",
+   "boundary board",
+   "on",
+   "qa/mv0001-v700"
+  ],
+  [
+   "dup+audio report",
    "on",
    "qa/mv0001-v700"
   ]
@@ -48,25 +48,25 @@
  ],
  "results": [
   [
-   "v700 44.042 hit",
-   "r2418"
+   "-14.1 LUFS",
+   "r2419"
   ],
   [
-   "v703 44.042 gone",
-   "r2418"
+   "-1.1 dBTP",
+   "r2419"
   ],
   [
-   "v703 6 more",
-   "r2418"
+   "dup 82/191",
+   "r2419"
   ],
   [
-   "calib 400k",
-   "r2418"
+   "zoom 1.00",
+   "r2419"
   ]
  ],
  "live": [
-  "当前活：S2 层 1.8 闪帧门已落地并对 v700/v703 实测（只读在产件，零接触）",
-  "最近实物：qa/mv0001-v700/FLASH-SCAN-R2418.md＋锚点板图 v700_hi_03.png（01:40）",
-  "下个里程碑：backlog#118 剩余（重复镜 1.34x 配对＋音轨响度复核），窗 ≤10-25"
+  "当前活：mv0001 修复面剩余两项（音轨响度 / 重复镜 1.34x）实测收口，只读在产件零接触",
+  "最近实物：qa/mv0001-v700/DUP-AUDIO-VERIFY-R2419.md＋板图 DUP-CROSSBEAT-BOARD-R2419.jpg（01:47）",
+  "下个里程碑：导演席对 82.000s/191.042s 同构图重复出裁（接受回扣或重烧一镜 1.34x），窗 ≤10-26"
  ]
 }
