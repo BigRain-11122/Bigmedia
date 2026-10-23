@@ -1,26 +1,31 @@
 {
- "export_ts": "2026-10-20 18:29:18",
- "do": "R2415 简单爱分镜 30 镜落盘（lint 0/窗口 0）：下一动作=双曲 KF-PACK 送导演席四块 verdict",
+ "export_ts": "2026-10-24 00:09:02",
+ "do": "R2416: v700 verified clean (pops 0/11), v701 rejected (2 pops back) -> determinism assert next",
  "depts": [
   {
-   "n": "工程技术部",
-   "t": "S2 三门+守卫面 20+ 在役；tech#251 水位守卫+5 新测（模块 104 绿）；selfcheck 工具落仓",
+   "n": "渲染复核席",
+   "t": "mv_v700_final.py 两次输出不等价实锤：v700 pop 11/11 清、v701 2 处复发",
    "s": 1
   }
  ],
  "outs": [
   [
-   "简单爱分镜 v2.0=30 镜·270.99s 全曲铺满·自检绿",
+   "MV repair verify report (v700 vs v701 frame-diff)",
    "on",
-   "mv-jda-shots"
+   "qa/mv0001-v700"
   ],
   [
-   "龙卷风分镜 v2.0=29 镜（R2414 产件·R2415 补上链）",
+   "full_mv_v700.mp4 repaired cut, independently clean",
    "on",
-   "mv-ljf-shots"
+   "mv0001"
   ],
   [
-   "MV V5.11 水印+AIGC 成片=候 CEO 终审（账号未到位=未上线）",
+   "full_mv_v701.mp4 second pass, 2 pops back",
+   "off",
+   "mv0001"
+  ],
+  [
+   "MV V5.11 watermark+AIGC cut, awaiting CEO acc",
    "wait",
    "mv0001"
   ]
@@ -33,21 +38,21 @@
  ],
  "results": [
   [
-   "30 shots green",
-   "r2415"
+   "pops v700 0/11",
+   "r2416"
   ],
   [
-   "resnap bad rows",
-   "r2415"
+   "pops v701 2/11",
+   "r2416"
   ],
   [
-   "cloud-off ack",
-   "r2415"
+   "dark +17.4 code",
+   "r2416"
   ]
  ],
  "live": [
-  "当前活：mv0001 V5.11 发布前置包（R2411）——出库件独立复测+导演席签章+机器可读交付包，B站/YouTube 双平台门 PASS；readiness findings 清零",
-  "最近实物：DELIVERY-PACK-V511.json + DIRECTOR-REVIEW-V511-DELIVERY-ADDENDUM-20261020.md（2026-10-20 08:05·media/BigStream/qa/mv0001-v511/）；片体=cph4/fleet/mv0001-handover/outbound/krea2/30s-reel-v1/full_mv_v511_wmvs.mp4（917,565,589B·234.25s·31.1Mbps）",
-  "下个里程碑：V5.11 发布文案包（B站/YouTube 描述+AIGC 声明）起草 ≤2026-10-21 12:00；发布仍候 CEO 账号物理件"
+  "当前活：mv0001 修复面独立复核收口（与在执 MV 会话并行·只读·未碰其在产件）",
+  "最近实物：qa/mv0001-v700/REPAIR-VERIFY-R2416.md（2026-10-24 00:08）；被验件 full_mv_v700.mp4（621.6MB·234.29s·11/11 pop 已清）",
+  "下个里程碑：tech#275 修复脚本确定性断言（pop 决策清单化+出片自检归零）· 窗 2026-10-25"
  ]
 }
