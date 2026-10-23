@@ -465,5 +465,75 @@ class SummaryModeTests(unittest.TestCase):
         self.assertNotIn("|", out)
 
 
+class ReviewTraceTests(unittest.TestCase):
+    """tech#377 (R2428): a GATE-PENDING draft whose M4 seat call never
+    ran must read differently from one a reviewer failed."""
+
+    def test_parse_missing_file_is_empty(self):
+        d = make_dir(self, "bs-rdy-trace-")
+        self.assertEqual([], readiness.parse_not_executed(d / "nope.jsonl"))
+
+    def test_parse_keeps_only_not_executed_rows(self):
+        d = make_dir(self, "bs-rdy-trace-")
+        p = d / "trace.jsonl"
+        p.write_text(
+            '{"mark": "NOT-EXECUTED", "ts": "2026-10-24 05:00:00",'
+            ' "material": "data/drafts/a.md", "reason": "r", "rc": 3}\n'
+            '{"event": "defer", "ts": "2026-10-24 05:01:00"}\n'
+            'not json\n', encoding="utf-8")
+        rows = readiness.parse_not_executed(p)
+        self.assertEqual(1, len(rows))
+        self.assertEqual("NOT-EXECUTED", rows[0]["mark"])
+
+    def test_matches_only_pending_drafts(self):
+        rows = [{"mark": "NOT-EXECUTED", "ts": "2026-10-24 05:00:00",
+                 "material": "data\\drafts\\a.md", "reason": "r", "rc": 3},
+                {"mark": "NOT-EXECUTED", "ts": "2026-10-24 05:02:00",
+                 "material": "data/drafts/b.md", "reason": "r", "rc": 3},
+                {"mark": "NOT-EXECUTED", "ts": "2026-10-24 05:03:00",
+                 "material": "elsewhere.md", "reason": "r", "rc": 3}]
+        gates = {"a.md": "PENDING", "b.md": "PASS", "c.md": "PENDING"}
+        hit = readiness.not_executed_drafts(rows, gates)
+        self.assertEqual(["a.md"], sorted(hit))
+
+    def test_later_success_supersedes_the_trace(self):
+        rows = [{"mark": "NOT-EXECUTED", "ts": "2026-10-24 05:00:00",
+                 "material": "data/drafts/a.md", "reason": "r", "rc": 3}]
+        gates = {"a.md": "PENDING"}
+        self.assertEqual({}, readiness.not_executed_drafts(
+            rows, gates, {"a.md": "2026-10-24 06:00:00"}))
+        # an older success does not: the trace is still the last word
+        self.assertEqual(["a.md"], sorted(readiness.not_executed_drafts(
+            rows, gates, {"a.md": "2026-10-24 04:00:00"})))
+
+    def test_parse_review_calls_reads_success_rows_only(self):
+        d = make_dir(self, "bs-rdy-calls-")
+        p = d / "expert-calls.md"
+        p.write_text(
+            "| \u65f6\u95f4 | \u4e13\u5bb6 |\n|---|---|\n"
+            "| 2026-10-20 05:11 | S4-compliance | r\uff08d\uff09 |"
+            " data\\drafts\\a.md | 0 | ok |\n"
+            "| 2026-10-20 05:12 | S4-compliance | r\uff08d\uff09 |"
+            " data\\drafts\\a.md | 3 | NOT-EXECUTED rc=3: dead |\n"
+            "| 2026-10-21 05:12 | S0-topic | r\uff08d\uff09 |"
+            " data\\drafts\\b.md | 0 | ok |\n", encoding="utf-8")
+        calls = readiness.parse_review_calls(p)
+        self.assertEqual("2026-10-20 05:11", calls["a.md"])
+        self.assertEqual("2026-10-21 05:12", calls["b.md"])
+
+    def test_blocker_names_the_never_reviewed_count(self):
+        gates = {"a.md": "PENDING", "b.md": "PENDING", "c.md": "PASS"}
+        blockers = readiness.build_blockers(
+            (None, [], []), [], gates, [], {"a.md": {"ts": "x"}})
+        m4 = [b for b in blockers if b.startswith("M4 gate")]
+        self.assertEqual(1, len(m4))
+        self.assertIn("1 of them: review face NOT EXECUTED", m4[0])
+
+    def test_no_trace_keeps_old_message(self):
+        gates = {"a.md": "PENDING"}
+        blockers = readiness.build_blockers((None, [], []), [], gates, [])
+        self.assertNotIn("NOT EXECUTED", blockers[0])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

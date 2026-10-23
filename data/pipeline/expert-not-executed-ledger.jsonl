@@ -1,0 +1,1 @@
+{"ts": "2026-10-24 05:07:38", "mark": "NOT-EXECUTED", "expert": "S4-compliance", "material": "data\\drafts\\20261024-BS-006-公众号-v1.md", "reason": "model call failed: brain /health unreachable (2s cap) - liveness fail-closed, no flight cap burned", "rc": 3}

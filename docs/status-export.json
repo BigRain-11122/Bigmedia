@@ -1,21 +1,21 @@
 {
- "export_ts": "2026-10-24 04:35:44",
- "do": "R2427: BS-006 pair shipped (master + 58.2s variant, draft_lint PASS); M4 human review blocked by local model down",
+ "export_ts": "2026-10-24 05:10:22",
+ "do": "R2428: seat failures now leave a NOT-EXECUTED trace; readiness separates not-reviewed from failed",
  "depts": [
   {
    "n": "内容面",
-   "t": "BS-006 系列开篇双件落地：2426 轮\\119 项任务板\\105 件渲染\\254 张城市卡\\0 发布，全部当轮重测取数",
+   "t": "BS-006 双件在库待 M4（母稿 662 字 + 视频号 58.2s）；本轮无新卡=供给零合法",
    "s": 1
   },
   {
    "n": "供给面",
-   "t": "今日热榜 20 条仍全避面或已用（zhihu 8 避面+2 已用，bilibili 10 全指名频道），L-卡零合法题材；CENSUS #63 缺 C-00030",
+   "t": "zhihu 10 条 8 回避 2 已用；bilibili 10 全具名频道；CENSUS #63 缺 C-00030 锚=三形态零合法",
    "s": 2
   },
   {
    "n": "评审面",
-   "t": "M4 人审面本地模型不可达=未执行（call_expert exit 3 fail-closed），已入 tech#377，不冒充评审通过",
-   "s": 2
+   "t": "失败双账留痕（rc3/rc6/rc5），readiness 报 review-not-executed，成功评审自动覆盖；05:07 实弹 brain 8090 不可达",
+   "s": 1
   }
  ],
  "outs": [
@@ -30,9 +30,9 @@
    "bs006-variant"
   ],
   [
-   "tech 377",
+   "expert trace 2 faces",
    "on",
-   "tech-377"
+   "r2428-trace"
   ]
  ],
  "chips": [
@@ -41,7 +41,7 @@
    "live"
   ],
   [
-   "findings 0",
+   "findings 1",
    "live"
   ],
   [
@@ -51,25 +51,25 @@
  ],
  "results": [
   [
-   "draft lint 2/2",
-   "r2427"
+   "trace 2 faces",
+   "r2428"
   ],
   [
-   "3 blockers",
-   "r2427"
+   "review-not-exec",
+   "r2428"
   ],
   [
-   "M4 human n/a",
-   "r2427"
+   "tests 95/95",
+   "r2428"
   ],
   [
    "V5.14 234.29s",
-   "r2426"
+   "r2425"
   ]
  ],
  "live": [
-  "当前活：BS-006 双件（公众号母稿 662 字 + 视频号 58.2s）机审 PASS；M4 人审因本地模型不可达未执行，如实标注不冒充",
-  "最近实物：data/drafts/20261024-BS-006-公众号-v1.md 与 20261024-BS-006-视频号-v1.md（2026-10-24 04:3x，draft_lint 2/2 PASS）",
-  "下个里程碑：tech#377 评价面未执行可查（窗 ≤12h）；随后 BS-001..005 陈旧稿 supersede-or-refresh 决断（窗 ≤48h）"
+  "当前活：tech#377 收口=评审面未执行不再是静默失败（call_expert 双账留痕 + readiness 区分「未执行」与「不过」）",
+  "最近实物：data/pipeline/expert-not-executed-ledger.jsonl 首行（2026-10-24 05:07:38，S4-compliance rc=3 brain /health unreachable）与 docs/reviews/expert-calls.md 同刻 NOT-EXECUTED 行",
+  "下个里程碑：BS-006 双件过 M4（须 brain :8090 可达；tech#378 值班探针窗 ≤48h）；BS-001..005 陈旧稿 supersede-or-refresh（窗 ≤48h）"
  ]
 }

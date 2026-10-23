@@ -70,6 +70,15 @@ REGISTRY = REPO / "data" / "experts" / "registry.json"
 LEDGER = REPO / "docs" / "reviews" / "expert-calls.md"
 VERDICT_DIR = REPO / "docs" / "reviews" / "expert-verdicts"
 DEFER_LEDGER = REPO / "data" / "pipeline" / "gpu-guard-defer-ledger.jsonl"
+# tech#377 (R2428): a seat that never ran must leave a trace. Before
+# this, every failure path (liveness dead / wire error / wedge bail /
+# GPU defer) exited with a clean message and nothing in any ledger, so
+# "the review never ran" and "the review ran and failed" looked
+# identical to the next round - the only evidence was somebody
+# remembering that the model was down. NOT_EXECUTED_MARK is the single
+# constant readiness matches on.
+NOT_EXECUTED_LEDGER = REPO / "data" / "pipeline" / "expert-not-executed-ledger.jsonl"
+NOT_EXECUTED_MARK = "NOT-EXECUTED"
 # O-20261015-1335 fleet rollout: the 14b-era 300s default cannot fund a
 # cold-ish 17G partial-offload flagship on the 12G card (canon precedent:
 # gen_storyboard 420->600 for the same model on this same machine).
@@ -272,6 +281,84 @@ def append_defer_row(row, path=None):
         return False
 
 
+def not_executed_row(expert_id, material, reason, exit_code, now=None):
+    """Pure: one JSONL row for a seat call that produced no verdict
+    (tech#377). Field set mirrors defer_row so a reader can tell the
+    two apart by `mark` alone:
+      - NOT-EXECUTED = the review face never ran (this file)
+      - event=defer    = the guard stopped it before takeoff
+    Both are recorded; neither may be read as a review verdict."""
+    stamp = (now or datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+    payload = {
+        "ts": stamp,
+        "mark": NOT_EXECUTED_MARK,
+        "expert": expert_id,
+        "material": str(material),
+        "reason": reason,
+        "rc": int(exit_code),
+    }
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def append_not_executed(row, path=None):
+    """Best-effort JSONL append (same law as append_defer_row: a write
+    failure WARNs, it never changes the call's exit code). path=None
+    resolves NOT_EXECUTED_LEDGER at call time so tests can patch it."""
+    try:
+        target = Path(path) if path is not None else NOT_EXECUTED_LEDGER
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("a", encoding="utf-8") as f:
+            f.write(row + "\n")
+        return True
+    except OSError:
+        return False
+
+
+LEDGER_HEADER = (
+    "# \u4e13\u804c\u4e13\u5bb6\u8c03\u7528\u53f0\u8d26\uff08"
+    "Expert Calls Ledger\uff09\n\n"
+    "> \u673a\u5236=`docs/expert-roster.md`\uff08O-20260924-1033-bm-a\uff09\u3002"
+    "\u884c\u7ea7\u8ffd\u52a0\u7981\u6539\u5199\uff1b\u6bcf\u6b21 "
+    "call_expert.py \u771f\u8c03\u81ea\u52a8\u843d\u4e00\u884c"
+    "\uff08\u7ed3\u8bba\u5168\u6587=expert-verdicts/ \u76ee\u5f55\u00b7"
+    "\u672c\u8868\u53ea\u5b58\u9996\u884c\uff09\u3002\n\n"
+    "| \u65f6\u95f4 | \u4e13\u5bb6 | \u8eab\u4efd\uff08\u90e8\u95e8\uff09 | "
+    "\u6750\u6599 | \u9000\u51fa | \u7ed3\u8bba\u9996\u884c |\n"
+    "|---|---|---|---|---|---|\n")
+
+
+def append_ledger_row(row, path=None):
+    """Best-effort append to the human audit ledger, creating the table
+    header on first write. Returns True on success."""
+    try:
+        target = Path(path) if path is not None else LEDGER
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if not target.exists():
+            target.write_text(LEDGER_HEADER, encoding="utf-8")
+        with target.open("a", encoding="utf-8") as f:
+            f.write(row)
+        return True
+    except OSError:
+        return False
+
+
+def record_not_executed(expert_id, role, dept, material, reason, exit_code,
+                        ledger=None, jsonl=None):
+    """Leave the not-executed trace on both faces (tech#377).
+
+    The markdown ledger keeps the audit trail free of a silent hole
+    (same table shape as a real call, exit code + reason visible); the
+    JSONL row is the machine face readiness reads. Both best-effort.
+    Returns (jsonl_ok, ledger_ok)."""
+    jsonl_ok = append_not_executed(
+        not_executed_row(expert_id, material, reason, exit_code), jsonl)
+    note = "%s rc=%d: %s" % (NOT_EXECUTED_MARK, int(exit_code), reason)
+    ledger_ok = append_ledger_row(
+        ledger_row(expert_id, role, dept, str(material), int(exit_code),
+                   note), ledger)
+    return jsonl_ok, ledger_ok
+
+
 def ledger_row(expert_id, role, dept, material, exit_code, note):
     """One markdown table row for the call ledger (pure)."""
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -363,6 +450,15 @@ def main(argv):
     if not material_path.exists():
         print("FAIL material file missing: %s" % material_path)
         return 2
+
+    def trace_not_executed(reason, code):
+        """tech#377: a seat that never ran leaves both faces behind.
+        Best-effort - a write failure only WARNs, the exit code stands."""
+        jsonl_ok, ledger_ok = record_not_executed(
+            expert_id, ex["role"], ex["dept"], material_path, reason, code)
+        print("%s rc=%d: %s" % (NOT_EXECUTED_MARK, code, reason))
+        if not jsonl_ok or not ledger_ok:
+            print("WARN not-executed ledger append failed (exit kept)")
     if gpu_guard:
         # tech#44 pre-flight: probe before burning a (possibly 1500s)
         # local-LLM flight. Advisory - force overrides, probe failure
@@ -383,6 +479,7 @@ def main(argv):
                 if not append_defer_row(defer_row(expert_id, material,
                                                   reason, reading)):
                     print("WARN defer ledger append failed (defer kept)")
+                trace_not_executed("gpu-guard defer: %s" % reason, 5)
                 return 5
         elif reading is None:
             print("WARN gpu probe unavailable; proceeding (advisory guard)")
@@ -405,10 +502,14 @@ def main(argv):
                   " model %s) - wedged/contended window; re-dispatch"
                   " in a healthy window"
                   % (WEDGE_PROBE_CAP, WEDGE_PROBE_MODEL))
+            trace_not_executed(
+                "wedge probe timed out (%ds cap)" % WEDGE_PROBE_CAP, 6)
             return 6
         if wcode != 0:
             print("WEDGE-FAIL brain micro-probe exit %d - server"
                   " unhealthy; re-dispatch in a healthy window" % wcode)
+            trace_not_executed(
+                "wedge probe exit %d (server unhealthy)" % wcode, 6)
             return 6
         print("WEDGE-OK micro-probe alive (model %s, %ds cap)"
               % (WEDGE_PROBE_MODEL, WEDGE_PROBE_CAP))
@@ -421,9 +522,14 @@ def main(argv):
         # absorbs timeouts); kept as a hard safety net.
         print("FAIL model call timeout (%ds)" % timeout_s)
         code, out = 3, ""
+        trace_not_executed("model call timeout (%ds)" % timeout_s, 3)
+        return 3
     if code != 0:
         print("FAIL model call exit %d" % code)
         print(out[-500:])
+        trace_not_executed("model call failed: %s"
+                           % (" ".join((out or "").split())[:200] or
+                              "exit %d" % code), 3)
         return 3
     verdict = out.strip()
     print("OK %s [%s - %s]" % (expert_id, ex["dept"], ex["role"]))
@@ -447,16 +553,8 @@ def main(argv):
             first_line = "全文=expert-verdicts/%s ｜ %s" % (vname, first_line)
         row = ledger_row(expert_id, ex["role"], ex["dept"],
                          str(material_path), 0, first_line)
-        if not LEDGER.exists():
-            LEDGER.write_text(
-                "# 专职专家调用台账（Expert Calls Ledger）\n\n"
-                "> 机制=`docs/expert-roster.md`（O-20260924-1033-bm-a）。"
-                "行级追加禁改写；每次 call_expert.py 真调自动落一行"
-                "（结论全文=expert-verdicts/ 目录·本表只存首行）。\n\n"
-                "| 时间 | 专家 | 身份（部门） | 材料 | 退出 | 结论首行 |\n"
-                "|---|---|---|---|---|---|\n", encoding="utf-8")
-        with LEDGER.open("a", encoding="utf-8") as f:
-            f.write(row)
+        if not append_ledger_row(row):
+            print("WARN ledger append failed (verdict kept above)")
     except OSError as e:
         print("WARN ledger append failed: %s (verdict kept above)" % e)
     return 0

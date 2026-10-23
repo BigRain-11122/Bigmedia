@@ -8,6 +8,7 @@ modified. Chinese appears as \\uXXXX escapes (ASCII rule).
 Run:
     python tests/test_call_expert.py
 """
+import contextlib
 import json
 import re
 import subprocess
@@ -22,6 +23,17 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
 import call_expert as ce  # noqa: E402
+
+
+def _enter_all(patches):
+    """Start every patch in one list (R2428: the hand-written
+    `with patches[0], ..., patches[5]` chains silently stopped applying
+    once a new patch was inserted mid-list). Returns the ExitStack so
+    the caller keeps its usual `with _enter_all(patches):` block."""
+    stk = contextlib.ExitStack()
+    for p in patches:
+        stk.enter_context(p)
+    return stk
 
 
 REGISTRY_FIXTURE = {
@@ -199,6 +211,8 @@ class TestGpuGuardCli(unittest.TestCase):
                         "id": "hot-intel", "dept": "d", "role": "r",
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "NOT_EXECUTED_LEDGER",
+                                  repo / "not-executed.jsonl"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
                 mock.patch.object(ce, "DEFER_LEDGER",
                                   repo / "defer-ledger.jsonl"),
@@ -207,8 +221,7 @@ class TestGpuGuardCli(unittest.TestCase):
                                   lambda r, **kw: decision),
                 mock.patch.object(ce, "call_model", fake_call_model),
             ]
-            with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4], patches[5], patches[6], patches[7]:
+            with _enter_all(patches):
                 # argv[0] = script path slot (production: sys.argv[0])
                 rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                               "--material", str(mat)] + argv)
@@ -318,6 +331,8 @@ class TestWedgeProbeCli(unittest.TestCase):
                         "id": "hot-intel", "dept": "d", "role": "r",
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "NOT_EXECUTED_LEDGER",
+                                  repo / "not-executed.jsonl"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
                 mock.patch.object(ce, "DEFER_LEDGER",
                                   repo / "defer-ledger.jsonl"),
@@ -326,8 +341,7 @@ class TestWedgeProbeCli(unittest.TestCase):
             import io
             import contextlib
             buf = io.StringIO()
-            with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4], patches[5]:
+            with _enter_all(patches):
                 with contextlib.redirect_stdout(buf):
                     rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                                   "--material", str(mat)] + argv)
@@ -351,8 +365,11 @@ class TestWedgeProbeCli(unittest.TestCase):
         self.assertEqual([(ce.WEDGE_PROBE_MODEL, ce.WEDGE_PROBE_CAP)],
                          calls)  # zero main flights burned
         self.assertIn("WEDGE-FAIL", out)
-        # audit purity: probe never lands in expert-calls
-        self.assertEqual(0, rows)
+        # tech#377 (R2428): the probe itself still never lands as a
+        # call, but the bail is no longer silent - one NOT-EXECUTED
+        # ledger row records that the seat never ran.
+        self.assertEqual(1, rows)
+        self.assertIn("NOT-EXECUTED", out)
 
     def test_wedge_probe_nonzero_rc_bails(self):
         rc, calls, out, rows = self._run_main(
@@ -361,7 +378,8 @@ class TestWedgeProbeCli(unittest.TestCase):
         self.assertEqual([(ce.WEDGE_PROBE_MODEL, ce.WEDGE_PROBE_CAP)],
                          calls)
         self.assertIn("WEDGE-FAIL", out)
-        self.assertEqual(0, rows)
+        self.assertEqual(1, rows)
+        self.assertIn("NOT-EXECUTED", out)
 
     def test_wedge_probe_ok_then_main_flight(self):
         rc, calls, out, rows = self._run_main(
@@ -404,6 +422,8 @@ class TestWedgeProbeCli(unittest.TestCase):
                         "id": "hot-intel", "dept": "d", "role": "r",
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "l.md"),
+                mock.patch.object(ce, "NOT_EXECUTED_LEDGER",
+                                  repo / "ne.jsonl"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "v"),
                 mock.patch.object(ce, "DEFER_LEDGER", repo / "d.jsonl"),
                 mock.patch.object(ce, "call_model", fake),
@@ -411,8 +431,7 @@ class TestWedgeProbeCli(unittest.TestCase):
             import io
             import contextlib
             buf = io.StringIO()
-            with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4], patches[5]:
+            with _enter_all(patches):
                 with contextlib.redirect_stdout(buf):
                     rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                                   "--material", str(mat), "--timeout", "1500",
@@ -485,11 +504,12 @@ class TestTimeoutCli(unittest.TestCase):
                         "id": "hot-intel", "dept": "d", "role": "r",
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "NOT_EXECUTED_LEDGER",
+                                  repo / "not-executed.jsonl"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
                 mock.patch.object(ce, "call_model", fake_call_model),
             ]
-            with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4]:
+            with _enter_all(patches):
                 rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                               "--material", str(mat)] + argv)
             return rc, captured
@@ -550,12 +570,13 @@ class TestTimeoutCli(unittest.TestCase):
                         "id": "hot-intel", "dept": "d", "role": "r",
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "NOT_EXECUTED_LEDGER",
+                                  repo / "not-executed.jsonl"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
                 mock.patch.object(ce, "read_gpu_headroom", lambda: None),
                 mock.patch.object(ce, "call_model", fake_call_model),
             ]
-            with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4], patches[5]:
+            with _enter_all(patches):
                 rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                               "--material", str(mat),
                               "--timeout", "1500", "--gpu-guard"])
@@ -590,19 +611,78 @@ class TestTimeoutCli(unittest.TestCase):
                         "id": "hot-intel", "dept": "d", "role": "r",
                         "prompt_file": "prompts/p.txt", "model": "m"}})),
                 mock.patch.object(ce, "LEDGER", repo / "ledger.md"),
+                mock.patch.object(ce, "NOT_EXECUTED_LEDGER",
+                                  repo / "not-executed.jsonl"),
                 mock.patch.object(ce, "VERDICT_DIR", repo / "verdicts"),
                 mock.patch.object(ce, "call_model", fake_call_model),
             ]
             buf = io.StringIO()
-            with patches[0], patches[1], patches[2], patches[3], \
-                    patches[4], contextlib.redirect_stdout(buf):
+            with _enter_all(patches), contextlib.redirect_stdout(buf):
                 rc = ce.main(["call_expert.py", "--expert", "hot-intel",
                               "--material", str(mat),
                               "--timeout", "1500"])
             self.assertEqual(3, rc)
             self.assertIn("FAIL model call timeout (1500s)", buf.getvalue())
-            self.assertFalse((repo / "ledger.md").exists())
+            # tech#377 (R2428): a dead seat leaves a trace instead of
+            # vanishing - still zero verdict archive, but one
+            # NOT-EXECUTED row on both faces (ledger + JSONL).
             self.assertFalse((repo / "verdicts").exists())
+            lg = (repo / "ledger.md").read_text(encoding="utf-8")
+            self.assertIn("NOT-EXECUTED", lg)
+            self.assertIn("| 3 |", lg)
+            ne = [json.loads(ln) for ln in
+                  (repo / "not-executed.jsonl").read_text(
+                      encoding="utf-8").splitlines() if ln.strip()]
+            self.assertEqual(1, len(ne))
+            self.assertEqual("NOT-EXECUTED", ne[0]["mark"])
+            self.assertEqual(3, ne[0]["rc"])
+            self.assertIn("timeout", ne[0]["reason"])
+
+
+class TestNotExecutedTrace(unittest.TestCase):
+    """tech#377 (R2428): a seat that never ran must leave a trace on
+    both faces - the human ledger and the JSONL readiness reads."""
+
+    def test_row_field_set(self):
+        row = ce.not_executed_row(
+            "S4-compliance", "data/drafts/20261024-BS-006-\u516c\u4f17\u53f7.md",
+            "brain /health unreachable", 3,
+            now=datetime(2026, 10, 24, 5, 1, 2))
+        payload = json.loads(row)
+        self.assertEqual("NOT-EXECUTED", payload["mark"])
+        self.assertEqual("2026-10-24 05:01:02", payload["ts"])
+        self.assertEqual(3, payload["rc"])
+        self.assertEqual("S4-compliance", payload["expert"])
+        self.assertIn("unreachable", payload["reason"])
+
+    def test_append_best_effort(self):
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "sub" / "ne.jsonl"
+            self.assertTrue(ce.append_not_executed("{}", path))
+            self.assertEqual(1, len(path.read_text(
+                encoding="utf-8").splitlines()))
+            # directory target = write failure, never an exception
+            self.assertFalse(ce.append_not_executed("{}", Path(td)))
+
+    def test_record_writes_both_faces(self):
+        with tempfile.TemporaryDirectory() as td:
+            ledger = Path(td) / "expert-calls.md"
+            jsonl = Path(td) / "ne.jsonl"
+            ok = ce.record_not_executed(
+                "S4-compliance", "S4 \u5408\u89c4\u5e2d", "\u5408\u89c4\u5ba1\u67e5\u90e8",
+                "data/drafts/m.md", "brain /health unreachable", 3,
+                ledger=ledger, jsonl=jsonl)
+            self.assertEqual((True, True), ok)
+            text = ledger.read_text(encoding="utf-8")
+            self.assertIn("| 3 |", text)
+            self.assertIn("NOT-EXECUTED", text)
+            # header created on first write, not duplicated
+            ce.record_not_executed("S4-compliance", "r", "d", "m", "again",
+                                   3, ledger=ledger, jsonl=jsonl)
+            self.assertEqual(1, ledger.read_text(
+                encoding="utf-8").count("| \u65f6\u95f4 |"))
+            self.assertEqual(2, len(jsonl.read_text(
+                encoding="utf-8").splitlines()))
 
 
 class E4AudienceSeatTests(unittest.TestCase):

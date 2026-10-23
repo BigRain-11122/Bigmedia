@@ -30,6 +30,9 @@ Findings (machine-discipline breaches; FAIL or WARN):
     render-unannot  media file not annotated with a test-piece/production/
                     disposed mark
     render-stale    ledger row references a media file not on disk
+    review-not-executed  a GATE-PENDING draft's M4 seat call never ran
+                    (trace: data/pipeline/expert-not-executed-ledger.jsonl;
+                    WARN - distinguishes "not reviewed" from "failed")
 
 Blockers (distance to first publish - the honest pre-launch state,
 not failures): first-batch accounts still at the first flow state,
@@ -65,6 +68,12 @@ ACCOUNTS = REPO / "docs" / "accounts.md"
 DRAFTS = REPO / "data" / "drafts"
 RENDERS = REPO / "output" / "renders"
 BACKLOG = REPO / "src" / "os" / "backlog.md"
+# tech#377 (R2428): the machine face src/call_expert.py writes when a
+# seat call never produced a verdict. Read here so "the review never
+# ran" stops looking identical to "the review ran and failed".
+REVIEW_TRACE = REPO / "data" / "pipeline" / "expert-not-executed-ledger.jsonl"
+NOT_EXECUTED_MARK = "NOT-EXECUTED"
+REVIEW_CALLS = REPO / "docs" / "reviews" / "expert-calls.md"
 TEMPLATE = REPO / "src" / "os" / "readiness_template.md"
 LEDGER_NAME = "README.md"
 
@@ -277,7 +286,75 @@ def parse_backlog_flags(path):
     return needs, suspended
 
 
-def build_blockers(flow, rows, gates, needs):
+def parse_not_executed(path=None):
+    """Seat calls that produced no verdict -> [row dict] (tech#377).
+
+    Reads the JSONL face call_expert writes on every failure path
+    (liveness dead / wire error / wedge bail / GPU defer). Missing file
+    is normal on a fresh tree (nothing failed yet), never an error."""
+    p = Path(path) if path is not None else REVIEW_TRACE
+    rows = []
+    if not p.is_file():
+        return rows
+    for line in p.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict) and row.get("mark") == NOT_EXECUTED_MARK:
+            rows.append(row)
+    return rows
+
+
+def parse_review_calls(path=None):
+    """Successful seat calls from the human ledger -> {basename: ts}.
+
+    tech#377: a not-executed trace is only true until a later call
+    actually ran. Without this the WARN would outlive its cause and
+    become the same "attached forever" noise the six stale drafts were.
+    Row shape: `| ts | expert | role（dept） | material | exit | note |`."""
+    p = Path(path) if path is not None else REVIEW_CALLS
+    calls = {}
+    if not p.is_file():
+        return calls
+    for line in p.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.startswith("| "):
+            continue
+        cells = [c.strip() for c in line.split("|")]
+        if len(cells) < 7:
+            continue
+        ts, material, exit_code = cells[1], cells[4], cells[5]
+        if exit_code != "0" or not material:
+            continue
+        name = material.replace("\\", "/").rsplit("/", 1)[-1]
+        if ts > calls.get(name, ""):
+            calls[name] = ts
+    return calls
+
+
+def not_executed_drafts(rows, gates, calls=None):
+    """draft name -> its latest not-executed trace (pure).
+
+    Matches the trace row's material basename against the drafts that
+    are still not GATE PASS: those are the pieces whose review could
+    not run, as opposed to pieces a reviewer actually failed."""
+    pending = set(n for n, v in gates.items() if v != "PASS")
+    hit = {}
+    for row in rows:
+        name = str(row.get("material", "")).replace("\\", "/").rsplit("/", 1)[-1]
+        if name not in pending:
+            continue
+        if calls and calls.get(name, "") >= str(row.get("ts", "")):
+            continue  # a later call really ran: the trace is history
+        if name not in hit or str(row.get("ts", "")) >= str(hit[name].get("ts", "")):
+            hit[name] = row
+    return hit
+
+
+def build_blockers(flow, rows, gates, needs, not_exec=None):
     """Distance-to-first-publish lines (English scaffold, parsed tokens)."""
     blockers = []
     if flow:
@@ -290,9 +367,15 @@ def build_blockers(flow, rows, gates, needs):
                             % ", ".join(launch_closed))
     not_pass = [n for n, v in gates.items() if v != "PASS"]
     if not_pass:
-        blockers.append("M4 gate not green: %d/%d draft(s) not GATE PASS "
-                        "(M4 = publish precondition; verdicts in section 2)"
-                        % (len(not_pass), len(gates)))
+        msg = ("M4 gate not green: %d/%d draft(s) not GATE PASS "
+               "(M4 = publish precondition; verdicts in section 2)"
+               % (len(not_pass), len(gates)))
+        never = [n for n in not_pass if not_exec and n in not_exec]
+        if never:
+            msg += (" - %d of them: review face NOT EXECUTED (seat call "
+                    "failed, trace in data/pipeline/"
+                    "expert-not-executed-ledger.jsonl)" % len(never))
+        blockers.append(msg)
     for num, clause in needs:
         blockers.append("decision pending: #%s %s (needs CEO sign-off)" % (num, clause))
     return blockers
@@ -430,6 +513,18 @@ def main(argv):
         flow, rows, findings = parse_accounts(accounts)
         gates, f = parse_gates(drafts)
         findings += f
+        never = not_executed_drafts(
+            parse_not_executed(root / "data" / "pipeline" /
+                               "expert-not-executed-ledger.jsonl"),
+            gates,
+            parse_review_calls(root / "docs" / "reviews" / "expert-calls.md"))
+        if never:
+            latest = max(never.values(), key=lambda r: str(r.get("ts", "")))
+            findings.append((
+                "WARN", "review-not-executed",
+                "review face NOT EXECUTED for %d draft(s) [%s]; latest %s: %s"
+                % (len(never), ", ".join(sorted(never)),
+                   latest.get("ts", "?"), latest.get("reason", "?"))))
         render_rows, f = parse_renders(renders, renders / LEDGER_NAME)
         findings += f
         needs, suspended = parse_backlog_flags(backlog)
@@ -438,7 +533,7 @@ def main(argv):
     except OSError as e:
         print("source error: %s" % e)
         return 2
-    blockers = build_blockers(flow, rows, gates, needs)
+    blockers = build_blockers(flow, rows, gates, needs, never)
     gen_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
     if summary:
         print(build_summary(gen_ts, flow, rows, gates, render_rows, needs,

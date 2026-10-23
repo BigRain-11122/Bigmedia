@@ -150,3 +150,4 @@
 | 2026-10-20 04:56 | S4-compliance | S4 合规官（合规审查部） | .c3-tmp\r2410_review_material.md | 0 | 全文=expert-verdicts/20261020-045637-S4-compliance.md ｜ ### ① 红线违例清单 |
 | 2026-10-20 05:08 | S0-topic | S0 选题官（选题研究部） | .c3-tmp\r2412_material.md | 0 | 全文=expert-verdicts/20261020-050818-S0-topic.md ｜ **① 每题一句话裁决** |
 | 2026-10-20 05:11 | S4-compliance | S4 合规官（合规审查部） | .c3-tmp\r2412_material.md | 0 | 全文=expert-verdicts/20261020-051126-S4-compliance.md ｜ ①红线违例清单 |
+| 2026-10-24 05:07 | S4-compliance | S4 合规官（合规审查部） | data\drafts\20261024-BS-006-公众号-v1.md | 3 | NOT-EXECUTED rc=3: model call failed: brain /health unreachable (2s cap) - liveness fail-closed, no flight cap burned |
