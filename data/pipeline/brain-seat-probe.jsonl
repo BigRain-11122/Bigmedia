@@ -1,1 +1,2 @@
 {"ts": "2026-10-24 05:33:18", "alive": false, "reason": "provisioning inputs missing: model, exe", "health_url": "http://127.0.0.1:8090/health", "missing": ["model", "exe"], "paused": false}
+{"ts": "2026-10-24 05:36:52", "alive": false, "reason": "provisioning inputs missing: model, exe", "health_url": "http://127.0.0.1:8090/health", "missing": ["model", "exe"], "paused": false}

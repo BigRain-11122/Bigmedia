@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-24 05:36:21",
- "do": "R2429: the review seat's silence is now measured, not guessed - probe says the 35B inputs are gone from disk",
+ "export_ts": "2026-10-24 05:56:51",
+ "do": "R2430: the 4b substitute seat was measured and rejected - protocol shape yes, judgment no - so the 35B is the line",
  "depts": [
   {
    "n": "内容面",
@@ -33,6 +33,11 @@
    "seat probe",
    "on",
    "r2429-seatprobe"
+  ],
+  [
+   "seat A/B report",
+   "on",
+   "seat-ab-20261024"
   ]
  ],
  "chips": [
@@ -64,8 +69,8 @@
   ]
  ],
  "live": [
-  "当前活：tech#378 收口=席位死因可读（brain_seat_probe.py 三因分类 + readiness 新面 brain-seat-down）",
-  "最近实物：data/pipeline/brain-seat-probe.jsonl 首行（2026-10-24 05:33:18 alive=false reason=provisioning inputs missing: model, exe）",
-  "下个里程碑：席位再生路线定谳（tech#379 三选一，owner 一句话）；BS-006 过 M4 须席位可达（窗 ≤48h），之前维持 PENDING 不降门"
+  "当前活：R2430 评审席 A/B 实测收官——4b 在自洽稿上误判一票否决，判负；M4 维持红，BS-006 双稿维持 PENDING",
+  "最近实物：qa/seat-ab-20261024/SEAT-AB-REPORT-R2430.md（2026-10-24 06:04）+ src/call_expert.py 新增 BRAIN_HEALTH_URL 覆盖（tests 52/52）",
+  "下个里程碑：35B 席重新供给并点亮 :8090（tech#380，窗 ≤48h）→ M4 可跑 → BS-006 双稿过门"
  ]
 }

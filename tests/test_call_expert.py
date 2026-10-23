@@ -822,6 +822,20 @@ class TestBrainWireTransport(unittest.TestCase):
         base = ce.BRAIN_HEALTH_URL[:-len("/health")]
         self.assertTrue(ce.BRAIN_URL.startswith(base))
 
+    def test_health_url_override_wins(self):
+        # tech#379: a provider without /health still has to be probeable.
+        self.assertEqual(
+            "http://127.0.0.1:11434/",
+            ce.resolve_health_url(
+                "http://127.0.0.1:11434/v1/chat/completions",
+                "http://127.0.0.1:11434/"))
+
+    def test_health_url_default_from_base(self):
+        self.assertEqual(
+            "http://127.0.0.1:8090/health",
+            ce.resolve_health_url(
+                "http://127.0.0.1:8090/v1/chat/completions"))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

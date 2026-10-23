@@ -96,8 +96,25 @@ GPU_DEFER_FREE_MB = 2048
 # pathological prompt_eval 0.16tok/s) is no longer referenced.
 BRAIN_URL = os.environ.get(
     "BRAIN_URL", "http://127.0.0.1:8090/v1/chat/completions")
-BRAIN_HEALTH_URL = (BRAIN_URL.split("/v1/")[0].rstrip("/")
-                    + "/health")
+
+
+def resolve_health_url(brain_url, override=None):
+    """Liveness URL for a seat; an explicit override wins (pure).
+
+    tech#379 (R2430): a provider that answers the OpenAI wire but has
+    no /health endpoint (ollama serves /api/version and 404s /health)
+    was indistinguishable from a dead seat - both returned rc 3 - so no
+    substitute seat could ever be measured. BRAIN_HEALTH_URL lets the
+    probe point at a URL that provider does answer, keeping "seat
+    answers" and "seat can fly" the same question.
+    """
+    if override:
+        return override
+    return brain_url.split("/v1/")[0].rstrip("/") + "/health"
+
+
+BRAIN_HEALTH_URL = resolve_health_url(
+    BRAIN_URL, os.environ.get("BRAIN_HEALTH_URL"))
 BRAIN_DEFAULT_MODEL = os.environ.get("BRAIN_MODEL", "qwen3.6-35b")
 LIVENESS_CAP_S = 2
 # tech#120 wedge fast-fail probe: two 1500s S1 flights burned through
