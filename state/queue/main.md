@@ -89,3 +89,4 @@
 142. [D-20261019-08 承接·夜窗单查腿] CoderServe resume 复测——今晚 19:00 AutoYield resume 后 Get-ScheduledTask bm-a-CoderServe 应回 Enabled（仍 Disabled=真违例升 E1 提报 HQFB；Enabled=定性翻转收口一行+D-08 案卷收口）——夜轮 03:07 task-health 面随轮领（19:00 前禁领=判据窗纪律）
 143. [R2420 补货·成品位承接] CENSUS 领件位（backlog#63）核锚面：先查 life/BigLife/census/anchors/C-00031.md 起卡号序锚存在性——锚在=进 M0/M1/M2；锚不在=supply-gated 退领留痕（R316 判例：只查 anchors/ 正典位，registry 生成卡不算锚）；同轮消费 DIGEST-SUPPLY 新窗口（10-24 起 orders 行）——按认领制随轮领做
 [R2423 done 2026-10-24] REACT 按日热点随轮领（第九续件位补记）——REACT-v27《城市速报 027·读博三年之问》F-202 登记（成品库第 203 件·L-卡第 150 件）；同日 tech#265 体裁席位适用表结案（dept-review §6.1），REACT 形态自此可按表过 S0/S4。
+[R2424 done 2026-10-24] REACT 速报件第二十八件（#59 位）：REACT-v28《城市速报 028·方向盘交给谁》F-203 登记（成品库 204 件/L-卡 151 件）；同轮 tech#374 供给闸回避标签提案入 tech 队。

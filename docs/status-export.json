@@ -1,66 +1,66 @@
 {
- "export_ts": "2026-10-24 02:53:54",
- "do": "R2423: REACT-v27 card shipped (F-202) + REACT genre seat table (tech#265 closed)",
+ "export_ts": "2026-10-24 03:37:19",
+ "do": "R2424: REACT-v28 card shipped (F-203) + tech#374 supply-gate seed",
  "depts": [
   {
-   "n": "L-卡产线",
-   "t": "REACT-v27 全链通件；首轮 collide 拒渲（秩序轴句 v17 已用）→换池句重渲",
+   "n": "L-卡线",
+   "t": "REACT-v28 全链走门：m1-assert 16/16、em-check ALL-HORIZ PASS、验图五检一次过",
    "s": 1
   },
   {
-   "n": "评审机制",
-   "t": "tech#265 结案：REACT 体裁席位适用表（S0=体裁合规/S4=两态声明），试点至 11-07",
+   "n": "情报/选题",
+   "t": "今日 zhihu 10 条 8 条回避面 -> tech#374 机检回避标签提案",
    "s": 1
   }
  ],
  "outs": [
   [
-   "react v27 png",
+   "react v28 png",
    "on",
-   "cards-react-v27"
+   "react-v28"
   ],
   [
-   "seat table 6.1",
+   "review v28",
    "on",
-   "dept-review-6-1"
+   "review-v28"
   ],
   [
-   "tech 373 seed",
+   "tech 374 seed",
    "on",
-   "queue-tech-373"
+   "tech-374"
   ]
  ],
  "chips": [
   [
-   "suite 1804",
+   "L-cards 151",
    "live"
   ],
   [
-   "L-cards 149",
+   "library 204",
    "live"
   ]
  ],
  "results": [
   [
-   "F-202 react-v27",
-   "r2423"
+   "F-203 react-v28",
+   "r2424"
   ],
   [
-   "m1 assert 15/15",
-   "r2423"
+   "m1 assert 16/16",
+   "r2424"
   ],
   [
-   "h2 28 / 30.6em",
-   "r2423"
+   "h2 30 / 30.0em",
+   "r2424"
   ],
   [
-   "seats min 9",
-   "r2423"
+   "poster 279456B",
+   "r2424"
   ]
  ],
  "live": [
-  "当前活：L-卡 REACT-v27 全链通件并登记 F-202（第一件按体裁席位新表过闸的 REACT）",
-  "最近实物：data/storylines/cards/MC-20261024-REACT-v27/MC-20261024-REACT-v27.png（226,501B·2026-10-24 02:5x）",
-  "下个里程碑：F-201/F-202 七席独立木桶回填，随后用周末云窗出一件可见新片（窗至 10-25 24:00）"
+  "当前活：REACT 速报 028（F-203）已出卡入库，M4 四检过 + 循环席 desk-audit 4 席 9",
+  "最近实物：data/storylines/cards/MC-20261024-REACT-v28/MC-20261024-REACT-v28.png（279,456B，2026-10-24 03:3x）",
+  "下个里程碑：F-201/F-202/F-203 七席独立木桶回填 + 周末云窗（至 10-25 24:00）一件可见片"
  ]
 }
