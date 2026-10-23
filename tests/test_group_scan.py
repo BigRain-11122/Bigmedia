@@ -1070,5 +1070,60 @@ class LiveRepoTests(unittest.TestCase):
             or "ORDERS-ORIGIN-DELTA-WARN:" in out)
 
 
+class PickGroupRootTests(unittest.TestCase):
+    """R2422 anchor: two FluxGroup path forms on one host.
+
+    A round launched through the stale mirror read a 10-21 orders.md while
+    the canonical tree already carried 10-23 CEO rows, and both the ORDERS
+    and ORDERS-ORIGIN-DELTA faces stayed quiet (origin/main was behind too).
+    The picker must choose the newest orders.md and say so.
+    """
+
+    def _root(self, tmp, name, mtime):
+        root = os.path.join(tmp, name)
+        os.makedirs(os.path.join(root, "docs"))
+        path = os.path.join(root, "docs", "orders.md")
+        with io.open(path, "w", encoding="utf-8") as fh:
+            fh.write(u"| 2026-10-21 00:0x | x |\n")
+        os.utime(path, (mtime, mtime))
+        return root
+
+    def test_primary_newer_keeps_primary_and_silent(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            primary = self._root(tmp, "live", time.time())
+            extra = self._root(tmp, "mirror", time.time() - 3600)
+            root, note = gs.pick_group_root(primary, extra=[extra])
+            self.assertEqual(os.path.abspath(root),
+                             os.path.abspath(primary))
+            self.assertIsNone(note)
+
+    def test_stale_primary_loses_to_newer_alias(self):
+        old = time.time() - 3600
+        with tempfile.TemporaryDirectory() as tmp:
+            primary = self._root(tmp, "mirror", old)
+            extra = self._root(tmp, "live", time.time())
+            root, note = gs.pick_group_root(primary, extra=[extra])
+            self.assertEqual(os.path.abspath(root), os.path.abspath(extra))
+            self.assertIn("stale mirror", note)
+
+    def test_env_root_wins_outright(self):
+        old = time.time() - 3600
+        with tempfile.TemporaryDirectory() as tmp:
+            primary = self._root(tmp, "mirror", old)
+            env = self._root(tmp, "chosen", old - 3600)
+            root, note = gs.pick_group_root(primary, env_root=env)
+            self.assertEqual(os.path.abspath(root), os.path.abspath(env))
+            self.assertIsNone(note)
+
+    def test_missing_primary_orders_falls_back(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            primary = os.path.join(tmp, "empty")
+            os.makedirs(primary)
+            extra = self._root(tmp, "live", time.time())
+            root, note = gs.pick_group_root(primary, extra=[extra])
+            self.assertEqual(os.path.abspath(root), os.path.abspath(extra))
+            self.assertIn("no docs/orders.md", note)
+
+
 if __name__ == "__main__":
     unittest.main()

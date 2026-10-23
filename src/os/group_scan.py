@@ -83,13 +83,76 @@ error. Task-book wiring of this probe is an operator-domain submission
 
 import io
 import json
+import os
 import re
 import sys
 from datetime import date, datetime
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-GROUP_ROOT = REPO.parent.parent
+
+
+def _orders_stat(root):
+    """(dev, ino, mtime, path) for <root>/docs/orders.md, or None."""
+    path = Path(root) / "docs" / "orders.md"
+    try:
+        stat = path.stat()
+    except OSError:
+        return None
+    return (stat.st_dev, stat.st_ino, stat.st_mtime, path)
+
+
+def pick_group_root(primary, extra=None, env_root=None):
+    """Return (root, note) for the group tree that actually holds the news.
+
+    R2422 anchor: this machine carries two FluxGroup path forms -- the live
+    tree (Desktop) and a stale mirror (D:). The script path decides which one
+    REPO.parent.parent names, so a round launched through the mirror read a
+    10-21 orders.md while the canonical tree already held 10-23 CEO rows: the
+    worktree face reported QUIET and the ORDERS-ORIGIN-DELTA face could not
+    see them either (origin/main was still behind). Picking the tree with the
+    newest orders.md -- and saying so loud -- removes that blind spot.
+    Explicit env root wins outright; identical files never produce a note.
+    """
+    primary = Path(primary)
+    keys = {}
+    for cand in [env_root, primary] + list(extra or []):
+        if not cand:
+            continue
+        key = _orders_stat(cand)
+        if key is None:
+            continue
+        keys.setdefault(key[:2], (Path(cand), key))
+    if not keys:
+        return primary, None
+    if env_root:
+        env_key = _orders_stat(env_root)
+        if env_key is not None:
+            return Path(env_root), None
+    primary_key = _orders_stat(primary)
+    if primary_key is None:
+        cand, key = max(keys.values(), key=lambda v: v[1][2])
+        return cand, ("primary %s has no docs/orders.md; using %s"
+                      % (primary, cand))
+    best = max(keys.values(), key=lambda v: v[1][2])
+    if best[1][:2] == primary_key[:2]:
+        return primary, None
+    if best[1][2] <= primary_key[2]:
+        return primary, None
+    hours = (best[1][2] - primary_key[2]) / 3600.0
+    note = ("using %s (orders.md %.1fh newer than primary %s; a stale mirror "
+            "read hides new CEO rows)" % (best[0], hours, primary))
+    return best[0], note
+
+
+_PRIMARY_GROUP_ROOT = REPO.parent.parent
+GROUP_ROOT, GROUP_ROOT_NOTE = pick_group_root(
+    _PRIMARY_GROUP_ROOT,
+    extra=[Path.home() / "Desktop" / "FluxGroup"],
+    env_root=os.environ.get("FLUX_GROUP_ROOT") or None,
+)
+# Alias candidates are machine-local (bm-a keeps a Desktop copy next to the
+# mirror); on hosts without them the picker degrades to the primary root.
 
 # 8-digit date family (YYYYMMDD). The two incident patterns (2026\d{3} and a
 # 2-digit-month face) both under-matched real dnums; this one is locked by
@@ -1003,6 +1066,9 @@ def main(argv):
         ("ORDERS-ORIGIN-DELTA", *face_orders_origin_delta(paths)),
         ("MTIME", *face_mtime(paths)),
     ]
+    if GROUP_ROOT_NOTE:
+        faces.insert(0, ("GROUP-ROOT", RC_QUIET,
+                         "GROUP-ROOT-DIVERGENCE: " + GROUP_ROOT_NOTE))
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     report = render_report(faces, ts)
 
