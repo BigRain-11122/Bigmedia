@@ -1,5 +1,5 @@
 {
- "export_ts": "2026-10-24 05:56:51",
+ "export_ts": "2026-10-24 05:57:34",
  "do": "R2430: the 4b substitute seat was measured and rejected - protocol shape yes, judgment no - so the 35B is the line",
  "depts": [
   {
@@ -70,7 +70,7 @@
  ],
  "live": [
   "当前活：R2430 评审席 A/B 实测收官——4b 在自洽稿上误判一票否决，判负；M4 维持红，BS-006 双稿维持 PENDING",
-  "最近实物：qa/seat-ab-20261024/SEAT-AB-REPORT-R2430.md（2026-10-24 06:04）+ src/call_expert.py 新增 BRAIN_HEALTH_URL 覆盖（tests 52/52）",
+  "最近实物：qa/seat-ab-20261024/SEAT-AB-REPORT-R2430.md（2026-10-24 05:57）+ src/call_expert.py 新增 BRAIN_HEALTH_URL 覆盖（tests 52/52）",
   "下个里程碑：35B 席重新供给并点亮 :8090（tech#380，窗 ≤48h）→ M4 可跑 → BS-006 双稿过门"
  ]
 }
