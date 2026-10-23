@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-24 05:10:22",
- "do": "R2428: seat failures now leave a NOT-EXECUTED trace; readiness separates not-reviewed from failed",
+ "export_ts": "2026-10-24 05:36:21",
+ "do": "R2429: the review seat's silence is now measured, not guessed - probe says the 35B inputs are gone from disk",
  "depts": [
   {
    "n": "内容面",
@@ -14,7 +14,7 @@
   },
   {
    "n": "评审面",
-   "t": "失败双账留痕（rc3/rc6/rc5），readiness 报 review-not-executed，成功评审自动覆盖；05:07 实弹 brain 8090 不可达",
+   "t": "席位探针三因分类（health/供给/pause）每跑一行 JSONL；实弹=35B 与 llama.cpp 二进制全盘 0 命中，CoderServe 假绿 rc=0",
    "s": 1
   }
  ],
@@ -30,9 +30,9 @@
    "bs006-variant"
   ],
   [
-   "expert trace 2 faces",
+   "seat probe",
    "on",
-   "r2428-trace"
+   "r2429-seatprobe"
   ]
  ],
  "chips": [
@@ -41,35 +41,31 @@
    "live"
   ],
   [
-   "findings 1",
+   "findings 2",
    "live"
   ],
   [
-   "drafts 12",
-   "live"
+   "seat down",
+   "wip"
   ]
  ],
  "results": [
   [
-   "trace 2 faces",
-   "r2428"
+   "seat probe 18/18",
+   "r2429"
   ],
   [
-   "review-not-exec",
-   "r2428"
+   "brain-seat-down",
+   "r2429"
   ],
   [
-   "tests 95/95",
-   "r2428"
-  ],
-  [
-   "V5.14 234.29s",
-   "r2425"
+   "tests 63/63",
+   "r2429"
   ]
  ],
  "live": [
-  "当前活：tech#377 收口=评审面未执行不再是静默失败（call_expert 双账留痕 + readiness 区分「未执行」与「不过」）",
-  "最近实物：data/pipeline/expert-not-executed-ledger.jsonl 首行（2026-10-24 05:07:38，S4-compliance rc=3 brain /health unreachable）与 docs/reviews/expert-calls.md 同刻 NOT-EXECUTED 行",
-  "下个里程碑：BS-006 双件过 M4（须 brain :8090 可达；tech#378 值班探针窗 ≤48h）；BS-001..005 陈旧稿 supersede-or-refresh（窗 ≤48h）"
+  "当前活：tech#378 收口=席位死因可读（brain_seat_probe.py 三因分类 + readiness 新面 brain-seat-down）",
+  "最近实物：data/pipeline/brain-seat-probe.jsonl 首行（2026-10-24 05:33:18 alive=false reason=provisioning inputs missing: model, exe）",
+  "下个里程碑：席位再生路线定谳（tech#379 三选一，owner 一句话）；BS-006 过 M4 须席位可达（窗 ≤48h），之前维持 PENDING 不降门"
  ]
 }
