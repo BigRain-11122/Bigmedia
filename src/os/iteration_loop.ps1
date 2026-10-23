@@ -158,6 +158,30 @@ try {
     # retired. Guard faults never abandon the round to an unmonitored
     # eternity: a plain hard-cap wait backstops (fail-safe, not fail-open).
     Log "spawning headless round (hard-cap ${RoundTimeoutMinutes}min, silence-kill ${RoundSilenceMinutes}min, prompt_chars=$($prompt.Length), out=$roundOut)"
+    # T0 CLOUD-OFF guard (CEO 2026-10-20): automation is local-only; never spawn the cloud CLI.
+    # Resolution lives in cloud_off_gate.ps1: this task is registered through the
+    # symlinked Desktop path, where a literal ancestor walk misses the canonical
+    # marker (stale Desktop cph4 mirror) and cloud rounds kept igniting. A
+    # resolver crash is fail-closed, never fail-open.
+    $__gateRoot = $null
+    $__gateCrash = $null
+    try {
+        . (Join-Path $PSScriptRoot 'cloud_off_gate.ps1')
+        $__gateRoot = Get-CloudOffMarkerRoot -ScriptRoot $PSScriptRoot -Project $Project
+    } catch { $__gateCrash = $_ }
+    if ($__gateRoot -or $__gateCrash) {
+        if ($__gateRoot) {
+            $__cl = Join-Path $__gateRoot 'media\logs\cloud-off-suppressed.log'
+        } else {
+            $__cl = Join-Path (Split-Path -Parent (Split-Path -Parent $Project)) 'media\logs\cloud-off-suppressed.log'
+            Log "cloud-off gate resolver crashed - fail-closed (T0): $__gateCrash"
+        }
+        $__cd = Split-Path -Parent $__cl
+        if (-not (Test-Path $__cd)) { New-Item -ItemType Directory -Force -Path $__cd | Out-Null }
+        $__why = if ($__gateCrash) { 'gate resolver crashed, fail-closed - suppressed cloud round (T0)' } else { 'suppressed cloud round (T0)' }
+        Add-Content -Path $__cl -Value ((Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + ' | ' + [System.IO.Path]::GetFileName($PSCommandPath) + ' | ' + $__why) -Encoding UTF8
+        exit 0
+    }
     $p = Start-Process -FilePath $codelyPath -ArgumentList $argLine -WorkingDirectory $Project -PassThru -NoNewWindow -RedirectStandardOutput $roundOut -RedirectStandardError $roundErr
     $null = $p.Handle   # materialize handle so ExitCode is readable
     $budgetVerdict = ''

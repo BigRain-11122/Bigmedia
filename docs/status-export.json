@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-24 06:15:25",
- "do": "R2431: seat route moved to :8091 + FAKE-GREEN assertion; MV V5 receipt is a three-piece machine check reading ABSENT 0/3",
+ "export_ts": "2026-10-24 06:45:39",
+ "do": "R2432: T0 cloud-off gate fixed (symlink-safe resolver + fail-closed guard); loop goes policy-quiet at next tick",
  "depts": [
   {
    "n": "内容面",
