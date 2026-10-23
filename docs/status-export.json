@@ -1,5 +1,5 @@
 {
- "export_ts": "2026-10-24 04:12:43",
+ "export_ts": "2026-10-24 04:13:17",
  "do": "R2426: renders mark vocabulary now one canonical module; M4 blocker next (6 stale drafts)",
  "depts": [
   {
@@ -52,19 +52,19 @@
  "results": [
   [
    "unannot 0",
-   "r2425"
+   "r2426"
   ],
   [
    "3 blockers",
-   "r2425"
+   "r2426"
   ],
   [
    "anchors 20",
-   "r2425"
+   "r2426"
   ],
   [
    "V5.14 234.29s",
-   "r2425"
+   "r2426"
   ]
  ],
  "live": [
