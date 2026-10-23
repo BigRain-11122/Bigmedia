@@ -1,33 +1,38 @@
 {
- "export_ts": "2026-10-24 03:37:19",
- "do": "R2424: REACT-v28 card shipped (F-203) + tech#374 supply-gate seed",
+ "export_ts": "2026-10-24 03:56:42",
+ "do": "R2425: render-unannot FAIL closed at root (ledger mark vocabulary) + backlog#117 corrected to V5.14 canon",
  "depts": [
   {
-   "n": "L-卡线",
-   "t": "REACT-v28 全链走门：m1-assert 16/16、em-check ALL-HORIZ PASS、验图五检一次过",
+   "n": "产线卫生",
+   "t": "台账五态标注词缺陷：v28 行自造词致解析 None，已补标注+拆粘连行，复发入 tech#375",
    "s": 1
   },
   {
-   "n": "情报/选题",
-   "t": "今日 zhihu 10 条 8 条回避面 -> tech#374 机检回避标签提案",
-   "s": 1
+   "n": "交付面",
+   "t": "MV 母版真相核对：V5.11 已被 V5.14 FINAL（234.2917s）取代，禁按旧账呈交",
+   "s": 2
+  },
+  {
+   "n": "供给面",
+   "t": "CENSUS #63 锚复检 anchors=20（max C-00029），供给门维持关闭",
+   "s": 2
   }
  ],
  "outs": [
   [
-   "react v28 png",
+   "renders fix",
    "on",
-   "react-v28"
+   "renders-r2425"
   ],
   [
-   "review v28",
+   "tech 375",
    "on",
-   "review-v28"
+   "tech-375"
   ],
   [
-   "tech 374 seed",
+   "bl117 truth",
    "on",
-   "tech-374"
+   "bl-117"
   ]
  ],
  "chips": [
@@ -38,29 +43,33 @@
   [
    "library 204",
    "live"
+  ],
+  [
+   "findings 0",
+   "live"
   ]
  ],
  "results": [
   [
-   "F-203 react-v28",
-   "r2424"
+   "unannot 0",
+   "r2425"
   ],
   [
-   "m1 assert 16/16",
-   "r2424"
+   "3 blockers",
+   "r2425"
   ],
   [
-   "h2 30 / 30.0em",
-   "r2424"
+   "anchors 20",
+   "r2425"
   ],
   [
-   "poster 279456B",
-   "r2424"
+   "V5.14 234.29s",
+   "r2425"
   ]
  ],
  "live": [
-  "当前活：REACT 速报 028（F-203）已出卡入库，M4 四检过 + 循环席 desk-audit 4 席 9",
-  "最近实物：data/storylines/cards/MC-20261024-REACT-v28/MC-20261024-REACT-v28.png（279,456B，2026-10-24 03:3x）",
-  "下个里程碑：F-201/F-202/F-203 七席独立木桶回填 + 周末云窗（至 10-25 24:00）一件可见片"
+  "当前活：产线卫生修红 + 交付面真相核对（readiness FAIL 清零，0 findings）",
+  "最近实物：data/storylines/cards/MC-20261024-REACT-v28/MC-20261024-REACT-v28.png（279,456B，2026-10-24 03:36 落件，F-203 已登记·成品库第 204 件）",
+  "下个里程碑：MV V5.14 母版重打 AIGC 七字段+显著标识后呈 CEO（MV 会话 lane·窗 ≤48h）；L-卡下一件视热榜供给（窗 ≤12h）"
  ]
 }
