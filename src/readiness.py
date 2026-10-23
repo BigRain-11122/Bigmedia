@@ -74,6 +74,10 @@ BACKLOG = REPO / "src" / "os" / "backlog.md"
 REVIEW_TRACE = REPO / "data" / "pipeline" / "expert-not-executed-ledger.jsonl"
 NOT_EXECUTED_MARK = "NOT-EXECUTED"
 REVIEW_CALLS = REPO / "docs" / "reviews" / "expert-calls.md"
+# tech#378 (R2429): the review seat's own liveness ledger, written by
+# src/os/brain_seat_probe.py. Read here so a dead seat names itself
+# instead of only surfacing as "some draft was never reviewed".
+SEAT_PROBE = REPO / "data" / "pipeline" / "brain-seat-probe.jsonl"
 TEMPLATE = REPO / "src" / "os" / "readiness_template.md"
 LEDGER_NAME = "README.md"
 
@@ -354,7 +358,34 @@ def not_executed_drafts(rows, gates, calls=None):
     return hit
 
 
-def build_blockers(flow, rows, gates, needs, not_exec=None):
+def parse_seat_probe(path=None):
+    """Latest seat-probe row -> (down_reason, ts) or None (tech#378).
+
+    The probe is the only face that asks the seat itself and records
+    why it is down (health / provisioning inputs / CEO pause). A stale
+    row is still the last thing anybody measured, so it is reported
+    with its own timestamp rather than silently dropped. Missing file
+    is normal on a fresh tree."""
+    p = Path(path) if path is not None else SEAT_PROBE
+    if not p.is_file():
+        return None
+    last = None
+    for line in p.read_text(encoding="utf-8", errors="replace").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict) and "alive" in row:
+            last = row
+    if last is None or last.get("alive"):
+        return None
+    return (str(last.get("reason") or "down"), str(last.get("ts") or "?"))
+
+
+def build_blockers(flow, rows, gates, needs, not_exec=None, seat_down=None):
     """Distance-to-first-publish lines (English scaffold, parsed tokens)."""
     blockers = []
     if flow:
@@ -375,6 +406,8 @@ def build_blockers(flow, rows, gates, needs, not_exec=None):
             msg += (" - %d of them: review face NOT EXECUTED (seat call "
                     "failed, trace in data/pipeline/"
                     "expert-not-executed-ledger.jsonl)" % len(never))
+            if seat_down:
+                msg += ("; seat: %s (probe %s)" % seat_down)
         blockers.append(msg)
     for num, clause in needs:
         blockers.append("decision pending: #%s %s (needs CEO sign-off)" % (num, clause))
@@ -525,6 +558,14 @@ def main(argv):
                 "review face NOT EXECUTED for %d draft(s) [%s]; latest %s: %s"
                 % (len(never), ", ".join(sorted(never)),
                    latest.get("ts", "?"), latest.get("reason", "?"))))
+        seat_down = parse_seat_probe(
+            root / "data" / "pipeline" / "brain-seat-probe.jsonl")
+        if seat_down:
+            findings.append((
+                "WARN", "brain-seat-down",
+                "review seat is down (%s) per probe %s - M4 cannot run "
+                "until it is provisioned (python src/os/brain_seat_probe.py)"
+                % (seat_down[0], seat_down[1])))
         render_rows, f = parse_renders(renders, renders / LEDGER_NAME)
         findings += f
         needs, suspended = parse_backlog_flags(backlog)
@@ -533,7 +574,7 @@ def main(argv):
     except OSError as e:
         print("source error: %s" % e)
         return 2
-    blockers = build_blockers(flow, rows, gates, needs, never)
+    blockers = build_blockers(flow, rows, gates, needs, never, seat_down)
     gen_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
     if summary:
         print(build_summary(gen_ts, flow, rows, gates, render_rows, needs,
