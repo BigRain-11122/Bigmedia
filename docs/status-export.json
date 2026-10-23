@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-24 03:56:42",
- "do": "R2425: render-unannot FAIL closed at root (ledger mark vocabulary) + backlog#117 corrected to V5.14 canon",
+ "export_ts": "2026-10-24 04:12:43",
+ "do": "R2426: renders mark vocabulary now one canonical module; M4 blocker next (6 stale drafts)",
  "depts": [
   {
    "n": "产线卫生",
