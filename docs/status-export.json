@@ -1,38 +1,43 @@
 {
- "export_ts": "2026-10-24 00:27:34",
- "do": "R2417: v700/v702 have a 1-frame flash at 44.042s; v703 clean; pop metric needs magnitude gate",
+ "export_ts": "2026-10-24 01:38:14",
+ "do": "R2418: flash-frame gate landed in S2 L1.8; v700 fails incl 44.042s anchor, v703 still fails on 6 other 1-3f shots",
  "depts": [
   {
-   "n": "渲染复核席",
-   "t": "mv_v700_final.py 两次输出不等价实锤：v700 pop 11/11 清、v701 2 处复发",
+   "n": "机检工程席",
+   "t": "S2 层 1.8 第七面 flash-frame 落地：两版判据被实测否证，终版=孤立短镜头，幅度门实测校准 400k",
    "s": 1
   }
  ],
  "outs": [
   [
-   "MV repair verify R2417",
+   "flash-frame gate L1.8",
+   "on",
+   "edit_craft_check"
+  ],
+  [
+   "flash tests 7/7",
+   "on",
+   "test_flash_frame"
+  ],
+  [
+   "v700 scan 7 hits",
    "on",
    "qa/mv0001-v700"
   ],
   [
-   "flash board 44.042s",
+   "v703 scan 6 hits",
    "on",
    "qa/mv0001-v700"
   ],
   [
-   "mv_pop_probe detector",
+   "anchor eyeball 44s",
    "on",
-   "src"
+   "qa/mv0001-v700"
   ],
   [
-   "full_mv_v700 flash @44.042",
-   "off",
-   "mv0001"
-  ],
-  [
-   "full_mv_v703 captured clean",
+   "flash report R2418",
    "on",
-   "mv0001"
+   "qa/mv0001-v700"
   ]
  ],
  "chips": [
@@ -43,25 +48,25 @@
  ],
  "results": [
   [
-   "flash@44.042s",
-   "r2417"
+   "v700 44.042 hit",
+   "r2418"
   ],
   [
-   "v703 clean",
-   "r2417"
+   "v703 44.042 gone",
+   "r2418"
   ],
   [
-   "77.333s noise",
-   "r2417"
+   "v703 6 more",
+   "r2418"
   ],
   [
-   "v704 race",
-   "r2417"
+   "calib 400k",
+   "r2418"
   ]
  ],
  "live": [
-  "当前活：mv0001 修复面二轮复核收口（在执 MV 会话仍在出片，本循环只读）",
-  "最近实物：qa/mv0001-v700/REPAIR-VERIFY-R2417.md＋FLASH-BOARD-44s-R2417.png（00:26）",
-  "下个里程碑：S2 补 flash-frame 检测，v700=FAIL/v703=PASS 双对照，窗 ≤10-25"
+  "当前活：S2 层 1.8 闪帧门已落地并对 v700/v703 实测（只读在产件，零接触）",
+  "最近实物：qa/mv0001-v700/FLASH-SCAN-R2418.md＋锚点板图 v700_hi_03.png（01:40）",
+  "下个里程碑：backlog#118 剩余（重复镜 1.34x 配对＋音轨响度复核），窗 ≤10-25"
  ]
 }

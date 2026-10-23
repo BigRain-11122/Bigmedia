@@ -34,6 +34,10 @@ AI-feel gate, layer 1.6). Spec: docs/editing-craft-spec.md v1.0.
                 (labeled contact sheet = mid/tail frames are always in
                 the inspector's view; semantic leaks stay a human/
                 multimodal call on the tile).
+  flash-frame   (--flash) every-frame burst scan: 1-3 frames of foreign
+                footage inside a shot (content leaves and comes back) is
+                a FAIL; a genuine cut does not return, so it passes
+                (tech#368, R2418).
 
 INDEPENDENCE LAW (group governance S10 defense #2): the spec constants
 below are deliberately NOT imported from render/edit_craft.py - the
@@ -47,7 +51,8 @@ ASCII rule: source is pure ASCII; Chinese lives in the data files only.
 Usage:
     python src/edit_craft_check.py --plan FILE --srt FILE --profile NAME [--json]
     python src/edit_craft_check.py --plan FILE --srt FILE --profile NAME \
-        --video VIDEO [--frames-out DIR] [--json]
+        --video VIDEO [--frames-out DIR] [--flash] [--json]
+    python src/edit_craft_check.py --video VIDEO --flash [--json]
 """
 import json
 import sys
@@ -80,6 +85,25 @@ LOOP_EDGE_S = 0.10       # wrap-crossing zone half-window (spec S4 law 3)
 LOOP_MAX_CROSS = 4       # crossings sampled per segment; beyond = WARN
 _DUR_CACHE = {}          # visual-source duration cache (path -> seconds)
 THUMB_W = 320            # contact-sheet cell width (px)
+
+# -- flash-frame law (tech#368 / R2418) --------------------------------
+# One frame of foreign footage hidden inside a static shot survives every
+# other gate: cut-point checks pass, head/mid/tail sampling never lands on
+# it, and the panel sees a 41ms blink. R2417 found exactly that at 44.042s
+# in full_mv_v700 (a whole extra shot, one frame) with a throwaway script.
+# Law: scan EVERY frame with the N-1/N/N+1 outlier ratio plus an absolute
+# magnitude gate - grain in a static shot can clear the ratio but never the
+# magnitude. A full scan strictly covers the "plan cut +-2 frames" window,
+# so no plan is required (standalone --flash mode).
+FLASH_PROXY_W, FLASH_PROXY_H = 240, 136
+FLASH_QUIET_FRAC = 0.20    # neighbours around the burst must stay <= 20%
+FLASH_MIN_ABS = 400000     # calibrated on the 768P renders: proxy grain
+                           # sits at a ~204k median delta, real cuts measure
+                           # 1.8M-6M, so 400k keeps every true cut and no
+                           # grain peak (R2418 measurement on v700/v703)
+FLASH_MAX_SHOT_FRAMES = 3  # 1-3 frames (<=0.125s at 24fps) = unreadable
+FLASH_MIN_NEIGHBOR_FRAMES = 8  # both neighbours must be normal shots
+FLASH_LIST_MAX = 12        # hit rows quoted in the finding text
 
 SPEC = {
     "shipinhao": {
@@ -609,9 +633,154 @@ def check_frames(video, plan, outdir):
     return findings
 
 
+def _stream_proxy_frames(video):
+    """Yield 240x136 rgb24 frames off ffmpeg as int16 arrays, one at a time.
+
+    Streaming (3 frames alive) keeps a 234s 768P render inside a few MB of
+    RAM; the proxy scale is enough for a whole-shot flip and far too coarse
+    to trip on grain.
+    """
+    import subprocess
+    import numpy as np
+
+    nbytes = FLASH_PROXY_W * FLASH_PROXY_H * 3
+    cmd = ["ffmpeg", "-nostdin", "-loglevel", "error", "-i", str(video),
+           "-vf", "scale=%d:%d:flags=area" % (FLASH_PROXY_W, FLASH_PROXY_H),
+           "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                            stderr=subprocess.DEVNULL)
+    try:
+        while True:
+            buf = proc.stdout.read(nbytes)
+            if not buf or len(buf) < nbytes:
+                break
+            yield np.frombuffer(buf, dtype=np.uint8).astype(np.int16)
+    finally:
+        proc.stdout.close()
+        proc.wait()
+
+
+def scan_flash_frames(video, fps=24.0, min_abs=FLASH_MIN_ABS,
+                      quiet_frac=FLASH_QUIET_FRAC):
+    """Every-frame scan for isolated 1-3 frame shots -> (hits, frames, err).
+
+    Why not the middle-frame ratio: an inserted shot can be internally
+    static (44.042s was two identical frames), so "unlike both neighbours"
+    misses it; and a 2-frame dissolve trips it, so a pure ratio gate is a
+    100% false positive on the repaired v703 (11 identical hits on both).
+
+    Why not "content returns": the 44.042s insertion sits between two
+    DIFFERENT shots (close-up -> flash -> wide), so nothing returns.
+
+    Signature used here - "isolated short shot":
+      r(i) = |F(i) - F(i+1)|
+      a cut is a local max of r with at least one quiet side
+      (min(r(i-1), r(i+1)) <= quiet_frac * r(i)): this keeps true cuts and
+      drops the decaying tail of a dissolve / whip pan / light burst.
+      Shots are the runs between cuts. A shot of 1-3 frames is a defect
+      only when BOTH neighbours are normal shots (>= MIN_NEIGHBOR frames);
+      a run of 1-2 frame shots is a deliberate strobe montage, not an
+      insertion, and stays a panel call.
+    """
+    import numpy as np
+
+    r = []
+    prev = None
+    count = 0
+    try:
+        for frame in _stream_proxy_frames(video):
+            count += 1
+            if prev is not None:
+                r.append(int(np.abs(frame - prev).sum()))
+            prev = frame
+    except ImportError as exc:
+        return [], count, "numpy unavailable: %s" % exc
+    except (OSError, ValueError) as exc:
+        return [], count, str(exc)[:300]
+
+    cuts = []
+    for i in range(1, len(r) - 1):
+        peak = r[i]
+        if peak < min_abs:
+            continue
+        if peak < r[i - 1] or peak < r[i + 1]:
+            continue
+        cuts.append(i)
+
+    # An insertion is cut-in + cut-out back to back, so the OUT spike is
+    # lower than the IN spike and never survives "local max": 44.042s is
+    # r=3.19M then 1.83M then quiet. Keep those descending spikes too.
+    for i in range(2, len(r) - 1):
+        if r[i] < min_abs or r[i] >= r[i - 1] or r[i] < r[i + 1]:
+            continue
+        if r[i - 1] < min_abs:
+            continue
+        if i in cuts:
+            continue
+        cuts.append(i)
+    cuts.sort()
+
+    # frames between cut i and cut j: i+1..j (length j-i)
+    hits = []
+    for k in range(len(cuts) - 1):
+        i0, i1 = cuts[k], cuts[k + 1]
+        length = i1 - i0
+        if not 1 <= length <= FLASH_MAX_SHOT_FRAMES:
+            continue
+        peak = max(r[i0], r[i1])
+        if r[i0 - 1] > quiet_frac * peak or r[i1 + 1] > quiet_frac * peak:
+            continue          # boundaries sit inside a decaying change
+        prev_len = i0 - cuts[k - 1] if k else i0 + 1
+        next_len = (cuts[k + 2] - i1) if k + 2 < len(cuts) else \
+            (len(r) - i1)
+        if prev_len < FLASH_MIN_NEIGHBOR_FRAMES or \
+                next_len < FLASH_MIN_NEIGHBOR_FRAMES:
+            continue          # strobe montage / rapid cutting, not insertion
+        s, e = i0 + 1, i1
+        hits.append({"start": s, "end": e, "len": length,
+                     "t": round((s + e) / 2.0 / fps, 3),
+                     "t_start": round(s / fps, 3),
+                     "peak": peak,
+                     "prev_len": prev_len, "next_len": next_len})
+    return hits, count, None
+
+
+def check_flash(video, fps=24.0, min_abs=FLASH_MIN_ABS,
+                quiet_frac=FLASH_QUIET_FRAC):
+    """Layer 1.8 seventh face: no 1-3 frame foreign insertion.
+
+    Full-video scan; covers every cut window without a plan. FAIL lists the
+    timestamp of each insertion so the inspector can pull the frame.
+    """
+    video = Path(video)
+    if not video.exists():
+        return [("FAIL", "flash-video", "video not on disk: %s" % video)]
+    hits, frames, err = scan_flash_frames(video, fps, min_abs, quiet_frac)
+    if err:
+        return [("WARN", "flash-scan", "flash scan incomplete: %s" % err)]
+    if frames < 5:
+        return [("WARN", "flash-scan",
+                 "only %d frame(s) decoded - nothing to compare" % frames)]
+    if hits:
+        listed = ", ".join("t=%.3fs(%df peak=%d)"
+                           % (h["t"], h["len"], h["peak"])
+                           for h in hits[:FLASH_LIST_MAX])
+        more = "" if len(hits) <= FLASH_LIST_MAX else \
+            " (+%d more)" % (len(hits) - FLASH_LIST_MAX)
+        return [("FAIL", "flash-frame",
+                 "%d shot(s) of 1-3 frames in %d frames: %s%s"
+                 % (len(hits), frames, listed, more))]
+    return [("PASS", "flash-frame",
+             "no 1-3 frame shot in %d frames (isolated cuts, "
+             "quiet<=%.2f of peak)" % (frames, quiet_frac))]
+
+
 def main(argv):
     plan_path = srt_path = profile = video_path = frames_out = None
     as_json = False
+    flash = False
+    flash_fps = 24.0
+    flash_min_abs = FLASH_MIN_ABS
     i = 1
     while i < len(argv):
         if argv[i] == "--plan":
@@ -629,29 +798,46 @@ def main(argv):
         elif argv[i] == "--frames-out":
             i += 1
             frames_out = argv[i]
+        elif argv[i] == "--flash":
+            flash = True
+        elif argv[i] == "--flash-fps":
+            i += 1
+            flash_fps = float(argv[i])
+        elif argv[i] == "--flash-min-abs":
+            i += 1
+            flash_min_abs = int(argv[i])
         elif argv[i] == "--json":
             as_json = True
         i += 1
-    if not (plan_path and srt_path and profile):
+    plan_run = bool(plan_path and srt_path and profile)
+    if not plan_run and not (flash and video_path):
         print("usage: edit_craft_check.py --plan FILE --srt FILE "
-              "--profile NAME [--video VIDEO [--frames-out DIR]] [--json]")
-        return 2
-    try:
-        plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
-    except (OSError, ValueError) as e:
-        print("FAIL plan: %s" % e)
-        return 2
-    try:
-        cues = parse_srt(Path(srt_path))
-    except ValueError as e:
-        print("FAIL srt: %s" % e)
+              "--profile NAME [--video VIDEO [--frames-out DIR]] "
+              "[--flash [--flash-fps F] [--flash-min-abs N]] [--json]\n"
+              "       edit_craft_check.py --video FILE --flash [--json]")
         return 2
 
-    findings = check(plan, cues, profile)
-    if video_path:
-        out = frames_out or str(Path(video_path).parent /
-                                (".frame-probe-" + Path(video_path).stem))
-        findings += check_frames(video_path, plan, out)
+    findings = []
+    if plan_run:
+        try:
+            plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
+        except (OSError, ValueError) as e:
+            print("FAIL plan: %s" % e)
+            return 2
+        try:
+            cues = parse_srt(Path(srt_path))
+        except ValueError as e:
+            print("FAIL srt: %s" % e)
+            return 2
+
+        findings += check(plan, cues, profile)
+        if video_path:
+            out = frames_out or str(Path(video_path).parent /
+                                    (".frame-probe-" + Path(video_path).stem))
+            findings += check_frames(video_path, plan, out)
+    if flash:
+        findings += check_flash(video_path, flash_fps, flash_min_abs)
+
     fails = [f for f in findings if f[0] == "FAIL"]
     warns = [f for f in findings if f[0] == "WARN"]
     if as_json:
