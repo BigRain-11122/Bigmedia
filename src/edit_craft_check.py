@@ -660,27 +660,13 @@ def _stream_proxy_frames(video):
         proc.wait()
 
 
-def scan_flash_frames(video, fps=24.0, min_abs=FLASH_MIN_ABS,
-                      quiet_frac=FLASH_QUIET_FRAC):
-    """Every-frame scan for isolated 1-3 frame shots -> (hits, frames, err).
+def detect_cuts(video, fps=24.0, min_abs=FLASH_MIN_ABS,
+                quiet_frac=FLASH_QUIET_FRAC):
+    """Shot boundaries of a full video -> (cuts, r, frames, err).
 
-    Why not the middle-frame ratio: an inserted shot can be internally
-    static (44.042s was two identical frames), so "unlike both neighbours"
-    misses it; and a 2-frame dissolve trips it, so a pure ratio gate is a
-    100% false positive on the repaired v703 (11 identical hits on both).
-
-    Why not "content returns": the 44.042s insertion sits between two
-    DIFFERENT shots (close-up -> flash -> wide), so nothing returns.
-
-    Signature used here - "isolated short shot":
-      r(i) = |F(i) - F(i+1)|
-      a cut is a local max of r with at least one quiet side
-      (min(r(i-1), r(i+1)) <= quiet_frac * r(i)): this keeps true cuts and
-      drops the decaying tail of a dissolve / whip pan / light burst.
-      Shots are the runs between cuts. A shot of 1-3 frames is a defect
-      only when BOTH neighbours are normal shots (>= MIN_NEIGHBOR frames);
-      a run of 1-2 frame shots is a deliberate strobe montage, not an
-      insertion, and stays a panel call.
+    Shared by the flash-frame face and the duplicate-shot probe: both need
+    the same "magnitude local peak with one quiet side" cut list, and a
+    second opinion built on a different cut set would be worthless.
     """
     import numpy as np
 
@@ -694,9 +680,9 @@ def scan_flash_frames(video, fps=24.0, min_abs=FLASH_MIN_ABS,
                 r.append(int(np.abs(frame - prev).sum()))
             prev = frame
     except ImportError as exc:
-        return [], count, "numpy unavailable: %s" % exc
+        return [], r, count, "numpy unavailable: %s" % exc
     except (OSError, ValueError) as exc:
-        return [], count, str(exc)[:300]
+        return [], r, count, str(exc)[:300]
 
     cuts = []
     for i in range(1, len(r) - 1):
@@ -719,6 +705,34 @@ def scan_flash_frames(video, fps=24.0, min_abs=FLASH_MIN_ABS,
             continue
         cuts.append(i)
     cuts.sort()
+    return cuts, r, count, None
+
+
+def scan_flash_frames(video, fps=24.0, min_abs=FLASH_MIN_ABS,
+                      quiet_frac=FLASH_QUIET_FRAC):
+    """Every-frame scan for isolated 1-3 frame shots -> (hits, frames, err).
+
+    Why not the middle-frame ratio: an inserted shot can be internally
+    static (44.042s was two identical frames), so "unlike both neighbours"
+    misses it; and a 2-frame dissolve trips it, so a pure ratio gate is a
+    100% false positive on the repaired v703 (11 identical hits on both).
+
+    Why not "content returns": the 44.042s insertion sits between two
+    DIFFERENT shots (close-up -> flash -> wide), so nothing returns.
+
+    Signature used here - "isolated short shot":
+      r(i) = |F(i) - F(i+1)|
+      a cut is a local max of r with at least one quiet side
+      (min(r(i-1), r(i+1)) <= quiet_frac * r(i)): this keeps true cuts and
+      drops the decaying tail of a dissolve / whip pan / light burst.
+      Shots are the runs between cuts. A shot of 1-3 frames is a defect
+      only when BOTH neighbours are normal shots (>= MIN_NEIGHBOR frames);
+      a run of 1-2 frame shots is a deliberate strobe montage, not an
+      insertion, and stays a panel call.
+    """
+    cuts, r, count, err = detect_cuts(video, fps, min_abs, quiet_frac)
+    if err:
+        return [], count, err
 
     # frames between cut i and cut j: i+1..j (length j-i)
     hits = []
