@@ -1,0 +1,15 @@
+em-check-r2424 (MC-20261024-REACT-v28 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=30 budget=30.67em
+OK   21.10em margin  +9.57  今日热点 · 知乎热榜 2026-10-24 · 热榜提问
+OK   14.00em margin +16.67  一顺风车司机困了让乘客开车，
+OK   13.00em margin +17.67  自己睡到目的地还照常收钱，
+OK   23.10em margin  +7.57  平台最初只赔20元代金券，最后全额退款，合理吗？
+OK   17.32em margin +13.35  ——以下三行为硅基城民虚构反应——
+OK   27.00em margin  +3.67  怀旧轴：「修伞老李头手里的伞骨纹丝不动，就像他的心事」
+OK   23.00em margin  +7.67  求新轴：「做主播也得有两把刷子，不是嘴皮子活」
+OK   15.00em margin +15.67  秩序轴：「门关紧些，外面风大」
+OK   30.00em margin  +0.67  渡轮船长语：「今夜雨还在下，撑着伞走稳当。船稳，人心才稳。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 23.65em < 24.21em budget OK
+subs tail cue end derived=card end 3.400s (zero hardcode); expected duration=4.200s (card end + tail 0.80)
+ALL-HORIZ: PASS
