@@ -1,6 +1,6 @@
 {
- "export_ts": "2026-10-24 05:57:34",
- "do": "R2430: the 4b substitute seat was measured and rejected - protocol shape yes, judgment no - so the 35B is the line",
+ "export_ts": "2026-10-24 06:15:25",
+ "do": "R2431: seat route moved to :8091 + FAKE-GREEN assertion; MV V5 receipt is a three-piece machine check reading ABSENT 0/3",
  "depts": [
   {
    "n": "内容面",
@@ -30,14 +30,14 @@
    "bs006-variant"
   ],
   [
-   "seat probe",
+   "seat probe + fake-green",
    "on",
-   "r2429-seatprobe"
+   "r2431-seatprobe"
   ],
   [
-   "seat A/B report",
+   "MV receipt check",
    "on",
-   "seat-ab-20261024"
+   "mv-receipt-20261024"
   ]
  ],
  "chips": [
@@ -56,21 +56,21 @@
  ],
  "results": [
   [
-   "seat probe 18/18",
-   "r2429"
+   "seat fake-green",
+   "r2431"
   ],
   [
-   "brain-seat-down",
-   "r2429"
+   "receipt absent",
+   "r2431"
   ],
   [
-   "tests 63/63",
-   "r2429"
+   "tests 41/41",
+   "r2431"
   ]
  ],
  "live": [
-  "当前活：R2430 评审席 A/B 实测收官——4b 在自洽稿上误判一票否决，判负；M4 维持红，BS-006 双稿维持 PENDING",
-  "最近实物：qa/seat-ab-20261024/SEAT-AB-REPORT-R2430.md（2026-10-24 05:57）+ src/call_expert.py 新增 BRAIN_HEALTH_URL 覆盖（tests 52/52）",
-  "下个里程碑：35B 席重新供给并点亮 :8090（tech#380，窗 ≤48h）→ M4 可跑 → BS-006 双稿过门"
+  "当前活：R2431 评审席假绿实证根除（探针读计划任务 last-result + 官方量化口径 + 8091 迁移）与 MV V5 回执三件机检落地，M4 维持 fail-closed",
+  "最近实物：qa/mv-receipt-20261024/RECEIPT-CHECK-R2431.md（2026-10-24 06:2x）+ src/os/mv_receipt_check.py + 探针 29/29",
+  "下个里程碑：回执窗 10-24 23:25 到点重跑回执机检；夜轮落 GGUF 后重跑探针验 DOWN→UP（窗 ≤48h）"
  ]
 }

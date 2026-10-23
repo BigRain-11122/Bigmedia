@@ -89,13 +89,16 @@ DEFAULT_TIMEOUT = 600
 GPU_DEFER_UTIL_PCT = 80
 GPU_DEFER_FREE_MB = 2048
 # tech#186 wire v3 (origin row 432): the expert seat stack flies the
-# external brain lane -- :8090 Qwen3.6-35B-A3B over the OpenAI wire.
+# external brain lane -- :8091 Qwen3.5-35B-A3B over the OpenAI wire.
 # BRAIN_URL is env-driven (canon cph4/fleet/qwen38-rollout-20261015.md
 # v3 -- BRAIN_URL/BRAIN_MODEL "one line per machine"); the health URL
 # derives from the same base. The dormant ollama qwen3.8:27b (measured
 # pathological prompt_eval 0.16tok/s) is no longer referenced.
+# D-20261024-01 (R2431): the seat was regenerated on :8091 (the old
+# :8090 name is retired and must not be reused), so both faces move
+# together or "probe says up" and "call can fly" would drift apart.
 BRAIN_URL = os.environ.get(
-    "BRAIN_URL", "http://127.0.0.1:8090/v1/chat/completions")
+    "BRAIN_URL", "http://127.0.0.1:8091/v1/chat/completions")
 
 
 def resolve_health_url(brain_url, override=None):
