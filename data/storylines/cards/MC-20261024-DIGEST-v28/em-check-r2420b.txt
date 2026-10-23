@@ -1,0 +1,13 @@
+em-check-r2420b (MC-20261024-DIGEST-v28 M2 front-fit, ladder even-steps, canonical lcard_m2.py)
+h2_size=40 budget=23.00em
+OK    6.00em margin +17.00  三天三次改判
+OK   17.80em margin  +5.20  47 行令 · 3 次口径改判 · 1 个新部门
+OK   17.64em margin  +5.36  「……全部停止走云端，全部走本地了」
+OK   13.89em margin  +9.11  「……不要再消耗云端 token」
+OK   14.64em margin  +8.36  「……尽量少用云端，多用本地」
+OK   17.64em margin  +5.36  「……周末可以云端和本地平衡生产。」
+OK   16.64em margin  +6.36  「……成立专门的部门去搞，快点。」
+H1=6.15em (h1 own face, h1_size=84)
+subs 21.58em < 24.21em budget OK
+subs tail cue end derived=card end 3.000s (zero hardcode); expected duration=3.800s (card end + tail 0.80)
+ALL-HORIZ: PASS
