@@ -23,6 +23,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "src"))
 
 import readiness  # noqa: E402
+import render_marks  # noqa: E402
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 MANIFEST = json.loads((FIXTURES / "manifest.json").read_text(encoding="utf-8"))
@@ -155,6 +156,24 @@ class RenderTests(unittest.TestCase):
         rows, findings = readiness.parse_renders(d, d / "README.md")
         self.assertEqual(fail_codes(findings), {"render-unannot"})
         self.assertIsNone(rows[0][1])
+
+    def test_unannotated_message_echoes_legal_vocabulary(self):
+        # tech#375: the gate must name the five legal tokens, otherwise a
+        # self-coined ledger label reads as a missing row (R2399/R2411/R2425).
+        d = make_renders(self, ["alpha.mp4"], "readiness_renders_bare")
+        _, findings = readiness.parse_renders(d, d / "README.md")
+        msg = [m for c, code, m in
+               ((f[0], f[1], f[2]) for f in findings) if code == "render-unannot"][0]
+        for mark in render_marks.LEGAL_MARKS:
+            self.assertIn(mark, msg)
+
+    def test_readiness_marks_match_canonical_module(self):
+        self.assertEqual(
+            (readiness.PRODUCT_SLOT_MARK, readiness.PRODUCT_MARK,
+             readiness.SUPERSEDED_MARK, readiness.DISPOSED_MARK,
+             readiness.TEST_MARK),
+            render_marks.LEGAL_MARKS)
+        self.assertEqual(readiness.STATUS_PRECEDENCE, render_marks.LEGAL_MARKS)
 
     def test_production_mark_passes(self):
         # D-BS-06 gate-open era: ledger rows carrying the production mark

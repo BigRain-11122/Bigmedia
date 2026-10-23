@@ -77,14 +77,16 @@ from weekly_report import DONE_RE, ITEM_RE, first_clause  # noqa: E402
 # capture would run across paragraphs. readiness bounds it to one line.
 FLOW_LINE_RE = re.compile(FLOW_MARKER + r"[\uff1a:]\s*([^\uff1b;\n]+)")
 
-TEST_MARK = "\u6d4b\u8bd5\u4ef6\u00b7\u975e\u6210\u54c1"  # test-piece mark
-PRODUCT_MARK = "\u6210\u54c1\u00b7\u6279\u6b21"  # production-piece mark (D-BS-06 gate-open era; covers .mp4 only rows)
+import render_marks  # noqa: E402
+
+TEST_MARK = render_marks.TEST_MARK  # test-piece mark (canonical vocabulary)
+PRODUCT_MARK = render_marks.PRODUCT_MARK  # production-piece mark (D-BS-06 gate-open era)
 # slot-filled production piece (2026-09-27 R512 era): release-schedule
 # D-slot pre-production goods (LC-001 D15 first case) are a fifth legal
 # state - "production.slot-filled" cells. Kept as a distinct full mark so
 # prose lines that merely say "落位" without the 成品 prefix stay
 # unannotated (false-hit guard).
-PRODUCT_SLOT_MARK = "\u6210\u54c1\u00b7\u843d\u4f4d"  # slot-filled production mark
+PRODUCT_SLOT_MARK = render_marks.PRODUCT_SLOT_MARK  # slot-filled production mark
 # superseded historical piece (2026-09-25 #23 v14 batch era): rectification
 # re-renders replace registered goods but the old mp4s stay on disk as
 # historical archive rows - "superseded by <new>" cells are a third legal
@@ -103,9 +105,9 @@ DISPOSED_B = "\u7559\u6863"  # "archived on disk" qualifier
 # ledger row's real state instead of hard-coding the test-piece string
 # (R1799 finding: all 78 mp4s displayed as test pieces masked the
 # production / superseded / disposed rows). Gate legality unchanged.
-SUPERSEDED_MARK = "\u5df2\u88ab\u53d6\u4ee3"  # superseded archive display label
-DISPOSED_MARK = "\u5f03\u4eb6\u7559\u6863"  # disposed archive display label
-MISSING_MARK = "(missing test-piece mark)"  # unannotated display cell
+SUPERSEDED_MARK = render_marks.SUPERSEDED_MARK  # superseded archive display label
+DISPOSED_MARK = render_marks.DISPOSED_MARK  # disposed archive display label
+MISSING_MARK = "(no legal renders mark)"  # unannotated display cell
 STATUS_PRECEDENCE = (PRODUCT_SLOT_MARK, PRODUCT_MARK, SUPERSEDED_MARK,
                     DISPOSED_MARK, TEST_MARK)  # multi-mention rank
 STATUS_WORD = "\u72b6\u6001"  # status column header word
@@ -243,7 +245,8 @@ def parse_renders(renders_dir, ledger_path):
         status = seen.get(name.lower())
         if status is None:
             findings.append(("FAIL", "render-unannot",
-                             "media file not annotated as test piece: %s" % name))
+                             "media file not annotated with a legal renders mark"
+                             " (%s): %s" % (render_marks.legal_vocabulary(), name)))
         rows.append((name, status))
     on_disk = {n.lower() for n in media}
     for name in sorted(seen):
